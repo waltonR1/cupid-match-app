@@ -13,11 +13,11 @@ export const homeMessages: AppLocaleMessages = {
         secondary: '了解活动详情',
       },
       quote: '让爱，有文化的温度。',
-      // stats: {
-      //   members: { value: '70万+', label: '全球高学历用户' },
-      //   events: { value: '5万', label: '巴黎及欧洲活动' },
-      //   connections: { value: '300万+', label: '跨文化真实相遇' },
-      // },
+      stats: {
+        members: { value: '7万+', label: '全球高学历用户' },
+        events: { value: '300', label: '巴黎及欧洲活动' },
+        connections: { value: '3000', label: '跨文化真实相遇' },
+      },
     },
     vision: {
       eyebrow: '我们的愿景',

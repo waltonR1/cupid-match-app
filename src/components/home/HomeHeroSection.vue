@@ -16,11 +16,11 @@ function openPlan(plan: string) {
   openRegisterPage(plan)
 }
 
-// const stats = [
-//   { value: 'hero.stats.members.value', label: 'hero.stats.members.label' },
-//   { value: 'hero.stats.events.value', label: 'hero.stats.events.label' },
-//   { value: 'hero.stats.connections.value', label: 'hero.stats.connections.label' }
-// ]
+const stats = [
+  { value: 'hero.stats.members.value', label: 'hero.stats.members.label' },
+  { value: 'hero.stats.events.value', label: 'hero.stats.events.label' },
+  { value: 'hero.stats.connections.value', label: 'hero.stats.connections.label' }
+]
 </script>
 
 <template>
@@ -66,15 +66,15 @@ function openPlan(plan: string) {
           「{{ t('hero.quote') }}」
         </view>
 
-        <view class="mt-16 grid grid-cols-3 gap-10 border-t border-white/10 pt-10">
-<!--          <view v-for="item in stats" :key="item.label">-->
-<!--            <view class="text-[36px] font-semibold text-[#d4af37] lg:text-[48px]">-->
-<!--              {{ t(item.value) }}-->
-<!--            </view>-->
-<!--            <view class="mt-2 text-[13px] leading-6 text-white/65">-->
-<!--              {{ t(item.label) }}-->
-<!--            </view>-->
-<!--          </view>-->
+        <view class="mt-5 grid grid-cols-3 gap-10 border-t border-white/10 pt-5">
+          <view v-for="item in stats" :key="item.label">
+            <view class="text-[36px] font-semibold text-[#d4af37] lg:text-[48px]">
+              {{ t(item.value) }}
+            </view>
+            <view class="mt-2 text-[13px] leading-6 text-white/65">
+              {{ t(item.label) }}
+            </view>
+          </view>
         </view>
       </view>
 

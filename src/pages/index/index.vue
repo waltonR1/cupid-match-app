@@ -12,13 +12,12 @@
     <!-- 愿景 -->
     <HomeVisionSection/>
 
-    <!-- 核心功能 -->
-    <HomeFeaturesSection/>
+    <HomeProfilesPreviewSection />
 
     <HomeEventsPreviewSection />
 
-    <HomeProfilesPreviewSection />
-
+    <!-- 核心功能 -->
+    <HomeFeaturesSection/>
 
     <!-- 为谁而生 -->
     <HomeAudienceSection />
