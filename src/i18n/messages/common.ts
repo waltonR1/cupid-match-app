@@ -14,6 +14,11 @@ export const commonMessages: AppLocaleMessages = {
       membership: '会员体系',
       contact: '联系我们',
       register: '立即注册',
+      login: '登录',
+      logout: '退出登录',
+      account: '个人中心',
+      myProfile: '我的资料',
+      messages: '消息中心',
     },
     footer: {
       brandDesc: '以巴黎为起点，连接全球高质量的相遇。',
@@ -31,17 +36,22 @@ export const commonMessages: AppLocaleMessages = {
   },
   fr: {
     brand: {
-      name: 'Rencontre a Paris',
+      name: '相约巴黎',
       tagline: 'Rencontre à Paris',
     },
     nav: {
-      about: 'A propos',
+      about: 'À propos',
       profiles: 'Profils',
-      parents: 'Espace Parents',
-      events: 'Evenements',
-      membership: 'Adhesion',
+      parents: 'Parents',
+      events: 'Événements',
+      membership: 'Abonnement',
       contact: 'Contact',
-      register: 'S inscrire',
+      register: 'S\'inscrire',
+      login: 'Connexion',
+      logout: 'Déconnexionn',
+      account: 'Mon compte',
+      myProfile: 'Mon profil',
+      messages: 'Messages',
     },
     footer: {
       brandDesc: 'Depuis Paris, pour des rencontres de qualite a l echelle mondiale.',
@@ -70,6 +80,12 @@ export const commonMessages: AppLocaleMessages = {
       membership: 'Membership',
       contact: 'Contact',
       register: 'Register',
+      login: 'Login',
+      logout: 'Logout',
+      account: 'Account',
+      myProfile: 'My Profile',
+      messages: 'Messages',
+
     },
     footer: {
       brandDesc: 'Starting from Paris, connecting high-quality encounters worldwide.',
