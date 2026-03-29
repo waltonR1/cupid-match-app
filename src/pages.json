@@ -1,16 +1,136 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	}
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "相亲巴黎"
+      }
+    },
+    {
+      "path": "pages/about/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "关于我们"
+      }
+    },
+    {
+      "path": "pages/profiles/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员资料"
+      }
+    },
+    {
+      "path": "pages/parents/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "父母专区"
+      }
+    },
+    {
+      "path": "pages/events/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动日历"
+      }
+    },
+    {
+      "path": "pages/profile-detail/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
+      }
+    },
+    {
+      "path": "pages/event-detail/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动详情"
+      }
+    },
+    {
+      "path": "pages/parent-program-detail/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "家长项目"
+      }
+    },
+    {
+      "path": "pages/membership/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员体系"
+      }
+    },
+    {
+      "path": "pages/contact/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "联系我们"
+      }
+    },
+    {
+      "path": "pages/register/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+      "path": "pages/account/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/my-profile/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的资料"
+      }
+    },
+    {
+      "path": "pages/my-events/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的报名"
+      }
+    },
+    {
+      "path": "pages/favorites/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的收藏"
+      }
+    },
+    {
+      "path": "pages/messages/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "消息中心"
+      }
+    },
+    {
+      "path": "pages/privacy/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "隐私设置"
+      }
+    },
+    {
+      "path": "pages/empty-state/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "空状态页"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
 }

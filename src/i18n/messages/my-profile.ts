@@ -1,0 +1,55 @@
+import type { AppLocaleMessages } from '@/i18n/types'
+
+export const myProfileMessages: AppLocaleMessages = {
+  zh: {
+    hero: {
+      eyebrow: 'My Profile',
+      completion: '完成度',
+      visibility: '可见范围',
+      familyVisible: '家长协助可见',
+      userOnly: '仅本人主导',
+      basic: '基础资料',
+      city: '城市',
+      education: '教育',
+      job: '职业',
+      intent: '关系意向',
+      languages: '语言',
+      summary: '自我简介',
+      tags: '标签',
+    },
+  },
+  fr: {
+    hero: {
+      eyebrow: 'My Profile',
+      completion: 'Completion',
+      visibility: 'Visibilite',
+      familyVisible: 'Visible avec famille',
+      userOnly: 'Utilisateur seul',
+      basic: 'Informations',
+      city: 'Ville',
+      education: 'Formation',
+      job: 'Metier',
+      intent: 'Intention',
+      languages: 'Langues',
+      summary: 'Presentation',
+      tags: 'Tags',
+    },
+  },
+  en: {
+    hero: {
+      eyebrow: 'My Profile',
+      completion: 'Completion',
+      visibility: 'Visibility',
+      familyVisible: 'Family-assisted visible',
+      userOnly: 'User-led only',
+      basic: 'Basic info',
+      city: 'City',
+      education: 'Education',
+      job: 'Occupation',
+      intent: 'Intent',
+      languages: 'Languages',
+      summary: 'About me',
+      tags: 'Tags',
+    },
+  },
+}
