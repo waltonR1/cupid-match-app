@@ -60,7 +60,7 @@
     <!-- 底部收口区 -->
     <view class="border-t border-white/10 py-4">
       <view class="text-center text-[12px] text-white/40 tracking-wide">
-        {{ t('common.footer.rights') }}
+        {{ t('common.footer.rights', { year }) }}
       </view>
     </view>
   </view>
@@ -78,6 +78,8 @@ defineProps<{
 }>()
 
 const { t } = useAppI18n()
+
+const year = new Date().getFullYear()
 
 const emit = defineEmits<{
   (e: 'nav-click', key: string): void

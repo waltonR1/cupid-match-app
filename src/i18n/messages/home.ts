@@ -3,7 +3,7 @@ import type { AppLocaleMessages } from '@/i18n/types'
 export const homeMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      meta: 'Paris · 2026',
+      meta: 'Paris · {year}',
       title: '相约巴黎',
       titleAccent: 'Rencontre a Paris',
       description: '巴黎起点的高学历相亲与社交演示站。',
@@ -84,7 +84,7 @@ export const homeMessages: AppLocaleMessages = {
   },
   fr: {
     hero: {
-      meta: 'Paris · 2026',
+      meta: 'Paris · {year}',
       title: 'Rencontre a Paris',
       titleAccent: 'Paris',
       description: 'Une vitrine demo de rencontres premium pour celibataires diplomes.',
@@ -165,7 +165,7 @@ export const homeMessages: AppLocaleMessages = {
   },
   en: {
     hero: {
-      meta: 'Paris · 2026',
+      meta: 'Paris · {year}',
       title: 'Meet in Paris',
       titleAccent: 'Rencontre a Paris',
       description: 'A premium dating and social demo site for highly educated singles.',

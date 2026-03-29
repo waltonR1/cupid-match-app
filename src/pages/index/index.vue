@@ -13,7 +13,7 @@
         <view class="max-w-[680px]">
           <view class="mb-6 inline-flex items-center gap-4">
             <view class="h-[1px] w-16 bg-[#c9a96a]" />
-            <text class="text-[12px] uppercase tracking-[6px] text-[#d8c8a8]">{{ t('hero.meta') }}</text>
+            <text class="text-[12px] uppercase tracking-[6px] text-[#d8c8a8]">{{ t('hero.meta', { year }) }}</text>
           </view>
 
           <view class="text-[64px] font-semibold leading-[1.05] text-[#fffaf3] lg:text-[92px]">
@@ -410,6 +410,8 @@ const missionTags = [
   { title: 'mission.tag2.title', desc: 'mission.tag2.desc', accent: false },
   { title: 'mission.tag3.title', desc: 'mission.tag3.desc', accent: false }
 ]
+
+const year = new Date().getFullYear()
 
 function handleNavClick(key: string) {
   navigateByNavKey(key, navList)

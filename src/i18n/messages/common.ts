@@ -26,7 +26,7 @@ export const commonMessages: AppLocaleMessages = {
       contact: '联系我们',
       lang: '支持语言',
       languageList: '中文 / Francais / English',
-      rights: '© 2026 Rencontre a Paris. All rights reserved.',
+      rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
       email: 'contact@rencontreaparis.com',
@@ -59,7 +59,7 @@ export const commonMessages: AppLocaleMessages = {
       contact: 'Contact',
       lang: 'Langues',
       languageList: '中文 / Francais / English',
-      rights: '© 2026 Rencontre a Paris. All rights reserved.',
+      rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
       email: 'contact@rencontreaparis.com',
@@ -93,7 +93,7 @@ export const commonMessages: AppLocaleMessages = {
       contact: 'Contact',
       lang: 'Languages',
       languageList: '中文 / Francais / English',
-      rights: '© 2026 Rencontre a Paris. All rights reserved.',
+      rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
       email: 'contact@rencontreaparis.com',
