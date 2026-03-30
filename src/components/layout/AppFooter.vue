@@ -40,6 +40,7 @@
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-white/70">
             <view>{{ t('common.contact.email') }}</view>
+            <view>{{ t('common.contact.email', { email }) }}</view>
             <view>{{ t('common.contact.wechat') }}</view>
             <view>{{ t('common.contact.location') }}</view>
           </view>
@@ -80,6 +81,7 @@ defineProps<{
 const { t } = useAppI18n()
 
 const year = new Date().getFullYear()
+const email = 'contact@rencontreaparis.com';
 
 const emit = defineEmits<{
   (e: 'nav-click', key: string): void

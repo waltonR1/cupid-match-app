@@ -29,7 +29,7 @@ export const commonMessages: AppLocaleMessages = {
       rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
-      email: 'contact@rencontreaparis.com',
+      email: '{email}',
       wechat: '微信: RencontreParis',
       location: '巴黎 · 法国',
     },
@@ -62,7 +62,7 @@ export const commonMessages: AppLocaleMessages = {
       rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
-      email: 'contact@rencontreaparis.com',
+      email: '{email}',
       wechat: 'WeChat: RencontreParis',
       location: 'Paris · France',
     },
@@ -96,7 +96,7 @@ export const commonMessages: AppLocaleMessages = {
       rights: '© {year} Rencontre a Paris. All rights reserved.',
     },
     contact: {
-      email: 'contact@rencontreaparis.com',
+      email: '{email}',
       wechat: 'WeChat: RencontreParis',
       location: 'Paris · France',
     },
