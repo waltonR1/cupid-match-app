@@ -46,44 +46,48 @@
     </view>
 
     <view class="mx-auto max-w-[1280px] px-8 py-20">
-      <view class="grid gap-5 md:grid-cols-3">
-        <view class="border border-[#e2d7c9] bg-[#faf7f1] px-7 py-7">
-          <view class="text-[12px] uppercase tracking-[5px] text-[#cf9aa0]">{{ t('filters.city') }}</view>
-          <view class="mt-4 flex flex-wrap gap-3">
+      <view class="rounded-[28px] border border-[#e2d7c9] bg-[linear-gradient(180deg,#fbf7f0_0%,#f5ede3_100%)] p-4 shadow-[0_20px_50px_rgba(30,24,18,0.06)] lg:p-5">
+        <view class="mb-4 flex flex-wrap items-center justify-between gap-4 border-b border-[#eadfce] px-3 pb-4">
+          <view class="text-[15px] leading-7 text-[#7b6d60]">{{ t('directory.note') }}</view>
+          <view class="flex flex-wrap gap-3">
             <view
-                v-for="item in cityFilters"
-                :key="item"
-                class="border border-[#e3d8cb] bg-white px-4 py-2 text-[14px] text-[#5d5045]"
+              v-for="item in [selectedCity, selectedIntent, selectedLanguage].filter(Boolean)"
+              :key="item"
+              class="border border-[#dfd3c4] bg-white px-4 py-2 text-[13px] text-[#5d5045]"
             >
               {{ item }}
             </view>
           </view>
         </view>
 
-        <view class="border border-[#e2d7c9] bg-[#faf7f1] px-7 py-7">
-          <view class="text-[12px] uppercase tracking-[5px] text-[#cf9aa0]">{{ t('filters.intent') }}</view>
-          <view class="mt-4 flex flex-wrap gap-3">
-            <view
-                v-for="item in intentFilters"
-                :key="item"
-                class="border border-[#e3d8cb] bg-white px-4 py-2 text-[14px] text-[#5d5045]"
-            >
-              {{ item }}
-            </view>
-          </view>
-        </view>
-
-        <view class="border border-[#e2d7c9] bg-[#faf7f1] px-7 py-7">
-          <view class="text-[12px] uppercase tracking-[5px] text-[#cf9aa0]">{{ t('filters.languages') }}</view>
-          <view class="mt-4 flex flex-wrap gap-3">
-            <view
-                v-for="item in languageFilters"
-                :key="item"
-                class="border border-[#e3d8cb] bg-white px-4 py-2 text-[14px] text-[#5d5045]"
-            >
-              {{ item }}
-            </view>
-          </view>
+        <view class="grid gap-5 md:grid-cols-3">
+          <ProfileFilterGroup
+            :label="t('filters.city')"
+            :hint="t('filters.cityHint')"
+            :options="cityFilters"
+            :active-value="selectedCity"
+            :clear-label="t('filters.clear')"
+            @toggle="toggleCity"
+            @clear="selectedCity = ''"
+          />
+          <ProfileFilterGroup
+            :label="t('filters.intent')"
+            :hint="t('filters.intentHint')"
+            :options="intentFilters"
+            :active-value="selectedIntent"
+            :clear-label="t('filters.clear')"
+            @toggle="toggleIntent"
+            @clear="selectedIntent = ''"
+          />
+          <ProfileFilterGroup
+            :label="t('filters.languages')"
+            :hint="t('filters.languagesHint')"
+            :options="languageFilters"
+            :active-value="selectedLanguage"
+            :clear-label="t('filters.clear')"
+            @toggle="toggleLanguage"
+            @clear="selectedLanguage = ''"
+          />
         </view>
       </view>
     </view>
@@ -201,9 +205,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import ProfileFilterGroup from '@/components/profiles/ProfileFilterGroup.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { type LocalizedText, mockProfiles, pickLocalized } from '@/mock/business'
@@ -214,6 +219,9 @@ const navList = NAV_LIST
 const { t, locale } = usePageI18n('profiles')
 const profiles = computed(() => mockProfiles)
 const familyProfiles = computed(() => mockProfiles.filter(profile => profile.familyVisible))
+const selectedCity = ref('')
+const selectedIntent = ref('')
+const selectedLanguage = ref('')
 
 const statCards = computed(() => {
   return [
@@ -246,5 +254,16 @@ function handleProfileOpen(id: string, source: 'member' | 'family' = 'member') {
 function handleRegisterClick() {
   openRegisterPage('free')
 }
-</script>
 
+function toggleCity(value: string) {
+  selectedCity.value = selectedCity.value === value ? '' : value
+}
+
+function toggleIntent(value: string) {
+  selectedIntent.value = selectedIntent.value === value ? '' : value
+}
+
+function toggleLanguage(value: string) {
+  selectedLanguage.value = selectedLanguage.value === value ? '' : value
+}
+</script>

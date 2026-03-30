@@ -16,6 +16,10 @@ export const profilesMessages: AppLocaleMessages = {
       city: '城市',
       intent: '关系意向',
       languages: '语言',
+      cityHint: '展示筛选位和选中反馈，当前不改变结果。',
+      intentHint: '强调关系导向，让浏览更像精致筛选而不是纯列表。',
+      languagesHint: '保留多语言维度，先做展示型交互。',
+      clear: '清除',
     },
     directory: {
       eyebrow: 'Profile Directory',
@@ -61,6 +65,10 @@ export const profilesMessages: AppLocaleMessages = {
       city: 'Ville',
       intent: 'Intention',
       languages: 'Langues',
+      cityHint: 'Le filtre reste visuel pour le moment, sans modifier les resultats.',
+      intentHint: 'Il structure deja la lecture avec une sensation plus selective.',
+      languagesHint: 'Le multilingue reste visible comme un marqueur de profil.',
+      clear: 'Effacer',
     },
     directory: {
       eyebrow: 'Profile Directory',
@@ -106,6 +114,10 @@ export const profilesMessages: AppLocaleMessages = {
       city: 'City',
       intent: 'Intent',
       languages: 'Languages',
+      cityHint: 'This keeps the filter area visible without changing results yet.',
+      intentHint: 'It adds a more selective, premium browsing rhythm to the page.',
+      languagesHint: 'Language range stays as a display cue for now.',
+      clear: 'Clear',
     },
     directory: {
       eyebrow: 'Profile Directory',
