@@ -6,7 +6,7 @@ export function openRegisterPage(plan?: string) {
   })
 }
 
-export function openProfileDetail(id: string, source: 'member' | 'parent' = 'member') {
+export function openProfileDetail(id: string, source: 'member' | 'family' = 'member') {
   uni.navigateTo({
     url: `/pages/profile-detail/index?id=${encodeURIComponent(id)}&source=${encodeURIComponent(source)}`,
   })
@@ -18,9 +18,9 @@ export function openEventDetail(id: string) {
   })
 }
 
-export function openParentProgramDetail(id: string) {
+export function openFamilyProgramDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/parent-program-detail/index?id=${encodeURIComponent(id)}`,
+    url: `/pages/family-program-detail/index?id=${encodeURIComponent(id)}`,
   })
 }
 

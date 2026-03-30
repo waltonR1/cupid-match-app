@@ -69,7 +69,7 @@ export const registerMessages: AppLocaleMessages = {
       step3: { title: 'Entrer dans le bon parcours', desc: 'Selon le besoin, on passe vers profils, evenements ou offre membre.' },
     },
     policy: {
-      privacy: { title: 'Limites de confidentialite', desc: 'La demo garde deja la logique de visibilite des profils, d accord parental et de cadre conseiller.' },
+      privacy: { title: 'Limites de confidentialite', desc: 'La demo garde deja la logique de visibilite des profils, d accord familial et de cadre conseiller.' },
       upgrade: { title: 'Upgrade membre', desc: 'Cette page pourra plus tard se connecter a un vrai flux de paiement et d activation.' },
     },
   },
@@ -105,7 +105,7 @@ export const registerMessages: AppLocaleMessages = {
       step3: { title: 'Enter the right flow', desc: 'From there, you move into profiles, events, or a membership upgrade path.' },
     },
     policy: {
-      privacy: { title: 'Privacy boundaries', desc: 'Even the demo keeps the concepts of profile visibility, parent authorization, and advisor communication limits.' },
+      privacy: { title: 'Privacy boundaries', desc: 'Even the demo keeps the concepts of profile visibility, family authorization, and advisor communication limits.' },
       upgrade: { title: 'Membership upgrade', desc: 'Later this page can be connected to real payment, membership activation, and purchase confirmation.' },
     },
   },

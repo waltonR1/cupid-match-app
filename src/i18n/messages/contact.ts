@@ -33,7 +33,7 @@ export const contactMessages: AppLocaleMessages = {
       card2: { title: '会员升级咨询', desc: '咨询白银、黄金、钻石会员的差异与升级流程。' },
       card3: { title: '活动报名与合作', desc: '了解巴黎及欧洲活动、定向局、主题活动与合作可能。' },
       card4: { title: '顾问或红娘服务', desc: '针对认真关系导向用户，沟通更深入的一对一顾问支持或牵线服务。' },
-      card5: { title: '父母专区咨询', desc: '家长可了解平台规则、参与边界与家长沙龙等内容。' },
+      card5: { title: '家庭参与咨询', desc: '家庭成员可了解平台规则、参与边界与家长沙龙等内容。' },
       card6: { title: '品牌与商务合作', desc: '媒体合作、场地合作、活动联办和品牌联名都可从这里进入。' },
     },
     guide: {
@@ -83,7 +83,7 @@ export const contactMessages: AppLocaleMessages = {
       card2: { title: 'Questions sur les adhesions', desc: 'Comprendre les differences entre les niveaux VIP et les modalites d evolution.' },
       card3: { title: 'Evenements et partenariats', desc: 'Poser une question sur les activites a Paris ou en Europe ou envisager une cooperation evenementielle.' },
       card4: { title: 'Conseil ou mise en relation', desc: 'Echanger autour d un accompagnement plus approfondi pour les personnes orientees relation serieuse.' },
-      card5: { title: 'Questions espace parents', desc: 'Les familles peuvent demander des precisions sur le role, les limites et les formats dedies.' },
+      card5: { title: 'Questions espace famille', desc: 'Les familles peuvent demander des precisions sur le role, les limites et les formats dedies.' },
       card6: { title: 'Marque et affaires', desc: 'Pour les medias, lieux partenaires, collaborations de marque ou projets conjoints.' },
     },
     guide: {
@@ -133,7 +133,7 @@ export const contactMessages: AppLocaleMessages = {
       card2: { title: 'Membership upgrade questions', desc: 'Understand the differences between VIP tiers and how upgrade handling works.' },
       card3: { title: 'Events and partnerships', desc: 'Ask about Paris and Europe events, themed gatherings, or potential collaborations.' },
       card4: { title: 'Advisor and matchmaking profiles', desc: 'Discuss deeper one-on-one advisor support or matchmaker-led introductions.' },
-      card5: { title: 'Parents Space questions', desc: 'Families can ask about the rules, boundaries, and support formats for parent participation.' },
+      card5: { title: 'Family Participation questions', desc: 'Families can ask about the rules, boundaries, and support formats for family participation.' },
       card6: { title: 'Brand and business cooperation', desc: 'For media, venue, event, partnership, or co-branding inquiries.' },
     },
     guide: {

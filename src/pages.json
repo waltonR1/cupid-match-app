@@ -22,10 +22,10 @@
       }
     },
     {
-      "path": "pages/parents/index",
+      "path": "pages/family/index",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "父母专区"
+        "navigationBarTitleText": "家庭参与"
       }
     },
     {
@@ -50,7 +50,7 @@
       }
     },
     {
-      "path": "pages/parent-program-detail/index",
+      "path": "pages/family-program-detail/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "家长项目"

@@ -13,8 +13,8 @@ import { messagesPageMessages } from '@/i18n/messages/messages-page'
 import { membershipMessages } from '@/i18n/messages/membership'
 import { myEventsMessages } from '@/i18n/messages/my-events'
 import { myProfileMessages } from '@/i18n/messages/my-profile'
-import { parentProgramDetailMessages } from '@/i18n/messages/parent-program-detail'
-import { parentsMessages } from '@/i18n/messages/parents'
+import { familyProgramDetailMessages } from '@/i18n/messages/family-program-detail'
+import { familyMessages } from '@/i18n/messages/family'
 import { privacyMessages } from '@/i18n/messages/privacy'
 import { profileDetailMessages } from '@/i18n/messages/profile-detail'
 import { registerMessages } from '@/i18n/messages/register'
@@ -35,8 +35,8 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.zh,
     myEvents: myEventsMessages.zh,
     myProfile: myProfileMessages.zh,
-    parentProgramDetail: parentProgramDetailMessages.zh,
-    parents: parentsMessages.zh,
+    familyProgramDetail: familyProgramDetailMessages.zh,
+    family: familyMessages.zh,
     privacy: privacyMessages.zh,
     profileDetail: profileDetailMessages.zh,
     register: registerMessages.zh,
@@ -56,8 +56,8 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.fr,
     myEvents: myEventsMessages.fr,
     myProfile: myProfileMessages.fr,
-    parentProgramDetail: parentProgramDetailMessages.fr,
-    parents: parentsMessages.fr,
+    familyProgramDetail: familyProgramDetailMessages.fr,
+    family: familyMessages.fr,
     privacy: privacyMessages.fr,
     profileDetail: profileDetailMessages.fr,
     register: registerMessages.fr,
@@ -77,8 +77,8 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.en,
     myEvents: myEventsMessages.en,
     myProfile: myProfileMessages.en,
-    parentProgramDetail: parentProgramDetailMessages.en,
-    parents: parentsMessages.en,
+    familyProgramDetail: familyProgramDetailMessages.en,
+    family: familyMessages.en,
     privacy: privacyMessages.en,
     profileDetail: profileDetailMessages.en,
     register: registerMessages.en,

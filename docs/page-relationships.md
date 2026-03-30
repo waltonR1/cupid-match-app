@@ -25,8 +25,8 @@
   关于我们。承接品牌故事、目标用户、平台价值观。
 - `/pages/profiles/index`
   会员资料。展示 mock 会员资料列表，并跳转会员详情。
-- `/pages/parents/index`
-  父母专区。展示家长可见资料、家长沙龙、协助项目，并跳转项目详情或会员详情。
+- `/pages/family/index`
+  家庭参与。展示家长可见资料、家长沙龙、协助项目，并跳转项目详情或会员详情。
 - `/pages/events/index`
   活动日历。展示 mock 活动列表，并跳转活动详情。
 - `/pages/membership/index`
@@ -37,11 +37,11 @@
 ### 2. 详情页
 
 - `/pages/profile-detail/index`
-  会员详情页。来源可以是会员资料页，也可以是父母专区。
+  会员详情页。来源可以是会员资料页，也可以是家庭参与页。
 - `/pages/event-detail/index`
   活动详情页。来源是活动日历页或首页 CTA。
-- `/pages/parent-program-detail/index`
-  家长项目详情页。来源是父母专区。
+- `/pages/family-program-detail/index`
+  家长项目详情页。来源是家庭参与页。
 
 ### 3. 用户页
 
@@ -71,7 +71,7 @@
 
 - `common.nav.about` -> `/pages/about/index`
 - `common.nav.profiles` -> `/pages/profiles/index`
-- `common.nav.parents` -> `/pages/parents/index`
+- `common.nav.family` -> `/pages/family/index`
 - `common.nav.events` -> `/pages/events/index`
 - `common.nav.membership` -> `/pages/membership/index`
 - `common.nav.contact` -> `/pages/contact/index`
@@ -103,7 +103,7 @@
 
 ### 路径 4：家长浏览
 
-1. 首页或导航进入父母专区
+1. 首页或导航进入家庭参与
 2. 浏览家长可见资料或家长项目
 3. 进入会员详情页或家长项目详情页
 4. 从详情页进入联系或注册
@@ -131,17 +131,17 @@
 
 - 首页 CTA -> 注册页
 - 首页 CTA -> 活动日历
-- 首页功能卡 -> 会员资料 / 活动日历 / 父母专区 / 会员体系 / 关于我们
+- 首页功能卡 -> 会员资料 / 活动日历 / 家庭参与 / 会员体系 / 关于我们
 
 ### 会员资料
 
 - 会员资料列表 -> 会员详情页
 - 家长协助资料列表 -> 会员详情页
 
-### 父母专区
+### 家庭参与
 
-- 父母专区资料卡 -> 会员详情页
-- 父母专区项目卡 -> 家长项目详情页
+- 家庭参与资料卡 -> 会员详情页
+- 家庭参与项目卡 -> 家长项目详情页
 
 ### 活动日历
 
@@ -185,7 +185,7 @@
    这是最核心的浏览链路。
 3. 活动日历页 + 活动详情页
    第二核心链路。
-4. 父母专区 + 家长项目详情页
+4. 家庭参与 + 家长项目详情页
    独立受众页，容易拉开差异。
 5. 会员体系 + 注册页
    调整转化链路。

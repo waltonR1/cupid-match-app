@@ -6,9 +6,9 @@ const { t } = usePageI18n('home')
 
 const year = new Date().getFullYear()
 
-function openEvents() {
+function openProfiles() {
   uni.navigateTo({
-    url: '/pages/events/index',
+    url: '/pages/profiles/index',
   })
 }
 
@@ -56,7 +56,7 @@ const stats = [
           </button>
           <button
               class="min-w-[190px] border border-[#c9a96a] bg-transparent px-6 py-4 text-[16px] text-[#f5e7c8]"
-              @click="openEvents"
+              @click="openProfiles"
           >
             {{ t('hero.actions.secondary') }}
           </button>

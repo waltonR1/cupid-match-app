@@ -32,7 +32,7 @@ export interface MockEvent {
   registered: number
 }
 
-export interface MockParentProgram {
+export interface MockFamilyProgram {
   id: string
   date: string
   city: LocalizedText
@@ -163,8 +163,8 @@ export const mockProfiles: MockProfile[] = [
     },
     summary: {
       zh: '生活和工作都在巴黎，愿意在本人授权下接受适度的家长辅助了解和沟通支持。',
-      fr: 'Vie et travail a Paris, ouverte a une participation parentale limitee avec accord explicite.',
-      en: 'Lives and works in Paris, and accepts limited parent-assisted review when explicitly authorized.',
+      fr: 'Vie et travail a Paris, ouverte a une participation familiale limitee avec accord explicite.',
+      en: 'Lives and works in Paris, and accepts limited family-assisted review when explicitly authorized.',
     },
     tags: [
       { zh: '建筑', fr: 'Architecture', en: 'Architecture' },
@@ -233,7 +233,7 @@ export const mockProfiles: MockProfile[] = [
     },
     summary: {
       zh: '常驻日内瓦，接受跨城发展，资料审核中，家长仅用于提供背景说明。',
-      fr: 'Basee a Geneve, ouverte a une relation entre villes, dossier en cours de verification avec un role parental limite.',
+      fr: 'Basee a Geneve, ouverte a une relation entre villes, dossier en cours de verification avec un role familial limite.',
       en: 'Based in Geneva, open to cross-city development, profile is under review, and family only helps provide background context.',
     },
     tags: [
@@ -309,7 +309,7 @@ export const mockProfiles: MockProfile[] = [
     tags: [
       { zh: '布鲁塞尔', fr: 'Bruxelles', en: 'Brussels' },
       { zh: '公共事务', fr: 'Affaires publiques', en: 'Public affairs' },
-      { zh: '家长可见', fr: 'Visible parents', en: 'Parent-visible' },
+      { zh: '家长可见', fr: 'Visible famille', en: 'Family-visible' },
     ],
     languages: ['FR', 'EN', 'NL'],
   },
@@ -411,18 +411,18 @@ export const mockEvents: MockEvent[] = [
     status: 'open',
     title: {
       zh: '家长沙龙',
-      fr: 'Salon parents',
-      en: 'Parents salon',
+      fr: 'Salon famille',
+      en: 'Family salon',
     },
     format: {
       zh: '家长圆桌',
-      fr: 'Table ronde parents',
-      en: 'Parents roundtable',
+      fr: 'Table ronde famille',
+      en: 'Family roundtable',
     },
     audience: {
       zh: '适合需要家长协助理解平台规则与沟通边界的家庭',
       fr: 'Pour les familles souhaitant comprendre les regles et limites de participation',
-      en: 'For families who want to understand platform rules and parent participation boundaries',
+      en: 'For families who want to understand platform rules and family participation boundaries',
     },
     summary: {
       zh: '聚焦资料协助、沟通方式、边界意识和代际预期，不公开讨论隐私资料。',
@@ -463,7 +463,7 @@ export const mockEvents: MockEvent[] = [
   },
 ]
 
-export const mockParentPrograms: MockParentProgram[] = [
+export const mockFamilyPrograms: MockFamilyProgram[] = [
   {
     id: 'pp-001',
     date: '2026-04-15',
@@ -472,13 +472,13 @@ export const mockParentPrograms: MockParentProgram[] = [
     status: 'open',
     title: {
       zh: '家长资料审核说明会',
-      fr: 'Session parents sur la verification des dossiers',
-      en: 'Parent briefing on profile review',
+      fr: 'Session famille sur la verification des dossiers',
+      en: 'Family briefing on profile review',
     },
     summary: {
       zh: '说明家长可以补充哪些背景信息，以及哪些内容必须由用户本人确认。',
-      fr: 'Explication des informations que les parents peuvent completer et de celles qui doivent rester confirmees par l utilisateur.',
-      en: 'Explains what parents may add to a profile and what must remain confirmed by the user directly.',
+      fr: 'Explication des informations que la famille peut completer et de celles qui doivent rester confirmees par l utilisateur.',
+      en: 'Explains what family members may add to a profile and what must remain confirmed by the user directly.',
     },
     seats: 20,
   },
@@ -490,8 +490,8 @@ export const mockParentPrograms: MockParentProgram[] = [
     status: 'open',
     title: {
       zh: '巴黎家长沙龙',
-      fr: 'Salon parents a Paris',
-      en: 'Paris parents salon',
+      fr: 'Salon famille a Paris',
+      en: 'Paris family salon',
     },
     summary: {
       zh: '围绕跨文化婚恋、代际沟通和资料协助展开，适合准备参与平台流程的家庭。',
@@ -508,8 +508,8 @@ export const mockParentPrograms: MockParentProgram[] = [
     status: 'waitlist',
     title: {
       zh: '家长协助沟通时段',
-      fr: 'Creneaux d accompagnement parents',
-      en: 'Parent-assisted communication slots',
+      fr: 'Creneaux d accompagnement famille',
+      en: 'Family-assisted communication slots',
     },
     summary: {
       zh: '适合已经进入候选人沟通阶段的家庭，用于确认沟通边界和信息整理方式。',
@@ -635,8 +635,8 @@ export const mockPrivacySettings: MockPrivacySetting[] = [
     enabled: true,
     title: {
       zh: '允许家长辅助了解',
-      fr: 'Autoriser un appui parental limite',
-      en: 'Allow limited parent-assisted context',
+      fr: 'Autoriser un appui familial limite',
+      en: 'Allow limited family-assisted context',
     },
     desc: {
       zh: '在你的授权下，家长可查看有限背景说明，但不能替代你做决定。',
@@ -668,8 +668,8 @@ export function getMockEventById(id: string) {
   return mockEvents.find(item => item.id === id)
 }
 
-export function getMockParentProgramById(id: string) {
-  return mockParentPrograms.find(item => item.id === id)
+export function getMockFamilyProgramById(id: string) {
+  return mockFamilyPrograms.find(item => item.id === id)
 }
 
 export function getCurrentMockProfile() {

@@ -1,9 +1,9 @@
 import type { AppLocaleMessages } from '@/i18n/types'
 
-export const parentProgramDetailMessages: AppLocaleMessages = {
+export const familyProgramDetailMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      eyebrow: 'Parent Program',
+      eyebrow: 'Family Program',
     },
     fields: {
       date: '日期',
@@ -19,7 +19,7 @@ export const parentProgramDetailMessages: AppLocaleMessages = {
       scope: '本场内容',
       boundary: '参与边界',
       visibleProfiles: '相关资料',
-      guidance: '父母专区只展示用户已授权的背景信息，不会开放私密聊天、联系方式或替代用户做关系决定。',
+      guidance: '家庭参与板块只展示用户已授权的背景信息，不会开放私密聊天、联系方式或替代用户做关系决定。',
       notFound: '没有找到这个家长项目的 mock 数据。',
     },
     scopeCards: {
@@ -34,7 +34,7 @@ export const parentProgramDetailMessages: AppLocaleMessages = {
   },
   fr: {
     hero: {
-      eyebrow: 'Parent Program',
+      eyebrow: 'Family Program',
     },
     fields: {
       date: 'Date',
@@ -50,11 +50,11 @@ export const parentProgramDetailMessages: AppLocaleMessages = {
       scope: 'Contenu',
       boundary: 'Cadre',
       visibleProfiles: 'Profils lies',
-      guidance: 'L espace parents ne donne acces qu aux informations deja autorisees par l utilisateur, sans ouvrir les conversations privees ni remplacer sa decision.',
-      notFound: 'Aucun programme parents mock trouve.',
+      guidance: 'L espace famille ne donne acces qu aux informations deja autorisees par l utilisateur, sans ouvrir les conversations privees ni remplacer sa decision.',
+      notFound: 'Aucun programme famille mock trouve.',
     },
     scopeCards: {
-      understanding: { title: 'Lecture du dossier', desc: 'Aider les parents a comprendre formation, metier, ville et intention relationnelle.' },
+      understanding: { title: 'Lecture du dossier', desc: 'Aider la famille a comprendre formation, metier, ville et intention relationnelle.' },
       boundary: { title: 'Limites de communication', desc: 'Clarifier ce que la famille peut completer et ce que seul l utilisateur confirme.' },
     },
     status: {
@@ -65,7 +65,7 @@ export const parentProgramDetailMessages: AppLocaleMessages = {
   },
   en: {
     hero: {
-      eyebrow: 'Parent Program',
+      eyebrow: 'Family Program',
     },
     fields: {
       date: 'Date',
@@ -81,11 +81,11 @@ export const parentProgramDetailMessages: AppLocaleMessages = {
       scope: 'Program scope',
       boundary: 'Participation boundary',
       visibleProfiles: 'Related profiles',
-      guidance: 'The parent area only exposes background information explicitly authorized by the user. It does not expose private chats, direct contact access, or replace the user in relationship decisions.',
-      notFound: 'No mock parent program was found.',
+      guidance: 'The family participation area only exposes background information explicitly authorized by the user. It does not expose private chats, direct contact access, or replace the user in relationship decisions.',
+      notFound: 'No mock family program was found.',
     },
     scopeCards: {
-      understanding: { title: 'Profile interpretation', desc: 'Helps parents understand education, occupation, city, and relationship intent fields.' },
+      understanding: { title: 'Profile interpretation', desc: 'Helps family members understand education, occupation, city, and relationship intent fields.' },
       boundary: { title: 'Communication boundaries', desc: 'Clarifies what family can add as context and what only the user can confirm.' },
     },
     status: {

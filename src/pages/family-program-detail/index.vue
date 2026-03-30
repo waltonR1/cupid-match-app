@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-[#f5f0e8] text-[#1d1d1f]">
     <AppHeader
         :nav-list="navList"
-        active-nav="common.nav.parents"
+        active-nav="common.nav.family"
         @nav-click="handleNavClick"
         @register-click="handleRegisterClick"
     />
@@ -105,12 +105,12 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { getMockParentProgramById, mockProfiles, pickLocalized, type LocalizedText } from '@/mock/business'
+import { getMockFamilyProgramById, mockProfiles, pickLocalized, type LocalizedText } from '@/mock/business'
 import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('parentProgramDetail')
+const { t, locale } = usePageI18n('familyProgramDetail')
 const programId = ref('')
 
 onLoad((query) => {
@@ -119,7 +119,7 @@ onLoad((query) => {
   }
 })
 
-const program = computed(() => getMockParentProgramById(programId.value))
+const program = computed(() => getMockFamilyProgramById(programId.value))
 const familyProfiles = computed(() => mockProfiles.filter(profile => profile.familyVisible).slice(0, 2))
 
 const scopeCards = computed(() => [
@@ -146,7 +146,7 @@ function formatDate(date: string) {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id, 'parent')
+  openProfileDetail(id, 'family')
 }
 
 function handleNavClick(key: string) {
@@ -157,6 +157,5 @@ function handleRegisterClick() {
   openRegisterPage('contact')
 }
 </script>
-
 
 

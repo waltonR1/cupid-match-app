@@ -1,9 +1,9 @@
 import type { AppLocaleMessages } from '@/i18n/types'
 
-export const parentsMessages: AppLocaleMessages = {
+export const familyMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      eyebrow: 'Parent Hub',
+      eyebrow: 'Family Participation',
       title: '家长协助',
       subtitle: '这里直接查看家长可参与的资料、沙龙和协助时段，而不只是理念介绍。',
     },
@@ -25,12 +25,12 @@ export const parentsMessages: AppLocaleMessages = {
       intent: '关系意向',
     },
     programs: {
-      eyebrow: 'Parent Programs',
+      eyebrow: 'Family Programs',
       title: '家长沙龙与协助时段',
       subtitle: '这里直接列出家长相关活动和时段，本地 mock 数据后续可替换为真实报名与预约系统。',
     },
     steps: {
-      eyebrow: 'Parent Flow',
+      eyebrow: 'Family Flow',
       title: '家长如何参与',
       subtitle: '家长只补充背景和理解平台流程，不能替代用户本人做关系决策。',
       items: {
@@ -64,9 +64,9 @@ export const parentsMessages: AppLocaleMessages = {
   },
   fr: {
     hero: {
-      eyebrow: 'Parent Hub',
-      title: 'Accompagnement parents',
-      subtitle: 'Cette page montre directement les profils, salons et creneaux accessibles aux parents au lieu d une simple page de discours.',
+      eyebrow: 'Family Participation',
+      title: 'Participation famille',
+      subtitle: 'Cette page montre directement les profils, salons et creneaux accessibles a la famille au lieu d une simple page de discours.',
     },
     stats: {
       visibleProfiles: 'Profils visibles',
@@ -74,7 +74,7 @@ export const parentsMessages: AppLocaleMessages = {
       supportSlots: 'Creneaux',
     },
     profiles: {
-      eyebrow: 'Profils visibles aux parents',
+      eyebrow: 'Profils visibles a la famille',
       title: 'Profils actuellement visibles',
       subtitle: 'Ces profils n ouvrent qu un acces limite au contexte et aux limites de communication.',
     },
@@ -86,14 +86,14 @@ export const parentsMessages: AppLocaleMessages = {
       intent: 'Intention',
     },
     programs: {
-      eyebrow: 'Parent Programs',
-      title: 'Salons et creneaux parents',
-      subtitle: 'La liste ci-dessous montre directement les evenements et plages d accompagnement parents via des donnees mock locales.',
+      eyebrow: 'Family Programs',
+      title: 'Salons et creneaux famille',
+      subtitle: 'La liste ci-dessous montre directement les evenements et plages d accompagnement famille via des donnees mock locales.',
     },
     steps: {
-      eyebrow: 'Parent Flow',
-      title: 'Comment les parents participent',
-      subtitle: 'Les parents ajoutent du contexte et comprennent le processus, sans remplacer la decision de l utilisateur.',
+      eyebrow: 'Family Flow',
+      title: 'Comment la famille participe',
+      subtitle: 'La famille ajoute du contexte et comprend le processus, sans remplacer la decision de l utilisateur.',
       items: {
         first: {
           index: '01',
@@ -102,8 +102,8 @@ export const parentsMessages: AppLocaleMessages = {
         },
         second: {
           index: '02',
-          title: 'Participer au salon parents',
-          desc: 'Comprendre les regles, le style de communication et les limites de participation parentale.',
+          title: 'Participer au salon famille',
+          desc: 'Comprendre les regles, le style de communication et les limites de participation familiale.',
         },
         third: {
           index: '03',
@@ -125,9 +125,9 @@ export const parentsMessages: AppLocaleMessages = {
   },
   en: {
     hero: {
-      eyebrow: 'Parent Hub',
-      title: 'Parent assistance',
-      subtitle: 'This page shows parent-visible profiles, salons, and support slots instead of another explanatory page.',
+      eyebrow: 'Family Participation',
+      title: 'Family participation',
+      subtitle: 'This page shows family-visible profiles, salons, and support slots instead of another explanatory page.',
     },
     stats: {
       visibleProfiles: 'Visible profiles',
@@ -135,7 +135,7 @@ export const parentsMessages: AppLocaleMessages = {
       supportSlots: 'Support slots',
     },
     profiles: {
-      eyebrow: 'Parent-visible profiles',
+      eyebrow: 'Family-visible profiles',
       title: 'Currently visible profiles',
       subtitle: 'These profiles only expose limited background and communication boundaries with user consent.',
     },
@@ -147,14 +147,14 @@ export const parentsMessages: AppLocaleMessages = {
       intent: 'Intent',
     },
     programs: {
-      eyebrow: 'Parent Programs',
-      title: 'Parent salons and support slots',
-      subtitle: 'This section lists parent events and support slots directly, backed by local mock data that can later be replaced by real booking flows.',
+      eyebrow: 'Family Programs',
+      title: 'Family salons and support slots',
+      subtitle: 'This section lists family events and support slots directly, backed by local mock data that can later be replaced by real booking flows.',
     },
     steps: {
-      eyebrow: 'Parent Flow',
-      title: 'How parent participation works',
-      subtitle: 'Parents add context and understand the process, but they do not replace the user in relationship decisions.',
+      eyebrow: 'Family Flow',
+      title: 'How family participation works',
+      subtitle: 'Family members add context and understand the process, but they do not replace the user in relationship decisions.',
       items: {
         first: {
           index: '01',
@@ -163,8 +163,8 @@ export const parentsMessages: AppLocaleMessages = {
         },
         second: {
           index: '02',
-          title: 'Join a parent salon next',
-          desc: 'Use parent salons to understand platform rules, communication style, and the limits of parent involvement.',
+          title: 'Join a family salon next',
+          desc: 'Use family salons to understand platform rules, communication style, and the limits of family involvement.',
         },
         third: {
           index: '03',

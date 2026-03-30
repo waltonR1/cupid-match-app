@@ -9,7 +9,7 @@ export const commonMessages: AppLocaleMessages = {
     nav: {
       about: '关于我们',
       profiles: '会员资料',
-      parents: '父母专区',
+      family: '家庭参与',
       events: '活动日历',
       membership: '会员体系',
       contact: '联系我们',
@@ -42,7 +42,7 @@ export const commonMessages: AppLocaleMessages = {
     nav: {
       about: 'À propos',
       profiles: 'Profils',
-      parents: 'Parents',
+      family: 'Famille',
       events: 'Événements',
       membership: 'Abonnement',
       contact: 'Contact',
@@ -75,7 +75,7 @@ export const commonMessages: AppLocaleMessages = {
     nav: {
       about: 'About',
       profiles: 'Profiles',
-      parents: 'Parents',
+      family: 'Family',
       events: 'Events',
       membership: 'Membership',
       contact: 'Contact',

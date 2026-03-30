@@ -82,8 +82,8 @@ export const profilesMessages: AppLocaleMessages = {
     },
     featured: {
       eyebrow: 'Profils avec appui familial',
-      title: 'Profils visibles aux parents',
-      subtitle: 'Ces profils autorisent une aide parentale limitee lorsque l utilisateur en donne l accord.',
+      title: 'Profils visibles a la famille',
+      subtitle: 'Ces profils autorisent un appui familial limite lorsque l utilisateur en donne l accord.',
     },
     status: {
       open: 'Ouvert',
@@ -127,8 +127,8 @@ export const profilesMessages: AppLocaleMessages = {
     },
     featured: {
       eyebrow: 'Family-assisted profiles',
-      title: 'Parent-visible profiles',
-      subtitle: 'These profiles allow limited parent-assisted context when the user explicitly authorizes it.',
+      title: 'Family-visible profiles',
+      subtitle: 'These profiles allow limited family-assisted context when the user explicitly authorizes it.',
     },
     status: {
       open: 'Open',

@@ -174,7 +174,7 @@
               v-for="profile in familyProfiles"
               :key="profile.id"
               class="border border-white/10 bg-white/5 px-8 py-8 backdrop-blur"
-              @click="handleProfileOpen(profile.id, 'parent')"
+              @click="handleProfileOpen(profile.id, 'family')"
           >
             <view class="flex items-center justify-between gap-4">
               <view class="text-[26px] font-semibold text-[#fffaf2]">{{ profile.name }}</view>
@@ -239,7 +239,7 @@ function handleNavClick(key: string) {
   navigateByNavKey(key, navList)
 }
 
-function handleProfileOpen(id: string, source: 'member' | 'parent' = 'member') {
+function handleProfileOpen(id: string, source: 'member' | 'family' = 'member') {
   openProfileDetail(id, source)
 }
 
@@ -247,5 +247,4 @@ function handleRegisterClick() {
   openRegisterPage('free')
 }
 </script>
-
 

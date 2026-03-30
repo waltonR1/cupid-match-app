@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-[#f5f0e8] text-[#1d1d1f]">
     <AppHeader
         :nav-list="navList"
-        active-nav="common.nav.parents"
+        active-nav="common.nav.family"
         @nav-click="handleNavClick"
         @register-click="handleRegisterClick"
     />
@@ -110,7 +110,7 @@
 
         <view class="grid gap-6">
           <view
-              v-for="program in parentPrograms"
+              v-for="program in familyPrograms"
               :key="program.id"
               class="grid gap-5 border border-white/10 bg-white/5 px-7 py-7 md:grid-cols-[160px_1fr_200px] md:items-center"
               @click="handleProgramOpen(program.id)"
@@ -177,22 +177,22 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { type LocalizedText, mockParentPrograms, mockProfiles, pickLocalized } from '@/mock/business'
-import { openParentProgramDetail, openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
+import { type LocalizedText, mockFamilyPrograms, mockProfiles, pickLocalized } from '@/mock/business'
+import { openFamilyProgramDetail, openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('parents')
+const { t, locale } = usePageI18n('family')
 const familyProfiles = computed(() => mockProfiles.filter(profile => profile.familyVisible))
-const parentPrograms = computed(() => [...mockParentPrograms].sort((left, right) => left.date.localeCompare(right.date)))
+const familyPrograms = computed(() => [...mockFamilyPrograms].sort((left, right) => left.date.localeCompare(right.date)))
 
 const statCards = computed(() => {
-  const openPrograms = mockParentPrograms.filter(item => item.status === 'open').length
+  const openPrograms = mockFamilyPrograms.filter(item => item.status === 'open').length
 
   return [
     { label: t('stats.visibleProfiles'), value: String(familyProfiles.value.length) },
     { label: t('stats.openPrograms'), value: String(openPrograms) },
-    { label: t('stats.supportSlots'), value: String(mockParentPrograms.length) },
+    { label: t('stats.supportSlots'), value: String(mockFamilyPrograms.length) },
   ]
 })
 
@@ -255,16 +255,15 @@ function handleNavClick(key: string) {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id, 'parent')
+  openProfileDetail(id, 'family')
 }
 
 function handleProgramOpen(id: string) {
-  openParentProgramDetail(id)
+  openFamilyProgramDetail(id)
 }
 
 function handleRegisterClick() {
   openRegisterPage('contact')
 }
 </script>
-
 

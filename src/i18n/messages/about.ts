@@ -85,7 +85,7 @@ export const aboutMessages: AppLocaleMessages = {
       titleAccent: 'differents',
       subtitle: 'Rencontre a Paris ne se limite pas a une vitrine plus elegante : la structure privilegie la relation serieuse et le prolongement reel.',
       card1: { title: 'Pas de logique purement divertissante', desc: 'La plateforme valorise davantage la relation serieuse, la compatibilite et la qualite d echange.' },
-      card2: { title: 'Participation des parents', desc: 'Dans des limites plus claires, les familles peuvent aussi trouver une place de soutien.' },
+      card2: { title: 'Participation de la famille', desc: 'Dans des limites plus claires, les familles peuvent aussi trouver une place de soutien.' },
       card3: { title: 'Les evenements hors ligne au coeur du modele', desc: 'Les rencontres reelles a Paris et en Europe font partie de la structure meme du projet.' },
     },
     values: {
@@ -134,7 +134,7 @@ export const aboutMessages: AppLocaleMessages = {
       titleAccent: 'different',
       subtitle: 'This is not just a prettier dating website. Its structure is different from typical entertainment-oriented platforms.',
       card1: { title: 'Not built for casual entertainment', desc: 'We focus more on serious relationships, better conversations, and value alignment than on endless shallow browsing.' },
-      card2: { title: 'Parent participation model', desc: 'Within respectful boundaries, families can also play a supportive role in the relationship journey.' },
+      card2: { title: 'Family participation model', desc: 'Within respectful boundaries, families can also play a supportive role in the relationship journey.' },
       card3: { title: 'Offline events as a core layer', desc: 'Paris and Europe offline activities are part of how online matching becomes real-world development.' },
     },
     values: {

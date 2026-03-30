@@ -90,10 +90,10 @@ const serviceCards: ServiceCardItem[] = [
   },
   {
     icon: '👨‍👩‍👧',
-    title: 'features.parent.title',
-    desc: 'features.parent.desc',
-    label: 'features.parent.label',
-    path: '/pages/parents/index',
+    title: 'features.family.title',
+    desc: 'features.family.desc',
+    label: 'features.family.label',
+    path: '/pages/family/index',
   },
   {
     icon: '💎',

@@ -56,7 +56,7 @@ export const profileDetailMessages: AppLocaleMessages = {
       notFound: 'Aucun profil mock trouve pour ce membre.',
     },
     visibility: {
-      familyVisible: 'Aide parentale autorisee',
+      familyVisible: 'Appui familial autorise',
       userVisible: 'Utilisateur principal',
     },
     status: {
