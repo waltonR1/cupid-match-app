@@ -14,6 +14,8 @@
 
     <HomeProfilesPreviewSection />
 
+    <HomeFamilySection />
+
     <HomeEventsPreviewSection />
 
     <!-- 核心功能 -->
@@ -45,6 +47,7 @@ import HomeMembershipSection from "@/components/home/HomeMembershipSection.vue";
 import HomeAudienceSection from '@/components/home/HomeAudienceSection.vue'
 import HomeEventsPreviewSection from "@/components/home/HomeEventsPreviewSection.vue";
 import HomeProfilesPreviewSection from "@/components/home/HomeProfilesPreviewSection.vue";
+import HomeFamilySection from "@/components/home/HomeFamilySection.vue";
 
 const navList = NAV_LIST
 

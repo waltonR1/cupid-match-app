@@ -157,6 +157,32 @@ export const homeMessages: AppLocaleMessages = {
         tag3: '真诚沟通',
         label: 'Profil Sélectionné',
       },
+    },
+    family: {
+      eyebrow: '家庭参与',
+      title: '不只是两个人',
+      titleAccent: '的选择',
+      description: '我们相信，一段长期关系不仅来自两个人的契合，也来自家庭之间的理解与认同。',
+      secondary: '在合适的阶段，引入家庭沟通，让关系更加清晰与稳定。',
+
+      item1: {
+        title: '资料透明',
+        desc: '父母可在授权下了解基本信息，减少信息不对称',
+      },
+      item2: {
+        title: '沟通支持',
+        desc: '在关系推进阶段，提供家庭沟通辅助',
+      },
+      item3: {
+        title: '节奏控制',
+        desc: '不是一开始介入，而是在合适阶段参与',
+      },
+
+      card1Label: '匹配原则',
+      card1: '家庭观念与价值观的接近，是关系长期稳定的重要基础',
+
+      card2Label: '我们的态度',
+      card2: '我们不让家庭主导选择，但让家庭成为更可靠的支持',
     }
   },
   fr: {
@@ -171,11 +197,11 @@ export const homeMessages: AppLocaleMessages = {
         secondary: 'Decouvrir les evenements',
       },
       quote: 'L amour avec une vraie profondeur culturelle.',
-      // stats: {
-      //   members: { value: '700k+', label: 'Membres qualifies' },
-      //   events: { value: '50k', label: 'Evenements en Europe' },
-      //   connections: { value: '3M+', label: 'Rencontres authentiques' },
-      // },
+      stats: {
+        members: { value: '700k+', label: 'Membres qualifies' },
+        events: { value: '50k', label: 'Evenements en Europe' },
+        connections: { value: '3M+', label: 'Rencontres authentiques' },
+      },
     },
     vision: {
       eyebrow: 'Notre vision',
@@ -315,6 +341,32 @@ export const homeMessages: AppLocaleMessages = {
         tag3: 'Dialogue sincère',
         label: 'Profil Sélectionné',
       },
+    },
+    family: {
+      eyebrow: 'Participation familiale',
+      title: 'Pas seulement',
+      titleAccent: 'deux personnes',
+      description: 'Une relation durable ne repose pas uniquement sur deux individus, mais aussi sur la compréhension entre familles.',
+      secondary: 'Impliquer la famille au bon moment permet une relation plus stable.',
+
+      item1: {
+        title: 'Transparence',
+        desc: 'Accès encadré aux informations essentielles',
+      },
+      item2: {
+        title: 'Accompagnement',
+        desc: 'Soutien dans les échanges familiaux',
+      },
+      item3: {
+        title: 'Au bon moment',
+        desc: 'Intervention uniquement quand c’est pertinent',
+      },
+
+      card1Label: 'Principe',
+      card1: 'La proximité des valeurs familiales renforce la stabilité',
+
+      card2Label: 'Notre approche',
+      card2: 'La famille soutient, sans jamais imposer',
     }
   },
   en: {
@@ -329,11 +381,11 @@ export const homeMessages: AppLocaleMessages = {
         secondary: 'Explore Events',
       },
       quote: 'Let love carry cultural warmth.',
-      // stats: {
-      //   members: { value: '700k+', label: 'Qualified global members' },
-      //   events: { value: '50k', label: 'Paris and Europe events' },
-      //   connections: { value: '3M+', label: 'Authentic connections' },
-      // },
+      stats: {
+        members: { value: '700k+', label: 'Qualified global members' },
+        events: { value: '50k', label: 'Paris and Europe events' },
+        connections: { value: '3M+', label: 'Authentic connections' },
+      },
     },
     vision: {
       eyebrow: 'Our vision',
@@ -473,6 +525,32 @@ export const homeMessages: AppLocaleMessages = {
         tag3: 'Sincere dialogue',
         label: 'Selected Profile',
       },
+    },
+    family: {
+      eyebrow: 'Family Involvement',
+      title: 'Not just',
+      titleAccent: 'two individuals',
+      description: 'A meaningful relationship is built not only between two people, but also between families.',
+      secondary: 'Involving family at the right moment brings clarity and stability.',
+
+      item1: {
+        title: 'Transparency',
+        desc: 'Structured access to key information',
+      },
+      item2: {
+        title: 'Support',
+        desc: 'Guidance in family communication',
+      },
+      item3: {
+        title: 'Timing matters',
+        desc: 'Involvement only when appropriate',
+      },
+
+      card1Label: 'Principle',
+      card1: 'Shared family values lead to long-term stability',
+
+      card2Label: 'Our approach',
+      card2: 'Family supports, never controls',
     }
   },
 }
