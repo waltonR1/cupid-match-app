@@ -90,12 +90,12 @@
 
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
-        <button
-            class="border border-[#1f1a1c] bg-transparent px-6 py-3 text-[16px] text-[#1f1a1c]"
+        <view
+            class="inline-flex items-center justify-center cursor-pointer rounded-lg border border-[#1f1a1c]/40 bg-transparent px-8 py-3 text-[15px] tracking-[1px] text-[#1f1a1c] transition-all duration-300 hover:border-[#1f1a1c] hover:bg-[#1f1a1c] hover:text-white"
             @click="goProfiles"
         >
           {{ t('profilesPreview.cta') }}
-        </button>
+        </view>
       </view>
     </view>
   </view>

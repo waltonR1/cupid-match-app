@@ -4,7 +4,7 @@
   >
     <view class="relative mx-auto flex max-w-[1280px] items-center justify-between px-8 py-3">
       <!-- 品牌 -->
-      <view class="flex flex-col pr-8" @click.stop="handleNavIndex">
+      <view class="cursor-pointer flex flex-col pr-8" @click.stop="handleNavIndex">
         <text class="text-[24px] font-semibold tracking-[2px] text-[#d4af37]">{{ t('common.brand.name') }}</text>
         <text class="mt-1 text-[13px] italic tracking-[2px] text-[#d8c8a8]">
           {{ t('common.brand.tagline') }}
@@ -43,26 +43,26 @@
       <view class="flex items-center gap-4">
         <!-- 未登录 -->
         <template v-if="!auth.isLoggedIn">
-          <button
-              class="rounded-xl border border-[#c9a96a] bg-transparent px-5 py-1 text-[14px] font-medium text-[#f3e7cf] transition-all duration-300 hover:border-[#d8b87a] hover:bg-[#c9a96a]/10 hover:text-white"
+          <view
+              class="inline-flex items-center justify-center cursor-pointer rounded-xl border border-[#c9a96a] bg-transparent px-5 py-2 text-[14px] font-medium text-[#f3e7cf] transition-all duration-300 hover:border-[#d8b87a] hover:bg-[#c9a96a]/10 hover:text-white"
               @click.stop="handleLogin"
           >
             {{ t('common.nav.login') }}
-          </button>
+          </view>
 
-          <button
-              class="rounded-xl border border-[#d90429] bg-[#d90429] px-5 py-1 text-[14px] font-medium text-white transition-all duration-300  hover:border-[#ef233c] hover:bg-[#ef233c] "
+          <view
+              class="inline-flex items-center justify-center cursor-pointer rounded-xl border border-[#d90429] bg-[#d90429] px-5 py-2 text-[14px] font-medium text-white transition-all duration-300  hover:border-[#ef233c] hover:bg-[#ef233c] "
               @click.stop="handleRegister"
           >
             {{ t('common.nav.register') }}
-          </button>
+          </view>
         </template>
 
         <!-- 已登录 -->
         <template v-else>
           <view class="relative inline-block" @click.stop>
-            <button
-                class="flex items-center gap-2 border border-[#c9a96a] bg-transparent px-4 py-2 text-[14px] font-medium text-[#f3e7cf] transition-colors duration-300 hover:bg-white/5"
+            <view
+                class="justify-center cursor-pointer flex items-center gap-2 border border-[#c9a96a] bg-transparent px-4 py-1 text-[14px] font-medium text-[#f3e7cf] transition-colors duration-300 hover:bg-white/5"
                 @click="toggleUserDropdown"
             >
               <view
@@ -72,7 +72,7 @@
               </view>
               <text>{{ auth.displayName }}</text>
               <text class="text-[10px] text-[#c9a96a]">▼</text>
-            </button>
+            </view>
 
             <view
                 v-if="showUserDropdown"
@@ -111,13 +111,13 @@
 
         <!-- 语言切换 -->
         <view class="relative inline-block" @click.stop>
-          <button
-              class="flex items-center gap-1 border border-[#c9a96a]/50 bg-transparent px-2 py-1 text-[12px] text-[#f3e7cf] transition-colors duration-200 hover:bg-[#c9a96a]/10"
+          <view
+              class="justify-center cursor-pointer flex items-center gap-1 border border-[#c9a96a]/50 bg-transparent px-2 py-1 text-[12px] text-[#f3e7cf] transition-colors duration-200 hover:bg-[#c9a96a]/10"
               @click="toggleLocaleDropdown"
           >
             <text>{{ locale.toUpperCase() }}</text>
             <text class="text-[10px] text-[#c9a96a]">▼</text>
-          </button>
+          </view>
 
           <view
               v-if="showLocaleDropdown"

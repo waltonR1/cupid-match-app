@@ -50,16 +50,17 @@ const stats = [
         </view>
 
         <view class="mt-12 flex flex-wrap gap-5">
-          <button class="min-w-[190px] bg-[#d90429] px-6 py-4 text-[16px] font-medium text-white"
-                  @click="openPlan('free')">
+          <view
+              class="inline-flex items-center justify-center cursor-pointer min-w-[190px] bg-[#d90429] px-6 py-4 text-[16px] font-medium text-white transition-all duration-300 hover:bg-[#ef233c]"
+              @click="openPlan('free')">
             {{ t('hero.actions.primary') }}
-          </button>
-          <button
-              class="min-w-[190px] border border-[#c9a96a] bg-transparent px-6 py-4 text-[16px] text-[#f5e7c8]"
+          </view>
+          <view
+              class="inline-flex items-center justify-center cursor-pointer min-w-[190px] border border-[#c9a96a] bg-transparent px-6 py-4 text-[16px] text-[#f5e7c8] transition-all duration-300 hover:bg-[#c9a96a]/10 hover:text-white hover:border-[#d8b87a]"
               @click="openProfiles"
           >
             {{ t('hero.actions.secondary') }}
-          </button>
+          </view>
         </view>
 
         <view class="mt-14 border-l-2 border-[#d90429] pl-5 text-[20px] text-[#f3e7cf]">

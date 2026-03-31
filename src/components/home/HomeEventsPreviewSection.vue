@@ -54,12 +54,12 @@
 
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
-        <button
-            class="border border-[#d7b86e] px-6 py-3 text-[16px] text-[#d7b86e] transition hover:bg-[#d7b86e] hover:text-[#0d2238]"
+        <view
+            class="inline-flex items-center justify-center cursor-pointer border border-[#d7b86e] px-6 py-3 text-[16px] text-[#d7b86e] transition  duration-300 hover:bg-[#d7b86e] hover:text-[#0d2238]"
             @click="goEvents"
         >
           {{ t('events.cta') }}
-        </button>
+        </view>
       </view>
 
     </view>

@@ -53,12 +53,12 @@
             <view>• {{ t('membership.free.f3') }}</view>
           </view>
 
-          <button
-              class="mt-auto w-full border border-[#1f1f1f] bg-transparent px-4 py-3 text-[16px] text-[#1f1f1f]"
+          <view
+              class="mt-auto inline-flex w-full items-center justify-center cursor-pointer rounded-[2px] border border-[#1f1f1f]/55 bg-transparent py-4 text-[16px] font-medium tracking-[0.5px] text-[#1f1f1f] transition-all duration-300 hover:border-[#1f1f1f] hover:bg-[#1f1f1f] hover:text-white"
               @click="openPlan('free')"
           >
             {{ t('membership.free.button') }}
-          </button>
+          </view>
         </view>
 
         <!-- Silver -->
@@ -90,12 +90,12 @@
             <view>• {{ t('membership.vip.silver.f3') }}</view>
           </view>
 
-          <button
-              class="mt-auto w-full border border-[#8b6a36] bg-transparent px-4 py-3 text-[16px] text-[#8b6a36]"
+          <view
+              class="mt-auto inline-flex w-full items-center justify-center cursor-pointer rounded-[2px] border border-[#8b6a36]/70 bg-transparent py-4 text-[16px] font-medium tracking-[0.5px] text-[#8b6a36] transition-all duration-300 hover:border-[#8b6a36] hover:bg-[#8b6a36] hover:text-[#fbf7ef]"
               @click="openPlan('silver')"
           >
             {{ t('membership.vip.cta') }}
-          </button>
+          </view>
         </view>
 
         <!-- Gold -->
@@ -127,12 +127,12 @@
             <view>• {{ t('membership.vip.gold.f3') }}</view>
           </view>
 
-          <button
-              class="mt-auto w-full border border-[#d7b86e] bg-[#d7b86e] px-4 py-3 text-[16px] text-[#1f3047]"
+          <view
+              class="mt-auto inline-flex w-full items-center justify-center cursor-pointer rounded-[2px] border border-[#d7b86e] bg-[#d7b86e] py-4 text-[16px] font-medium tracking-[0.5px] text-[#1f3047] transition-all duration-300 hover:-translate-y-[1px] hover:border-[#e4c783] hover:bg-[#e4c783]"
               @click="openPlan('gold')"
           >
             {{ t('membership.vip.cta') }}
-          </button>
+          </view>
         </view>
 
         <!-- Diamond -->
@@ -164,12 +164,11 @@
             <view>• {{ t('membership.vip.diamond.f3') }}</view>
           </view>
 
-          <button
-              class="mt-auto w-full border border-white bg-white px-4 py-3 text-[16px] text-[#d90429]"
-              @click="openPlan('diamond')"
+          <view
+              class="mt-auto inline-flex w-full items-center justify-center cursor-pointer rounded-[2px] border border-white bg-white py-4 text-[16px] font-medium tracking-[0.5px] text-[#d90429] transition-all duration-300 hover:-translate-y-[1px] hover:bg-[#fff5f7]"              @click="openPlan('diamond')"
           >
             {{ t('membership.vip.cta') }}
-          </button>
+          </view>
         </view>
       </view>
     </view>
