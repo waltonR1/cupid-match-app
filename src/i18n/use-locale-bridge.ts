@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useLocaleStore } from '@/stores/locale'
+import { useLocaleStore } from '@/stores/modules/locale'
 import { SUPPORTED_LOCALES, type AppLocale } from '@/i18n/types'
 
 /**

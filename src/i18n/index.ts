@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
-import { readLocale, FALLBACK_LOCALE } from '@/i18n/locale'
+import { DEFAULT_LOCALE, FALLBACK_LOCALE } from '@/i18n/locale'
+import type { AppLocale, AppMessages } from '@/i18n/types'
 import { aboutMessages } from '@/i18n/messages/about'
 import { accountMessages } from '@/i18n/messages/account'
 import { commonMessages } from '@/i18n/messages/common'
@@ -19,7 +20,6 @@ import { privacyMessages } from '@/i18n/messages/privacy'
 import { profileDetailMessages } from '@/i18n/messages/profile-detail'
 import { registerMessages } from '@/i18n/messages/register'
 import { profilesMessages } from '@/i18n/messages/profiles'
-import type { AppMessages } from '@/i18n/types'
 
 export const messages: AppMessages = {
   zh: {
@@ -87,9 +87,11 @@ export const messages: AppMessages = {
   },
 }
 
-export const i18n = createI18n({
-  legacy: false,
-  locale: readLocale(),
-  fallbackLocale: FALLBACK_LOCALE,
-  messages,
-})
+export function createAppI18n(locale: AppLocale = DEFAULT_LOCALE) {
+  return createI18n({
+    legacy: false,
+    locale,
+    fallbackLocale: FALLBACK_LOCALE,
+    messages,
+  })
+}

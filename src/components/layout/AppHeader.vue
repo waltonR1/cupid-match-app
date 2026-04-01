@@ -143,7 +143,7 @@
 import { ref } from 'vue'
 import { useAppI18n } from '@/i18n/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/modules/auth'
 
 interface NavItem {
   key: string
