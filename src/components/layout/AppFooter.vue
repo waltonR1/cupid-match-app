@@ -1,32 +1,32 @@
 <template>
-  <view class="bg-[#0d2238] text-white">
+  <view class="bg-page-inverse text-text-inverse">
     <view class="mx-auto max-w-[1280px] px-8 py-10">
       <!-- 上半部分 -->
       <view class="grid gap-12 md:grid-cols-4">
         <!-- 品牌 -->
         <view>
-          <view class="text-[22px] font-semibold tracking-[2px] text-[#d4af37]">
+          <view class="text-[22px] font-semibold tracking-[2px] text-brand-highlight-strong">
             {{ t('common.brand.name') }}
           </view>
-          <view class="mt-2 text-[13px] italic tracking-[2px] text-[#dbc8a2]">
+          <view class="mt-2 text-[13px] italic tracking-[2px] text-brand-highlight-soft">
             {{ t('common.brand.tagline') }}
           </view>
-          <view class="mt-4 text-[14px] leading-6 text-white/65">
+          <view class="mt-4 text-[14px] leading-6 text-text-inverse-subtle">
             {{ t('common.footer.brandDesc') }}
           </view>
         </view>
 
         <!-- 导航 -->
         <view>
-          <view class="text-[16px] font-medium text-[#d4af37]">
+          <view class="text-[16px] font-medium text-brand-highlight-strong">
             {{ t('common.footer.nav') }}
           </view>
-          <view class="mt-3 space-y-2 text-[14px] text-white/70">
+          <view class="mt-3 space-y-2 text-[14px] text-text-inverse-subtle">
             <view
-                v-for="item in navList"
-                :key="item.key"
-                class="cursor-pointer hover:text-white transition-colors"
-                @click="handleNavClick(item.key)"
+              v-for="item in navList"
+              :key="item.key"
+              class="cursor-pointer transition-colors hover:text-text-inverse"
+              @click="handleNavClick(item.key)"
             >
               {{ t(item.key) }}
             </view>
@@ -35,10 +35,10 @@
 
         <!-- 联系 -->
         <view>
-          <view class="text-[16px] font-medium text-[#d4af37]">
+          <view class="text-[16px] font-medium text-brand-highlight-strong">
             {{ t('common.footer.contact') }}
           </view>
-          <view class="mt-3 space-y-2 text-[14px] text-white/70">
+          <view class="mt-3 space-y-2 text-[14px] text-text-inverse-subtle">
             <view>{{ t('common.contact.email', { email }) }}</view>
             <view>{{ t('common.contact.wechat') }}</view>
             <view>{{ t('common.contact.location') }}</view>
@@ -47,10 +47,10 @@
 
         <!-- 语言 -->
         <view>
-          <view class="text-[16px] font-medium text-[#d4af37]">
+          <view class="text-[16px] font-medium text-brand-highlight-strong">
             {{ t('common.footer.lang') }}
           </view>
-          <view class="mt-3 text-[14px] leading-7 text-white/70">
+          <view class="mt-3 text-[14px] leading-7 text-text-inverse-subtle">
             {{ t('common.footer.languageList') }}
           </view>
         </view>
@@ -59,7 +59,7 @@
 
     <!-- 底部收口区 -->
     <view class="border-t border-white/10 py-4">
-      <view class="text-center text-[12px] text-white/40 tracking-wide">
+      <view class="text-center text-[12px] tracking-wide text-white/40">
         {{ t('common.footer.rights', { year }) }}
       </view>
     </view>
@@ -80,7 +80,7 @@ defineProps<{
 const { t } = useAppI18n()
 
 const year = new Date().getFullYear()
-const email = 'contact@rencontreaparis.com';
+const email = 'contact@rencontreaparis.com'
 
 const emit = defineEmits<{
   (e: 'nav-click', key: string): void

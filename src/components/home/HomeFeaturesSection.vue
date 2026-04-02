@@ -1,21 +1,21 @@
 <template>
-  <view class="bg-[#0d2238] text-white">
+  <view class="bg-page-inverse text-text-inverse">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <!-- 标题区 -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-[#b84c5c]"/>
-          <text class="text-[12px] uppercase tracking-[5px] text-[#d58f97]">
+          <view class="h-px w-14 bg-brand-rose-deep" />
+          <text class="text-[12px] uppercase tracking-[5px] text-brand-rose-strong">
             {{ t('features.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
           <text>{{ t('features.title') }}</text>
-          <text class="text-[#e0143d]"> · {{ t('features.titleAccent') }}</text>
+          <text class="text-brand-primary"> · {{ t('features.titleAccent') }}</text>
         </view>
 
-        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-[#d9d0c4] lg:text-[19px]">
+        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-text-inverse-subtle lg:text-[19px]">
           {{ t('features.subtitle') }}
         </view>
       </view>
@@ -23,26 +23,26 @@
       <!-- 服务卡片区 -->
       <view class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <view
-            v-for="card in serviceCards"
-            :key="card.title"
-            class="flex min-h-[280px] cursor-pointer flex-col border border-[#294766] bg-[#203854] px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-[#3a5978] hover:bg-[#25415f] hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
-            @click="openPath(card.path)"
+          v-for="card in serviceCards"
+          :key="card.title"
+          class="flex min-h-[280px] cursor-pointer flex-col border border-border-inverse-soft bg-surface-inverse-strong px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-inverse-hover hover:bg-surface-inverse-hover hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+          @click="openPath(card.path)"
         >
-          <view class="text-[34px] leading-none">
+          <view class="text-[20px] font-semibold uppercase tracking-[2px] text-text-inverse-subtle">
             {{ card.icon }}
           </view>
 
-          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-[#d4af37] lg:text-[28px]">
+          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-brand-highlight-strong lg:text-[28px]">
             {{ t(card.title) }}
           </view>
 
-          <view class="mt-3 text-[17px] leading-8 text-[#f3ede4] lg:text-[18px]">
+          <view class="mt-3 text-[17px] leading-8 text-text-inverse-soft lg:text-[18px]">
             {{ t(card.desc) }}
           </view>
 
           <view
-              v-if="showBrandLabel"
-              class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-[#d63f5f]"
+            v-if="showBrandLabel"
+            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-primary"
           >
             {{ t(card.label) }}
           </view>
@@ -53,10 +53,10 @@
 </template>
 
 <script lang="ts" setup>
-import {computed} from 'vue'
-import {usePageI18n} from "@/i18n/use-page-i18n";
+import { computed } from 'vue'
+import { usePageI18n } from '@/i18n/use-page-i18n'
 
-const {t, locale} = usePageI18n('home')
+const { t, locale } = usePageI18n('home')
 
 interface ServiceCardItem {
   icon: string

@@ -1,24 +1,24 @@
 <template>
-  <view class="bg-[#0d2238] text-white">
+  <view class="bg-page-inverse text-text-inverse">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
 
       <!-- 标题 -->
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-[#b84c5c]" />
-            <text class="text-[12px] uppercase tracking-[5px] text-[#d58f97]">
+            <view class="h-px w-14 bg-brand-rose-deep" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-rose-strong">
               {{ t('events.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
             {{ t('events.title') }}
-            <text class="text-[#e0143d]"> · {{ t('events.titleAccent') }}</text>
+            <text class="text-brand-primary"> · {{ t('events.titleAccent') }}</text>
           </view>
         </view>
 
-        <view class="max-w-[420px] text-[18px] leading-8 text-white/70">
+        <view class="max-w-[420px] text-[18px] leading-8 text-text-inverse-subtle">
           {{ t('events.subtitle') }}
         </view>
       </view>
@@ -26,12 +26,12 @@
       <!-- 卡片 -->
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <view
-            v-for="event in events"
-            :key="event.title"
-            class="group border border-white/10 bg-[#132c47] p-6 transition hover:-translate-y-1 hover:border-[#d7b86e]"
+          v-for="event in events"
+          :key="event.title"
+          class="group border border-white/10 bg-surface-inverse-panel p-6 transition hover:-translate-y-1 hover:border-border-highlight"
         >
           <!-- 标签 -->
-          <view class="text-[12px] uppercase tracking-[4px] text-[#d7b86e]">
+          <view class="text-[12px] uppercase tracking-[4px] text-brand-highlight">
             {{ t(event.tag) }}
           </view>
 
@@ -41,12 +41,12 @@
           </view>
 
           <!-- 描述 -->
-          <view class="mt-3 text-[15px] leading-7 text-white/70">
+          <view class="mt-3 text-[15px] leading-7 text-text-inverse-subtle">
             {{ t(event.desc) }}
           </view>
 
           <!-- meta -->
-          <view class="mt-6 text-[13px] text-white/50">
+          <view class="mt-6 text-[13px] text-text-inverse-muted/70">
             {{ t(event.meta) }}
           </view>
         </view>
@@ -55,13 +55,12 @@
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
         <view
-            class="inline-flex items-center justify-center cursor-pointer border border-[#d7b86e] px-6 py-3 text-[16px] text-[#d7b86e] transition  duration-300 hover:bg-[#d7b86e] hover:text-[#0d2238]"
-            @click="goEvents"
+          class="inline-flex cursor-pointer items-center justify-center border border-button-highlight px-6 py-3 text-[16px] text-button-highlight transition duration-300 hover:bg-button-highlight hover:text-page-inverse"
+          @click="goEvents"
         >
           {{ t('events.cta') }}
         </view>
       </view>
-
     </view>
   </view>
 </template>

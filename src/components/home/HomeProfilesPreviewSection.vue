@@ -1,23 +1,23 @@
 <template>
-  <view class="bg-[#f3ede3]">
+  <view class="bg-page-soft">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <!-- 标题区 -->
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-[#d08e92]" />
-            <text class="text-[12px] uppercase tracking-[5px] text-[#cf9aa0]">
+            <view class="h-px w-14 bg-brand-rose-line" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-rose">
               {{ t('profilesPreview.eyebrow') }}
             </text>
           </view>
 
-          <view class="text-[40px] font-semibold leading-[1.06] text-[#1f1a1c] lg:text-[56px]">
+          <view class="text-[40px] font-semibold leading-[1.06] text-text-heading lg:text-[56px]">
             <text>{{ t('profilesPreview.title') }}</text>
-            <text class="text-[#d71934]"> · {{ t('profilesPreview.titleAccent') }}</text>
+            <text class="text-brand-primary"> · {{ t('profilesPreview.titleAccent') }}</text>
           </view>
         </view>
 
-        <view class="max-w-[430px] text-[18px] leading-8 text-[#8c6b49] lg:text-[19px]">
+        <view class="max-w-[430px] text-[18px] leading-8 text-text-warm lg:text-[19px]">
           {{ t('profilesPreview.subtitle') }}
         </view>
       </view>
@@ -25,64 +25,61 @@
       <!-- 资料卡 -->
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <view
-            v-for="profile in profiles"
-            :key="profile.name"
-            class="flex min-h-[420px] flex-col border border-[#e2d7c9] bg-[#faf7f1] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,24,18,0.08)]"
+          v-for="profile in profiles"
+          :key="profile.name"
+          class="flex min-h-[420px] flex-col border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,24,18,0.08)]"
         >
-          <!-- 顶部 -->
           <view class="flex items-start justify-between gap-4">
             <view class="flex items-center gap-4">
-              <view
-                  class="flex h-14 w-14 items-center justify-center rounded-full border border-[#dccfbe] bg-[#f3eadf] text-[20px] font-semibold text-[#203854]"
-              >
+              <view class="flex h-14 w-14 items-center justify-center rounded-full border border-border-muted bg-surface-panel text-[20px] font-semibold text-surface-inverse-strong">
                 {{ t(profile.initials) }}
               </view>
 
               <view>
-                <view class="text-[22px] font-semibold text-[#1f1a1c]">
+                <view class="text-[22px] font-semibold text-text-heading">
                   {{ t(profile.name) }}
                 </view>
-                <view class="mt-1 text-[14px] text-[#7c6853]">
+                <view class="mt-1 text-[14px] text-text-body-soft">
                   {{ t(profile.meta) }}
                 </view>
               </view>
             </view>
 
-            <view class="rounded-full bg-[#f6ecdf] px-3 py-1 text-[12px] text-[#b07d45]">
+            <view class="rounded-full bg-surface-panel px-3 py-1 text-[12px] text-brand-brown">
               {{ t(profile.goal) }}
             </view>
           </view>
 
           <!-- 简介 -->
-          <view class="mt-6 text-[15px] leading-7 text-[#5f5144]">
+          <view class="mt-6 text-[15px] leading-7 text-text-body">
             {{ t(profile.summary) }}
           </view>
 
           <!-- 维度 -->
           <view class="mt-6 grid gap-3">
             <view
-                v-for="item in profile.facts"
-                :key="item.label"
-                class="flex items-start justify-between gap-4 border-b border-[#eee4d7] pb-3 text-[14px]"
+              v-for="item in profile.facts"
+              :key="item.label"
+              class="flex items-start justify-between gap-4 border-b border-border-light pb-3 text-[14px]"
             >
-              <text class="text-[#8b7864]">{{ t(item.label) }}</text>
-              <text class="text-right text-[#1f1a1c]">{{ t(item.value) }}</text>
+              <text class="text-text-muted">{{ t(item.label) }}</text>
+              <text class="text-right text-text-heading">{{ t(item.value) }}</text>
             </view>
           </view>
 
           <!-- 标签 -->
           <view class="mt-6 flex flex-wrap gap-2">
             <view
-                v-for="tag in profile.tags"
-                :key="tag"
-                class="rounded-full border border-[#e1d6c8] bg-white px-3 py-1 text-[12px] text-[#7a6450]"
+              v-for="tag in profile.tags"
+              :key="tag"
+              class="rounded-full border border-border-base bg-surface-base px-3 py-1 text-[12px] text-text-body-soft"
             >
               {{ t(tag) }}
             </view>
           </view>
 
           <!-- 底部 -->
-          <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-[#c34a62]">
+          <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-brand-rose-deep">
             {{ t(profile.label) }}
           </view>
         </view>
@@ -91,8 +88,8 @@
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
         <view
-            class="inline-flex items-center justify-center cursor-pointer rounded-lg border border-[#1f1a1c]/40 bg-transparent px-8 py-3 text-[15px] tracking-[1px] text-[#1f1a1c] transition-all duration-300 hover:border-[#1f1a1c] hover:bg-[#1f1a1c] hover:text-white"
-            @click="goProfiles"
+          class="inline-flex cursor-pointer items-center justify-center rounded-lg border border-button-neutral/40 bg-transparent px-8 py-3 text-[15px] tracking-[1px] text-button-neutral transition-all duration-300 hover:border-button-neutral hover:bg-button-neutral hover:text-white"
+          @click="goProfiles"
         >
           {{ t('profilesPreview.cta') }}
         </view>
