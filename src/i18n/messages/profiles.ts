@@ -3,149 +3,322 @@ import type { AppLocaleMessages } from '@/i18n/types'
 export const profilesMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      eyebrow: 'Local Mock Profiles',
+      eyebrow: 'Member Directory',
       title: '会员资料',
-      subtitle: '这里直接展示当前可浏览的本地 mock 会员资料，用于演示资料列表、筛选标签和资料详情跳转。',
+      subtitle: '浏览当前开放的会员资料，先按常规条件筛选，再决定是否进一步了解。',
+      tags: {
+        first: '真实资料目录',
+        second: '先浏览再筛选',
+        third: '支持分页查看',
+      },
     },
-    stats: {
-      totalProfiles: '公开资料',
-      openCities: '开放城市',
-      familyAssisted: '家长协助',
+
+    toolbar: {
+      searchPlaceholder: '搜索姓名、城市、职业或关键词',
+      sortLabel: '排序',
+      sortNewest: '最近活跃',
+      sortPriority: '优先资料',
+      sortAgeAsc: '年龄从低到高',
+      sortAgeDesc: '年龄从高到低',
+      filtersLabel: '更多筛选',
+      filterToggleOpen: '展开更多筛选',
+      filterToggleClose: '收起更多筛选',
     },
-    filters: {
-      city: '城市',
-      intent: '关系意向',
-      languages: '语言',
-      cityHint: '展示筛选位和选中反馈，当前不改变结果。',
-      intentHint: '强调关系导向，让浏览更像精致筛选而不是纯列表。',
-      languagesHint: '保留多语言维度，先做展示型交互。',
-      clear: '清除',
-    },
+
     directory: {
       eyebrow: 'Profile Directory',
-      title: '当前资料库',
-      note: '当前使用本地 mock 数据，后续可以直接替换为真实会员资料接口。',
+      title: '资料目录',
+      subtitle: '保持成熟平台常见的浏览逻辑：先看结果，再筛选，再翻页。',
+      resultPrefix: '当前共找到',
+      resultSuffix: '份资料',
+      resultHint: '默认展示全部公开资料，可通过筛选条件逐步收窄范围。',
+      empty: '当前没有符合条件的资料。',
+      pagePrefix: '当前显示',
+      pageMiddle: '',
+      pageSuffix: '',
     },
-    fields: {
+
+    filters: {
+      all: '全部',
+      clear: '清除全部',
+
       age: '年龄',
       city: '城市',
-      education: '教育',
+      height: '身高',
+      education: '学历',
+      intent: '关系意向',
+
+      industry: '行业',
+      languages: '语言',
+      verified: '认证状态',
+      verifiedLabel: '已认证',
+      unverifiedLabel: '未认证',
+      maritalStatus: '婚姻状态',
+      children: '子女情况',
+      longDistance: '异地接受度',
+
+      hasChildren: '有孩子',
+      noChildren: '无孩子',
+      acceptLongDistanceLabel: '接受异地',
+      noLongDistance: '不接受异地',
+
+      single: '未婚',
+      divorced: '离异',
+      widowed: '丧偶',
+
+      bachelor: '本科',
+      master: '硕士',
+      phd: '博士',
+
+      intentSerious: '认真长期关系',
+      intentMarriage: '婚姻导向',
+      intentExclusive: '明确排他关系',
+      intentCrossBorder: '跨国长期关系',
+    },
+
+    fields: {
+      age: '年龄',
+      height: '身高',
+      city: '城市',
+      education: '学历',
       job: '职业',
       intent: '关系意向',
       languages: '语言',
-      status: '状态',
     },
-    badges: {
-      familyAssisted: '家长协助',
-      directProfile: '本人主导',
+
+    statusTabs: {
+      all: '全部资料',
     },
-    featured: {
-      eyebrow: '家长协助资料',
-      title: '家长可见资料',
-      subtitle: '以下资料允许在用户授权下，由家长辅助理解背景或参与基础沟通。',
-    },
+
     status: {
       open: '可联系',
       review: '审核中',
-      vip: 'VIP 优先',
+      vip: '优先资料',
+    },
+
+    actions: {
+      open: '查看资料',
+      favorite: '加入关注',
+      compare: '进一步了解',
+    },
+
+    pagination: {
+      prev: '上一页',
+      next: '下一页',
     },
   },
+
   fr: {
     hero: {
-      eyebrow: 'Local Mock Profiles',
+      eyebrow: 'Member Directory',
       title: 'Profils membres',
-      subtitle: 'Cette page montre directement les profils mock consultables afin de demo le repertoire, les filtres et l acces au detail.',
+      subtitle: 'Parcourir les profils ouverts, filtrer d abord selon les criteres classiques, puis decider si un profil merite d etre approfondi.',
+      tags: {
+        first: 'Repertoire reel',
+        second: 'Voir puis filtrer',
+        third: 'Navigation paginee',
+      },
     },
-    stats: {
-      totalProfiles: 'Profils',
-      openCities: 'Villes',
-      familyAssisted: 'Avec famille',
+
+    toolbar: {
+      searchPlaceholder: 'Rechercher par nom, ville, metier ou mot-cle',
+      sortLabel: 'Tri',
+      sortNewest: 'Activite recente',
+      sortPriority: 'Profils prioritaires',
+      sortAgeAsc: 'Age croissant',
+      sortAgeDesc: 'Age decroissant',
+      filtersLabel: 'Plus de filtres',
+      filterToggleOpen: 'Ouvrir plus de filtres',
+      filterToggleClose: 'Fermer les filtres',
     },
-    filters: {
-      city: 'Ville',
-      intent: 'Intention',
-      languages: 'Langues',
-      cityHint: 'Le filtre reste visuel pour le moment, sans modifier les resultats.',
-      intentHint: 'Il structure deja la lecture avec une sensation plus selective.',
-      languagesHint: 'Le multilingue reste visible comme un marqueur de profil.',
-      clear: 'Effacer',
-    },
+
     directory: {
       eyebrow: 'Profile Directory',
-      title: 'Profils actuels',
-      note: 'La page fonctionne avec des donnees mock locales et pourra ensuite etre branchee sur une vraie API de profils.',
+      title: 'Repertoire',
+      subtitle: 'Une logique proche des plateformes matures : voir, filtrer, puis parcourir page par page.',
+      resultPrefix: 'Resultat actuel :',
+      resultSuffix: 'profils',
+      resultHint: 'Tous les profils publics sont affiches par defaut avant filtrage.',
+      empty: 'Aucun profil ne correspond aux filtres actuels.',
+      pagePrefix: 'Affichage',
+      pageMiddle: '',
+      pageSuffix: '',
     },
+
+    filters: {
+      all: 'Tous',
+      clear: 'Tout effacer',
+
+      age: 'Age',
+      city: 'Ville',
+      height: 'Taille',
+      education: 'Formation',
+      intent: 'Intention',
+
+      industry: 'Secteur',
+      languages: 'Langues',
+      verified: 'Verification',
+      verifiedLabel: 'Verifie',
+      unverifiedLabel: 'Non verifie',
+      maritalStatus: 'Statut marital',
+      children: 'Enfants',
+      longDistance: 'Distance',
+
+      hasChildren: 'Avec enfants',
+      noChildren: 'Sans enfant',
+      acceptLongDistanceLabel: 'Ouvert a distance',
+      noLongDistance: 'Pas de distance',
+
+      single: 'Celibataire',
+      divorced: 'Divorce',
+      widowed: 'Veuf / veuve',
+
+      bachelor: 'Licence',
+      master: 'Master',
+      phd: 'Doctorat',
+
+      intentSerious: 'Relation serieuse',
+      intentMarriage: 'Orientation mariage',
+      intentExclusive: 'Relation exclusive',
+      intentCrossBorder: 'Relation internationale',
+    },
+
     fields: {
       age: 'Age',
+      height: 'Taille',
       city: 'Ville',
       education: 'Formation',
       job: 'Metier',
       intent: 'Intention',
       languages: 'Langues',
-      status: 'Statut',
     },
-    badges: {
-      familyAssisted: 'Avec famille',
-      directProfile: 'En direct',
+
+    statusTabs: {
+      all: 'Tous les profils',
     },
-    featured: {
-      eyebrow: 'Profils avec appui familial',
-      title: 'Profils visibles a la famille',
-      subtitle: 'Ces profils autorisent un appui familial limite lorsque l utilisateur en donne l accord.',
-    },
+
     status: {
       open: 'Ouvert',
       review: 'Verification',
-      vip: 'Priorite VIP',
+      vip: 'Prioritaire',
+    },
+
+    actions: {
+      open: 'Voir le profil',
+      favorite: 'Ajouter au suivi',
+      compare: 'Approfondir',
+    },
+
+    pagination: {
+      prev: 'Precedent',
+      next: 'Suivant',
     },
   },
+
   en: {
     hero: {
-      eyebrow: 'Local Mock Profiles',
+      eyebrow: 'Member Directory',
       title: 'Member profiles',
-      subtitle: 'This page shows browsable local mock member profiles, including filter tags and profile detail entry points.',
+      subtitle: 'Browse the open profile pool, filter first by core dating criteria, then decide which profiles deserve deeper attention.',
+      tags: {
+        first: 'Real profile directory',
+        second: 'Browse then filter',
+        third: 'Paged navigation',
+      },
     },
-    stats: {
-      totalProfiles: 'Profiles',
-      openCities: 'Cities',
-      familyAssisted: 'Family-assisted',
+
+    toolbar: {
+      searchPlaceholder: 'Search by name, city, occupation, or keyword',
+      sortLabel: 'Sort',
+      sortNewest: 'Recently active',
+      sortPriority: 'Priority profiles',
+      sortAgeAsc: 'Age: low to high',
+      sortAgeDesc: 'Age: high to low',
+      filtersLabel: 'More filters',
+      filterToggleOpen: 'Show more filters',
+      filterToggleClose: 'Hide extra filters',
     },
-    filters: {
-      city: 'City',
-      intent: 'Intent',
-      languages: 'Languages',
-      cityHint: 'This keeps the filter area visible without changing results yet.',
-      intentHint: 'It adds a more selective, premium browsing rhythm to the page.',
-      languagesHint: 'Language range stays as a display cue for now.',
-      clear: 'Clear',
-    },
+
     directory: {
       eyebrow: 'Profile Directory',
-      title: 'Current profiles',
-      note: 'This view runs on local mock data now and can later be swapped to a real profile API.',
+      title: 'Directory',
+      subtitle: 'A mature browsing logic: view results, filter, then move through pages.',
+      resultPrefix: 'Current result:',
+      resultSuffix: 'profiles',
+      resultHint: 'All public profiles are shown by default before filtering.',
+      empty: 'No profiles match the current filters.',
+      pagePrefix: 'Showing',
+      pageMiddle: '',
+      pageSuffix: '',
     },
+
+    filters: {
+      all: 'All',
+      clear: 'Clear all',
+
+      age: 'Age',
+      city: 'City',
+      height: 'Height',
+      education: 'Education',
+      intent: 'Intent',
+
+      industry: 'Industry',
+      languages: 'Languages',
+      verified: 'Verification',
+      verifiedLabel: 'Verified',
+      unverifiedLabel: 'Unverified',
+      maritalStatus: 'Marital status',
+      children: 'Children',
+      longDistance: 'Long-distance',
+
+      hasChildren: 'Has children',
+      noChildren: 'No children',
+      acceptLongDistanceLabel: 'Open to long-distance',
+      noLongDistance: 'No long-distance',
+
+      single: 'Single',
+      divorced: 'Divorced',
+      widowed: 'Widowed',
+
+      bachelor: 'Bachelor',
+      master: 'Master',
+      phd: 'PhD',
+
+      intentSerious: 'Serious relationship',
+      intentMarriage: 'Marriage-oriented',
+      intentExclusive: 'Exclusive relationship',
+      intentCrossBorder: 'Cross-border relationship',
+    },
+
     fields: {
       age: 'Age',
+      height: 'Height',
       city: 'City',
       education: 'Education',
       job: 'Occupation',
       intent: 'Intent',
       languages: 'Languages',
-      status: 'Status',
     },
-    badges: {
-      familyAssisted: 'Family-assisted',
-      directProfile: 'Direct',
+
+    statusTabs: {
+      all: 'All profiles',
     },
-    featured: {
-      eyebrow: 'Family-assisted profiles',
-      title: 'Family-visible profiles',
-      subtitle: 'These profiles allow limited family-assisted context when the user explicitly authorizes it.',
-    },
+
     status: {
       open: 'Open',
       review: 'In review',
-      vip: 'VIP priority',
+      vip: 'Priority',
+    },
+
+    actions: {
+      open: 'Open profile',
+      favorite: 'Save',
+      compare: 'Explore more',
+    },
+
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
     },
   },
 }
