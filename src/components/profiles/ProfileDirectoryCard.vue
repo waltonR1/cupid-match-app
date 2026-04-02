@@ -1,5 +1,9 @@
 <template>
-  <DirectoryCardFrame :data="cardViewModel" />
+  <DirectoryCardFrame
+    :data="cardViewModel"
+    :clickable="clickable"
+    @select="handleOpen"
+  />
 </template>
 
 <script setup lang="ts">
@@ -11,15 +15,22 @@ import type { AppLocale } from '@/i18n/types'
 import { getLocalizedProfileCardData } from '@/mock/business'
 import type { MockProfile } from '@/mock/business'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   profile: MockProfile
   locale: AppLocale
   cityLabel: string
   educationLabel: string
   languagesLabel: string
-}>()
+  clickable?: boolean
+}>(), {
+  clickable: true,
+})
 
 const { t } = usePageI18n('profiles')
+
+const emit = defineEmits<{
+  (e: 'open', id: string): void
+}>()
 
 const cardData = computed(() => getLocalizedProfileCardData(props.locale, props.profile))
 
@@ -64,4 +75,9 @@ const cardViewModel = computed<DirectoryCardViewModel>(() => ({
   tags: cardData.value.tags,
   footer: labelText.value,
 }))
+
+function handleOpen() {
+  if (!props.clickable) return
+  emit('open', props.profile.id)
+}
 </script>

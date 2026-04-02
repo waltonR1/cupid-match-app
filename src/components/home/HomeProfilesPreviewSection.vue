@@ -32,6 +32,7 @@
           :city-label="t('profilesPreview.fields.city')"
           :education-label="t('profilesPreview.fields.education')"
           :languages-label="t('profilesPreview.fields.languages')"
+          @open="handleProfileOpen"
         />
       </view>
 
@@ -52,11 +53,16 @@
 import ProfileDirectoryCard from '@/components/profiles/ProfileDirectoryCard.vue'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { getHomePreviewProfiles } from '@/mock/business'
+import { openProfileDetail } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('home')
 const profiles = getHomePreviewProfiles()
 
 function goProfiles() {
   uni.navigateTo({ url: '/pages/profiles/index' })
+}
+
+function handleProfileOpen(id: string) {
+  openProfileDetail(id)
 }
 </script>

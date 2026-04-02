@@ -80,6 +80,7 @@
             :city-label="t('fields.city')"
             :education-label="t('fields.education')"
             :languages-label="t('fields.languages')"
+            @open="handleProfileOpen"
           />
         </template>
       </DirectoryGridShell>
@@ -116,7 +117,7 @@ import { useProfilesDirectory } from '@/components/profiles/useProfilesDirectory
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { NAV_LIST } from '@/constants/nav'
 import { navigateByNavKey } from '@/utils/navigation'
-import { openRegisterPage } from '@/utils/demo-navigation'
+import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('profiles')
 const navList = NAV_LIST
@@ -184,5 +185,9 @@ function handleNavClick(key: string) {
 
 function handleRegisterClick() {
   openRegisterPage()
+}
+
+function handleProfileOpen(id: string) {
+  openProfileDetail(id)
 }
 </script>
