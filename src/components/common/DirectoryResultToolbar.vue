@@ -36,8 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import type { DirectoryOption, ProfilesSortKey } from './profiles.types'
-
 defineProps<{
   resultPrefix: string
   resultSuffix: string
@@ -46,8 +44,11 @@ defineProps<{
   total: number
   start: number
   end: number
-  sortKey: ProfilesSortKey
-  sortOptions: DirectoryOption[]
+  sortKey: string
+  sortOptions: Array<{
+    label: string
+    value: string
+  }>
 }>()
 
 defineEmits<{

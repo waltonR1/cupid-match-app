@@ -28,17 +28,17 @@
         />
 
         <DirectoryFilterSelectCard
+          :label="familyModeLabel"
+          :options="familyModeOptions"
+          :value="filters.familyMode"
+          @change="handleSelect('familyMode', $event)"
+        />
+
+        <DirectoryFilterSelectCard
           :label="cityLabel"
           :options="cityOptions"
           :value="filters.city"
           @change="handleSelect('city', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="heightLabel"
-          :options="heightOptions"
-          :value="filters.heightRange"
-          @change="handleSelect('heightRange', $event)"
         />
 
         <DirectoryFilterSelectCard
@@ -75,42 +75,42 @@ import DirectoryFilterSelectCard from '@/components/common/DirectoryFilterSelect
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
-  ProfilesDirectoryFilters,
-} from './profiles.types'
+  FamilyDirectoryFilters,
+} from './family.types'
 
 defineProps<{
   title: string
   resetText: string
   ageLabel: string
   cityLabel: string
-  heightLabel: string
   educationLabel: string
   intentLabel: string
+  familyModeLabel: string
   moreFiltersLabel: string
   expandText: string
   collapseText: string
-  filters: ProfilesDirectoryFilters
+  filters: FamilyDirectoryFilters
   ageOptions: DirectoryOption[]
   cityOptions: DirectoryOption[]
-  heightOptions: DirectoryOption[]
   educationOptions: DirectoryOption[]
   intentOptions: DirectoryOption[]
+  familyModeOptions: DirectoryOption[]
   activeFilters: ActiveDirectoryFilterChip[]
   advancedOpen: boolean
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:filters', value: Partial<ProfilesDirectoryFilters>): void
-  (e: 'remove-filter', key: keyof ProfilesDirectoryFilters): void
+  (e: 'update:filters', value: Partial<FamilyDirectoryFilters>): void
+  (e: 'remove-filter', key: keyof FamilyDirectoryFilters): void
   (e: 'toggle-advanced'): void
   (e: 'reset'): void
 }>()
 
-function handleSelect(key: keyof ProfilesDirectoryFilters, value: string) {
+function handleSelect(key: keyof FamilyDirectoryFilters, value: string) {
   emit('update:filters', { [key]: value })
 }
 
 function handleRemoveFilter(key: string) {
-  emit('remove-filter', key as keyof ProfilesDirectoryFilters)
+  emit('remove-filter', key as keyof FamilyDirectoryFilters)
 }
 </script>

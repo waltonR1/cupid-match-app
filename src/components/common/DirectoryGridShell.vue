@@ -1,14 +1,10 @@
 <template>
   <view class="mt-5">
     <view v-if="items.length" class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-      <ProfileDirectoryCard
-        v-for="item in items"
-        :key="item.id"
-        :profile="item"
-        :locale="locale"
-        :city-label="cityLabel"
-        :education-label="educationLabel"
-        :languages-label="languagesLabel"
+      <slot
+        v-for="(item, index) in items"
+        :key="resolveItemKey(item, index)"
+        :item="item"
       />
     </view>
 
@@ -32,23 +28,25 @@
 </template>
 
 <script setup lang="ts">
-import type { AppLocale } from '@/i18n/types'
-import type { MockProfile } from '@/mock/business'
-import ProfileDirectoryCard from './ProfileDirectoryCard.vue'
-
-defineProps<{
-  items: MockProfile[]
-  locale: AppLocale
+const props = withDefaults(defineProps<{
+  items: any[]
   emptyText: string
   emptyActionText?: string
   showEmptyAction?: boolean
-
-  cityLabel: string
-  educationLabel: string
-  languagesLabel: string
-}>()
+  itemKeyField?: string
+}>(), {
+  emptyActionText: '',
+  showEmptyAction: false,
+  itemKeyField: 'id',
+})
 
 defineEmits<{
   (e: 'reset'): void
 }>()
+
+function resolveItemKey(item: any, index: number) {
+  const field = props.itemKeyField
+  const key = item?.[field]
+  return key ?? index
+}
 </script>

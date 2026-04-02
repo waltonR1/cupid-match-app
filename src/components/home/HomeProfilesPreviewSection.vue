@@ -24,65 +24,15 @@
 
       <!-- 资料卡 -->
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <view
+        <ProfileDirectoryCard
           v-for="profile in profiles"
-          :key="profile.name"
-          class="flex min-h-[420px] flex-col border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,24,18,0.08)]"
-        >
-          <view class="flex items-start justify-between gap-4">
-            <view class="flex items-center gap-4">
-              <view class="flex h-14 w-14 items-center justify-center rounded-full border border-border-muted bg-surface-panel text-[20px] font-semibold text-surface-inverse-strong">
-                {{ t(profile.initials) }}
-              </view>
-
-              <view>
-                <view class="text-[22px] font-semibold text-text-heading">
-                  {{ t(profile.name) }}
-                </view>
-                <view class="mt-1 text-[14px] text-text-body-soft">
-                  {{ t(profile.meta) }}
-                </view>
-              </view>
-            </view>
-
-            <view class="rounded-full bg-surface-panel px-3 py-1 text-[12px] text-brand-brown">
-              {{ t(profile.goal) }}
-            </view>
-          </view>
-
-          <!-- 简介 -->
-          <view class="mt-6 text-[15px] leading-7 text-text-body">
-            {{ t(profile.summary) }}
-          </view>
-
-          <!-- 维度 -->
-          <view class="mt-6 grid gap-3">
-            <view
-              v-for="item in profile.facts"
-              :key="item.label"
-              class="flex items-start justify-between gap-4 border-b border-border-light pb-3 text-[14px]"
-            >
-              <text class="text-text-muted">{{ t(item.label) }}</text>
-              <text class="text-right text-text-heading">{{ t(item.value) }}</text>
-            </view>
-          </view>
-
-          <!-- 标签 -->
-          <view class="mt-6 flex flex-wrap gap-2">
-            <view
-              v-for="tag in profile.tags"
-              :key="tag"
-              class="rounded-full border border-border-base bg-surface-base px-3 py-1 text-[12px] text-text-body-soft"
-            >
-              {{ t(tag) }}
-            </view>
-          </view>
-
-          <!-- 底部 -->
-          <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-brand-rose-deep">
-            {{ t(profile.label) }}
-          </view>
-        </view>
+          :key="profile.id"
+          :profile="profile"
+          :locale="locale"
+          :city-label="t('profilesPreview.fields.city')"
+          :education-label="t('profilesPreview.fields.education')"
+          :languages-label="t('profilesPreview.fields.languages')"
+        />
       </view>
 
       <!-- CTA -->
@@ -99,109 +49,12 @@
 </template>
 
 <script setup lang="ts">
+import ProfileDirectoryCard from '@/components/profiles/ProfileDirectoryCard.vue'
 import { usePageI18n } from '@/i18n/use-page-i18n'
+import { getHomePreviewProfiles } from '@/mock/business'
 
-interface ProfileFact {
-  label: string
-  value: string
-}
-
-interface ProfilePreviewItem {
-  initials: string
-  name: string
-  meta: string
-  goal: string
-  summary: string
-  facts: ProfileFact[]
-  tags: string[]
-  label: string
-}
-
-const { t } = usePageI18n('home')
-
-const profiles: ProfilePreviewItem[] = [
-  {
-    initials: 'profilesPreview.item1.initials',
-    name: 'profilesPreview.item1.name',
-    meta: 'profilesPreview.item1.meta',
-    goal: 'profilesPreview.item1.goal',
-    summary: 'profilesPreview.item1.summary',
-    facts: [
-      {
-        label: 'profilesPreview.fields.city',
-        value: 'profilesPreview.item1.city',
-      },
-      {
-        label: 'profilesPreview.fields.education',
-        value: 'profilesPreview.item1.education',
-      },
-      {
-        label: 'profilesPreview.fields.languages',
-        value: 'profilesPreview.item1.languages',
-      },
-    ],
-    tags: [
-      'profilesPreview.item1.tag1',
-      'profilesPreview.item1.tag2',
-      'profilesPreview.item1.tag3',
-    ],
-    label: 'profilesPreview.item1.label',
-  },
-  {
-    initials: 'profilesPreview.item2.initials',
-    name: 'profilesPreview.item2.name',
-    meta: 'profilesPreview.item2.meta',
-    goal: 'profilesPreview.item2.goal',
-    summary: 'profilesPreview.item2.summary',
-    facts: [
-      {
-        label: 'profilesPreview.fields.city',
-        value: 'profilesPreview.item2.city',
-      },
-      {
-        label: 'profilesPreview.fields.education',
-        value: 'profilesPreview.item2.education',
-      },
-      {
-        label: 'profilesPreview.fields.languages',
-        value: 'profilesPreview.item2.languages',
-      },
-    ],
-    tags: [
-      'profilesPreview.item2.tag1',
-      'profilesPreview.item2.tag2',
-      'profilesPreview.item2.tag3',
-    ],
-    label: 'profilesPreview.item2.label',
-  },
-  {
-    initials: 'profilesPreview.item3.initials',
-    name: 'profilesPreview.item3.name',
-    meta: 'profilesPreview.item3.meta',
-    goal: 'profilesPreview.item3.goal',
-    summary: 'profilesPreview.item3.summary',
-    facts: [
-      {
-        label: 'profilesPreview.fields.city',
-        value: 'profilesPreview.item3.city',
-      },
-      {
-        label: 'profilesPreview.fields.education',
-        value: 'profilesPreview.item3.education',
-      },
-      {
-        label: 'profilesPreview.fields.languages',
-        value: 'profilesPreview.item3.languages',
-      },
-    ],
-    tags: [
-      'profilesPreview.item3.tag1',
-      'profilesPreview.item3.tag2',
-      'profilesPreview.item3.tag3',
-    ],
-    label: 'profilesPreview.item3.label',
-  },
-]
+const { t, locale } = usePageI18n('home')
+const profiles = getHomePreviewProfiles()
 
 function goProfiles() {
   uni.navigateTo({ url: '/pages/profiles/index' })

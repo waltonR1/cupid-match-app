@@ -8,7 +8,7 @@
     />
 
     <view class="mx-auto max-w-[1280px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
-      <ProfilesPageIntro
+      <DirectoryIntro
         :eyebrow="t('hero.eyebrow')"
         :title="t('hero.title')"
         :subtitle="t('hero.subtitle')"
@@ -61,7 +61,7 @@
         @update:filters="handleUpdateFilters"
       />
 
-      <ProfilesResultToolbar
+      <DirectoryResultToolbar
         :result-prefix="t('directory.resultPrefix')"
         :result-suffix="t('directory.resultSuffix')"
         :page-text="t('directory.pagePrefix')"
@@ -74,19 +74,25 @@
         @update:sort-key="handleUpdateSort"
       />
 
-      <ProfilesDirectoryGrid
+      <DirectoryGridShell
         :items="pagedItems"
-        :locale="locale"
         :empty-text="t('directory.empty')"
         :empty-action-text="t('filters.clear')"
         :show-empty-action="activeFilterChips.length > 0"
-        :city-label="t('fields.city')"
-        :education-label="t('fields.education')"
-        :languages-label="t('fields.languages')"
         @reset="handleResetFilters"
-      />
+      >
+        <template #default="{ item }">
+          <ProfileDirectoryCard
+            :profile="item"
+            :locale="locale"
+            :city-label="t('fields.city')"
+            :education-label="t('fields.education')"
+            :languages-label="t('fields.languages')"
+          />
+        </template>
+      </DirectoryGridShell>
 
-      <ProfilesPagination
+      <DirectoryPagination
         :page="page"
         :page-size="pageSize"
         :total="total"
@@ -105,14 +111,15 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import DirectoryGridShell from '@/components/common/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/common/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/common/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/common/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import ProfilesPageIntro from '@/components/profiles/ProfilesPageIntro.vue'
+import ProfileDirectoryCard from '@/components/profiles/ProfileDirectoryCard.vue'
 import ProfilesFilterToolbar from '@/components/profiles/ProfilesFilterToolbar.vue'
 import ProfilesAdvancedFilters from '@/components/profiles/ProfilesAdvancedFilters.vue'
-import ProfilesResultToolbar from '@/components/profiles/ProfilesResultToolbar.vue'
-import ProfilesDirectoryGrid from '@/components/profiles/ProfilesDirectoryGrid.vue'
-import ProfilesPagination from '@/components/profiles/ProfilesPagination.vue'
 import type { ProfilesDirectoryFilters } from '@/components/profiles/profiles.types'
 import { useProfilesDirectory } from '@/components/profiles/useProfilesDirectory'
 import { usePageI18n } from '@/i18n/use-page-i18n'

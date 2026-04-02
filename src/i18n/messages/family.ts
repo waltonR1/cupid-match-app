@@ -4,184 +4,252 @@ export const familyMessages: AppLocaleMessages = {
   zh: {
     hero: {
       eyebrow: 'Family Participation',
-      title: '家长协助',
-      subtitle: '这里直接查看家长可参与的资料、沙龙和协助时段，而不只是理念介绍。',
-    },
-    stats: {
-      visibleProfiles: '可见资料',
-      openPrograms: '开放活动',
-      supportSlots: '协助时段',
-    },
-    profiles: {
-      eyebrow: '家长可见资料',
-      title: '当前可见资料',
-      subtitle: '以下资料只在用户授权范围内向家长开放，用于理解背景和沟通边界。',
-    },
-    fields: {
-      age: '年龄',
-      city: '城市',
-      education: '教育',
-      job: '职业',
-      intent: '关系意向',
-    },
-    programs: {
-      eyebrow: 'Family Programs',
-      title: '家长沙龙与协助时段',
-      subtitle: '这里直接列出家长相关活动和时段，本地 mock 数据后续可替换为真实报名与预约系统。',
-    },
-    steps: {
-      eyebrow: 'Family Flow',
-      title: '家长如何参与',
-      subtitle: '家长只补充背景和理解平台流程，不能替代用户本人做关系决策。',
-      items: {
-        first: {
-          index: '01',
-          title: '先看资料边界',
-          desc: '先确认哪些资料是用户本人公开，哪些只允许家长了解背景说明。',
-        },
-        second: {
-          index: '02',
-          title: '再进家长沙龙',
-          desc: '通过线上或线下家长沙龙理解平台规则、沟通方式和参与边界。',
-        },
-        third: {
-          index: '03',
-          title: '最后进入协助时段',
-          desc: '当候选人沟通真正开始时，再进入更具体的一对一协助和顾问答疑。',
-        },
+      title: '家庭参与',
+      subtitle: '这里承接家庭参与中的前置判断环节，只展示经本人授权、可供家庭先行了解的资料。',
+      tags: {
+        first: '先看资料',
+        second: '先做筛选',
+        third: '先判断门当户对',
       },
     },
-    profileStatus: {
-      open: '可协助',
-      review: '资料审核',
-      vip: '优先协助',
+
+    stats: {
+      visibleProfiles: '授权资料',
+      priorityProfiles: '优先评估',
+      contactReady: '可辅助沟通',
     },
-    programStatus: {
-      open: '开放中',
-      waitlist: '候补',
-      closed: '已满',
+
+    toolbar: {
+      sortLabel: '排序',
+      filtersLabel: '更多筛选',
+      filterToggleOpen: '展开更多筛选',
+      filterToggleClose: '收起更多筛选',
+    },
+
+    directory: {
+      title: '家庭参与筛选',
+      subtitle: '先看资料、先筛选背景与路径，再判断是否值得推动子女接触。',
+      resultPrefix: '当前筛出',
+      resultSuffix: '份候选资料',
+      empty: '当前没有符合条件的家庭候选资料。',
+      pagePrefix: '当前显示',
+    },
+
+    filters: {
+      clear: '清除全部',
+      age: '年龄',
+      city: '城市',
+      education: '学历',
+      intent: '关系目标',
+      familyMode: '家庭协作',
+      occupation: '职业',
+      industry: '行业',
+      maritalStatus: '婚姻状态',
+      children: '子女情况',
+      longDistance: '异地接受度',
+    },
+
+    fields: {
+      city: '城市',
+      education: '学历',
+      residencePlan: '定居计划',
+      job: '职业',
+    },
+
+    modes: {
+      contextOnly: '仅背景可见',
+      contactReady: '可家长辅助沟通',
+      priority: '优先家长评估',
+    },
+
+    tags: {
+      maritalSingle: '未婚',
+      maritalDivorced: '离异',
+      maritalWidowed: '丧偶',
+      childrenYes: '有孩子',
+      childrenNo: '无孩子',
+      longDistanceYes: '接受异地',
+      longDistanceNo: '更偏同城',
+    },
+
+    card: {
+      labelObserve: '建议先家庭了解',
+      labelContactReady: '可安排家长沟通',
+      labelReview: '资料仍在补充',
+      labelPriority: '可优先推进',
+    },
+
+    pagination: {
+      prev: '上一页',
+      next: '下一页',
     },
   },
+
   fr: {
     hero: {
       eyebrow: 'Family Participation',
       title: 'Participation famille',
-      subtitle: 'Cette page montre directement les profils, salons et creneaux accessibles a la famille au lieu d une simple page de discours.',
+      subtitle: 'Cette page correspond a l etape de participation familiale ou la famille consulte d abord les dossiers autorises.',
+      tags: {
+        first: 'Voir les dossiers',
+        second: 'Filtrer d abord',
+        third: 'Evaluer la compatibilite',
+      },
     },
+
     stats: {
-      visibleProfiles: 'Profils visibles',
-      openPrograms: 'Programmes ouverts',
-      supportSlots: 'Creneaux',
+      visibleProfiles: 'Dossiers visibles',
+      priorityProfiles: 'Priorite famille',
+      contactReady: 'Pret pour echange',
     },
-    profiles: {
-      eyebrow: 'Profils visibles a la famille',
-      title: 'Profils actuellement visibles',
-      subtitle: 'Ces profils n ouvrent qu un acces limite au contexte et aux limites de communication.',
+
+    toolbar: {
+      sortLabel: 'Tri',
+      filtersLabel: 'Plus de filtres',
+      filterToggleOpen: 'Ouvrir plus de filtres',
+      filterToggleClose: 'Fermer les filtres',
     },
-    fields: {
+
+    directory: {
+      title: 'Filtrage famille',
+      subtitle: 'Voir les dossiers, filtrer le contexte et le parcours, puis decider si un premier contact merite d etre pousse.',
+      resultPrefix: 'Selection actuelle :',
+      resultSuffix: 'dossiers',
+      empty: 'Aucun dossier familial ne correspond aux criteres actuels.',
+      pagePrefix: 'Affichage',
+    },
+
+    filters: {
+      clear: 'Tout effacer',
       age: 'Age',
       city: 'Ville',
       education: 'Formation',
+      intent: 'Projet relationnel',
+      familyMode: 'Mode famille',
+      occupation: 'Metier',
+      industry: 'Secteur',
+      maritalStatus: 'Statut marital',
+      children: 'Enfants',
+      longDistance: 'Distance',
+    },
+
+    fields: {
+      city: 'Ville',
+      education: 'Formation',
+      residencePlan: 'Projet de vie',
       job: 'Metier',
-      intent: 'Intention',
     },
-    programs: {
-      eyebrow: 'Family Programs',
-      title: 'Salons et creneaux famille',
-      subtitle: 'La liste ci-dessous montre directement les evenements et plages d accompagnement famille via des donnees mock locales.',
+
+    modes: {
+      contextOnly: 'Contexte seulement',
+      contactReady: 'Pret pour echange famille',
+      priority: 'Priorite famille',
     },
-    steps: {
-      eyebrow: 'Family Flow',
-      title: 'Comment la famille participe',
-      subtitle: 'La famille ajoute du contexte et comprend le processus, sans remplacer la decision de l utilisateur.',
-      items: {
-        first: {
-          index: '01',
-          title: 'Verifier les limites du dossier',
-          desc: 'Distinguer ce qui est public, ce qui reste prive, et ce que la famille peut seulement expliquer.',
-        },
-        second: {
-          index: '02',
-          title: 'Participer au salon famille',
-          desc: 'Comprendre les regles, le style de communication et les limites de participation familiale.',
-        },
-        third: {
-          index: '03',
-          title: 'Passer aux creneaux d accompagnement',
-          desc: 'Entrer ensuite dans des echanges plus concrets avec la conseillere seulement lorsque la phase de discussion commence.',
-        },
-      },
+
+    tags: {
+      maritalSingle: 'Celibataire',
+      maritalDivorced: 'Divorce',
+      maritalWidowed: 'Veuf / veuve',
+      childrenYes: 'Avec enfants',
+      childrenNo: 'Sans enfant',
+      longDistanceYes: 'Ouvert a distance',
+      longDistanceNo: 'Plutot meme ville',
     },
-    profileStatus: {
-      open: 'Accompagnement',
-      review: 'Verification',
-      vip: 'Priorite',
+
+    card: {
+      labelObserve: 'A evaluer en famille',
+      labelContactReady: 'Echange famille possible',
+      labelReview: 'Dossier encore en verification',
+      labelPriority: 'A pousser en priorite',
     },
-    programStatus: {
-      open: 'Ouvert',
-      waitlist: 'Attente',
-      closed: 'Complet',
+
+    pagination: {
+      prev: 'Precedent',
+      next: 'Suivant',
     },
   },
+
   en: {
     hero: {
       eyebrow: 'Family Participation',
       title: 'Family participation',
-      subtitle: 'This page shows family-visible profiles, salons, and support slots instead of another explanatory page.',
+      subtitle: 'This page handles the family participation review stage and only shows dossiers explicitly authorized for early family-side review.',
+      tags: {
+        first: 'Review dossiers first',
+        second: 'Filter before acting',
+        third: 'Judge fit first',
+      },
     },
+
     stats: {
-      visibleProfiles: 'Visible profiles',
-      openPrograms: 'Open programs',
-      supportSlots: 'Support slots',
+      visibleProfiles: 'Visible dossiers',
+      priorityProfiles: 'Priority review',
+      contactReady: 'Contact-ready',
     },
-    profiles: {
-      eyebrow: 'Family-visible profiles',
-      title: 'Currently visible profiles',
-      subtitle: 'These profiles only expose limited background and communication boundaries with user consent.',
+
+    toolbar: {
+      sortLabel: 'Sort',
+      filtersLabel: 'More filters',
+      filterToggleOpen: 'Show more filters',
+      filterToggleClose: 'Hide extra filters',
     },
-    fields: {
+
+    directory: {
+      title: 'Family screening',
+      subtitle: 'Review the dossier first, filter the background and relationship path, then decide whether contact should be encouraged.',
+      resultPrefix: 'Current shortlist:',
+      resultSuffix: 'dossiers',
+      empty: 'No family-facing dossiers match the current filters.',
+      pagePrefix: 'Showing',
+    },
+
+    filters: {
+      clear: 'Clear all',
       age: 'Age',
       city: 'City',
       education: 'Education',
+      intent: 'Relationship path',
+      familyMode: 'Family mode',
+      occupation: 'Occupation',
+      industry: 'Industry',
+      maritalStatus: 'Marital status',
+      children: 'Children',
+      longDistance: 'Long-distance',
+    },
+
+    fields: {
+      city: 'City',
+      education: 'Education',
+      residencePlan: 'Residence plan',
       job: 'Occupation',
-      intent: 'Intent',
     },
-    programs: {
-      eyebrow: 'Family Programs',
-      title: 'Family salons and support slots',
-      subtitle: 'This section lists family events and support slots directly, backed by local mock data that can later be replaced by real booking flows.',
+
+    modes: {
+      contextOnly: 'Context only',
+      contactReady: 'Family contact ready',
+      priority: 'Priority family review',
     },
-    steps: {
-      eyebrow: 'Family Flow',
-      title: 'How family participation works',
-      subtitle: 'Family members add context and understand the process, but they do not replace the user in relationship decisions.',
-      items: {
-        first: {
-          index: '01',
-          title: 'Review profile boundaries first',
-          desc: 'Separate what is public, what remains private, and what family members may only explain as background.',
-        },
-        second: {
-          index: '02',
-          title: 'Join a family salon next',
-          desc: 'Use family salons to understand platform rules, communication style, and the limits of family involvement.',
-        },
-        third: {
-          index: '03',
-          title: 'Use support slots only when needed',
-          desc: 'Move into one-to-one support once candidate conversations actually begin and more concrete guidance is needed.',
-        },
-      },
+
+    tags: {
+      maritalSingle: 'Single',
+      maritalDivorced: 'Divorced',
+      maritalWidowed: 'Widowed',
+      childrenYes: 'Has children',
+      childrenNo: 'No children',
+      longDistanceYes: 'Open to long-distance',
+      longDistanceNo: 'Prefers same city',
     },
-    profileStatus: {
-      open: 'Assistable',
-      review: 'In review',
-      vip: 'Priority',
+
+    card: {
+      labelObserve: 'Worth family review first',
+      labelContactReady: 'Ready for family discussion',
+      labelReview: 'Profile still under review',
+      labelPriority: 'Ready to move forward',
     },
-    programStatus: {
-      open: 'Open',
-      waitlist: 'Waitlist',
-      closed: 'Closed',
+
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
     },
   },
 }

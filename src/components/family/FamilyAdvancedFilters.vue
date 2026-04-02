@@ -4,15 +4,7 @@
       {{ title }}
     </view>
 
-    <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-      <DirectoryFilterSelectCard
-        :label="industryLabel"
-        :options="industryOptions"
-        :value="filters.industry"
-        variant="secondary"
-        @change="handleSelect('industry', $event)"
-      />
-
+    <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
       <DirectoryFilterSelectCard
         :label="occupationLabel"
         :options="occupationOptions"
@@ -22,19 +14,11 @@
       />
 
       <DirectoryFilterSelectCard
-        :label="languageLabel"
-        :options="languageOptions"
-        :value="filters.language"
+        :label="industryLabel"
+        :options="industryOptions"
+        :value="filters.industry"
         variant="secondary"
-        @change="handleSelect('language', $event)"
-      />
-
-      <DirectoryFilterSelectCard
-        :label="verifiedLabel"
-        :options="verifiedOptions"
-        :value="filters.verified"
-        variant="secondary"
-        @change="handleSelect('verified', $event)"
+        @change="handleSelect('industry', $event)"
       />
 
       <DirectoryFilterSelectCard
@@ -67,33 +51,28 @@
 
 <script setup lang="ts">
 import DirectoryFilterSelectCard from '@/components/common/DirectoryFilterSelectCard.vue'
-import type { DirectoryOption, ProfilesDirectoryFilters } from './profiles.types'
+import type { DirectoryOption, FamilyDirectoryFilters } from './family.types'
 
 defineProps<{
   title: string
-  industryLabel: string
   occupationLabel: string
-  languageLabel: string
-  verifiedLabel: string
+  industryLabel: string
   maritalStatusLabel: string
   childrenLabel: string
   longDistanceLabel: string
-
-  filters: ProfilesDirectoryFilters
-  industryOptions: DirectoryOption[]
+  filters: FamilyDirectoryFilters
   occupationOptions: DirectoryOption[]
-  languageOptions: DirectoryOption[]
-  verifiedOptions: DirectoryOption[]
+  industryOptions: DirectoryOption[]
   maritalStatusOptions: DirectoryOption[]
   childrenOptions: DirectoryOption[]
   longDistanceOptions: DirectoryOption[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:filters', value: Partial<ProfilesDirectoryFilters>): void
+  (e: 'update:filters', value: Partial<FamilyDirectoryFilters>): void
 }>()
 
-function handleSelect(key: keyof ProfilesDirectoryFilters, value: string) {
+function handleSelect(key: keyof FamilyDirectoryFilters, value: string) {
   emit('update:filters', { [key]: value })
 }
 </script>
