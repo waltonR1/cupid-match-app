@@ -107,7 +107,6 @@ import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { getCurrentMockProfile, getMockUserEvents, mockCurrentUser, pickLocalized, type LocalizedText } from '@/mock/business'
 import {
-  openEmptyStatePage,
   openFavoritesPage,
   openMessagesPage,
   openMyEventsPage,
@@ -151,7 +150,6 @@ const quickCards = computed(() => [
   { icon: 'FV', title: t('quickCards.favorites.title'), desc: t('quickCards.favorites.desc'), action: openFavoritesPage },
   { icon: 'MS', title: t('quickCards.messages.title'), desc: t('quickCards.messages.desc'), action: openMessagesPage },
   { icon: 'PR', title: t('quickCards.privacy.title'), desc: t('quickCards.privacy.desc'), action: openPrivacyPage },
-  { icon: '404', title: t('quickCards.emptyState.title'), desc: t('quickCards.emptyState.desc'), action: openEmptyStatePage },
   { icon: 'VIP', title: t('quickCards.renew.title'), desc: t('quickCards.renew.desc'), action: () => openRegisterPage('gold') },
 ])
 

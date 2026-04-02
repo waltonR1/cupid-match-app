@@ -100,14 +100,14 @@ const serviceCards: ServiceCardItem[] = [
     title: 'features.vip.title',
     desc: 'features.vip.desc',
     label: 'features.vip.label',
-    path: '/pages/membership/index',
+    path: '/pages/membership',
   },
   {
     icon: '🏆',
     title: 'features.story.title',
     desc: 'features.story.desc',
     label: 'features.story.label',
-    path: '/pages/about/index',
+    path: '/pages/about',
   },
 ]
 

@@ -1,14 +1,14 @@
 {
   "pages": [
     {
-      "path": "pages/index/index",
+      "path": "pages/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "相约巴黎"
       }
     },
     {
-      "path": "pages/about/index",
+      "path": "pages/about",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "关于我们"
@@ -19,6 +19,13 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员资料"
+      }
+    },
+    {
+      "path": "pages/profiles/detail",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
       }
     },
     {
@@ -36,94 +43,80 @@
       }
     },
     {
-      "path": "pages/profile-detail/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "会员详情"
-      }
-    },
-    {
-      "path": "pages/event-detail/index",
+      "path": "pages/events/detail",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "活动详情"
       }
     },
     {
-      "path": "pages/family-program-detail/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "家长项目"
-      }
-    },
-    {
-      "path": "pages/membership/index",
+      "path": "pages/membership",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员体系"
       }
     },
     {
-      "path": "pages/contact/index",
+      "path": "pages/contact",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "联系我们"
       }
     },
     {
-      "path": "pages/register/index",
+      "path": "pages/register",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "注册"
       }
     },
     {
-      "path": "pages/account/index",
+      "path": "pages/user/index",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "个人中心"
+        "navigationBarTitleText": "用户中心"
       }
     },
     {
-      "path": "pages/my-profile/index",
+      "path": "pages/user/profile",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的资料"
       }
     },
     {
-      "path": "pages/my-events/index",
+      "path": "pages/user/events",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的报名"
       }
     },
     {
-      "path": "pages/favorites/index",
+      "path": "pages/user/favorites",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的收藏"
       }
     },
     {
-      "path": "pages/messages/index",
+      "path": "pages/user/messages",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "消息中心"
       }
     },
     {
-      "path": "pages/privacy/index",
+      "path": "pages/user/privacy",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "隐私设置"
       }
     },
     {
-      "path": "pages/empty-state/index",
+      "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "空状态页"
+        "navigationBarTitleText": "404"
       }
     }
   ],

@@ -169,7 +169,7 @@ const showUserDropdown = ref(false)
 function handleNavIndex(): void {
   closeAllDropdowns()
   uni.navigateTo({
-    url: '/pages/index/index',
+    url: '/pages/index',
   })
 }
 
@@ -198,21 +198,21 @@ function handleAccount() {
   closeAllDropdowns()
   emit('account-click')
   uni.navigateTo({
-    url: '/pages/account/index',
+    url: '/pages/user/index',
   })
 }
 
 function handleMyProfile() {
   closeAllDropdowns()
   uni.navigateTo({
-    url: '/pages/my-profile/index',
+    url: '/pages/user/profile',
   })
 }
 
 function handleMessages() {
   closeAllDropdowns()
   uni.navigateTo({
-    url: '/pages/messages/index',
+    url: '/pages/user/messages',
   })
 }
 

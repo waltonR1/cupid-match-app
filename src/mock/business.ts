@@ -80,17 +80,6 @@ export interface MockEvent {
   registered: number
 }
 
-export interface MockFamilyProgram {
-  id: string
-  date: string
-  city: LocalizedText
-  mode: LocalizedText
-  status: EventStatus
-  title: LocalizedText
-  summary: LocalizedText
-  seats: number
-}
-
 export interface MockUserAccount {
   id: string
   name: string
@@ -1159,51 +1148,6 @@ export const mockEvents: MockEvent[] = [
   },
 ]
 
-export const mockFamilyPrograms: MockFamilyProgram[] = [
-  {
-    id: 'pp-001',
-    date: '2026-04-15',
-    city: localized('线上', 'En ligne', 'Online'),
-    mode: localized('顾问答疑', 'Q&A conseillere', 'Advisor Q&A'),
-    status: 'open',
-    title: localized('家长资料审核说明会', 'Session famille sur la verification des dossiers', 'Family briefing on profile review'),
-    summary: localized(
-        '说明家长可以补充哪些背景信息，以及哪些内容必须由用户本人确认。',
-        'Explication des informations que la famille peut completer et de celles qui doivent rester confirmees par l utilisateur.',
-        'Explains what family members may add to a profile and what must remain confirmed by the user directly.'
-    ),
-    seats: 20,
-  },
-  {
-    id: 'pp-002',
-    date: '2026-05-03',
-    city: localized('巴黎', 'Paris', 'Paris'),
-    mode: localized('线下沙龙', 'Salon sur place', 'In-person salon'),
-    status: 'open',
-    title: localized('巴黎家长沙龙', 'Salon famille a Paris', 'Paris family salon'),
-    summary: localized(
-        '围绕跨文化婚恋、代际沟通和资料协助展开，适合准备参与平台流程的家庭。',
-        'Autour des relations interculturelles, de la communication intergenerationnelle et de l aide au dossier.',
-        'Focused on intercultural relationships, intergenerational communication, and dossier support for families entering the platform flow.'
-    ),
-    seats: 10,
-  },
-  {
-    id: 'pp-003',
-    date: '2026-05-09',
-    city: localized('线上', 'En ligne', 'Online'),
-    mode: localized('一对一时段', 'Creneaux individuels', 'One-to-one slots'),
-    status: 'waitlist',
-    title: localized('家长协助沟通时段', 'Creneaux d accompagnement famille', 'Family-assisted communication slots'),
-    summary: localized(
-        '适合已经进入候选人沟通阶段的家庭，用于确认沟通边界和信息整理方式。',
-        'Pour les familles deja en phase de communication avec un candidat, afin de cadrer les limites et les informations a partager.',
-        'For families already entering candidate conversations, helping define boundaries and what information can be shared.'
-    ),
-    seats: 6,
-  },
-]
-
 export const mockCurrentUser: MockUserAccount = {
   id: 'u-001',
   name: 'Lin S.',
@@ -1338,10 +1282,6 @@ export function getMockProfileById(id: string) {
 
 export function getMockEventById(id: string) {
   return mockEvents.find(item => item.id === id)
-}
-
-export function getMockFamilyProgramById(id: string) {
-  return mockFamilyPrograms.find(item => item.id === id)
 }
 
 export function getCurrentMockProfile() {

@@ -5,7 +5,6 @@ import { aboutMessages } from '@/i18n/messages/about'
 import { accountMessages } from '@/i18n/messages/account'
 import { commonMessages } from '@/i18n/messages/common'
 import { contactMessages } from '@/i18n/messages/contact'
-import { emptyStateMessages } from '@/i18n/messages/empty-state'
 import { eventDetailMessages } from '@/i18n/messages/event-detail'
 import { eventsMessages } from '@/i18n/messages/events'
 import { favoritesMessages } from '@/i18n/messages/favorites'
@@ -14,8 +13,8 @@ import { messagesPageMessages } from '@/i18n/messages/messages-page'
 import { membershipMessages } from '@/i18n/messages/membership'
 import { myEventsMessages } from '@/i18n/messages/my-events'
 import { myProfileMessages } from '@/i18n/messages/my-profile'
-import { familyProgramDetailMessages } from '@/i18n/messages/family-program-detail'
 import { familyMessages } from '@/i18n/messages/family'
+import { notFoundMessages } from '@/i18n/messages/not-found'
 import { privacyMessages } from '@/i18n/messages/privacy'
 import { profileDetailMessages } from '@/i18n/messages/profile-detail'
 import { registerMessages } from '@/i18n/messages/register'
@@ -35,13 +34,12 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.zh,
     myEvents: myEventsMessages.zh,
     myProfile: myProfileMessages.zh,
-    familyProgramDetail: familyProgramDetailMessages.zh,
     family: familyMessages.zh,
     privacy: privacyMessages.zh,
     profileDetail: profileDetailMessages.zh,
     register: registerMessages.zh,
     contact: contactMessages.zh,
-    emptyState: emptyStateMessages.zh,
+    notFound: notFoundMessages.zh,
   },
   fr: {
     common: commonMessages.fr,
@@ -56,13 +54,12 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.fr,
     myEvents: myEventsMessages.fr,
     myProfile: myProfileMessages.fr,
-    familyProgramDetail: familyProgramDetailMessages.fr,
     family: familyMessages.fr,
     privacy: privacyMessages.fr,
     profileDetail: profileDetailMessages.fr,
     register: registerMessages.fr,
     contact: contactMessages.fr,
-    emptyState: emptyStateMessages.fr,
+    notFound: notFoundMessages.fr,
   },
   en: {
     common: commonMessages.en,
@@ -77,13 +74,12 @@ export const messages: AppMessages = {
     messages: messagesPageMessages.en,
     myEvents: myEventsMessages.en,
     myProfile: myProfileMessages.en,
-    familyProgramDetail: familyProgramDetailMessages.en,
     family: familyMessages.en,
     privacy: privacyMessages.en,
     profileDetail: profileDetailMessages.en,
     register: registerMessages.en,
     contact: contactMessages.en,
-    emptyState: emptyStateMessages.en,
+    notFound: notFoundMessages.en,
   },
 }
 
