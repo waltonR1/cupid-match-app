@@ -1,5 +1,5 @@
 ﻿<template>
-  <view class="min-h-screen bg-background text-text-main">
+  <view class="min-h-screen text-text-main bg-[#f5f0e8]">
     <AppHeader
         :nav-list="navList"
         active-nav="common.nav.profiles"
@@ -7,7 +7,7 @@
         @register-click="handleRegisterClick"
     />
 
-    <view class="mx-auto max-w-[1280px] px-6 pb-16 pt-8 lg:px-8 lg:pt-10">
+    <view class="mx-auto max-w-[1280px] px-6 pb-16 pt-8 lg:px-8 lg:pt-10 ">
       <ProfilesPageIntro
           :eyebrow="t('hero.eyebrow')"
           :title="t('hero.title')"
@@ -87,7 +87,7 @@
           :status-vip-text="t('status.vip')"
           :open-text="t('actions.open')"
           :favorite-text="t('actions.favorite')"
-          :compare-text="t('actions.compare')"
+          :advisor-text="advisorActionText"
           @view-detail="handleViewDetail"
           @toggle-favorite="handleToggleFavorite"
           @compare="handleCompare"
@@ -175,6 +175,12 @@ const genderFemaleText = computed(() => {
   if (locale.value === 'zh') return '女'
   if (locale.value === 'fr') return 'F'
   return 'F'
+})
+
+const advisorActionText = computed(() => {
+  if (locale.value === 'zh') return '顾问解读'
+  if (locale.value === 'fr') return 'Lecture conseillere'
+  return 'Advisor review'
 })
 
 function handleUpdateFilters(nextFilters: Partial<ProfilesDirectoryFilters>) {

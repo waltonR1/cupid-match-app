@@ -1,11 +1,11 @@
 <template>
   <view
       v-if="total > 0"
-      class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-divider bg-card px-4 py-4"
+      class="profile-pagination-wrap"
   >
     <view
-        class="cursor-pointer border px-4 py-2 text-[13px]"
-        :class="page <= 1 ? 'border-divider bg-[#f7f3ec] text-[#b6ab9a]' : 'border-divider bg-background text-text-secondary'"
+        class="profile-page-btn interactive-view"
+        :class="page <= 1 ? 'profile-page-btn-disabled' : 'profile-page-btn-default'"
         @click="handlePrev"
     >
       {{ prevText }}
@@ -14,18 +14,16 @@
     <view
         v-for="pageNumber in pageNumbers"
         :key="pageNumber"
-        class="min-w-[42px] cursor-pointer border px-4 py-2 text-center text-[13px]"
-        :class="pageNumber === page
-        ? 'border-[#b89c6b] bg-[rgba(184,156,107,0.08)] text-[#7b6241]'
-        : 'border-divider bg-background text-text-secondary'"
+        class="profile-page-number interactive-view"
+        :class="pageNumber === page ? 'profile-page-number-active' : 'profile-page-number-default'"
         @click="handleChange(pageNumber)"
     >
       {{ pageNumber }}
     </view>
 
     <view
-        class="cursor-pointer border px-4 py-2 text-[13px]"
-        :class="page >= totalPages ? 'border-divider bg-[#f7f3ec] text-[#b6ab9a]' : 'border-divider bg-background text-text-secondary'"
+        class="profile-page-btn interactive-view"
+        :class="page >= totalPages ? 'profile-page-btn-disabled' : 'profile-page-btn-default'"
         @click="handleNext"
     >
       {{ nextText }}
@@ -74,3 +72,61 @@ function handleNext() {
   handleChange(props.page + 1)
 }
 </script>
+
+<style scoped>
+.profile-pagination-wrap {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #ddd6c8;
+  background: #faf7f1;
+  padding: 16px 18px;
+}
+
+.profile-page-btn,
+.profile-page-number {
+  display: flex;
+  min-width: 44px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd6c8;
+  padding: 0 14px;
+  font-size: 13px;
+  transition: all 0.22s ease;
+}
+
+.profile-page-btn-default,
+.profile-page-number-default {
+  background: #fffdf9;
+  color: #506071;
+}
+
+.profile-page-btn-default:hover,
+.profile-page-number-default:hover {
+  transform: translateY(-1px);
+  border-color: #cbb48a;
+  background: #f8f3ea;
+  color: #16263a;
+}
+
+.profile-page-number-active {
+  border-color: rgba(184, 156, 107, 0.62);
+  background: rgba(184, 156, 107, 0.1);
+  color: #7b6241;
+}
+
+.profile-page-number-active:hover {
+  transform: translateY(-1px);
+  border-color: rgba(184, 156, 107, 0.78);
+  background: rgba(184, 156, 107, 0.14);
+}
+
+.profile-page-btn-disabled {
+  background: #f7f3ec;
+  color: #b6ab9a;
+}
+</style>

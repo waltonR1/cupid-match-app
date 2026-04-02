@@ -17,7 +17,7 @@
           :status-vip-text="statusVipText"
           :open-text="openText"
           :favorite-text="favoriteText"
-          :compare-text="compareText"
+          :advisor-text="advisorText"
           @view-detail="$emit('view-detail', $event)"
           @toggle-favorite="$emit('toggle-favorite', $event)"
           @compare="$emit('compare', $event)"
@@ -57,7 +57,7 @@ defineProps<{
 
   openText: string
   favoriteText: string
-  compareText: string
+  advisorText: string
 }>()
 
 defineEmits<{

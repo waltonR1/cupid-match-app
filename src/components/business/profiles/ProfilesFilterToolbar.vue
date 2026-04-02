@@ -1,13 +1,13 @@
 <template>
-  <view class="border border-divider bg-card px-4 py-4 lg:px-5 lg:py-5">
+  <view class="profile-filter-panel">
     <view class="flex flex-col gap-4">
       <view class="flex flex-wrap items-center gap-3">
-        <view class="text-[13px] tracking-[2px] text-text-secondary">
+        <view class="text-[13px] tracking-[3px] text-[#7f7466]">
           {{ title }}
         </view>
 
         <view
-            class="ml-auto cursor-pointer border border-divider bg-background px-4 py-2 text-[13px] text-text-secondary"
+            class="interactive-view ml-auto border border-[#ddd6c8] bg-[#fffdf9] px-4 py-2 text-[13px] text-[#5d6a78] transition-all duration-200"
             @click="$emit('reset')"
         >
           {{ resetText }}
@@ -15,7 +15,7 @@
       </view>
 
       <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-        <view class="profile-filter-item">
+        <view class="profile-filter-item interactive-view">
           <view class="profile-filter-label">{{ ageLabel }}</view>
           <picker
               mode="selector"
@@ -30,7 +30,7 @@
           </picker>
         </view>
 
-        <view class="profile-filter-item">
+        <view class="profile-filter-item interactive-view">
           <view class="profile-filter-label">{{ cityLabel }}</view>
           <picker
               mode="selector"
@@ -45,7 +45,7 @@
           </picker>
         </view>
 
-        <view class="profile-filter-item">
+        <view class="profile-filter-item interactive-view">
           <view class="profile-filter-label">{{ heightLabel }}</view>
           <picker
               mode="selector"
@@ -60,7 +60,7 @@
           </picker>
         </view>
 
-        <view class="profile-filter-item">
+        <view class="profile-filter-item interactive-view">
           <view class="profile-filter-label">{{ educationLabel }}</view>
           <picker
               mode="selector"
@@ -75,7 +75,7 @@
           </picker>
         </view>
 
-        <view class="profile-filter-item">
+        <view class="profile-filter-item interactive-view">
           <view class="profile-filter-label">{{ intentLabel }}</view>
           <picker
               mode="selector"
@@ -91,7 +91,7 @@
         </view>
 
         <view
-            class="profile-filter-item profile-filter-toggle"
+            class="profile-filter-item profile-filter-toggle interactive-view"
             @click="$emit('toggle-advanced')"
         >
           <view class="profile-filter-label">{{ moreFiltersLabel }}</view>
@@ -157,19 +157,32 @@ function handleSelect(
 </script>
 
 <style scoped>
-.profile-filter-item {
-  display: flex;
-  min-height: 78rpx;
-  flex-direction: column;
-  justify-content: center;
+.profile-filter-panel {
   border: 1px solid #ddd6c8;
   background: #faf7f1;
+  padding: 18px 20px 20px;
+}
+
+.profile-filter-item {
+  display: flex;
+  min-height: 82rpx;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #ddd0c0;
+  background: linear-gradient(180deg, #f6f1e8 0%, #f3ede3 100%);
   padding: 18rpx 22rpx;
+  transition: all 0.22s ease;
+}
+
+.profile-filter-item:hover {
+  border-color: #cbb48a;
+  background: #fbf7ef;
+  box-shadow: 0 10px 18px rgba(24, 38, 58, 0.03);
 }
 
 .profile-filter-label {
   font-size: 12px;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.8px;
   color: #8b7e6d;
 }
 
