@@ -1,75 +1,64 @@
 <template>
-  <view class="border border-border-base bg-surface-card px-5 py-5 shadow-[0_16px_40px_rgba(30,24,18,0.04)]">
-    <view class="flex flex-col gap-4">
+  <view class="border border-border-base bg-surface-card px-4 py-4 shadow-[0_16px_40px_rgba(30,24,18,0.04)]">
+    <view class="flex flex-col gap-3">
       <view class="flex flex-wrap items-center gap-3">
-        <view class="text-[13px] tracking-[3px] text-text-muted">
-          {{ title }}
+        <view class="min-w-0 flex-1">
+          <view class="text-[12.5px] tracking-[2.6px] text-text-muted">
+            {{ props.title }}
+          </view>
         </view>
 
-        <view
-          class="ml-auto inline-flex cursor-pointer items-center justify-center border border-border-base bg-surface-base px-4 py-2 text-[13px] text-text-body-soft transition-all duration-200 hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading"
-          @click="$emit('reset')"
-        >
-          {{ resetText }}
+        <view class="ml-auto flex items-center gap-2">
+          <view
+            v-if="secondaryFilters.length"
+            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading"
+            @click="toggleExpanded"
+          >
+            <text>{{ isExpanded ? props.collapseText : props.expandText }}</text>
+            <svg
+              class="h-2 w-2 shrink-0 transition-transform duration-150"
+              :class="isExpanded ? 'rotate-180 text-brand-brown' : ''"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2.5 4.25L6 7.75L9.5 4.25"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </view>
+
+          <view
+            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading"
+            @click="$emit('reset')"
+          >
+            {{ props.resetText }}
+          </view>
         </view>
       </view>
 
       <ActiveFilterChips
-        :items="activeFilters"
+        v-if="props.activeFilters.length"
+        :items="props.activeFilters"
         @remove="handleRemoveFilter"
       />
 
-      <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
-        <DirectoryFilterSelectCard
-          :label="genderLabel"
-          :options="genderOptions"
-          :value="filters.gender"
-          @change="handleSelect('gender', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="ageLabel"
-          :options="ageOptions"
-          :value="filters.ageRange"
-          @change="handleSelect('ageRange', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="familyModeLabel"
-          :options="familyModeOptions"
-          :value="filters.familyMode"
-          @change="handleSelect('familyMode', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="cityLabel"
-          :options="cityOptions"
-          :value="filters.city"
-          @change="handleSelect('city', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="educationLabel"
-          :options="educationOptions"
-          :value="filters.education"
-          @change="handleSelect('education', $event)"
-        />
-
-        <DirectoryFilterSelectCard
-          :label="intentLabel"
-          :options="intentOptions"
-          :value="filters.intentCode"
-          @change="handleSelect('intentCode', $event)"
-        />
-
+      <view class="flex flex-wrap gap-1.5">
         <view
-          class="flex min-h-[82rpx] cursor-pointer flex-col justify-center border border-border-base bg-surface-card-soft px-[22rpx] py-[18rpx] transition-all duration-200 hover:-translate-y-[1px] hover:border-border-highlight/70 hover:bg-surface-base hover:shadow-[0_10px_18px_rgba(24,38,58,0.03)]"
-          @click="$emit('toggle-advanced')"
+          v-for="filter in visibleFilters"
+          :key="filter.key"
+          :class="filter.widthClass"
         >
-          <view class="text-[12px] tracking-[1.8px] text-text-muted">{{ moreFiltersLabel }}</view>
-          <view class="mt-[10rpx] text-[15px] leading-[1.5] text-brand-brown">
-            {{ advancedOpen ? collapseText : expandText }}
-          </view>
+          <DirectoryFilterSelectCard
+            :label="filter.label"
+            :options="filter.options"
+            :value="filter.value"
+            @change="handleSelect(filter.key, $event)"
+          />
         </view>
       </view>
     </view>
@@ -77,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import ActiveFilterChips from '@/components/common/ActiveFilterChips.vue'
 import DirectoryFilterSelectCard from '@/components/common/DirectoryFilterSelectCard.vue'
 import type {
@@ -85,18 +75,22 @@ import type {
   FamilyDirectoryFilters,
 } from './family.types'
 
-defineProps<{
+const props = defineProps<{
   title: string
   resetText: string
+  expandText: string
+  collapseText: string
   genderLabel: string
   ageLabel: string
   cityLabel: string
   educationLabel: string
   intentLabel: string
   familyModeLabel: string
-  moreFiltersLabel: string
-  expandText: string
-  collapseText: string
+  occupationLabel: string
+  industryLabel: string
+  maritalStatusLabel: string
+  childrenLabel: string
+  longDistanceLabel: string
   filters: FamilyDirectoryFilters
   genderOptions: DirectoryOption[]
   ageOptions: DirectoryOption[]
@@ -104,16 +98,126 @@ defineProps<{
   educationOptions: DirectoryOption[]
   intentOptions: DirectoryOption[]
   familyModeOptions: DirectoryOption[]
+  occupationOptions: DirectoryOption[]
+  industryOptions: DirectoryOption[]
+  maritalStatusOptions: DirectoryOption[]
+  childrenOptions: DirectoryOption[]
+  longDistanceOptions: DirectoryOption[]
   activeFilters: ActiveDirectoryFilterChip[]
-  advancedOpen: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'update:filters', value: Partial<FamilyDirectoryFilters>): void
   (e: 'remove-filter', key: keyof FamilyDirectoryFilters): void
-  (e: 'toggle-advanced'): void
   (e: 'reset'): void
 }>()
+
+interface FamilyFilterItem {
+  key: keyof FamilyDirectoryFilters
+  label: string
+  options: DirectoryOption[]
+  value: string
+  widthClass: string
+}
+
+const isExpanded = ref(false)
+
+const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
+const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
+const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
+
+const primaryFilters = computed<FamilyFilterItem[]>(() => [
+  {
+    key: 'gender',
+    label: props.genderLabel,
+    options: props.genderOptions,
+    value: props.filters.gender,
+    widthClass: compactWidthClass,
+  },
+  {
+    key: 'ageRange',
+    label: props.ageLabel,
+    options: props.ageOptions,
+    value: props.filters.ageRange,
+    widthClass: compactWidthClass,
+  },
+  {
+    key: 'familyMode',
+    label: props.familyModeLabel,
+    options: props.familyModeOptions,
+    value: props.filters.familyMode,
+    widthClass: wideWidthClass,
+  },
+  {
+    key: 'city',
+    label: props.cityLabel,
+    options: props.cityOptions,
+    value: props.filters.city,
+    widthClass: regularWidthClass,
+  },
+  {
+    key: 'education',
+    label: props.educationLabel,
+    options: props.educationOptions,
+    value: props.filters.education,
+    widthClass: regularWidthClass,
+  },
+  {
+    key: 'intentCode',
+    label: props.intentLabel,
+    options: props.intentOptions,
+    value: props.filters.intentCode,
+    widthClass: wideWidthClass,
+  },
+])
+
+const secondaryFilters = computed<FamilyFilterItem[]>(() => [
+  {
+    key: 'occupation',
+    label: props.occupationLabel,
+    options: props.occupationOptions,
+    value: props.filters.occupation,
+    widthClass: wideWidthClass,
+  },
+  {
+    key: 'industry',
+    label: props.industryLabel,
+    options: props.industryOptions,
+    value: props.filters.industry,
+    widthClass: regularWidthClass,
+  },
+  {
+    key: 'maritalStatus',
+    label: props.maritalStatusLabel,
+    options: props.maritalStatusOptions,
+    value: props.filters.maritalStatus,
+    widthClass: regularWidthClass,
+  },
+  {
+    key: 'hasChildren',
+    label: props.childrenLabel,
+    options: props.childrenOptions,
+    value: props.filters.hasChildren,
+    widthClass: regularWidthClass,
+  },
+  {
+    key: 'acceptLongDistance',
+    label: props.longDistanceLabel,
+    options: props.longDistanceOptions,
+    value: props.filters.acceptLongDistance,
+    widthClass: regularWidthClass,
+  },
+])
+
+const visibleFilters = computed(() => {
+  return isExpanded.value
+    ? [...primaryFilters.value, ...secondaryFilters.value]
+    : primaryFilters.value
+})
+
+function toggleExpanded() {
+  isExpanded.value = !isExpanded.value
+}
 
 function handleSelect(key: keyof FamilyDirectoryFilters, value: string) {
   emit('update:filters', { [key]: value })

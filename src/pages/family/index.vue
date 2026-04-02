@@ -19,15 +19,19 @@
       <FamilyFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
+        :expand-text="t('filters.expand')"
+        :collapse-text="t('filters.collapse')"
         :gender-label="t('filters.gender')"
         :age-label="t('filters.age')"
         :city-label="t('filters.city')"
         :education-label="t('filters.education')"
         :intent-label="t('filters.intent')"
         :family-mode-label="t('filters.familyMode')"
-        :more-filters-label="t('toolbar.filtersLabel')"
-        :expand-text="t('toolbar.filterToggleOpen')"
-        :collapse-text="t('toolbar.filterToggleClose')"
+        :occupation-label="t('filters.occupation')"
+        :industry-label="t('filters.industry')"
+        :marital-status-label="t('filters.maritalStatus')"
+        :children-label="t('filters.children')"
+        :long-distance-label="t('filters.longDistance')"
         :filters="filters"
         :gender-options="genderOptions"
         :age-options="ageOptions"
@@ -35,29 +39,15 @@
         :education-options="educationOptions"
         :intent-options="intentOptions"
         :family-mode-options="familyModeOptions"
-        :active-filters="activeFilterChips"
-        :advanced-open="advancedOpen"
-        @update:filters="handleUpdateFilters"
-        @remove-filter="handleRemoveFilter"
-        @toggle-advanced="advancedOpen = !advancedOpen"
-        @reset="handleResetFilters"
-      />
-
-      <FamilyAdvancedFilters
-        v-if="advancedOpen"
-        :title="t('directory.subtitle')"
-        :occupation-label="t('filters.occupation')"
-        :industry-label="t('filters.industry')"
-        :marital-status-label="t('filters.maritalStatus')"
-        :children-label="t('filters.children')"
-        :long-distance-label="t('filters.longDistance')"
-        :filters="filters"
         :occupation-options="occupationOptions"
         :industry-options="industryOptions"
         :marital-status-options="maritalStatusOptions"
         :children-options="childrenOptions"
         :long-distance-options="longDistanceOptions"
+        :active-filters="activeFilterChips"
         @update:filters="handleUpdateFilters"
+        @remove-filter="handleRemoveFilter"
+        @reset="handleResetFilters"
       />
 
       <DirectoryResultToolbar
@@ -110,14 +100,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import DirectoryGridShell from '@/components/common/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/common/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/common/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/common/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import FamilyAdvancedFilters from '@/components/family/FamilyAdvancedFilters.vue'
 import FamilyDirectoryCard from '@/components/family/FamilyDirectoryCard.vue'
 import FamilyFilterToolbar from '@/components/family/FamilyFilterToolbar.vue'
 import type { FamilyDirectoryFilters } from '@/components/family/family.types'
@@ -130,7 +119,6 @@ import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('family')
-const advancedOpen = ref(false)
 
 const {
   filters,

@@ -1,17 +1,17 @@
 <template>
   <view
     v-if="items.length"
-    class="flex flex-wrap gap-2 border border-border-light bg-surface-base px-3 py-3"
+    class="flex flex-wrap gap-2"
   >
     <view
       v-for="item in items"
       :key="String(item.key)"
-      class="inline-flex min-h-[36px] items-center gap-2 border border-brand-highlight/40 bg-brand-highlight/10 px-3 text-[12px] text-brand-brown"
+      class="inline-flex min-h-[28px] items-center gap-2 border border-border-highlight/40 bg-surface-panel px-2.5 text-[12px] text-brand-brown"
     >
       <text class="text-text-body-soft">{{ item.label }}</text>
       <text class="font-medium">{{ item.value }}</text>
       <text
-        class="cursor-pointer text-[13px] leading-none transition-opacity duration-200 hover:opacity-70"
+        class="cursor-pointer text-[12px] leading-none transition-opacity duration-200 hover:opacity-70"
         @click="$emit('remove', item.key)"
       >
         x

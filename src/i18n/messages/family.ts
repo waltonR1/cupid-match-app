@@ -21,14 +21,10 @@ export const familyMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: '排序',
-      filtersLabel: '更多筛选',
-      filterToggleOpen: '展开更多筛选',
-      filterToggleClose: '收起更多筛选',
     },
 
     directory: {
       title: '家庭参与筛选',
-      subtitle: '先看资料、先筛选背景与路径，再判断是否值得推动子女接触。',
       resultPrefix: '当前筛出',
       resultSuffix: '份候选资料',
       empty: '当前没有符合条件的家庭候选资料。',
@@ -36,6 +32,8 @@ export const familyMessages: AppLocaleMessages = {
     },
 
     filters: {
+      expand: '\u5c55\u5f00\u7b5b\u9009',
+      collapse: '\u6536\u8d77\u7b5b\u9009',
       clear: '清除全部',
       gender: '性别',
       genderMale: '男',
@@ -108,14 +106,10 @@ export const familyMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: 'Tri',
-      filtersLabel: 'Plus de filtres',
-      filterToggleOpen: 'Ouvrir plus de filtres',
-      filterToggleClose: 'Fermer les filtres',
     },
 
     directory: {
       title: 'Filtrage famille',
-      subtitle: 'Voir les dossiers, filtrer le contexte et le parcours, puis decider si un premier contact merite d etre pousse.',
       resultPrefix: 'Selection actuelle :',
       resultSuffix: 'dossiers',
       empty: 'Aucun dossier familial ne correspond aux criteres actuels.',
@@ -124,6 +118,8 @@ export const familyMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Tout effacer',
+      expand: 'Afficher plus',
+      collapse: 'Replier',
       gender: 'Genre',
       genderMale: 'Homme',
       genderFemale: 'Femme',
@@ -195,14 +191,10 @@ export const familyMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: 'Sort',
-      filtersLabel: 'More filters',
-      filterToggleOpen: 'Show more filters',
-      filterToggleClose: 'Hide extra filters',
     },
 
     directory: {
       title: 'Family screening',
-      subtitle: 'Review the dossier first, filter the background and relationship path, then decide whether contact should be encouraged.',
       resultPrefix: 'Current shortlist:',
       resultSuffix: 'dossiers',
       empty: 'No family-facing dossiers match the current filters.',
@@ -211,6 +203,8 @@ export const familyMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Clear all',
+      expand: 'Show filters',
+      collapse: 'Collapse',
       gender: 'Gender',
       genderMale: 'Male',
       genderFemale: 'Female',

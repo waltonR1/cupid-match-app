@@ -15,18 +15,10 @@ export const profilesMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: '排序',
-      sortNewest: '最近活跃',
-      sortPriority: '优先资料',
-      sortAgeAsc: '年龄从低到高',
-      sortAgeDesc: '年龄从高到低',
-      filtersLabel: '更多筛选',
-      filterToggleOpen: '展开更多筛选',
-      filterToggleClose: '收起更多筛选',
     },
 
     directory: {
       title: '会员筛选',
-      subtitle: '保持成熟平台常见的浏览逻辑：先看结果，再筛选，再翻页。',
       resultPrefix: '当前共找到',
       resultSuffix: '份资料',
       empty: '当前没有符合条件的资料。',
@@ -34,6 +26,8 @@ export const profilesMessages: AppLocaleMessages = {
     },
 
     filters: {
+      expand: '\u5c55\u5f00\u7b5b\u9009',
+      collapse: '\u6536\u8d77\u7b5b\u9009',
       clear: '清除全部',
       gender: '性别',
       genderMale: '男',
@@ -88,18 +82,10 @@ export const profilesMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: 'Tri',
-      sortNewest: 'Activite recente',
-      sortPriority: 'Profils prioritaires',
-      sortAgeAsc: 'Age croissant',
-      sortAgeDesc: 'Age decroissant',
-      filtersLabel: 'Plus de filtres',
-      filterToggleOpen: 'Ouvrir plus de filtres',
-      filterToggleClose: 'Fermer les filtres',
     },
 
     directory: {
       title: 'Repertoire',
-      subtitle: 'Une logique proche des plateformes matures : voir, filtrer, puis parcourir page par page.',
       resultPrefix: 'Resultat actuel :',
       resultSuffix: 'profils',
       empty: 'Aucun profil ne correspond aux filtres actuels.',
@@ -108,6 +94,8 @@ export const profilesMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Tout effacer',
+      expand: 'Afficher plus',
+      collapse: 'Replier',
       gender: 'Genre',
       genderMale: 'Homme',
       genderFemale: 'Femme',
@@ -161,18 +149,10 @@ export const profilesMessages: AppLocaleMessages = {
 
     toolbar: {
       sortLabel: 'Sort',
-      sortNewest: 'Recently active',
-      sortPriority: 'Priority profiles',
-      sortAgeAsc: 'Age: low to high',
-      sortAgeDesc: 'Age: high to low',
-      filtersLabel: 'More filters',
-      filterToggleOpen: 'Show more filters',
-      filterToggleClose: 'Hide extra filters',
     },
 
     directory: {
       title: 'Directory',
-      subtitle: 'A mature browsing logic: view results, filter, then move through pages.',
       resultPrefix: 'Current result:',
       resultSuffix: 'profiles',
       empty: 'No profiles match the current filters.',
@@ -181,6 +161,8 @@ export const profilesMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Clear all',
+      expand: 'Show filters',
+      collapse: 'Collapse',
       gender: 'Gender',
       genderMale: 'Male',
       genderFemale: 'Female',
