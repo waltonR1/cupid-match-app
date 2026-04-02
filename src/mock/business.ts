@@ -1378,51 +1378,76 @@ export function getMockThreads() {
       .filter((item): item is MockThreadRecord => Boolean(item))
 }
 
-export function getLocalizedProfileCardData(locale: AppLocale, profile: MockProfile) {
+const PROFILE_LANGUAGE_LABELS: Record<string, LocalizedText> = {
+  FR: localized('法语', 'Francais', 'French'),
+  EN: localized('英语', 'Anglais', 'English'),
+  ZH: localized('中文', 'Chinois', 'Chinese'),
+  NL: localized('荷兰语', 'Neerlandais', 'Dutch'),
+  IT: localized('意大利语', 'Italien', 'Italian'),
+  DE: localized('德语', 'Allemand', 'German'),
+}
+
+export interface LocalizedChoiceOption {
+  label: string
+  value: string
+}
+
+export function getLocalizedLanguageLabel(locale: AppLocale, language: string) {
+  const label = PROFILE_LANGUAGE_LABELS[String(language || '').trim()]
+  if (!label) return String(language || '').trim()
+  return pickLocalized(locale, label)
+}
+
+function formatProfileDirectoryMeta(locale: AppLocale, profile: MockProfile) {
+  const occupation = pickLocalized(locale, profile.occupation)
+
+  if (locale === 'zh') return `${profile.age}岁 · ${occupation}`
+  if (locale === 'fr') return `${profile.age} ans · ${occupation}`
+  return `${profile.age} · ${occupation}`
+}
+
+function formatProfileDirectoryLanguages(locale: AppLocale, languages: string[]) {
+  return languages
+      .map(language => getLocalizedLanguageLabel(locale, language))
+      .join(' / ')
+}
+
+export interface LocalizedProfileCardData {
+  id: string
+  name: string
+  avatar: string
+  meta: string
+  goalCode: IntentionCode
+  status: ProfileStatus
+  summary: string
+  facts: {
+    city: string
+    education: string
+    languages: string
+  }
+  tags: string[]
+}
+
+export function getLocalizedProfileCardData(
+    locale: AppLocale,
+    profile: MockProfile,
+): LocalizedProfileCardData {
   return {
     id: profile.id,
     name: profile.name,
     avatar: profile.avatar,
-    gender: profile.gender,
-    age: profile.age,
-    height: profile.height,
-    city: pickLocalized(locale, profile.city),
-    country: pickLocalized(locale, profile.country),
-    nationality: pickLocalized(locale, profile.nationality),
+    meta: formatProfileDirectoryMeta(locale, profile),
+    goalCode: profile.intentCode,
     status: profile.status,
-    isVerified: profile.isVerified,
-    lastActiveAt: profile.lastActiveAt,
-    joinedAt: profile.joinedAt,
-
-    familyVisible: profile.familyVisible,
-    allowFamilyContact: profile.allowFamilyContact,
-    familyPriority: profile.familyPriority,
-
-    degreeLevel: profile.degreeLevel,
-    education: pickLocalized(locale, profile.education),
-    occupation: pickLocalized(locale, profile.occupation),
-    industry: pickLocalized(locale, profile.industry),
-    employer: pickLocalized(locale, profile.employer),
-    incomeRange: pickLocalized(locale, profile.incomeRange),
-
-    maritalStatus: profile.maritalStatus,
-    hasChildren: profile.hasChildren,
-    wantChildren: profile.wantChildren,
-    acceptLongDistance: profile.acceptLongDistance,
-
-    intentCode: profile.intentCode,
-    intent: pickLocalized(locale, profile.intent),
-    maritalPlan: pickLocalized(locale, profile.maritalPlan),
-
-    languages: [...profile.languages],
-    smoke: profile.smoke,
-    drink: profile.drink,
-    exercise: pickLocalized(locale, profile.exercise),
-    residencePlan: pickLocalized(locale, profile.residencePlan),
-
     summary: pickLocalized(locale, profile.summary),
-    highlights: profile.highlights.map(item => pickLocalized(locale, item)),
-    tags: profile.tags.map(item => pickLocalized(locale, item)),
+    facts: {
+      city: pickLocalized(locale, profile.city),
+      education: pickLocalized(locale, profile.education),
+      languages: formatProfileDirectoryLanguages(locale, profile.languages),
+    },
+    tags: profile.tags
+        .slice(0, 3)
+        .map(item => pickLocalized(locale, item)),
   }
 }
 
@@ -1457,7 +1482,7 @@ export function getLocalizedIntentOptions(locale: AppLocale) {
       })
 }
 
-export function getLocalizedLanguageOptions() {
+export function getLocalizedLanguageOptions(locale: AppLocale): LocalizedChoiceOption[] {
   const values = new Set<string>()
 
   mockProfiles.forEach(profile => {
@@ -1468,5 +1493,10 @@ export function getLocalizedLanguageOptions() {
     })
   })
 
-  return Array.from(values).sort((a, b) => a.localeCompare(b))
+  return Array.from(values)
+      .sort((a, b) => getLocalizedLanguageLabel(locale, a).localeCompare(getLocalizedLanguageLabel(locale, b)))
+      .map(value => ({
+        label: getLocalizedLanguageLabel(locale, value),
+        value,
+      }))
 }

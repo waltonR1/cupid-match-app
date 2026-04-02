@@ -5,6 +5,12 @@ export interface DirectoryOption {
     value: string
 }
 
+export interface ActiveDirectoryFilterChip {
+    key: keyof ProfilesDirectoryFilters
+    label: string
+    value: string
+}
+
 export interface ProfilesDirectoryFilters {
     ageRange: string
     city: string
@@ -23,7 +29,7 @@ export interface ProfilesDirectoryFilters {
 
 export type ProfilesSortKey =
     | 'recentActive'
-    | 'verifiedFirst'
+    | 'priorityFirst'
     | 'ageAsc'
     | 'ageDesc'
 
@@ -40,6 +46,7 @@ export interface UseProfilesDirectoryResult<TProfile> {
     pagedItems: ComputedRef<TProfile[]>
     pageStart: ComputedRef<number>
     pageEnd: ComputedRef<number>
+    activeFilterChips: ComputedRef<ActiveDirectoryFilterChip[]>
 
     ageOptions: ComputedRef<DirectoryOption[]>
     cityOptions: ComputedRef<DirectoryOption[]>
@@ -56,6 +63,7 @@ export interface UseProfilesDirectoryResult<TProfile> {
     sortOptions: ComputedRef<DirectoryOption[]>
 
     updateFilters: (nextFilters: Partial<ProfilesDirectoryFilters>) => void
+    removeFilter: (key: keyof ProfilesDirectoryFilters) => void
     resetFilters: () => void
     updateSort: (nextSortKey: string) => void
     changePage: (nextPage: number) => void
