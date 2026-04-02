@@ -12,6 +12,7 @@ export interface ActiveDirectoryFilterChip {
 }
 
 export interface ProfilesDirectoryFilters {
+    gender: string
     ageRange: string
     city: string
     heightRange: string
@@ -49,6 +50,7 @@ export interface UseProfilesDirectoryResult<TProfile> {
     activeFilterChips: ComputedRef<ActiveDirectoryFilterChip[]>
 
     ageOptions: ComputedRef<DirectoryOption[]>
+    genderOptions: ComputedRef<DirectoryOption[]>
     cityOptions: ComputedRef<DirectoryOption[]>
     heightOptions: ComputedRef<DirectoryOption[]>
     educationOptions: ComputedRef<DirectoryOption[]>

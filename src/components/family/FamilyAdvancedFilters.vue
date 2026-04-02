@@ -4,7 +4,7 @@
       {{ title }}
     </view>
 
-    <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+    <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
       <DirectoryFilterSelectCard
         :label="occupationLabel"
         :options="occupationOptions"

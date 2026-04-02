@@ -37,6 +37,9 @@ export const familyMessages: AppLocaleMessages = {
 
     filters: {
       clear: '清除全部',
+      gender: '性别',
+      genderMale: '男',
+      genderFemale: '女',
       age: '年龄',
       city: '城市',
       education: '学历',
@@ -121,6 +124,9 @@ export const familyMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Tout effacer',
+      gender: 'Genre',
+      genderMale: 'Homme',
+      genderFemale: 'Femme',
       age: 'Age',
       city: 'Ville',
       education: 'Formation',
@@ -205,6 +211,9 @@ export const familyMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Clear all',
+      gender: 'Gender',
+      genderMale: 'Male',
+      genderFemale: 'Female',
       age: 'Age',
       city: 'City',
       education: 'Education',

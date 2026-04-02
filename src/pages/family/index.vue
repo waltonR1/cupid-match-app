@@ -19,6 +19,7 @@
       <FamilyFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
+        :gender-label="t('filters.gender')"
         :age-label="t('filters.age')"
         :city-label="t('filters.city')"
         :education-label="t('filters.education')"
@@ -28,6 +29,7 @@
         :expand-text="t('toolbar.filterToggleOpen')"
         :collapse-text="t('toolbar.filterToggleClose')"
         :filters="filters"
+        :gender-options="genderOptions"
         :age-options="ageOptions"
         :city-options="cityOptions"
         :education-options="educationOptions"
@@ -141,6 +143,7 @@ const {
   pageEnd,
   activeFilterChips,
   ageOptions,
+  genderOptions,
   cityOptions,
   educationOptions,
   intentOptions,

@@ -52,6 +52,7 @@ const labelText = computed(() => {
 const cardViewModel = computed<DirectoryCardViewModel>(() => ({
   avatar: cardData.value.avatar,
   name: cardData.value.name,
+  gender: props.profile.gender,
   meta: cardData.value.meta,
   badge: goalText.value,
   summary: cardData.value.summary,

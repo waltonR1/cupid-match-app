@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { useLocaleBridge } from '@/i18n/use-locale-bridge'
+import { usePageI18n } from '@/i18n/use-page-i18n'
 import {
   getLocalizedIntentOptions,
   getLocalizedLanguageOptions,
@@ -17,6 +17,7 @@ import type {
 } from './profiles.types'
 
 const DEFAULT_FILTERS: ProfilesDirectoryFilters = {
+  gender: '',
   ageRange: '',
   city: '',
   heightRange: '',
@@ -80,6 +81,11 @@ function matchAgeRange(age: number, range: string) {
     default:
       return true
   }
+}
+
+function matchGender(gender: MockProfile['gender'], value: string) {
+  if (!value) return true
+  return gender === value
 }
 
 function matchHeightRange(height: number, range: string) {
@@ -160,7 +166,7 @@ function getPriorityRank(profile: MockProfile) {
 }
 
 export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> {
-  const { locale } = useLocaleBridge()
+  const { locale, t } = usePageI18n('profiles')
 
   const filters = ref<ProfilesDirectoryFilters>({ ...DEFAULT_FILTERS })
   const sortKey = ref<ProfilesSortKey>('recentActive')
@@ -168,6 +174,9 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
   const pageSize = ref(6)
 
   const text = computed(() => ({
+    gender: t('filters.gender'),
+    genderMale: t('filters.genderMale'),
+    genderFemale: t('filters.genderFemale'),
     all: localized('全部', 'Tous', 'All')[locale.value],
     age: localized('年龄', 'Age', 'Age')[locale.value],
     city: localized('城市', 'Ville', 'City')[locale.value],
@@ -211,6 +220,12 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
     { label: text.value.age30to34, value: '30to34' },
     { label: text.value.age35to39, value: '35to39' },
     { label: text.value.age40plus, value: '40plus' },
+  ])
+
+  const genderOptions = computed<DirectoryOption[]>(() => [
+    buildBaseAllOption(text.value.all),
+    { label: text.value.genderMale, value: 'male' },
+    { label: text.value.genderFemale, value: 'female' },
   ])
 
   const heightOptions = computed<DirectoryOption[]>(() => [
@@ -304,6 +319,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
       const localizedIndustry = profile.industry[locale.value]
       const localizedOccupation = profile.occupation[locale.value]
 
+      const passedGender = matchGender(profile.gender, filters.value.gender)
       const passedAge = matchAgeRange(profile.age, filters.value.ageRange)
       const passedCity = !filters.value.city || localizedCity === filters.value.city
       const passedHeight = matchHeightRange(profile.height, filters.value.heightRange)
@@ -322,6 +338,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
       )
 
       return [
+        passedGender,
         passedAge,
         passedCity,
         passedHeight,
@@ -388,6 +405,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
 
   const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
     const chips = [
+      buildActiveChip('gender', text.value.gender, genderOptions.value, filters.value.gender),
       buildActiveChip('ageRange', text.value.age, ageOptions.value, filters.value.ageRange),
       buildActiveChip('city', text.value.city, cityOptions.value, filters.value.city),
       buildActiveChip('heightRange', text.value.height, heightOptions.value, filters.value.heightRange),
@@ -466,6 +484,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
     pageEnd,
     activeFilterChips,
     ageOptions,
+    genderOptions,
     cityOptions,
     heightOptions,
     educationOptions,

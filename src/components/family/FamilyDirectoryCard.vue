@@ -84,6 +84,7 @@ const decisionLabelText = computed(() => {
 const cardViewModel = computed<DirectoryCardViewModel>(() => ({
   avatar: props.profile.avatar,
   name: props.profile.name,
+  gender: props.profile.gender,
   meta: metaText.value,
   badge: familyModeText.value,
   summary: summaryText.value,

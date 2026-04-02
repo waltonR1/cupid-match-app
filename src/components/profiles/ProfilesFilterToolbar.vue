@@ -19,7 +19,14 @@
         @remove="handleRemoveFilter"
       />
 
-      <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+      <view class="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
+        <DirectoryFilterSelectCard
+          :label="genderLabel"
+          :options="genderOptions"
+          :value="filters.gender"
+          @change="handleSelect('gender', $event)"
+        />
+
         <DirectoryFilterSelectCard
           :label="ageLabel"
           :options="ageOptions"
@@ -81,6 +88,7 @@ import type {
 defineProps<{
   title: string
   resetText: string
+  genderLabel: string
   ageLabel: string
   cityLabel: string
   heightLabel: string
@@ -90,6 +98,7 @@ defineProps<{
   expandText: string
   collapseText: string
   filters: ProfilesDirectoryFilters
+  genderOptions: DirectoryOption[]
   ageOptions: DirectoryOption[]
   cityOptions: DirectoryOption[]
   heightOptions: DirectoryOption[]

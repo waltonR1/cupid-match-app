@@ -25,7 +25,7 @@ export const profilesMessages: AppLocaleMessages = {
     },
 
     directory: {
-      title: '资料目录',
+      title: '会员筛选',
       subtitle: '保持成熟平台常见的浏览逻辑：先看结果，再筛选，再翻页。',
       resultPrefix: '当前共找到',
       resultSuffix: '份资料',
@@ -35,6 +35,9 @@ export const profilesMessages: AppLocaleMessages = {
 
     filters: {
       clear: '清除全部',
+      gender: '性别',
+      genderMale: '男',
+      genderFemale: '女',
       age: '年龄',
       city: '城市',
       height: '身高',
@@ -105,6 +108,9 @@ export const profilesMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Tout effacer',
+      gender: 'Genre',
+      genderMale: 'Homme',
+      genderFemale: 'Femme',
       age: 'Age',
       city: 'Ville',
       height: 'Taille',
@@ -175,6 +181,9 @@ export const profilesMessages: AppLocaleMessages = {
 
     filters: {
       clear: 'Clear all',
+      gender: 'Gender',
+      genderMale: 'Male',
+      genderFemale: 'Female',
       age: 'Age',
       city: 'City',
       height: 'Height',
