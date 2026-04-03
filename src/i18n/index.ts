@@ -7,6 +7,7 @@ import { commonMessages } from '@/i18n/messages/common'
 import { contactMessages } from '@/i18n/messages/contact'
 import { eventDetailMessages } from '@/i18n/messages/event-detail'
 import { eventsMessages } from '@/i18n/messages/events'
+import { familyDetailMessages } from '@/i18n/messages/family-detail'
 import { favoritesMessages } from '@/i18n/messages/favorites'
 import { homeMessages } from '@/i18n/messages/home'
 import { messagesPageMessages } from '@/i18n/messages/messages-page'
@@ -35,6 +36,7 @@ export const messages: AppMessages = {
     myEvents: myEventsMessages.zh,
     myProfile: myProfileMessages.zh,
     family: familyMessages.zh,
+    familyDetail: familyDetailMessages.zh,
     privacy: privacyMessages.zh,
     profileDetail: profileDetailMessages.zh,
     register: registerMessages.zh,
@@ -55,6 +57,7 @@ export const messages: AppMessages = {
     myEvents: myEventsMessages.fr,
     myProfile: myProfileMessages.fr,
     family: familyMessages.fr,
+    familyDetail: familyDetailMessages.fr,
     privacy: privacyMessages.fr,
     profileDetail: profileDetailMessages.fr,
     register: registerMessages.fr,
@@ -75,6 +78,7 @@ export const messages: AppMessages = {
     myEvents: myEventsMessages.en,
     myProfile: myProfileMessages.en,
     family: familyMessages.en,
+    familyDetail: familyDetailMessages.en,
     privacy: privacyMessages.en,
     profileDetail: profileDetailMessages.en,
     register: registerMessages.en,

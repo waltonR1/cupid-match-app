@@ -36,6 +36,13 @@
       }
     },
     {
+      "path": "pages/family/detail",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
+      }
+    },
+    {
       "path": "pages/events/index",
       "style": {
         "navigationStyle": "custom",

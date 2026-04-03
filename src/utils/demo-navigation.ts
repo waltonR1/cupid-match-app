@@ -6,9 +6,15 @@ export function openRegisterPage(plan?: string) {
   })
 }
 
-export function openProfileDetail(id: string, source: 'member' | 'family' = 'member') {
+export function openProfileDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/profiles/detail?id=${encodeURIComponent(id)}&source=${encodeURIComponent(source)}`,
+    url: `/pages/profiles/detail?id=${encodeURIComponent(id)}`,
+  })
+}
+
+export function openFamilyProfileDetail(id: string) {
+  uni.navigateTo({
+    url: `/pages/family/detail?id=${encodeURIComponent(id)}`,
   })
 }
 

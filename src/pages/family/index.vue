@@ -114,7 +114,7 @@ import { useFamilyDirectory } from '@/components/family/useFamilyDirectory'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { mockProfiles } from '@/mock/business'
-import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
+import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
@@ -193,7 +193,7 @@ function handleNavClick(key: string) {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id, 'family')
+  openFamilyProfileDetail(id)
 }
 
 function handleRegisterClick() {

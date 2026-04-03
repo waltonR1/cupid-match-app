@@ -1,8 +1,8 @@
 <template>
   <DetailDossierPage
     :nav-list="navList"
-    active-nav-key="common.nav.profiles"
-    :back-text="t('actions.backToProfiles')"
+    active-nav-key="common.nav.family"
+    :back-text="t('actions.backToFamily')"
     :hero-data="heroData"
     :overview-facts="overviewFacts"
     :relationship-facts="relationshipFacts"
@@ -34,14 +34,14 @@
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import DetailDossierPage from '@/components/common/detail/DetailDossierPage.vue'
-import { useProfileDetailViewModel } from '@/components/profiles/useProfileDetailViewModel'
+import { useFamilyDetailViewModel } from '@/components/family/useFamilyDetailViewModel'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('profileDetail')
+const { t, locale } = usePageI18n('familyDetail')
 
 const profileId = ref('')
 
@@ -61,7 +61,7 @@ const {
   maritalPlanText,
   highlightTexts,
   tagTexts,
-} = useProfileDetailViewModel(profileId, locale, t)
+} = useFamilyDetailViewModel(profileId, locale, t)
 
 function handleBack() {
   if (getCurrentPages().length > 1) {
@@ -70,7 +70,7 @@ function handleBack() {
   }
 
   uni.redirectTo({
-    url: '/pages/profiles/index',
+    url: '/pages/family/index',
   })
 }
 
@@ -79,6 +79,6 @@ function handleNavClick(key: string) {
 }
 
 function handleRegisterClick() {
-  openRegisterPage('free')
+  openRegisterPage('contact')
 }
 </script>
