@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import EmptyStatePanel from '@/components/common/EmptyStatePanel.vue'
+import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 
 const props = withDefaults(defineProps<{
   items: any[]

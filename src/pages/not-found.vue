@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import EmptyStatePanel from '@/components/common/EmptyStatePanel.vue'
+import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'

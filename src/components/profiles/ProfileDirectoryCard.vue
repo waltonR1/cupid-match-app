@@ -8,8 +8,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import DirectoryCardFrame from '@/components/common/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/common/directory-card.types'
+import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import type { AppLocale } from '@/i18n/types'
 import { getLocalizedProfileCardData } from '@/mock/business'

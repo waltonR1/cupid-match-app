@@ -8,24 +8,24 @@
     />
 
     <!-- Hero -->
-    <HomeHeroSection/>
+    <HomeHero/>
     <!-- 愿景 -->
-    <HomeVisionSection/>
+    <HomeVision/>
 
-    <HomeProfilesPreviewSection />
+    <HomeProfilesPreview />
 
-    <HomeFamilySection />
+    <HomeFamily />
 
-    <HomeEventsPreviewSection />
+    <HomeEventsPreview />
 
     <!-- 核心功能 -->
-    <HomeFeaturesSection/>
+    <HomeFeatures/>
 
     <!-- 为谁而生 -->
-    <HomeAudienceSection />
+    <HomeAudience />
 
     <!-- 会员体系 -->
-    <HomeMembershipSection />
+    <HomeMembership />
 
     <AppFooter
         :nav-list="navList"
@@ -40,14 +40,14 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
-import HomeVisionSection from "@/components/home/HomeVisionSection.vue";
-import HomeHeroSection from "@/components/home/HomeHeroSection.vue";
-import HomeFeaturesSection from "@/components/home/HomeFeaturesSection.vue";
-import HomeMembershipSection from "@/components/home/HomeMembershipSection.vue";
-import HomeAudienceSection from '@/components/home/HomeAudienceSection.vue'
-import HomeEventsPreviewSection from "@/components/home/HomeEventsPreviewSection.vue";
-import HomeProfilesPreviewSection from "@/components/home/HomeProfilesPreviewSection.vue";
-import HomeFamilySection from "@/components/home/HomeFamilySection.vue";
+import HomeVision from "@/components/home/HomeVision.vue";
+import HomeHero from "@/components/home/HomeHero.vue";
+import HomeFeatures from "@/components/home/HomeFeatures.vue";
+import HomeMembership from "@/components/home/HomeMembership.vue";
+import HomeAudience from '@/components/home/HomeAudience.vue'
+import HomeEventsPreview from "@/components/home/HomeEventsPreview.vue";
+import HomeProfilesPreview from "@/components/home/HomeProfilesPreview.vue";
+import HomeFamily from "@/components/home/HomeFamily.vue";
 
 const navList = NAV_LIST
 

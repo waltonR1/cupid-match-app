@@ -101,10 +101,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import DirectoryGridShell from '@/components/common/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/common/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/common/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/common/DirectoryResultToolbar.vue'
+import DirectoryGridShell from '@/components/common/directory/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/common/directory/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/common/directory/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import FamilyDirectoryCard from '@/components/family/FamilyDirectoryCard.vue'

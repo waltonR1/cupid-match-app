@@ -41,7 +41,7 @@
         </view>
       </view>
 
-      <ActiveFilterChips
+      <DirectoryActiveFilterChips
         v-if="props.activeFilters.length"
         :items="props.activeFilters"
         @remove="handleRemoveFilter"
@@ -67,8 +67,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import ActiveFilterChips from '@/components/common/ActiveFilterChips.vue'
-import DirectoryFilterSelectCard from '@/components/common/DirectoryFilterSelectCard.vue'
+import DirectoryActiveFilterChips from '@/components/common/directory/DirectoryActiveFilterChips.vue'
+import DirectoryFilterSelectCard from '@/components/common/directory/DirectoryFilterSelectCard.vue'
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
