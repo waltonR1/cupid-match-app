@@ -7,11 +7,11 @@
         @register-click="handleRegisterClick"
     />
 
-    <AboutHeroSection />
-    <AboutOriginSection />
-    <AboutAudienceSection />
-    <AboutDifferenceSection />
-    <AboutValuesSection />
+    <AboutHero />
+    <AboutOrigin />
+    <AboutAudience />
+    <AboutDifference />
+    <AboutValues />
 
     <AppFooter
         :nav-list="navList"
@@ -23,11 +23,11 @@
 <script setup lang="ts">
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import AboutHeroSection from '@/components/about/AboutHeroSection.vue'
-import AboutOriginSection from '@/components/about/AboutOriginSection.vue'
-import AboutAudienceSection from '@/components/about/AboutAudienceSection.vue'
-import AboutDifferenceSection from '@/components/about/AboutDifferenceSection.vue'
-import AboutValuesSection from '@/components/about/AboutValuesSection.vue'
+import AboutHero from '@/components/about/AboutHero.vue'
+import AboutOrigin from '@/components/about/AboutOrigin.vue'
+import AboutAudience from '@/components/about/AboutAudience.vue'
+import AboutDifference from '@/components/about/AboutDifference.vue'
+import AboutValues from '@/components/about/AboutValues.vue'
 
 import { NAV_LIST } from '@/constants/nav'
 import { openRegisterPage } from '@/utils/demo-navigation'
