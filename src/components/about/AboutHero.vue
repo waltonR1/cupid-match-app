@@ -1,31 +1,30 @@
 <template>
-  <view class="relative overflow-hidden bg-[linear-gradient(135deg,#0d2238_0%,#183354_52%,#102842_100%)] text-white">
-    <view class="absolute inset-x-0 top-0 h-[240px] bg-[radial-gradient(circle_at_top_left,rgba(215,25,52,0.22),transparent_52%)]" />
-    <view class="absolute right-[-120px] top-16 h-[320px] w-[320px] rounded-full border border-white/10" />
+  <view class="relative overflow-hidden bg-events-hero text-text-inverse">
+    <view class="pointer-events-none absolute left-[-56px] top-[-40px] h-[220px] w-[220px] rounded-full bg-brand-highlight/10 blur-[82px]" />
 
     <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
       <view class="grid gap-14 lg:min-h-[620px] lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
         <view class="relative z-10 max-w-[720px]">
-          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-white/10 bg-white/5 px-5 py-2">
-            <view class="h-[1px] w-12 bg-[#d7b86e]" />
-            <text class="text-[12px] uppercase tracking-[6px] text-[#e8d7bc]">
+          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/35 bg-surface-inverse-panel/28 px-5 py-2 backdrop-blur">
+            <view class="h-[1px] w-12 bg-brand-highlight" />
+            <text class="text-[12px] uppercase tracking-[6px] text-brand-highlight-soft">
               {{ t('hero.eyebrow') }}
             </text>
           </view>
 
-          <view class="max-w-[640px] text-[52px] font-semibold leading-[1.02] text-[#fffaf3] lg:text-[92px]">
+          <view class="max-w-[640px] text-[52px] font-semibold leading-[1.02] text-text-inverse lg:text-[92px]">
             {{ t('hero.title') }}
           </view>
 
-          <view class="mt-4 text-[32px] italic leading-[1.05] text-[#d7b86e] lg:text-[62px]">
+          <view class="mt-4 text-[32px] italic leading-[1.05] text-brand-highlight-strong lg:text-[62px]">
             {{ t('hero.titleAccent') }}
           </view>
 
-          <view class="mt-10 max-w-[660px] text-[19px] leading-8 text-[#efe2cf] lg:text-[21px]">
+          <view class="mt-10 max-w-[660px] text-[19px] leading-8 text-text-inverse-soft lg:text-[21px]">
             {{ t('hero.description') }}
           </view>
 
-          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-white/60 lg:text-[18px]">
+          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-text-inverse-muted lg:text-[18px]">
             {{ t('hero.secondaryDescription') }}
           </view>
 
@@ -33,12 +32,12 @@
             <view
                 v-for="item in audienceCards.slice(0, 2)"
                 :key="item.title"
-                class="border border-white/10 bg-white/5 px-6 py-5 backdrop-blur"
+                class="border border-border-inverse/32 bg-surface-inverse-panel/34 px-6 py-5 backdrop-blur"
             >
-              <view class="text-[13px] uppercase tracking-[4px] text-[#ffb3bf]">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight-soft">
                 {{ t(item.title) }}
               </view>
-              <view class="mt-3 text-[15px] leading-7 text-[#efe5d7]">
+              <view class="mt-3 text-[15px] leading-7 text-text-inverse-soft">
                 {{ t(item.desc) }}
               </view>
             </view>
@@ -46,21 +45,21 @@
         </view>
 
         <view class="relative">
-          <view class="pointer-events-none absolute right-0 top-[-36px] text-[118px] font-semibold tracking-[10px] text-white/5 lg:text-[180px]">
+          <view class="pointer-events-none absolute right-0 top-[-36px] text-[118px] font-semibold tracking-[10px] text-text-inverse/5 lg:text-[180px]">
             PARIS
           </view>
 
           <view class="grid gap-6 lg:ml-auto lg:max-w-[460px]">
-            <view class="border border-[#d7b86e]/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.04))] px-8 py-8 backdrop-blur">
-              <view class="text-[13px] uppercase tracking-[4px] text-[#d7b86e]">Positioning</view>
-              <view class="mt-5 text-[28px] leading-[1.6] text-white">
+            <view class="border border-border-inverse/34 bg-surface-inverse-panel/76 px-8 py-8 shadow-card backdrop-blur">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight">Positioning</view>
+              <view class="mt-5 text-[28px] leading-[1.6] text-text-inverse">
                 {{ t('hero.card1') }}
               </view>
             </view>
 
-            <view class="border border-[#f06b82]/40 bg-[#d71934] px-8 py-8 text-white shadow-[0_30px_80px_rgba(164,17,46,0.28)] lg:ml-14">
-              <view class="text-[13px] uppercase tracking-[4px] text-[#ffd5dd]">Approach</view>
-              <view class="mt-5 text-[28px] leading-[1.6]">
+            <view class="border border-brand-highlight/32 bg-surface-inverse-card/72 px-8 py-8 text-text-inverse shadow-hero lg:ml-14">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight-soft">Approach</view>
+              <view class="mt-5 text-[28px] leading-[1.6] text-text-inverse">
                 {{ t('hero.card2') }}
               </view>
             </view>

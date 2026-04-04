@@ -1,5 +1,5 @@
 ﻿<template>
-  <view class="min-h-screen bg-[#f5f0e8] text-[#1d1d1f]">
+  <view class="min-h-screen bg-page-base text-text-heading">
     <AppHeader
         :nav-list="navList"
         active-nav="common.nav.about"
