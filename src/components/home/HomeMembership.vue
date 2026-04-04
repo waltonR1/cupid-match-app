@@ -1,165 +1,299 @@
 <template>
-  <view class="bg-page-soft">
-    <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-      <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <view class="max-w-[760px]">
-          <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-brand-rose-line" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-rose">
+  <view class="relative overflow-hidden bg-page-base text-text-heading">
+    <!-- ambient background -->
+    <view class="pointer-events-none absolute inset-0">
+      <view
+          class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(215,184,110,0.10),transparent_30%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(215,184,110,0.08),transparent_34%)]"
+      />
+      <view
+          class="absolute right-[-140px] top-[-20px] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(215,184,110,0.10),transparent_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(215,184,110,0.12),transparent_70%)]"
+      />
+      <view
+          class="absolute bottom-[-120px] left-[-100px] h-[240px] w-[240px] rounded-full bg-[radial-gradient(circle,rgba(255,250,243,0.06),transparent_68%)] blur-3xl"
+      />
+    </view>
+
+    <view class="relative mx-auto max-w-[1240px] px-6 py-16 lg:px-8 lg:py-20">
+      <!-- header -->
+      <view class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-10">
+        <view class="pt-2">
+          <view class="mb-4 inline-flex items-center gap-4">
+            <view class="h-px w-10 bg-brand-highlight" />
+            <text class="text-[10px] uppercase tracking-[4px] text-text-subtle dark:text-text-inverse-subtle">
               {{ t('membership.eyebrow') }}
             </text>
           </view>
 
-          <view class="text-[40px] font-semibold leading-[1.06] text-text-heading lg:text-[56px]">
-            <text>{{ t('membership.title') }}</text>
-            <text class="text-brand-primary"> · {{ t('membership.titleAccent') }}</text>
-          </view>
-        </view>
+          <view class="max-w-[760px]">
+            <view
+                class="text-[32px] font-semibold leading-[1.06] text-text-heading dark:text-text-inverse lg:text-[52px]"
+            >
+              <text>{{ t('membership.title') }}</text>
+              <text class="text-brand-highlight"> · {{ t('membership.titleAccent') }}</text>
+            </view>
 
-        <view class="max-w-[430px] text-[18px] leading-8 text-text-warm lg:text-[19px]">
-          {{ t('membership.subtitle') }}
+            <view
+                class="mt-4 max-w-[700px] text-[14px] leading-7 text-text-body dark:text-text-inverse-soft lg:text-[15px]"
+            >
+              {{ t('membership.subtitle') }}
+            </view>
+          </view>
         </view>
       </view>
 
-      <!-- 四张卡片：同宽同高 -->
-      <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <!-- Free -->
-        <view class="flex min-h-[560px] flex-col border border-border-subtle bg-surface-card px-7 py-8 text-button-neutral lg:px-8 lg:py-9">
-          <view class="text-[13px] uppercase tracking-[5px] text-text-subtle">
-            {{ t('membership.free.badge') }}
-          </view>
-
-          <view class="mt-5 text-[34px] font-semibold leading-[1.18] lg:text-[38px]">
-            {{ t('membership.free.name') }}
-          </view>
-
-          <view class="mt-8 text-[30px] font-semibold leading-none lg:text-[32px]">
-            {{ t('membership.free.price') }}
-            <text class="ml-1 text-[17px] font-normal leading-normal text-text-muted">
-              {{ t('membership.free.priceNote') }}
-            </text>
-          </view>
-
-          <view class="mt-3 text-[15px] italic text-text-muted">
-            {{ t('membership.free.period') }}
-          </view>
-
-          <view class="mt-8 space-y-3 text-[16px] leading-8 text-text-body">
-            <view>• {{ t('membership.free.f1') }}</view>
-            <view>• {{ t('membership.free.f2') }}</view>
-            <view>• {{ t('membership.free.f3') }}</view>
-          </view>
-
-          <view
-            class="mt-auto inline-flex w-full cursor-pointer items-center justify-center rounded-button border border-button-neutral/55 bg-transparent py-btn-cta-y text-[16px] font-medium tracking-[0.5px] text-button-neutral transition-all duration-300 hover:border-button-neutral hover:bg-button-neutral hover:text-white"
-            @click="openPlan('free')"
-          >
-            {{ t('membership.free.button') }}
-          </view>
-        </view>
-
-        <!-- Silver -->
-        <view class="flex min-h-[560px] flex-col border border-border-highlight/50 bg-surface-card-soft px-7 py-8 text-text-heading lg:px-8 lg:py-9">
-          <view class="text-[13px] uppercase tracking-[5px] text-brand-brown">
+      <!-- membership cards -->
+      <view class="grid gap-4 lg:grid-cols-[0.92fr_1fr_1.06fr]">
+        <!-- silver -->
+        <view
+            class="relative flex min-h-[460px] flex-col overflow-hidden border border-border-membership-silver bg-surface-membership-silver px-5 py-6 shadow-card dark:border-border-membership-silver dark:bg-surface-membership-silver dark:shadow-card lg:px-6"
+        >
+          <view class="text-[10px] uppercase tracking-[3px] text-brand-warm dark:text-text-inverse-subtle">
             {{ t('membership.vip.silver.badge') }}
           </view>
 
-          <view class="mt-5 text-[34px] font-semibold leading-[1.18] text-brand-brown lg:text-[38px]">
+          <view class="mt-3 h-px w-10 bg-border-membership-silver" />
+
+          <view
+              class="mt-5 text-[28px] font-semibold leading-[1.12] text-text-heading dark:text-text-inverse lg:text-[32px]"
+          >
             {{ t('membership.vip.silver.name') }}
           </view>
 
-          <view class="mt-8 text-[30px] font-semibold leading-none lg:text-[32px]">
-            {{ t('membership.vip.silver.price') }}
-            <text class="ml-1 text-[17px] font-normal leading-normal text-text-muted">
+          <view
+              class="mt-3 text-[13px] leading-6 text-text-body dark:text-text-inverse-soft"
+          >
+            {{ t('membership.vip.silver.description') }}
+          </view>
+
+          <view class="mt-6">
+            <view
+                class="text-[36px] font-semibold leading-none text-text-heading dark:text-text-inverse"
+            >
+              {{ t('membership.vip.silver.price') }}
+            </view>
+            <view
+                class="mt-2 text-[12px] leading-5 text-text-muted dark:text-text-inverse-subtle"
+            >
               {{ t('membership.vip.silver.priceNote') }}
-            </text>
+            </view>
+            <view
+                class="mt-1 text-[12px] italic leading-5 text-text-muted dark:text-text-inverse-subtle"
+            >
+              {{ t('membership.vip.silver.period') }}
+            </view>
           </view>
 
-          <view class="mt-3 text-[15px] italic text-text-muted">
-            {{ t('membership.vip.silver.period') }}
-          </view>
+          <view class="mt-6 h-px w-full bg-border-soft dark:bg-border-inverse" />
 
-          <view class="mt-8 space-y-3 text-[16px] leading-8">
-            <view>• {{ t('membership.vip.silver.f1') }}</view>
-            <view>• {{ t('membership.vip.silver.f2') }}</view>
-            <view>• {{ t('membership.vip.silver.f3') }}</view>
+          <view
+              class="mt-6 space-y-3 text-[13px] leading-6 text-text-body dark:text-text-inverse-soft"
+          >
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.silver.f1') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.silver.f2') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.silver.f3') }}</text>
+            </view>
           </view>
 
           <view
-            class="mt-auto inline-flex w-full cursor-pointer items-center justify-center rounded-button border border-brand-brown/70 bg-transparent py-btn-cta-y text-[16px] font-medium tracking-[0.5px] text-brand-brown transition-all duration-300 hover:border-brand-brown hover:bg-brand-brown hover:text-surface-card-soft"
-            @click="openPlan('silver')"
+              class="mt-auto inline-flex w-full cursor-pointer items-center justify-center border border-border-membership-silver bg-transparent py-[0.75rem] text-[14px] font-medium tracking-[0.3px] text-text-heading transition-all duration-300 hover:bg-black/[0.03] dark:text-text-inverse dark:hover:bg-white/5"
+              @click="openPlan('silver')"
           >
             {{ t('membership.vip.cta') }}
           </view>
         </view>
 
-        <!-- Gold -->
-        <view class="flex min-h-[560px] flex-col border border-border-highlight bg-surface-inverse-strong px-7 py-8 text-text-inverse shadow-[0_18px_40px_rgba(22,41,65,0.12)] lg:px-8 lg:py-9">
-          <view class="text-[13px] uppercase tracking-[5px] text-brand-highlight">
+        <!-- gold -->
+        <view
+            class="relative flex min-h-[460px] flex-col overflow-hidden border border-border-membership-gold bg-[linear-gradient(180deg,#4a3d28_0%,#332818_100%)] px-5 py-6 shadow-emphasis dark:border-border-membership-gold lg:px-6"
+        >
+          <view class="absolute inset-x-0 top-0 h-px bg-brand-highlight/70" />
+          <view class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(215,184,110,0.14),transparent_40%)]" />
+
+          <view class="relative text-[10px] uppercase tracking-[3px] text-brand-highlight-warm">
             {{ t('membership.vip.gold.badge') }}
           </view>
 
-          <view class="mt-5 text-[34px] font-semibold leading-[1.18] text-brand-highlight-warm lg:text-[38px]">
+          <view class="relative mt-3 h-px w-10 bg-border-membership-gold" />
+
+          <view
+              class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-brand-highlight-warm lg:text-[32px]"
+          >
             {{ t('membership.vip.gold.name') }}
           </view>
 
-          <view class="mt-8 text-[30px] font-semibold leading-none lg:text-[32px]">
-            {{ t('membership.vip.gold.price') }}
-            <text class="ml-1 text-[17px] font-normal leading-normal text-text-inverse-subtle">
+          <view class="relative mt-3 text-[13px] leading-6 text-text-inverse-soft">
+            {{ t('membership.vip.gold.description') }}
+          </view>
+
+          <view class="relative mt-6">
+            <view class="text-[36px] font-semibold leading-none text-text-inverse">
+              {{ t('membership.vip.gold.price') }}
+            </view>
+            <view class="mt-2 text-[12px] leading-5 text-text-inverse-subtle">
               {{ t('membership.vip.gold.priceNote') }}
-            </text>
+            </view>
+            <view class="mt-1 text-[12px] italic leading-5 text-text-inverse-subtle">
+              {{ t('membership.vip.gold.period') }}
+            </view>
           </view>
 
-          <view class="mt-3 text-[15px] italic text-text-inverse-subtle">
-            {{ t('membership.vip.gold.period') }}
-          </view>
+          <view class="relative mt-6 h-px w-full bg-brand-highlight/22" />
 
-          <view class="mt-8 space-y-3 text-[16px] leading-8 text-text-inverse-soft">
-            <view>• {{ t('membership.vip.gold.f1') }}</view>
-            <view>• {{ t('membership.vip.gold.f2') }}</view>
-            <view>• {{ t('membership.vip.gold.f3') }}</view>
+          <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-text-inverse-soft">
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.gold.f1') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.gold.f2') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.gold.f3') }}</text>
+            </view>
           </view>
 
           <view
-            class="mt-auto inline-flex w-full cursor-pointer items-center justify-center rounded-button border border-button-highlight bg-button-highlight py-btn-cta-y text-[16px] font-medium tracking-[0.5px] text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:border-button-highlight-hover hover:bg-button-highlight-hover"
-            @click="openPlan('gold')"
+              class="relative mt-auto inline-flex w-full cursor-pointer items-center justify-center border border-button-membership-gold bg-button-membership-gold py-[0.75rem] text-[14px] font-medium tracking-[0.3px] text-button-neutral-ink transition-all duration-300 hover:border-button-membership-gold-hover hover:bg-button-membership-gold-hover"
+              @click="openPlan('gold')"
           >
             {{ t('membership.vip.cta') }}
           </view>
         </view>
 
-        <!-- Diamond -->
-        <view class="flex min-h-[560px] flex-col border border-border-accent-strong bg-button-primary px-7 py-8 text-text-inverse lg:px-8 lg:py-9">
-          <view class="text-[13px] uppercase tracking-[5px] text-brand-primary-soft">
+        <!-- diamond -->
+        <view
+            class="relative flex min-h-[490px] flex-col overflow-hidden border border-brand-highlight bg-[linear-gradient(135deg,#0f2338_0%,#10263d_46%,#081726_100%)] px-5 py-6 shadow-luxe ring-1 ring-brand-highlight/18 lg:-translate-y-1 lg:px-6"
+        >
+          <view class="absolute inset-x-0 top-0 h-[2px] bg-brand-highlight" />
+          <view class="absolute inset-y-0 right-0 w-[46%] bg-[radial-gradient(circle_at_top_right,rgba(215,184,110,0.18),transparent_62%)]" />
+
+          <view
+              class="relative inline-flex w-fit items-center border border-brand-highlight/35 bg-brand-highlight/10 px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-brand-highlight-warm"
+          >
             {{ t('membership.vip.diamond.badge') }}
           </view>
 
-          <view class="mt-5 text-[34px] font-semibold leading-[1.18] text-text-inverse lg:text-[38px]">
+          <view class="relative mt-4 h-px w-12 bg-brand-highlight/70" />
+
+          <view
+              class="relative mt-5 text-[30px] font-semibold leading-[1.1] text-brand-highlight-warm lg:text-[34px]"
+          >
             {{ t('membership.vip.diamond.name') }}
           </view>
 
-          <view class="mt-8 text-[30px] font-semibold leading-none lg:text-[32px]">
-            {{ t('membership.vip.diamond.price') }}
-            <text class="ml-1 text-[17px] font-normal leading-normal text-text-inverse-soft">
+          <view class="relative mt-3 text-[13px] leading-6 text-text-inverse-soft">
+            {{ t('membership.vip.diamond.description') }}
+          </view>
+
+          <view class="relative mt-6">
+            <view class="text-[40px] font-semibold leading-none text-text-inverse">
+              {{ t('membership.vip.diamond.price') }}
+            </view>
+            <view class="mt-2 text-[12px] leading-5 text-text-inverse-subtle">
               {{ t('membership.vip.diamond.priceNote') }}
-            </text>
+            </view>
+            <view class="mt-1 text-[12px] italic leading-5 text-text-inverse-subtle">
+              {{ t('membership.vip.diamond.period') }}
+            </view>
           </view>
 
-          <view class="mt-3 text-[15px] italic text-text-inverse-soft">
-            {{ t('membership.vip.diamond.period') }}
+          <view class="relative mt-7 h-px w-full bg-brand-highlight/25" />
+
+          <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-text-inverse-soft">
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.diamond.f1') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.diamond.f2') }}</text>
+            </view>
+            <view class="flex gap-3">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.vip.diamond.f3') }}</text>
+            </view>
           </view>
 
-          <view class="mt-8 space-y-3 text-[16px] leading-8 text-text-inverse">
-            <view>• {{ t('membership.vip.diamond.f1') }}</view>
-            <view>• {{ t('membership.vip.diamond.f2') }}</view>
-            <view>• {{ t('membership.vip.diamond.f3') }}</view>
+          <view class="relative mt-auto pt-6">
+            <view class="mb-3 text-[10px] uppercase tracking-[3px] text-brand-highlight/80">
+              Private Access
+            </view>
+
+            <view
+                class="inline-flex w-full cursor-pointer items-center justify-center border border-button-membership-diamond bg-button-membership-diamond py-[0.75rem] text-[14px] font-medium tracking-[0.3px] text-button-neutral-ink transition-all duration-300 hover:border-button-membership-diamond-hover hover:bg-button-membership-diamond-hover"
+                @click="openPlan('diamond')"
+            >
+              {{ t('membership.vip.cta') }}
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- complimentary access -->
+      <view
+          class="mt-4 border border-border-base bg-surface-card px-5 py-5 shadow-card dark:border-border-inverse-soft dark:bg-surface-inverse-panel/88 dark:shadow-panel lg:px-6"
+      >
+        <view class="grid gap-5 lg:grid-cols-[210px_120px_minmax(0,1fr)_150px] lg:items-center">
+          <view>
+            <view class="text-[10px] uppercase tracking-[3px] text-text-subtle dark:text-text-inverse-subtle">
+              {{ t('membership.free.badge') }}
+            </view>
+            <view
+                class="mt-2 text-[24px] font-semibold leading-[1.14] text-text-heading dark:text-text-inverse"
+            >
+              {{ t('membership.free.name') }}
+            </view>
+            <view class="mt-2 text-[12px] leading-6 text-text-body dark:text-text-inverse-soft">
+              {{ t('membership.free.description') }}
+            </view>
+          </view>
+
+          <view>
+            <view
+                class="text-[30px] font-semibold leading-none text-text-heading dark:text-text-inverse"
+            >
+              {{ t('membership.free.price') }}
+            </view>
+            <view class="mt-2 text-[12px] leading-5 text-text-muted dark:text-text-inverse-subtle">
+              {{ t('membership.free.priceNote') }}
+            </view>
+            <view class="mt-1 text-[12px] italic leading-5 text-text-muted dark:text-text-inverse-subtle">
+              {{ t('membership.free.period') }}
+            </view>
           </view>
 
           <view
-            class="mt-auto inline-flex w-full cursor-pointer items-center justify-center rounded-button border border-white bg-white py-btn-cta-y text-[16px] font-medium tracking-[0.5px] text-button-primary transition-all duration-300 hover:-translate-y-[1px] hover:bg-white/95"
-            @click="openPlan('diamond')"
+              class="grid gap-2 text-[12px] leading-6 text-text-body dark:text-text-inverse-soft lg:grid-cols-3 lg:gap-4"
           >
-            {{ t('membership.vip.cta') }}
+            <view class="flex gap-2">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.free.f1') }}</text>
+            </view>
+            <view class="flex gap-2">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.free.f2') }}</text>
+            </view>
+            <view class="flex gap-2">
+              <text class="text-brand-highlight">—</text>
+              <text>{{ t('membership.free.f3') }}</text>
+            </view>
+          </view>
+
+          <view
+              class="inline-flex w-full cursor-pointer items-center justify-center border border-border-base bg-transparent py-[0.72rem] text-[13px] font-medium tracking-[0.3px] text-text-heading transition-all duration-300 hover:bg-black/[0.03] dark:border-border-inverse-hover dark:text-text-inverse dark:hover:bg-white/5"
+              @click="openPlan('free')"
+          >
+            {{ t('membership.free.button') }}
           </view>
         </view>
       </view>

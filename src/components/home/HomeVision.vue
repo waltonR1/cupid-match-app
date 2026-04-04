@@ -1,20 +1,20 @@
 <template>
-  <view class="bg-page-soft">
+  <view class="bg-page-base">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="grid gap-8 lg:grid-cols-[0.95fr_1.15fr] lg:gap-10">
         <!-- 左侧标题区 -->
         <view
             class="border border-border-base bg-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
           <view class="mb-6 inline-flex items-center gap-4">
-            <view class="h-px w-10 bg-brand-rose-line"/>
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-rose">
+            <view class="h-px w-10 bg-brand-highlight"/>
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
               {{ t('vision.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.04] text-text-heading sm:text-[46px] lg:text-[58px]">
             <text>{{ t('vision.title') }}</text>
-            <text class="text-brand-primary"> · {{ t('vision.titleAccent') }}</text>
+            <text class="text-brand-highlight-strong"> · {{ t('vision.titleAccent') }}</text>
           </view>
 
           <view class="mt-6 max-w-[420px] text-[15px] leading-7 text-text-body-soft lg:text-[16px]">
@@ -42,11 +42,11 @@
                 :key="item.title"
                 class="flex min-h-[220px] flex-col border border-border-soft bg-surface-card-soft px-7 py-8"
             >
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-rose">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
                 {{ t('vision.pointLabel') }}
               </view>
 
-              <view class="mt-5 text-[25px] font-medium leading-[1.28] text-brand-primary">
+              <view class="mt-5 text-[25px] font-medium leading-[1.28] text-brand-brown">
                 {{ t(item.title) }}
               </view>
 

@@ -1,7 +1,7 @@
 <template>
   <view
     v-if="totalPages > 1"
-    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-border-base bg-surface-card px-5 py-4 shadow-[0_16px_40px_rgba(30,24,18,0.04)]"
+    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-border-base bg-surface-card px-5 py-4 shadow-panel"
   >
     <view
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"

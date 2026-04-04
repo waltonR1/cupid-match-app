@@ -1,5 +1,5 @@
 <template>
-  <view class="mb-6 border border-border-base bg-surface-card px-5 py-5 shadow-[0_16px_40px_rgba(30,24,18,0.04)] lg:mb-7 lg:px-7 lg:py-6">
+  <view class="mb-6 border border-border-base bg-surface-card px-5 py-5 shadow-panel lg:mb-7 lg:px-7 lg:py-6">
     <view
       class="flex flex-col gap-8 lg:flex-row lg:justify-between"
       :class="hasStats ? 'lg:items-start' : 'lg:items-end'"

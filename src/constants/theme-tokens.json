@@ -1,0 +1,200 @@
+{
+  "shared": {
+    "page": {
+      "inverse": "#0d2238",
+      "inverse-alt": "#0f2438",
+      "inverse-blend": "#183354"
+    },
+    "surface": {
+      "inverse": "#162f4a",
+      "inverse-strong": "#203854",
+      "inverse-hover": "#25415f",
+      "inverse-card": "#203b5a",
+      "inverse-panel": "#132c47"
+    },
+    "text": {
+      "inverse": "#fffaf3",
+      "inverse-soft": "#f3ede4",
+      "inverse-muted": "#e8dcc6",
+      "inverse-subtle": "#d9d0c4",
+      "inverse-faint": "#efe5d7"
+    },
+    "brand": {
+      "primary": "#d71934",
+      "primary-strong": "#d90429",
+      "primary-hover": "#ef233c",
+      "primary-soft": "#ffd5dd",
+      "highlight": "#d7b86e",
+      "highlight-strong": "#d4af37",
+      "highlight-soft": "#d8c8a8",
+      "highlight-warm": "#f4d27f",
+      "rose": "#cf9aa0",
+      "rose-strong": "#d58f97",
+      "rose-line": "#d08e92"
+    },
+    "border": {
+      "inverse": "#2a4158",
+      "inverse-soft": "#294766",
+      "inverse-hover": "#3a5978",
+      "highlight": "#d7b86e",
+      "highlight-soft": "#c9a96a",
+      "highlight-hover": "#d8b87a",
+      "accent": "#d71934",
+      "accent-strong": "#d90429"
+    },
+    "button": {
+      "primary": "#d90429",
+      "primary-hover": "#ef233c",
+      "highlight": "#d7b86e",
+      "highlight-hover": "#e4c783"
+    }
+  },
+  "themes": {
+    "dark": {
+      "page": {
+        "base": "#102336",
+        "soft": "#142a40"
+      },
+      "surface": {
+        "base": "#152b40",
+        "panel": "#1a3249",
+        "card": "#173047",
+        "card-soft": "#1c354d",
+        "membership-silver": "#263646",
+        "membership-gold": "#3b3326",
+        "membership-diamond": "#081726"
+      },
+      "text": {
+        "heading": "#fff8ef",
+        "heading-strong": "#fffaf4",
+        "body": "#e6dac8",
+        "body-soft": "#d6c8b5",
+        "muted": "#beab91",
+        "warm": "#f0d7a7",
+        "subtle": "#ad9c89"
+      },
+      "brand": {
+        "brown": "#d8b67a",
+        "warm": "#ecd5aa",
+        "rose-deep": "#e1a4ad"
+      },
+      "border": {
+        "base": "#2d4760",
+        "soft": "#37516c",
+        "subtle": "#27415a",
+        "muted": "#3d5872",
+        "light": "#4b6279",
+        "membership-silver": "#8f7652",
+        "membership-gold": "#d8b67a",
+        "membership-diamond": "#be9a63"
+      },
+      "button": {
+        "neutral": "#efe1cb",
+        "neutral-ink": "#10263b",
+        "neutral-contrast": "#10263b",
+        "membership-silver": "#b49469",
+        "membership-silver-hover": "#c5a87d",
+        "membership-gold": "#d8b879",
+        "membership-gold-hover": "#ebcf95",
+        "membership-diamond": "#f0dfc1",
+        "membership-diamond-hover": "#f6e7cc"
+      },
+      "gradient": {
+        "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)"
+      },
+      "hero": {
+        "secondary-cta": {
+          "border": "rgba(75, 98, 121, 0.45)",
+          "bg": "rgba(239, 225, 203, 0.12)",
+          "bg-hover": "rgba(239, 225, 203, 0.2)"
+        },
+        "ornament": {
+          "line": "rgba(75, 98, 121, 0.45)",
+          "fill": "rgba(75, 98, 121, 0.15)"
+        }
+      },
+      "shadow": {
+        "panel": "0 16px 40px rgba(4, 12, 22, 0.28)",
+        "card": "0 16px 40px rgba(4, 12, 22, 0.34)",
+        "feature": "0 18px 40px rgba(4, 12, 22, 0.32)",
+        "hero": "0 24px 60px rgba(3, 10, 18, 0.38)",
+        "emphasis": "0 20px 50px rgba(3, 10, 18, 0.34)",
+        "dropdown": "0 18px 50px rgba(4, 12, 22, 0.42)",
+        "luxe": "0 32px 88px rgba(2, 8, 16, 0.58)"
+      }
+    },
+    "light": {
+      "page": {
+        "base": "#f5f0e8",
+        "soft": "#f3ede3"
+      },
+      "surface": {
+        "base": "#ffffff",
+        "panel": "#f6ecdf",
+        "card": "#faf7f1",
+        "card-soft": "#fbf7ef",
+        "membership-silver": "#f1e8dd",
+        "membership-gold": "#ead7ab",
+        "membership-diamond": "#162b40"
+      },
+      "text": {
+        "heading": "#1f1a1c",
+        "heading-strong": "#1e1e1f",
+        "body": "#685a4e",
+        "body-soft": "#7d6752",
+        "muted": "#8a7765",
+        "warm": "#8c6b49",
+        "subtle": "#9b907f"
+      },
+      "brand": {
+        "brown": "#b07d45",
+        "warm": "#a27b55",
+        "rose-deep": "#b84c5c"
+      },
+      "border": {
+        "base": "#e2d7c9",
+        "soft": "#eadfd2",
+        "subtle": "#ddd6c8",
+        "muted": "#dccfbe",
+        "light": "#eee4d7",
+        "membership-silver": "#c7a77a",
+        "membership-gold": "#d7b86e",
+        "membership-diamond": "#bc995e"
+      },
+      "button": {
+        "neutral": "#1f1f1f",
+        "neutral-ink": "#1f3047",
+        "neutral-contrast": "#fffaf3",
+        "membership-silver": "#cfb190",
+        "membership-silver-hover": "#c09a6f",
+        "membership-gold": "#d9bb74",
+        "membership-gold-hover": "#e6cb92",
+        "membership-diamond": "#f1e3cf",
+        "membership-diamond-hover": "#f7ecdc"
+      },
+      "gradient": {
+        "home-hero": "linear-gradient(135deg, #f6efe7 0%, #eadfce 42%, #f8f3eb 100%)"
+      },
+      "hero": {
+        "secondary-cta": {
+          "border": "rgba(220, 207, 190, 0.8)",
+          "bg": "rgba(250, 247, 241, 0.58)",
+          "bg-hover": "rgba(246, 236, 223, 0.88)"
+        },
+        "ornament": {
+          "line": "rgba(220, 207, 190, 0.74)",
+          "fill": "rgba(220, 207, 190, 0.24)"
+        }
+      },
+      "shadow": {
+        "panel": "0 16px 40px rgba(30, 24, 18, 0.04)",
+        "card": "0 16px 40px rgba(30, 24, 18, 0.08)",
+        "feature": "0 18px 40px rgba(18, 31, 44, 0.1)",
+        "hero": "0 24px 60px rgba(35, 30, 22, 0.08)",
+        "emphasis": "0 20px 50px rgba(159, 126, 74, 0.16)",
+        "dropdown": "0 18px 50px rgba(18, 31, 44, 0.14)",
+        "luxe": "0 30px 78px rgba(100, 77, 43, 0.24)"
+      }
+    }
+  }
+}

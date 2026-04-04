@@ -1,6 +1,6 @@
 <template>
   <view
-    class="border border-border-base px-6 py-7 shadow-[0_18px_40px_rgba(30,24,18,0.04)]"
+    class="border border-border-base px-6 py-7 shadow-panel"
     :class="surfaceClassName"
   >
     <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">

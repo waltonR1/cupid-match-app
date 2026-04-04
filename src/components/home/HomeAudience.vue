@@ -5,15 +5,15 @@
         <!-- 左侧主说明 -->
         <view class="border border-border-base bg-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-brand-rose-line" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-rose">
+            <view class="h-px w-14 bg-brand-highlight" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
               {{ t('audience.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] text-text-heading lg:text-[56px]">
             <text>{{ t('audience.title') }}</text>
-            <text class="text-brand-primary">{{ t('audience.titleAccent') }}</text>
+            <text class="text-brand-highlight-strong">{{ t('audience.titleAccent') }}</text>
           </view>
 
           <view class="mt-7 text-[17px] leading-8 text-text-body lg:text-[18px]">
@@ -36,7 +36,7 @@
             >
               <view
                 class="text-[22px] font-medium leading-[1.3]"
-                :class="tag.accent ? 'text-brand-primary' : 'text-text-heading-strong'"
+                :class="tag.accent ? 'text-brand-highlight-strong' : 'text-text-heading-strong'"
               >
                 {{ t(tag.title) }}
               </view>
@@ -49,7 +49,7 @@
 
           <!-- 两张核心态度卡 -->
           <view class="grid gap-6 md:grid-cols-2">
-            <view class="border border-surface-inverse-strong bg-surface-inverse-strong px-7 py-8 text-text-inverse lg:px-8 lg:py-9">
+            <view class="border border-border-base bg-surface-card px-7 py-8 text-text-heading lg:px-8 lg:py-9">
               <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight">
                 {{ t('audience.card1Label') }}
               </view>
@@ -58,13 +58,13 @@
                 {{ t('audience.card1') }}
               </view>
 
-              <view class="mt-5 text-[15px] leading-8 text-text-inverse-subtle lg:text-[16px]">
+              <view class="mt-5 text-[15px] leading-8 text-text-body-soft lg:text-[16px]">
                 {{ t('audience.card1Accent') }}
               </view>
             </view>
 
-            <view class="border border-border-accent bg-brand-primary px-7 py-8 text-text-inverse shadow-[0_20px_50px_rgba(175,16,47,0.14)] lg:px-8 lg:py-9">
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-primary-soft">
+            <view class="border border-border-highlight/55 bg-surface-panel px-7 py-8 text-text-heading shadow-emphasis lg:px-8 lg:py-9">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
                 {{ t('audience.card2Label') }}
               </view>
 
@@ -72,7 +72,7 @@
                 {{ t('audience.card2') }}
               </view>
 
-              <view class="mt-5 text-[15px] leading-8 text-text-inverse-soft lg:text-[16px]">
+              <view class="mt-5 text-[15px] leading-8 text-text-body-soft lg:text-[16px]">
                 {{ t('audience.card2Accent') }}
               </view>
             </view>

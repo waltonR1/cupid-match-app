@@ -1,12 +1,12 @@
 <template>
   <view
-    class="flex h-full min-h-[460px] flex-col border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,24,18,0.08)]"
+    class="flex h-full min-h-[460px] flex-col border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
     :class="rootClassName"
     @click="handleSelect"
   >
     <view class="flex items-start justify-between gap-4">
       <view class="flex min-w-0 items-center gap-4">
-        <view class="flex h-14 w-14 items-center justify-center rounded-full border border-border-muted bg-surface-panel text-[20px] font-semibold text-surface-inverse-strong">
+        <view class="flex h-14 w-14 items-center justify-center rounded-full border border-border-muted bg-surface-panel text-[20px] font-semibold text-brand-highlight-strong">
           {{ data.avatar }}
         </view>
 
@@ -79,7 +79,7 @@
       </view>
     </view>
 
-    <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-brand-rose-deep">
+    <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-brand-brown">
       {{ data.footer }}
     </view>
   </view>

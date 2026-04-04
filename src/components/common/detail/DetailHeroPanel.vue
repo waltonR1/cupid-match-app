@@ -1,37 +1,37 @@
 <template>
-  <view class="relative overflow-hidden border border-border-inverse bg-home-hero px-6 py-6 text-text-inverse shadow-[0_24px_60px_rgba(13,34,56,0.12)] lg:px-8 lg:py-7">
-    <view class="absolute inset-x-0 top-0 h-px bg-white/10" />
-    <view class="absolute right-[-80px] top-[-70px] hidden h-[220px] w-[220px] rounded-full border border-white/5 xl:block" />
+  <view class="relative overflow-hidden border border-border-base bg-home-hero px-6 py-6 text-text-heading shadow-hero lg:px-8 lg:py-7">
+    <view class="absolute inset-x-0 top-0 h-px bg-border-light/45" />
+    <view class="absolute right-[-80px] top-[-70px] hidden h-[220px] w-[220px] rounded-full border border-border-light/20 xl:block" />
 
     <view class="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
       <view class="min-w-0">
         <view class="flex flex-wrap items-center gap-3">
           <view class="inline-flex items-center gap-3">
-            <view class="h-px w-12 bg-border-highlight-soft" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-highlight-soft">
+            <view class="h-px w-12 bg-border-highlight/65" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
               {{ data.eyebrow }}
             </text>
           </view>
 
-          <view class="inline-flex items-center border border-border-highlight-soft/55 bg-border-highlight-soft/10 px-3 py-1 text-[11px] tracking-[2px] text-brand-highlight-strong">
+          <view class="inline-flex items-center border border-border-highlight/55 bg-brand-highlight/10 px-3 py-1 text-[11px] tracking-[2px] text-brand-brown">
             {{ data.recordId }}
           </view>
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-border-highlight-soft/50 bg-surface-inverse-panel text-[28px] font-semibold text-brand-highlight-strong">
+          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-border-highlight/45 bg-surface-base/60 text-[28px] font-semibold text-brand-highlight-strong">
             {{ data.avatar }}
           </view>
 
           <view class="min-w-0 flex-1">
             <view class="flex flex-wrap items-center gap-2.5">
-              <view class="text-[36px] font-semibold leading-[1.02] text-text-inverse lg:text-[48px]">
+              <view class="text-[36px] font-semibold leading-[1.02] text-text-heading lg:text-[48px]">
                 {{ data.name }}
               </view>
 
               <view
                 v-if="data.gender"
-                class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-border-inverse-soft bg-surface-inverse-card text-text-inverse-soft"
+                class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-border-base bg-surface-base/70 text-text-body-soft"
               >
                 <svg
                   v-if="data.gender === 'female'"
@@ -58,7 +58,7 @@
               </view>
             </view>
 
-            <view class="mt-3 text-[17px] leading-7 text-text-inverse-subtle">
+            <view class="mt-3 text-[17px] leading-7 text-text-body-soft">
               {{ data.meta }}
             </view>
 
@@ -75,13 +75,13 @@
           </view>
         </view>
 
-        <view class="mt-6 max-w-[720px] text-[16px] leading-8 text-text-inverse-soft lg:text-[17px]">
+        <view class="mt-6 max-w-[720px] text-[16px] leading-8 text-text-body lg:text-[17px]">
           {{ data.summary }}
         </view>
       </view>
 
-      <view class="border border-border-inverse-soft bg-surface-inverse-card px-5 py-5">
-        <view class="text-[12px] uppercase tracking-[3px] text-brand-highlight-soft">
+      <view class="border border-border-base bg-surface-card/80 px-5 py-5">
+        <view class="text-[12px] uppercase tracking-[3px] text-brand-brown">
           {{ data.indexTitle }}
         </view>
 
@@ -89,12 +89,12 @@
           <view
             v-for="item in data.indexFacts"
             :key="item.label"
-            class="flex items-start justify-between gap-4 border-b border-white/8 pb-3 last:border-b-0 last:pb-0"
+            class="flex items-start justify-between gap-4 border-b border-border-light/55 pb-3 last:border-b-0 last:pb-0"
           >
-            <text class="text-[12px] tracking-[1px] text-text-inverse-subtle">
+            <text class="text-[12px] tracking-[1px] text-text-muted">
               {{ item.label }}
             </text>
-            <text class="max-w-[180px] text-right text-[15px] leading-6 text-text-inverse">
+            <text class="max-w-[180px] text-right text-[15px] leading-6 text-text-heading">
               {{ item.value }}
             </text>
           </view>
@@ -113,9 +113,9 @@ defineProps<{
 
 function badgeClassName(tone?: DetailBadgeItem['tone']) {
   if (tone === 'muted') {
-    return 'border-border-inverse-soft bg-surface-inverse-card text-text-inverse-subtle'
+    return 'border-border-base bg-surface-card/70 text-text-body-soft'
   }
 
-  return 'border-border-highlight-soft/55 bg-border-highlight-soft/10 text-brand-highlight-strong'
+  return 'border-border-highlight/55 bg-brand-highlight/10 text-brand-brown'
 }
 </script>

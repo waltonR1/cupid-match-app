@@ -1,21 +1,21 @@
 <template>
-  <view class="bg-page-inverse text-text-inverse">
+  <view class="bg-page-base text-text-heading">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <!-- 标题区 -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-brand-rose-deep" />
-          <text class="text-[12px] uppercase tracking-[5px] text-brand-rose-strong">
+          <view class="h-px w-14 bg-brand-highlight" />
+          <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
             {{ t('features.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
           <text>{{ t('features.title') }}</text>
-          <text class="text-brand-primary"> · {{ t('features.titleAccent') }}</text>
+          <text class="text-brand-highlight-strong"> · {{ t('features.titleAccent') }}</text>
         </view>
 
-        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-text-inverse-subtle lg:text-[19px]">
+        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-text-body-soft lg:text-[19px]">
           {{ t('features.subtitle') }}
         </view>
       </view>
@@ -25,10 +25,10 @@
         <view
           v-for="card in serviceCards"
           :key="card.title"
-          class="flex min-h-[280px] cursor-pointer flex-col border border-border-inverse-soft bg-surface-inverse-strong px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-inverse-hover hover:bg-surface-inverse-hover hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+          class="flex min-h-[280px] cursor-pointer flex-col border border-border-base bg-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-highlight/50 hover:bg-surface-panel hover:shadow-feature"
           @click="openPath(card.path)"
         >
-          <view class="text-[20px] font-semibold uppercase tracking-[2px] text-text-inverse-subtle">
+          <view class="text-[20px] font-semibold uppercase tracking-[2px] text-text-subtle">
             {{ card.icon }}
           </view>
 
@@ -36,13 +36,13 @@
             {{ t(card.title) }}
           </view>
 
-          <view class="mt-3 text-[17px] leading-8 text-text-inverse-soft lg:text-[18px]">
+          <view class="mt-3 text-[17px] leading-8 text-text-body lg:text-[18px]">
             {{ t(card.desc) }}
           </view>
 
           <view
             v-if="showBrandLabel"
-            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-primary"
+            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-brown"
           >
             {{ t(card.label) }}
           </view>

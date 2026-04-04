@@ -62,16 +62,58 @@ export const homeMessages: AppLocaleMessages = {
       card2Accent: '每一次相遇，都应该建立在清晰、真诚与彼此尊重之上。',
     },
     membership: {
-      eyebrow: '会员体系',
-      title: '会员体系',
-      titleAccent: '套餐方案',
-      subtitle: '从免费体验到顾问协助升级，按照你的节奏选择更适合自己的相识路径。',
-      free: {badge: '免费会员', name: '免费会员', price: '¥0', priceNote: '/ 免费', period: '基础体验', f1: '免费注册与基础资料填写', f2: '浏览部分公开资料', f3: '查看活动与平台介绍', button: '免费加入'},
+      eyebrow: 'PRIVATE MEMBERSHIP',
+      title: '专属会籍',
+      titleAccent: '礼遇路径',
+      subtitle: '从基础体验到顾问协助，再到更私密的高阶撮合服务，按照关系节奏与期待层级，选择更适合自己的相识方式。',
+      note: '不同会籍对应不同的服务深度、推荐优先级与活动参与礼遇。',
+      free: {
+        badge: '基础入口',
+        name: '免费体验',
+        description: '适合刚开始了解平台与整体相识方式的用户。',
+        price: '¥0',
+        priceNote: '免费开放',
+        period: '基础体验权限',
+        f1: '完成注册与基础资料建立',
+        f2: '浏览部分公开资料与平台内容',
+        f3: '了解活动形式与整体服务流程',
+        button: '开启体验',
+      },
       vip: {
-        cta: '咨询顾问',
-        silver: {badge: '白银会员', name: '白银会员', price: '¥499', priceNote: '/ €65', period: '有效期一年', f1: '12 个介绍名额', f2: '12 次线下活动机会', f3: '每日 10 次联系资料查看'},
-        gold: {badge: '黄金会员', name: '黄金会员', price: '¥770', priceNote: '/ €100', period: '有效期六个月', f1: '20 个介绍名额', f2: '20 次线下活动机会', f3: '每日 20 次联系资料查看'},
-        diamond: {badge: '钻石会员', name: '钻石会员', price: '¥1155', priceNote: '/ €150', period: '有效期一年', f1: '24 个介绍名额', f2: '24 次线下活动机会', f3: '每日 30 次联系资料查看'},
+        cta: '咨询专属顾问',
+        silver: {
+          badge: 'Silver Access',
+          name: '白银会籍',
+          description: '适合希望进入更完整浏览与基础相识节奏的会员。',
+          price: '¥499',
+          priceNote: '约 €65 / 年',
+          period: '年度会籍',
+          f1: '基础介绍机会与资料浏览权限',
+          f2: '活动参与资格与日常互动入口',
+          f3: '适合建立稳定而克制的初步连接',
+        },
+        gold: {
+          badge: 'Gold Selection',
+          name: '黄金会籍',
+          description: '适合希望提升推荐效率与线下相遇机会的会员。',
+          price: '¥770',
+          priceNote: '约 €100 / 六个月',
+          period: '半年会籍',
+          f1: '更高频的介绍机会与优先浏览权限',
+          f2: '更完整的活动参与与筛选空间',
+          f3: '适合认真推进关系判断与相识节奏',
+        },
+        diamond: {
+          badge: 'Private Diamond',
+          name: '钻石会籍',
+          description: '面向希望获得更私密、更高阶顾问协助的会员。',
+          price: '¥1155',
+          priceNote: '约 €150 / 年',
+          period: '年度高阶会籍',
+          f1: '更优先的推荐排序与高阶资料查看',
+          f2: '更完整的活动礼遇与相识协助',
+          f3: '可进入更具私密感的顾问支持路径',
+        },
       },
     },
     events: {
@@ -201,17 +243,64 @@ export const homeMessages: AppLocaleMessages = {
       card2Accent: 'Chaque rencontre mérite clarté, respect mutuel et intention authentique.',
     },
     membership: {
-      eyebrow: 'Adhésion',
-      title: 'Adhésion',
-      titleAccent: 'Tarifs',
-      subtitle: 'De l’accès gratuit à l’accompagnement premium, choisissez la formule qui correspond le mieux à votre rythme.',
-      free: {badge: 'Gratuit', name: 'Membre gratuit', price: '€0', priceNote: '/ gratuit', period: 'Accès de base', f1: 'Inscription gratuite et création du profil', f2: 'Consultation de profils publics sélectionnés', f3: 'Accès aux événements et à la présentation de la plateforme', button: 'Rejoindre gratuitement'},
-      vip: {
-        cta: 'Contacter un conseiller',
-        silver: {badge: 'VIP Argent', name: 'VIP Argent', price: '¥499', priceNote: '/ €65', period: 'Valable un an', f1: '12 mises en relation', f2: '12 événements hors ligne', f3: '10 consultations de contact par jour'},
-        gold: {badge: 'VIP Or', name: 'VIP Or', price: '¥770', priceNote: '/ €100', period: 'Valable six mois', f1: '20 mises en relation', f2: '20 événements hors ligne', f3: '20 consultations de contact par jour'},
-        diamond: {badge: 'VIP Diamant', name: 'VIP Diamant', price: '¥1155', priceNote: '/ €150', period: 'Valable un an', f1: '24 mises en relation', f2: '24 événements hors ligne', f3: '30 consultations de contact par jour'},
+      eyebrow: 'PRIVATE MEMBERSHIP',
+      title: 'Adhésion Privée',
+      titleAccent: 'Parcours & Privilèges',
+      subtitle: 'D’une première découverte à un accompagnement plus structuré, puis à une approche plus confidentielle, chaque niveau d’adhésion correspond à une profondeur différente de service.',
+      note: 'Chaque niveau d’adhésion détermine l’accès aux profils, la priorité de recommandation et les privilèges liés aux événements.',
+
+      free: {
+        badge: 'Accès Découverte',
+        name: 'Accès Gratuit',
+        description: 'Pour découvrir la plateforme, son fonctionnement et l’esprit des rencontres proposées.',
+        price: '€0',
+        priceNote: 'accès libre',
+        period: 'Découverte essentielle',
+        f1: 'Création du profil et informations de base',
+        f2: 'Consultation d’une sélection de profils publics',
+        f3: 'Accès aux événements et à la présentation de la plateforme',
+        button: 'Commencer'
       },
+
+      vip: {
+        cta: 'Contacter un conseiller privé',
+
+        silver: {
+          badge: 'Silver Access',
+          name: 'Adhésion Argent',
+          description: 'Pour entrer dans une démarche plus structurée et découvrir un rythme d’échanges plus régulier.',
+          price: '€65',
+          priceNote: 'env. ¥499 / an',
+          period: 'Adhésion annuelle',
+          f1: 'Accès élargi aux profils et premières mises en relation',
+          f2: 'Participation aux événements et interactions essentielles',
+          f3: 'Un rythme sobre pour des rencontres progressives'
+        },
+
+        gold: {
+          badge: 'Gold Selection',
+          name: 'Adhésion Or',
+          description: 'Pour renforcer la qualité des mises en relation et multiplier les opportunités de rencontres réelles.',
+          price: '€100',
+          priceNote: 'env. ¥770 / 6 mois',
+          period: 'Adhésion semestrielle',
+          f1: 'Priorité plus élevée dans les recommandations',
+          f2: 'Accès plus complet aux événements et aux profils',
+          f3: 'Pensé pour une démarche sérieuse et active'
+        },
+
+        diamond: {
+          badge: 'Private Diamond',
+          name: 'Adhésion Diamant',
+          description: 'Pour une approche plus confidentielle, avec un niveau de sélection et d’accompagnement plus élevé.',
+          price: '€150',
+          priceNote: 'env. ¥1155 / an',
+          period: 'Adhésion premium annuelle',
+          f1: 'Priorité renforcée dans les introductions et recommandations',
+          f2: 'Privilèges étendus sur les événements et rencontres',
+          f3: 'Accès à un accompagnement plus discret et personnalisé'
+        }
+      }
     },
     events: {
       eyebrow: 'Rencontres',
@@ -340,17 +429,64 @@ export const homeMessages: AppLocaleMessages = {
       card2Accent: 'Every encounter deserves clarity, mutual respect, and honest intention.',
     },
     membership: {
-      eyebrow: 'Membership',
-      title: 'Membership',
-      titleAccent: 'Plans',
-      subtitle: 'From free access to premium advisory support, choose the plan that best fits your pace and expectations.',
-      free: {badge: 'Free', name: 'Free Member', price: '€0', priceNote: '/ free', period: 'Basic access', f1: 'Free registration and basic profile setup', f2: 'Browse selected public profiles', f3: 'View events and platform introduction', button: 'Join for Free'},
-      vip: {
-        cta: 'Contact an advisor',
-        silver: {badge: 'Silver VIP', name: 'Silver VIP', price: '¥499', priceNote: '/ €65', period: 'Valid for one year', f1: '12 introduction quotas', f2: '12 offline events', f3: '10 contact views per day'},
-        gold: {badge: 'Gold VIP', name: 'Gold VIP', price: '¥770', priceNote: '/ €100', period: 'Valid for six months', f1: '20 introduction quotas', f2: '20 offline events', f3: '20 contact views per day'},
-        diamond: {badge: 'Diamond VIP', name: 'Diamond VIP', price: '¥1155', priceNote: '/ €150', period: 'Valid for one year', f1: '24 introduction quotas', f2: '24 offline events', f3: '30 contact views per day'},
+      eyebrow: 'PRIVATE MEMBERSHIP',
+      title: 'Private Membership',
+      titleAccent: 'Privileges & Paths',
+      subtitle: 'From an initial introduction to the platform, to a more structured journey, and finally to a more discreet and elevated level of matchmaking, each tier reflects a different depth of service.',
+      note: 'Each membership level defines access to profiles, recommendation priority, and event privileges.',
+
+      free: {
+        badge: 'Discovery Access',
+        name: 'Complimentary Access',
+        description: 'For those who wish to explore the platform and understand its approach before engaging further.',
+        price: '€0',
+        priceNote: 'complimentary',
+        period: 'Essential access',
+        f1: 'Create a profile and complete basic information',
+        f2: 'Browse selected public profiles',
+        f3: 'Explore events and platform structure',
+        button: 'Begin the Experience'
       },
+
+      vip: {
+        cta: 'Speak with a private advisor',
+
+        silver: {
+          badge: 'Silver Access',
+          name: 'Silver Membership',
+          description: 'Designed for members seeking a more structured introduction and steady pace of interaction.',
+          price: '€65',
+          priceNote: 'approx. ¥499 / year',
+          period: 'Annual membership',
+          f1: 'Expanded profile access and initial introductions',
+          f2: 'Participation in events and basic interaction features',
+          f3: 'A composed and gradual approach to connection'
+        },
+
+        gold: {
+          badge: 'Gold Selection',
+          name: 'Gold Membership',
+          description: 'For members looking to increase both the quality and frequency of meaningful encounters.',
+          price: '€100',
+          priceNote: 'approx. ¥770 / 6 months',
+          period: 'Six-month membership',
+          f1: 'Higher priority in recommendations and introductions',
+          f2: 'Broader access to events and profiles',
+          f3: 'Designed for a more active and intentional journey'
+        },
+
+        diamond: {
+          badge: 'Private Diamond',
+          name: 'Diamond Membership',
+          description: 'For a more discreet and refined experience with a higher level of selection and guidance.',
+          price: '€150',
+          priceNote: 'approx. ¥1155 / year',
+          period: 'Premium annual membership',
+          f1: 'Priority access to curated recommendations',
+          f2: 'Extended privileges across events and introductions',
+          f3: 'A more private and elevated matchmaking pathway'
+        }
+      }
     },
     events: {
       eyebrow: 'Events',

@@ -33,10 +33,12 @@
 
     <view
       v-if="isOpen"
-      class="absolute left-0 top-[calc(100%+6px)] z-30 min-w-full w-[220px] max-w-[calc(100vw-32px)] overflow-hidden border border-border-soft bg-surface-card shadow-[0_16px_24px_rgba(30,24,18,0.08)]"
+      class="absolute left-0 top-[calc(100%+6px)] z-30 min-w-full w-[220px] max-w-[calc(100vw-32px)] overflow-hidden border border-border-soft bg-surface-card shadow-dropdown"
       @click.stop
     >
-      <scroll-view scroll-y="false" style="max-height: 220px;">
+      <view
+        class="max-h-[220px] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
         <view
           v-for="option in options"
           :key="option.value || '__all__'"
@@ -56,7 +58,7 @@
             <text class="min-w-0 text-[13.5px] leading-[1.35] text-left">{{ option.label }}</text>
           </view>
         </view>
-      </scroll-view>
+      </view>
     </view>
   </view>
 </template>

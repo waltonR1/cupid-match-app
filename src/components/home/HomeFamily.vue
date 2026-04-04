@@ -1,10 +1,10 @@
 <template>
-  <view class="bg-page-inverse-alt">
+  <view class="bg-page-base">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
 
         <!-- 左侧 -->
-        <view class="border border-border-inverse bg-surface-inverse px-8 py-10">
+        <view class="border border-border-base bg-surface-panel px-8 py-10">
           <view class="mb-5 inline-flex items-center gap-4">
             <view class="h-[1px] w-14 bg-brand-highlight" />
             <text class="text-[12px] uppercase tracking-[5px] text-brand-highlight">
@@ -12,18 +12,18 @@
             </text>
           </view>
 
-          <view class="text-[44px] font-semibold leading-[1.1] text-text-inverse">
+          <view class="text-[44px] font-semibold leading-[1.1] text-text-heading">
             {{ t('family.title') }}
-            <text class="text-brand-primary">
+            <text class="text-brand-highlight-strong">
               {{ t('family.titleAccent') }}
             </text>
           </view>
 
-          <view class="mt-6 text-[17px] leading-8 text-text-inverse-subtle">
+          <view class="mt-6 text-[17px] leading-8 text-text-body">
             {{ t('family.description') }}
           </view>
 
-          <view class="mt-5 text-[16px] italic leading-8 text-text-inverse-muted">
+          <view class="mt-5 text-[16px] italic leading-8 text-text-muted">
             {{ t('family.secondary') }}
           </view>
         </view>
@@ -36,13 +36,13 @@
             <view
               v-for="item in familyItems"
               :key="item.title"
-              class="border border-border-inverse bg-surface-inverse px-6 py-6"
+              class="border border-border-base bg-surface-base px-6 py-6"
             >
-              <view class="text-[20px] font-medium text-text-inverse">
+              <view class="text-[20px] font-medium text-text-heading">
                 {{ t(item.title) }}
               </view>
 
-              <view class="mt-3 text-[14px] italic leading-6 text-text-inverse-muted">
+              <view class="mt-3 text-[14px] italic leading-6 text-text-body-soft">
                 {{ t(item.desc) }}
               </view>
             </view>
@@ -50,7 +50,7 @@
 
           <!-- 强调卡 -->
           <view class="grid gap-6 md:grid-cols-2">
-            <view class="border border-border-inverse bg-surface-inverse-card px-8 py-8 text-text-inverse">
+            <view class="border border-border-base bg-surface-card px-8 py-8 text-text-heading">
               <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight">
                 {{ t('family.card1Label') }}
               </view>
@@ -60,8 +60,8 @@
               </view>
             </view>
 
-            <view class="border border-border-accent bg-brand-primary px-8 py-8 text-text-inverse">
-              <view class="text-[13px] uppercase tracking-[4px] text-text-inverse-soft">
+            <view class="border border-border-highlight/55 bg-surface-panel px-8 py-8 text-text-heading shadow-emphasis">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
                 {{ t('family.card2Label') }}
               </view>
 

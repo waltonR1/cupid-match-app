@@ -1,5 +1,5 @@
 <template>
-  <view class="mt-5 border border-border-base bg-surface-card px-5 py-4 shadow-[0_16px_40px_rgba(30,24,18,0.04)]">
+  <view class="mt-5 border border-border-base bg-surface-card px-5 py-4 shadow-panel">
     <view class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <view class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-text-body-soft">
         <view>
