@@ -9,6 +9,10 @@ export interface EventFieldLabels {
   seats: string
 }
 
+export interface EventDetailFieldLabels extends EventFieldLabels {
+  status: string
+}
+
 export interface EventStatItem {
   label: string
   value: string
@@ -26,4 +30,23 @@ export interface EventOverviewItem {
   seats: string
   status: EventStatus
   statusLabel: string
+}
+
+export interface EventAgendaItem {
+  time: string
+  title: string
+  desc: string
+}
+
+export interface EventNoteItem {
+  title: string
+  desc: string
+}
+
+export interface EventRelatedProfileItem {
+  id: string
+  name: string
+  meta: string
+  reason: string
+  summary: string
 }

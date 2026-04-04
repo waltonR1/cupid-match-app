@@ -27,27 +27,28 @@
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <view
           v-for="event in events"
-          :key="event.title"
-          class="group border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-border-highlight/50 hover:bg-surface-panel hover:shadow-card"
+          :key="event.id"
+          class="group cursor-pointer border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-border-highlight/50 hover:bg-surface-panel hover:shadow-card"
+          @click="handleEventOpen(event.id)"
         >
           <!-- 标签 -->
           <view class="text-[12px] uppercase tracking-[4px] text-brand-highlight">
-            {{ t(event.tag) }}
+            {{ event.tag }}
           </view>
 
           <!-- 标题 -->
           <view class="mt-4 text-[22px] font-semibold leading-[1.4]">
-            {{ t(event.title) }}
+            {{ event.title }}
           </view>
 
           <!-- 描述 -->
           <view class="mt-3 text-[15px] leading-7 text-text-body-soft">
-            {{ t(event.desc) }}
+            {{ event.desc }}
           </view>
 
           <!-- meta -->
           <view class="mt-6 text-[13px] text-text-subtle">
-            {{ t(event.meta) }}
+            {{ event.meta }}
           </view>
         </view>
       </view>
@@ -66,32 +67,48 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/use-page-i18n'
+import { getHomePreviewEvents, type MockEvent } from '@/mock/events'
+import { pickLocalized } from '@/mock/shared'
+import { openEventDetail } from '@/utils/demo-navigation'
 
-const { t } = usePageI18n('home')
+const { t, locale } = usePageI18n('home')
+const previewEvents = getHomePreviewEvents()
 
-const events = [
-  {
-    tag: 'events.item1.tag',
-    title: 'events.item1.title',
-    desc: 'events.item1.desc',
-    meta: 'events.item1.meta',
-  },
-  {
-    tag: 'events.item2.tag',
-    title: 'events.item2.title',
-    desc: 'events.item2.desc',
-    meta: 'events.item2.meta',
-  },
-  {
-    tag: 'events.item3.tag',
-    title: 'events.item3.title',
-    desc: 'events.item3.desc',
-    meta: 'events.item3.meta',
-  },
-]
+const events = computed(() =>
+  previewEvents.map(event => ({
+    id: event.id,
+    tag: formatDate(event.date),
+    title: localize(event.title),
+    desc: localize(event.summary),
+    meta: `${localize(event.city)} | ${localize(event.venue)}`,
+  })),
+)
+
+function localize(text: MockEvent['title']) {
+  return pickLocalized(locale.value, text)
+}
+
+function formatDate(date: string) {
+  const value = new Date(date)
+
+  if (locale.value === 'zh') {
+    return value.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
+  }
+
+  if (locale.value === 'fr') {
+    return value.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })
+  }
+
+  return value.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 
 function goEvents() {
   uni.navigateTo({ url: '/pages/events/index' })
+}
+
+function handleEventOpen(id: string) {
+  openEventDetail(id)
 }
 </script>
