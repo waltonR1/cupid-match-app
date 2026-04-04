@@ -3,7 +3,7 @@ import type { AppLocaleMessages } from '@/i18n/types'
 export const eventDetailMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      eyebrow: 'Event Detail',
+      eyebrow: '活动详情',
     },
     fields: {
       status: '状态',
@@ -12,22 +12,22 @@ export const eventDetailMessages: AppLocaleMessages = {
       venue: '场地',
       format: '形式',
       audience: '适合人群',
-      seats: '名额',
+      seats: '席位',
     },
     actions: {
-      register: '提交报名',
+      register: '提交报名意向',
     },
     sections: {
       agenda: '活动流程',
       notes: '报名说明',
-      notesText: '当前详情页使用 mock 流程展示活动结构。后续可以继续接入实名报名、资格审核、候补转正和活动后跟进。',
+      notesText: '提交报名后，顾问会结合席位、资料完成度与活动匹配度进行确认，并在需要时安排候补或后续跟进。',
       relatedProfiles: '相关会员',
-      notFound: '没有找到这场活动的 mock 数据。',
+      notFound: '暂未找到该活动信息。',
     },
     agenda: {
-      step1: { title: '签到入场', desc: '核验报名名单并完成轻度破冰。' },
-      step2: { title: '主题交流', desc: '围绕活动主题进行分组与轮换交流。' },
-      step3: { title: '自由延展', desc: '进入更自然的互动与后续意向记录。' },
+      step1: { title: '签到与入场', desc: '核对报名信息，完成简短签到与活动说明。' },
+      step2: { title: '主题交流', desc: '围绕当晚主题进行小范围分组交流与轮换互动。' },
+      step3: { title: '自由延展', desc: '进入更自然的互动阶段，并记录后续沟通意向。' },
     },
     status: {
       open: '报名中',
@@ -37,7 +37,7 @@ export const eventDetailMessages: AppLocaleMessages = {
   },
   fr: {
     hero: {
-      eyebrow: 'Event Detail',
+      eyebrow: 'Detail evenement',
     },
     fields: {
       status: 'Statut',
@@ -53,15 +53,15 @@ export const eventDetailMessages: AppLocaleMessages = {
     },
     sections: {
       agenda: 'Deroule',
-      notes: 'Notes inscription',
-      notesText: 'Cette fiche evenement reste une demonstration mock. Elle pourra ensuite accueillir un vrai tunnel d inscription, de verification et de suivi.',
+      notes: 'Modalites inscription',
+      notesText: 'Apres la demande, la conseillere valide la participation selon les places, le niveau de dossier et la coherence avec le format, avec bascule possible en attente si necessaire.',
       relatedProfiles: 'Profils lies',
-      notFound: 'Aucun evenement mock trouve.',
+      notFound: 'Aucune information evenement n a ete trouvee.',
     },
     agenda: {
-      step1: { title: 'Accueil', desc: 'Verification de la liste et premier brise-glace.' },
-      step2: { title: 'Echanges thematiques', desc: 'Discussions en petits groupes selon le format choisi.' },
-      step3: { title: 'Extension libre', desc: 'Interactions plus naturelles et recueil des intentions.' },
+      step1: { title: 'Accueil', desc: 'Verification des inscriptions et courte mise en place avant le debut.' },
+      step2: { title: 'Echanges thematiques', desc: 'Conversations en petits groupes autour du sujet central de la soiree.' },
+      step3: { title: 'Extension libre', desc: 'Temps d interaction plus naturel avec recueil des intentions de suite.' },
     },
     status: {
       open: 'Ouvert',
@@ -71,7 +71,7 @@ export const eventDetailMessages: AppLocaleMessages = {
   },
   en: {
     hero: {
-      eyebrow: 'Event Detail',
+      eyebrow: 'Event detail',
     },
     fields: {
       status: 'Status',
@@ -83,19 +83,19 @@ export const eventDetailMessages: AppLocaleMessages = {
       seats: 'Seats',
     },
     actions: {
-      register: 'Submit registration',
+      register: 'Submit interest',
     },
     sections: {
       agenda: 'Agenda',
       notes: 'Registration notes',
-      notesText: 'This event detail page still runs on mock data. Later it can connect to real registration, eligibility review, waitlist promotion, and follow-up logic.',
+      notesText: 'After submission, an advisor reviews seat availability, profile readiness, and event fit before confirming participation or placing the user on waitlist.',
       relatedProfiles: 'Related members',
-      notFound: 'No mock event was found.',
+      notFound: 'No event information is currently available.',
     },
     agenda: {
-      step1: { title: 'Check-in', desc: 'Participant list verification and a light opening ice-breaker.' },
-      step2: { title: 'Themed exchange', desc: 'Small-group rotations and conversations tied to the event format.' },
-      step3: { title: 'Open interaction', desc: 'A more natural phase for interaction and post-event intention capture.' },
+      step1: { title: 'Check-in', desc: 'Registration review, arrival guidance, and a short opening orientation.' },
+      step2: { title: 'Themed exchange', desc: 'Small-group conversations built around the evening theme and format.' },
+      step3: { title: 'Open interaction', desc: 'A more natural interaction phase followed by interest capture for next steps.' },
     },
     status: {
       open: 'Open',

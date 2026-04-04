@@ -3,10 +3,10 @@ import type { AppLocaleMessages } from '@/i18n/types'
 export const eventsMessages: AppLocaleMessages = {
   zh: {
     hero: {
-      eyebrow: 'Local Mock Events',
+      eyebrow: '精选线下活动',
       title: '活动列表',
-      subtitle: '这里直接显示当前本地 mock 线下活动，包含城市、时间、场地、名额和报名状态。',
-      nextEvent: '近期活动',
+      subtitle: '查看当前开放报名、候补与已满额的活动安排，快速了解时间、城市、场地与参与门槛。',
+      nextEvent: '近期优先活动',
     },
     fields: {
       date: '日期',
@@ -14,7 +14,7 @@ export const eventsMessages: AppLocaleMessages = {
       venue: '场地',
       format: '形式',
       audience: '适合人群',
-      seats: '名额',
+      seats: '席位',
     },
     stats: {
       totalEvents: '活动总数',
@@ -23,14 +23,14 @@ export const eventsMessages: AppLocaleMessages = {
       cities: '覆盖城市',
     },
     featured: {
-      eyebrow: '近期活动',
+      eyebrow: '优先查看',
       title: '开放与候补活动',
-      subtitle: '优先展示当前开放报名或处于候补中的活动。',
+      subtitle: '优先展示当前仍可报名或正在候补的活动，方便先判断是否值得继续了解。',
     },
     schedule: {
-      eyebrow: '完整日历',
+      eyebrow: '完整安排',
       title: '完整活动清单',
-      note: '当前全部为本地 mock 数据，后续可以直接替换成活动接口和报名状态接口。',
+      note: '完整列表用于查看近期节奏与分布。后续接入真实接口后，这里会直接映射实际活动状态。',
     },
     status: {
       open: '报名中',
@@ -40,10 +40,10 @@ export const eventsMessages: AppLocaleMessages = {
   },
   fr: {
     hero: {
-      eyebrow: 'Local Mock Events',
+      eyebrow: 'Selection d evenements',
       title: 'Liste des evenements',
-      subtitle: 'Cette page montre directement les evenements mock avec ville, date, lieu, capacite et statut d inscription.',
-      nextEvent: 'Next Event',
+      subtitle: 'Consulte les evenements ouverts, en attente ou complets pour comprendre rapidement le format, la ville, le lieu et le niveau d acces.',
+      nextEvent: 'Evenement prioritaire',
     },
     fields: {
       date: 'Date',
@@ -60,14 +60,14 @@ export const eventsMessages: AppLocaleMessages = {
       cities: 'Villes',
     },
     featured: {
-      eyebrow: 'Prochains evenements',
-      title: 'Evenements ouverts et attente',
-      subtitle: 'Priorite aux evenements ouverts ou en liste d attente.',
+      eyebrow: 'A voir en premier',
+      title: 'Evenements ouverts et en attente',
+      subtitle: 'Les formats encore accessibles ou actuellement en attente sont mis en avant pour faciliter la lecture.',
     },
     schedule: {
-      eyebrow: 'Full Schedule',
+      eyebrow: 'Vue complete',
       title: 'Calendrier complet',
-      note: 'Tout est alimente par des donnees mock locales et pourra etre remplace plus tard par une vraie API d evenements.',
+      note: 'Cette liste donne une vision d ensemble du rythme des evenements. Elle pourra ensuite se brancher directement sur de vraies donnees d activite.',
     },
     status: {
       open: 'Ouvert',
@@ -77,10 +77,10 @@ export const eventsMessages: AppLocaleMessages = {
   },
   en: {
     hero: {
-      eyebrow: 'Local Mock Events',
+      eyebrow: 'Curated offline events',
       title: 'Event list',
-      subtitle: 'This page shows current local mock offline events with city, date, venue, capacity, and registration status.',
-      nextEvent: 'Next Event',
+      subtitle: 'Browse open, waitlist, and full events to quickly understand timing, city, venue, and participation fit.',
+      nextEvent: 'Priority event',
     },
     fields: {
       date: 'Date',
@@ -97,14 +97,14 @@ export const eventsMessages: AppLocaleMessages = {
       cities: 'Cities',
     },
     featured: {
-      eyebrow: 'Upcoming events',
+      eyebrow: 'Start here',
       title: 'Open and waitlist events',
-      subtitle: 'Open and waitlist events are prioritized first.',
+      subtitle: 'Events that are still available or currently running on waitlist are surfaced first for faster review.',
     },
     schedule: {
-      eyebrow: 'Full Schedule',
-      title: 'Full event schedule',
-      note: 'Everything here is driven by local mock data and can later be swapped to real event and registration APIs.',
+      eyebrow: 'Full view',
+      title: 'Complete event calendar',
+      note: 'This full list helps users read the current event rhythm and distribution. It can later connect directly to live event data.',
     },
     status: {
       open: 'Open',
