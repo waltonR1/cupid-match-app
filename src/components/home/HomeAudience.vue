@@ -5,15 +5,15 @@
         <!-- 左侧主说明 -->
         <view class="border border-border-base bg-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+            <view class="h-px w-14 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
               {{ t('audience.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] text-text-heading lg:text-[56px]">
             <text>{{ t('audience.title') }}</text>
-            <text class="text-brand-highlight-strong">{{ t('audience.titleAccent') }}</text>
+            <text class="text-brand-accent-strong">{{ t('audience.titleAccent') }}</text>
           </view>
 
           <view class="mt-7 text-[17px] leading-8 text-text-body lg:text-[18px]">
@@ -36,7 +36,7 @@
             >
               <view
                 class="text-[22px] font-medium leading-[1.3]"
-                :class="tag.accent ? 'text-brand-highlight-strong' : 'text-text-heading-strong'"
+              :class="tag.accent ? 'text-brand-accent-strong' : 'text-text-heading'"
               >
                 {{ t(tag.title) }}
               </view>
@@ -50,7 +50,7 @@
           <!-- 两张核心态度卡 -->
           <view class="grid gap-6 md:grid-cols-2">
             <view class="border border-border-base bg-surface-card px-7 py-8 text-text-heading lg:px-8 lg:py-9">
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-accent">
                 {{ t('audience.card1Label') }}
               </view>
 
@@ -63,8 +63,8 @@
               </view>
             </view>
 
-            <view class="border border-border-highlight/55 bg-surface-panel px-7 py-8 text-text-heading shadow-emphasis lg:px-8 lg:py-9">
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
+            <view class="border border-border-accent/55 bg-surface-panel px-7 py-8 text-text-heading shadow-emphasis lg:px-8 lg:py-9">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
                 {{ t('audience.card2Label') }}
               </view>
 

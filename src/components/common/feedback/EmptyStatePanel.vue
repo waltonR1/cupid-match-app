@@ -84,7 +84,7 @@ const variantClassName = computed(() => {
 
 const primaryButtonClassName = computed(() => {
   if (props.primaryVariant === 'outline') {
-    return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'
+    return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'
   }
 
   return 'border border-button-primary bg-button-primary text-white hover:border-button-primary-hover hover:bg-button-primary-hover'
@@ -95,6 +95,6 @@ const secondaryButtonClassName = computed(() => {
     return 'border border-button-primary bg-button-primary text-white hover:border-button-primary-hover hover:bg-button-primary-hover'
   }
 
-  return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'
+  return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'
 })
 </script>

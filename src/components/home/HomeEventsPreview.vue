@@ -6,15 +6,15 @@
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+            <view class="h-px w-14 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
               {{ t('events.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
             {{ t('events.title') }}
-            <text class="text-brand-highlight-strong"> · {{ t('events.titleAccent') }}</text>
+            <text class="text-brand-accent-strong"> · {{ t('events.titleAccent') }}</text>
           </view>
         </view>
 
@@ -28,11 +28,11 @@
         <view
           v-for="event in events"
           :key="event.id"
-          class="group cursor-pointer border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-border-highlight/50 hover:bg-surface-panel hover:shadow-card"
+          class="group cursor-pointer border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-border-accent/50 hover:bg-surface-panel hover:shadow-card"
           @click="handleEventOpen(event.id)"
         >
           <!-- 标签 -->
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-highlight">
+          <view class="text-[12px] uppercase tracking-[4px] text-brand-accent">
             {{ event.tag }}
           </view>
 
@@ -56,7 +56,7 @@
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
         <view
-          class="inline-flex min-w-[178px] cursor-pointer items-center justify-center rounded-button border border-brand-highlight/35 bg-brand-highlight/8 px-8 py-3 text-[15px] tracking-[0.6px] text-brand-brown transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-highlight hover:bg-brand-highlight/16 hover:text-text-heading hover:shadow-panel"
+          class="inline-flex min-w-[178px] cursor-pointer items-center justify-center rounded-button border border-brand-accent/35 bg-brand-accent/8 px-8 py-3 text-[15px] tracking-[0.6px] text-brand-support transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-accent hover:bg-brand-accent/16 hover:text-text-heading hover:shadow-panel"
           @click="goEvents"
         >
           {{ t('events.cta') }}

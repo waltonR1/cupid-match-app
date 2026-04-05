@@ -19,11 +19,11 @@ const props = defineProps<{
 
 const badgeClassName = computed(() => {
   if (props.status === 'open') {
-    return 'rounded-full border-brand-highlight/72 bg-button-highlight text-button-neutral-ink shadow-panel tracking-[1.5px]'
+    return 'rounded-full border-brand-accent/72 bg-button-accent text-button-neutral-ink shadow-panel tracking-[1.5px]'
   }
 
   if (props.status === 'waitlist') {
-    return 'rounded-full border-brand-rose-line/72 bg-brand-primary-soft/52 text-brand-rose-deep shadow-panel tracking-[1.5px]'
+    return 'rounded-full border-brand-secondary-soft/72 bg-brand-primary-soft/52 text-brand-secondary shadow-panel tracking-[1.5px]'
   }
 
   return 'rounded-[10px] border-dashed border-border-base/90 bg-surface-panel/88 text-text-muted tracking-[1.2px]'
@@ -35,7 +35,7 @@ const dotClassName = computed(() => {
   }
 
   if (props.status === 'waitlist') {
-    return 'h-1.5 w-1.5 rounded-full bg-brand-rose-deep'
+    return 'h-1.5 w-1.5 rounded-full bg-brand-secondary'
   }
 
   if (props.status === 'closed') {

@@ -6,15 +6,15 @@
         <!-- 左侧 -->
         <view class="border border-border-base bg-surface-panel px-8 py-10">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-14 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-highlight">
+            <view class="h-[1px] w-14 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-accent">
               {{ t('family.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[44px] font-semibold leading-[1.1] text-text-heading">
             {{ t('family.title') }}
-            <text class="text-brand-highlight-strong">
+            <text class="text-brand-accent-strong">
               {{ t('family.titleAccent') }}
             </text>
           </view>
@@ -51,7 +51,7 @@
           <!-- 强调卡 -->
           <view class="grid gap-6 md:grid-cols-2">
             <view class="border border-border-base bg-surface-card px-8 py-8 text-text-heading">
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-highlight">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-accent">
                 {{ t('family.card1Label') }}
               </view>
 
@@ -60,8 +60,8 @@
               </view>
             </view>
 
-            <view class="border border-border-highlight/55 bg-surface-panel px-8 py-8 text-text-heading shadow-emphasis">
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
+            <view class="border border-border-accent/55 bg-surface-panel px-8 py-8 text-text-heading shadow-emphasis">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
                 {{ t('family.card2Label') }}
               </view>
 

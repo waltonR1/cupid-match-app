@@ -5,10 +5,10 @@
       <view class="grid gap-12 md:grid-cols-4">
         <!-- 品牌 -->
         <view>
-          <view class="text-[22px] font-semibold tracking-[2px] text-brand-highlight-strong">
+          <view class="text-[22px] font-semibold tracking-[2px] text-brand-accent-strong">
             {{ t('common.brand.name') }}
           </view>
-          <view class="mt-2 text-[13px] italic tracking-[2px] text-brand-warm">
+          <view class="mt-2 text-[13px] italic tracking-[2px] text-brand-support-soft">
             {{ t('common.brand.tagline') }}
           </view>
           <view class="mt-4 text-[14px] leading-6 text-text-body">
@@ -18,7 +18,7 @@
 
         <!-- 导航 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-brown">
+          <view class="text-[16px] font-medium text-brand-support">
             {{ t('common.footer.nav') }}
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-text-body">
@@ -33,14 +33,14 @@
               >
                 {{ t(item.key) }}
               </view>
-              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-brand-brown transition-all duration-200 group-hover:w-full" />
+              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-brand-support transition-all duration-200 group-hover:w-full" />
             </view>
           </view>
         </view>
 
         <!-- 联系 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-brown">
+          <view class="text-[16px] font-medium text-brand-support">
             {{ t('common.footer.contact') }}
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-text-body">
@@ -52,7 +52,7 @@
 
         <!-- 语言 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-brown">
+          <view class="text-[16px] font-medium text-brand-support">
             {{ t('common.footer.lang') }}
           </view>
           <view class="mt-3 text-[14px] leading-7 text-text-body">

@@ -6,15 +6,15 @@
         <view
             class="border border-border-base bg-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
           <view class="mb-6 inline-flex items-center gap-4">
-            <view class="h-px w-10 bg-brand-highlight"/>
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+            <view class="h-px w-10 bg-brand-accent"/>
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
               {{ t('vision.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.04] text-text-heading sm:text-[46px] lg:text-[58px]">
             <text>{{ t('vision.title') }}</text>
-            <text class="text-brand-highlight-strong"> · {{ t('vision.titleAccent') }}</text>
+            <text class="text-brand-accent-strong"> · {{ t('vision.titleAccent') }}</text>
           </view>
 
           <view class="mt-6 max-w-[420px] text-[15px] leading-7 text-text-body-soft lg:text-[16px]">
@@ -30,7 +30,7 @@
               {{ t('vision.description') }}
             </view>
 
-            <view class="mt-7 text-[18px] italic leading-[1.9] text-brand-warm lg:text-[20px]">
+            <view class="mt-7 text-[18px] italic leading-[1.9] text-brand-support-soft lg:text-[20px]">
               {{ t('vision.secondaryDescription') }}
             </view>
           </view>
@@ -42,11 +42,11 @@
                 :key="item.title"
                 class="flex min-h-[220px] flex-col border border-border-soft bg-surface-card-soft px-7 py-8"
             >
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
                 {{ t('vision.pointLabel') }}
               </view>
 
-              <view class="mt-5 text-[25px] font-medium leading-[1.28] text-brand-brown">
+              <view class="mt-5 text-[25px] font-medium leading-[1.28] text-brand-support">
                 {{ t(item.title) }}
               </view>
 

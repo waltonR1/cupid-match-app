@@ -11,13 +11,13 @@
         <view class="ml-auto flex items-center gap-2">
           <view
             v-if="secondaryFilters.length"
-            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading"
+            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-accent hover:bg-surface-panel hover:text-text-heading"
             @click="toggleExpanded"
           >
             <text>{{ isExpanded ? props.collapseText : props.expandText }}</text>
             <svg
               class="h-2 w-2 shrink-0 transition-transform duration-150"
-              :class="isExpanded ? 'rotate-180 text-brand-brown' : ''"
+              :class="isExpanded ? 'rotate-180 text-brand-support' : ''"
               viewBox="0 0 12 12"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
           </view>
 
           <view
-            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading"
+            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-border-base bg-surface-card-soft px-3.5 text-[12.5px] text-text-body-soft transition-all duration-200 hover:border-border-accent hover:bg-surface-panel hover:text-text-heading"
             @click="$emit('reset')"
           >
             {{ props.resetText }}

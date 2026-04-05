@@ -4,8 +4,8 @@
       <view class="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view class="max-w-[760px]">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[6px] text-brand-brown">
+            <view class="h-[1px] w-16 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
               {{ t('info.eyebrow') }}
             </text>
           </view>
@@ -13,12 +13,12 @@
           <view class="text-[44px] font-semibold leading-tight lg:text-[64px]">
             <view class="inline-flex items-baseline gap-3">
               <text>{{ t('info.title') }}</text>
-              <text class="italic text-brand-highlight-strong">& {{ t('info.titleAccent') }}</text>
+              <text class="italic text-brand-accent-strong">& {{ t('info.titleAccent') }}</text>
             </view>
           </view>
         </view>
 
-        <view class="max-w-[440px] text-[18px] italic leading-8 text-text-warm">
+        <view class="max-w-[440px] text-[18px] italic leading-8 text-text-lead">
           {{ t('info.subtitle') }}
         </view>
       </view>
@@ -32,7 +32,7 @@
           <view class="absolute inset-x-0 top-0 h-px bg-border-light/80" />
           <view class="flex items-center justify-between gap-4">
             <view class="text-[32px]">{{ item.icon }}</view>
-            <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
+            <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
               {{ t('info.cardLabel') }}
             </view>
           </view>

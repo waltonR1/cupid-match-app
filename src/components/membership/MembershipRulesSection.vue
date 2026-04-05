@@ -4,22 +4,22 @@
       <view class="grid gap-12 lg:grid-cols-[0.86fr_1.14fr]">
         <view>
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[6px] text-brand-brown">
+            <view class="h-[1px] w-16 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
               {{ t('rules.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[44px] font-semibold leading-[1.15] lg:text-[66px]">
             {{ t('rules.title') }}
-            <text class="text-brand-highlight-strong"> {{ t('rules.titleAccent') }}</text>
+            <text class="text-brand-accent-strong"> {{ t('rules.titleAccent') }}</text>
           </view>
 
-          <view class="mt-10 max-w-[660px] text-[19px] italic leading-[1.95] text-text-warm">
+          <view class="mt-10 max-w-[660px] text-[19px] italic leading-[1.95] text-text-lead">
             {{ t('rules.description') }}
           </view>
 
-          <view class="mt-8 max-w-[660px] text-[19px] italic leading-[1.95] text-text-warm">
+          <view class="mt-8 max-w-[660px] text-[19px] italic leading-[1.95] text-text-lead">
             {{ t('rules.secondaryDescription') }}
           </view>
         </view>
@@ -31,10 +31,10 @@
               :key="item.title"
               class="border px-7 py-6 shadow-card"
               :class="item.accent
-                ? 'border-border-highlight-soft bg-brand-highlight/10'
+                ? 'border-border-accent-soft bg-brand-accent/10'
                 : 'border-border-base bg-surface-panel'"
             >
-              <view class="text-[22px] font-medium" :class="item.accent ? 'text-brand-highlight-strong' : 'text-text-heading'">
+              <view class="text-[22px] font-medium" :class="item.accent ? 'text-brand-accent-strong' : 'text-text-heading'">
                 {{ t(item.title) }}
               </view>
               <view class="mt-3 text-[14px] italic leading-6 text-text-body-soft">
@@ -44,30 +44,30 @@
           </view>
 
           <view class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-            <view class="border border-border-subtle bg-surface-card px-8 py-8 shadow-card">
+            <view class="border border-border-base bg-surface-card px-8 py-8 shadow-card">
               <view class="text-[20px] font-medium text-text-heading">
                 {{ t('rules.processTitle') }}
               </view>
 
               <view class="mt-6 grid gap-4">
                 <view class="flex gap-4 border-b border-border-light pb-4">
-                  <view class="text-[26px] font-semibold text-brand-highlight-strong">01</view>
+                  <view class="text-[26px] font-semibold text-brand-accent-strong">01</view>
                   <view class="text-[16px] leading-8 text-text-body">{{ t('rules.process1') }}</view>
                 </view>
 
                 <view class="flex gap-4 border-b border-border-light pb-4">
-                  <view class="text-[26px] font-semibold text-brand-highlight-strong">02</view>
+                  <view class="text-[26px] font-semibold text-brand-accent-strong">02</view>
                   <view class="text-[16px] leading-8 text-text-body">{{ t('rules.process2') }}</view>
                 </view>
 
                 <view class="flex gap-4">
-                  <view class="text-[26px] font-semibold text-brand-highlight-strong">03</view>
+                  <view class="text-[26px] font-semibold text-brand-accent-strong">03</view>
                   <view class="text-[16px] leading-8 text-text-body">{{ t('rules.process3') }}</view>
                 </view>
               </view>
             </view>
 
-            <view class="border border-border-membership-gold/50 bg-surface-elevated-soft px-8 py-8 shadow-card">
+            <view class="border border-border-membership-gold/50 bg-surface-card-soft px-8 py-8 shadow-card">
               <view class="text-[24px] leading-[1.7] text-text-heading">
                 {{ t('rules.card1') }}
               </view>

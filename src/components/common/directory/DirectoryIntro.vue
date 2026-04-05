@@ -7,7 +7,7 @@
       <view class="max-w-[760px]">
         <view
           v-if="eyebrow"
-          class="mb-3 inline-flex items-center border border-brand-highlight/40 bg-brand-highlight/10 px-3 py-1 text-[12px] tracking-[2px] text-brand-brown"
+          class="mb-3 inline-flex items-center border border-brand-accent/40 bg-brand-accent/10 px-3 py-1 text-[12px] tracking-[2px] text-brand-support"
         >
           {{ eyebrow }}
         </view>

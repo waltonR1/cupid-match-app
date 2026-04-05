@@ -9,14 +9,14 @@
 
     <view class="relative overflow-hidden bg-membership-hero text-text-inverse">
       <view class="pointer-events-none absolute right-[-140px] top-14 h-[320px] w-[320px] rounded-full border border-border-inverse/24" />
-      <view class="pointer-events-none absolute left-[-72px] top-[-44px] h-[240px] w-[240px] rounded-full bg-brand-highlight/10 blur-[86px]" />
+      <view class="pointer-events-none absolute left-[-72px] top-[-44px] h-[240px] w-[240px] rounded-full bg-brand-accent/10 blur-[86px]" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
         <view class="grid gap-12 lg:min-h-[620px] lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
           <view class="max-w-[640px]">
             <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/34 bg-surface-inverse-panel/24 px-5 py-2 backdrop-blur">
-              <view class="h-[1px] w-12 bg-brand-highlight" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-highlight-soft">
+              <view class="h-[1px] w-12 bg-brand-accent" />
+              <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
                 {{ labels.eyebrow }}
               </text>
             </view>
@@ -57,7 +57,7 @@
             </view>
 
             <view class="border border-border-inverse/30 bg-surface-inverse-panel/18 px-6 py-6 backdrop-blur">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-highlight">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-accent">
                 {{ labels.selectedRole }}
               </view>
               <view class="mt-4 text-[34px] font-semibold text-text-inverse">
@@ -74,17 +74,17 @@
 
     <view class="mx-auto max-w-[1280px] px-8 py-20">
       <view class="grid gap-8 lg:grid-cols-[1.02fr_0.98fr]">
-        <view class="border border-border-base bg-surface-elevated px-8 py-8 shadow-card">
+            <view class="border border-border-base bg-surface-card-soft px-8 py-8 shadow-card">
           <view class="flex flex-wrap items-center justify-between gap-4">
             <view>
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-rose-deep">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-secondary">
                 {{ labels.formTitle }}
               </view>
               <view class="mt-4 text-[30px] font-semibold text-text-heading">
                 {{ activeRoleLabel }}
               </view>
             </view>
-            <view class="rounded-full border border-border-highlight/45 bg-brand-highlight/10 px-3 py-1 text-[11px] uppercase tracking-[3px] text-brand-brown">
+            <view class="rounded-full border border-border-accent/45 bg-brand-accent/10 px-3 py-1 text-[11px] uppercase tracking-[3px] text-brand-support">
               {{ activeRoleShort }}
             </view>
           </view>
@@ -105,7 +105,7 @@
           </view>
 
           <view class="mt-8 border border-border-soft bg-surface-card-soft px-5 py-5">
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
               {{ labels.roleBenefitTitle }}
             </view>
             <view class="mt-4 text-[22px] font-medium text-text-heading">
@@ -125,7 +125,7 @@
             </button>
 
             <button
-                class="[margin-left:0] [margin-right:0] inline-flex min-w-btn-cta items-center justify-center rounded-button border border-border-base bg-surface-card px-btn-cta-x py-btn-cta-y text-[15px] font-medium text-text-body transition-all duration-300 hover:-translate-y-[1px] hover:border-border-highlight/50 hover:text-text-heading"
+                class="[margin-left:0] [margin-right:0] inline-flex min-w-btn-cta items-center justify-center rounded-button border border-border-base bg-surface-card px-btn-cta-x py-btn-cta-y text-[15px] font-medium text-text-body transition-all duration-300 hover:-translate-y-[1px] hover:border-border-accent/50 hover:text-text-heading"
                 @click="handleLoginClick"
             >
               {{ loginText }}
@@ -134,7 +134,7 @@
         </view>
 
         <view class="border border-border-base bg-surface-card px-8 py-8 shadow-card">
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-rose-deep">
+          <view class="text-[12px] uppercase tracking-[4px] text-brand-secondary">
             {{ labels.processTitle }}
           </view>
 
@@ -144,7 +144,7 @@
                 :key="step.index"
                 class="grid gap-3 border border-border-soft bg-surface-card-soft px-5 py-5 md:grid-cols-[72px_1fr]"
             >
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
                 {{ step.index }}
               </view>
               <view>
@@ -237,11 +237,11 @@ const roleOptions = computed(() => {
       title: t(`roles.${roleKey}.title`),
       desc: t(`roles.${roleKey}.desc`),
       className: isActive
-          ? 'border-brand-highlight bg-brand-highlight/10 shadow-card'
-          : 'border-border-inverse/30 bg-surface-inverse-panel/16 hover:border-border-highlight/40 hover:bg-surface-inverse-card/24',
-      kickerClassName: isActive ? 'text-brand-highlight' : 'text-text-inverse-muted',
+          ? 'border-brand-accent bg-brand-accent/10 shadow-card'
+          : 'border-border-inverse/30 bg-surface-inverse-panel/16 hover:border-border-accent/40 hover:bg-surface-inverse-card/24',
+      kickerClassName: isActive ? 'text-brand-accent' : 'text-text-inverse-muted',
       descClassName: isActive ? 'text-text-inverse-soft' : 'text-text-inverse-muted',
-      dotClassName: isActive ? 'border-brand-highlight bg-brand-highlight shadow-card' : 'border-border-inverse/50 bg-transparent',
+      dotClassName: isActive ? 'border-brand-accent bg-brand-accent shadow-card' : 'border-border-inverse/50 bg-transparent',
     }
   })
 })

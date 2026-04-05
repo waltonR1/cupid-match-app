@@ -4,17 +4,17 @@
       <view class="grid gap-10 lg:grid-cols-[1.06fr_0.94fr]">
         <view class="grid gap-6">
           <view class="relative overflow-hidden border border-border-base bg-surface-panel px-9 py-10 text-text-heading shadow-emphasis">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-highlight/55" />
+            <view class="absolute inset-x-0 top-0 h-px bg-brand-accent/55" />
             <view class="mb-5 inline-flex items-center gap-4">
-              <view class="h-[1px] w-16 bg-brand-highlight" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-brown">
+              <view class="h-[1px] w-16 bg-brand-accent" />
+              <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
                 {{ t('values.eyebrow') }}
               </text>
             </view>
 
             <view class="text-[44px] font-semibold leading-tight lg:text-[62px]">
               {{ t('values.title') }}
-              <text class="italic text-brand-highlight">& {{ t('values.titleAccent') }}</text>
+              <text class="italic text-brand-accent">& {{ t('values.titleAccent') }}</text>
             </view>
 
             <view class="mt-6 max-w-[560px] text-[19px] italic leading-8 text-text-body-soft lg:text-[20px]">
@@ -28,7 +28,7 @@
               :key="item.title"
               class="border border-border-base bg-surface-card px-8 py-9 shadow-card"
             >
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ item.index }}
               </view>
               <view class="mt-6 text-[28px] font-semibold text-text-heading">
@@ -43,8 +43,8 @@
 
         <view class="grid gap-6">
           <view class="relative overflow-hidden border border-brand-primary/18 bg-brand-primary/8 px-8 py-9 shadow-card lg:mr-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-rose-deep/45" />
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+            <view class="absolute inset-x-0 top-0 h-px bg-brand-secondary/45" />
+            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
               {{ valueCards[2].index }}
             </view>
             <view class="mt-6 text-[30px] font-semibold text-text-heading">
@@ -55,9 +55,9 @@
             </view>
           </view>
 
-          <view class="relative overflow-hidden border border-border-highlight/35 bg-brand-highlight/18 px-8 py-9 text-text-heading shadow-emphasis lg:ml-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-highlight/70" />
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+          <view class="relative overflow-hidden border border-border-accent/35 bg-brand-accent/18 px-8 py-9 text-text-heading shadow-emphasis lg:ml-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-brand-accent/70" />
+            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
               {{ valueCards[3].index }}
             </view>
             <view class="mt-6 text-[30px] font-semibold">

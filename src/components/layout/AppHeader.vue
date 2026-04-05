@@ -6,10 +6,10 @@
     <view class="relative mx-auto flex max-w-[1280px] items-center justify-between px-8 py-3">
       <!-- 品牌 -->
       <view class="flex cursor-pointer flex-col pr-8" @click.stop="handleNavIndex">
-        <text class="text-[24px] font-semibold tracking-[2px] text-brand-highlight-strong">
+        <text class="text-[24px] font-semibold tracking-[2px] text-brand-accent-strong">
           {{ t('common.brand.name') }}
         </text>
-        <text class="mt-1 text-[13px] italic tracking-[2px] text-brand-warm">
+        <text class="mt-1 text-[13px] italic tracking-[2px] text-brand-support-soft">
           {{ t('common.brand.tagline') }}
         </text>
       </view>
@@ -25,14 +25,14 @@
           >
             <text
               class="whitespace-nowrap text-[16px] transition-colors duration-200"
-              :class="activeNav === item.key ? 'text-brand-highlight-strong' : 'text-text-body-soft group-hover:text-text-heading'"
+              :class="activeNav === item.key ? 'text-brand-accent-strong' : 'text-text-body-soft group-hover:text-text-heading'"
             >
               {{ t(item.key) }}
             </text>
 
             <view
               class="absolute left-1/2 top-[calc(100%+8px)] h-[2px] -translate-x-1/2 rounded-full transition-all duration-200"
-              :class="activeNav === item.key ? 'w-full bg-brand-highlight-strong' : 'w-0 bg-brand-brown group-hover:w-full'"
+              :class="activeNav === item.key ? 'w-full bg-brand-accent-strong' : 'w-0 bg-brand-support group-hover:w-full'"
             />
           </view>
         </view>
@@ -43,14 +43,14 @@
         <!-- 未登录 -->
         <template v-if="!auth.isLoggedIn">
           <view
-            class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-brand-highlight/35 bg-brand-highlight/8 px-5 py-2.5 text-[14px] font-medium tracking-[0.3px] text-brand-brown transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-highlight/80 hover:bg-brand-highlight/16 hover:text-brand-highlight-strong hover:shadow-panel"
+            class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-brand-accent/35 bg-brand-accent/8 px-5 py-2.5 text-[14px] font-medium tracking-[0.3px] text-brand-support transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-accent/80 hover:bg-brand-accent/16 hover:text-brand-accent-strong hover:shadow-panel"
             @click.stop="handleLogin"
           >
             {{ t('common.nav.login') }}
           </view>
 
           <view
-            class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-button-highlight bg-button-highlight px-5 py-2 text-[14px] font-medium tracking-[0.3px] text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:border-button-highlight-hover hover:bg-button-highlight-hover hover:shadow-emphasis"
+            class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-button-accent bg-button-accent px-5 py-2 text-[14px] font-medium tracking-[0.3px] text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:border-button-accent-hover hover:bg-button-accent-hover hover:shadow-emphasis"
             @click.stop="handleRegister"
           >
             {{ t('common.nav.register') }}
@@ -61,7 +61,7 @@
         <template v-else>
           <view class="relative inline-block" @click.stop>
             <view
-              class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-border-base bg-surface-panel px-4 py-1.5 text-[14px] font-medium text-text-body transition-all duration-300 hover:border-border-subtle hover:bg-surface-card-soft hover:text-text-heading"
+              class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-border-base bg-surface-panel px-4 py-1.5 text-[14px] font-medium text-text-body transition-all duration-300 hover:border-border-soft hover:bg-surface-card-soft hover:text-text-heading"
               @click="toggleUserDropdown"
             >
               <view
@@ -78,28 +78,28 @@
               class="absolute left-1/2 top-[calc(100%+12px)] w-full overflow-hidden rounded-[20px] border border-border-soft bg-surface-card-soft text-center shadow-dropdown animate-dropdown"
             >
               <view
-                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-highlight/10 hover:text-text-heading"
+                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-accent/10 hover:text-text-heading"
                 @click="handleAccount"
               >
                 {{ t('common.nav.account') }}
               </view>
               <view class="h-px bg-border-light" />
               <view
-                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-highlight/10 hover:text-text-heading"
+                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-accent/10 hover:text-text-heading"
                 @click="handleMyProfile"
               >
                 {{ t('common.nav.myProfile') }}
               </view>
               <view class="h-px bg-border-light" />
               <view
-                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-highlight/10 hover:text-text-heading"
+                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-accent/10 hover:text-text-heading"
                 @click="handleMessages"
               >
                 {{ t('common.nav.messages') }}
               </view>
               <view class="h-px bg-border-light" />
               <view
-                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-highlight/10 hover:text-text-heading"
+                class="cursor-pointer px-4 py-3.5 text-[14px] text-text-body transition-colors duration-200 hover:bg-brand-accent/10 hover:text-text-heading"
                 @click="handleLogout"
               >
                 {{ t('common.nav.logout') }}
@@ -112,7 +112,7 @@
           <!-- 语言切换 -->
           <view class="relative inline-block" @click.stop>
             <view
-              class="flex w-full cursor-pointer items-center justify-center gap-1 rounded-xl border border-border-base bg-surface-card-soft px-3 py-1.5 text-[12px] text-text-body transition-all duration-200 hover:border-border-subtle hover:bg-surface-panel hover:text-text-heading"
+              class="flex w-full cursor-pointer items-center justify-center gap-1 rounded-xl border border-border-base bg-surface-card-soft px-3 py-1.5 text-[12px] text-text-body transition-all duration-200 hover:border-border-soft hover:bg-surface-panel hover:text-text-heading"
               @click="toggleLocaleDropdown"
             >
               <text>{{ locale.toUpperCase() }}</text>
@@ -127,7 +127,7 @@
                 v-for="item in locales"
                 :key="item"
                 class="cursor-pointer px-1 py-3.5 text-center text-[13px] transition-colors duration-200"
-                :class="locale === item ? 'bg-brand-highlight/12 text-brand-highlight-strong' : 'text-text-body hover:bg-brand-highlight/10 hover:text-text-heading'"
+                :class="locale === item ? 'bg-brand-accent/12 text-brand-accent-strong' : 'text-text-body hover:bg-brand-accent/10 hover:text-text-heading'"
                 @click="handleLocaleChange(item)"
               >
                 {{ item.toUpperCase() }}
@@ -137,7 +137,7 @@
 
           <!-- 主题切换 -->
           <view
-            class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-xl border border-border-base bg-surface-card-soft text-text-body transition-all duration-200 hover:border-border-subtle hover:bg-surface-panel hover:text-text-heading"
+            class="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-xl border border-border-base bg-surface-card-soft text-text-body transition-all duration-200 hover:border-border-soft hover:bg-surface-panel hover:text-text-heading"
             @click.stop="handleToggleTheme"
           >
             <view v-if="themeStore.theme === 'light'" class="h-[16px] w-[16px]">

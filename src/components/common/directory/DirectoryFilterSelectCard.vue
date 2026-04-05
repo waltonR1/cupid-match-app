@@ -1,8 +1,8 @@
 <template>
   <view ref="rootRef" class="relative w-full">
     <view
-      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-border-base bg-surface-card-soft px-3 transition-all duration-150 hover:border-border-highlight/60 hover:bg-surface-panel"
-      :class="isOpen ? 'border-border-highlight/70 bg-surface-panel' : ''"
+      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-border-base bg-surface-card-soft px-3 transition-all duration-150 hover:border-border-accent/60 hover:bg-surface-panel"
+      :class="isOpen ? 'border-border-accent/70 bg-surface-panel' : ''"
       @click.stop="toggleOpen"
     >
       <view class="min-w-0 flex flex-1 items-center gap-1.5">
@@ -15,8 +15,8 @@
       </view>
 
       <svg
-        class="ml-1 h-[7.5px] w-[7.5px] shrink-0 text-text-muted transition-transform duration-150 group-hover:text-brand-brown"
-        :class="isOpen ? 'rotate-180 text-brand-brown' : ''"
+        class="ml-1 h-[7.5px] w-[7.5px] shrink-0 text-text-muted transition-transform duration-150 group-hover:text-brand-support"
+        :class="isOpen ? 'rotate-180 text-brand-support' : ''"
         viewBox="0 0 12 12"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -47,13 +47,13 @@
           <view
             class="flex cursor-pointer items-center gap-2.5 px-3 py-2 transition-colors duration-150"
             :class="option.value === value
-              ? 'bg-surface-panel text-brand-brown'
+              ? 'bg-surface-panel text-brand-support'
               : 'bg-surface-card text-text-body-soft hover:bg-surface-card-soft hover:text-text-body'"
             @click.stop="handleSelect(option.value)"
           >
             <view
               class="h-5 w-px shrink-0 transition-opacity duration-150"
-              :class="option.value === value ? 'bg-brand-brown opacity-100' : 'opacity-0'"
+              :class="option.value === value ? 'bg-brand-support opacity-100' : 'opacity-0'"
             />
             <text class="min-w-0 text-[13.5px] leading-[1.35] text-left">{{ option.label }}</text>
           </view>
@@ -90,7 +90,7 @@ const selectedLabel = computed(() => {
 })
 
 const selectedLabelClassName = computed(() => {
-  return props.value ? 'text-brand-brown' : 'text-text-body-soft'
+  return props.value ? 'text-brand-support' : 'text-text-body-soft'
 })
 
 function closeOpen() {

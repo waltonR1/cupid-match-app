@@ -7,19 +7,19 @@
       <view class="min-w-0">
         <view class="flex flex-wrap items-center gap-3">
           <view class="inline-flex items-center gap-3">
-            <view class="h-px w-12 bg-border-highlight/65" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+            <view class="h-px w-12 bg-border-accent/65" />
+            <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
               {{ data.eyebrow }}
             </text>
           </view>
 
-          <view class="inline-flex items-center border border-border-highlight/55 bg-brand-highlight/10 px-3 py-1 text-[11px] tracking-[2px] text-brand-brown">
+          <view class="inline-flex items-center border border-border-accent/55 bg-brand-accent/10 px-3 py-1 text-[11px] tracking-[2px] text-brand-support">
             {{ data.recordId }}
           </view>
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-border-highlight/45 bg-surface-base/60 text-[28px] font-semibold text-brand-highlight-strong">
+          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-border-accent/45 bg-surface-base/60 text-[28px] font-semibold text-brand-accent-strong">
             {{ data.avatar }}
           </view>
 
@@ -81,7 +81,7 @@
       </view>
 
       <view class="border border-border-base bg-surface-card/80 px-5 py-5">
-        <view class="text-[12px] uppercase tracking-[3px] text-brand-brown">
+        <view class="text-[12px] uppercase tracking-[3px] text-brand-support">
           {{ data.indexTitle }}
         </view>
 
@@ -116,6 +116,6 @@ function badgeClassName(tone?: DetailBadgeItem['tone']) {
     return 'border-border-base bg-surface-card/70 text-text-body-soft'
   }
 
-  return 'border-border-highlight/55 bg-brand-highlight/10 text-brand-brown'
+  return 'border-border-accent/55 bg-brand-accent/10 text-brand-support'
 }
 </script>

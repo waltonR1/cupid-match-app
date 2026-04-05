@@ -9,7 +9,7 @@
 
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
-        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-border-base bg-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-text-body-soft transition-colors duration-200 hover:text-brand-brown"
+        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-border-base bg-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-text-body-soft transition-colors duration-200 hover:text-brand-support"
         @click="handleBack"
       >
         <svg
@@ -35,7 +35,7 @@
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <view class="space-y-6">
             <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ t('sections.overview') }}
               </view>
 
@@ -57,7 +57,7 @@
 
             <view class="grid gap-6 lg:grid-cols-2">
               <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                   {{ t('sections.relationship') }}
                 </view>
 
@@ -94,7 +94,7 @@
               </view>
 
               <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                   {{ t('sections.lifestyle') }}
                 </view>
 
@@ -118,7 +118,7 @@
 
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
             <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ t('sections.accessPolicy') }}
               </view>
               <view class="mt-4 text-[16px] leading-8 text-text-body-soft">
@@ -127,7 +127,7 @@
             </view>
 
             <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ t('sections.curationFocus') }}
               </view>
 
@@ -148,7 +148,7 @@
             </view>
 
             <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ t('sections.highlights') }}
               </view>
 
@@ -164,7 +164,7 @@
             </view>
 
             <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
                 {{ t('sections.tags') }}
               </view>
 
@@ -172,7 +172,7 @@
                 <view
                   v-for="item in tagTexts"
                   :key="item"
-                  class="rounded-full border border-border-base bg-surface-panel px-3 py-1.5 text-[12px] text-brand-brown"
+                  class="rounded-full border border-border-base bg-surface-panel px-3 py-1.5 text-[12px] text-brand-support"
                 >
                   {{ item }}
                 </view>

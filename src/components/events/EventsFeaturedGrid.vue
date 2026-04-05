@@ -2,7 +2,7 @@
   <view class="mx-auto max-w-[1280px] px-8 pb-24">
     <view class="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <view>
-        <view class="text-[12px] uppercase tracking-[5px] text-brand-brown">{{ eyebrow }}</view>
+        <view class="text-[12px] uppercase tracking-[5px] text-brand-support">{{ eyebrow }}</view>
         <view class="mt-4 text-[44px] font-semibold leading-tight text-text-heading lg:text-[62px]">
           {{ title }}
         </view>
@@ -22,7 +22,7 @@
       >
         <view class="flex items-start justify-between gap-4">
           <view>
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">{{ event.date }}</view>
+            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">{{ event.date }}</view>
             <view class="mt-4 text-[30px] font-semibold leading-[1.25] text-text-heading">
               {{ event.title }}
             </view>

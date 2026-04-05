@@ -3,18 +3,18 @@
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="mb-12">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-[1px] w-16 bg-brand-highlight" />
-          <text class="text-[12px] uppercase tracking-[6px] text-brand-brown">
+          <view class="h-[1px] w-16 bg-brand-accent" />
+          <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
             {{ t('audience.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[44px] font-semibold leading-tight lg:text-[64px]">
           {{ t('audience.title') }}
-          <text class="italic text-brand-highlight-strong">& {{ t('audience.titleAccent') }}</text>
+          <text class="italic text-brand-accent-strong">& {{ t('audience.titleAccent') }}</text>
         </view>
 
-        <view class="mt-5 max-w-[780px] text-[19px] italic leading-8 text-text-warm lg:text-[21px]">
+        <view class="mt-5 max-w-[780px] text-[19px] italic leading-8 text-text-lead lg:text-[21px]">
           {{ t('audience.subtitle') }}
         </view>
       </view>
@@ -29,7 +29,7 @@
           <view class="absolute inset-x-0 top-0 h-px" :class="lineClass(item.tone)" />
 
           <view class="flex items-start justify-between">
-            <view class="text-[12px] uppercase tracking-[4px]" :class="item.tone === 'accent' ? 'text-brand-highlight' : 'text-brand-brown'">
+            <view class="text-[12px] uppercase tracking-[4px]" :class="item.tone === 'accent' ? 'text-brand-accent' : 'text-brand-support'">
               Profile
             </view>
             <view class="text-[12px] uppercase tracking-[4px] text-text-subtle">
@@ -75,16 +75,16 @@ function cardClass(tone: (typeof audienceCards)[number]['tone']) {
     return 'border border-border-base bg-surface-panel text-text-heading shadow-card lg:-translate-y-3'
   }
 
-  return 'border border-border-highlight/25 bg-brand-highlight/10 text-text-heading shadow-emphasis lg:translate-y-4'
+  return 'border border-border-accent/25 bg-brand-accent/10 text-text-heading shadow-emphasis lg:translate-y-4'
 }
 
 function lineClass(tone: (typeof audienceCards)[number]['tone']) {
   if (tone === 'accent') {
-    return 'bg-brand-highlight/55'
+    return 'bg-brand-accent/55'
   }
 
   if (tone === 'warm') {
-    return 'bg-brand-highlight/65'
+    return 'bg-brand-accent/65'
   }
 
   return 'bg-border-light/80'

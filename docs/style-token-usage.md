@@ -54,49 +54,28 @@
 - `surface.card` -> `bg-surface-card`
 - `text.heading` -> `text-text-heading`
 - `border.soft` -> `border-border-soft`
-- `brand.highlight-strong` -> `text-brand-highlight-strong`
-- `button.highlight` -> `bg-button-highlight`
+- `brand.accent-strong` -> `text-brand-accent-strong`
+- `button.accent` -> `bg-button-accent`
 
 这些 utility 支持透明度后缀，因为底层是 `rgb(var(--color-...)/<alpha-value>)`：
 
 - `bg-page-base/92`
-- `border-brand-highlight/35`
-- `bg-brand-highlight/8`
+- `border-brand-accent/35`
+- `bg-brand-accent/8`
 
 ### 4.2 渐变 token
 
-`gradient` 会映射到 `backgroundImage`：
-
-- `gradient.membership-section-ambient` -> `bg-membership-section-ambient`
-- `gradient.membership-section-orb` -> `bg-membership-section-orb`
-- `gradient.membership-section-haze` -> `bg-membership-section-haze`
-- `gradient.membership-gold-card` -> `bg-membership-gold-card`
-- `gradient.membership-gold-card-glow` -> `bg-membership-gold-card-glow`
-- `gradient.membership-diamond-card` -> `bg-membership-diamond-card`
-- `gradient.membership-diamond-card-glow` -> `bg-membership-diamond-card-glow`
-- `gradient.home-hero` -> `bg-home-hero`
-- `gradient.events-hero` -> `bg-events-hero`
-- `gradient.membership-hero` -> `bg-membership-hero`
-- `gradient.auth-hero` -> `bg-auth-hero`
+`gradient` 会映射到 `backgroundImage`，使用方式统一为 `bg-*`。
 
 ### 4.3 阴影 token
 
-`shadow` 会映射到 `boxShadow`：
-
-- `shadow.panel` -> `shadow-panel`
-- `shadow.card` -> `shadow-card`
-- `shadow.feature` -> `shadow-feature`
-- `shadow.hero` -> `shadow-hero`
-- `shadow.emphasis` -> `shadow-emphasis`
-- `shadow.dropdown` -> `shadow-dropdown`
-- `shadow.luxe` -> `shadow-luxe`
-- `shadow.soft-luxe` -> `shadow-soft-luxe`
+`shadow` 会映射到 `boxShadow`，使用方式统一为 `shadow-*`。
 
 ### 4.4 原始 CSS 变量 token
 
-`hero` 属于原始变量，不会自动生成 utility class。
+`hero` 属于原始变量，不会自动生成 utility class，只能通过 CSS 变量使用。
 
-这类 token 只能通过 CSS 变量使用，例如：
+例如：
 
 ```vue
 <view
@@ -104,145 +83,116 @@
 />
 ```
 
-当前已有：
-
-- `hero.secondary-cta.border` -> `--hero-secondary-cta-border`
-- `hero.secondary-cta.bg` -> `--hero-secondary-cta-bg`
-- `hero.secondary-cta.bg-hover` -> `--hero-secondary-cta-bg-hover`
-- `hero.ornament.line` -> `--hero-ornament-line`
-- `hero.ornament.fill` -> `--hero-ornament-fill`
-- `--hero-secondary-cta-border`
-- `--hero-secondary-cta-bg`
-- `--hero-secondary-cta-bg-hover`
-- `--hero-ornament-line`
-- `--hero-ornament-fill`
-
 ## 5. 当前 Token 清单
 
-下面列的是当前项目里最重要、最常用的一组 token 名称。
+下面按根分类列出当前全部 token，并为每个 token 用中文写明用途。
 
 ### 5.1 `page`
 
-- `page.base`
-- `page.soft`
-
-推荐用途：
-
-- 页面根容器：`bg-page-base`
-- 柔和背景分区：`bg-page-soft`
+- `page.base`：页面主背景色，用于页面最外层容器和整页底色。 常见 utility：`bg-page-base`
+- `page.soft`：页面次级背景色，用于交替 section、浅层内容区和过渡背景。 常见 utility：`bg-page-soft`
 
 ### 5.2 `surface`
 
-- `surface.base`
-- `surface.panel`
-- `surface.card`
-- `surface.card-soft`
-- `surface.elevated`
-- `surface.elevated-soft`
-- `surface.hero-float-strong`
-- `surface.inverse-card`
-- `surface.inverse-panel`
-- `surface.membership-silver`
-- `surface.membership-gold`
-- `surface.membership-diamond`
-
-推荐用途：
-
-- 常规卡片：`bg-surface-card`
-- 柔和卡片：`bg-surface-card-soft`
-- 表单或浮层：`bg-surface-panel`
-- 更强层级卡片：`bg-surface-elevated`
-- 深色区块内部面板：`bg-surface-inverse-panel`
+- `surface.base`：基础内容底板，用于普通内容区或默认容器底色。 常见 utility：`bg-surface-base`
+- `surface.card`：标准卡片底色，用于通用信息卡片和列表项容器。 常见 utility：`bg-surface-card`
+- `surface.card-soft`：柔和卡片底色，用于层级较轻的说明卡片或辅助内容块。 常见 utility：`bg-surface-card-soft`
+- `surface.hero-float-strong`：Hero 区悬浮块底色，用于深色 hero 上的漂浮信息面板。 常见 utility：`bg-surface-hero-float-strong`
+- `surface.inverse-card`：反相卡片底色，用于深色区域内部的深色卡片。 常见 utility：`bg-surface-inverse-card`
+- `surface.inverse-panel`：反相面板底色，用于深色 hero 或深色 section 内的面板容器。 常见 utility：`bg-surface-inverse-panel`
+- `surface.membership-diamond`：Diamond 会员等级卡片底色，用于最高等级会员档位。 常见 utility：`bg-surface-membership-diamond`
+- `surface.membership-gold`：Gold 会员等级卡片底色，用于主推或推荐会员档位。 常见 utility：`bg-surface-membership-gold`
+- `surface.membership-silver`：Silver 会员等级卡片底色，用于入门会员档位。 常见 utility：`bg-surface-membership-silver`
+- `surface.panel`：面板底色，用于表单区、筛选条、工具条和浮层内容区。 常见 utility：`bg-surface-panel`
 
 ### 5.3 `text`
 
-- `text.heading`
-- `text.heading-strong`
-- `text.body`
-- `text.body-soft`
-- `text.muted`
-- `text.warm`
-- `text.subtle`
-- `text.inverse`
-- `text.inverse-soft`
-- `text.inverse-muted`
-- `text.inverse-subtle`
-- `text.inverse-faint`
-
-推荐用途：
-
-- 一级标题：`text-text-heading`
-- 普通正文：`text-text-body`
-- 次级正文：`text-text-body-soft`
-- 弱提示：`text-text-muted`
-- 标签/辅助信息：`text-text-subtle`
-- 深色底文字：`text-text-inverse`
+- `text.body`：标准正文文字色，用于大部分正文和描述文案。 常见 utility：`text-text-body`
+- `text.body-soft`：次级正文文字色，用于补充说明和较轻正文。 常见 utility：`text-text-body-soft`
+- `text.heading`：主标题文字色，用于页面和模块的主要标题。 常见 utility：`text-text-heading`
+- `text.inverse`：深色背景上的主文字色，用于深底高对比文案。 常见 utility：`text-text-inverse`
+- `text.inverse-muted`：深色背景上的弱提示文字色，用于深底辅助信息。 常见 utility：`text-text-inverse-muted`
+- `text.inverse-soft`：深色背景上的次级正文色，用于深底说明文案。 常见 utility：`text-text-inverse-soft`
+- `text.inverse-subtle`：深色背景上的轻辅助文字色，用于标签和非核心提示。 常见 utility：`text-text-inverse-subtle`
+- `text.lead`：导语文字色，用于段首引导、短句强调和说明型副标题。 常见 utility：`text-text-lead`
+- `text.muted`：弱提示文字色，用于时间、状态补充和低优先级说明。 常见 utility：`text-text-muted` / `bg-text-muted`
+- `text.subtle`：最轻辅助文字色，用于标签、注释和非核心补充信息。 常见 utility：`text-text-subtle`
 
 ### 5.4 `brand`
 
-共享和主题扩展后的常用 token：
-
-- `brand.primary`
-- `brand.primary-soft`
-- `brand.highlight`
-- `brand.highlight-strong`
-- `brand.highlight-soft`
-- `brand.highlight-warm`
-- `brand.rose-line`
-- `brand.brown`
-- `brand.warm`
-- `brand.rose-deep`
-
-推荐用途：
-
-- 品牌强调：`text-brand-highlight-strong`
-- 品牌辅助线：`bg-brand-highlight-soft`
-- 暖色强调文字：`text-brand-brown`
-- 柔和品牌底：`bg-brand-highlight/10`
+- `brand.accent`：通用品牌强调色，用于强调描边、图标和局部点缀。 常见 utility：`bg-brand-accent` / `text-brand-accent`
+- `brand.accent-foreground`：强调底或深色底上的高可读前景色，用于文字和图标前景。 常见 utility：`text-brand-accent-foreground`
+- `brand.accent-soft`：柔和品牌强调色，用于浅层装饰、弱光效和柔和点缀。 常见 utility：`text-brand-accent-soft` / `border-brand-accent-soft`
+- `brand.accent-strong`：更强的品牌强调色，用于标题高光、关键数字和核心强调。 常见 utility：`text-brand-accent-strong` / `bg-brand-accent-strong`
+- `brand.primary`：主品牌强调色，用于高识别主动作、品牌标记和强提示。 常见 utility：`bg-brand-primary` / `border-brand-primary`
+- `brand.primary-soft`：主品牌柔和版本，用于轻量提示底色或弱化品牌点缀。 常见 utility：`bg-brand-primary-soft`
+- `brand.secondary`：次级品牌强调色，用于与主强调线区分开的补充点缀或状态提示。 常见 utility：`text-brand-secondary` / `bg-brand-secondary`
+- `brand.secondary-soft`：次级品牌强调的柔和版本，用于轻提示和补充状态。 常见 utility：`border-brand-secondary-soft`
+- `brand.support`：辅助品牌强调色，用于 eyebrow、索引文字和辅助强调文案。 常见 utility：`text-brand-support` / `bg-brand-support`
+- `brand.support-soft`：更轻的辅助品牌色，用于深色区副标题和柔和强调文本。 常见 utility：`text-brand-support-soft`
 
 ### 5.5 `border`
 
-- `border.base`
-- `border.soft`
-- `border.subtle`
-- `border.muted`
-- `border.light`
-- `border.inverse`
-- `border.inverse-soft`
-- `border.inverse-hover`
-- `border.highlight`
-- `border.highlight-soft`
-- `border.hero-float`
-- `border.membership-silver`
-- `border.membership-gold`
-- `border.membership-diamond`
-
-推荐用途：
-
-- 常规边框：`border-border-base`
-- 输入/卡片次级边框：`border-border-soft`
-- 分割线：`border-border-light`
-- hover 高亮边框：`hover:border-border-highlight/50`
+- `border.accent`：品牌强调边框色，用于强调态、交互态和视觉高亮轮廓。 常见 utility：`border-border-accent` / `bg-border-accent`
+- `border.accent-soft`：柔和品牌强调边框色，用于弱强调分组和轻高亮边界。 常见 utility：`bg-border-accent-soft` / `border-border-accent-soft`
+- `border.base`：标准结构边框色，用于默认卡片、面板和内容分隔。 常见 utility：`border-border-base` / `bg-border-base`
+- `border.hero-float`：Hero 悬浮块边框色，用于 hero 上漂浮信息块的轮廓。 常见 utility：`border-border-hero-float`
+- `border.inverse`：深色背景上的主边框色，用于反相卡片和深色模块轮廓。 常见 utility：`border-border-inverse` / `bg-border-inverse`
+- `border.inverse-hover`：深色背景上的 hover 或 focus 边框色。 常见 utility：`border-border-inverse-hover`
+- `border.inverse-soft`：深色背景上的次级边框色，用于柔和轮廓和内部分隔。 常见 utility：`border-border-inverse-soft`
+- `border.light`：最轻分割线颜色，用于列表分隔和轻边界。 常见 utility：`border-border-light` / `bg-border-light`
+- `border.membership-diamond`：Diamond 会员等级卡片边框色。 常见 utility：`border-border-membership-diamond`
+- `border.membership-gold`：Gold 会员等级卡片边框色。 常见 utility：`border-border-membership-gold` / `bg-border-membership-gold`
+- `border.membership-silver`：Silver 会员等级卡片边框色。 常见 utility：`border-border-membership-silver` / `bg-border-membership-silver`
+- `border.muted`：中等存在感边框色，用于需要看见但不抢视觉的分隔。 常见 utility：`border-border-muted`
+- `border.soft`：柔和边框色，用于次级卡片、输入框和弱边界。 常见 utility：`border-border-soft` / `bg-border-soft`
 
 ### 5.6 `button`
 
-- `button.primary`
-- `button.primary-hover`
-- `button.highlight`
-- `button.highlight-hover`
-- `button.neutral`
-- `button.neutral-ink`
-- `button.neutral-contrast`
-- `button.membership-gold`
-- `button.membership-gold-hover`
-- `button.membership-diamond`
-- `button.membership-diamond-hover`
+- `button.accent`：通用强调按钮底色，用于首页和营销场景主 CTA。 常见 utility：`bg-button-accent` / `border-button-accent`
+- `button.accent-hover`：通用强调按钮 hover 底色。 常见 utility：`bg-button-accent-hover` / `border-button-accent-hover`
+- `button.membership-diamond`：Diamond 会员等级卡片 CTA 按钮底色。 常见 utility：`bg-button-membership-diamond` / `border-button-membership-diamond`
+- `button.membership-diamond-hover`：Diamond 会员等级卡片 CTA hover 底色。 常见 utility：`bg-button-membership-diamond-hover` / `border-button-membership-diamond-hover`
+- `button.membership-gold`：Gold 会员等级卡片 CTA 按钮底色。 常见 utility：`bg-button-membership-gold` / `border-button-membership-gold`
+- `button.membership-gold-hover`：Gold 会员等级卡片 CTA hover 底色。 常见 utility：`bg-button-membership-gold-hover` / `border-button-membership-gold-hover`
+- `button.neutral`：中性色按钮底色，用于反相场景或次级按钮底板。 常见 utility：`border-button-neutral` / `text-button-neutral`
+- `button.neutral-contrast`：高对比按钮前景色，用于深色主按钮上的浅色文字。 常见 utility：`text-button-neutral-contrast`
+- `button.neutral-ink`：中性色按钮上的文字和图标前景色。 常见 utility：`text-button-neutral-ink` / `bg-button-neutral-ink`
+- `button.primary`：主操作按钮底色，用于高识别主动作按钮。 常见 utility：`bg-button-primary` / `border-button-primary`
+- `button.primary-hover`：主操作按钮 hover 底色。 常见 utility：`bg-button-primary-hover` / `border-button-primary-hover`
 
-推荐用途：
+### 5.7 `gradient`
 
-- 主 CTA：`bg-button-highlight text-button-neutral-ink`
-- 深色文字按钮：`bg-button-primary text-button-neutral-contrast`
-- hover：`hover:bg-button-highlight-hover`
+- `gradient.auth-hero`：登录注册等认证场景 Hero 主背景渐变。 常见 utility：`bg-auth-hero`
+- `gradient.decor-ambient`：大面积环境氛围渐变，用于 section 外层铺底和背景气氛。 常见 utility：`bg-decor-ambient`
+- `gradient.decor-glow`：局部光晕渐变，用于制造聚焦点和局部高光。 常见 utility：`bg-decor-glow`
+- `gradient.decor-haze`：柔和雾化渐变，用于弱化边缘和增加空气感。 常见 utility：`bg-decor-haze`
+- `gradient.events-hero`：活动相关 Hero 主背景渐变。 常见 utility：`bg-events-hero`
+- `gradient.home-hero`：首页 Hero 主背景渐变。 常见 utility：`bg-home-hero`
+- `gradient.membership-diamond-card`：Diamond 会员卡片主体渐变背景。 常见 utility：`bg-membership-diamond-card`
+- `gradient.membership-diamond-card-glow`：Diamond 会员卡片局部高光渐变。 常见 utility：`bg-membership-diamond-card-glow`
+- `gradient.membership-gold-card`：Gold 会员卡片主体渐变背景。 常见 utility：`bg-membership-gold-card`
+- `gradient.membership-gold-card-glow`：Gold 会员卡片局部高光渐变。 常见 utility：`bg-membership-gold-card-glow`
+- `gradient.membership-hero`：会员页 Hero 主背景渐变。 常见 utility：`bg-membership-hero`
+
+### 5.8 `shadow`
+
+- `shadow.card`：标准卡片阴影，用于通用内容卡片。 常见 utility：`shadow-card`
+- `shadow.dropdown`：下拉层阴影，用于菜单、选择器和悬浮列表。 常见 utility：`shadow-dropdown`
+- `shadow.emphasis`：强调模块阴影，用于重点 section 和需要额外层次的容器。 常见 utility：`shadow-emphasis`
+- `shadow.feature`：特色模块阴影，用于功能亮点卡片和重点功能块。 常见 utility：`shadow-feature`
+- `shadow.hero`：Hero 区大体量阴影，用于大幅视觉模块。 常见 utility：`shadow-hero`
+- `shadow.luxe`：高等级会员或重点营销卡片的厚重阴影。 常见 utility：`shadow-luxe`
+- `shadow.panel`：轻量面板阴影，用于工具条、筛选条和轻浮层。 常见 utility：`shadow-panel`
+- `shadow.soft-luxe`：高等级卡片的柔和阴影版本，用于保留质感但降低压迫感。 常见 utility：`shadow-soft-luxe`
+
+### 5.9 `hero`
+
+- `hero.ornament.fill`：Hero 装饰填充变量。 使用方式：`var(--hero-ornament-fill)`
+- `hero.ornament.line`：Hero 装饰线条变量。 使用方式：`var(--hero-ornament-line)`
+- `hero.secondary-cta.bg`：Hero 区次级 CTA 的背景变量。 使用方式：`var(--hero-secondary-cta-bg)`
+- `hero.secondary-cta.bg-hover`：Hero 区次级 CTA 的 hover 背景变量。 使用方式：`var(--hero-secondary-cta-bg-hover)`
+- `hero.secondary-cta.border`：Hero 区次级 CTA 的边框变量。 使用方式：`var(--hero-secondary-cta-border)`
 
 ## 6. 推荐写法
 
@@ -267,7 +217,7 @@
 ### 6.4 主要按钮
 
 ```vue
-<view class="bg-button-highlight text-button-neutral-ink hover:bg-button-highlight-hover">
+<view class="bg-button-accent text-button-neutral-ink hover:bg-button-accent-hover">
 ```
 
 ### 6.5 深色 Hero 区域
@@ -316,7 +266,7 @@
 
 - 宽高、间距、圆角、位移等布局值
 - `var(--hero-...)` 这种原始主题变量
-- 暂时没有抽象价值的特殊路径/装饰
+- 暂时没有抽象价值的特殊路径或装饰
 
 ## 9. 什么时候应该新增 Token
 
@@ -405,8 +355,7 @@ Tailwind utility 的 key 是根据 `tailwind.config.js` 里的 `DEFAULT_THEME = 
 
 ## 15. 后续建议
 
-如果后面你还想继续把规范落地，建议按这个顺序做：
+如果后面还要继续收口命名，优先看这两类：
 
-1. 先把 `account` 页面组改成 token 写法
-2. 再整理 `membership` 相关组件里仍偏业务耦合的 tier token 命名
-3. 最后再处理零散页面和组件里的遗留硬编码
+1. `shadow.luxe`、`shadow.soft-luxe` 这种还带气质语义的 token
+2. `account` 页面里的硬编码样式

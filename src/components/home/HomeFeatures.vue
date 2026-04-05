@@ -4,15 +4,15 @@
       <!-- 标题区 -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-brand-highlight" />
-          <text class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+          <view class="h-px w-14 bg-brand-accent" />
+          <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
             {{ t('features.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
           <text>{{ t('features.title') }}</text>
-          <text class="text-brand-highlight-strong"> · {{ t('features.titleAccent') }}</text>
+          <text class="text-brand-accent-strong"> · {{ t('features.titleAccent') }}</text>
         </view>
 
         <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-text-body-soft lg:text-[19px]">
@@ -25,14 +25,14 @@
         <view
           v-for="card in serviceCards"
           :key="card.title"
-          class="flex min-h-[280px] cursor-pointer flex-col border border-border-base bg-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-highlight/50 hover:bg-surface-panel hover:shadow-feature"
+          class="flex min-h-[280px] cursor-pointer flex-col border border-border-base bg-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-accent/50 hover:bg-surface-panel hover:shadow-feature"
           @click="openPath(card.path)"
         >
           <view class="text-[20px] font-semibold uppercase tracking-[2px] text-text-subtle">
             {{ card.icon }}
           </view>
 
-          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-brand-highlight-strong lg:text-[28px]">
+          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-brand-accent-strong lg:text-[28px]">
             {{ t(card.title) }}
           </view>
 
@@ -42,7 +42,7 @@
 
           <view
             v-if="showBrandLabel"
-            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-brown"
+            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-support"
           >
             {{ t(card.label) }}
           </view>

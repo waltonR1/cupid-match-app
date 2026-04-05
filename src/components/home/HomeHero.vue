@@ -5,8 +5,8 @@
     >
       <view class="max-w-[680px]">
         <view class="mb-6 inline-flex items-center gap-4">
-          <view class="h-[1px] w-16 bg-border-highlight-soft" />
-          <text class="text-[12px] uppercase tracking-[6px] text-brand-highlight-soft">
+          <view class="h-[1px] w-16 bg-border-accent-soft" />
+          <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
             {{ t('hero.meta', { year }) }}
           </text>
         </view>
@@ -15,7 +15,7 @@
           {{ t('hero.title') }}
         </view>
 
-        <view class="mt-3 text-[42px] italic leading-[1.15] text-brand-highlight-strong lg:text-[68px]">
+        <view class="mt-3 text-[42px] italic leading-[1.15] text-brand-accent-strong lg:text-[68px]">
           {{ t('hero.titleAccent') }}
         </view>
 
@@ -29,27 +29,27 @@
 
         <view class="mt-12 flex flex-wrap gap-5">
           <view
-            class="inline-flex min-w-btn-cta cursor-pointer items-center justify-center bg-button-highlight px-btn-cta-x py-btn-cta-y text-[16px] font-medium text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:bg-button-highlight-hover hover:shadow-card"
+            class="inline-flex min-w-btn-cta cursor-pointer items-center justify-center bg-button-accent px-btn-cta-x py-btn-cta-y text-[16px] font-medium text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:bg-button-accent-hover hover:shadow-card"
             @click="openPlan('free')"
           >
             {{ t('hero.actions.primary') }}
           </view>
 
           <view
-            class="inline-flex min-w-btn-cta cursor-pointer items-center justify-center border px-btn-cta-x py-btn-cta-y text-[16px] text-text-heading shadow-panel transition-all duration-300 [background-color:var(--hero-secondary-cta-bg)] [border-color:var(--hero-secondary-cta-border)] hover:-translate-y-[1px] hover:text-brand-brown hover:shadow-card hover:[background-color:var(--hero-secondary-cta-bg-hover)]"
+            class="inline-flex min-w-btn-cta cursor-pointer items-center justify-center border px-btn-cta-x py-btn-cta-y text-[16px] text-text-heading shadow-panel transition-all duration-300 [background-color:var(--hero-secondary-cta-bg)] [border-color:var(--hero-secondary-cta-border)] hover:-translate-y-[1px] hover:text-brand-support hover:shadow-card hover:[background-color:var(--hero-secondary-cta-bg-hover)]"
             @click="openProfiles"
           >
             {{ t('hero.actions.secondary') }}
           </view>
         </view>
 
-        <view class="mt-14 border-l-2 border-border-highlight pl-5 text-[20px] text-text-body-soft">
+        <view class="mt-14 border-l-2 border-border-accent pl-5 text-[20px] text-text-body-soft">
           「{{ t('hero.quote') }}」
         </view>
 
         <view class="mt-5 grid grid-cols-3 gap-10 border-t border-border-light/45 pt-5">
           <view v-for="item in stats" :key="item.label">
-            <view class="text-[36px] font-semibold text-brand-highlight-strong lg:text-[48px]">
+            <view class="text-[36px] font-semibold text-brand-accent-strong lg:text-[48px]">
               {{ t(item.value) }}
             </view>
             <view class="mt-2 text-[13px] leading-6 text-text-subtle">

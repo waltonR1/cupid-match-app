@@ -24,7 +24,7 @@
           :key="item.label"
           class="border border-border-base bg-surface-card px-6 py-7 shadow-panel"
         >
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">{{ item.label }}</view>
+          <view class="text-[12px] uppercase tracking-[4px] text-brand-support">{{ item.label }}</view>
           <view class="mt-4 text-[34px] font-semibold text-text-heading">{{ item.value }}</view>
         </view>
       </view>

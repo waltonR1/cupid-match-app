@@ -4,8 +4,8 @@
       <view class="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
         <view class="lg:sticky lg:top-24 lg:self-start">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-brand-highlight" />
-            <text class="text-[12px] uppercase tracking-[6px] text-brand-brown">
+            <view class="h-[1px] w-16 bg-brand-accent" />
+            <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
               {{ t('cases.eyebrow') }}
             </text>
           </view>
@@ -13,16 +13,16 @@
           <view class="text-[44px] font-semibold leading-tight lg:text-[64px]">
             <view class="inline-flex items-baseline gap-3">
               <text>{{ t('cases.title') }}</text>
-              <text class="italic text-brand-highlight-strong">& {{ t('cases.titleAccent') }}</text>
+              <text class="italic text-brand-accent-strong">& {{ t('cases.titleAccent') }}</text>
             </view>
           </view>
 
-          <view class="mt-5 max-w-[400px] text-[19px] italic leading-8 text-text-warm lg:text-[21px]">
+          <view class="mt-5 max-w-[400px] text-[19px] italic leading-8 text-text-lead lg:text-[21px]">
             {{ t('cases.subtitle') }}
           </view>
 
           <view class="mt-10 border border-border-soft bg-surface-card-soft px-7 py-8 shadow-card">
-            <view class="text-[12px] uppercase tracking-[5px] text-brand-brown">
+            <view class="text-[12px] uppercase tracking-[5px] text-brand-support">
               {{ t('cases.deskLabel') }}
             </view>
             <view class="mt-4 text-[16px] leading-8 text-text-body">
@@ -82,12 +82,12 @@ function cardClass(index: number) {
     return 'border-border-base bg-surface-panel'
   }
 
-  return 'border-border-highlight/25 bg-brand-highlight/10'
+  return 'border-border-accent/25 bg-brand-accent/10'
 }
 
 function lineClass(index: number) {
   if (index % 3 === 2) {
-    return 'bg-brand-highlight/65'
+    return 'bg-brand-accent/65'
   }
 
   return 'bg-border-light/80'
@@ -95,21 +95,21 @@ function lineClass(index: number) {
 
 function iconClass(index: number) {
   if (index % 3 === 0) {
-    return 'border-border-soft bg-surface-card text-brand-brown'
+    return 'border-border-soft bg-surface-card text-brand-support'
   }
 
   if (index % 3 === 1) {
-    return 'border-border-base bg-surface-base text-brand-highlight-strong'
+    return 'border-border-base bg-surface-base text-brand-accent-strong'
   }
 
-  return 'border-border-highlight/35 bg-brand-highlight/12 text-brand-highlight-strong'
+  return 'border-border-accent/35 bg-brand-accent/12 text-brand-accent-strong'
 }
 
 function indexClass(index: number) {
   if (index % 3 === 2) {
-    return 'text-brand-highlight-strong'
+    return 'text-brand-accent-strong'
   }
 
-  return 'text-brand-brown'
+  return 'text-brand-support'
 }
 </script>

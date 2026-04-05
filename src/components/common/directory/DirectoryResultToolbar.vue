@@ -24,8 +24,8 @@
           :key="item.value"
           class="inline-flex min-h-[40px] cursor-pointer items-center justify-center border px-4 text-[13px] transition-all duration-200"
           :class="item.value === sortKey
-            ? 'border-brand-highlight/60 bg-brand-highlight/10 text-brand-brown hover:-translate-y-[1px] hover:border-brand-highlight/80 hover:bg-brand-highlight/20'
-            : 'border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'"
+            ? 'border-brand-accent/60 bg-brand-accent/10 text-brand-support hover:-translate-y-[1px] hover:border-brand-accent/80 hover:bg-brand-accent/20'
+            : 'border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
           @click="$emit('update:sort-key', item.value)"
         >
           {{ item.label }}

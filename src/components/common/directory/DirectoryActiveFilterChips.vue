@@ -6,7 +6,7 @@
     <view
       v-for="item in items"
       :key="String(item.key)"
-      class="inline-flex min-h-[28px] items-center gap-2 border border-border-highlight/40 bg-surface-panel px-2.5 text-[12px] text-brand-brown"
+      class="inline-flex min-h-[28px] items-center gap-2 border border-border-accent/40 bg-surface-panel px-2.5 text-[12px] text-brand-support"
     >
       <text class="text-text-body-soft">{{ item.label }}</text>
       <text class="font-medium">{{ item.value }}</text>

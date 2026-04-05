@@ -7,7 +7,7 @@
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page <= 1
         ? 'border-border-base bg-surface-panel text-text-subtle'
-        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'"
+        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
       @click="handlePrev"
     >
       {{ prevText }}
@@ -20,8 +20,8 @@
       :class="item.type === 'ellipsis'
         ? 'border-border-light bg-surface-card text-text-subtle'
         : item.value === page
-          ? 'border-brand-highlight/60 bg-brand-highlight/10 text-brand-brown hover:-translate-y-[1px] hover:border-brand-highlight/80 hover:bg-brand-highlight/20'
-          : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'"
+          ? 'border-brand-accent/60 bg-brand-accent/10 text-brand-support hover:-translate-y-[1px] hover:border-brand-accent/80 hover:bg-brand-accent/20'
+          : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
       @click="handleTokenClick(item)"
     >
       {{ item.label }}
@@ -31,7 +31,7 @@
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page >= totalPages
         ? 'border-border-base bg-surface-panel text-text-subtle'
-        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-highlight hover:bg-surface-panel hover:text-text-heading'"
+        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
       @click="handleNext"
     >
       {{ nextText }}

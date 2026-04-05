@@ -13,7 +13,6 @@
         :title="t('hero.title')"
         :subtitle="t('hero.subtitle')"
         :tags="heroTags"
-        :stats="statCards"
       />
 
       <FamilyFilterToolbar
@@ -112,7 +111,7 @@ import type { FamilyDirectoryFilters } from '@/components/family/family.types'
 import { useFamilyDirectory } from '@/components/family/useFamilyDirectory'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { mockProfiles, pickLocalized, type MockProfile } from '@/mock/business'
+import { pickLocalized, type MockProfile } from '@/mock/business'
 import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
@@ -148,24 +147,12 @@ const {
   changePage,
 } = useFamilyDirectory()
 
-const familyProfiles = computed(() => mockProfiles.filter(profile => profile.familyVisible))
 
 const heroTags = computed(() => [
   t('hero.tags.first'),
   t('hero.tags.second'),
   t('hero.tags.third'),
 ])
-
-const statCards = computed(() => {
-  const priorityCount = familyProfiles.value.filter(profile => profile.familyPriority).length
-  const contactReadyCount = familyProfiles.value.filter(profile => profile.allowFamilyContact).length
-
-  return [
-    { label: t('stats.visibleProfiles'), value: String(familyProfiles.value.length) },
-    { label: t('stats.priorityProfiles'), value: String(priorityCount) },
-    { label: t('stats.contactReady'), value: String(contactReadyCount) },
-  ]
-})
 
 function createFamilyCardViewModel(profile: MockProfile): DirectoryCardViewModel {
   const occupation = pickLocalized(locale.value, profile.occupation)
