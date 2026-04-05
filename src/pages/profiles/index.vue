@@ -74,13 +74,10 @@
         @reset="handleResetFilters"
       >
         <template #default="{ item }">
-          <ProfileDirectoryCard
-            :profile="item"
-            :locale="locale"
-            :city-label="t('fields.city')"
-            :education-label="t('fields.education')"
-            :languages-label="t('fields.languages')"
-            @open="handleProfileOpen"
+          <DirectoryCardFrame
+            :data="createProfileCardViewModel(item)"
+            clickable
+            @select="handleProfileOpen(item.id)"
           />
         </template>
       </DirectoryGridShell>
@@ -104,18 +101,20 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
 import DirectoryGridShell from '@/components/common/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/common/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/common/directory/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import ProfileDirectoryCard from '@/components/profiles/ProfileDirectoryCard.vue'
 import ProfilesFilterToolbar from '@/components/profiles/ProfilesFilterToolbar.vue'
 import type { ProfilesDirectoryFilters } from '@/components/profiles/profiles.types'
 import { useProfilesDirectory } from '@/components/profiles/useProfilesDirectory'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 import { NAV_LIST } from '@/constants/nav'
+import { getLocalizedProfileCardData, type MockProfile } from '@/mock/business'
 import { navigateByNavKey } from '@/utils/navigation'
 import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 
@@ -158,6 +157,39 @@ const heroTags = computed(() => [
   t('hero.tags.second'),
   t('hero.tags.third'),
 ])
+
+function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+  const cardData = getLocalizedProfileCardData(locale.value, profile)
+  const goalText = cardData.goalCode === 'marriage'
+    ? t('card.goalMarriage')
+    : cardData.goalCode === 'exclusive'
+      ? t('card.goalExclusive')
+      : cardData.goalCode === 'cross_border'
+        ? t('card.goalCrossBorder')
+        : t('card.goalSerious')
+
+  const labelText = cardData.status === 'review'
+    ? t('card.labelReview')
+    : cardData.status === 'vip'
+      ? t('card.labelPriority')
+      : t('card.labelSelected')
+
+  return {
+    avatar: cardData.avatar,
+    name: cardData.name,
+    gender: profile.gender,
+    meta: cardData.meta,
+    badge: goalText,
+    summary: cardData.summary,
+    facts: [
+      { label: t('fields.city'), value: cardData.facts.city },
+      { label: t('fields.education'), value: cardData.facts.education },
+      { label: t('fields.languages'), value: cardData.facts.languages },
+    ],
+    tags: cardData.tags,
+    footer: labelText,
+  }
+}
 
 function handleUpdateFilters(nextFilters: Partial<ProfilesDirectoryFilters>) {
   updateFilters(nextFilters)

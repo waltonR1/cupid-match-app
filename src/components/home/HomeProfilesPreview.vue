@@ -1,7 +1,6 @@
 <template>
   <view class="bg-page-soft">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-      <!-- 标题区 -->
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
@@ -13,7 +12,7 @@
 
           <view class="text-[40px] font-semibold leading-[1.06] text-text-heading lg:text-[56px]">
             <text>{{ t('profilesPreview.title') }}</text>
-            <text class="text-brand-highlight-strong"> · {{ t('profilesPreview.titleAccent') }}</text>
+            <text class="text-brand-highlight-strong"> 路 {{ t('profilesPreview.titleAccent') }}</text>
           </view>
         </view>
 
@@ -22,21 +21,16 @@
         </view>
       </view>
 
-      <!-- 资料卡 -->
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <ProfileDirectoryCard
+        <DirectoryCardFrame
           v-for="profile in profiles"
           :key="profile.id"
-          :profile="profile"
-          :locale="locale"
-          :city-label="t('profilesPreview.fields.city')"
-          :education-label="t('profilesPreview.fields.education')"
-          :languages-label="t('profilesPreview.fields.languages')"
-          @open="handleProfileOpen"
+          :data="createProfileCardViewModel(profile)"
+          clickable
+          @select="handleProfileOpen(profile.id)"
         />
       </view>
 
-      <!-- CTA -->
       <view class="mt-12 flex justify-center">
         <view
           class="inline-flex min-w-[178px] cursor-pointer items-center justify-center rounded-button border border-brand-highlight/35 bg-brand-highlight/8 px-8 py-3 text-[15px] tracking-[0.6px] text-brand-brown transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-highlight hover:bg-brand-highlight/16 hover:text-text-heading hover:shadow-panel"
@@ -50,13 +44,52 @@
 </template>
 
 <script setup lang="ts">
-import ProfileDirectoryCard from '@/components/profiles/ProfileDirectoryCard.vue'
+import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { getHomePreviewProfiles } from '@/mock/business'
+import {
+  getHomePreviewProfiles,
+  getLocalizedProfileCardData,
+  type MockProfile,
+} from '@/mock/business'
 import { openProfileDetail } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('home')
+const { t: profileT } = usePageI18n('profiles')
 const profiles = getHomePreviewProfiles()
+
+function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+  const cardData = getLocalizedProfileCardData(locale.value, profile)
+  const goalText = cardData.goalCode === 'marriage'
+    ? profileT('card.goalMarriage')
+    : cardData.goalCode === 'exclusive'
+      ? profileT('card.goalExclusive')
+      : cardData.goalCode === 'cross_border'
+        ? profileT('card.goalCrossBorder')
+        : profileT('card.goalSerious')
+
+  const labelText = cardData.status === 'review'
+    ? profileT('card.labelReview')
+    : cardData.status === 'vip'
+      ? profileT('card.labelPriority')
+      : profileT('card.labelSelected')
+
+  return {
+    avatar: cardData.avatar,
+    name: cardData.name,
+    gender: profile.gender,
+    meta: cardData.meta,
+    badge: goalText,
+    summary: cardData.summary,
+    facts: [
+      { label: t('profilesPreview.fields.city'), value: cardData.facts.city },
+      { label: t('profilesPreview.fields.education'), value: cardData.facts.education },
+      { label: t('profilesPreview.fields.languages'), value: cardData.facts.languages },
+    ],
+    tags: cardData.tags,
+    footer: labelText,
+  }
+}
 
 function goProfiles() {
   uni.navigateTo({ url: '/pages/profiles/index' })

@@ -71,13 +71,11 @@
         @reset="handleResetFilters"
       >
         <template #default="{ item }">
-          <FamilyDirectoryCard
-            :profile="item"
-            :locale="locale"
-            :city-label="t('fields.city')"
-            :education-label="t('fields.education')"
-            :residence-label="t('fields.residencePlan')"
-            @open="handleProfileOpen"
+          <DirectoryCardFrame
+            :data="createFamilyCardViewModel(item)"
+            clickable
+            summary-class="line-clamp-3"
+            @select="handleProfileOpen(item.id)"
           />
         </template>
       </DirectoryGridShell>
@@ -101,19 +99,20 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
 import DirectoryGridShell from '@/components/common/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/common/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/common/directory/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import FamilyDirectoryCard from '@/components/family/FamilyDirectoryCard.vue'
 import FamilyFilterToolbar from '@/components/family/FamilyFilterToolbar.vue'
 import type { FamilyDirectoryFilters } from '@/components/family/family.types'
 import { useFamilyDirectory } from '@/components/family/useFamilyDirectory'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { mockProfiles } from '@/mock/business'
+import { mockProfiles, pickLocalized, type MockProfile } from '@/mock/business'
 import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
@@ -167,6 +166,61 @@ const statCards = computed(() => {
     { label: t('stats.contactReady'), value: String(contactReadyCount) },
   ]
 })
+
+function createFamilyCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+  const occupation = pickLocalized(locale.value, profile.occupation)
+  const meta = locale.value === 'zh'
+    ? `${profile.age}岁 / ${occupation}`
+    : locale.value === 'fr'
+      ? `${profile.age} ans / ${occupation}`
+      : `${profile.age} / ${occupation}`
+
+  const familyMode = profile.familyPriority
+    ? t('modes.priority')
+    : profile.allowFamilyContact
+      ? t('modes.contactReady')
+      : t('modes.contextOnly')
+
+  const maritalStatus = profile.maritalStatus === 'divorced'
+    ? t('tags.maritalDivorced')
+    : profile.maritalStatus === 'widowed'
+      ? t('tags.maritalWidowed')
+      : t('tags.maritalSingle')
+
+  const familyContext = profile.acceptLongDistance
+    ? t('tags.longDistanceYes')
+    : profile.hasChildren
+      ? t('tags.childrenYes')
+      : t('tags.childrenNo')
+
+  const decisionLabel = profile.status === 'review'
+    ? t('card.labelReview')
+    : profile.familyPriority
+      ? t('card.labelPriority')
+      : profile.allowFamilyContact
+        ? t('card.labelContactReady')
+        : t('card.labelObserve')
+
+  return {
+    avatar: profile.avatar,
+    name: profile.name,
+    gender: profile.gender,
+    meta,
+    badge: familyMode,
+    summary: pickLocalized(locale.value, profile.maritalPlan),
+    facts: [
+      { label: t('fields.city'), value: pickLocalized(locale.value, profile.city) },
+      { label: t('fields.education'), value: pickLocalized(locale.value, profile.education) },
+      { label: t('fields.residencePlan'), value: pickLocalized(locale.value, profile.residencePlan) },
+    ],
+    tags: [
+      pickLocalized(locale.value, profile.intent),
+      maritalStatus,
+      familyContext,
+    ],
+    footer: decisionLabel,
+  }
+}
 
 function handleUpdateFilters(nextFilters: Partial<FamilyDirectoryFilters>) {
   updateFilters(nextFilters)
