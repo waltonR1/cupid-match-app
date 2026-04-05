@@ -108,7 +108,8 @@
         "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
         "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 52%, #102842 100%)",
         "events-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
-        "membership-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)"
+        "membership-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)",
+        "auth-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)"
       },
       "hero": {
         "secondary-cta": {
@@ -196,7 +197,8 @@
         "home-hero": "linear-gradient(135deg, #f6efe7 0%, #eadfce 42%, #f8f3eb 100%)",
         "about-hero": "linear-gradient(135deg, #f7f0e7 0%, #eadfce 48%, #ddd3c7 100%)",
         "events-hero": "linear-gradient(135deg, #2f3a49 0%, #66543f 48%, #875864 100%)",
-        "membership-hero": "linear-gradient(135deg, #2f3a49 0%, #5a4b39 52%, #876b47 100%)"
+        "membership-hero": "linear-gradient(135deg, #2f3a49 0%, #5a4b39 52%, #876b47 100%)",
+        "auth-hero": "linear-gradient(135deg, #ece2d2 0%, #e2d4c0 46%, #d3c2aa 100%)"
       },
       "hero": {
         "secondary-cta": {
