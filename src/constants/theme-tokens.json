@@ -12,7 +12,7 @@
     },
     "brand": {
       "primary": "#d71934",
-      "primary-soft": "#ffd5dd",
+      "primary-soft": "#ffd66b",
       "accent": "#d7b86e",
       "accent-strong": "#d4af37",
       "accent-soft": "#d8c8a8",
@@ -144,7 +144,7 @@
       "brand": {
         "support": "#b07d45",
         "support-soft": "#a27b55",
-        "secondary": "#b84c5c"
+        "secondary": "#B84C5C"
       },
       "border": {
         "base": "#e2d7c9",

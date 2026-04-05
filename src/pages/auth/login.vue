@@ -14,9 +14,9 @@
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
         <view class="grid gap-12 lg:min-h-[680px] lg:grid-cols-[1.06fr_0.94fr] lg:items-start">
           <view class="max-w-[720px]">
-            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-base/60 bg-surface-card/30 px-5 py-2 backdrop-blur">
+            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/34 bg-surface-inverse-panel/34 px-5 py-2 backdrop-blur">
               <view class="h-[1px] w-12 bg-brand-accent" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
+              <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
                 {{ labels.eyebrow }}
               </text>
             </view>

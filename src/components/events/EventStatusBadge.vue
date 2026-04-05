@@ -23,7 +23,7 @@ const badgeClassName = computed(() => {
   }
 
   if (props.status === 'waitlist') {
-    return 'rounded-full border-brand-secondary-soft/72 bg-brand-primary-soft/52 text-brand-secondary shadow-panel tracking-[1.5px]'
+    return 'rounded-full border-brand-secondary-soft/72 bg-brand-primary-soft text-brand-secondary shadow-panel tracking-[1.5px]'
   }
 
   return 'rounded-[10px] border-dashed border-border-base/90 bg-surface-panel/88 text-text-muted tracking-[1.2px]'

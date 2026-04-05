@@ -53,14 +53,13 @@
             </view>
           </view>
 
-          <button
-            class="mt-8 w-full px-6 py-4 text-[16px] font-medium transition-all duration-200"
-            :class="buttonClassName"
-            :disabled="event.status === 'closed'"
+          <view
+            class="inline-flex items-center justify-center mt-8 w-full px-6 py-4 text-[16px] font-medium transition-all duration-200"
+            :class="[buttonClassName, isDisabled ? 'pointer-events-none' : 'cursor-pointer']"
             @click="handleActionClick"
           >
             {{ actionText }}
-          </button>
+          </view>
 
           <view class="mt-4 text-[15px] leading-8 text-text-inverse-muted">
             {{ actionHint }}
@@ -113,13 +112,15 @@ const actionHint = computed(() => {
   return props.registerHint
 })
 
+const isDisabled = computed(() => props.event.status === 'closed')
+
 const buttonClassName = computed(() => {
   if (props.event.status === 'waitlist') {
-    return 'border border-brand-accent/56 bg-surface-inverse-card/38 text-text-inverse hover:-translate-y-[1px] hover:border-brand-accent/72 hover:bg-surface-inverse-card/54 hover:shadow-card'
+    return 'border border-brand-accent/56 bg-button-neutral-contrast/5 text-text-inverse hover:-translate-y-[1px] hover:border-brand-accent/72 hover:bg-surface-inverse-card/54 hover:shadow-card'
   }
 
   if (props.event.status === 'closed') {
-    return 'cursor-default border border-border-inverse/36 bg-surface-inverse-panel/32 text-text-inverse-subtle opacity-90'
+    return 'border border-border-inverse/36 bg-surface-inverse-panel/32 text-text-inverse-subtle opacity-90'
   }
 
   return 'border border-button-accent bg-button-accent text-button-neutral-ink hover:-translate-y-[1px] hover:border-button-accent-hover hover:bg-button-accent-hover hover:shadow-card'

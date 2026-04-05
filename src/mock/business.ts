@@ -1115,6 +1115,15 @@ export const mockFavoriteProfiles: MockFavoriteProfile[] = [
         'Strong cultural fit, likely worth discussing with an advisor next.'
     ),
   },
+  {
+    profileId: 'p-006',
+    savedAt: '2026-03-28',
+    note: localized(
+        '这份资料已允许进入家长协同视角，后续可一起评估双城发展与家庭节奏。',
+        'Ce profil peut deja entrer dans une lecture familiale limitee pour evaluer le rythme entre deux villes.',
+        'This profile is already suitable for a limited family-assisted review around cross-city rhythm and fit.'
+    ),
+  },
 ]
 
 export const mockMessageThreads: MockMessageThread[] = [
@@ -1138,6 +1147,17 @@ export const mockMessageThreads: MockMessageThread[] = [
         '我对文化散步活动也很感兴趣。',
         'Le parcours culturel m interesse aussi beaucoup.',
         'I am also very interested in the culture walk event.'
+    ),
+  },
+  {
+    id: 'm-003',
+    profileId: 'p-006',
+    updatedAt: '2026-03-27T19:15:00',
+    unread: 1,
+    lastMessage: localized(
+        '如果后续节奏合适，我们也可以讨论巴黎和布鲁塞尔之间的安排。',
+        'Si le rythme convient, on pourra aussi parler d un equilibre entre Paris et Bruxelles.',
+        'If the pace feels right, we can also talk about how Paris and Brussels might work.'
     ),
   },
 ]
