@@ -229,21 +229,21 @@ function handleAccount() {
   closeAllDropdowns()
   emit('account-click')
   uni.navigateTo({
-    url: '/pages/user/index',
+    url: '/pages/account/index',
   })
 }
 
 function handleMyProfile() {
   closeAllDropdowns()
   uni.navigateTo({
-    url: '/pages/user/profile',
+    url: '/pages/account/profile',
   })
 }
 
 function handleMessages() {
   closeAllDropdowns()
   uni.navigateTo({
-    url: '/pages/user/messages',
+    url: '/pages/account/messages',
   })
 }
 

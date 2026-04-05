@@ -243,7 +243,7 @@ function handleBack() {
   }
 
   uni.redirectTo({
-    url: '/pages/family/index',
+    url: '/pages/discovery/family/index',
   })
 }
 

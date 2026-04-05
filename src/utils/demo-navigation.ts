@@ -14,13 +14,13 @@ export function openRegisterPage(plan?: string) {
 
 export function openProfileDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/profiles/detail?id=${encodeURIComponent(id)}`,
+    url: `/pages/discovery/self/detail?id=${encodeURIComponent(id)}`,
   })
 }
 
 export function openFamilyProfileDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/family/detail?id=${encodeURIComponent(id)}`,
+    url: `/pages/discovery/family/detail?id=${encodeURIComponent(id)}`,
   })
 }
 
@@ -32,36 +32,36 @@ export function openEventDetail(id: string) {
 
 export function openAccountPage() {
   uni.navigateTo({
-    url: '/pages/user/index',
+    url: '/pages/account/index',
   })
 }
 
 export function openMyProfilePage() {
   uni.navigateTo({
-    url: '/pages/user/profile',
+    url: '/pages/account/profile',
   })
 }
 
 export function openMyEventsPage() {
   uni.navigateTo({
-    url: '/pages/user/events',
+    url: '/pages/account/events',
   })
 }
 
 export function openFavoritesPage() {
   uni.navigateTo({
-    url: '/pages/user/favorites',
+    url: '/pages/account/favorites',
   })
 }
 
 export function openMessagesPage() {
   uni.navigateTo({
-    url: '/pages/user/messages',
+    url: '/pages/account/messages',
   })
 }
 
 export function openPrivacyPage() {
   uni.navigateTo({
-    url: '/pages/user/privacy',
+    url: '/pages/account/privacy',
   })
 }

@@ -243,7 +243,7 @@ function handleBack() {
   }
 
   uni.redirectTo({
-    url: '/pages/profiles/index',
+    url: '/pages/discovery/self/index',
   })
 }
 

@@ -8,66 +8,24 @@
       }
     },
     {
-      "path": "pages/about",
+      "path": "pages/public/about",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "关于我们"
       }
     },
     {
-      "path": "pages/profiles/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "会员资料"
-      }
-    },
-    {
-      "path": "pages/profiles/detail",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "会员详情"
-      }
-    },
-    {
-      "path": "pages/family/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "家庭参与"
-      }
-    },
-    {
-      "path": "pages/family/detail",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "会员详情"
-      }
-    },
-    {
-      "path": "pages/events/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "活动日历"
-      }
-    },
-    {
-      "path": "pages/events/detail",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "活动详情"
-      }
-    },
-    {
-      "path": "pages/membership",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "会员体系"
-      }
-    },
-    {
-      "path": "pages/contact",
+      "path": "pages/public/contact",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "联系我们"
+      }
+    },
+    {
+      "path": "pages/public/membership",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员体系"
       }
     },
     {
@@ -85,45 +43,87 @@
       }
     },
     {
-      "path": "pages/user/index",
+      "path": "pages/discovery/self/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员资料"
+      }
+    },
+    {
+      "path": "pages/discovery/self/detail",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
+      }
+    },
+    {
+      "path": "pages/discovery/family/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "家庭参与"
+      }
+    },
+    {
+      "path": "pages/discovery/family/detail",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
+      }
+    },
+    {
+      "path": "pages/account/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "用户中心"
       }
     },
     {
-      "path": "pages/user/profile",
+      "path": "pages/account/profile",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的资料"
       }
     },
     {
-      "path": "pages/user/events",
+      "path": "pages/account/events",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的报名"
       }
     },
     {
-      "path": "pages/user/favorites",
+      "path": "pages/account/favorites",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "我的收藏"
       }
     },
     {
-      "path": "pages/user/messages",
+      "path": "pages/account/messages",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "消息中心"
       }
     },
     {
-      "path": "pages/user/privacy",
+      "path": "pages/account/privacy",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "隐私设置"
+      }
+    },
+    {
+      "path": "pages/events/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动日历"
+      }
+    },
+    {
+      "path": "pages/events/detail",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动详情"
       }
     },
     {

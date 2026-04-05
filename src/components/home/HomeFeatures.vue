@@ -72,14 +72,14 @@ const serviceCards: ServiceCardItem[] = [
     title: 'features.ai.title',
     desc: 'features.ai.desc',
     label: 'features.ai.label',
-    path: '/pages/profiles/index',
+    path: '/pages/discovery/self/index',
   },
   {
     icon: '💌',
     title: 'features.message.title',
     desc: 'features.message.desc',
     label: 'features.message.label',
-    path: '/pages/profiles/index',
+    path: '/pages/discovery/self/index',
   },
   {
     icon: '🎭',
@@ -93,21 +93,21 @@ const serviceCards: ServiceCardItem[] = [
     title: 'features.family.title',
     desc: 'features.family.desc',
     label: 'features.family.label',
-    path: '/pages/family/index',
+    path: '/pages/discovery/family/index',
   },
   {
     icon: '💎',
     title: 'features.vip.title',
     desc: 'features.vip.desc',
     label: 'features.vip.label',
-    path: '/pages/membership',
+    path: '/pages/public/membership',
   },
   {
     icon: '🏆',
     title: 'features.story.title',
     desc: 'features.story.desc',
     label: 'features.story.label',
-    path: '/pages/about',
+    path: '/pages/public/about',
   },
 ]
 

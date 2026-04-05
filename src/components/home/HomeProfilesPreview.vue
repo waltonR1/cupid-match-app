@@ -92,7 +92,7 @@ function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewMode
 }
 
 function goProfiles() {
-  uni.navigateTo({ url: '/pages/profiles/index' })
+  uni.navigateTo({ url: '/pages/discovery/self/index' })
 }
 
 function handleProfileOpen(id: string) {

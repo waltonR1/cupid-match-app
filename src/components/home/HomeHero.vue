@@ -84,7 +84,7 @@ const year = new Date().getFullYear()
 
 function openProfiles() {
   uni.navigateTo({
-    url: '/pages/profiles/index',
+    url: '/pages/discovery/self/index',
   })
 }
 

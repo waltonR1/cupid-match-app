@@ -186,7 +186,7 @@ function handleNavClick(key: string) {
 function handleSubmit() {
   auth.loginMock()
   uni.redirectTo({
-    url: '/pages/user/index',
+    url: '/pages/discovery/self/index',
   })
 }
 

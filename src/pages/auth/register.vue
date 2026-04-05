@@ -181,7 +181,7 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { useAppI18n } from '@/i18n/use-app-i18n'
 import { usePageI18n } from '@/i18n/use-page-i18n'
-import { openAccountPage, openLoginPage, openRegisterPage } from '@/utils/demo-navigation'
+import { openLoginPage, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
@@ -283,7 +283,9 @@ function handleNavClick(key: string) {
 }
 
 function handleSubmit() {
-  openAccountPage()
+  uni.redirectTo({
+    url: '/pages/discovery/self/index',
+  })
 }
 
 function handleLoginClick() {
