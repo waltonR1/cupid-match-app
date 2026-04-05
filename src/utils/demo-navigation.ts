@@ -2,7 +2,7 @@ export function openRegisterPage(plan?: string) {
   const query = plan ? `?plan=${encodeURIComponent(plan)}` : ''
 
   uni.navigateTo({
-    url: `/pages/register${query}`,
+    url: `/pages/auth/register${query}`,
   })
 }
 
