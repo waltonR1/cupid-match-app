@@ -10,6 +10,7 @@ import { eventsMessages } from '@/i18n/messages/events'
 import { familyDetailMessages } from '@/i18n/messages/family-detail'
 import { favoritesMessages } from '@/i18n/messages/favorites'
 import { homeMessages } from '@/i18n/messages/home'
+import { loginMessages } from '@/i18n/messages/login'
 import { messagesPageMessages } from '@/i18n/messages/messages-page'
 import { membershipMessages } from '@/i18n/messages/membership'
 import { myEventsMessages } from '@/i18n/messages/my-events'
@@ -25,6 +26,7 @@ export const messages: AppMessages = {
   zh: {
     common: commonMessages.zh,
     home: homeMessages.zh,
+    login: loginMessages.zh,
     about: aboutMessages.zh,
     account: accountMessages.zh,
     profiles: profilesMessages.zh,
@@ -46,6 +48,7 @@ export const messages: AppMessages = {
   fr: {
     common: commonMessages.fr,
     home: homeMessages.fr,
+    login: loginMessages.fr,
     about: aboutMessages.fr,
     account: accountMessages.fr,
     profiles: profilesMessages.fr,
@@ -67,6 +70,7 @@ export const messages: AppMessages = {
   en: {
     common: commonMessages.en,
     home: homeMessages.en,
+    login: loginMessages.en,
     about: aboutMessages.en,
     account: accountMessages.en,
     profiles: profilesMessages.en,

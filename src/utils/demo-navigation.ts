@@ -1,3 +1,9 @@
+export function openLoginPage() {
+  uni.navigateTo({
+    url: '/pages/auth/login',
+  })
+}
+
 export function openRegisterPage(plan?: string) {
   const query = plan ? `?plan=${encodeURIComponent(plan)}` : ''
 

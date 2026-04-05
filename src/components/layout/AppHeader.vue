@@ -162,6 +162,7 @@
 import { ref } from 'vue'
 import { useAppI18n } from '@/i18n/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
+import { openLoginPage } from '@/utils/demo-navigation'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useThemeStore } from '@/stores/modules/theme'
 
@@ -213,7 +214,15 @@ function handleRegister() {
 function handleLogin() {
   closeAllDropdowns()
   emit('login-click')
-  auth.loginMock()
+
+  const pageStack = getCurrentPages()
+  const currentRoute = pageStack.length ? pageStack[pageStack.length - 1].route : ''
+
+  if (currentRoute === 'pages/auth/login') {
+    return
+  }
+
+  openLoginPage()
 }
 
 function handleAccount() {
