@@ -1,14 +1,8 @@
 {
   "shared": {
-    "page": {
-      "inverse": "#0d2238"
-    },
     "surface": {
-      "inverse": "#162f4a",
       "inverse-card": "#203b5a",
-      "inverse-panel": "#132c47",
-      "glass": "#ffffff",
-      "glass-strong": "#ffffff"
+      "inverse-panel": "#132c47"
     },
     "text": {
       "inverse": "#fffaf3",
@@ -24,10 +18,7 @@
       "highlight-strong": "#d4af37",
       "highlight-soft": "#d8c8a8",
       "highlight-warm": "#f4d27f",
-      "rose": "#cf9aa0",
-      "rose-line": "#d08e92",
-      "luxury": "#d7b86e",
-      "luxury-soft": "#d8c8a8"
+      "rose-line": "#d08e92"
     },
     "border": {
       "inverse": "#2a4158",
@@ -41,6 +32,13 @@
       "primary-hover": "#ef233c",
       "highlight": "#d7b86e",
       "highlight-hover": "#e4c783"
+    },
+    "gradient": {
+      "membership-section-haze": "radial-gradient(circle, rgba(255, 250, 243, 0.06), transparent 68%)",
+      "membership-gold-card": "linear-gradient(180deg, #4a3d28 0%, #332818 100%)",
+      "membership-gold-card-glow": "radial-gradient(circle at top right, rgba(215, 184, 110, 0.14), transparent 40%)",
+      "membership-diamond-card": "linear-gradient(135deg, #0f2338 0%, #10263d 46%, #081726 100%)",
+      "membership-diamond-card-glow": "radial-gradient(circle at top right, rgba(215, 184, 110, 0.18), transparent 62%)"
     }
   },
   "themes": {
@@ -59,7 +57,6 @@
         "membership-diamond": "#081726",
         "elevated": "#1d3750",
         "elevated-soft": "#213a54",
-        "hero-float": "#1b3249",
         "hero-float-strong": "#223b55"
       },
       "text": {
@@ -69,8 +66,7 @@
         "body-soft": "#d6c8b5",
         "muted": "#beab91",
         "warm": "#f0d7a7",
-        "subtle": "#ad9c89",
-        "luxe": "#f3e5c6"
+        "subtle": "#ad9c89"
       },
       "brand": {
         "brown": "#d8b67a",
@@ -86,27 +82,21 @@
         "membership-silver": "#8f7652",
         "membership-gold": "#d8b67a",
         "membership-diamond": "#be9a63",
-        "elevated": "#3d5872",
         "hero-float": "#4b6279"
-      },
-      "overlay": {
-        "hero-wash": "rgba(8, 17, 28, 0.18)",
-        "card-shine": "rgba(239, 225, 203, 0.08)"
       },
       "button": {
         "neutral": "#efe1cb",
         "neutral-ink": "#10263b",
         "neutral-contrast": "#10263b",
-        "membership-silver": "#b49469",
-        "membership-silver-hover": "#c5a87d",
         "membership-gold": "#d8b879",
         "membership-gold-hover": "#ebcf95",
         "membership-diamond": "#f0dfc1",
         "membership-diamond-hover": "#f6e7cc"
       },
       "gradient": {
+        "membership-section-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.08), transparent 34%)",
+        "membership-section-orb": "radial-gradient(circle, rgba(215, 184, 110, 0.12), transparent 70%)",
         "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
-        "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 52%, #102842 100%)",
         "events-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
         "membership-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)",
         "auth-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)"
@@ -148,7 +138,6 @@
         "membership-diamond": "#162b40",
         "elevated": "#fffaf3",
         "elevated-soft": "#f7efe5",
-        "hero-float": "#f4eadc",
         "hero-float-strong": "#eadcc8"
       },
       "text": {
@@ -158,8 +147,7 @@
         "body-soft": "#7d6752",
         "muted": "#8a7765",
         "warm": "#8c6b49",
-        "subtle": "#9b907f",
-        "luxe": "#8b6a45"
+        "subtle": "#9b907f"
       },
       "brand": {
         "brown": "#b07d45",
@@ -175,27 +163,21 @@
         "membership-silver": "#c7a77a",
         "membership-gold": "#d7b86e",
         "membership-diamond": "#bc995e",
-        "elevated": "#e6d9c8",
         "hero-float": "#d9c7af"
-      },
-      "overlay": {
-        "hero-wash": "rgba(255, 250, 243, 0.16)",
-        "card-shine": "rgba(176, 125, 69, 0.06)"
       },
       "button": {
         "neutral": "#1f1f1f",
         "neutral-ink": "#1f3047",
         "neutral-contrast": "#fffaf3",
-        "membership-silver": "#cfb190",
-        "membership-silver-hover": "#c09a6f",
         "membership-gold": "#d9bb74",
         "membership-gold-hover": "#e6cb92",
         "membership-diamond": "#f1e3cf",
         "membership-diamond-hover": "#f7ecdc"
       },
       "gradient": {
+        "membership-section-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.10), transparent 30%)",
+        "membership-section-orb": "radial-gradient(circle, rgba(215, 184, 110, 0.10), transparent 72%)",
         "home-hero": "linear-gradient(135deg, #f6efe7 0%, #eadfce 42%, #f8f3eb 100%)",
-        "about-hero": "linear-gradient(135deg, #f7f0e7 0%, #eadfce 48%, #ddd3c7 100%)",
         "events-hero": "linear-gradient(135deg, #2f3a49 0%, #66543f 48%, #875864 100%)",
         "membership-hero": "linear-gradient(135deg, #2f3a49 0%, #5a4b39 52%, #876b47 100%)",
         "auth-hero": "linear-gradient(135deg, #ece2d2 0%, #e2d4c0 46%, #d3c2aa 100%)"

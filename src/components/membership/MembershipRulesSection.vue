@@ -31,7 +31,7 @@
               :key="item.title"
               class="border px-7 py-6 shadow-card"
               :class="item.accent
-                ? 'border-border-luxury-soft bg-brand-highlight/10'
+                ? 'border-border-highlight-soft bg-brand-highlight/10'
                 : 'border-border-base bg-surface-panel'"
             >
               <view class="text-[22px] font-medium" :class="item.accent ? 'text-brand-highlight-strong' : 'text-text-heading'">

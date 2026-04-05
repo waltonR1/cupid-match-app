@@ -67,10 +67,17 @@
 
 `gradient` 会映射到 `backgroundImage`：
 
+- `gradient.membership-section-ambient` -> `bg-membership-section-ambient`
+- `gradient.membership-section-orb` -> `bg-membership-section-orb`
+- `gradient.membership-section-haze` -> `bg-membership-section-haze`
+- `gradient.membership-gold-card` -> `bg-membership-gold-card`
+- `gradient.membership-gold-card-glow` -> `bg-membership-gold-card-glow`
+- `gradient.membership-diamond-card` -> `bg-membership-diamond-card`
+- `gradient.membership-diamond-card-glow` -> `bg-membership-diamond-card-glow`
 - `gradient.home-hero` -> `bg-home-hero`
-- `gradient.about-hero` -> `bg-about-hero`
 - `gradient.events-hero` -> `bg-events-hero`
 - `gradient.membership-hero` -> `bg-membership-hero`
+- `gradient.auth-hero` -> `bg-auth-hero`
 
 ### 4.3 阴影 token
 
@@ -99,6 +106,11 @@
 
 当前已有：
 
+- `hero.secondary-cta.border` -> `--hero-secondary-cta-border`
+- `hero.secondary-cta.bg` -> `--hero-secondary-cta-bg`
+- `hero.secondary-cta.bg-hover` -> `--hero-secondary-cta-bg-hover`
+- `hero.ornament.line` -> `--hero-ornament-line`
+- `hero.ornament.fill` -> `--hero-ornament-fill`
 - `--hero-secondary-cta-border`
 - `--hero-secondary-cta-bg`
 - `--hero-secondary-cta-bg-hover`
@@ -113,13 +125,11 @@
 
 - `page.base`
 - `page.soft`
-- `page.inverse`
 
 推荐用途：
 
 - 页面根容器：`bg-page-base`
 - 柔和背景分区：`bg-page-soft`
-- 深色整屏背景：`bg-page-inverse`
 
 ### 5.2 `surface`
 
@@ -129,13 +139,9 @@
 - `surface.card-soft`
 - `surface.elevated`
 - `surface.elevated-soft`
-- `surface.hero-float`
 - `surface.hero-float-strong`
-- `surface.inverse`
 - `surface.inverse-card`
 - `surface.inverse-panel`
-- `surface.glass`
-- `surface.glass-strong`
 - `surface.membership-silver`
 - `surface.membership-gold`
 - `surface.membership-diamond`
@@ -157,7 +163,6 @@
 - `text.muted`
 - `text.warm`
 - `text.subtle`
-- `text.luxe`
 - `text.inverse`
 - `text.inverse-soft`
 - `text.inverse-muted`
@@ -183,10 +188,7 @@
 - `brand.highlight-strong`
 - `brand.highlight-soft`
 - `brand.highlight-warm`
-- `brand.rose`
 - `brand.rose-line`
-- `brand.luxury`
-- `brand.luxury-soft`
 - `brand.brown`
 - `brand.warm`
 - `brand.rose-deep`
@@ -210,7 +212,6 @@
 - `border.inverse-hover`
 - `border.highlight`
 - `border.highlight-soft`
-- `border.elevated`
 - `border.hero-float`
 - `border.membership-silver`
 - `border.membership-gold`
@@ -232,8 +233,6 @@
 - `button.neutral`
 - `button.neutral-ink`
 - `button.neutral-contrast`
-- `button.membership-silver`
-- `button.membership-silver-hover`
 - `button.membership-gold`
 - `button.membership-gold-hover`
 - `button.membership-diamond`
@@ -378,9 +377,7 @@ Tailwind utility 的 key 是根据 `tailwind.config.js` 里的 `DEFAULT_THEME = 
 
 当前仓库并没有完全遵守上面的规范，主要例外有：
 
-- `src/pages/user/*.vue` 里仍有较多 `bg-[#...]`、`text-[#...]`、`border-[#...]`
-- `src/pages/auth/*.vue` 目前也还是硬编码颜色为主
-- `src/components/home/HomeMembership.vue` 里有一部分特殊色值
+- `src/pages/account/*.vue` 里仍有较多 `bg-[#...]`、`text-[#...]`、`border-[#...]`
 
 这意味着现阶段应该这样理解规范：
 
@@ -402,6 +399,7 @@ Tailwind utility 的 key 是根据 `tailwind.config.js` 里的 `DEFAULT_THEME = 
 
 - `src/components/layout/AppHeader.vue`
 - `src/components/home/HomeHero.vue`
+- `src/components/home/HomeMembership.vue`
 - `src/components/common/directory/DirectoryCardFrame.vue`
 - `src/components/common/detail/DetailHeroPanel.vue`
 
@@ -409,7 +407,6 @@ Tailwind utility 的 key 是根据 `tailwind.config.js` 里的 `DEFAULT_THEME = 
 
 如果后面你还想继续把规范落地，建议按这个顺序做：
 
-1. 先把 `auth` 页面改成 token 写法
-2. 再整理 `user` 页面组
-3. 最后再处理零散组件里的遗留硬编码
-
+1. 先把 `account` 页面组改成 token 写法
+2. 再整理 `membership` 相关组件里仍偏业务耦合的 tier token 命名
+3. 最后再处理零散页面和组件里的遗留硬编码

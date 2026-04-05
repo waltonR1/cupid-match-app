@@ -3,13 +3,13 @@
     <!-- ambient background -->
     <view class="pointer-events-none absolute inset-0">
       <view
-          class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(215,184,110,0.10),transparent_30%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(215,184,110,0.08),transparent_34%)]"
+          class="absolute inset-0 bg-membership-section-ambient"
       />
       <view
-          class="absolute right-[-140px] top-[-20px] h-[300px] w-[300px] rounded-full bg-[radial-gradient(circle,rgba(215,184,110,0.10),transparent_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(215,184,110,0.12),transparent_70%)]"
+          class="absolute right-[-140px] top-[-20px] h-[300px] w-[300px] rounded-full bg-membership-section-orb blur-3xl"
       />
       <view
-          class="absolute bottom-[-120px] left-[-100px] h-[240px] w-[240px] rounded-full bg-[radial-gradient(circle,rgba(255,250,243,0.06),transparent_68%)] blur-3xl"
+          class="absolute bottom-[-120px] left-[-100px] h-[240px] w-[240px] rounded-full bg-membership-section-haze blur-3xl"
       />
     </view>
 
@@ -112,10 +112,10 @@
 
         <!-- gold -->
         <view
-            class="relative flex min-h-[460px] flex-col overflow-hidden border border-border-membership-gold bg-[linear-gradient(180deg,#4a3d28_0%,#332818_100%)] px-5 py-6 shadow-emphasis dark:border-border-membership-gold lg:px-6"
+            class="relative flex min-h-[460px] flex-col overflow-hidden border border-border-membership-gold bg-membership-gold-card px-5 py-6 shadow-emphasis dark:border-border-membership-gold lg:px-6"
         >
           <view class="absolute inset-x-0 top-0 h-px bg-brand-highlight/70" />
-          <view class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(215,184,110,0.14),transparent_40%)]" />
+          <view class="absolute inset-0 bg-membership-gold-card-glow" />
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-brand-highlight-warm">
             {{ t('membership.vip.gold.badge') }}
@@ -172,10 +172,10 @@
 
         <!-- diamond -->
         <view
-            class="relative flex min-h-[490px] flex-col overflow-hidden border border-brand-highlight bg-[linear-gradient(135deg,#0f2338_0%,#10263d_46%,#081726_100%)] px-5 py-6 shadow-luxe ring-1 ring-brand-highlight/18 lg:-translate-y-1 lg:px-6"
+            class="relative flex min-h-[490px] flex-col overflow-hidden border border-brand-highlight bg-membership-diamond-card px-5 py-6 shadow-luxe ring-1 ring-brand-highlight/18 lg:-translate-y-1 lg:px-6"
         >
           <view class="absolute inset-x-0 top-0 h-[2px] bg-brand-highlight" />
-          <view class="absolute inset-y-0 right-0 w-[46%] bg-[radial-gradient(circle_at_top_right,rgba(215,184,110,0.18),transparent_62%)]" />
+          <view class="absolute inset-y-0 right-0 w-[46%] bg-membership-diamond-card-glow" />
 
           <view
               class="relative inline-flex w-fit items-center border border-brand-highlight/35 bg-brand-highlight/10 px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-brand-highlight-warm"
@@ -226,7 +226,7 @@
 
           <view class="relative mt-auto pt-6">
             <view class="mb-3 text-[10px] uppercase tracking-[3px] text-brand-highlight/80">
-              Private Access
+              {{ t('membership.vip.diamond.accessLabel') }}
             </view>
 
             <view
