@@ -114,7 +114,7 @@
 import { computed } from 'vue'
 import AccountPageShell from '@/components/account/AccountPageShell.vue'
 import AccountPerspectiveGrid from '@/components/account/AccountPerspectiveGrid.vue'
-import { useAccountData } from '@/composables/use-account-data'
+import { useAccountData } from '@/components/account/use-account-data'
 import { usePageI18n } from '@/i18n/use-page-i18n'
 
 const { t } = usePageI18n('privacy')
