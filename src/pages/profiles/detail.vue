@@ -34,13 +34,34 @@
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <view class="space-y-6">
-            <DetailSectionPanel :title="t('sections.overview')">
-              <DetailFactGrid :items="overviewFacts" />
-            </DetailSectionPanel>
+            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                {{ t('sections.overview') }}
+              </view>
+
+              <view class="mt-6 grid gap-x-6 gap-y-4 md:grid-cols-2 xl:grid-cols-3">
+                <view
+                  v-for="item in overviewFacts"
+                  :key="item.label"
+                  class="border-b border-border-light pb-3"
+                >
+                  <view class="text-[12px] tracking-[1px] text-text-muted">
+                    {{ item.label }}
+                  </view>
+                  <view class="mt-2 text-[16px] leading-7 text-text-body">
+                    {{ item.value }}
+                  </view>
+                </view>
+              </view>
+            </view>
 
             <view class="grid gap-6 lg:grid-cols-2">
-              <DetailSectionPanel :title="t('sections.relationship')" surface="soft">
-                <view class="border border-border-light bg-surface-card px-5 py-5">
+              <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                  {{ t('sections.relationship') }}
+                </view>
+
+                <view class="mt-6 border border-border-light bg-surface-card px-5 py-5">
                   <view class="text-[12px] tracking-[1px] text-text-muted">
                     {{ t('fields.intent') }}
                   </view>
@@ -56,30 +77,82 @@
                   </view>
                 </view>
 
-                <view class="mt-6">
-                  <DetailFactList :items="relationshipFacts" />
+                <view class="mt-6 grid gap-4">
+                  <view
+                    v-for="item in relationshipFacts"
+                    :key="item.label"
+                    class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                  >
+                    <view class="text-[12px] tracking-[1px] text-text-muted">
+                      {{ item.label }}
+                    </view>
+                    <view class="mt-2 text-[16px] leading-7 text-text-body">
+                      {{ item.value }}
+                    </view>
+                  </view>
                 </view>
-              </DetailSectionPanel>
+              </view>
 
-              <DetailSectionPanel :title="t('sections.lifestyle')">
-                <DetailFactList :items="lifestyleFacts" />
-              </DetailSectionPanel>
+              <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                  {{ t('sections.lifestyle') }}
+                </view>
+
+                <view class="mt-6 grid gap-4">
+                  <view
+                    v-for="item in lifestyleFacts"
+                    :key="item.label"
+                    class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                  >
+                    <view class="text-[12px] tracking-[1px] text-text-muted">
+                      {{ item.label }}
+                    </view>
+                    <view class="mt-2 text-[16px] leading-7 text-text-body">
+                      {{ item.value }}
+                    </view>
+                  </view>
+                </view>
+              </view>
             </view>
           </view>
 
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <DetailSectionPanel :title="t('sections.accessPolicy')" surface="soft" spacing="compact">
-              <view class="text-[16px] leading-8 text-text-body-soft">
+            <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                {{ t('sections.accessPolicy') }}
+              </view>
+              <view class="mt-4 text-[16px] leading-8 text-text-body-soft">
                 {{ t('hero.accessNote') }}
               </view>
-            </DetailSectionPanel>
+            </view>
 
-            <DetailSectionPanel :title="t('sections.curationFocus')">
-              <DetailFactList :items="spotlightFacts" />
-            </DetailSectionPanel>
+            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                {{ t('sections.curationFocus') }}
+              </view>
 
-            <DetailSectionPanel :title="t('sections.highlights')">
-              <view class="grid gap-3">
+              <view class="mt-6 grid gap-4">
+                <view
+                  v-for="item in spotlightFacts"
+                  :key="item.label"
+                  class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                >
+                  <view class="text-[12px] tracking-[1px] text-text-muted">
+                    {{ item.label }}
+                  </view>
+                  <view class="mt-2 text-[16px] leading-7 text-text-body">
+                    {{ item.value }}
+                  </view>
+                </view>
+              </view>
+            </view>
+
+            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                {{ t('sections.highlights') }}
+              </view>
+
+              <view class="mt-6 grid gap-3">
                 <view
                   v-for="item in highlightTexts"
                   :key="item"
@@ -88,11 +161,23 @@
                   {{ item }}
                 </view>
               </view>
-            </DetailSectionPanel>
+            </view>
 
-            <DetailSectionPanel :title="t('sections.tags')" spacing="compact">
-              <DetailTagList :items="tagTexts" />
-            </DetailSectionPanel>
+            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">
+                {{ t('sections.tags') }}
+              </view>
+
+              <view class="mt-4 flex flex-wrap gap-2">
+                <view
+                  v-for="item in tagTexts"
+                  :key="item"
+                  class="rounded-full border border-border-base bg-surface-panel px-3 py-1.5 text-[12px] text-brand-brown"
+                >
+                  {{ item }}
+                </view>
+              </view>
+            </view>
           </view>
         </view>
       </view>
@@ -121,11 +206,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import DetailFactGrid from '@/components/common/detail/DetailFactGrid.vue'
-import DetailFactList from '@/components/common/detail/DetailFactList.vue'
 import DetailHeroPanel from '@/components/common/detail/DetailHeroPanel.vue'
-import DetailSectionPanel from '@/components/common/detail/DetailSectionPanel.vue'
-import DetailTagList from '@/components/common/detail/DetailTagList.vue'
 import { useProfileDetailViewModel } from '@/components/profiles/useProfileDetailViewModel'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/use-page-i18n'

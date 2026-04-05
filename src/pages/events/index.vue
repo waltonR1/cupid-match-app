@@ -17,7 +17,18 @@
       @open="handleEventOpen"
     />
 
-    <EventsStatGrid :items="statCards" />
+    <view class="mx-auto max-w-[1280px] px-8 py-20">
+      <view class="grid gap-5 md:grid-cols-4">
+        <view
+          v-for="item in statCards"
+          :key="item.label"
+          class="border border-border-base bg-surface-card px-6 py-7 shadow-panel"
+        >
+          <view class="text-[12px] uppercase tracking-[4px] text-brand-brown">{{ item.label }}</view>
+          <view class="mt-4 text-[34px] font-semibold text-text-heading">{{ item.value }}</view>
+        </view>
+      </view>
+    </view>
 
     <EventsFeaturedGrid
       :eyebrow="t('featured.eyebrow')"
@@ -48,7 +59,6 @@ import { computed } from 'vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import EventsHero from '@/components/events/EventsHero.vue'
-import EventsStatGrid from '@/components/events/EventsStatGrid.vue'
 import EventsFeaturedGrid from '@/components/events/EventsFeaturedGrid.vue'
 import EventsScheduleList from '@/components/events/EventsScheduleList.vue'
 import type { EventFieldLabels, EventOverviewItem } from '@/components/events/events.types'
