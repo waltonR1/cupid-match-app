@@ -36,5 +36,5 @@ onPageNotFound(({ path }) => {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/*姣忎釜椤甸潰鍏叡css */
+/*每个页面公共css */
 </style>
