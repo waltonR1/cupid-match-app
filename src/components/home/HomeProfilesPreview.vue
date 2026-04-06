@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
 import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
   getHomePreviewProfiles,
   getLocalizedProfileCardData,

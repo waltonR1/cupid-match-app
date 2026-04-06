@@ -160,7 +160,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAppI18n } from '@/i18n/use-app-i18n'
+import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
 import { openLoginPage } from '@/utils/demo-navigation'
 import { useAuthStore } from '@/stores/modules/auth'

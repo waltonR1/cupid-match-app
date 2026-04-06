@@ -111,7 +111,7 @@ import { computed } from 'vue'
 import AccountPageShell from '@/components/account/AccountPageShell.vue'
 import AccountPerspectiveGrid from '@/components/account/AccountPerspectiveGrid.vue'
 import { useAccountData } from '@/components/account/use-account-data'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/demo-navigation'
 
 const { t } = usePageI18n('myEvents')

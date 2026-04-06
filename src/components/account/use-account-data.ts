@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { useLocaleBridge } from '@/i18n/use-locale-bridge'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import {
   getCurrentMockProfile,
   getMockFavorites,

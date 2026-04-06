@@ -1,0 +1,51 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const aboutMessages: AppMessageSchema = {
+    hero: {
+      eyebrow: 'About Us',
+      title: 'A propos',
+      titleAccent: 'de nous',
+      description: 'Rencontre a Paris est une plateforme demo de rencontres pensee depuis Paris pour des celibataires diplomes a l echelle internationale.',
+      secondaryDescription: 'Nous ne voulons pas un espace rapide et superficiel, mais un lieu plus sincere, plus elegant et plus qualitatif.',
+      card1: 'Depuis Paris, nous relions des rencontres de qualite a l echelle mondiale.',
+      card2: 'Le numerique connecte, Paris et l Europe rendent la rencontre reelle.',
+    },
+    origin: {
+      eyebrow: 'Origin',
+      title: 'Pourquoi partir',
+      titleAccent: 'de Paris',
+      description: 'Paris incarne a la fois le romantisme, la culture et l ouverture internationale.',
+      secondaryDescription: 'La ville reste un point de depart symbolique pour une plateforme plus large ouverte a la France, a l Europe et au monde.',
+      card1: { title: 'Paris comme atmosphere de marque', desc: 'Ce n est pas un decor, mais une signature de ton, de culture et de style de vie.' },
+      card2: { title: 'Global et ancre a la fois', desc: 'La plateforme accueille un public international tout en gardant de vrais prolongements hors ligne.' },
+    },
+    audience: {
+      eyebrow: 'Audience',
+      title: 'A qui nous nous',
+      titleAccent: 'adressons',
+      subtitle: 'La plateforme vise des celibataires eduques, ouverts sur le monde, avec une intention claire de relation de qualite.',
+      card1: { title: 'Celibataires diplomes', desc: 'Principalement a partir du niveau licence, avec une attention particuliere a la qualite d echange.' },
+      card2: { title: 'Profils internationaux', desc: 'Des utilisateurs vivant, etudiant ou travaillant a Paris, en France, en Europe ou ailleurs.' },
+      card3: { title: 'Relations serieuses', desc: 'Pense pour ceux qui recherchent une relation durable ou une sociabilite plus qualitative.' },
+      card4: { title: 'Principalement 25-35 ans', desc: 'La cible actuelle reste un public plus mature, plus stable et plus reflechi.' },
+    },
+    difference: {
+      eyebrow: 'Difference',
+      title: 'Ce qui nous rend',
+      titleAccent: 'differents',
+      subtitle: 'Rencontre a Paris ne se limite pas a une vitrine plus elegante : la structure privilegie la relation serieuse et le prolongement reel.',
+      card1: { title: 'Pas de logique purement divertissante', desc: 'La plateforme valorise davantage la relation serieuse, la compatibilite et la qualite d echange.' },
+      card2: { title: 'Participation de la famille', desc: 'Dans des limites plus claires, les familles peuvent aussi trouver une place de soutien.' },
+      card3: { title: 'Les evenements hors ligne au coeur du modele', desc: 'Les rencontres reelles a Paris et en Europe font partie de la structure meme du projet.' },
+    },
+    values: {
+      eyebrow: 'Values',
+      title: 'Nos',
+      titleAccent: 'valeurs',
+      subtitle: 'Nous voulons une plateforme haut de gamme, mais aussi respectueuse, structuree et tournee vers le long terme.',
+      card1: { title: 'Sincerite', desc: 'Les profils, les echanges et les relations doivent reposer sur une base authentique.' },
+      card2: { title: 'Elegance', desc: 'La maniere de communiquer et la qualite de presence comptent autant que le fond.' },
+      card3: { title: 'Qualite', desc: 'Nous privilegions la qualite des profils, des evenements et des liens crees.' },
+      card4: { title: 'Vision long terme', desc: 'Le projet favorise des rencontres qui ont du sens, plutot qu une consommation rapide du social.' },
+    },
+  }

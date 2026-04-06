@@ -1,0 +1,94 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const contactMessages: AppMessageSchema = {
+    hero: {
+      eyebrow: 'Contact',
+      title: 'Nous',
+      titleAccent: 'contacter',
+      description: 'Que vous souhaitiez decouvrir la plateforme, parler a un conseiller, passer au VIP, poser une question sur les evenements ou evoquer une collaboration, vous pouvez nous ecrire ici.',
+      secondaryDescription: 'Nous voulons faire du contact un point de depart clair, respectueux et utile.',
+      actions: {
+        primary: 'Parler a un conseiller',
+      },
+      card1: 'Le contact n est pas un simple formulaire, mais une porte d entree vers le bon service.',
+      card2: 'Des questions d adhesion aux evenements, chaque demande doit etre bien orientee.',
+    },
+    info: {
+      eyebrow: 'Contact Info',
+      title: 'Coordonnees',
+      titleAccent: 'Infos',
+      subtitle: 'Choisissez le canal qui correspond le mieux a votre besoin et nous orienterons ensuite le suivi.',
+      cardLabel: 'Direct',
+      card1: {
+        title: 'Email',
+        desc: 'Pour les demandes formelles concernant la plateforme, les collaborations, les adhesions ou les evenements.',
+        value: '{email}',
+      },
+      card2: {
+        title: 'WeChat conseiller',
+        desc: 'Pour un echange plus direct sur l adhesion, les activites ou une premiere discussion conseil.',
+        value: 'RencontreParis',
+      },
+      card3: {
+        title: 'Ville d ancrage',
+        desc: 'La marque est pensee depuis Paris, avec un developpement hors ligne prioritaire en France et en Europe.',
+        value: 'Paris / France',
+      },
+    },
+    cases: {
+      eyebrow: 'Contact Scenarios',
+      title: 'Pourquoi',
+      titleAccent: 'nous contacter',
+      subtitle: 'La page contact sert aussi a orienter vers differents scenarios reels de la plateforme.',
+      deskLabel: 'Concierge Desk',
+      card1: {
+        title: 'Presentation de la plateforme',
+        desc: 'Decouvrir le positionnement, les profils vises, le multilinguisme et le fonctionnement general.',
+      },
+      card2: {
+        title: 'Questions sur les adhesions',
+        desc: 'Comprendre les differences entre les niveaux VIP et les modalites d evolution.',
+      },
+      card3: {
+        title: 'Evenements et partenariats',
+        desc: 'Poser une question sur les activites a Paris ou en Europe ou envisager une cooperation evenementielle.',
+      },
+      card4: {
+        title: 'Conseil ou mise en relation',
+        desc: 'Echanger autour d un accompagnement plus approfondi pour les personnes orientees relation serieuse.',
+      },
+      card5: {
+        title: 'Questions espace famille',
+        desc: 'Les familles peuvent demander des precisions sur le role, les limites et les formats dedies.',
+      },
+      card6: {
+        title: 'Marque et affaires',
+        desc: 'Pour les medias, lieux partenaires, collaborations de marque ou projets conjoints.',
+      },
+    },
+    guide: {
+      eyebrow: 'Guidance',
+      title: 'Nous voulons rendre',
+      titleAccent: 'le contact plus utile',
+      description: 'Selon la demande, le suivi ne sera pas le meme. Plus votre besoin est clair, plus la reponse pourra etre pertinente.',
+      secondaryDescription: 'Nous cherchons aussi a garder une communication elegante et cadre, plutot qu un echange flou ou interminable.',
+      flow1Label: 'Reply Flow 01',
+      flow2Label: 'Reply Flow 02',
+      tag1: {
+        title: 'Demande claire',
+        desc: 'Permet une meilleure orientation',
+      },
+      tag2: {
+        title: 'Service adapte',
+        desc: 'Chaque sujet a son bon canal',
+      },
+      tag3: {
+        title: 'Respect des limites',
+        desc: 'Le contact doit rester qualitatif',
+      },
+      card1: 'Comprendre d abord le besoin, puis proposer le bon niveau d accompagnement.',
+      card1Sub: 'Toutes les demandes n appellent pas le meme type de suite.',
+      card2: 'Une communication claire et respectueuse fait partie de l experience.',
+      card2Sub: 'Cela vaut aussi pour les conseillers, les evenements et les adhesions.',
+    },
+  }

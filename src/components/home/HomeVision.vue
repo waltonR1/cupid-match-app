@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import {usePageI18n} from '@/i18n/use-page-i18n'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 
 const {t} = usePageI18n('home')
 

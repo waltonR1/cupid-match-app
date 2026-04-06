@@ -1,0 +1,68 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const profilesMessages: AppMessageSchema = {
+    hero: {
+      eyebrow: 'Member Directory',
+      title: 'Member profiles',
+      subtitle: 'Browse the open profile pool, filter first by core dating criteria, then decide which profiles deserve deeper attention.',
+      tags: {
+        first: 'Real profile directory',
+        second: 'Browse then filter',
+        third: 'Paged navigation',
+      },
+    },
+
+    toolbar: {
+      sortLabel: 'Sort',
+    },
+
+    directory: {
+      title: 'Directory',
+      resultPrefix: 'Current result:',
+      resultSuffix: 'profiles',
+      empty: 'No profiles match the current filters.',
+      pagePrefix: 'Showing',
+    },
+
+    filters: {
+      clear: 'Clear all',
+      expand: 'Show filters',
+      collapse: 'Collapse',
+      gender: 'Gender',
+      genderMale: 'Male',
+      genderFemale: 'Female',
+      age: 'Age',
+      city: 'City',
+      height: 'Height',
+      education: 'Education',
+      intent: 'Intent',
+      industry: 'Industry',
+      languages: 'Languages',
+      verified: 'Verification',
+      maritalStatus: 'Marital status',
+      children: 'Children',
+      longDistance: 'Long-distance',
+    },
+
+    fields: {
+      city: 'City',
+      education: 'Education',
+      job: 'Occupation',
+      languages: 'Languages',
+    },
+
+    card: {
+      goalSerious: 'Serious relationship',
+      goalMarriage: 'Marriage-oriented',
+      goalExclusive: 'Long-term path',
+      goalCrossBorder: 'Cross-city potential',
+      labelSelected: 'Selected Profile',
+      labelReview: 'Profile In Review',
+      labelPriority: 'Priority Profile',
+    },
+
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+    },
+  }

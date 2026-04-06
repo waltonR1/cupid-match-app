@@ -209,7 +209,7 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import DetailHeroPanel from '@/components/common/detail/DetailHeroPanel.vue'
 import { useFamilyDetailViewModel } from '@/components/family/useFamilyDetailViewModel'
 import { NAV_LIST } from '@/constants/nav'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 

@@ -1,0 +1,51 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const aboutMessages: AppMessageSchema = {
+    hero: {
+      eyebrow: 'About Us',
+      title: '关于我们',
+      titleAccent: 'A propos',
+      description: '相约巴黎是一套以巴黎为起点、面向全球高学历单身人群的相亲与社交演示站。',
+      secondaryDescription: '我们想呈现的不是快消式社交，而是更真诚、更体面、更有品质的相识空间。',
+      card1: '以巴黎为品牌起点，连接全球高质量的相遇。',
+      card2: '线上连接世界，线下在巴黎与欧洲落地真实相遇。',
+    },
+    origin: {
+      eyebrow: 'Origin',
+      title: '为什么从',
+      titleAccent: '巴黎开始',
+      description: '巴黎兼具浪漫、文化与国际都市特征，天然具备品牌记忆点与情感象征。',
+      secondaryDescription: '平台并不只服务巴黎，而是以巴黎为精神起点，延展到法国、欧洲与更广泛的国际用户。',
+      card1: { title: '巴黎不是背景，而是品牌气质', desc: '它决定了平台在表达、审美和生活方式上的整体感受。' },
+      card2: { title: '全球化并不排斥真实落地', desc: '欢迎国际用户，也重视线下活动和城市场景带来的真实承接。' },
+    },
+    audience: {
+      eyebrow: 'Audience',
+      title: '我们面向',
+      titleAccent: '谁',
+      subtitle: '主要服务于关系目标明确、教育背景较好、重视生活品质与长期发展的单身群体。',
+      card1: { title: '高学历单身人士', desc: '以本科及以上学历为主，更重视沟通质量与背景匹配。' },
+      card2: { title: '国际化生活人群', desc: '包括在巴黎、法国、欧洲及全球生活、学习、工作的用户。' },
+      card3: { title: '认真关系导向', desc: '适合希望寻找长期关系、婚恋发展或高质量社交连接的人群。' },
+      card4: { title: '主要为 25-35 岁', desc: '当前更聚焦成熟、稳定、具备判断力与生活节奏感的人群。' },
+    },
+    difference: {
+      eyebrow: 'Difference',
+      title: '我们与普通相亲平台的',
+      titleAccent: '不同',
+      subtitle: '这不是一套更漂亮的宣传页，而是一套在结构上就更偏认真关系与真实承接的网站。',
+      card1: { title: '不走泛娱乐社交路线', desc: '平台更关注长期关系、认真沟通与价值观契合，而不是无尽刷动和浅层互动。' },
+      card2: { title: '父母参与机制', desc: '在尊重本人意愿的前提下，允许家庭在清晰边界内参与支持与沟通。' },
+      card3: { title: '线下活动是核心能力', desc: '通过巴黎与欧洲活动，让线上匹配真正走向现实中的认识与发展。' },
+    },
+    values: {
+      eyebrow: 'Values',
+      title: '平台',
+      titleAccent: '价值观',
+      subtitle: '我们希望平台不仅高端，也有边界感、尊重感与长期主义。',
+      card1: { title: '真诚', desc: '资料、沟通和关系推进都应建立在真实与坦诚基础上。' },
+      card2: { title: '体面', desc: '无论线上互动还是线下接触，都强调表达方式与相处边界。' },
+      card3: { title: '质量', desc: '比起数量和热闹，我们更重视匹配质量、活动质量与关系质量。' },
+      card4: { title: '长期主义', desc: '希望每一段连接都有更深的意义，而不是停留在短期社交消费。' },
+    },
+  }

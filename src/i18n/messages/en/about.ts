@@ -1,0 +1,51 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const aboutMessages: AppMessageSchema = {
+    hero: {
+      eyebrow: 'About Us',
+      title: 'About',
+      titleAccent: 'Us',
+      description: 'Rencontre a Paris is a Paris-rooted relationship and social demo platform designed for highly educated singles around the world.',
+      secondaryDescription: 'We are not building a low-threshold social product. We want something more sincere, refined, and meaningful.',
+      card1: 'Starting from Paris, we connect high-quality encounters worldwide.',
+      card2: 'Digital connection begins online, while Paris and Europe make real encounters possible.',
+    },
+    origin: {
+      eyebrow: 'Origin',
+      title: 'Why start',
+      titleAccent: 'from Paris',
+      description: 'Paris carries romance, culture, aesthetics, and international openness.',
+      secondaryDescription: 'Paris is the symbolic starting point while the platform extends toward France, Europe, and beyond.',
+      card1: { title: 'Paris as brand atmosphere', desc: 'It is not just a backdrop. It shapes the tone, cultural feeling, and lifestyle image of the platform.' },
+      card2: { title: 'Global, yet grounded', desc: 'The platform welcomes international users while still building real offline presence and community.' },
+    },
+    audience: {
+      eyebrow: 'Audience',
+      title: 'Who we',
+      titleAccent: 'serve',
+      subtitle: 'The platform is designed for educated singles with clear relationship goals, international exposure, and a preference for quality over speed.',
+      card1: { title: 'Highly educated singles', desc: 'Mainly bachelor s degree and above, with strong emphasis on communication quality and personal background.' },
+      card2: { title: 'International users', desc: 'People living, studying, or working in Paris, France, Europe, or elsewhere in the world.' },
+      card3: { title: 'Serious relationship intent', desc: 'Built for people seeking long-term relationships, marriage potential, or meaningful social bonds.' },
+      card4: { title: 'Mostly ages 25-35', desc: 'The current focus is on more mature, stable, and reflective users.' },
+    },
+    difference: {
+      eyebrow: 'Difference',
+      title: 'What makes us',
+      titleAccent: 'different',
+      subtitle: 'This is not just a prettier dating website. Its structure is different from typical entertainment-oriented platforms.',
+      card1: { title: 'Not built for casual entertainment', desc: 'We focus more on serious relationships, better conversations, and value alignment than on endless shallow browsing.' },
+      card2: { title: 'Family participation model', desc: 'Within respectful boundaries, families can also play a supportive role in the relationship journey.' },
+      card3: { title: 'Offline events as a core layer', desc: 'Paris and Europe offline activities are part of how online matching becomes real-world development.' },
+    },
+    values: {
+      eyebrow: 'Values',
+      title: 'Platform',
+      titleAccent: 'values',
+      subtitle: 'We want the platform to feel premium, but also respectful, structured, and long-term in mindset.',
+      card1: { title: 'Sincerity', desc: 'Profiles, conversations, and relationship progress should be built on honesty and authenticity.' },
+      card2: { title: 'Grace', desc: 'How people communicate and respect boundaries matters just as much as the content itself.' },
+      card3: { title: 'Quality', desc: 'We care more about the quality of profiles, events, and encounters than sheer quantity.' },
+      card4: { title: 'Long-term mindset', desc: 'We want every connection to have more meaning rather than becoming short-term social consumption.' },
+    },
+  }

@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAppI18n } from '@/i18n/use-app-i18n'
+import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 
 interface NavItem {
   key: string

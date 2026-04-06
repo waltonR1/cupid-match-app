@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { getHomePreviewEvents, type MockEvent } from '@/mock/events'
 import { pickLocalized } from '@/mock/shared'
 import { openEventDetail } from '@/utils/demo-navigation'

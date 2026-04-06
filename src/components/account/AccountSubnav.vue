@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLocaleBridge } from '@/i18n/use-locale-bridge'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import {
   openAccountPage,
   openFavoritesPage,
@@ -34,7 +34,7 @@ const props = defineProps<{
 
 const { t } = useLocaleBridge()
 
-const items = computed(() => [
+const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [
   { key: 'overview', label: t('account.nav.overview') },
   { key: 'profile', label: t('account.nav.profile') },
   { key: 'events', label: t('account.nav.events') },

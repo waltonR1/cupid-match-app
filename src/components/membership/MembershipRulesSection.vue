@@ -100,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
 const emit = defineEmits<{
   openPlan: [plan: string]

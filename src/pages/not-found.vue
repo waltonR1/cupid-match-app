@@ -28,7 +28,7 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openAccountPage, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 

@@ -54,7 +54,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { usePageI18n } from '@/i18n/use-page-i18n'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
 const { t, locale } = usePageI18n('home')
 
