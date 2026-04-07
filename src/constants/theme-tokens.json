@@ -260,7 +260,28 @@
             "danger": "#d71934"
           }
         },
-          "component": {
+        "component": {
+          "about-hero": {
+            "border": "#ccd8e3",
+            "overlay": {
+              "background-soft": "rgba(19, 44, 71, 0.22)",
+              "background-panel": "rgba(19, 44, 71, 0.13)"
+            },
+            "accent": "#d7b86e",
+            "eyebrow-text": "#d8c8a8",
+            "title-accent": "#d4af37",
+            "description": "#f3ede4",
+            "secondary-description": "#e8dcc6",
+            "ghost-title": "rgba(255, 250, 243, 0.05)"
+          },
+          "about-section": {
+            "accent-line": "#b89055",
+            "emphasis": {
+              "background": "#223548",
+              "border": "#4c6a84",
+              "line": "#d4b273"
+            }
+          },
           "home-events": {
             "card": {
               "background": "#1f3953",
@@ -308,12 +329,11 @@
             },
             "divider": "#4b6279"
           },
-          "home-vision": {
-            "point": {
-              "background": "#213b54",
-              "background-hover": "#294561",
-              "border-hover": "#4f6780"
-            }
+          "point": {
+            "background": "#213b54",
+            "background-hover": "#294561",
+            "border-hover": "#4f6780",
+            "line": "#b89055"
           },
           "home-family": {
             "point": {
@@ -335,12 +355,9 @@
               "button-hover": "#3c5167"
             },
             "gold": {
-              "line": "#d8b879",
+              "accent": "#d8b879",
               "divider": "#76613b",
-              "button-border": "#d8b879",
-              "button-background": "#d8b879",
-              "button-border-hover": "#ebcf95",
-              "button-background-hover": "#ebcf95"
+              "accent-hover": "#ebcf95"
             },
             "diamond": {
               "border": "#be9a63",
@@ -350,10 +367,8 @@
               "line": "#d0ad6f",
               "divider": "#7a6540",
               "access-label": "#d7bc86",
-              "button-border": "#f0dfc1",
-              "button-background": "#f0dfc1",
-              "button-border-hover": "#f6e7cc",
-              "button-background-hover": "#f6e7cc"
+              "button": "#f0dfc1",
+              "button-hover": "#f6e7cc"
             },
             "free": {
               "panel-background": "#1c3349",
@@ -361,6 +376,10 @@
               "button-border": "#354d67",
               "button-hover": "#243a51"
             }
+          },
+          "footer": {
+            "background": "#162c42",
+            "divider": "#3a536d"
           },
           "header": {
             "background": "#0d1f30",
@@ -374,6 +393,7 @@
         },
         "effect": {
           "gradient": {
+            "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
             "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(208, 172, 102, 0.08), transparent 34%)",
             "home-membership-silver-card": "linear-gradient(180deg, #415468 0%, #2e4052 100%)",
@@ -384,6 +404,8 @@
             "home-membership-diamond-glow": "radial-gradient(circle at top right, rgba(215, 184, 110, 0.16), transparent 72%)"
           },
           "shadow": {
+            "about-hero-panel": "0 16px 40px rgba(4, 12, 22, 0.22)",
+            "about-hero-feature": "0 24px 60px rgba(3, 10, 18, 0.28)",
             "panel": "0 20px 48px rgba(4, 12, 22, 0.36)",
             "emphasis": "0 26px 60px rgba(3, 10, 18, 0.44)",
             "dropdown": "0 18px 50px rgba(4, 12, 22, 0.42)",
@@ -435,7 +457,28 @@
             "danger": "#d71934"
           }
         },
-          "component": {
+        "component": {
+          "about-hero": {
+            "border": "#cdbda7",
+            "overlay": {
+              "background-soft": "rgba(255, 250, 243, 0.16)",
+              "background-panel": "rgba(108, 86, 84, 0.5)"
+            },
+            "accent": "#d7b86e",
+            "eyebrow-text": "#e0cfaf",
+            "title-accent": "#d8b24f",
+            "description": "#fff7ed",
+            "secondary-description": "#eadcc7",
+            "ghost-title": "rgba(255, 244, 225, 0.09)"
+          },
+          "about-section": {
+            "accent-line": "#d6b67a",
+            "emphasis": {
+              "background": "#eef3f7",
+              "border": "#cfdae4",
+              "line": "#cda968"
+            }
+          },
           "home-events": {
             "card": {
               "background": "#fbf5ec",
@@ -483,12 +526,11 @@
             },
             "divider": "#d8cbb7"
           },
-          "home-vision": {
-            "point": {
-              "background": "#f9f0e4",
-              "background-hover": "#fef7ee",
-              "border-hover": "#ceb98b"
-            }
+          "point": {
+            "background": "#f9f0e4",
+            "background-hover": "#fef7ee",
+            "border-hover": "#ceb98b",
+            "line": "#d6b67a"
           },
           "home-family": {
             "point": {
@@ -510,12 +552,9 @@
               "button-hover": "#c7c3bd"
             },
             "gold": {
-              "line": "#d9bb74",
+              "accent": "#d9bb74",
               "divider": "#cfb372",
-              "button-border": "#d9bb74",
-              "button-background": "#d9bb74",
-              "button-border-hover": "#e6cb92",
-              "button-background-hover": "#e6cb92"
+              "accent-hover": "#e6cb92"
             },
             "diamond": {
               "border": "#bc995e",
@@ -525,10 +564,8 @@
               "line": "#dfc181",
               "divider": "#b18d54",
               "access-label": "#e0c998",
-              "button-border": "#f1e3cf",
-              "button-background": "#f1e3cf",
-              "button-border-hover": "#f7ecdc",
-              "button-background-hover": "#f7ecdc"
+              "button": "#f1e3cf",
+              "button-hover": "#f7ecdc"
             },
             "free": {
               "panel-background": "#fdf7ee",
@@ -536,6 +573,10 @@
               "button-border": "#e3d7c7",
               "button-hover": "#f8f0e3"
             }
+          },
+          "footer": {
+            "background": "#eee3d3",
+            "divider": "#ded0bc"
           },
           "header": {
             "background": "#f3eadb",
@@ -549,6 +590,7 @@
         },
         "effect": {
           "gradient": {
+            "about-hero": "linear-gradient(135deg, #3a4658 0%, #735e48 48%, #9a6771 100%)",
             "home-hero": "linear-gradient(135deg, #f5ebdc 0%, #eee0cc 42%, #fcf8f1 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.10), transparent 30%)",
             "home-membership-silver-card": "linear-gradient(180deg, #e1ddda 0%, #cbc6bf 100%)",
@@ -559,6 +601,8 @@
             "home-membership-diamond-glow": "radial-gradient(circle at top right, rgba(232, 205, 145, 0.20), transparent 74%)"
           },
           "shadow": {
+            "about-hero-panel": "0 16px 40px rgba(30, 24, 18, 0.08)",
+            "about-hero-feature": "0 24px 60px rgba(35, 30, 22, 0.08)",
             "panel": "0 20px 48px rgba(120, 91, 49, 0.09)",
             "emphasis": "0 26px 58px rgba(173, 136, 78, 0.24)",
             "dropdown": "0 18px 50px rgba(84, 66, 38, 0.12)",

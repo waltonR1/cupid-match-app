@@ -172,7 +172,13 @@ function buildNextTailwindColors(tokens, path = []) {
 
     if (typeof value === 'string') {
       const utilityKey = `next-${nextPath.join('-')}`
-      acc[utilityKey] = `rgb(var(--next-color-${nextPath.join('-')}))`
+
+      if (isHexColor(value)) {
+        acc[utilityKey] = `rgb(var(--next-color-${nextPath.join('-')}) / <alpha-value>)`
+        return acc
+      }
+
+      acc[utilityKey] = `var(--next-raw-color-${nextPath.join('-')})`
       return acc
     }
 
@@ -215,7 +221,12 @@ function flattenNextVariables(tokens, path, variables) {
       }
 
       if (root === 'semantic' || root === 'component') {
-        variables[`--next-color-${nextPath.join('-')}`] = hexToRgbChannels(value)
+        if (isHexColor(value)) {
+          variables[`--next-color-${nextPath.join('-')}`] = hexToRgbChannels(value)
+          return
+        }
+
+        variables[`--next-raw-color-${nextPath.join('-')}`] = value
         return
       }
 
@@ -303,4 +314,8 @@ function hexToRgbChannels(hex) {
   const blue = value & 255
 
   return `${red} ${green} ${blue}`
+}
+
+function isHexColor(value) {
+  return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value)
 }

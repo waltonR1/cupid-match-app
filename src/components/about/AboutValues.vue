@@ -1,23 +1,23 @@
 <template>
-  <view class="bg-page-soft">
+  <view class="bg-next-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="grid gap-10 lg:grid-cols-[1.06fr_0.94fr]">
         <view class="grid gap-6">
-          <view class="relative overflow-hidden border border-border-base bg-surface-panel px-9 py-10 text-text-heading shadow-emphasis">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-accent/55" />
+          <view class="relative overflow-hidden border border-next-semantic-border-default bg-next-semantic-surface-panel px-9 py-10 text-next-semantic-text-primary shadow-next-shadow-emphasis">
+            <view class="absolute inset-x-0 top-0 h-px bg-next-component-about-section-accent-line" />
             <view class="mb-5 inline-flex items-center gap-4">
-              <view class="h-[1px] w-16 bg-brand-accent" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
+              <view class="h-[1px] w-16 bg-next-semantic-accent-secondary" />
+              <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-secondary">
                 {{ t('values.eyebrow') }}
               </text>
             </view>
 
-            <view class="text-[44px] font-semibold leading-tight lg:text-[62px]">
+            <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[62px]">
               {{ t('values.title') }}
-              <text class="italic text-brand-accent">& {{ t('values.titleAccent') }}</text>
+              <text class="italic text-next-semantic-accent-secondary">& {{ t('values.titleAccent') }}</text>
             </view>
 
-            <view class="mt-6 max-w-[560px] text-[19px] italic leading-8 text-text-body-soft lg:text-[20px]">
+            <view class="mt-6 max-w-[560px] text-[19px] italic leading-8 text-next-semantic-text-muted lg:text-[20px]">
               {{ t('values.subtitle') }}
             </view>
           </view>
@@ -26,15 +26,16 @@
             <view
               v-for="item in valueCards.slice(0, 2)"
               :key="item.title"
-              class="border border-border-base bg-surface-card px-8 py-9 shadow-card"
+              class="relative overflow-hidden border border-next-semantic-border-soft bg-next-component-point-background px-8 py-9 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-point-border-hover hover:bg-next-component-point-background-hover hover:shadow-next-shadow-panel"
             >
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+              <view class="absolute inset-x-0 top-0 h-px bg-next-component-point-line" />
+              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
                 {{ item.index }}
               </view>
-              <view class="mt-6 text-[28px] font-semibold text-text-heading">
+              <view class="mt-6 text-[28px] font-semibold text-next-semantic-text-primary">
                 {{ t(item.title) }}
               </view>
-              <view class="mt-5 text-[16px] leading-8 text-text-body">
+              <view class="mt-5 text-[16px] leading-8 text-next-semantic-text-secondary">
                 {{ t(item.desc) }}
               </view>
             </view>
@@ -42,28 +43,28 @@
         </view>
 
         <view class="grid gap-6">
-          <view class="relative overflow-hidden border border-brand-primary/18 bg-brand-primary/8 px-8 py-9 shadow-card lg:mr-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-secondary/45" />
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+          <view class="relative overflow-hidden border border-next-component-about-section-emphasis-border bg-next-component-about-section-emphasis-background px-8 py-9 shadow-next-shadow-panel lg:mr-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-next-component-about-section-emphasis-line" />
+            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
               {{ valueCards[2].index }}
             </view>
-            <view class="mt-6 text-[30px] font-semibold text-text-heading">
+            <view class="mt-6 text-[30px] font-semibold text-next-semantic-text-primary">
               {{ t(valueCards[2].title) }}
             </view>
-            <view class="mt-5 text-[16px] leading-8 text-text-body">
+            <view class="mt-5 text-[16px] leading-8 text-next-semantic-text-secondary">
               {{ t(valueCards[2].desc) }}
             </view>
           </view>
 
-          <view class="relative overflow-hidden border border-border-accent/35 bg-brand-accent/18 px-8 py-9 text-text-heading shadow-emphasis lg:ml-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-brand-accent/70" />
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+          <view class="relative overflow-hidden border border-next-semantic-border-soft bg-next-component-point-background px-8 py-9 text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-point-border-hover hover:bg-next-component-point-background-hover hover:shadow-next-shadow-panel lg:ml-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-next-component-point-line" />
+            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
               {{ valueCards[3].index }}
             </view>
-            <view class="mt-6 text-[30px] font-semibold">
+            <view class="mt-6 text-[30px] font-semibold text-next-semantic-text-primary">
               {{ t(valueCards[3].title) }}
             </view>
-            <view class="mt-5 text-[16px] leading-8 text-text-body">
+            <view class="mt-5 text-[16px] leading-8 text-next-semantic-text-secondary">
               {{ t(valueCards[3].desc) }}
             </view>
           </view>

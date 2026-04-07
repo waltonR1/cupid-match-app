@@ -118,11 +118,11 @@ const variantClass = computed(() => {
   }
 
   if (props.context === 'membership-gold') {
-    return 'border-next-component-home-membership-gold-button-border bg-next-component-home-membership-gold-button-background text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-gold-button-border-hover hover:bg-next-component-home-membership-gold-button-background-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-next-component-home-membership-gold-accent bg-next-component-home-membership-gold-accent text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-gold-accent-hover hover:bg-next-component-home-membership-gold-accent-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
   }
 
   if (props.context === 'membership-diamond') {
-    return 'border-next-component-home-membership-diamond-button-border bg-next-component-home-membership-diamond-button-background text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-diamond-button-border-hover hover:bg-next-component-home-membership-diamond-button-background-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-next-component-home-membership-diamond-button bg-next-component-home-membership-diamond-button text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-diamond-button-hover hover:bg-next-component-home-membership-diamond-button-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
   }
 
   if (props.context === 'membership-free') {

@@ -1,5 +1,5 @@
 <template>
-  <view class="border-t border-next-semantic-border-default bg-next-semantic-page-subtle text-next-semantic-text-secondary">
+  <view class="border-t border-next-semantic-border-default bg-next-component-footer-background text-next-semantic-text-secondary">
     <view class="mx-auto max-w-[1280px] px-8 py-10">
       <!-- 上半部分 -->
       <view class="grid gap-12 md:grid-cols-4">
@@ -63,7 +63,7 @@
     </view>
 
     <!-- 底部收口区 -->
-    <view class="border-t border-next-semantic-border-soft py-4">
+    <view class="border-t border-next-component-footer-divider py-4">
       <view class="text-center text-[12px] tracking-wide text-next-semantic-text-subtle">
         {{ t('common.footer.rights', { year }) }}
       </view>

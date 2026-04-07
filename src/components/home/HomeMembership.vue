@@ -98,14 +98,14 @@
         <view
           class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-semantic-accent-secondary bg-next-gradient-home-membership-gold-card px-5 py-6 shadow-next-shadow-emphasis lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-home-membership-gold-line" />
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-home-membership-gold-accent" />
           <view class="absolute inset-0 bg-next-gradient-home-membership-gold-glow" />
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse-subtle">
             {{ t('membership.vip.gold.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-next-component-home-membership-gold-line" />
+          <view class="relative mt-3 h-px w-10 bg-next-component-home-membership-gold-accent" />
 
           <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-next-semantic-text-inverse lg:text-[32px]">
             {{ t('membership.vip.gold.name') }}

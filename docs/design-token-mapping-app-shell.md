@@ -16,6 +16,12 @@
 - `src/components/home/HomeFeatures.vue`
 - `src/components/home/HomeAudience.vue`
 - `src/components/home/HomeMembership.vue`
+- `src/pages/public/about.vue`
+- `src/components/about/AboutHero.vue`
+- `src/components/about/AboutOrigin.vue`
+- `src/components/about/AboutAudience.vue`
+- `src/components/about/AboutDifference.vue`
+- `src/components/about/AboutValues.vue`
 - `src/constants/theme-tokens.json`
 
 ## Token Semantics
@@ -25,7 +31,7 @@
 #### page
 
 - `next-semantic-page-default`: 页面主背景。用于页面级背景，不用于悬浮容器或应用壳层。
-- `next-semantic-page-subtle`: 页面次级背景。用于 footer、弱分区、页面收口区。
+- `next-semantic-page-subtle`: 页面次级背景。用于普通弱分区，不再建议继续承担 footer 专用背景。
 
 #### surface
 
@@ -71,6 +77,11 @@
 - `next-component-header-menu-hover`: header dropdown/locale 选项 hover 背景。
 - `next-component-header-menu-selected`: header locale 当前选中背景。
 
+#### footer
+
+- `next-component-footer-background`: footer 容器专用背景。用于页面收口，不再复用 `page.subtle`。
+- `next-component-footer-divider`: footer 底部收口分隔线。
+
 ### next.effect
 
 - `shadow-next-shadow-panel`: 轻强调阴影。用于 ghost 按钮 hover，强化浮起感。
@@ -90,7 +101,7 @@
 
 ### AppFooter
 
-- `bg-next-semantic-page-subtle`: page subtle / footer section background
+- `bg-next-component-footer-background`: footer background
 
 ## Text Classification
 
@@ -127,7 +138,7 @@
 ### AppFooter
 
 - `border-next-semantic-border-default`: default
-- `border-next-semantic-border-soft`: soft
+- `border-next-component-footer-divider`: footer divider
 
 ## Issues Identified
 
@@ -151,6 +162,7 @@
 
 - 无 opacity
 - 语义整体比 header 简单，但仍混用了 legacy 的 `page/text/brand/border` 命名体系
+- footer 背景与底部分隔线已独立到 `component.footer`
 
 ## Class Mapping
 
@@ -193,7 +205,7 @@
 | Legacy class | Next class |
 | --- | --- |
 | `border-border-base` | `border-next-semantic-border-default` |
-| `bg-page-soft` | `bg-next-semantic-page-subtle` |
+| `bg-page-soft` | `bg-next-component-footer-background` |
 | `text-text-body` | `text-next-semantic-text-secondary` |
 | `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
 | `text-brand-support-soft` | `text-next-semantic-accent-muted` |
@@ -201,7 +213,7 @@
 | `text-text-body-soft` | `text-next-semantic-text-muted` |
 | `group-hover:text-text-heading` | `group-hover:text-next-semantic-text-primary` |
 | `bg-brand-support` | `bg-next-semantic-accent-secondary` |
-| `border-border-soft` | `border-next-semantic-border-soft` |
+| `border-border-soft` | `border-next-component-footer-divider` |
 | `text-text-subtle` | `text-next-semantic-text-subtle` |
 
 ## Usage Rules For Follow-up Pages
@@ -212,6 +224,9 @@
 - 复用次数达到 3 次及以上再评估沉淀到 `next.semantic`
 - 禁止继续使用 opacity class
 - 禁止将 `page` 语义用于 card、panel、header 这类局部容器
+- `next.semantic` / `next.component` 现在同时支持两类颜色值：
+- `hex` 值会生成支持透明度后缀的 utility，例如 `bg-next-.../40`
+- `rgba(...)` 等原始颜色值会原样输出为 utility，不再叠加透明度后缀
 
 ## AppButton
 
@@ -253,9 +268,10 @@
 - `next-component-hero-ornament-line`: Hero 右侧装饰线。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-hero-ornament-fill`: Hero 右侧装饰填充。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-home-hero-divider`: Hero 数据区分隔线
-- `next-component-home-vision-point-background`: Vision point 卡默认背景
-- `next-component-home-vision-point-background-hover`: Vision point 卡 hover 背景
-- `next-component-home-vision-point-border-hover`: Vision point 卡 hover 边框
+- `next-component-point-background`: Vision / About 常规信息卡默认背景
+- `next-component-point-background-hover`: Vision / About 常规信息卡 hover 背景
+- `next-component-point-border-hover`: Vision / About 常规信息卡 hover 边框
+- `next-component-point-line`: Vision / About 常规信息卡顶部线
 
 ### Background Classification
 
@@ -484,7 +500,9 @@
 - `next-semantic-text-inverse-muted`: 深底卡片正文
 - `next-semantic-text-inverse-subtle`: 深底卡片弱文本
 - `next-component-home-membership-silver-*`: 银卡局部背景、边框、分隔线、按钮边框与 hover
-- `next-component-home-membership-gold-*`: 金卡分隔线与按钮语义
+- `next-component-home-membership-gold-accent`: 金卡顶部线 / 短分隔线 / 按钮主色
+- `next-component-home-membership-gold-accent-hover`: 金卡按钮 hover 主色
+- `next-component-home-membership-gold-divider`: 金卡内容分隔线
 - `next-component-home-membership-diamond-*`: 钻石卡边框、ring、badge、分隔线、access label、按钮语义
 - `next-component-home-membership-free-*`: 免费入口面板与按钮语义
 - `next-effect-gradient-home-membership-ambient`: Membership section 环境背景
@@ -513,11 +531,196 @@
 - 金卡 / 钻石卡正文: `text.inverse / text.inverse-muted / text.inverse-subtle`
 - 业务强调: `accent.primary / accent.muted`
 
+### Current Local Token Consolidation
+
+- `home-membership.gold.line / button-border / button-background` 已合并为 `home-membership.gold.accent`
+- `home-membership.gold.button-border-hover / button-background-hover` 已合并为 `home-membership.gold.accent-hover`
+- `home-membership.diamond.button-border / button-background` 已合并为 `home-membership.diamond.button`
+- `home-membership.diamond.button-border-hover / button-background-hover` 已合并为 `home-membership.diamond.button-hover`
+
 ### Border Classification
 
 - 银卡: `component.home-membership.silver.border`
 - 金卡: `semantic.accent.secondary`
 - 钻石卡: `component.home-membership.diamond.border`
+
+## About Page / AboutHero
+
+### Added Tokens
+
+- `next-effect-gradient-about-hero`: AboutHero 专用背景渐变
+- `next-component-about-hero-border`: AboutHero 当前统一边框
+- `next-component-about-hero-overlay-background-soft`: AboutHero 弱透明背景
+- `next-component-about-hero-overlay-background-panel`: AboutHero 右侧主卡 / 强调卡共用背景
+- `next-component-about-hero-accent`: AboutHero 局部强调线和标签色
+- `next-component-about-hero-eyebrow-text`: AboutHero eyebrow / audience label 文本
+- `next-component-about-hero-title-accent`: AboutHero 标题强调色
+- `next-component-about-hero-description`: AboutHero 主说明文字色
+- `next-component-about-hero-secondary-description`: AboutHero 副说明文字色
+- `next-component-about-hero-ghost-title`: AboutHero 背景大字
+- `next-shadow-about-hero-panel`: AboutHero 主卡阴影
+- `next-shadow-about-hero-feature`: AboutHero 强调卡阴影
+
+### Background Classification
+
+- `about.vue`: `semantic.page.default`
+- `AboutHero`: `effect.gradient.about-hero`
+- `AboutHero` eyebrow / audience card / positioning card: `component.about-hero.overlay`
+- `AboutHero` approach card: `component.about-hero.overlay`
+
+### Text Classification
+
+- `AboutHero` 主标题 / 右侧正文: `text.inverse`
+- `AboutHero` 标题强调: `component.about-hero.title-accent`
+- `AboutHero` 主说明: `component.about-hero.description`
+- `AboutHero` 副说明: `component.about-hero.secondary-description`
+- `AboutHero` eyebrow / audience / approach: `component.about-hero.eyebrow-text`
+- `AboutHero` positioning / 装饰线: `component.about-hero.accent`
+- `AboutHero` 背景大字: `component.about-hero.ghost-title`
+
+### Border Classification
+
+- `AboutHero` 当前 3 处边框已统一：`component.about-hero.border`
+
+### Mapping Summary
+
+#### about.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### AboutHero
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-events-hero` | `bg-next-gradient-about-hero` |
+| `text-text-inverse` | `text-next-semantic-text-inverse` |
+| `border-border-inverse/34` | `border-next-component-about-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-about-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-about-hero-accent` |
+| `text-brand-accent-soft` | `text-next-component-about-hero-eyebrow-text` |
+| `text-brand-accent-strong` | `text-next-component-about-hero-title-accent` |
+| `text-text-inverse-soft` | `text-next-component-about-hero-description` |
+| `text-text-inverse-muted` | `text-next-component-about-hero-secondary-description` |
+| `border-border-inverse/32` | `border-next-component-about-hero-border` |
+| `text-text-inverse/5` | `text-next-component-about-hero-ghost-title` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-about-hero-overlay-background-panel` |
+| `shadow-card` | `shadow-next-shadow-about-hero-panel` |
+| `text-brand-accent` | `text-next-component-about-hero-accent` |
+| `border-brand-accent/32` | `border-next-component-about-hero-border` |
+| `bg-surface-inverse-card/72` | `bg-next-component-about-hero-overlay-background-panel` |
+| `shadow-hero` | `shadow-next-shadow-about-hero-feature` |
+
+## About Sections
+
+### Added Tokens
+
+- `next-component-about-section-accent-line`: about 常规卡顶部线
+- `next-component-about-section-emphasis-background`: about 强调卡背景
+- `next-component-about-section-emphasis-border`: about 强调卡边框
+- `next-component-about-section-emphasis-line`: about 强调卡顶部线
+
+### Background Classification
+
+- `AboutOrigin`: `semantic.page.default`
+- `AboutAudience`: `semantic.page.subtle`
+- `AboutDifference`: `semantic.page.default`
+- `AboutValues`: `semantic.page.subtle`
+- `AboutOrigin` 左侧说明卡: `semantic.surface.soft`
+- `AboutOrigin` / `AboutAudience` / `AboutDifference` / `AboutValues` 常规信息卡: `component.point`
+- `AboutAudience` 第四张卡、`AboutValues` 右侧第一张卡: `component.about-section.emphasis`
+
+### Mapping Summary
+
+#### AboutOrigin
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `border-border-soft` | `border-next-semantic-border-soft` |
+| `bg-surface-card-soft` | `bg-next-semantic-surface-soft` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `border-border-base` | `border-next-semantic-border-soft` |
+| `bg-surface-panel` | `bg-next-component-point-background` |
+| `bg-brand-accent/45` | `bg-next-component-point-line` |
+| `bg-surface-card` | `bg-next-component-point-background` |
+| `bg-brand-accent/55` | `bg-next-component-point-line` |
+
+#### AboutAudience
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-soft` | `bg-next-semantic-page-subtle` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `border-border-base` | `border-next-semantic-border-soft` |
+| `bg-surface-panel` | `bg-next-component-point-background` |
+| `shadow-emphasis` | `shadow-next-shadow-emphasis` |
+| `border-border-soft` | `border-next-semantic-border-soft` |
+| `bg-surface-base` | `bg-next-component-point-background` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+| `border-border-accent/25` | `border-next-component-about-section-emphasis-border` |
+| `bg-brand-accent/10` | `bg-next-component-about-section-emphasis-background` |
+| `bg-brand-accent/55` | `bg-next-component-point-line` |
+| `bg-brand-accent/65` | `bg-next-component-about-section-emphasis-line` |
+| `bg-border-light/80` | `bg-next-component-point-line` |
+
+#### AboutDifference
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `border-border-base` | `border-next-semantic-border-soft` |
+| `bg-surface-panel` | `bg-next-component-point-background` |
+| `shadow-emphasis` | `shadow-next-shadow-emphasis` |
+| `bg-brand-accent/55` | `bg-next-component-point-line` |
+| `bg-surface-base` | `bg-next-component-point-background` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+| `bg-border-light/80` | `bg-next-component-point-line` |
+| `border-border-accent/30` | `border-next-semantic-border-soft` |
+| `bg-brand-accent/10` | `bg-next-component-point-background` |
+| `bg-brand-accent/60` | `bg-next-component-point-line` |
+
+Current code note:
+- `AboutDifference` 当前三张内容卡都已收敛到 `component.point`
+- 左侧标题区保留为 section 主引导，不再额外保留第三张强调卡
+
+#### AboutValues
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-soft` | `bg-next-semantic-page-subtle` |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `bg-surface-panel` | `bg-next-semantic-surface-panel` |
+| `shadow-emphasis` | `shadow-next-shadow-emphasis` |
+| `bg-brand-accent/55` | `bg-next-component-about-section-accent-line` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+| `bg-surface-card` | `bg-next-component-point-background` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+| `border-brand-primary/18` | `border-next-component-about-section-emphasis-border` |
+| `bg-brand-primary/8` | `bg-next-component-about-section-emphasis-background` |
+| `bg-brand-secondary/45` | `bg-next-component-about-section-emphasis-line` |
+| `border-border-accent/35` | `border-next-semantic-border-soft` |
+| `bg-brand-accent/18` | `bg-next-component-point-background` |
+| `bg-brand-accent/70` | `bg-next-component-point-line` |
+
+Current code note:
+- `AboutValues` 右侧仅保留第一张为 `component.about-section.emphasis`
+- 右侧第二张已回收到 `component.home-vision.point`
 - 免费入口: `component.home-membership.free.panel-border`
 
 ### Issues Identified
