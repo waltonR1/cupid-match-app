@@ -1,24 +1,24 @@
 <template>
-  <view class="bg-page-soft text-text-heading">
+  <view class="bg-next-semantic-page-subtle text-next-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
 
       <!-- 标题 -->
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-brand-accent" />
-            <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
+            <view class="h-px w-14 bg-next-semantic-accent-primary" />
+            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
               {{ t('events.eyebrow') }}
             </text>
           </view>
 
-          <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
+          <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
             {{ t('events.title') }}
-            <text class="text-brand-accent-strong"> · {{ t('events.titleAccent') }}</text>
+            <text class="text-next-semantic-accent-primary"> · {{ t('events.titleAccent') }}</text>
           </view>
         </view>
 
-        <view class="max-w-[420px] text-[18px] leading-8 text-text-body-soft">
+        <view class="max-w-[420px] text-[18px] leading-8 text-next-semantic-text-muted">
           {{ t('events.subtitle') }}
         </view>
       </view>
@@ -28,26 +28,26 @@
         <view
           v-for="event in events"
           :key="event.id"
-          class="group cursor-pointer border border-border-base bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-border-accent/50 hover:bg-surface-panel hover:shadow-card"
+          class="group cursor-pointer border border-next-semantic-border-default bg-next-component-home-events-card-background p-6 transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-component-home-events-card-background-hover hover:shadow-next-shadow-panel"
           @click="handleEventOpen(event.id)"
         >
           <!-- 标签 -->
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-accent">
+          <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-primary">
             {{ event.tag }}
           </view>
 
           <!-- 标题 -->
-          <view class="mt-4 text-[22px] font-semibold leading-[1.4]">
+          <view class="mt-4 text-[22px] font-semibold leading-[1.4] text-next-semantic-text-primary">
             {{ event.title }}
           </view>
 
           <!-- 描述 -->
-          <view class="mt-3 text-[15px] leading-7 text-text-body-soft">
+          <view class="mt-3 text-[15px] leading-7 text-next-semantic-text-muted">
             {{ event.desc }}
           </view>
 
           <!-- meta -->
-          <view class="mt-6 text-[13px] text-text-subtle">
+          <view class="mt-6 text-[13px] text-next-semantic-text-subtle">
             {{ event.meta }}
           </view>
         </view>
@@ -55,18 +55,21 @@
 
       <!-- CTA -->
       <view class="mt-12 flex justify-center">
-        <view
-          class="inline-flex min-w-[178px] cursor-pointer items-center justify-center rounded-button border border-brand-accent/35 bg-brand-accent/8 px-8 py-3 text-[15px] tracking-[0.6px] text-brand-support transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-accent hover:bg-brand-accent/16 hover:text-text-heading hover:shadow-panel"
+        <AppButton
+          variant="secondary"
+          context="section"
+          class="min-w-[178px] px-8 tracking-[0.6px]"
           @click="goEvents"
         >
           {{ t('events.cta') }}
-        </view>
+        </AppButton>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+import AppButton from '@/components/common/AppButton.vue'
 import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { getHomePreviewEvents, type MockEvent } from '@/mock/events'

@@ -1,21 +1,21 @@
 <template>
-  <view class="bg-page-base text-text-heading">
+  <view class="bg-next-semantic-page-default text-next-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <!-- 标题区 -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-brand-accent" />
-          <text class="text-[12px] uppercase tracking-[5px] text-brand-support">
+          <view class="h-px w-14 bg-next-semantic-accent-primary" />
+          <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
             {{ t('features.eyebrow') }}
           </text>
         </view>
 
-        <view class="text-[40px] font-semibold leading-[1.06] lg:text-[56px]">
+        <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
           <text>{{ t('features.title') }}</text>
-          <text class="text-brand-accent-strong"> · {{ t('features.titleAccent') }}</text>
+          <text class="text-next-semantic-accent-primary"> · {{ t('features.titleAccent') }}</text>
         </view>
 
-        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-text-body-soft lg:text-[19px]">
+        <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-next-semantic-text-muted lg:text-[19px]">
           {{ t('features.subtitle') }}
         </view>
       </view>
@@ -25,24 +25,24 @@
         <view
           v-for="card in serviceCards"
           :key="card.title"
-          class="flex min-h-[280px] cursor-pointer flex-col border border-border-base bg-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-1 hover:border-border-accent/50 hover:bg-surface-panel hover:shadow-feature"
+          class="flex min-h-[280px] cursor-pointer flex-col border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-semantic-surface-soft hover:shadow-next-shadow-panel"
           @click="openPath(card.path)"
         >
-          <view class="text-[20px] font-semibold uppercase tracking-[2px] text-text-subtle">
+          <view class="text-[20px] font-semibold uppercase tracking-[2px] text-next-semantic-text-subtle">
             {{ card.icon }}
           </view>
 
-          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-brand-accent-strong lg:text-[28px]">
+          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-next-semantic-accent-primary lg:text-[28px]">
             {{ t(card.title) }}
           </view>
 
-          <view class="mt-3 text-[17px] leading-8 text-text-body lg:text-[18px]">
+          <view class="mt-3 text-[17px] leading-8 text-next-semantic-text-secondary lg:text-[18px]">
             {{ t(card.desc) }}
           </view>
 
           <view
             v-if="showBrandLabel"
-            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-brand-support"
+            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-next-semantic-accent-secondary"
           >
             {{ t(card.label) }}
           </view>

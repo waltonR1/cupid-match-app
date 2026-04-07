@@ -3,11 +3,19 @@ const plugin = require('tailwindcss/plugin')
 const themeTokens = require('./src/constants/theme-tokens.json')
 
 const DEFAULT_THEME = 'dark'
-const RAW_TOKEN_ROOTS = new Set(['gradient', 'shadow', 'hero'])
-const THEME_NAMES = Object.keys(themeTokens.themes)
-const sharedTokens = themeTokens.shared
-const themeOverrides = themeTokens.themes
-const baseThemeTokens = getMergedThemeTokens(DEFAULT_THEME)
+
+const LEGACY_RAW_TOKEN_ROOTS = new Set(['gradient', 'shadow', 'hero'])
+const NEXT_COLOR_ROOTS = new Set(['semantic', 'component'])
+const NEXT_EFFECT_ROOTS = new Set(['gradient', 'shadow'])
+
+const LEGACY_THEME_NAMES = Object.keys(themeTokens.legacy.themes)
+const NEXT_THEME_NAMES = Object.keys(themeTokens.next.themes)
+
+const legacySharedTokens = themeTokens.legacy.shared
+const legacyThemeOverrides = themeTokens.legacy.themes
+const legacyBaseThemeTokens = getMergedLegacyThemeTokens(DEFAULT_THEME)
+
+const nextBaseThemeTokens = getMergedNextThemeTokens(DEFAULT_THEME)
 
 module.exports = {
   content: [
@@ -16,19 +24,34 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: buildTailwindColors(baseThemeTokens),
-      backgroundImage: buildRawTokenUtilities('gradient', baseThemeTokens.gradient),
-      boxShadow: buildRawTokenUtilities('shadow', baseThemeTokens.shadow),
+      colors: {
+        ...buildLegacyTailwindColors(legacyBaseThemeTokens),
+        ...buildNextTailwindColors(nextBaseThemeTokens),
+      },
+
+      backgroundImage: {
+        ...buildLegacyRawTokenUtilities('gradient', legacyBaseThemeTokens.gradient),
+        ...buildNextEffectUtilities('gradient', nextBaseThemeTokens.effect?.gradient),
+      },
+
+      boxShadow: {
+        ...buildLegacyRawTokenUtilities('shadow', legacyBaseThemeTokens.shadow),
+        ...buildNextEffectUtilities('shadow', nextBaseThemeTokens.effect?.shadow),
+      },
+
       minWidth: {
         'btn-cta': '190px',
       },
+
       spacing: {
         'btn-cta-x': '1.5rem',
         'btn-cta-y': '1rem',
       },
+
       borderRadius: {
         button: '2px',
       },
+
       keyframes: {
         dropdownFade: {
           '0%': {
@@ -41,11 +64,13 @@ module.exports = {
           },
         },
       },
+
       animation: {
         dropdown: 'dropdownFade 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards',
       },
     },
   },
+
   plugins: [
     plugin(({ addBase }) => {
       addBase(buildThemeBaseStyles())
@@ -53,9 +78,17 @@ module.exports = {
   ],
 }
 
-function buildTailwindColors(tokens, path = []) {
+// ==============================
+// legacy
+// ==============================
+
+function getMergedLegacyThemeTokens(themeName) {
+  return mergeDeep(legacySharedTokens, legacyThemeOverrides[themeName])
+}
+
+function buildLegacyTailwindColors(tokens, path = []) {
   return Object.entries(tokens).reduce((acc, [key, value]) => {
-    if (isRawTokenRoot(key)) {
+    if (isLegacyRawTokenRoot(key)) {
       return acc
     }
 
@@ -66,21 +99,12 @@ function buildTailwindColors(tokens, path = []) {
       return acc
     }
 
-    acc[key] = buildTailwindColors(value, nextPath)
+    acc[key] = buildLegacyTailwindColors(value, nextPath)
     return acc
   }, {})
 }
 
-function buildThemeBaseStyles() {
-  return THEME_NAMES.reduce((styles, themeName) => {
-    styles[`.theme-${themeName}, [data-theme="${themeName}"]`] = buildThemeVariableMap(themeName)
-    return styles
-  }, {
-    ':root': buildThemeVariableMap(DEFAULT_THEME),
-  })
-}
-
-function buildRawTokenUtilities(tokenRoot, tokens) {
+function buildLegacyRawTokenUtilities(tokenRoot, tokens) {
   const tokenEntries = flattenTokenEntries(tokens)
 
   return Object.keys(tokenEntries).reduce((acc, key) => {
@@ -89,25 +113,21 @@ function buildRawTokenUtilities(tokenRoot, tokens) {
   }, {})
 }
 
-function getMergedThemeTokens(themeName) {
-  return mergeDeep(sharedTokens, themeOverrides[themeName])
-}
-
-function buildThemeVariableMap(themeName) {
-  const mergedTokens = getMergedThemeTokens(themeName)
+function buildLegacyThemeVariableMap(themeName) {
+  const mergedTokens = getMergedLegacyThemeTokens(themeName)
   const variables = {}
 
-  flattenVariables(mergedTokens, [], variables)
+  flattenLegacyVariables(mergedTokens, [], variables)
 
   return variables
 }
 
-function flattenVariables(tokens, path, variables) {
+function flattenLegacyVariables(tokens, path, variables) {
   Object.entries(tokens).forEach(([key, value]) => {
     const nextPath = [...path, key]
 
     if (typeof value === 'string') {
-      if (isRawTokenPath(path)) {
+      if (isLegacyRawTokenPath(path)) {
         variables[`--${nextPath.join('-')}`] = value
         return
       }
@@ -116,9 +136,130 @@ function flattenVariables(tokens, path, variables) {
       return
     }
 
-    flattenVariables(value, nextPath, variables)
+    flattenLegacyVariables(value, nextPath, variables)
   })
 }
+
+function isLegacyRawTokenRoot(key) {
+  return LEGACY_RAW_TOKEN_ROOTS.has(key)
+}
+
+function isLegacyRawTokenPath(path) {
+  return LEGACY_RAW_TOKEN_ROOTS.has(path[0])
+}
+
+// ==============================
+// next
+// ==============================
+
+function getMergedNextThemeTokens(themeName) {
+  const theme = themeTokens.next.themes[themeName] || {}
+
+  return {
+    semantic: theme.semantic || {},
+    component: theme.component || {},
+    effect: theme.effect || {},
+  }
+}
+
+function buildNextTailwindColors(tokens, path = []) {
+  return Object.entries(tokens).reduce((acc, [key, value]) => {
+    if (!NEXT_COLOR_ROOTS.has(key) && path.length === 0) {
+      return acc
+    }
+
+    const nextPath = [...path, key]
+
+    if (typeof value === 'string') {
+      const utilityKey = `next-${nextPath.join('-')}`
+      acc[utilityKey] = `rgb(var(--next-color-${nextPath.join('-')}))`
+      return acc
+    }
+
+    Object.assign(acc, buildNextTailwindColors(value, nextPath))
+    return acc
+  }, {})
+}
+
+function buildNextEffectUtilities(effectRoot, tokens = {}) {
+  const tokenEntries = flattenTokenEntries(tokens)
+
+  return Object.keys(tokenEntries).reduce((acc, key) => {
+    acc[`next-${effectRoot}-${key}`] = `var(--next-${effectRoot}-${key})`
+    return acc
+  }, {})
+}
+
+function buildNextThemeVariableMap(themeName) {
+  const mergedTokens = getMergedNextThemeTokens(themeName)
+  const variables = {}
+
+  flattenNextVariables(mergedTokens, [], variables)
+
+  return variables
+}
+
+function flattenNextVariables(tokens, path, variables) {
+  Object.entries(tokens).forEach(([key, value]) => {
+    const nextPath = [...path, key]
+
+    if (typeof value === 'string') {
+      const root = nextPath[0]
+
+      if (root === 'effect') {
+        const [, effectType, ...rest] = nextPath
+        if (NEXT_EFFECT_ROOTS.has(effectType)) {
+          variables[`--next-${effectType}-${rest.join('-')}`] = value
+        }
+        return
+      }
+
+      if (root === 'semantic' || root === 'component') {
+        variables[`--next-color-${nextPath.join('-')}`] = hexToRgbChannels(value)
+        return
+      }
+
+      return
+    }
+
+    flattenNextVariables(value, nextPath, variables)
+  })
+}
+
+// ==============================
+// base styles
+// ==============================
+
+function buildThemeBaseStyles() {
+  const styles = {
+    ':root': {
+      ...buildLegacyThemeVariableMap(DEFAULT_THEME),
+      ...buildNextThemeVariableMap(DEFAULT_THEME),
+    },
+  }
+
+  LEGACY_THEME_NAMES.forEach((themeName) => {
+    const selector = `.theme-${themeName}, [data-theme="${themeName}"]`
+    styles[selector] = {
+      ...(styles[selector] || {}),
+      ...buildLegacyThemeVariableMap(themeName),
+    }
+  })
+
+  NEXT_THEME_NAMES.forEach((themeName) => {
+    const selector = `.theme-${themeName}, [data-theme="${themeName}"]`
+    styles[selector] = {
+      ...(styles[selector] || {}),
+      ...buildNextThemeVariableMap(themeName),
+    }
+  })
+
+  return styles
+}
+
+// ==============================
+// shared utils
+// ==============================
 
 function flattenTokenEntries(tokens, path = [], result = {}) {
   Object.entries(tokens || {}).forEach(([key, value]) => {
@@ -135,18 +276,10 @@ function flattenTokenEntries(tokens, path = [], result = {}) {
   return result
 }
 
-function isRawTokenRoot(key) {
-  return RAW_TOKEN_ROOTS.has(key)
-}
-
-function isRawTokenPath(path) {
-  return RAW_TOKEN_ROOTS.has(path[0])
-}
-
 function mergeDeep(base, override) {
   const result = { ...base }
 
-  Object.entries(override).forEach(([key, value]) => {
+  Object.entries(override || {}).forEach(([key, value]) => {
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       result[key] = mergeDeep(base[key] || {}, value)
       return
@@ -161,8 +294,8 @@ function mergeDeep(base, override) {
 function hexToRgbChannels(hex) {
   const normalized = hex.replace('#', '')
   const full = normalized.length === 3
-    ? normalized.split('').map(char => `${char}${char}`).join('')
-    : normalized
+      ? normalized.split('').map((char) => `${char}${char}`).join('')
+      : normalized
 
   const value = Number.parseInt(full, 16)
   const red = (value >> 16) & 255
