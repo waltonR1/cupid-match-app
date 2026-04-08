@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav="common.nav.events"
@@ -17,23 +17,11 @@
       @open="handleEventOpen"
     />
 
-    <view class="mx-auto max-w-[1280px] px-8 py-20">
-      <view class="grid gap-5 md:grid-cols-4">
-        <view
-          v-for="item in statCards"
-          :key="item.label"
-          class="border border-border-base bg-surface-card px-6 py-7 shadow-panel"
-        >
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-support">{{ item.label }}</view>
-          <view class="mt-4 text-[34px] font-semibold text-text-heading">{{ item.value }}</view>
-        </view>
-      </view>
-    </view>
-
     <EventsFeaturedGrid
       :eyebrow="t('featured.eyebrow')"
       :title="t('featured.title')"
       :subtitle="t('featured.subtitle')"
+      :stats="statCards"
       :fields="fieldLabels"
       :events="featuredEventCards"
       @open="handleEventOpen"

@@ -437,6 +437,8 @@
 
 - `HomeEventsPreview`: `semantic.page.subtle`
 - `HomeEventsPreview` event 卡: `component.home-events.card`
+  - 现已复用 `EventOverviewCard`
+  - 卡片内容来自 `mock/events`
 - `HomeFeatures`: `semantic.page.default`
 - `HomeFeatures` service 卡: `semantic.surface.card`
 - `HomeAudience`: `semantic.page.subtle`
@@ -448,6 +450,11 @@
 ### Mapping Summary
 
 #### HomeEventsPreview
+
+Current structure note:
+- `HomeEventsPreview` 当前不再维护首页私有的简化 event card
+- 首页活动卡与 `events/index` 统一复用 `EventOverviewCard`
+- 卡片内容由 `mock/events` 组装，不再沿用旧的 `tag / desc / meta` 结构
 
 | Legacy class | Next class |
 | --- | --- |
@@ -996,3 +1003,113 @@ Current code note:
 - `component.principle-card.background` 与 `semantic.surface.panel` 在 light 目前同值。后续依据 principle-card 的复用范围决定是回收还是继续保留独立调色空间。
 - `component.section-card.hover-border` 与 `component.home-audience.tag.border-hover` 在 light 目前同值。若更多卡片继续复用，可考虑再上提。
 - `component.home-audience.tag.background-hover` 与 `component.home-family.point.background-hover` 在 light 目前同值。当前先记录，不主动合并。
+
+# Events Index / Hero
+
+## Background Classification
+
+- `events/index.vue`: `semantic.page.default`
+- `EventsFeaturedGrid`: `semantic.page.subtle`
+- `EventsFeaturedGrid` stats cards: `semantic.surface.card`
+- `EventsScheduleList`: `semantic.page.default`
+- `EventsHero`: `effect.gradient.events-hero`
+- `EventsHero` eyebrow: `component.hero.overlay.background-soft`
+- `EventsHero` next-event card: `component.hero.overlay.background-panel`
+- `EventsHero` 右侧三圈装饰: `component.hero-ornament.line`
+
+## Text Classification
+
+- `EventsHero` 主标题: `semantic.text.inverse`
+- `EventsHero` 主说明: `component.hero.description`
+- `EventsHero` next-event label: `component.section-label`
+- `EventsHero` next-event fields: `component.hero.secondary-description`
+- `EventsHero` next-event summary: `semantic.text.inverse-muted`
+- `EventsFeaturedGrid` stats label: `semantic.accent.secondary`
+- `EventsFeaturedGrid` stats value: `semantic.text.primary`
+
+## Border Classification
+
+- `EventsHero` eyebrow: `component.hero.border`
+- `EventsHero` next-event card: `component.hero.border`
+- `EventStatusBadge` waitlist / closed: `component.hero.border`
+- `EventsFeaturedGrid` stats cards: `semantic.border.default`
+
+## Mapping Summary
+
+#### events/index.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### EventsHero.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-events-hero` | `bg-next-gradient-events-hero` |
+| right-side orbit decoration | `border-next-component-hero-ornament-line` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-section-line` |
+| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
+| `text-brand-accent` | `text-next-component-section-label` |
+| `text-text-inverse-muted` | `text-next-semantic-text-inverse-muted` |
+
+#### EventStatusBadge.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| open badge | `semantic.state.open.background/border/text/dot` |
+| waitlist badge | `semantic.state.waitlist.background/border/text/dot` |
+| closed badge | `semantic.state.closed.background/border/text/dot` |
+
+#### EventsFeaturedGrid.vue
+
+Current structure note:
+- `EventsFeaturedGrid` 当前内部顺序是：
+  - header / intro
+  - stats cards
+  - featured event cards
+- featured event cards 已抽成共享 `EventOverviewCard`
+- section wrapper: `bg-next-semantic-page-subtle`
+
+| Legacy class | Next class |
+| --- | --- |
+| `text-brand-support` | `text-next-component-section-label` / `text-next-semantic-accent-secondary` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+| `text-text-body` | `text-next-semantic-text-secondary` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+| `text-text-muted` | `text-next-semantic-text-subtle` |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `border-border-light` | `border-next-semantic-border-soft` |
+| `bg-surface-base` | `bg-next-component-home-events-card-background` |
+| `shadow-panel` | `shadow-next-panel` |
+| `hover:border-border-accent/50` | `hover:border-next-component-section-card-hover-border` |
+| `hover:bg-surface-panel` | `hover:bg-next-component-home-events-card-background-hover` |
+| `hover:shadow-card` | `hover:shadow-next-about-hero-panel` |
+| stats `border-border-base` | `border-next-semantic-border-default` |
+| stats `bg-surface-card` | `bg-next-semantic-surface-card` |
+| stats `shadow-panel` | `shadow-next-panel` |
+| stats `text-brand-support` | `text-next-semantic-accent-secondary` |
+| stats `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### EventsScheduleList.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+| `bg-border-base/55` | `bg-next-component-section-line opacity-45` |
+| `text-brand-support` | `text-next-component-section-label` / `text-next-semantic-accent-secondary` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `bg-surface-card` | `bg-next-component-home-events-card-background` |
+| `shadow-panel` | `shadow-next-panel` |
+| `hover:border-brand-accent/24` | `hover:border-next-component-section-card-hover-border` |
+| `hover:bg-surface-base` | `hover:bg-next-component-home-events-card-background-hover` |
+| `hover:shadow-card` | `hover:shadow-next-about-hero-panel` |
+| `bg-brand-accent/18` | `bg-next-component-section-line opacity-*` |
+| `text-text-muted` | `text-next-semantic-text-subtle` |
+| `border-border-light` | `border-next-semantic-border-soft` |

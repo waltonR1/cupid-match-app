@@ -1,8 +1,6 @@
 <template>
   <view class="bg-next-semantic-page-subtle text-next-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-
-      <!-- 标题 -->
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
@@ -23,37 +21,16 @@
         </view>
       </view>
 
-      <!-- 卡片 -->
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <view
+        <EventOverviewCard
           v-for="event in events"
           :key="event.id"
-          class="group cursor-pointer border border-next-semantic-border-default bg-next-component-home-events-card-background p-6 transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-component-home-events-card-background-hover hover:shadow-next-shadow-panel"
-          @click="handleEventOpen(event.id)"
-        >
-          <!-- 标签 -->
-          <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-primary">
-            {{ event.tag }}
-          </view>
-
-          <!-- 标题 -->
-          <view class="mt-4 text-[22px] font-semibold leading-[1.4] text-next-semantic-text-primary">
-            {{ event.title }}
-          </view>
-
-          <!-- 描述 -->
-          <view class="mt-3 text-[15px] leading-7 text-next-semantic-text-muted">
-            {{ event.desc }}
-          </view>
-
-          <!-- meta -->
-          <view class="mt-6 text-[13px] text-next-semantic-text-subtle">
-            {{ event.meta }}
-          </view>
-        </view>
+          :event="event"
+          :fields="fieldLabels"
+          @open="handleEventOpen"
+        />
       </view>
 
-      <!-- CTA -->
       <view class="mt-12 flex justify-center">
         <AppButton
           variant="secondary"
@@ -70,6 +47,8 @@
 
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
+import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
+import type { EventFieldLabels, EventOverviewItem } from '@/components/events/events.types'
 import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { getHomePreviewEvents, type MockEvent } from '@/mock/events'
@@ -79,15 +58,65 @@ import { openEventDetail } from '@/utils/demo-navigation'
 const { t, locale } = usePageI18n('home')
 const previewEvents = getHomePreviewEvents()
 
-const events = computed(() =>
+const fieldLabelsByLocale: Record<'zh' | 'fr' | 'en', Pick<EventFieldLabels, 'city' | 'venue' | 'format' | 'audience' | 'seats'>> = {
+  zh: {
+    city: '城市',
+    venue: '场地',
+    format: '形式',
+    audience: '适合人群',
+    seats: '席位',
+  },
+  fr: {
+    city: 'Ville',
+    venue: 'Lieu',
+    format: 'Format',
+    audience: 'Public',
+    seats: 'Places',
+  },
+  en: {
+    city: 'City',
+    venue: 'Venue',
+    format: 'Format',
+    audience: 'Audience',
+    seats: 'Seats',
+  },
+}
+
+const fieldLabels = computed(() => fieldLabelsByLocale[locale.value])
+
+const events = computed<EventOverviewItem[]>(() =>
   previewEvents.map(event => ({
     id: event.id,
-    tag: formatDate(event.date),
+    date: formatDate(event.date),
     title: localize(event.title),
-    desc: localize(event.summary),
-    meta: `${localize(event.city)} | ${localize(event.venue)}`,
+    summary: localize(event.summary),
+    city: localize(event.city),
+    venue: localize(event.venue),
+    format: localize(event.format),
+    audience: localize(event.audience),
+    seats: `${event.registered} / ${event.seats}`,
+    status: event.status,
+    statusLabel: statusLabelByLocale[locale.value][event.status],
   })),
 )
+
+const statusLabelByLocale = {
+  zh: {
+    open: '报名中',
+    waitlist: '候补',
+    closed: '已满额',
+  },
+  fr: {
+    open: 'Ouvert',
+    waitlist: 'Attente',
+    closed: 'Complet',
+  },
+  en: {
+    open: 'Open',
+    waitlist: 'Waitlist',
+    closed: 'Full',
+  },
+} as const
 
 function localize(text: MockEvent['title']) {
   return pickLocalized(locale.value, text)

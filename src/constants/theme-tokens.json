@@ -257,6 +257,24 @@
             "primary-contrast": "#10263B"
           },
           "state": {
+            "open": {
+              "background": "#D3B46E",
+              "border": "#D3B46E",
+              "text": "#10263B",
+              "dot": "#10263B"
+            },
+            "waitlist": {
+              "background": "#2C4A5B",
+              "border": "#7FB6C9",
+              "text": "#EDF8FC",
+              "dot": "#7FB6C9"
+            },
+            "closed": {
+              "background": "#173047",
+              "border": "#6D849A",
+              "text": "#D9D0C4",
+              "dot": "#D9D0C4"
+            },
             "info": "#173047",
             "success": "#263646",
             "warning": "#3b3326",
@@ -400,6 +418,7 @@
         },
         "effect": {
           "gradient": {
+            "events-hero": "linear-gradient(135deg, #0d2238 0%, #183354 44%, #5c2740 100%)",
             "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
             "contact-hero": "linear-gradient(135deg, #0d2238 0%, #183354 40%, #5c2740 100%)",
             "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
@@ -463,6 +482,24 @@
             "primary-contrast":"#1F3047"
           },
           "state": {
+            "open": {
+              "background": "#CFB067",
+              "border": "#CFB067",
+              "text": "#1F3047",
+              "dot": "#1F3047"
+            },
+            "waitlist": {
+              "background": "#E2F0F5",
+              "border": "#82AFC0",
+              "text": "#2F5564",
+              "dot": "#4F89A0"
+            },
+            "closed": {
+              "background": "#F4ECE2",
+              "border": "#CDBBA7",
+              "text": "#928574",
+              "dot": "#928574"
+            },
             "info": "#faf7f1",
             "success": "#f1e8dd",
             "warning": "#ead7ab",
@@ -606,6 +643,7 @@
         },
         "effect": {
           "gradient": {
+            "events-hero": "linear-gradient(135deg, #3d4a5d 0%, #6f5a48 44%, #8c6772 100%)",
             "about-hero": "linear-gradient(135deg, #3a4658 0%, #735e48 48%, #9a6771 100%)",
             "contact-hero": "linear-gradient(135deg, #39485c 0%, #6c5b4a 40%, #8b6974 100%)",
             "home-hero": "linear-gradient(135deg, #f5ebdc 0%, #eee0cc 42%, #fcf8f1 100%)",
