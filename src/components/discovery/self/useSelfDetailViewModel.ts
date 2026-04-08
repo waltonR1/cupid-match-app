@@ -6,7 +6,7 @@ import {
   type DetailTranslator,
 } from '@/utils/detail-view-model'
 
-export function useProfileDetailViewModel(
+export function useSelfDetailViewModel(
   profileId: Ref<string>,
   locale: Ref<AppLocale>,
   t: DetailTranslator,

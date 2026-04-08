@@ -1,12 +1,12 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
-export const profileDetailMessages: AppMessageSchema = {
+export const selfDetailMessages: AppMessageSchema = {
     hero: {
       eyebrow: '会员档案',
       accessNote: '当前先展示完整资料档案，会员等级、联系权限与更细的资料开放规则后续再接入。',
     },
     actions: {
-      backToProfiles: '返回会员筛选',
+      backToSelf: '返回会员筛选',
       backToFamily: '返回家庭参与',
     },
     badges: {

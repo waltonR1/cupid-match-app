@@ -6,12 +6,12 @@ export interface DirectoryOption {
 }
 
 export interface ActiveDirectoryFilterChip {
-    key: keyof ProfilesDirectoryFilters
+    key: keyof SelfDirectoryFilters
     label: string
     value: string
 }
 
-export interface ProfilesDirectoryFilters {
+export interface SelfDirectoryFilters {
     gender: string
     ageRange: string
     city: string
@@ -28,15 +28,15 @@ export interface ProfilesDirectoryFilters {
     acceptLongDistance: string
 }
 
-export type ProfilesSortKey =
+export type SelfSortKey =
     | 'recentActive'
     | 'priorityFirst'
     | 'ageAsc'
     | 'ageDesc'
 
-export interface UseProfilesDirectoryResult<TProfile> {
-    filters: Ref<ProfilesDirectoryFilters>
-    sortKey: Ref<ProfilesSortKey>
+export interface UseSelfDirectoryResult<TProfile> {
+    filters: Ref<SelfDirectoryFilters>
+    sortKey: Ref<SelfSortKey>
     page: Ref<number>
     pageSize: Ref<number>
 
@@ -64,8 +64,8 @@ export interface UseProfilesDirectoryResult<TProfile> {
     longDistanceOptions: ComputedRef<DirectoryOption[]>
     sortOptions: ComputedRef<DirectoryOption[]>
 
-    updateFilters: (nextFilters: Partial<ProfilesDirectoryFilters>) => void
-    removeFilter: (key: keyof ProfilesDirectoryFilters) => void
+    updateFilters: (nextFilters: Partial<SelfDirectoryFilters>) => void
+    removeFilter: (key: keyof SelfDirectoryFilters) => void
     resetFilters: () => void
     updateSort: (nextSortKey: string) => void
     changePage: (nextPage: number) => void

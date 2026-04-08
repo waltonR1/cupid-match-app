@@ -1,12 +1,12 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
-export const profileDetailMessages: AppMessageSchema = {
+export const selfDetailMessages: AppMessageSchema = {
     hero: {
       eyebrow: 'Member dossier',
       accessNote: 'The page currently shows the full profile dossier. Membership gates, contact permissions, and finer access rules can be layered in later.',
     },
     actions: {
-      backToProfiles: 'Back to member filtering',
+      backToSelf: 'Back to member filtering',
       backToFamily: 'Back to family participation',
     },
     badges: {

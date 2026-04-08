@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-page-soft text-text-heading">
     <AppHeader
       :nav-list="navList"
-      active-nav="common.nav.profiles"
+      active-nav="common.nav.self"
       @nav-click="handleNavClick"
       @register-click="handleRegisterClick"
     />
@@ -26,7 +26,7 @@
             stroke-linejoin="round"
           />
         </svg>
-        <text>{{ t('actions.backToProfiles') }}</text>
+        <text>{{ t('actions.backToSelf') }}</text>
       </view>
 
       <view v-if="heroData" class="space-y-6">
@@ -186,7 +186,7 @@
         v-else
         :title="t('sections.notFoundTitle')"
         :subtitle="t('sections.notFoundSubtitle')"
-        :primary-text="t('actions.backToProfiles')"
+        :primary-text="t('actions.backToSelf')"
         primary-variant="outline"
         variant="compact"
         @primary="handleBack"
@@ -207,14 +207,14 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import DetailHeroPanel from '@/components/common/detail/DetailHeroPanel.vue'
-import { useProfileDetailViewModel } from '@/components/profiles/useProfileDetailViewModel'
+import { useSelfDetailViewModel } from '@/components/discovery/self/useSelfDetailViewModel'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('profileDetail')
+const { t, locale } = usePageI18n('selfDetail')
 
 const profileId = ref('')
 
@@ -234,7 +234,7 @@ const {
   maritalPlanText,
   highlightTexts,
   tagTexts,
-} = useProfileDetailViewModel(profileId, locale, t)
+} = useSelfDetailViewModel(profileId, locale, t)
 
 function handleBack() {
   if (getCurrentPages().length > 1) {

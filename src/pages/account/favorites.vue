@@ -157,7 +157,7 @@ import AccountPageShell from '@/components/account/AccountPageShell.vue'
 import AccountPerspectiveGrid from '@/components/account/AccountPerspectiveGrid.vue'
 import { useAccountData } from '@/components/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openFamilyProfileDetail, openProfileDetail } from '@/utils/demo-navigation'
+import { openFamilyProfileDetail, openSelfDetail } from '@/utils/demo-navigation'
 
 const { t } = usePageI18n('favorites')
 const { favorites, familyVisibleFavorites, privateFavorites, localize, formatDate } = useAccountData()
@@ -195,7 +195,7 @@ const perspectiveItems = computed(() => [
 ])
 
 function openUserProfile(id: string) {
-  openProfileDetail(id)
+  openSelfDetail(id)
 }
 
 function openFamilyProfile(id: string) {

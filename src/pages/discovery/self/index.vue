@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-page-base text-text-heading">
     <AppHeader
       :nav-list="navList"
-      active-nav="common.nav.profiles"
+      active-nav="common.nav.self"
       @nav-click="handleNavClick"
       @register-click="handleRegisterClick"
     />
@@ -15,7 +15,7 @@
         :tags="heroTags"
       />
 
-      <ProfilesFilterToolbar
+      <SelfFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
         :expand-text="t('filters.expand')"
@@ -109,16 +109,16 @@ import DirectoryPagination from '@/components/common/directory/DirectoryPaginati
 import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import ProfilesFilterToolbar from '@/components/profiles/ProfilesFilterToolbar.vue'
-import type { ProfilesDirectoryFilters } from '@/components/profiles/profiles.types'
-import { useProfilesDirectory } from '@/components/profiles/useProfilesDirectory'
+import SelfFilterToolbar from '@/components/discovery/self/SelfFilterToolbar.vue'
+import type { SelfDirectoryFilters } from '@/components/discovery/self/self.types'
+import { useSelfDirectory } from '@/components/discovery/self/useSelfDirectory'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { NAV_LIST } from '@/constants/nav'
 import { getLocalizedProfileCardData, type MockProfile } from '@/mock/business'
 import { navigateByNavKey } from '@/utils/navigation'
-import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
+import { openSelfDetail, openRegisterPage } from '@/utils/demo-navigation'
 
-const { t, locale } = usePageI18n('profiles')
+const { t, locale } = usePageI18n('self')
 const navList = NAV_LIST
 
 const {
@@ -150,7 +150,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
-} = useProfilesDirectory()
+} = useSelfDirectory()
 
 const heroTags = computed(() => [
   t('hero.tags.first'),
@@ -191,7 +191,7 @@ function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewMode
   }
 }
 
-function handleUpdateFilters(nextFilters: Partial<ProfilesDirectoryFilters>) {
+function handleUpdateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
   updateFilters(nextFilters)
 }
 
@@ -199,7 +199,7 @@ function handleResetFilters() {
   resetFilters()
 }
 
-function handleRemoveFilter(key: keyof ProfilesDirectoryFilters) {
+function handleRemoveFilter(key: keyof SelfDirectoryFilters) {
   removeFilter(key)
 }
 
@@ -220,6 +220,6 @@ function handleRegisterClick() {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id)
+  openSelfDetail(id)
 }
 </script>

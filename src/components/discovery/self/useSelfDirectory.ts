@@ -11,12 +11,12 @@ import type { MockProfile } from '@/mock/business'
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
-  ProfilesDirectoryFilters,
-  ProfilesSortKey,
-  UseProfilesDirectoryResult,
-} from './profiles.types'
+  SelfDirectoryFilters,
+  SelfSortKey,
+  UseSelfDirectoryResult,
+} from './self.types'
 
-const DEFAULT_FILTERS: ProfilesDirectoryFilters = {
+const DEFAULT_FILTERS: SelfDirectoryFilters = {
   gender: '',
   ageRange: '',
   city: '',
@@ -50,7 +50,7 @@ function resolveOptionLabel(options: DirectoryOption[], value: string) {
 }
 
 function buildActiveChip(
-  key: keyof ProfilesDirectoryFilters,
+  key: keyof SelfDirectoryFilters,
   label: string,
   options: DirectoryOption[],
   value: string,
@@ -165,11 +165,11 @@ function getPriorityRank(profile: MockProfile) {
   return profile.status === 'vip' ? 0 : 1
 }
 
-export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> {
-  const { locale, t } = usePageI18n('profiles')
+export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
+  const { locale, t } = usePageI18n('self')
 
-  const filters = ref<ProfilesDirectoryFilters>({ ...DEFAULT_FILTERS })
-  const sortKey = ref<ProfilesSortKey>('recentActive')
+  const filters = ref<SelfDirectoryFilters>({ ...DEFAULT_FILTERS })
+  const sortKey = ref<SelfSortKey>('recentActive')
   const page = ref(1)
   const pageSize = ref(6)
 
@@ -433,7 +433,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
     return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
   })
 
-  function updateFilters(nextFilters: Partial<ProfilesDirectoryFilters>) {
+  function updateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
     filters.value = {
       ...filters.value,
       ...nextFilters,
@@ -441,7 +441,7 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
     page.value = 1
   }
 
-  function removeFilter(key: keyof ProfilesDirectoryFilters) {
+  function removeFilter(key: keyof SelfDirectoryFilters) {
     updateFilters({ [key]: '' })
   }
 
@@ -452,16 +452,16 @@ export function useProfilesDirectory(): UseProfilesDirectoryResult<MockProfile> 
   }
 
   function updateSort(nextSortKey: string) {
-    const allowed: ProfilesSortKey[] = [
+    const allowed: SelfSortKey[] = [
       'recentActive',
       'priorityFirst',
       'ageAsc',
       'ageDesc',
     ]
 
-    if (!allowed.includes(nextSortKey as ProfilesSortKey)) return
+    if (!allowed.includes(nextSortKey as SelfSortKey)) return
 
-    sortKey.value = nextSortKey as ProfilesSortKey
+    sortKey.value = nextSortKey as SelfSortKey
     page.value = 1
   }
 

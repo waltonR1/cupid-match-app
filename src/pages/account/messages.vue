@@ -128,7 +128,7 @@ import AccountPageShell from '@/components/account/AccountPageShell.vue'
 import AccountPerspectiveGrid from '@/components/account/AccountPerspectiveGrid.vue'
 import { useAccountData } from '@/components/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openProfileDetail } from '@/utils/demo-navigation'
+import { openSelfDetail } from '@/utils/demo-navigation'
 
 const { t } = usePageI18n('messages')
 const { threads, unreadCount, familyVisibleThreads, localize, formatDateTime } = useAccountData()
@@ -177,6 +177,6 @@ const boundaryPoints = computed(() => [
 ])
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id)
+  openSelfDetail(id)
 }
 </script>

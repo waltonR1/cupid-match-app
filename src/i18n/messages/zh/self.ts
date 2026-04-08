@@ -1,6 +1,6 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
-export const profilesMessages: AppMessageSchema = {
+export const selfMessages: AppMessageSchema = {
     hero: {
       eyebrow: 'Member Directory',
       title: '会员资料',

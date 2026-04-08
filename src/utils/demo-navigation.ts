@@ -12,7 +12,7 @@ export function openRegisterPage(plan?: string) {
   })
 }
 
-export function openProfileDetail(id: string) {
+export function openSelfDetail(id: string) {
   uni.navigateTo({
     url: `/pages/discovery/self/detail?id=${encodeURIComponent(id)}`,
   })

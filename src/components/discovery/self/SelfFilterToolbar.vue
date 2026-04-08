@@ -72,17 +72,17 @@ import DirectoryFilterSelectCard from '@/components/common/directory/DirectoryFi
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
-  ProfilesDirectoryFilters,
-} from './profiles.types'
+  SelfDirectoryFilters,
+} from './self.types'
 
 const emit = defineEmits<{
-  (e: 'update:filters', value: Partial<ProfilesDirectoryFilters>): void
-  (e: 'remove-filter', key: keyof ProfilesDirectoryFilters): void
+  (e: 'update:filters', value: Partial<SelfDirectoryFilters>): void
+  (e: 'remove-filter', key: keyof SelfDirectoryFilters): void
   (e: 'reset'): void
 }>()
 
-interface ProfilesFilterItem {
-  key: keyof ProfilesDirectoryFilters
+interface SelfFilterItem {
+  key: keyof SelfDirectoryFilters
   label: string
   options: DirectoryOption[]
   value: string
@@ -107,7 +107,7 @@ const props = defineProps<{
   maritalStatusLabel: string
   childrenLabel: string
   longDistanceLabel: string
-  filters: ProfilesDirectoryFilters
+  filters: SelfDirectoryFilters
   genderOptions: DirectoryOption[]
   ageOptions: DirectoryOption[]
   cityOptions: DirectoryOption[]
@@ -130,7 +130,7 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-const primaryFilters = computed<ProfilesFilterItem[]>(() => [
+const primaryFilters = computed<SelfFilterItem[]>(() => [
   {
     key: 'gender',
     label: props.genderLabel,
@@ -175,7 +175,7 @@ const primaryFilters = computed<ProfilesFilterItem[]>(() => [
   },
 ])
 
-const secondaryFilters = computed<ProfilesFilterItem[]>(() => [
+const secondaryFilters = computed<SelfFilterItem[]>(() => [
   {
     key: 'industry',
     label: props.industryLabel,
@@ -237,11 +237,11 @@ function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 
-function handleSelect(key: keyof ProfilesDirectoryFilters, value: string) {
+function handleSelect(key: keyof SelfDirectoryFilters, value: string) {
   emit('update:filters', { [key]: value })
 }
 
 function handleRemoveFilter(key: string) {
-  emit('remove-filter', key as keyof ProfilesDirectoryFilters)
+  emit('remove-filter', key as keyof SelfDirectoryFilters)
 }
 </script>

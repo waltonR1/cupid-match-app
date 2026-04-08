@@ -86,7 +86,7 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { mockProfiles, type MockProfile } from '@/mock/business'
 import { getMockEventById, type MockEvent } from '@/mock/events'
 import { pickLocalized, type LocalizedText } from '@/mock/shared'
-import { openProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
+import { openSelfDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
@@ -213,7 +213,7 @@ function buildRelatedReason(profile: MockProfile, cityKey: string) {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id)
+  openSelfDetail(id)
 }
 
 function handleNavClick(key: string) {

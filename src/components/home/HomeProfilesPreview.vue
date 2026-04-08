@@ -55,10 +55,10 @@ import {
   getLocalizedProfileCardData,
   type MockProfile,
 } from '@/mock/business'
-import { openProfileDetail } from '@/utils/demo-navigation'
+import { openSelfDetail } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('home')
-const { t: profileT } = usePageI18n('profiles')
+const { t: profileT } = usePageI18n('self')
 const profiles = getHomePreviewProfiles()
 
 function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewModel {
@@ -99,6 +99,6 @@ function goProfiles() {
 }
 
 function handleProfileOpen(id: string) {
-  openProfileDetail(id)
+  openSelfDetail(id)
 }
 </script>
