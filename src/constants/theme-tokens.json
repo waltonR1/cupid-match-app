@@ -225,8 +225,10 @@
           },
           "surface": {
             "card": "#173047",
+            "info-card": "#1f3952",
+            "info-card-hover": "#294561",
             "panel": "#1d3750",
-            "soft": "#213b54"
+            "soft": "#253f58"
           },
           "text": {
             "primary": "#fff8ef",
@@ -240,6 +242,7 @@
           },
           "border": {
             "default": "#2d4760",
+            "info-card-hover": "#4f6780",
             "soft": "#37516c",
             "divider": "#4b6279"
           },
@@ -261,26 +264,23 @@
           }
         },
         "component": {
+          "section-label": "#e0bf4f",
           "about-hero": {
             "border": "#ccd8e3",
             "overlay": {
               "background-soft": "rgba(19, 44, 71, 0.22)",
               "background-panel": "rgba(19, 44, 71, 0.13)"
             },
-            "accent": "#d7b86e",
-            "eyebrow-text": "#d8c8a8",
+            "line": "#d7b86e",
             "title-accent": "#d4af37",
-            "description": "#f3ede4",
+            "description": "#fbf4ea",
             "secondary-description": "#e8dcc6",
             "ghost-title": "rgba(255, 250, 243, 0.05)"
           },
-          "about-section": {
-            "accent-line": "#b89055",
-            "emphasis": {
-              "background": "#223548",
-              "border": "#4c6a84",
-              "line": "#d4b273"
-            }
+          "emphasis-card": {
+            "background": "#223548",
+            "border": "#4c6a84",
+            "line": "#d4b273"
           },
           "home-events": {
             "card": {
@@ -329,10 +329,7 @@
             },
             "divider": "#4b6279"
           },
-          "point": {
-            "background": "#213b54",
-            "background-hover": "#294561",
-            "border-hover": "#4f6780",
+          "info-card": {
             "line": "#b89055"
           },
           "home-family": {
@@ -394,6 +391,7 @@
         "effect": {
           "gradient": {
             "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
+            "contact-hero": "linear-gradient(135deg, #0d2238 0%, #183354 40%, #5c2740 100%)",
             "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(208, 172, 102, 0.08), transparent 34%)",
             "home-membership-silver-card": "linear-gradient(180deg, #415468 0%, #2e4052 100%)",
@@ -422,6 +420,8 @@
           },
           "surface": {
             "card": "#fbf6ef",
+            "info-card": "#f9f0e4",
+            "info-card-hover": "#fef7ee",
             "panel": "#f7eddf",
             "soft": "#fefaf4"
           },
@@ -437,6 +437,7 @@
           },
           "border": {
             "default": "#dfd2c1",
+            "info-card-hover": "#ceb98b",
             "soft": "#e8dccb",
             "divider": "#ece2d5"
           },
@@ -458,26 +459,23 @@
           }
         },
         "component": {
+          "section-label": "#e0bf4f",
           "about-hero": {
             "border": "#cdbda7",
             "overlay": {
-              "background-soft": "rgba(255, 250, 243, 0.16)",
+              "background-soft": "rgba(255, 250, 243, 0.03)",
               "background-panel": "rgba(108, 86, 84, 0.5)"
             },
-            "accent": "#d7b86e",
-            "eyebrow-text": "#e0cfaf",
+            "line": "#d7b86e",
             "title-accent": "#d8b24f",
             "description": "#fff7ed",
             "secondary-description": "#eadcc7",
             "ghost-title": "rgba(255, 244, 225, 0.09)"
           },
-          "about-section": {
-            "accent-line": "#d6b67a",
-            "emphasis": {
-              "background": "#eef3f7",
-              "border": "#cfdae4",
-              "line": "#cda968"
-            }
+          "emphasis-card": {
+            "background": "#eef3f7",
+            "border": "#cfdae4",
+            "line": "#cda968"
           },
           "home-events": {
             "card": {
@@ -526,10 +524,7 @@
             },
             "divider": "#d8cbb7"
           },
-          "point": {
-            "background": "#f9f0e4",
-            "background-hover": "#fef7ee",
-            "border-hover": "#ceb98b",
+          "info-card": {
             "line": "#d6b67a"
           },
           "home-family": {
@@ -591,6 +586,7 @@
         "effect": {
           "gradient": {
             "about-hero": "linear-gradient(135deg, #3a4658 0%, #735e48 48%, #9a6771 100%)",
+            "contact-hero": "linear-gradient(135deg, #39485c 0%, #6c5b4a 40%, #8b6974 100%)",
             "home-hero": "linear-gradient(135deg, #f5ebdc 0%, #eee0cc 42%, #fcf8f1 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.10), transparent 30%)",
             "home-membership-silver-card": "linear-gradient(180deg, #e1ddda 0%, #cbc6bf 100%)",

@@ -64,17 +64,17 @@ const audienceCards = [
 
 function cardClass(emphasis: boolean) {
   if (emphasis) {
-    return 'border border-next-component-about-section-emphasis-border bg-next-component-about-section-emphasis-background text-next-semantic-text-primary shadow-next-shadow-emphasis lg:translate-y-4'
+    return 'border border-next-component-emphasis-card-border bg-next-component-emphasis-card-background text-next-semantic-text-primary shadow-next-shadow-emphasis lg:translate-y-4'
   }
 
-  return 'border border-next-semantic-border-soft bg-next-component-point-background text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-point-border-hover hover:bg-next-component-point-background-hover hover:shadow-next-shadow-panel'
+  return 'border border-next-semantic-border-soft bg-next-semantic-surface-info-card text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-panel'
 }
 
 function lineClass(emphasis: boolean) {
   if (emphasis) {
-    return 'bg-next-component-about-section-emphasis-line'
+    return 'bg-next-component-emphasis-card-line'
   }
 
-  return 'bg-next-component-point-line'
+  return 'bg-next-component-info-card-line'
 }
 </script>

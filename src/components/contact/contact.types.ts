@@ -14,5 +14,4 @@ export type ContactCaseItem = {
 export type ContactGuideTag = {
   title: string
   desc: string
-  accent: boolean
 }

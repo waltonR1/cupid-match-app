@@ -22,6 +22,8 @@
 - `src/components/about/AboutAudience.vue`
 - `src/components/about/AboutDifference.vue`
 - `src/components/about/AboutValues.vue`
+- `src/pages/public/contact.vue`
+- `src/components/contact/ContactHero.vue`
 - `src/constants/theme-tokens.json`
 
 ## Token Semantics
@@ -268,10 +270,10 @@
 - `next-component-hero-ornament-line`: Hero 右侧装饰线。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-hero-ornament-fill`: Hero 右侧装饰填充。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-home-hero-divider`: Hero 数据区分隔线
-- `next-component-point-background`: Vision / About 常规信息卡默认背景
-- `next-component-point-background-hover`: Vision / About 常规信息卡 hover 背景
-- `next-component-point-border-hover`: Vision / About 常规信息卡 hover 边框
-- `next-component-point-line`: Vision / About 常规信息卡顶部线
+- `next-semantic-surface-info-card`: Home / About / Contact 共享信息卡默认背景
+- `next-semantic-surface-info-card-hover`: Home / About / Contact 共享信息卡 hover 背景
+- `next-semantic-border-info-card-hover`: Home / About / Contact 共享信息卡 hover 边框
+- `next-component-info-card-line`: Home / About / Contact 常规信息卡顶部线
 
 ### Background Classification
 
@@ -279,7 +281,7 @@
 - `HomeVision`: `semantic.page.default`
 - `HomeVision` 主标题区: `semantic.surface.panel`
 - `HomeVision` 主说明卡: `semantic.surface.soft`
-- `HomeVision` point 卡: `component.home-vision.point`
+- `HomeVision` point 卡: `semantic.surface.info-card`
 
 ### Mapping Summary
 
@@ -552,8 +554,8 @@
 - `next-component-about-hero-border`: AboutHero 当前统一边框
 - `next-component-about-hero-overlay-background-soft`: AboutHero 弱透明背景
 - `next-component-about-hero-overlay-background-panel`: AboutHero 右侧主卡 / 强调卡共用背景
-- `next-component-about-hero-accent`: AboutHero 局部强调线和标签色
-- `next-component-about-hero-eyebrow-text`: AboutHero eyebrow / audience label 文本
+- `next-component-about-hero-line`: AboutHero 局部强调线色
+- `next-component-section-label`: section / hero 的 eyebrow、标签与卡片小标题共享文本色
 - `next-component-about-hero-title-accent`: AboutHero 标题强调色
 - `next-component-about-hero-description`: AboutHero 主说明文字色
 - `next-component-about-hero-secondary-description`: AboutHero 副说明文字色
@@ -574,8 +576,8 @@
 - `AboutHero` 标题强调: `component.about-hero.title-accent`
 - `AboutHero` 主说明: `component.about-hero.description`
 - `AboutHero` 副说明: `component.about-hero.secondary-description`
-- `AboutHero` eyebrow / audience / approach: `component.about-hero.eyebrow-text`
-- `AboutHero` positioning / 装饰线: `component.about-hero.accent`
+- `AboutHero` eyebrow / audience / positioning / approach: `component.section-label`
+- `AboutHero` 装饰线: `component.about-hero.line`
 - `AboutHero` 背景大字: `component.about-hero.ghost-title`
 
 ### Border Classification
@@ -599,8 +601,8 @@
 | `text-text-inverse` | `text-next-semantic-text-inverse` |
 | `border-border-inverse/34` | `border-next-component-about-hero-border` |
 | `bg-surface-inverse-panel/34` | `bg-next-component-about-hero-overlay-background-soft` |
-| `bg-brand-accent` | `bg-next-component-about-hero-accent` |
-| `text-brand-accent-soft` | `text-next-component-about-hero-eyebrow-text` |
+| `bg-brand-accent` | `bg-next-component-about-hero-line` |
+| `text-brand-accent-soft` | `text-next-component-section-label` |
 | `text-brand-accent-strong` | `text-next-component-about-hero-title-accent` |
 | `text-text-inverse-soft` | `text-next-component-about-hero-description` |
 | `text-text-inverse-muted` | `text-next-component-about-hero-secondary-description` |
@@ -608,7 +610,7 @@
 | `text-text-inverse/5` | `text-next-component-about-hero-ghost-title` |
 | `bg-surface-inverse-panel/76` | `bg-next-component-about-hero-overlay-background-panel` |
 | `shadow-card` | `shadow-next-shadow-about-hero-panel` |
-| `text-brand-accent` | `text-next-component-about-hero-accent` |
+| `text-brand-accent` | `text-next-component-section-label` |
 | `border-brand-accent/32` | `border-next-component-about-hero-border` |
 | `bg-surface-inverse-card/72` | `bg-next-component-about-hero-overlay-background-panel` |
 | `shadow-hero` | `shadow-next-shadow-about-hero-feature` |
@@ -617,10 +619,9 @@
 
 ### Added Tokens
 
-- `next-component-about-section-accent-line`: about 常规卡顶部线
-- `next-component-about-section-emphasis-background`: about 强调卡背景
-- `next-component-about-section-emphasis-border`: about 强调卡边框
-- `next-component-about-section-emphasis-line`: about 强调卡顶部线
+- `next-component-emphasis-card-background`: About / Contact 强调卡背景
+- `next-component-emphasis-card-border`: About / Contact 强调卡边框
+- `next-component-emphasis-card-line`: About / Contact 强调卡顶部线
 
 ### Background Classification
 
@@ -629,8 +630,8 @@
 - `AboutDifference`: `semantic.page.default`
 - `AboutValues`: `semantic.page.subtle`
 - `AboutOrigin` 左侧说明卡: `semantic.surface.soft`
-- `AboutOrigin` / `AboutAudience` / `AboutDifference` / `AboutValues` 常规信息卡: `component.point`
-- `AboutAudience` 第四张卡、`AboutValues` 右侧第一张卡: `component.about-section.emphasis`
+- `AboutOrigin` / `AboutAudience` / `AboutDifference` / `AboutValues` 常规信息卡: `semantic.surface.info-card`
+- `AboutAudience` 第四张卡、`AboutValues` 右侧第一张卡: `component.emphasis-card`
 
 ### Mapping Summary
 
@@ -647,10 +648,10 @@
 | `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
 | `text-text-lead` | `text-next-semantic-text-lead` |
 | `border-border-base` | `border-next-semantic-border-soft` |
-| `bg-surface-panel` | `bg-next-component-point-background` |
-| `bg-brand-accent/45` | `bg-next-component-point-line` |
-| `bg-surface-card` | `bg-next-component-point-background` |
-| `bg-brand-accent/55` | `bg-next-component-point-line` |
+| `bg-surface-panel` | `bg-next-semantic-surface-info-card` |
+| `bg-brand-accent/45` | `bg-next-component-info-card-line` |
+| `bg-surface-card` | `bg-next-semantic-surface-info-card` |
+| `bg-brand-accent/55` | `bg-next-component-info-card-line` |
 
 #### AboutAudience
 
@@ -662,16 +663,16 @@
 | `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
 | `text-text-lead` | `text-next-semantic-text-lead` |
 | `border-border-base` | `border-next-semantic-border-soft` |
-| `bg-surface-panel` | `bg-next-component-point-background` |
+| `bg-surface-panel` | `bg-next-semantic-surface-info-card` |
 | `shadow-emphasis` | `shadow-next-shadow-emphasis` |
 | `border-border-soft` | `border-next-semantic-border-soft` |
-| `bg-surface-base` | `bg-next-component-point-background` |
+| `bg-surface-base` | `bg-next-semantic-surface-info-card` |
 | `shadow-card` | `shadow-next-shadow-panel` |
-| `border-border-accent/25` | `border-next-component-about-section-emphasis-border` |
-| `bg-brand-accent/10` | `bg-next-component-about-section-emphasis-background` |
-| `bg-brand-accent/55` | `bg-next-component-point-line` |
-| `bg-brand-accent/65` | `bg-next-component-about-section-emphasis-line` |
-| `bg-border-light/80` | `bg-next-component-point-line` |
+| `border-border-accent/25` | `border-next-component-emphasis-card-border` |
+| `bg-brand-accent/10` | `bg-next-component-emphasis-card-background` |
+| `bg-brand-accent/55` | `bg-next-component-info-card-line` |
+| `bg-brand-accent/65` | `bg-next-component-emphasis-card-line` |
+| `bg-border-light/80` | `bg-next-component-info-card-line` |
 
 #### AboutDifference
 
@@ -683,18 +684,18 @@
 | `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
 | `text-text-lead` | `text-next-semantic-text-lead` |
 | `border-border-base` | `border-next-semantic-border-soft` |
-| `bg-surface-panel` | `bg-next-component-point-background` |
+| `bg-surface-panel` | `bg-next-semantic-surface-info-card` |
 | `shadow-emphasis` | `shadow-next-shadow-emphasis` |
-| `bg-brand-accent/55` | `bg-next-component-point-line` |
-| `bg-surface-base` | `bg-next-component-point-background` |
+| `bg-brand-accent/55` | `bg-next-component-info-card-line` |
+| `bg-surface-base` | `bg-next-semantic-surface-info-card` |
 | `shadow-card` | `shadow-next-shadow-panel` |
-| `bg-border-light/80` | `bg-next-component-point-line` |
+| `bg-border-light/80` | `bg-next-component-info-card-line` |
 | `border-border-accent/30` | `border-next-semantic-border-soft` |
-| `bg-brand-accent/10` | `bg-next-component-point-background` |
-| `bg-brand-accent/60` | `bg-next-component-point-line` |
+| `bg-brand-accent/10` | `bg-next-semantic-surface-info-card` |
+| `bg-brand-accent/60` | `bg-next-component-info-card-line` |
 
 Current code note:
-- `AboutDifference` 当前三张内容卡都已收敛到 `component.point`
+- `AboutDifference` 当前三张内容卡都已收敛到 `semantic.surface.info-card`
 - 左侧标题区保留为 section 主引导，不再额外保留第三张强调卡
 
 #### AboutValues
@@ -705,68 +706,162 @@ Current code note:
 | `border-border-base` | `border-next-semantic-border-default` |
 | `bg-surface-panel` | `bg-next-semantic-surface-panel` |
 | `shadow-emphasis` | `shadow-next-shadow-emphasis` |
-| `bg-brand-accent/55` | `bg-next-component-about-section-accent-line` |
+| `bg-brand-accent/55` | `bg-next-component-info-card-line` |
 | `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
 | `text-brand-support` | `text-next-semantic-accent-secondary` |
 | `text-text-body-soft` | `text-next-semantic-text-muted` |
-| `bg-surface-card` | `bg-next-component-point-background` |
+| `bg-surface-card` | `bg-next-semantic-surface-info-card` |
 | `shadow-card` | `shadow-next-shadow-panel` |
-| `border-brand-primary/18` | `border-next-component-about-section-emphasis-border` |
-| `bg-brand-primary/8` | `bg-next-component-about-section-emphasis-background` |
-| `bg-brand-secondary/45` | `bg-next-component-about-section-emphasis-line` |
+| `border-brand-primary/18` | `border-next-component-emphasis-card-border` |
+| `bg-brand-primary/8` | `bg-next-component-emphasis-card-background` |
+| `bg-brand-secondary/45` | `bg-next-component-emphasis-card-line` |
 | `border-border-accent/35` | `border-next-semantic-border-soft` |
-| `bg-brand-accent/18` | `bg-next-component-point-background` |
-| `bg-brand-accent/70` | `bg-next-component-point-line` |
+| `bg-brand-accent/18` | `bg-next-semantic-surface-info-card` |
+| `bg-brand-accent/70` | `bg-next-component-info-card-line` |
 
 Current code note:
-- `AboutValues` 右侧仅保留第一张为 `component.about-section.emphasis`
-- 右侧第二张已回收到 `component.home-vision.point`
-- 免费入口: `component.home-membership.free.panel-border`
+- `AboutValues` 右侧仅保留第一张为 `component.emphasis-card`
+- 右侧第二张已回收到 `semantic.surface.info-card`
 
-### Issues Identified
+## Contact Page / ContactHero
 
-- 旧实现高度依赖 membership 私有 legacy token，且按钮样式重复
-- 存在 opacity 用法:
-  - `bg-brand-accent/10`
-  - `border-brand-accent/35`
-  - `bg-brand-accent/70`
-  - `bg-brand-accent/22`
-  - `ring-brand-accent/18`
-  - `text-brand-accent/80`
-- 金卡 / 钻石卡的深底文本原先依赖 legacy inverse 文本，现已收敛到 `next.semantic.text.inverse*`
+### Added Tokens
+
+- `next-effect-gradient-contact-hero`: ContactHero 专用背景渐变
+- `next-component-section-label`: ContactHero 与 Contact section 复用的小标题文本色
+
+### Reused Tokens
+
+- `about-hero.border`
+- `about-hero.overlay.background-soft`
+- `about-hero.line`
+- `section-label`
+- `about-hero.title-accent`
+- `about-hero.description`
+- `about-hero.secondary-description`
+- `shadow.about-hero-panel`
+
+### Background Classification
+
+- `contact.vue`: `semantic.page.default`
+- `ContactHero`: `effect.gradient.contact-hero`
+- `ContactHero` eyebrow 与右侧联系卡: `component.about-hero.overlay`
+- `ContactInfo`: `semantic.page.default`
+- `ContactCases`: `semantic.page.subtle`
+- `ContactGuide`: `semantic.page.default`
+- `ContactInfo` / `ContactCases` 常规卡 / `ContactGuide` 常规卡: `semantic.surface.info-card`
+- `ContactCases` 强调卡 / `ContactGuide` 第二张流程卡: `component.emphasis-card`
+- `ContactCases` 左侧 desk card / `ContactGuide` 右侧说明卡: `semantic.surface.soft`
+
+### Text Classification
+
+- Contact 各 section eyebrow: `semantic.accent.secondary`
+- Contact 各 section 标题强调: `semantic.accent.primary`
+- Contact 常规卡标题: `semantic.text.primary`
+- Contact 常规卡正文: `semantic.text.secondary`
+- Contact 辅助说明: `semantic.text.lead` / `semantic.text.muted`
+
+### Border Classification
+
+- Contact 常规卡: `semantic.border.soft`
+- Contact 强调卡: `component.emphasis-card.border`
+- Contact 说明卡: `semantic.border.soft`
 
 ### Mapping Summary
+
+#### contact.vue
 
 | Legacy class | Next class |
 | --- | --- |
 | `bg-page-base` | `bg-next-semantic-page-default` |
-| `bg-decor-ambient` | `bg-next-gradient-home-membership-ambient` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### ContactHero
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-events-hero` | `bg-next-gradient-contact-hero` |
+| `text-text-inverse` | `text-next-semantic-text-inverse` |
+| `border-border-inverse/34` | `border-next-component-about-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-about-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-about-hero-line` |
+| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-strong` | `text-next-component-about-hero-title-accent` |
+| `text-text-inverse-soft` | `text-next-component-about-hero-description` |
+| `text-text-inverse-muted` | `text-next-component-about-hero-secondary-description` |
+| primary CTA legacy button | `AppButton primary + lg + cta` |
+| `border-border-inverse/32` | `border-next-component-about-hero-border` |
+| `shadow-card` | `shadow-next-shadow-about-hero-panel` |
+| card `text-brand-accent` | `text-next-component-section-label` |
+
+#### ContactInfo.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `border-border-base` | `border-next-semantic-border-soft` |
+| `bg-surface-base` | `bg-next-semantic-surface-info-card` |
+| `bg-border-light/80` | `bg-next-component-info-card-line` |
+| `text-brand-support` card label | `text-next-component-section-label` |
 | `text-text-heading` | `text-next-semantic-text-primary` |
 | `text-text-body` | `text-next-semantic-text-secondary` |
-| `text-text-muted` | `text-next-semantic-text-muted` |
-| `text-text-subtle` | `text-next-semantic-text-subtle` |
-| `text-text-inverse` | `text-next-semantic-text-inverse` |
-| `text-text-inverse-soft` | `text-next-semantic-text-inverse-muted` |
-| `text-text-inverse-subtle` | `text-next-semantic-text-inverse-subtle` |
-| `text-brand-accent` | `text-next-semantic-accent-primary` |
-| `text-brand-accent-foreground` | `text-next-semantic-text-inverse` |
-| silver `border-border-membership-silver` | `border-next-component-home-membership-silver-border` |
-| silver `bg-surface-membership-silver` | `bg-next-gradient-home-membership-silver-card` |
-| silver top line | `bg-next-component-home-membership-silver-line` |
-| silver glow | `bg-next-gradient-home-membership-silver-glow` |
-| gold `bg-membership-gold-card` | `bg-next-gradient-home-membership-gold-card` |
-| gold `bg-membership-gold-card-glow` | `bg-next-gradient-home-membership-gold-glow` |
-| diamond `bg-membership-diamond-card` | `bg-next-gradient-home-membership-diamond-card` |
-| diamond `bg-membership-diamond-card-glow` | `bg-next-gradient-home-membership-diamond-glow` |
+| `border-border-soft` | `border-next-semantic-border-soft` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+
+#### ContactCases.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-soft` | `bg-next-semantic-page-subtle` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `border-border-soft` | `border-next-semantic-border-soft` |
+| `bg-surface-card-soft` | `bg-next-semantic-surface-soft` |
+| `bg-surface-base` / `bg-surface-panel` | `bg-next-semantic-surface-info-card` |
+| `bg-border-light/80` | `bg-next-component-info-card-line` |
+| `border-border-accent/25` | `border-next-component-emphasis-card-border` |
+| `bg-brand-accent/10` | `bg-next-component-emphasis-card-background` |
+| `bg-brand-accent/65` | `bg-next-component-emphasis-card-line` |
 | `shadow-card` | `shadow-next-shadow-panel` |
 | `shadow-emphasis` | `shadow-next-shadow-emphasis` |
-| `shadow-luxe` | `shadow-next-shadow-luxe` |
-| silver CTA | `AppButton secondary + membership-silver` |
-| gold CTA | `AppButton secondary + membership-gold` |
-| diamond CTA | `AppButton secondary + membership-diamond` |
-| free CTA | `AppButton secondary + membership-free` |
+
+#### ContactGuide.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `bg-brand-accent` | `bg-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-semantic-accent-secondary` |
+| `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
+| `border-border-base` / `bg-surface-panel` | `border-next-semantic-border-soft` / `bg-next-semantic-surface-info-card` |
+| `bg-brand-accent/60` | `bg-next-component-info-card-line` |
+| `bg-brand-accent/72` | `bg-next-component-emphasis-card-line` |
+| `bg-surface-card-soft` | `bg-next-semantic-surface-soft` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+| `text-text-lead` | `text-next-semantic-text-lead` |
+| `shadow-card` | `shadow-next-shadow-panel` |
+| `shadow-emphasis` | `shadow-next-shadow-emphasis` |
+
+### Current Code Note
+
+- `src/pages/public/contact.vue` 里仍保留 `ContactInfoSection` / `ContactGuideSection` 作为模板标签别名，但实际导入文件已切到 [ContactInfo.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactInfo.vue) 和 [ContactGuide.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactGuide.vue)。
 
 ## Maintenance Note
 
 - 本文档只记录已迁移页面与组件的 token 决策。
 - 若代码与本文档冲突，以 `src/constants/theme-tokens.json` 和组件当前 class 为准，并应立即同步更新本文档。
+
+## Pending Convergence Notes
+
+- `component.home-events.card.background-hover` 与 `semantic.surface.info-card-hover` 在 dark 目前同值，暂不合并。后续等真实 events 页面替换后再判断。
+- `component.directory-card.hover-border` 与 `semantic.border.info-card-hover` 在 dark 目前同值，先记录，后续视目录卡是否需要独立 hover 语义再决定。
+- `semantic.surface.card` 与 `semantic.state.info` 在 dark 目前同值。当前未造成使用层冲突，但状态色长期不宜与普通 surface 共值。
+- `component.principle-card.background` 与 `semantic.surface.panel` 在 light 目前同值。后续依据 principle-card 的复用范围决定是回收还是继续保留独立调色空间。
+- `component.section-card.hover-border` 与 `component.home-audience.tag.border-hover` 在 light 目前同值。若更多卡片继续复用，可考虑再上提。
+- `component.home-audience.tag.background-hover` 与 `component.home-family.point.background-hover` 在 light 目前同值。当前先记录，不主动合并。

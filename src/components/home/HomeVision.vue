@@ -40,9 +40,9 @@
             <view
                 v-for="item in visionPoints"
                 :key="item.title"
-                class="relative flex min-h-[220px] flex-col overflow-hidden border border-next-semantic-border-soft bg-next-component-point-background px-7 py-8 transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-point-border-hover hover:bg-next-component-point-background-hover hover:shadow-next-shadow-panel"
-            >
-              <view class="absolute inset-x-0 top-0 h-px bg-next-component-point-line" />
+                class="relative flex min-h-[220px] flex-col overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-7 py-8 transition-all duration-300 hover:-translate-y-[3px] hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-panel"
+              >
+              <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
               <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
                 {{ t('vision.pointLabel') }}
               </view>
