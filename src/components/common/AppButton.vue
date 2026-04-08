@@ -17,7 +17,7 @@ type ButtonVariant = 'primary' | 'secondary'
 type ButtonContext =
   | 'default'
   | 'header'
-  | 'home-hero'
+  | 'hero'
   | 'section'
   | 'membership-silver'
   | 'membership-gold'
@@ -105,8 +105,8 @@ const variantClass = computed(() => {
     return 'border-next-component-header-ghost-border bg-next-component-header-ghost text-next-semantic-accent-secondary hover:border-next-component-header-ghost-border-hover hover:bg-next-component-header-ghost-hover hover:text-next-semantic-accent-primary'
   }
 
-  if (props.context === 'home-hero') {
-    return 'border-next-component-home-hero-secondary-action-border bg-next-component-home-hero-secondary-action-background text-next-semantic-text-secondary hover:border-next-semantic-accent-secondary hover:bg-next-component-home-hero-secondary-action-background-hover hover:text-next-semantic-accent-secondary hover:shadow-next-shadow-panel'
+  if (props.context === 'hero') {
+    return 'border-next-component-hero-secondary-action-border bg-next-component-hero-secondary-action-background text-next-semantic-text-secondary hover:border-next-semantic-accent-secondary hover:bg-next-component-hero-secondary-action-background-hover hover:text-next-semantic-accent-secondary hover:shadow-next-shadow-panel'
   }
 
   if (props.context === 'section') {
@@ -114,19 +114,19 @@ const variantClass = computed(() => {
   }
 
   if (props.context === 'membership-silver') {
-    return 'border-next-component-home-membership-silver-button-border bg-transparent text-next-semantic-text-primary hover:border-next-component-home-membership-silver-button-border hover:bg-next-component-home-membership-silver-button-hover hover:text-next-semantic-text-primary'
+    return 'border-next-component-membership-tier-silver-button-border bg-next-component-membership-tier-silver-button-background text-next-semantic-text-primary hover:border-next-component-membership-tier-silver-button-border hover:bg-next-component-membership-tier-silver-button-hover hover:text-next-semantic-text-primary'
   }
 
   if (props.context === 'membership-gold') {
-    return 'border-next-component-home-membership-gold-accent bg-next-component-home-membership-gold-accent text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-gold-accent-hover hover:bg-next-component-home-membership-gold-accent-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-next-component-membership-tier-gold-accent bg-next-component-membership-tier-gold-accent text-next-semantic-action-primary-contrast hover:border-next-component-membership-tier-gold-accent-hover hover:bg-next-component-membership-tier-gold-accent-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
   }
 
   if (props.context === 'membership-diamond') {
-    return 'border-next-component-home-membership-diamond-button bg-next-component-home-membership-diamond-button text-next-semantic-action-primary-contrast hover:border-next-component-home-membership-diamond-button-hover hover:bg-next-component-home-membership-diamond-button-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-next-component-membership-tier-diamond-button bg-next-component-membership-tier-diamond-button text-next-semantic-action-primary-contrast hover:border-next-component-membership-tier-diamond-button-hover hover:bg-next-component-membership-tier-diamond-button-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
   }
 
   if (props.context === 'membership-free') {
-    return 'border-next-component-home-membership-free-button-border bg-transparent text-next-semantic-text-primary hover:border-next-component-home-membership-free-button-border hover:bg-next-component-home-membership-free-button-hover hover:text-next-semantic-text-primary'
+    return 'border-next-component-membership-tier-free-button-border bg-transparent text-next-semantic-text-primary hover:border-next-component-membership-tier-free-button-border hover:bg-next-component-membership-tier-free-button-hover hover:text-next-semantic-text-primary'
   }
 
   return 'border-next-semantic-border-default bg-next-semantic-surface-soft text-next-semantic-text-secondary hover:border-next-semantic-border-soft hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'

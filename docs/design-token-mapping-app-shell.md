@@ -24,6 +24,10 @@
 - `src/components/about/AboutValues.vue`
 - `src/pages/public/contact.vue`
 - `src/components/contact/ContactHero.vue`
+- `src/pages/public/membership.vue`
+- `src/components/membership/MembershipHero.vue`
+- `src/components/membership/MembershipTiersSection.vue`
+- `src/components/membership/MembershipRulesSection.vue`
 - `src/constants/theme-tokens.json`
 
 ## Token Semantics
@@ -241,7 +245,7 @@
 ### Props
 
 - `variant`: `primary | secondary`
-- `context`: `default | header | home-hero | section | membership-silver | membership-gold | membership-diamond | membership-free`
+- `context`: `default | header | hero | section | membership-silver | membership-gold | membership-diamond | membership-free`
 - `size`: `sm | md | lg | icon`
 - `width`: `auto | cta | full`
 - `rounded`: `none | button | xl`
@@ -252,21 +256,25 @@
 - `AppHeader` 登录按钮: `secondary + header + sm + xl`
 - `AppHeader` 注册按钮: `primary + sm + xl`
 - `HomeHero` 主按钮: `primary + lg + cta + none`
-- `HomeHero` 次按钮: `secondary + home-hero + lg + cta + none`
+- `HomeHero` 次按钮: `secondary + hero + lg + cta + none`
 - `HomeProfilesPreview` / `HomeEventsPreview` CTA: `secondary + section`
+- `MembershipTiersSection` 入口按钮: `primary + lg + cta + none`
+- `MembershipTiersSection` 免费卡按钮: `secondary + membership-free + sm + full + none`
 - `HomeMembership` 银卡按钮: `secondary + membership-silver + sm + full + none`
 - `HomeMembership` 金卡按钮: `secondary + membership-gold + sm + full + none`
 - `HomeMembership` 钻石卡按钮: `secondary + membership-diamond + sm + full + none`
 - `HomeMembership` 免费入口按钮: `secondary + membership-free + sm + full + none`
+- `MembershipTiersSection` 三档卡按钮: 继续复用 `membership-silver / membership-gold / membership-diamond`
+- `MembershipRulesSection` 结尾按钮: `primary + lg + cta + none`
 
 ## Home Hero And Vision
 
 ### Added Tokens
 
 - `next-effect-gradient-home-hero`: Home hero 专用渐变背景
-- `next-component-home-hero-secondary-action-background`: Hero 次按钮默认底色
-- `next-component-home-hero-secondary-action-background-hover`: Hero 次按钮 hover 底色
-- `next-component-home-hero-secondary-action-border`: Hero 次按钮边框
+- `next-component-hero-secondary-action-background`: Hero 次按钮默认底色
+- `next-component-hero-secondary-action-background-hover`: Hero 次按钮 hover 底色
+- `next-component-hero-secondary-action-border`: Hero 次按钮边框
 - `next-component-hero-ornament-line`: Hero 右侧装饰线。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-hero-ornament-fill`: Hero 右侧装饰填充。独立于 `home-hero`，为后续可能复用保留。
 - `next-component-home-hero-divider`: Hero 数据区分隔线
@@ -501,12 +509,12 @@
 - `next-semantic-text-inverse`: 深底卡片主文本
 - `next-semantic-text-inverse-muted`: 深底卡片正文
 - `next-semantic-text-inverse-subtle`: 深底卡片弱文本
-- `next-component-home-membership-silver-*`: 银卡局部背景、边框、分隔线、按钮边框与 hover
-- `next-component-home-membership-gold-accent`: 金卡顶部线 / 短分隔线 / 按钮主色
-- `next-component-home-membership-gold-accent-hover`: 金卡按钮 hover 主色
-- `next-component-home-membership-gold-divider`: 金卡内容分隔线
-- `next-component-home-membership-diamond-*`: 钻石卡边框、ring、badge、分隔线、access label、按钮语义
-- `next-component-home-membership-free-*`: 免费入口面板与按钮语义
+- `next-component-membership-tier-silver-*`: 银卡局部背景、边框、分隔线、按钮边框与 hover
+- `next-component-membership-tier-gold-accent`: 金卡顶部线 / 短分隔线 / 按钮主色
+- `next-component-membership-tier-gold-accent-hover`: 金卡按钮 hover 主色
+- `next-component-membership-tier-gold-divider`: 金卡内容分隔线
+- `next-component-membership-tier-diamond-*`: 钻石卡边框、ring、badge、分隔线、access label、按钮语义
+- `next-component-membership-tier-free-*`: 免费入口面板与按钮语义
 - `next-effect-gradient-home-membership-ambient`: Membership section 环境背景
 - `next-effect-gradient-home-membership-silver-card`: 银卡渐变背景
 - `next-effect-gradient-home-membership-silver-glow`: 银卡冷银高光
@@ -524,7 +532,7 @@
 - `HomeMembership` 银卡: `effect.gradient.home-membership-silver-card`
 - `HomeMembership` 金卡: `effect.gradient.home-membership-gold-card`
 - `HomeMembership` 钻石卡: `effect.gradient.home-membership-diamond-card`
-- `HomeMembership` 免费入口: `component.home-membership.free`
+- `HomeMembership` 免费入口: `component.membership-tier.free`
 
 ### Text Classification
 
@@ -542,23 +550,23 @@
 
 ### Border Classification
 
-- 银卡: `component.home-membership.silver.border`
+- 银卡: `component.membership-tier.silver.border`
 - 金卡: `semantic.accent.secondary`
-- 钻石卡: `component.home-membership.diamond.border`
+- 钻石卡: `component.membership-tier.diamond.border`
 
 ## About Page / AboutHero
 
 ### Added Tokens
 
 - `next-effect-gradient-about-hero`: AboutHero 专用背景渐变
-- `next-component-about-hero-border`: AboutHero 当前统一边框
-- `next-component-about-hero-overlay-background-soft`: AboutHero 弱透明背景
-- `next-component-about-hero-overlay-background-panel`: AboutHero 右侧主卡 / 强调卡共用背景
-- `next-component-about-hero-line`: AboutHero 局部强调线色
+- `next-component-hero-border`: Hero 共享边框
+- `next-component-hero-overlay-background-soft`: Hero 共享弱透明背景
+- `next-component-hero-overlay-background-panel`: Hero 共享主浮层背景
+- `next-component-section-line`: section 头部装饰线色。用于 AboutHero、ContactHero 与 Membership 各 section。
 - `next-component-section-label`: section / hero 的 eyebrow、标签与卡片小标题共享文本色
-- `next-component-about-hero-title-accent`: AboutHero 标题强调色
-- `next-component-about-hero-description`: AboutHero 主说明文字色
-- `next-component-about-hero-secondary-description`: AboutHero 副说明文字色
+- `next-component-hero-title-accent`: Hero 共享标题强调色
+- `next-component-hero-description`: Hero 共享主说明文字色
+- `next-component-hero-secondary-description`: Hero 共享副说明文字色
 - `next-component-about-hero-ghost-title`: AboutHero 背景大字
 - `next-shadow-about-hero-panel`: AboutHero 主卡阴影
 - `next-shadow-about-hero-feature`: AboutHero 强调卡阴影
@@ -567,22 +575,22 @@
 
 - `about.vue`: `semantic.page.default`
 - `AboutHero`: `effect.gradient.about-hero`
-- `AboutHero` eyebrow / audience card / positioning card: `component.about-hero.overlay`
-- `AboutHero` approach card: `component.about-hero.overlay`
+- `AboutHero` eyebrow / audience card / positioning card: `component.hero.overlay`
+- `AboutHero` approach card: `component.hero.overlay`
 
 ### Text Classification
 
 - `AboutHero` 主标题 / 右侧正文: `text.inverse`
-- `AboutHero` 标题强调: `component.about-hero.title-accent`
-- `AboutHero` 主说明: `component.about-hero.description`
-- `AboutHero` 副说明: `component.about-hero.secondary-description`
+- `AboutHero` 标题强调: `component.hero.title-accent`
+- `AboutHero` 主说明: `component.hero.description`
+- `AboutHero` 副说明: `component.hero.secondary-description`
 - `AboutHero` eyebrow / audience / positioning / approach: `component.section-label`
-- `AboutHero` 装饰线: `component.about-hero.line`
+- `AboutHero` 装饰线: `component.section-line`
 - `AboutHero` 背景大字: `component.about-hero.ghost-title`
 
 ### Border Classification
 
-- `AboutHero` 当前 3 处边框已统一：`component.about-hero.border`
+- `AboutHero` 当前 3 处边框已统一：`component.hero.border`
 
 ### Mapping Summary
 
@@ -599,20 +607,20 @@
 | --- | --- |
 | `bg-events-hero` | `bg-next-gradient-about-hero` |
 | `text-text-inverse` | `text-next-semantic-text-inverse` |
-| `border-border-inverse/34` | `border-next-component-about-hero-border` |
-| `bg-surface-inverse-panel/34` | `bg-next-component-about-hero-overlay-background-soft` |
-| `bg-brand-accent` | `bg-next-component-about-hero-line` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-section-line` |
 | `text-brand-accent-soft` | `text-next-component-section-label` |
-| `text-brand-accent-strong` | `text-next-component-about-hero-title-accent` |
-| `text-text-inverse-soft` | `text-next-component-about-hero-description` |
-| `text-text-inverse-muted` | `text-next-component-about-hero-secondary-description` |
-| `border-border-inverse/32` | `border-next-component-about-hero-border` |
+| `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
+| `border-border-inverse/32` | `border-next-component-hero-border` |
 | `text-text-inverse/5` | `text-next-component-about-hero-ghost-title` |
-| `bg-surface-inverse-panel/76` | `bg-next-component-about-hero-overlay-background-panel` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
 | `shadow-card` | `shadow-next-shadow-about-hero-panel` |
 | `text-brand-accent` | `text-next-component-section-label` |
-| `border-brand-accent/32` | `border-next-component-about-hero-border` |
-| `bg-surface-inverse-card/72` | `bg-next-component-about-hero-overlay-background-panel` |
+| `border-brand-accent/32` | `border-next-component-hero-border` |
+| `bg-surface-inverse-card/72` | `bg-next-component-hero-overlay-background-panel` |
 | `shadow-hero` | `shadow-next-shadow-about-hero-feature` |
 
 ## About Sections
@@ -734,7 +742,7 @@ Current code note:
 
 - `about-hero.border`
 - `about-hero.overlay.background-soft`
-- `about-hero.line`
+- `section-line`
 - `section-label`
 - `about-hero.title-accent`
 - `about-hero.description`
@@ -745,7 +753,7 @@ Current code note:
 
 - `contact.vue`: `semantic.page.default`
 - `ContactHero`: `effect.gradient.contact-hero`
-- `ContactHero` eyebrow 与右侧联系卡: `component.about-hero.overlay`
+- `ContactHero` eyebrow 与右侧联系卡: `component.hero.overlay`
 - `ContactInfo`: `semantic.page.default`
 - `ContactCases`: `semantic.page.subtle`
 - `ContactGuide`: `semantic.page.default`
@@ -782,15 +790,15 @@ Current code note:
 | --- | --- |
 | `bg-events-hero` | `bg-next-gradient-contact-hero` |
 | `text-text-inverse` | `text-next-semantic-text-inverse` |
-| `border-border-inverse/34` | `border-next-component-about-hero-border` |
-| `bg-surface-inverse-panel/34` | `bg-next-component-about-hero-overlay-background-soft` |
-| `bg-brand-accent` | `bg-next-component-about-hero-line` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-section-line` |
 | `text-brand-accent-soft` | `text-next-component-section-label` |
-| `text-brand-accent-strong` | `text-next-component-about-hero-title-accent` |
-| `text-text-inverse-soft` | `text-next-component-about-hero-description` |
-| `text-text-inverse-muted` | `text-next-component-about-hero-secondary-description` |
+| `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
 | primary CTA legacy button | `AppButton primary + lg + cta` |
-| `border-border-inverse/32` | `border-next-component-about-hero-border` |
+| `border-border-inverse/32` | `border-next-component-hero-border` |
 | `shadow-card` | `shadow-next-shadow-about-hero-panel` |
 | card `text-brand-accent` | `text-next-component-section-label` |
 
@@ -851,6 +859,129 @@ Current code note:
 ### Current Code Note
 
 - `src/pages/public/contact.vue` 里仍保留 `ContactInfoSection` / `ContactGuideSection` 作为模板标签别名，但实际导入文件已切到 [ContactInfo.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactInfo.vue) 和 [ContactGuide.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactGuide.vue)。
+
+## Membership Page / MembershipHero
+
+### Added Tokens
+
+- `next-effect-gradient-membership-hero`: MembershipHero 专用背景渐变
+
+### Reused Tokens
+
+- `hero.border`
+- `hero.overlay.background-soft`
+- `hero.overlay.background-panel`
+- `section-line`
+- `hero.title-accent`
+- `hero.description`
+- `hero.secondary-description`
+- `section-label`
+- `hero-ornament.line`
+- `membership-tier.free.feature-*`
+- `membership-tier.silver.*`
+- `membership-tier.silver.feature-*`
+- `membership-tier.gold.feature-*`
+- `membership-tier.diamond.*`
+- `membership-tier.diamond.feature-*`
+- `gradient.home-membership-gold-card`
+- `gradient.home-membership-silver-card`
+- `gradient.home-membership-diamond-card`
+- `emphasis-card.*`
+- `shadow.soft-luxe`
+- `shadow.luxe`
+
+### Membership Tier Note
+
+- `membership-tier.silver` 当前已补完整按钮层：
+  - `border`
+  - `line`
+  - `feature-background`
+  - `feature-border`
+  - `button-background`
+  - `button-border`
+  - `button-hover`
+- `membership-tier.free` 当前保留：
+  - `panel-background`
+  - `panel-border`
+  - `feature-background`
+  - `feature-border`
+  - `button-border`
+  - `button-hover`
+- `light` 下 `free` 维持更浅的辅助入口层，`silver` 维持更暖的银香槟层，并通过独立按钮底色与 `free` 拉开。
+- 当前只有 `MembershipTiersSection` 使用 `free / silver / gold / diamond` 的块状 `feature-*`。
+- `HomeMembership` 已回滚为线性特性列表，未接入这套块状 `feature-*` 表现。
+
+### Background Classification
+
+- `membership.vue`: `semantic.page.default`
+- `MembershipHero`: `effect.gradient.membership-hero`
+- `MembershipHero` eyebrow: `component.hero.overlay`
+- `MembershipHero` 右上装饰圆环: `component.hero-ornament`
+- `MembershipHero` 右侧主浮层: `component.hero.overlay`
+- `MembershipHero` 价格预览卡:
+  - silver: `effect.gradient.home-membership-silver-card`
+  - gold: `effect.gradient.home-membership-gold-card`
+  - diamond: `effect.gradient.home-membership-diamond-card`
+- `MembershipHero` 底部说明卡: `component.hero.overlay`
+
+### Text Classification
+
+- `MembershipHero` 主标题: `semantic.text.inverse`
+- `MembershipHero` 标题强调: `component.hero.title-accent`
+- `MembershipHero` 主说明: `component.hero.description`
+- `MembershipHero` 副说明: `component.hero.secondary-description`
+- `MembershipHero` eyebrow / overview title: `component.section-label`
+
+### Border Classification
+
+- `MembershipHero` eyebrow: `component.hero.border`
+- `MembershipHero` 主浮层: `component.hero.border`
+- `MembershipHero` 底部说明卡: `component.hero.border`
+
+### Mapping Summary
+
+#### membership.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### MembershipHero.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-membership-hero` | `bg-next-gradient-membership-hero` |
+| `text-text-inverse` | `text-next-semantic-text-inverse` |
+| `border-border-inverse/28` | `border-next-component-hero-ornament-line` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
+| `bg-brand-accent` | `bg-next-component-section-line` |
+| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
+| primary CTA legacy button | `AppButton primary + lg + cta` |
+| secondary CTA legacy ghost button | `AppButton secondary + hero + lg + cta` |
+| `border-border-hero-float/70` | `border-next-component-hero-border` |
+| `bg-surface-hero-float-strong/78` | `bg-next-component-hero-overlay-background-panel` |
+| `shadow-soft-luxe` | `shadow-next-shadow-soft-luxe` |
+| silver preview `border-border-membership-silver/55` | `border-next-component-membership-tier-silver-border` |
+| silver preview `bg-surface-membership-silver` | `bg-next-gradient-home-membership-silver-card` |
+| gold preview `border-border-membership-gold/70` | `border-next-semantic-accent-secondary` |
+| gold preview `bg-surface-membership-gold` | `bg-next-gradient-home-membership-gold-card` |
+| diamond preview `border-border-membership-diamond/60` | `border-next-component-membership-tier-diamond-border` |
+| diamond preview `bg-surface-membership-diamond` | `bg-next-gradient-home-membership-diamond-card` |
+| `shadow-luxe` | `shadow-next-shadow-luxe` |
+| `border-border-inverse/20` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/26` | `bg-next-component-hero-overlay-background-soft` |
+
+Current code note:
+- `MembershipHero` 主按钮现在是“免费注册”，仍走注册流。
+- `MembershipHero` 次按钮现在是“查看方案对比”，使用页内滚动跳到 `#membership-compare`。
+- `MembershipCompareSection` 已移除，对比区能力并入 `MembershipTiersSection`。
+- `MembershipTiersSection` 现在同时承载：左侧档位说明、右侧 `free` 小卡，以及 `silver / gold / diamond` 三档主卡。
+- `membership-silver` 按钮现在不是透明按钮，而是使用 `button-background` 的实体底色。
 
 ## Maintenance Note
 

@@ -252,9 +252,9 @@
             "muted": "#ecd5aa"
           },
           "action": {
-            "primary": "#d7b86e",
-            "primary-hover": "#f0d190",
-            "primary-contrast": "#10263b"
+            "primary": "#D3B46E",
+            "primary-hover": "#E4C783",
+            "primary-contrast": "#10263B"
           },
           "state": {
             "info": "#173047",
@@ -265,22 +265,24 @@
         },
         "component": {
           "section-label": "#e0bf4f",
-          "about-hero": {
+          "hero": {
             "border": "#ccd8e3",
             "overlay": {
               "background-soft": "rgba(19, 44, 71, 0.22)",
               "background-panel": "rgba(19, 44, 71, 0.13)"
             },
-            "line": "#d7b86e",
             "title-accent": "#d4af37",
             "description": "#fbf4ea",
-            "secondary-description": "#e8dcc6",
+            "secondary-description": "#e8dcc6"
+          },
+          "about-hero": {
             "ghost-title": "rgba(255, 250, 243, 0.05)"
           },
+          "section-line": "#d7b86e",
           "emphasis-card": {
-            "background": "#223548",
-            "border": "#4c6a84",
-            "line": "#d4b273"
+            "background": "#1c3146",
+            "border": "#6d849a",
+            "line": "#d8b879"
           },
           "home-events": {
             "card": {
@@ -321,12 +323,12 @@
             "line": "#2b3f54",
             "fill": "#192c40"
           },
+          "hero-secondary-action": {
+            "background": "#2f4156",
+            "border": "#c9a86a",
+            "line": "#d4b273"
+          },
           "home-hero": {
-            "secondary-action": {
-              "background": "#334456",
-              "background-hover": "#465466",
-              "border": "#2b3f54"
-            },
             "divider": "#4b6279"
           },
           "info-card": {
@@ -343,35 +345,43 @@
               "border": "#b69457"
             }
           },
-          "home-membership": {
+          "membership-tier": {
             "silver": {
-              "background": "#314457",
-              "border": "#b09164",
-              "line": "#b09164",
-              "button-border": "#a4875f",
-              "button-hover": "#3c5167"
+              "border": "#AF9166",
+              "line": "#B89B70",
+              "feature-background": "#4D6277",
+              "feature-border": "#7C8EA0",
+              "button-background": "#496177",
+              "button-border": "#A8895F",
+              "button-hover": "#587189"
             },
             "gold": {
-              "accent": "#d8b879",
-              "divider": "#76613b",
-              "accent-hover": "#ebcf95"
+              "accent": "#D7B777",
+              "divider": "#7C6540",
+              "accent-hover": "#EBCF95",
+              "feature-background": "#513F2A",
+              "feature-border": "#8F7548"
             },
             "diamond": {
-              "border": "#be9a63",
-              "ring": "#6a5a39",
-              "badge-background": "#21374f",
-              "badge-border": "#8d7548",
-              "line": "#d0ad6f",
-              "divider": "#7a6540",
-              "access-label": "#d7bc86",
-              "button": "#f0dfc1",
-              "button-hover": "#f6e7cc"
+              "border": "#BE9A63",
+              "ring": "#6E5C3B",
+              "badge-background": "#22384E",
+              "badge-border": "#8E7649",
+              "line": "#D0AD6F",
+              "divider": "#7C6641",
+              "access-label": "#D8BD86",
+              "feature-background": "#24384E",
+              "feature-border": "#526C87",
+              "button": "#EEDCBF",
+              "button-hover": "#F6E8CF"
             },
             "free": {
-              "panel-background": "#1c3349",
-              "panel-border": "#354d67",
-              "button-border": "#354d67",
-              "button-hover": "#243a51"
+              "panel-background": "#1A3248",
+              "panel-border": "#334B65",
+              "feature-background": "#22394F",
+              "feature-border": "#415C77",
+              "button-border": "#38506A",
+              "button-hover": "#243B53"
             }
           },
           "footer": {
@@ -393,6 +403,7 @@
             "about-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
             "contact-hero": "linear-gradient(135deg, #0d2238 0%, #183354 40%, #5c2740 100%)",
             "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
+            "membership-hero": "linear-gradient(135deg, #0d2238 0%, #1b3553 44%, #5e2740 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(208, 172, 102, 0.08), transparent 34%)",
             "home-membership-silver-card": "linear-gradient(180deg, #415468 0%, #2e4052 100%)",
             "home-membership-silver-glow": "radial-gradient(circle at top right, rgba(207, 220, 232, 0.12), transparent 44%)",
@@ -447,9 +458,9 @@
             "muted": "#be9c78"
           },
           "action": {
-            "primary": "#d8ba72",
-            "primary-hover": "#e7ca86",
-            "primary-contrast": "#1f3047"
+            "primary":"#CFB067",
+            "primary-hover":"#DEC07D",
+            "primary-contrast":"#1F3047"
           },
           "state": {
             "info": "#faf7f1",
@@ -460,22 +471,24 @@
         },
         "component": {
           "section-label": "#e0bf4f",
-          "about-hero": {
+          "hero": {
             "border": "#cdbda7",
             "overlay": {
               "background-soft": "rgba(255, 250, 243, 0.03)",
               "background-panel": "rgba(108, 86, 84, 0.5)"
             },
-            "line": "#d7b86e",
             "title-accent": "#d8b24f",
             "description": "#fff7ed",
-            "secondary-description": "#eadcc7",
+            "secondary-description": "#eadcc7"
+          },
+          "about-hero": {
             "ghost-title": "rgba(255, 244, 225, 0.09)"
           },
+          "section-line": "#d7b86e",
           "emphasis-card": {
-            "background": "#eef3f7",
-            "border": "#cfdae4",
-            "line": "#cda968"
+            "background": "#d8c3a5",
+            "border": "#cbb38f",
+            "line": "#bfa074"
           },
           "home-events": {
             "card": {
@@ -516,12 +529,12 @@
             "line": "#d7c5a8",
             "fill": "#eadfcb"
           },
+          "hero-secondary-action": {
+            "background": "#fcf6eb",
+            "background-hover": "#f3e5ce",
+            "border": "#dac9ad"
+          },
           "home-hero": {
-            "secondary-action": {
-              "background": "#fcf6eb",
-              "background-hover": "#f3e5ce",
-              "border": "#dac9ad"
-            },
             "divider": "#d8cbb7"
           },
           "info-card": {
@@ -538,35 +551,43 @@
               "border": "#cfab62"
             }
           },
-          "home-membership": {
+          "membership-tier": {
             "silver": {
-              "background": "#d5d2ce",
-              "border": "#afa9a2",
-              "line": "#9f9890",
-              "button-border": "#9f9890",
-              "button-hover": "#c7c3bd"
+              "border": "#A38767",
+              "line": "#927658",
+              "feature-background": "#E8DCCD",
+              "feature-border": "#C9B49A",
+              "button-background": "#E8DDCF",
+              "button-border": "#987C5E",
+              "button-hover": "#D8C7B3"
             },
             "gold": {
-              "accent": "#d9bb74",
-              "divider": "#cfb372",
-              "accent-hover": "#e6cb92"
+              "accent": "#D8BA73",
+              "divider": "#C8A15C",
+              "accent-hover": "#E8CD91",
+              "feature-background": "#705939",
+              "feature-border": "#B38B50"
             },
             "diamond": {
-              "border": "#bc995e",
-              "ring": "#ecdcb9",
-              "badge-background": "#294158",
-              "badge-border": "#d7b878",
-              "line": "#dfc181",
-              "divider": "#b18d54",
-              "access-label": "#e0c998",
-              "button": "#f1e3cf",
-              "button-hover": "#f7ecdc"
+              "border": "#BE9A63",
+              "ring": "#E6D6B2",
+              "badge-background": "#233B53",
+              "badge-border": "#D4B474",
+              "line": "#DFC07E",
+              "divider": "#AF8B52",
+              "access-label": "#E2CAA0",
+              "feature-background": "#344A61",
+              "feature-border": "#8EA4BB",
+              "button": "#F1E4D2",
+              "button-hover": "#F7ECDD"
             },
             "free": {
-              "panel-background": "#fdf7ee",
-              "panel-border": "#e8ddcf",
-              "button-border": "#e3d7c7",
-              "button-hover": "#f8f0e3"
+              "panel-background": "#F8F1E7",
+              "panel-border": "#D8C8B2",
+              "feature-background": "#FBF5EC",
+              "feature-border": "#E0D1BD",
+              "button-border": "#CCBCA6",
+              "button-hover": "#EEE2D1"
             }
           },
           "footer": {
@@ -588,8 +609,9 @@
             "about-hero": "linear-gradient(135deg, #3a4658 0%, #735e48 48%, #9a6771 100%)",
             "contact-hero": "linear-gradient(135deg, #39485c 0%, #6c5b4a 40%, #8b6974 100%)",
             "home-hero": "linear-gradient(135deg, #f5ebdc 0%, #eee0cc 42%, #fcf8f1 100%)",
+            "membership-hero": "linear-gradient(135deg, #3b495d 0%, #695748 42%, #8a6873 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.10), transparent 30%)",
-            "home-membership-silver-card": "linear-gradient(180deg, #e1ddda 0%, #cbc6bf 100%)",
+            "home-membership-silver-card": "linear-gradient(180deg, #e5ddd1 0%, #cdbfae 100%)",
             "home-membership-silver-glow": "radial-gradient(circle at top right, rgba(255, 255, 255, 0.42), transparent 40%)",
             "home-membership-gold-card": "linear-gradient(180deg, #675135 0%, #4a3822 100%)",
             "home-membership-gold-glow": "radial-gradient(circle at top right, rgba(239, 210, 150, 0.22), transparent 50%)",

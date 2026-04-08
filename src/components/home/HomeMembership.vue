@@ -33,16 +33,16 @@
       <view class="grid gap-4 lg:grid-cols-[0.92fr_1fr_1.06fr]">
         <!-- silver -->
         <view
-          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-component-home-membership-silver-border bg-next-gradient-home-membership-silver-card px-5 py-6 shadow-next-shadow-panel lg:px-6"
+          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-component-membership-tier-silver-border bg-next-gradient-home-membership-silver-card px-5 py-6 shadow-next-shadow-panel lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-home-membership-silver-line" />
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-silver-line" />
           <view class="absolute inset-0 bg-next-gradient-home-membership-silver-glow" />
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-next-semantic-accent-muted">
             {{ t('membership.vip.silver.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-next-component-home-membership-silver-line" />
+          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-silver-line" />
 
           <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-next-semantic-text-primary lg:text-[32px]">
             {{ t('membership.vip.silver.name') }}
@@ -64,7 +64,7 @@
             </view>
           </view>
 
-          <view class="relative mt-6 h-px w-full bg-next-component-home-membership-silver-line" />
+          <view class="relative mt-6 h-px w-full bg-next-component-membership-tier-silver-line" />
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-secondary">
             <view class="flex gap-3">
@@ -98,14 +98,14 @@
         <view
           class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-semantic-accent-secondary bg-next-gradient-home-membership-gold-card px-5 py-6 shadow-next-shadow-emphasis lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-home-membership-gold-accent" />
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-gold-accent" />
           <view class="absolute inset-0 bg-next-gradient-home-membership-gold-glow" />
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse-subtle">
             {{ t('membership.vip.gold.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-next-component-home-membership-gold-accent" />
+          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-gold-accent" />
 
           <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-next-semantic-text-inverse lg:text-[32px]">
             {{ t('membership.vip.gold.name') }}
@@ -127,7 +127,7 @@
             </view>
           </view>
 
-          <view class="relative mt-6 h-px w-full bg-next-component-home-membership-gold-divider" />
+          <view class="relative mt-6 h-px w-full bg-next-component-membership-tier-gold-divider" />
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-inverse-muted">
             <view class="flex gap-3">
@@ -159,18 +159,18 @@
 
         <!-- diamond -->
         <view
-          class="relative flex min-h-[490px] flex-col overflow-hidden border border-next-component-home-membership-diamond-border bg-next-gradient-home-membership-diamond-card px-5 py-6 shadow-next-shadow-luxe ring-1 ring-next-component-home-membership-diamond-ring lg:-translate-y-1 lg:px-6"
+          class="relative flex min-h-[490px] flex-col overflow-hidden border border-next-component-membership-tier-diamond-border bg-next-gradient-home-membership-diamond-card px-5 py-6 shadow-next-shadow-luxe ring-1 ring-next-component-membership-tier-diamond-ring lg:-translate-y-1 lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-[2px] bg-next-component-home-membership-diamond-line" />
+          <view class="absolute inset-x-0 top-0 h-[2px] bg-next-component-membership-tier-diamond-line" />
           <view class="absolute inset-y-0 right-0 w-[46%] bg-next-gradient-home-membership-diamond-glow" />
 
           <view
-            class="relative inline-flex w-fit items-center border border-next-component-home-membership-diamond-badge-border bg-next-component-home-membership-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse"
+            class="relative inline-flex w-fit items-center border border-next-component-membership-tier-diamond-badge-border bg-next-component-membership-tier-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse"
           >
             {{ t('membership.vip.diamond.badge') }}
           </view>
 
-          <view class="relative mt-4 h-px w-12 bg-next-component-home-membership-diamond-line" />
+          <view class="relative mt-4 h-px w-12 bg-next-component-membership-tier-diamond-line" />
 
           <view class="relative mt-5 text-[30px] font-semibold leading-[1.1] text-next-semantic-text-inverse lg:text-[34px]">
             {{ t('membership.vip.diamond.name') }}
@@ -192,7 +192,7 @@
             </view>
           </view>
 
-          <view class="relative mt-7 h-px w-full bg-next-component-home-membership-diamond-divider" />
+          <view class="relative mt-7 h-px w-full bg-next-component-membership-tier-diamond-divider" />
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-inverse-muted">
             <view class="flex gap-3">
@@ -210,7 +210,7 @@
           </view>
 
           <view class="relative mt-auto pt-6">
-            <view class="mb-3 text-[10px] uppercase tracking-[3px] text-next-component-home-membership-diamond-access-label">
+            <view class="mb-3 text-[10px] uppercase tracking-[3px] text-next-component-membership-tier-diamond-access-label">
               {{ t('membership.vip.diamond.accessLabel') }}
             </view>
 
@@ -230,7 +230,7 @@
 
       <!-- complimentary access -->
       <view
-        class="mt-4 border border-next-component-home-membership-free-panel-border bg-next-component-home-membership-free-panel-background px-5 py-5 shadow-next-shadow-panel lg:px-6"
+        class="mt-4 border border-next-component-membership-tier-free-panel-border bg-next-component-membership-tier-free-panel-background px-5 py-5 shadow-next-shadow-panel lg:px-6"
       >
         <view class="grid gap-5 lg:grid-cols-[210px_120px_minmax(0,1fr)_150px] lg:items-center">
           <view>

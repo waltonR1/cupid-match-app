@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav="common.nav.membership"
@@ -7,8 +7,10 @@
       @register-click="handleRegisterClick"
     />
 
-    <MembershipHero @open-plan="openPlan" />
-    <MembershipCompareSection @open-plan="openPlan" />
+    <MembershipHero
+      @open-plan="openPlan"
+      @open-compare="openCompare"
+    />
     <MembershipTiersSection @open-plan="openPlan" />
     <MembershipRulesSection @open-plan="openPlan" />
 
@@ -22,7 +24,6 @@
 <script setup lang="ts">
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
-import MembershipCompareSection from '@/components/membership/MembershipCompareSection.vue'
 import MembershipHero from '@/components/membership/MembershipHero.vue'
 import MembershipRulesSection from '@/components/membership/MembershipRulesSection.vue'
 import MembershipTiersSection from '@/components/membership/MembershipTiersSection.vue'
@@ -38,6 +39,13 @@ function handleNavClick(key: string) {
 
 function openPlan(plan: string) {
   openRegisterPage(plan)
+}
+
+function openCompare() {
+  uni.pageScrollTo({
+    selector: '#membership-compare',
+    duration: 280,
+  })
 }
 
 function handleRegisterClick() {

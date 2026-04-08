@@ -38,12 +38,12 @@
             {{ t('hero.actions.primary') }}
           </AppButton>
 
-          <AppButton
-            variant="secondary"
-            context="home-hero"
-            size="lg"
-            width="cta"
-            rounded="none"
+            <AppButton
+              variant="secondary"
+              context="hero"
+              size="lg"
+              width="cta"
+              rounded="none"
             @click="openProfiles"
           >
             {{ t('hero.actions.secondary') }}

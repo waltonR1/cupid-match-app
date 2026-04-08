@@ -3,8 +3,8 @@
     <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
       <view class="grid gap-12 lg:min-h-[560px] lg:grid-cols-[1fr_0.94fr] lg:items-start">
         <view class="max-w-[680px]">
-          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-about-hero-border bg-next-component-about-hero-overlay-background-soft px-5 py-2 backdrop-blur">
-            <view class="h-[1px] w-12 bg-next-component-about-hero-line" />
+          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
+            <view class="h-[1px] w-12 bg-next-component-section-line" />
             <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
               {{ t('hero.eyebrow') }}
             </text>
@@ -14,16 +14,16 @@
             <view class="text-[52px] font-semibold leading-[1.02] text-next-semantic-text-inverse lg:text-[86px]">
               {{ t('hero.title') }}
             </view>
-            <view class="mt-4 text-[32px] italic leading-[1.08] text-next-component-about-hero-title-accent lg:text-[58px]">
+            <view class="mt-4 text-[32px] italic leading-[1.08] text-next-component-hero-title-accent lg:text-[58px]">
               {{ t('hero.titleAccent') }}
             </view>
           </view>
 
-          <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-next-component-about-hero-description lg:text-[20px]">
+          <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-next-component-hero-description lg:text-[20px]">
             {{ t('hero.description') }}
           </view>
 
-          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-next-component-about-hero-secondary-description lg:text-[18px]">
+          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-next-component-hero-secondary-description lg:text-[18px]">
             {{ t('hero.secondaryDescription') }}
           </view>
 
@@ -44,7 +44,7 @@
           <view
             v-for="item in cards"
             :key="item.title"
-            class="border border-next-component-about-hero-border bg-next-component-about-hero-overlay-background-soft px-6 py-6 shadow-next-shadow-about-hero-panel backdrop-blur"
+            class="border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-6 py-6 shadow-next-shadow-about-hero-panel backdrop-blur"
           >
             <view class="flex items-center gap-4">
               <view class="text-[28px]">{{ item.icon }}</view>
@@ -52,7 +52,7 @@
                 {{ t(item.title) }}
               </view>
             </view>
-            <view class="mt-4 text-[17px] leading-8 text-next-component-about-hero-description">
+            <view class="mt-4 text-[17px] leading-8 text-next-component-hero-description">
               {{ t(item.desc) }}
             </view>
             <view class="mt-6 text-[18px] font-medium text-next-semantic-text-inverse">
