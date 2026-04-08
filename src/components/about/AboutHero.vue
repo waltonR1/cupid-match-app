@@ -5,7 +5,7 @@
         <view class="relative z-10 max-w-[720px]">
           <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
             <view class="h-[1px] w-12 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
+            <text class="text-[12px] uppercase tracking-[6px] text-next-component-hero-eyebrow">
               {{ t('hero.eyebrow') }}
             </text>
           </view>
@@ -32,7 +32,7 @@
                 :key="item.title"
                 class="border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-6 py-5 backdrop-blur"
             >
-              <view class="text-[13px] uppercase tracking-[4px] text-next-component-section-label">
+              <view class="text-[13px] uppercase tracking-[4px] text-next-component-hero-label">
                 {{ t(item.title) }}
               </view>
               <view class="mt-3 text-[15px] leading-7 text-next-component-hero-description">
@@ -49,14 +49,14 @@
 
           <view class="grid gap-6 lg:ml-auto lg:max-w-[460px]">
             <view class="border border-next-component-hero-border bg-next-component-hero-overlay-background-panel px-8 py-8 shadow-next-shadow-about-hero-panel backdrop-blur">
-              <view class="text-[13px] uppercase tracking-[4px] text-next-component-section-label">Positioning</view>
+              <view class="text-[13px] uppercase tracking-[4px] text-next-component-hero-label">Positioning</view>
               <view class="mt-5 text-[28px] leading-[1.6] text-next-semantic-text-inverse">
                 {{ t('hero.card1') }}
               </view>
             </view>
 
             <view class="border border-next-component-hero-border bg-next-component-hero-overlay-background-panel px-8 py-8 text-next-semantic-text-inverse shadow-next-shadow-about-hero-feature lg:ml-14">
-              <view class="text-[13px] uppercase tracking-[4px] text-next-component-section-label">Approach</view>
+              <view class="text-[13px] uppercase tracking-[4px] text-next-component-hero-label">Approach</view>
               <view class="mt-5 text-[28px] leading-[1.6] text-next-semantic-text-inverse">
                 {{ t('hero.card2') }}
               </view>

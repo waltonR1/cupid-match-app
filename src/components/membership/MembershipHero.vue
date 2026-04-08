@@ -6,7 +6,7 @@
         <view class="max-w-[620px]">
           <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
             <view class="h-[1px] w-12 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
+            <text class="text-[12px] uppercase tracking-[6px] text-next-component-hero-eyebrow">
               {{ t('hero.eyebrow') }}
             </text>
           </view>
@@ -53,7 +53,7 @@
 
         <view class="grid gap-5 lg:ml-auto lg:max-w-[560px]">
           <view class="border border-next-component-hero-border bg-next-component-hero-overlay-background-panel px-7 py-7 shadow-next-shadow-soft-luxe backdrop-blur">
-            <view class="text-[13px] uppercase tracking-[5px] text-next-component-section-label">
+            <view class="text-[13px] uppercase tracking-[5px] text-next-component-hero-label">
               {{ t('hero.overviewTitle') }}
             </view>
 

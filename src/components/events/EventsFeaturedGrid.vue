@@ -3,7 +3,7 @@
     <view class="mx-auto max-w-[1280px] px-8 pb-24">
     <view class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <view>
-        <view class="mt-6 text-[12px] uppercase tracking-[5px] text-next-component-section-label">{{ eyebrow }}</view>
+        <view class="mt-6 text-[12px] uppercase tracking-[5px] text-next-component-section-eyebrow">{{ eyebrow }}</view>
         <view class="mt-4 text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[62px]">
           {{ title }}
         </view>

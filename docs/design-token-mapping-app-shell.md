@@ -422,8 +422,8 @@
 
 ### Added Tokens
 
-- `next-component-home-events-card-background`: Events preview 卡默认背景
-- `next-component-home-events-card-background-hover`: Events preview 卡 hover 背景
+- `next-component-event-card-background`: 共享 event card 默认背景
+- `next-component-event-card-background-hover`: 共享 event card hover 背景
 - `next-component-section-card-hover-border`: Events / Features 共用 hover 边框
 - `next-component-home-audience-tag-background`: Audience 标签卡默认背景
 - `next-component-home-audience-tag-background-hover`: Audience 标签卡 hover 背景
@@ -436,7 +436,7 @@
 ### Background Classification
 
 - `HomeEventsPreview`: `semantic.page.subtle`
-- `HomeEventsPreview` event 卡: `component.home-events.card`
+- `HomeEventsPreview` event 卡: `component.event-card`
   - 现已复用 `EventOverviewCard`
   - 卡片内容来自 `mock/events`
 - `HomeFeatures`: `semantic.page.default`
@@ -465,9 +465,9 @@ Current structure note:
 | `text-brand-accent-strong` | `text-next-semantic-accent-primary` |
 | `text-text-body-soft` | `text-next-semantic-text-muted` |
 | `border-border-base` | `border-next-semantic-border-default` |
-| `bg-surface-card` | `bg-next-component-home-events-card-background` |
+| `bg-surface-card` | `bg-next-component-event-card-background` |
 | `hover:border-border-accent/50` | `hover:border-next-component-section-card-hover-border` |
-| `hover:bg-surface-panel` | `hover:bg-next-component-home-events-card-background-hover` |
+| `hover:bg-surface-panel` | `hover:bg-next-component-event-card-background-hover` |
 | `hover:shadow-card` | `hover:shadow-next-shadow-panel` |
 | CTA ghost button | `AppButton secondary + section` |
 
@@ -570,7 +570,10 @@ Current structure note:
 - `next-component-hero-overlay-background-soft`: Hero 共享弱透明背景
 - `next-component-hero-overlay-background-panel`: Hero 共享主浮层背景
 - `next-component-section-line`: section 头部装饰线色。用于 AboutHero、ContactHero 与 Membership 各 section。
-- `next-component-section-label`: section / hero 的 eyebrow、标签与卡片小标题共享文本色
+- `next-component-section-eyebrow`: 普通 section 顶部 eyebrow 文本色
+- `next-component-hero-eyebrow`: hero 顶部 eyebrow 文本色
+- `next-component-hero-label`: hero 内部卡片标签与字段标题文本色
+- `next-component-card-label`: 普通卡片内的小标题 / 标签文本色
 - `next-component-hero-title-accent`: Hero 共享标题强调色
 - `next-component-hero-description`: Hero 共享主说明文字色
 - `next-component-hero-secondary-description`: Hero 共享副说明文字色
@@ -591,7 +594,8 @@ Current structure note:
 - `AboutHero` 标题强调: `component.hero.title-accent`
 - `AboutHero` 主说明: `component.hero.description`
 - `AboutHero` 副说明: `component.hero.secondary-description`
-- `AboutHero` eyebrow / audience / positioning / approach: `component.section-label`
+- `AboutHero` eyebrow: `component.hero-eyebrow`
+- `AboutHero` audience / positioning / approach: `component.hero-label`
 - `AboutHero` 装饰线: `component.section-line`
 - `AboutHero` 背景大字: `component.about-hero.ghost-title`
 
@@ -617,7 +621,7 @@ Current structure note:
 | `border-border-inverse/34` | `border-next-component-hero-border` |
 | `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
 | `bg-brand-accent` | `bg-next-component-section-line` |
-| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` / `text-next-component-hero-label` |
 | `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
 | `text-text-inverse-soft` | `text-next-component-hero-description` |
 | `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
@@ -625,7 +629,7 @@ Current structure note:
 | `text-text-inverse/5` | `text-next-component-about-hero-ghost-title` |
 | `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
 | `shadow-card` | `shadow-next-shadow-about-hero-panel` |
-| `text-brand-accent` | `text-next-component-section-label` |
+| `text-brand-accent` | `text-next-component-hero-label` |
 | `border-brand-accent/32` | `border-next-component-hero-border` |
 | `bg-surface-inverse-card/72` | `bg-next-component-hero-overlay-background-panel` |
 | `shadow-hero` | `shadow-next-shadow-about-hero-feature` |
@@ -743,14 +747,20 @@ Current code note:
 ### Added Tokens
 
 - `next-effect-gradient-contact-hero`: ContactHero 专用背景渐变
-- `next-component-section-label`: ContactHero 与 Contact section 复用的小标题文本色
+- `next-component-section-eyebrow`: Contact section 顶部 eyebrow 文本色
+- `next-component-hero-eyebrow`: ContactHero 顶部 eyebrow 文本色
+- `next-component-hero-label`: ContactHero 卡片标题文本色
+- `next-component-card-label`: Contact section 普通卡标签文本色
 
 ### Reused Tokens
 
 - `about-hero.border`
 - `about-hero.overlay.background-soft`
 - `section-line`
-- `section-label`
+- `section-eyebrow`
+- `hero-eyebrow`
+- `hero-label`
+- `card-label`
 - `about-hero.title-accent`
 - `about-hero.description`
 - `about-hero.secondary-description`
@@ -800,14 +810,14 @@ Current code note:
 | `border-border-inverse/34` | `border-next-component-hero-border` |
 | `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
 | `bg-brand-accent` | `bg-next-component-section-line` |
-| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` |
 | `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
 | `text-text-inverse-soft` | `text-next-component-hero-description` |
 | `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
 | primary CTA legacy button | `AppButton primary + lg + cta` |
 | `border-border-inverse/32` | `border-next-component-hero-border` |
 | `shadow-card` | `shadow-next-shadow-about-hero-panel` |
-| card `text-brand-accent` | `text-next-component-section-label` |
+| card `text-brand-accent` | `text-next-component-hero-label` |
 
 #### ContactInfo.vue
 
@@ -821,7 +831,7 @@ Current code note:
 | `border-border-base` | `border-next-semantic-border-soft` |
 | `bg-surface-base` | `bg-next-semantic-surface-info-card` |
 | `bg-border-light/80` | `bg-next-component-info-card-line` |
-| `text-brand-support` card label | `text-next-component-section-label` |
+| `text-brand-support` card label | `text-next-component-card-label` |
 | `text-text-heading` | `text-next-semantic-text-primary` |
 | `text-text-body` | `text-next-semantic-text-secondary` |
 | `border-border-soft` | `border-next-semantic-border-soft` |
@@ -882,7 +892,9 @@ Current code note:
 - `hero.title-accent`
 - `hero.description`
 - `hero.secondary-description`
-- `section-label`
+- `section-eyebrow`
+- `hero-eyebrow`
+- `hero-label`
 - `hero-ornament.line`
 - `membership-tier.free.feature-*`
 - `membership-tier.silver.*`
@@ -937,7 +949,8 @@ Current code note:
 - `MembershipHero` 标题强调: `component.hero.title-accent`
 - `MembershipHero` 主说明: `component.hero.description`
 - `MembershipHero` 副说明: `component.hero.secondary-description`
-- `MembershipHero` eyebrow / overview title: `component.section-label`
+- `MembershipHero` eyebrow: `component.hero-eyebrow`
+- `MembershipHero` overview title: `component.hero-label`
 
 ### Border Classification
 
@@ -964,7 +977,7 @@ Current code note:
 | `border-border-inverse/34` | `border-next-component-hero-border` |
 | `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
 | `bg-brand-accent` | `bg-next-component-section-line` |
-| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` / `text-next-component-hero-label` |
 | `text-brand-accent-strong` | `text-next-component-hero-title-accent` |
 | `text-text-inverse-soft` | `text-next-component-hero-description` |
 | `text-text-inverse-muted` | `text-next-component-hero-secondary-description` |
@@ -997,7 +1010,7 @@ Current code note:
 
 ## Pending Convergence Notes
 
-- `component.home-events.card.background-hover` 与 `semantic.surface.info-card-hover` 在 dark 目前同值，暂不合并。后续等真实 events 页面替换后再判断。
+- `component.event-card.background-hover` 与 `semantic.surface.info-card-hover` 在 dark 目前同值，暂不合并。后续等真实 events 页面替换后再判断。
 - `component.directory-card.hover-border` 与 `semantic.border.info-card-hover` 在 dark 目前同值，先记录，后续视目录卡是否需要独立 hover 语义再决定。
 - `semantic.surface.card` 与 `semantic.state.info` 在 dark 目前同值。当前未造成使用层冲突，但状态色长期不宜与普通 surface 共值。
 - `component.principle-card.background` 与 `semantic.surface.panel` 在 light 目前同值。后续依据 principle-card 的复用范围决定是回收还是继续保留独立调色空间。
@@ -1021,7 +1034,7 @@ Current code note:
 
 - `EventsHero` 主标题: `semantic.text.inverse`
 - `EventsHero` 主说明: `component.hero.description`
-- `EventsHero` next-event label: `component.section-label`
+- `EventsHero` next-event label: `component.hero-label`
 - `EventsHero` next-event fields: `component.hero.secondary-description`
 - `EventsHero` next-event summary: `semantic.text.inverse-muted`
 - `EventsFeaturedGrid` stats label: `semantic.accent.secondary`
@@ -1052,19 +1065,19 @@ Current code note:
 | `border-border-inverse/34` | `border-next-component-hero-border` |
 | `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
 | `bg-brand-accent` | `bg-next-component-section-line` |
-| `text-brand-accent-soft` | `text-next-component-section-label` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` / `text-next-component-hero-label` |
 | `text-text-inverse-soft` | `text-next-component-hero-description` |
 | `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
-| `text-brand-accent` | `text-next-component-section-label` |
+| `text-brand-accent` | `text-next-component-hero-label` |
 | `text-text-inverse-muted` | `text-next-semantic-text-inverse-muted` |
 
 #### EventStatusBadge.vue
 
 | Legacy class | Next class |
 | --- | --- |
-| open badge | `semantic.state.open.background/border/text/dot` |
-| waitlist badge | `semantic.state.waitlist.background/border/text/dot` |
-| closed badge | `semantic.state.closed.background/border/text/dot` |
+| open badge | `semantic.state.event.open.background/border/text/dot` |
+| waitlist badge | `semantic.state.event.waitlist.background/border/text/dot` |
+| closed badge | `semantic.state.event.closed.background/border/text/dot` |
 
 #### EventsFeaturedGrid.vue
 
@@ -1078,17 +1091,17 @@ Current structure note:
 
 | Legacy class | Next class |
 | --- | --- |
-| `text-brand-support` | `text-next-component-section-label` / `text-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-component-section-eyebrow` / `text-next-semantic-accent-secondary` |
 | `text-text-heading` | `text-next-semantic-text-primary` |
 | `text-text-body` | `text-next-semantic-text-secondary` |
 | `text-text-body-soft` | `text-next-semantic-text-muted` |
 | `text-text-muted` | `text-next-semantic-text-subtle` |
 | `border-border-base` | `border-next-semantic-border-default` |
 | `border-border-light` | `border-next-semantic-border-soft` |
-| `bg-surface-base` | `bg-next-component-home-events-card-background` |
+| `bg-surface-base` | `bg-next-component-event-card-background` |
 | `shadow-panel` | `shadow-next-panel` |
 | `hover:border-border-accent/50` | `hover:border-next-component-section-card-hover-border` |
-| `hover:bg-surface-panel` | `hover:bg-next-component-home-events-card-background-hover` |
+| `hover:bg-surface-panel` | `hover:bg-next-component-event-card-background-hover` |
 | `hover:shadow-card` | `hover:shadow-next-about-hero-panel` |
 | stats `border-border-base` | `border-next-semantic-border-default` |
 | stats `bg-surface-card` | `bg-next-semantic-surface-card` |
@@ -1102,14 +1115,119 @@ Current structure note:
 | --- | --- |
 | `text-text-heading` | `text-next-semantic-text-primary` |
 | `bg-border-base/55` | `bg-next-component-section-line opacity-45` |
-| `text-brand-support` | `text-next-component-section-label` / `text-next-semantic-accent-secondary` |
+| `text-brand-support` | `text-next-component-section-eyebrow` / `text-next-semantic-accent-secondary` |
 | `text-text-body-soft` | `text-next-semantic-text-muted` |
 | `border-border-base` | `border-next-semantic-border-default` |
-| `bg-surface-card` | `bg-next-component-home-events-card-background` |
+| `bg-surface-card` | `bg-next-component-event-card-background` |
 | `shadow-panel` | `shadow-next-panel` |
 | `hover:border-brand-accent/24` | `hover:border-next-component-section-card-hover-border` |
-| `hover:bg-surface-base` | `hover:bg-next-component-home-events-card-background-hover` |
+| `hover:bg-surface-base` | `hover:bg-next-component-event-card-background-hover` |
 | `hover:shadow-card` | `hover:shadow-next-about-hero-panel` |
 | `bg-brand-accent/18` | `bg-next-component-section-line opacity-*` |
 | `text-text-muted` | `text-next-semantic-text-subtle` |
 | `border-border-light` | `border-next-semantic-border-soft` |
+
+# Events Detail
+
+## Background Classification
+
+- `events/detail.vue`: `semantic.page.default`
+- `EventDetailHero`: `effect.gradient.events-hero`
+- `EventDetailHero` eyebrow: `component.hero.overlay.background-soft`
+- `EventDetailHero` detail panel: `component.hero.overlay.background-panel`
+- `EventDetailAgenda`: `semantic.surface.panel`
+- `EventDetailAgenda` items: `semantic.surface.card`
+- `EventDetailNotes`: `semantic.surface.card`
+- `EventDetailRelatedProfiles` cards: `semantic.surface.info-card`
+
+## Text Classification
+
+- `EventDetailHero` title: `semantic.text.inverse`
+- `EventDetailHero` summary: `component.hero.description`
+- `EventDetailHero` field labels: `component.hero-label`
+- `EventDetailHero` field values: `component.hero.description`
+- `EventDetailHero` hint: `semantic.text.inverse-muted`
+- `EventDetailAgenda` title: `semantic.text.primary`
+- `EventDetailAgenda` body: `semantic.text.muted`
+- `EventDetailNotes` title: `semantic.text.primary`
+- `EventDetailNotes` body: `semantic.text.muted`
+- `EventDetailRelatedProfiles` title: `semantic.text.primary`
+- `EventDetailRelatedProfiles` meta: `semantic.text.subtle`
+- `EventDetailRelatedProfiles` summary: `semantic.text.muted`
+
+## Border Classification
+
+- `EventDetailHero` eyebrow: `component.hero.border`
+- `EventDetailHero` detail panel: `component.hero.border`
+- `EventDetailAgenda`: `semantic.border.default`
+- `EventDetailAgenda` items: `semantic.border.soft`
+- `EventDetailNotes`: `semantic.border.default`
+- `EventDetailNotes` dividers: `semantic.border.soft`
+- `EventDetailRelatedProfiles`: `semantic.border.default`
+- `EventDetailRelatedProfiles` hover: `semantic.border.info-card-hover`
+
+## Mapping Summary
+
+#### events/detail.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+
+#### EventDetailHero.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-events-hero` | `bg-next-gradient-events-hero` |
+| orbit decoration | `component.hero-ornament.line/fill` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-hero-overlay-background-soft` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
+| `bg-brand-accent` | `bg-next-component-section-line` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` / `text-next-component-hero-label` |
+| `text-brand-accent` | `text-next-component-hero-label` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| waitlist action button | `semantic.action.waitlist/*` |
+| closed action button | `semantic.action.disabled/*` |
+| open action button | `semantic.action.primary/*` |
+
+#### EventDetailAgenda.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `bg-surface-base` | `bg-next-semantic-surface-panel` |
+| `text-brand-support` | `text-next-component-section-eyebrow` / `text-next-component-card-label` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+| `border-border-light` | `border-next-semantic-border-soft` |
+| `bg-surface-card` | `bg-next-semantic-surface-card` |
+| `hover:border-border-accent/30` | `hover:border-next-component-section-card-hover-border` |
+| `hover:bg-surface-base` | `hover:bg-next-semantic-surface-soft` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+
+#### EventDetailNotes.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `bg-surface-card` | `bg-next-semantic-surface-card` |
+| `bg-brand-accent/62` | `bg-next-component-section-line opacity-70` |
+| `text-brand-support` | `text-next-component-section-eyebrow` / `text-next-component-card-label` |
+| `border-border-light` | `border-next-semantic-border-soft` |
+| `bg-surface-panel` | `bg-next-semantic-surface-panel` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |
+
+#### EventDetailRelatedProfiles.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `text-brand-support` | `text-next-component-section-eyebrow` / `text-next-component-card-label` |
+| `text-text-heading` | `text-next-semantic-text-primary` |
+| `border-border-base` | `border-next-semantic-border-default` |
+| `bg-surface-card` | `bg-next-semantic-surface-info-card` / `bg-next-semantic-surface-card` |
+| `bg-surface-panel` | `bg-next-semantic-surface-panel` |
+| `hover:border-border-accent/28` | `hover:border-next-semantic-border-info-card-hover` |
+| `hover:bg-surface-base` | `hover:bg-next-semantic-surface-info-card-hover` |
+| `text-text-muted` | `text-next-semantic-text-subtle` |
+| `text-text-body-soft` | `text-next-semantic-text-muted` |

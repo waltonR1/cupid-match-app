@@ -19,29 +19,29 @@ const props = defineProps<{
 
 const badgeClassName = computed(() => {
   if (props.status === 'open') {
-    return 'rounded-full border-next-semantic-state-open-border bg-next-semantic-state-open-background text-next-semantic-state-open-text shadow-next-panel tracking-[1.5px]'
+    return 'rounded-full border-next-semantic-state-event-open-border bg-next-semantic-state-event-open-background text-next-semantic-state-event-open-text shadow-next-panel tracking-[1.5px]'
   }
 
   if (props.status === 'waitlist') {
-    return 'rounded-full border-next-semantic-state-waitlist-border bg-next-semantic-state-waitlist-background text-next-semantic-state-waitlist-text shadow-next-panel tracking-[1.5px]'
+    return 'rounded-full border-next-semantic-state-event-waitlist-border bg-next-semantic-state-event-waitlist-background text-next-semantic-state-event-waitlist-text shadow-next-panel tracking-[1.5px]'
   }
 
-  return 'rounded-[10px] border-dashed border-next-semantic-state-closed-border bg-next-semantic-state-closed-background text-next-semantic-state-closed-text tracking-[1.2px]'
+  return 'rounded-[10px] border-dashed border-next-semantic-state-event-closed-border bg-next-semantic-state-event-closed-background text-next-semantic-state-event-closed-text tracking-[1.2px]'
 })
 
 const dotClassName = computed(() => {
   if (props.status === 'open') {
-    return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-open-dot'
+    return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-event-open-dot'
   }
 
   if (props.status === 'waitlist') {
-    return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-waitlist-dot'
+    return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-event-waitlist-dot'
   }
 
   if (props.status === 'closed') {
-    return 'h-[5px] w-[5px] rounded-[1px] bg-next-semantic-state-closed-dot'
+    return 'h-[5px] w-[5px] rounded-[1px] bg-next-semantic-state-event-closed-dot'
   }
 
-  return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-open-dot'
+  return 'h-1.5 w-1.5 rounded-full bg-next-semantic-state-event-open-dot'
 })
 </script>

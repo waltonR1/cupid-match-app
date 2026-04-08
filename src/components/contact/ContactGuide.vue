@@ -39,7 +39,7 @@
           <view class="grid gap-6 md:grid-cols-2">
             <view class="relative overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-8 py-10 shadow-next-shadow-emphasis transition-all duration-300 hover:-translate-y-1 hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover">
               <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
-              <view class="text-[12px] uppercase tracking-[5px] text-next-component-section-label">
+              <view class="text-[12px] uppercase tracking-[5px] text-next-component-card-label">
                 {{ t('guide.flow1Label') }}
               </view>
               <view class="mt-5 text-[30px] font-semibold leading-[1.4] text-next-semantic-text-primary">

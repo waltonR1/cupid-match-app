@@ -5,7 +5,7 @@
         <view class="lg:sticky lg:top-24 lg:self-start">
           <view class="mb-5 inline-flex items-center gap-4">
             <view class="h-[1px] w-16 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
+            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-eyebrow">
               {{ t('tiers.eyebrow') }}
             </text>
           </view>

@@ -11,7 +11,7 @@
         <view class="max-w-[680px]">
           <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
             <view class="h-[1px] w-12 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
+            <text class="text-[12px] uppercase tracking-[6px] text-next-component-hero-eyebrow">
               {{ eyebrow }}
             </text>
           </view>
@@ -32,7 +32,7 @@
         >
           <view class="flex flex-wrap items-start justify-between gap-4">
             <view>
-              <view class="text-[12px] uppercase tracking-[4px] text-next-component-section-label transition-colors duration-300 group-hover:text-next-semantic-accent-muted">{{ nextEventLabel }}</view>
+              <view class="text-[12px] uppercase tracking-[4px] text-next-component-hero-label transition-colors duration-300 group-hover:text-next-semantic-accent-muted">{{ nextEventLabel }}</view>
               <view class="mt-4 text-[34px] font-semibold leading-[1.25] text-next-semantic-text-inverse transition-colors duration-300 group-hover:text-next-component-hero-description">
                 {{ nextEvent.title }}
               </view>

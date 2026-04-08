@@ -32,7 +32,7 @@
           <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
           <view class="flex items-center justify-between gap-4">
             <view class="text-[32px]">{{ item.icon }}</view>
-            <view class="text-[13px] uppercase tracking-[4px] text-next-component-section-label">
+            <view class="text-[13px] uppercase tracking-[4px] text-next-component-card-label">
               {{ t('info.cardLabel') }}
             </view>
           </view>

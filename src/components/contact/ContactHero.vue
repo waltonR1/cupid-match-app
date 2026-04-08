@@ -5,7 +5,7 @@
         <view class="max-w-[680px]">
           <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
             <view class="h-[1px] w-12 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-label">
+            <text class="text-[12px] uppercase tracking-[6px] text-next-component-hero-eyebrow">
               {{ t('hero.eyebrow') }}
             </text>
           </view>
@@ -48,7 +48,7 @@
           >
             <view class="flex items-center gap-4">
               <view class="text-[28px]">{{ item.icon }}</view>
-              <view class="text-[18px] font-medium text-next-component-section-label">
+              <view class="text-[18px] font-medium text-next-component-hero-label">
                 {{ t(item.title) }}
               </view>
             </view>

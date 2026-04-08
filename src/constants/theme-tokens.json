@@ -254,26 +254,34 @@
           "action": {
             "primary": "#D3B46E",
             "primary-hover": "#E4C783",
-            "primary-contrast": "#10263B"
+            "primary-contrast": "#10263B",
+            "waitlist": "#7FB6C9",
+            "waitlist-hover": "#95C8D8",
+            "waitlist-contrast": "#10263B",
+            "disabled": "#173047",
+            "disabled-border": "#6D849A",
+            "disabled-contrast": "#D9D0C4"
           },
           "state": {
-            "open": {
-              "background": "#D3B46E",
-              "border": "#D3B46E",
-              "text": "#10263B",
-              "dot": "#10263B"
-            },
-            "waitlist": {
-              "background": "#2C4A5B",
-              "border": "#7FB6C9",
-              "text": "#EDF8FC",
-              "dot": "#7FB6C9"
-            },
-            "closed": {
-              "background": "#173047",
-              "border": "#6D849A",
-              "text": "#D9D0C4",
-              "dot": "#D9D0C4"
+            "event": {
+              "open": {
+                "background": "#D3B46E",
+                "border": "#D3B46E",
+                "text": "#10263B",
+                "dot": "#10263B"
+              },
+              "waitlist": {
+                "background": "#2C4A5B",
+                "border": "#7FB6C9",
+                "text": "#EDF8FC",
+                "dot": "#7FB6C9"
+              },
+              "closed": {
+                "background": "#173047",
+                "border": "#6D849A",
+                "text": "#D9D0C4",
+                "dot": "#D9D0C4"
+              }
             },
             "info": "#173047",
             "success": "#263646",
@@ -282,7 +290,10 @@
           }
         },
         "component": {
-          "section-label": "#e0bf4f",
+          "section-eyebrow": "#d8b67a",
+          "hero-eyebrow": "#e0bf4f",
+          "hero-label": "#ecd5aa",
+          "card-label": "#d8b67a",
           "hero": {
             "border": "#ccd8e3",
             "overlay": {
@@ -302,11 +313,9 @@
             "border": "#6d849a",
             "line": "#d8b879"
           },
-          "home-events": {
-            "card": {
-              "background": "#1f3953",
-              "background-hover": "#294561"
-            }
+          "event-card": {
+            "background": "#1f3953",
+            "background-hover": "#294561"
           },
           "section-card": {
             "hover-border": "#5a7694"
@@ -479,26 +488,34 @@
           "action": {
             "primary":"#CFB067",
             "primary-hover":"#DEC07D",
-            "primary-contrast":"#1F3047"
+            "primary-contrast":"#1F3047",
+            "waitlist":"#82AFC0",
+            "waitlist-hover":"#9BC0CE",
+            "waitlist-contrast":"#1F3047",
+            "disabled":"#F4ECE2",
+            "disabled-border":"#CDBBA7",
+            "disabled-contrast":"#928574"
           },
           "state": {
-            "open": {
-              "background": "#CFB067",
-              "border": "#CFB067",
-              "text": "#1F3047",
-              "dot": "#1F3047"
-            },
-            "waitlist": {
-              "background": "#E2F0F5",
-              "border": "#82AFC0",
-              "text": "#2F5564",
-              "dot": "#4F89A0"
-            },
-            "closed": {
-              "background": "#F4ECE2",
-              "border": "#CDBBA7",
-              "text": "#928574",
-              "dot": "#928574"
+            "event": {
+              "open": {
+                "background": "#CFB067",
+                "border": "#CFB067",
+                "text": "#1F3047",
+                "dot": "#1F3047"
+              },
+              "waitlist": {
+                "background": "#E2F0F5",
+                "border": "#82AFC0",
+                "text": "#2F5564",
+                "dot": "#4F89A0"
+              },
+              "closed": {
+                "background": "#F4ECE2",
+                "border": "#CDBBA7",
+                "text": "#928574",
+                "dot": "#928574"
+              }
             },
             "info": "#faf7f1",
             "success": "#f1e8dd",
@@ -507,7 +524,10 @@
           }
         },
         "component": {
-          "section-label": "#e0bf4f",
+          "section-eyebrow": "#b2834e",
+          "hero-eyebrow": "#e0bf4f",
+          "hero-label": "#eadcc7",
+          "card-label": "#b2834e",
           "hero": {
             "border": "#cdbda7",
             "overlay": {
@@ -527,11 +547,9 @@
             "border": "#cbb38f",
             "line": "#bfa074"
           },
-          "home-events": {
-            "card": {
-              "background": "#fbf5ec",
-              "background-hover": "#fffaf2"
-            }
+          "event-card": {
+            "background": "#fbf5ec",
+            "background-hover": "#fffaf2"
           },
           "section-card": {
             "hover-border": "#d4bc86"

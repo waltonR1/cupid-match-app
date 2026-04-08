@@ -1,6 +1,6 @@
 <template>
   <view
-    class="border border-next-semantic-border-default bg-next-component-home-events-card-background px-8 py-8 shadow-next-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-component-home-events-card-background-hover hover:shadow-next-about-hero-panel"
+    class="border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-component-event-card-background-hover hover:shadow-next-about-hero-panel"
     @click="$emit('open', event.id)"
   >
     <view class="flex items-start justify-between gap-4">
