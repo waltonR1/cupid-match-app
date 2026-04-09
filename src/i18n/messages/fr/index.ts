@@ -17,6 +17,7 @@ import { familyDetailMessages } from '@/i18n/messages/fr/family-detail'
 import { privacyMessages } from '@/i18n/messages/fr/privacy'
 import { selfDetailMessages } from '@/i18n/messages/fr/self-detail'
 import { registerMessages } from '@/i18n/messages/fr/register'
+import { agreementsMessages } from '@/i18n/messages/fr/agreements'
 import { contactMessages } from '@/i18n/messages/fr/contact'
 import { notFoundMessages } from '@/i18n/messages/fr/not-found'
 
@@ -39,6 +40,7 @@ export const fr: AppMessages['fr'] = {
   privacy: privacyMessages,
   selfDetail: selfDetailMessages,
   register: registerMessages,
+  agreements: agreementsMessages,
   contact: contactMessages,
   notFound: notFoundMessages,
 }

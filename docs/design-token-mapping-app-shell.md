@@ -905,7 +905,7 @@ Current code note:
 - hero primary panels: `component.hero.overlay.background-panel`
 - register form panel: `component.hero.overlay.background-panel`
 - register hero helper / selected cards: `component.auth.overlay.background-soft`
-- register lower process items: `semantic.surface.panel` / `semantic.surface.soft`
+- register lower process cards: `semantic.surface.panel`
 - login lower access area: `semantic.page.subtle`
 - login lower access cards: `semantic.surface.info-card`
 
@@ -945,6 +945,10 @@ Current code note:
 | `text-text-inverse-soft` | `text-next-component-hero-description` |
 | lower access cards | `bg-next-semantic-surface-info-card` + `hover:bg-next-semantic-surface-info-card-hover` |
 
+- login agreement row 使用勾选框 + 可点击文本链接，复用共享 `AgreementDialog.vue`
+- 若未勾选直接点击登录，会先打开本地确认弹窗；确认后自动勾选并继续登录
+- login / register 长条款正文已统一迁到独立 `agreements` i18n namespace
+
 #### auth/register.vue
 
 | Legacy class | Next class |
@@ -962,8 +966,13 @@ Current code note:
 | hero body | `text-next-component-hero-description` |
 | hero form card | `border-next-component-hero-border bg-next-component-hero-overlay-background-panel` |
 | hero form fields | `border-next-component-hero-border bg-next-component-auth-overlay-background-soft` |
-| hero benefit card | `border-next-component-hero-border bg-next-component-auth-overlay-background-soft` |
-| lower process rows | `border-next-semantic-border-soft bg-next-semantic-surface-soft` |
+| lower process cards | `border-next-semantic-border-default bg-next-semantic-surface-panel` |
+
+- register fields 已调整为标准账号注册结构：`email / password / confirmPassword / name / city`
+- `intent / contact` 这类申请式字段已从 `auth/register` 移除
+- register agreement row 使用可点击文本链接，打开本地条款 / 隐私弹窗
+- 条款 / 隐私正文已从 `register` i18n 拆出，改为独立 `agreements` namespace
+- 弹窗已抽成共享组件 `AgreementDialog.vue`；容器继续复用 `component.hero.overlay.background-panel` 与 `component.auth.overlay.background-soft`
 
 ## Membership Page / MembershipHero
 

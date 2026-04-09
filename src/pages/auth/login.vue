@@ -113,6 +113,21 @@
                   {{ labels.secondary }}
                 </AppButton>
               </view>
+
+              <label class="mt-6 flex items-start gap-3 border border-next-component-hero-border bg-next-component-auth-overlay-background-soft px-5 py-4">
+                <checkbox :checked="agreed" @click="toggleAgreement" />
+                <view class="text-[14px] leading-7 text-next-component-hero-description">
+                  <text>{{ agreement.prefix }}</text>
+                  <text class="text-next-semantic-accent-secondary underline" @click.stop="openAgreementDialog('terms')">
+                    {{ agreement.terms }}
+                  </text>
+                  <text>{{ agreement.connector }}</text>
+                  <text class="text-next-semantic-accent-secondary underline" @click.stop="openAgreementDialog('privacy')">
+                    {{ agreement.privacy }}
+                  </text>
+                  <text>{{ agreement.suffix }}</text>
+                </view>
+              </label>
             </view>
           </view>
         </view>
@@ -152,11 +167,61 @@
       :nav-list="navList"
       @nav-click="handleNavClick"
     />
+
+    <AgreementDialog
+      :open="Boolean(agreementDialog)"
+      :kind="agreementDialog || 'terms'"
+      @close="closeAgreementDialog"
+    />
+
+    <view
+      v-if="showConsentConfirm"
+      class="fixed inset-0 z-[71] flex items-center justify-center bg-[#07131fcc] px-6 py-10"
+      @click="closeConsentConfirm"
+    >
+      <view
+        class="w-full max-w-[520px] border border-next-component-hero-border bg-next-component-hero-overlay-background-panel px-7 py-7 text-next-semantic-text-inverse shadow-next-shadow-hero"
+        @click.stop
+      >
+        <view class="text-[12px] uppercase tracking-[4px] text-next-component-hero-label">
+          {{ consentConfirm.kicker }}
+        </view>
+        <view class="mt-4 text-[28px] font-semibold leading-[1.3] text-next-semantic-text-inverse">
+          {{ consentConfirm.title }}
+        </view>
+        <view class="mt-4 text-[15px] leading-8 text-next-component-hero-description">
+          {{ consentConfirm.desc }}
+        </view>
+
+        <view class="mt-8 grid gap-4 sm:grid-cols-2">
+          <AppButton
+            variant="secondary"
+            context="hero"
+            width="full"
+            size="lg"
+            class="[margin-left:0] [margin-right:0]"
+            @click="closeConsentConfirm"
+          >
+            {{ consentConfirm.reject }}
+          </AppButton>
+
+          <AppButton
+            width="full"
+            size="lg"
+            class="[margin-left:0] [margin-right:0]"
+            @click="acceptAgreementAndLogin"
+          >
+            {{ consentConfirm.accept }}
+          </AppButton>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
@@ -173,6 +238,9 @@ const navList = NAV_LIST
 const { t } = usePageI18n('login')
 const identity = ref('')
 const password = ref('')
+const agreed = ref(false)
+const agreementDialog = ref<'terms' | 'privacy' | null>(null)
+const showConsentConfirm = ref(false)
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -184,6 +252,22 @@ const labels = computed(() => ({
   submit: t('hero.submit'),
   secondary: t('hero.secondary'),
   accessTitle: t('hero.accessTitle'),
+}))
+
+const agreement = computed(() => ({
+  prefix: t('hero.agreementPrefix'),
+  terms: t('hero.agreementTerms'),
+  connector: t('hero.agreementConnector'),
+  privacy: t('hero.agreementPrivacy'),
+  suffix: t('hero.agreementSuffix'),
+}))
+
+const consentConfirm = computed(() => ({
+  kicker: t('hero.consentConfirm.kicker'),
+  title: t('hero.consentConfirm.title'),
+  desc: t('hero.consentConfirm.desc'),
+  accept: t('hero.consentConfirm.accept'),
+  reject: t('hero.consentConfirm.reject'),
 }))
 
 const formLabels = computed(() => ({
@@ -207,6 +291,11 @@ function handleNavClick(key: string) {
 }
 
 function handleSubmit() {
+  if (!agreed.value) {
+    showConsentConfirm.value = true
+    return
+  }
+
   auth.loginMock()
   uni.redirectTo({
     url: SELF_ROUTE,
@@ -215,5 +304,27 @@ function handleSubmit() {
 
 function handleRegisterClick() {
   openRegisterPage('free')
+}
+
+function toggleAgreement() {
+  agreed.value = !agreed.value
+}
+
+function openAgreementDialog(kind: 'terms' | 'privacy') {
+  agreementDialog.value = kind
+}
+
+function closeAgreementDialog() {
+  agreementDialog.value = null
+}
+
+function closeConsentConfirm() {
+  showConsentConfirm.value = false
+}
+
+function acceptAgreementAndLogin() {
+  agreed.value = true
+  showConsentConfirm.value = false
+  handleSubmit()
 }
 </script>

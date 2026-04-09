@@ -1,73 +1,65 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const registerMessages: AppMessageSchema = {
-    hero: {
-      eyebrow: 'Registration',
-      title: 'Choisissez d abord votre identite',
-      subtitle: 'L inscription commence par un choix clair : pour soi-meme ou comme parent. Ensuite seulement, on entre dans le bon parcours.',
-      selectedRole: 'Identite active',
-      formTitle: 'Informations d inscription',
-      submit: 'Envoyer cette demande',
-      processTitle: 'Etapes',
-      roleBenefitTitle: 'Priorite de cette inscription',
+  hero: {
+    eyebrow: 'Inscription',
+    title: 'Creez votre compte et lancez votre parcours',
+    subtitle: 'Commencez par une inscription de compte classique, puis poursuivez dans le parcours membre ou parent selon votre identite. Le profil detaille viendra ensuite.',
+    selectedRole: 'Identite selectionnee',
+    formTitle: 'Creation du compte',
+    panelTitle: 'Ouvrir votre compte',
+    panelHint: 'Utilisez votre email principal ou WeChat, definissez votre mot de passe, puis ajoutez les informations minimales necessaires pour ouvrir le compte et poursuivre dans le bon parcours.',
+    submit: 'Creer mon compte',
+    processTitle: 'Fonctionnement',
+    agreementPrefix: 'J ai lu et j accepte les',
+    agreementTerms: 'Conditions de la plateforme',
+    agreementConnector: ' et la ',
+    agreementPrivacy: 'Politique de confidentialite',
+    agreementSuffix: '. Apres inscription, la plateforme peut utiliser les informations du compte pour les prises de contact necessaires au service et regler la visibilite selon votre parcours et vos regles de confidentialite.',
+    formFootnote: 'Apres inscription, vous pourrez completer le profil, ajuster la visibilite et ajouter des informations relationnelles plus detaillees dans votre compte.',
+  },
+  roles: {
+    self: {
+      badge: 'Parcours membre',
+      title: 'Inscription pour moi-meme',
+      desc: 'Convient aux membres qui veulent creer eux-memes leur profil, exprimer clairement leurs preferences et avancer directement vers le matching.',
+      note: 'Ce parcours met l accent sur la qualite du profil personnel, la clarte des preferences, l accompagnement conseiller et un rythme pilote par le membre.',
     },
-    roles: {
-      self: {
-        badge: 'Parcours personnel',
-        title: 'Inscription personnelle',
-        desc: 'Pour les membres qui souhaitent construire eux-memes leur profil et avancer directement dans le matching.',
-        note: 'Le systeme met davantage l accent sur le profil personnel, les preferences et le suivi individuel.',
-      },
-      parent: {
-        badge: 'Parcours famille',
-        title: 'Inscription parent',
-        desc: 'Pour les parents qui souhaitent filtrer, comprendre le cadre et accompagner le rythme de contact.',
-        note: 'Le systeme met davantage l accent sur la participation familiale, le cadre des echanges et l accompagnement du dossier enfant.',
-      },
+    parent: {
+      badge: 'Parcours famille',
+      title: 'Inscription comme parent',
+      desc: 'Convient aux parents qui veulent comprendre le cadre, examiner les profils d abord et participer aux premiers echanges.',
+      note: 'Ce parcours met l accent sur la participation familiale, le filtrage initial, les limites d intervention et la coordination autour de l enfant.',
     },
-    form: {
-      name: { label: 'Nom', placeholder: 'Entrez votre nom' },
-      city: { label: 'Ville', placeholder: 'Ex: Paris / Lyon / Bruxelles' },
-      contact: { label: 'Email ou WeChat', placeholder: 'Pour le suivi conseiller' },
-      intent: {
-        label: 'Intention d inscription',
-        placeholder: {
-          self: 'Ex: relation serieuse / projet mariage / voir d abord les profils',
-          parent: 'Ex: comprendre la plateforme pour mon enfant / echanger d abord entre parents / filtrer les familles',
-        },
-      },
-    },
-    process: {
-      step1: {
-        title: 'Confirmer l identite',
-        desc: {
-          self: 'Confirmer que vous entrez comme membre principal avant de lancer l inscription.',
-          parent: 'Confirmer que vous entrez comme parent avant de lancer le parcours famille.',
-        },
-      },
-      step2: {
-        title: 'Laisser les informations de base',
-        desc: {
-          self: 'Donner vos coordonnees, votre ville et votre intention relationnelle pour lancer le suivi.',
-          parent: 'Donner vos coordonnees parentales et la logique d accompagnement avant d ajouter les details de votre enfant.',
-        },
-      },
-      step3: {
-        title: 'Entrer dans le bon parcours',
-        desc: {
-          self: 'Ensuite, vous avancez vers le profil personnel, le matching, les recommandations et les rendez-vous.',
-          parent: 'Ensuite, vous avancez vers la participation familiale, le tri, les autorisations et la coordination.',
-        },
+  },
+  form: {
+    email: { label: 'Email ou WeChat', placeholder: 'Entrez votre email principal ou WeChat' },
+    password: { label: 'Mot de passe', placeholder: 'Definissez votre mot de passe' },
+    confirmPassword: { label: 'Confirmation du mot de passe', placeholder: 'Saisissez a nouveau le mot de passe' },
+    name: { label: 'Nom ou surnom', placeholder: 'Entrez votre nom ou le nom a afficher' },
+    city: { label: 'Ville', placeholder: 'Exemple : Paris / Lyon / Bruxelles' },
+  },
+  process: {
+    step1: {
+      title: 'Creer le compte',
+      desc: {
+        self: 'Commencez par definir votre email ou WeChat et votre mot de passe pour ouvrir le compte membre.',
+        parent: 'Commencez par definir votre email ou WeChat et votre mot de passe pour ouvrir le compte cote famille.',
       },
     },
-    roleBenefits: {
-      self: {
-        title: 'Inscription pour soi-meme',
-        desc: 'Le parcours privilegie la presentation personnelle, les preferences et la prise de contact directe.',
-      },
-      parent: {
-        title: 'Inscription comme parent',
-        desc: 'Le parcours privilegie l evaluation familiale, le filtrage initial et l accompagnement avant mise en relation.',
+    step2: {
+      title: 'Ajouter les bases',
+      desc: {
+        self: 'Ajoutez d abord votre nom et votre ville, puis completez le profil personnel plus en detail ensuite.',
+        parent: 'Ajoutez d abord le nom et la ville cote parent, puis continuez vers la configuration familiale ensuite.',
       },
     },
-  }
+    step3: {
+      title: 'Entrer dans le bon parcours',
+      desc: {
+        self: 'Apres l inscription, vous entrez dans le parcours membre pour la navigation, le profil detaille et le matching.',
+        parent: 'Apres l inscription, vous entrez dans le parcours parent pour le tri, la coordination et la communication ulterieure.',
+      },
+    },
+  },
+}
