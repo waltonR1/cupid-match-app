@@ -98,12 +98,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
-import DirectoryGridShell from '@/components/common/directory/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/common/directory/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/common/directory/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
+import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/discovery/shared/directory/directory-card.types'
+import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/discovery/shared/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import FamilyFilterToolbar from '@/components/discovery/family/FamilyFilterToolbar.vue'

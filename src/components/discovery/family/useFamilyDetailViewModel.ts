@@ -1,5 +1,5 @@
 import { computed, type Ref } from 'vue'
-import type { DetailFactItem, DetailHeroData } from '@/components/common/detail/detail.types'
+import type { DetailFactItem, DetailHeroData } from '@/components/discovery/shared/detail/detail.types'
 import type { AppLocale } from '@/i18n/types'
 import {
   createDetailProfileState,
