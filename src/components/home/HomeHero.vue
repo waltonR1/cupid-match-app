@@ -68,10 +68,10 @@
 
       <view class="relative mt-16 hidden h-[560px] w-[420px] lg:block">
         <view class="absolute inset-0 rounded-t-[220px] border border-next-component-hero-ornament-line" />
-        <view class="absolute left-1/2 top-[34px] h-[440px] w-[2px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
         <view
-          class="absolute left-1/2 top-[34px] h-0 w-0 -translate-x-1/2 border-b-[420px] border-l-[130px] border-l-transparent border-r-[130px] border-r-transparent border-b-next-component-hero-ornament-fill"
+            class="absolute left-1/2 top-[34px] h-0 w-0 -translate-x-1/2 border-b-[420px] border-l-[130px] border-l-transparent border-r-[130px] border-r-transparent border-b-next-component-hero-ornament-fill"
         />
+        <view class="absolute left-1/2 top-[34px] h-[440px] w-[2px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
         <view class="absolute left-1/2 top-[128px] h-[1px] w-[170px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
         <view class="absolute left-1/2 top-[220px] h-[1px] w-[210px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
         <view class="absolute left-1/2 top-[312px] h-[1px] w-[250px] -translate-x-1/2 bg-next-component-hero-ornament-line" />

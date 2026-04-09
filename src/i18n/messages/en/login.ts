@@ -3,14 +3,17 @@ import type { AppMessageSchema } from '@/i18n/types'
 export const loginMessages: AppMessageSchema = {
     hero: {
       eyebrow: 'Login',
-      title: 'Enter your matchmaking path',
-      subtitle: 'After login, the system will automatically recognize your account identity and take you to the appropriate path.',
-      formTitle: 'Account access',
-      panelTitle: 'Log in to your account',
-      panelHint: 'There is no manual role selection here anymore. The system will determine the correct path from your account identity.',
-      submit: 'Enter account',
+      title: 'Log in and continue your path',
+      subtitle: 'Enter your account to return to saved profiles, event plans, and advisor follow-up.',
+      formTitle: 'Account Login',
+      panelTitle: 'Welcome back',
+      panelHint: 'This is still a demo login. Clicking the button will enter the account directly without validating the input.',
+      submit: 'Log in',
       secondary: 'No account yet? Register',
       accessTitle: 'Available after login',
+      autoRouteTitle: 'Auto route',
+      autoRouteHeading: 'Login sends you to the right identity flow',
+      autoRouteDesc: 'The system reads your account context and opens the matching member or parent path directly.',
     },
     form: {
       identity: { label: 'Email or WeChat', placeholder: 'Enter your usual contact info' },

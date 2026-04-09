@@ -3,14 +3,17 @@ import type { AppMessageSchema } from '@/i18n/types'
 export const loginMessages: AppMessageSchema = {
     hero: {
       eyebrow: 'Login',
-      title: '进入你的婚恋路径',
-      subtitle: '登录后系统会根据你的账号自动识别身份，并进入对应的使用路径。',
-      formTitle: '账号进入',
-      panelTitle: '登录你的账户',
-      panelHint: '这里不再手动选择身份。系统会依据账号信息自动进入本人路径或家长路径。',
-      submit: '进入账户',
+      title: '登录后继续你的路径',
+      subtitle: '输入账号后即可继续浏览资料、收藏记录、活动安排与顾问跟进。',
+      formTitle: 'Account Login',
+      panelTitle: '欢迎回来',
+      panelHint: '当前仍为演示登录，点击按钮后会直接进入账户，不校验输入内容。',
+      submit: '登录',
       secondary: '还没有账号？去注册',
       accessTitle: '登录后可体验',
+      autoRouteTitle: '自动识别',
+      autoRouteHeading: '登录后自动进入对应身份路径',
+      autoRouteDesc: '系统会根据账号资料直接进入本人或家长视图，不需要在登录阶段重复选择。',
     },
     form: {
       identity: { label: '邮箱或微信', placeholder: '请输入你的常用联系方式' },

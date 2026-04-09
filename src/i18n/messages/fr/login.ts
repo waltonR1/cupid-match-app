@@ -3,14 +3,17 @@ import type { AppMessageSchema } from '@/i18n/types'
 export const loginMessages: AppMessageSchema = {
     hero: {
       eyebrow: 'Login',
-      title: 'Entrez dans votre parcours',
-      subtitle: 'Apres connexion, le systeme reconnait automatiquement votre identite et vous dirige vers le bon parcours.',
-      formTitle: 'Acces compte',
-      panelTitle: 'Connectez votre compte',
-      panelHint: 'Il n y a plus de selection manuelle du role ici. Le systeme determine automatiquement le bon parcours.',
-      submit: 'Entrer dans le compte',
+      title: 'Connectez-vous pour reprendre votre parcours',
+      subtitle: 'Entrez votre compte pour retrouver vos profils suivis, vos evenements et le suivi conseiller.',
+      formTitle: 'Connexion compte',
+      panelTitle: 'Bon retour',
+      panelHint: 'Le login reste en mode demo. Le bouton entre directement dans le compte sans verifier les champs saisis.',
+      submit: 'Connexion',
       secondary: 'Pas encore de compte ? S inscrire',
       accessTitle: 'Disponible apres connexion',
+      autoRouteTitle: 'Orientation auto',
+      autoRouteHeading: 'La connexion ouvre le bon parcours automatiquement',
+      autoRouteDesc: 'Le systeme lit le contexte du compte et envoie directement vers le parcours membre ou parent.',
     },
     form: {
       identity: { label: 'Email ou WeChat', placeholder: 'Entrez votre contact habituel' },

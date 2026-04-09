@@ -754,16 +754,16 @@ Current code note:
 
 ### Reused Tokens
 
-- `about-hero.border`
-- `about-hero.overlay.background-soft`
+- `hero.border`
+- `hero.overlay.background-soft`
 - `section-line`
 - `section-eyebrow`
 - `hero-eyebrow`
 - `hero-label`
 - `card-label`
-- `about-hero.title-accent`
-- `about-hero.description`
-- `about-hero.secondary-description`
+- `hero.title-accent`
+- `hero.description`
+- `hero.secondary-description`
 - `shadow.about-hero-panel`
 
 ### Background Classification
@@ -876,6 +876,94 @@ Current code note:
 ### Current Code Note
 
 - `src/pages/public/contact.vue` 里仍保留 `ContactInfoSection` / `ContactGuideSection` 作为模板标签别名，但实际导入文件已切到 [ContactInfo.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactInfo.vue) 和 [ContactGuide.vue](/Users/wang/WebstormProjects/cupid-match/src/components/contact/ContactGuide.vue)。
+
+## Auth Pages / Login / Register
+
+### Added Tokens
+
+- `next-effect-gradient-auth-hero`: `login.vue` / `register.vue` 共享 auth hero 背景渐变
+- `next-component-auth-*`: auth 页面局部 hero overlay 语义
+
+### Reused Tokens
+
+- `hero-ornament.line`
+- `section-line`
+- `section-eyebrow`
+- `semantic.surface.info-card`
+- `semantic.surface.info-card-hover`
+- `semantic.border.info-card-hover`
+- `AppButton primary`
+- `AppButton secondary + hero`
+- `AppButton secondary + section`
+
+### Background Classification
+
+- `auth/login.vue`: `semantic.page.default`
+- `auth/register.vue`: `semantic.page.default`
+- auth hero: `effect.gradient.auth-hero`
+- hero eyebrow / secondary chips: `component.auth.overlay.background-soft`
+- hero primary panels: `component.hero.overlay.background-panel`
+- register form panel: `component.hero.overlay.background-panel`
+- register hero helper / selected cards: `component.auth.overlay.background-soft`
+- register lower process items: `semantic.surface.panel` / `semantic.surface.soft`
+- login lower access area: `semantic.page.subtle`
+- login lower access cards: `semantic.surface.info-card`
+
+### Text Classification
+
+- auth hero title: `semantic.text.inverse`
+- auth hero eyebrow: `component.hero-eyebrow`
+- auth hero small titles: `component.hero-label`
+- auth hero body: `component.hero.description`
+- auth hero weaker body: `component.hero.secondary-description`
+- auth hero field labels: `component.card-label`
+- form labels / process step index: `component.card-label`
+- form / process body: `semantic.text.secondary`
+- form / process main headings: `semantic.text.primary`
+- login lower section eyebrow: `component.section-eyebrow`
+
+### Border Classification
+
+- hero eyebrow / role cards / hero support panels: `component.hero.border`
+- auth form / process wrappers: `semantic.border.default`
+- form fields / helper blocks / process rows: `semantic.border.soft`
+- login lower access hover: `semantic.border.info-card-hover`
+
+### Mapping Summary
+
+#### auth/login.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `bg-membership-hero` | `bg-next-gradient-auth-hero` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-auth-overlay-background-soft` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
+| `text-brand-accent-soft` | `text-next-component-hero-eyebrow` |
+| `text-brand-accent` | `text-next-component-hero-label` |
+| `text-text-inverse-soft` | `text-next-component-hero-description` |
+| lower access cards | `bg-next-semantic-surface-info-card` + `hover:bg-next-semantic-surface-info-card-hover` |
+
+#### auth/register.vue
+
+| Legacy class | Next class |
+| --- | --- |
+| `bg-page-base` | `bg-next-semantic-page-default` |
+| `bg-membership-hero` | `bg-next-gradient-auth-hero` |
+| `border-border-inverse/34` | `border-next-component-hero-border` |
+| `bg-surface-inverse-panel/34` | `bg-next-component-auth-overlay-background-soft` |
+| `bg-surface-inverse-panel/76` | `bg-next-component-hero-overlay-background-panel` |
+| role cards active state | `border-next-semantic-accent-secondary bg-next-component-hero-overlay-background-panel` |
+| role cards inactive state | `border-next-component-hero-border bg-next-component-auth-overlay-background-soft` |
+| role selection dot | `border-next-semantic-accent-secondary bg-next-semantic-accent-secondary` |
+| hero eyebrow text | `text-next-component-hero-eyebrow` |
+| hero support title | `text-next-component-hero-label` |
+| hero body | `text-next-component-hero-description` |
+| hero form card | `border-next-component-hero-border bg-next-component-hero-overlay-background-panel` |
+| hero form fields | `border-next-component-hero-border bg-next-component-auth-overlay-background-soft` |
+| hero benefit card | `border-next-component-hero-border bg-next-component-auth-overlay-background-soft` |
+| lower process rows | `border-next-semantic-border-soft bg-next-semantic-surface-soft` |
 
 ## Membership Page / MembershipHero
 

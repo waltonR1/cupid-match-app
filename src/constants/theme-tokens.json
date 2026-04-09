@@ -95,7 +95,7 @@
           "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
           "events-hero": "linear-gradient(135deg, #0d2238 0%, #183354 50%, #6d1224 100%)",
           "membership-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)",
-          "auth-hero": "linear-gradient(135deg, #111920 0%, #17273a 52%, #203854 100%)"
+          "auth-hero": "linear-gradient(135deg, #111920 0%, #17273a 44%, #5d2740 100%)"
         },
         "hero": {
           "secondary-cta": {
@@ -172,7 +172,7 @@
           "home-hero": "linear-gradient(135deg, #f6efe7 0%, #eadfce 42%, #f8f3eb 100%)",
           "events-hero": "linear-gradient(135deg, #2f3a49 0%, #66543f 48%, #875864 100%)",
           "membership-hero": "linear-gradient(135deg, #2f3a49 0%, #5a4b39 52%, #876b47 100%)",
-          "auth-hero": "linear-gradient(135deg, #ece2d2 0%, #e2d4c0 46%, #d3c2aa 100%)"
+          "auth-hero": "linear-gradient(135deg, #3b495d 0%, #695748 42%, #8a6873 100%)"
         },
         "hero": {
           "secondary-cta": {
@@ -294,6 +294,11 @@
           "hero-eyebrow": "#e0bf4f",
           "hero-label": "#ecd5aa",
           "card-label": "#d8b67a",
+          "auth": {
+            "overlay": {
+              "background-soft": "rgba(18, 32, 45, 0.34)"
+            }
+          },
           "hero": {
             "border": "#ccd8e3",
             "overlay": {
@@ -347,8 +352,8 @@
             }
           },
           "hero-ornament": {
-            "line": "#2b3f54",
-            "fill": "#192c40"
+            "line": "#7794cf",
+            "fill": "#264d69"
           },
           "hero-secondary-action": {
             "background": "#2f4156",
@@ -432,6 +437,7 @@
             "contact-hero": "linear-gradient(135deg, #0d2238 0%, #183354 40%, #5c2740 100%)",
             "home-hero": "linear-gradient(135deg, #0a1b2d 0%, #10263b 48%, #17324a 100%)",
             "membership-hero": "linear-gradient(135deg, #0d2238 0%, #1b3553 44%, #5e2740 100%)",
+            "auth-hero": "linear-gradient(135deg, #0d2238 0%, #1b3553 44%, #5e2740 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(208, 172, 102, 0.08), transparent 34%)",
             "home-membership-silver-card": "linear-gradient(180deg, #415468 0%, #2e4052 100%)",
             "home-membership-silver-glow": "radial-gradient(circle at top right, rgba(207, 220, 232, 0.12), transparent 44%)",
@@ -528,6 +534,11 @@
           "hero-eyebrow": "#e0bf4f",
           "hero-label": "#eadcc7",
           "card-label": "#b2834e",
+          "auth": {
+            "overlay": {
+              "background-soft": "rgba(123, 91, 69, 0.14)"
+            }
+          },
           "hero": {
             "border": "#cdbda7",
             "overlay": {
@@ -666,6 +677,7 @@
             "contact-hero": "linear-gradient(135deg, #39485c 0%, #6c5b4a 40%, #8b6974 100%)",
             "home-hero": "linear-gradient(135deg, #f5ebdc 0%, #eee0cc 42%, #fcf8f1 100%)",
             "membership-hero": "linear-gradient(135deg, #3b495d 0%, #695748 42%, #8a6873 100%)",
+            "auth-hero": "linear-gradient(135deg, #3b495d 0%, #695748 42%, #8a6873 100%)",
             "home-membership-ambient": "radial-gradient(circle at top left, rgba(215, 184, 110, 0.10), transparent 30%)",
             "home-membership-silver-card": "linear-gradient(180deg, #e5ddd1 0%, #cdbfae 100%)",
             "home-membership-silver-glow": "radial-gradient(circle at top right, rgba(255, 255, 255, 0.42), transparent 40%)",
