@@ -235,7 +235,7 @@ function handleAccount() {
   closeAllDropdowns()
   emit('account-click')
   uni.navigateTo({
-    url: '/pages/account/index',
+    url: '/pages/account/profile',
   })
 }
 

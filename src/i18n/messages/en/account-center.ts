@@ -1,0 +1,210 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const accountCenterMessages: AppMessageSchema = {
+  nav: {
+    profile: 'Profile',
+    verification: 'Verification',
+    connections: 'Connections',
+    messages: 'Messages',
+    safety: 'Safety',
+    membership: 'Services',
+  },
+  topSummary: {
+    title: 'Account center',
+    subtitle: 'Keep profile quality, trust, connections, and service access in one operational workspace.',
+    metrics: {
+      completion: 'Completion',
+      verification: 'Verified',
+      membership: 'Membership',
+      activity: 'Activities',
+    },
+    actions: {
+      profile: 'Edit profile',
+      verification: 'Verify now',
+      connections: 'Open connections',
+      membership: 'View services',
+    },
+  },
+  common: {
+    open: 'Open',
+    manage: 'Manage',
+    review: 'Review',
+    upgrade: 'Upgrade',
+    enabled: 'Enabled',
+    disabled: 'Disabled',
+    visibility: 'Visibility',
+    familyVisible: 'Family visible',
+    familyAssist: 'Family assistance',
+    privateOnly: 'Private only',
+    currentTier: 'Current tier',
+    visibleFields: 'Open fields',
+    joinedAt: 'Joined',
+  },
+  profile: {
+    eyebrow: 'Profile',
+    title: 'My profile',
+    subtitle: 'Profile quality comes first. Make your information complete, trustworthy, and ready for matching.',
+    sections: {
+      summary: 'Profile snapshot',
+      media: 'Media and image',
+      base: 'Core information',
+      visibility: 'Visibility and boundaries',
+      tasks: 'Next completion tasks',
+      preview: 'Public preview',
+    },
+    rows: {
+      city: 'City',
+      education: 'Education',
+      occupation: 'Occupation',
+      languages: 'Languages',
+    },
+    media: {
+      photos: 'Photo set ready',
+      video: 'Video profile pending',
+      order: 'Profile order can be refined',
+    },
+    tasks: {
+      photos: 'Add one stronger first impression photo',
+      introduction: 'Tighten the self-introduction and intentions',
+      verification: 'Complete identity and education checks',
+    },
+  },
+  verification: {
+    eyebrow: 'Trust',
+    title: 'Verification center',
+    subtitle: 'Serious matchmaking needs visible trust. Keep certification and risk tools separate from generic settings.',
+    sections: {
+      overview: 'Verification overview',
+      grid: 'Available checks',
+      risk: 'Risk check',
+      invite: 'Invite verification',
+    },
+    items: {
+      realName: 'Real-name verification',
+      education: 'Education verification',
+      marital: 'Marital verification',
+      career: 'Career verification',
+      video: 'Video verification',
+      assets: 'Asset verification',
+    },
+    status: {
+      done: 'Completed',
+      pending: 'Pending',
+    },
+    summary: {
+      progress: 'Completed checks',
+    },
+  },
+  connections: {
+    eyebrow: 'Matches',
+    title: 'My connections',
+    subtitle: 'Treat favorites, mutual interest, family-visible profiles, and recommendations as one connection pipeline.',
+    filters: {
+      likedMe: 'Liked me',
+      liked: 'Saved by me',
+      mutual: 'Mutual',
+      family: 'Family visible',
+    },
+    sections: {
+      pool: 'Connection pool',
+      reason: 'Why these profiles',
+      summary: 'Connection summary',
+    },
+    reasons: {
+      complete: 'Profile quality is already solid',
+      family: 'Can be shared with family when needed',
+      active: 'Recent activity is stable',
+    },
+  },
+  messages: {
+    eyebrow: 'Messages',
+    title: 'Conversations',
+    subtitle: 'Keep messaging focused on progress, with trust state and safety reminders close at hand.',
+    filters: {
+      all: 'All',
+      unread: 'Unread',
+      family: 'Family assisted',
+    },
+    sections: {
+      threads: 'Recent threads',
+      safety: 'Safety reminder',
+    },
+    list: {
+      familyBadge: 'Family visible',
+      unreadLabel: 'Unread',
+      open: 'Open profile',
+    },
+    support: {
+      point1: 'Unread messages are not automatically a risk. Response quality and clarity matter more.',
+      point2: 'If you move toward offline meetings or family collaboration, handle that outside the chat thread.',
+      point3: 'Keep your own tone instead of turning the conversation into a scripted flow.',
+    },
+    boundary: {
+      title: 'Family boundaries in messaging',
+      point1: 'No message drafting and no proxy judgment of relationship temperature.',
+      point2: 'If family gets involved, it should only add context or follow-up advice.',
+      point3: 'Real compatibility still has to be judged through direct interaction.',
+    },
+  },
+  safety: {
+    eyebrow: 'Safety',
+    title: 'Privacy and safety',
+    subtitle: 'Visibility, contact rules, family access, and risk handling should live in one explicit control page.',
+    sections: {
+      visibility: 'Visibility',
+      contact: 'Contact rules',
+      family: 'Family assistance',
+      risk: 'Risk tools',
+      records: 'Records',
+    },
+    family: {
+      point1: 'Family access only starts after your explicit approval.',
+      point2: 'Family should add context, not replace your conversations or decisions.',
+      point3: 'You should be able to withdraw family access at any time.',
+    },
+    notes: {
+      point1: 'Advisor contact is a service workflow, not the same thing as family involvement.',
+      point2: 'Family collaboration fits better once the direction is already clearer.',
+      point3: 'Before opening more profile fields, confirm that it really helps progress.',
+    },
+  },
+  membership: {
+    eyebrow: 'Service',
+    title: 'Membership and services',
+    subtitle: 'Membership should explain service value clearly instead of taking over the whole account structure.',
+    sections: {
+      current: 'Current plan',
+      benefits: 'Benefits matrix',
+      service: 'Service entry',
+      plans: 'Upgrade plans',
+    },
+  },
+  activity: {
+    eyebrow: 'Activity',
+    title: 'My activity',
+    subtitle: 'Keep event participation as a secondary account page instead of a top-level dashboard destination.',
+    filters: {
+      confirmed: 'Confirmed',
+      waitlist: 'Waitlist',
+      completed: 'Completed',
+    },
+    sections: {
+      list: 'Registrations',
+      followup: 'Aftercare',
+    },
+    list: {
+      action: 'Open event',
+    },
+    support: {
+      point1: 'Check place, time, and notes early for confirmed activities.',
+      point2: 'Stay light on waitlist follow-up instead of forcing the pace.',
+      point3: 'Completed activities are better used for reflection than repeated booking.',
+    },
+    family: {
+      title: 'Where family assistance fits',
+      point1: 'Event background and family salon details can be shared.',
+      point2: 'The final decision to continue still belongs to the user.',
+      point3: 'If you do not want family involvement, keeping the current boundary is enough.',
+    },
+  },
+}

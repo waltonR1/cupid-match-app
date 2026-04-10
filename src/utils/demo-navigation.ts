@@ -32,7 +32,7 @@ export function openEventDetail(id: string) {
 
 export function openAccountPage() {
   uni.navigateTo({
-    url: '/pages/account/index',
+    url: '/pages/account/profile',
   })
 }
 
@@ -42,15 +42,9 @@ export function openMyProfilePage() {
   })
 }
 
-export function openMyEventsPage() {
+export function openActivityPage() {
   uni.navigateTo({
-    url: '/pages/account/events',
-  })
-}
-
-export function openFavoritesPage() {
-  uni.navigateTo({
-    url: '/pages/account/favorites',
+    url: '/pages/account/activity',
   })
 }
 
@@ -60,8 +54,26 @@ export function openMessagesPage() {
   })
 }
 
-export function openPrivacyPage() {
+export function openVerificationPage() {
   uni.navigateTo({
-    url: '/pages/account/privacy',
+    url: '/pages/account/verification',
+  })
+}
+
+export function openConnectionsPage() {
+  uni.navigateTo({
+    url: '/pages/account/connections',
+  })
+}
+
+export function openSafetyPage() {
+  uni.navigateTo({
+    url: '/pages/account/safety',
+  })
+}
+
+export function openMembershipPage() {
+  uni.navigateTo({
+    url: '/pages/account/membership',
   })
 }

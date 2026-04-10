@@ -1,0 +1,210 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const accountCenterMessages: AppMessageSchema = {
+  nav: {
+    profile: 'Profil',
+    verification: 'Verification',
+    connections: 'Connexions',
+    messages: 'Messages',
+    safety: 'Securite',
+    membership: 'Services',
+  },
+  topSummary: {
+    title: 'Centre du compte',
+    subtitle: 'Gardez profil, confiance, connexions et services dans un seul espace operationnel.',
+    metrics: {
+      completion: 'Completion',
+      verification: 'Verifie',
+      membership: 'Abonnement',
+      activity: 'Activites',
+    },
+    actions: {
+      profile: 'Modifier le profil',
+      verification: 'Verifier',
+      connections: 'Voir les connexions',
+      membership: 'Voir les services',
+    },
+  },
+  common: {
+    open: 'Ouvrir',
+    manage: 'Gerer',
+    review: 'Verifier',
+    upgrade: 'Ameliorer',
+    enabled: 'Active',
+    disabled: 'Inactive',
+    visibility: 'Visibilite',
+    familyVisible: 'Visible famille',
+    familyAssist: 'Aide familiale',
+    privateOnly: 'Prive',
+    currentTier: 'Formule actuelle',
+    visibleFields: 'Champs ouverts',
+    joinedAt: 'Inscrit le',
+  },
+  profile: {
+    eyebrow: 'Profil',
+    title: 'Mon profil',
+    subtitle: 'La qualite du profil passe avant tout. Rendez les informations completes, fiables et pretes pour la mise en relation.',
+    sections: {
+      summary: 'Resume du profil',
+      media: 'Media et image',
+      base: 'Informations essentielles',
+      visibility: 'Visibilite et limites',
+      tasks: 'Prochaines taches',
+      preview: 'Apercu public',
+    },
+    rows: {
+      city: 'Ville',
+      education: 'Etudes',
+      occupation: 'Profession',
+      languages: 'Langues',
+    },
+    media: {
+      photos: 'Galerie photo prete',
+      video: 'Video profil en attente',
+      order: 'Ordre du profil a optimiser',
+    },
+    tasks: {
+      photos: 'Ajouter une photo d accroche plus forte',
+      introduction: 'Resserer la presentation et les intentions',
+      verification: 'Completer l identite et les etudes',
+    },
+  },
+  verification: {
+    eyebrow: 'Confiance',
+    title: 'Centre de verification',
+    subtitle: 'Une plateforme matrimoniale serieuse doit montrer la confiance clairement, separee des reglages generaux.',
+    sections: {
+      overview: 'Vue verification',
+      grid: 'Verifications disponibles',
+      risk: 'Controle de risque',
+      invite: 'Invitation a verifier',
+    },
+    items: {
+      realName: 'Identite reelle',
+      education: 'Diplome',
+      marital: 'Situation matrimoniale',
+      career: 'Profession',
+      video: 'Video',
+      assets: 'Patrimoine',
+    },
+    status: {
+      done: 'Termine',
+      pending: 'En attente',
+    },
+    summary: {
+      progress: 'Verifications terminees',
+    },
+  },
+  connections: {
+    eyebrow: 'Rencontres',
+    title: 'Mes connexions',
+    subtitle: 'Favoris, attirances reciproques, profils partageables et recommandations doivent vivre dans un meme flux.',
+    filters: {
+      likedMe: 'M a aime',
+      liked: 'Sauvegardes',
+      mutual: 'Reciproque',
+      family: 'Visible famille',
+    },
+    sections: {
+      pool: 'Reserve de profils',
+      reason: 'Pourquoi ces profils',
+      summary: 'Resume des connexions',
+    },
+    reasons: {
+      complete: 'Le profil est deja solide',
+      family: 'Partage possible avec la famille',
+      active: 'Activite recente stable',
+    },
+  },
+  messages: {
+    eyebrow: 'Messages',
+    title: 'Conversations',
+    subtitle: 'La messagerie doit rester simple et orientee action, avec confiance et securite visibles sans reprendre l ancien tableau de bord.',
+    filters: {
+      all: 'Tout',
+      unread: 'Non lu',
+      family: 'Aide familiale',
+    },
+    sections: {
+      threads: 'Conversations recentes',
+      safety: 'Rappel securite',
+    },
+    list: {
+      familyBadge: 'Visible famille',
+      unreadLabel: 'Non lu',
+      open: 'Ouvrir le profil',
+    },
+    support: {
+      point1: 'Un message non lu n est pas automatiquement un risque. La qualite de reponse compte davantage.',
+      point2: 'Si vous passez vers le hors ligne ou la collaboration familiale, traitez cela hors du fil de discussion.',
+      point3: 'Gardez votre propre ton au lieu de transformer la conversation en script.',
+    },
+    boundary: {
+      title: 'Limites familiales dans la messagerie',
+      point1: 'Pas de message redige a votre place et pas de jugement delegue sur la relation.',
+      point2: 'Si la famille intervient, elle ne doit ajouter que du contexte ou un conseil de suite.',
+      point3: 'La compatibilite reelle doit rester evaluee par l interaction directe.',
+    },
+  },
+  safety: {
+    eyebrow: 'Securite',
+    title: 'Confidentialite et securite',
+    subtitle: 'Visibilite, regles de contact, acces familial et gestion du risque doivent etre centralises.',
+    sections: {
+      visibility: 'Visibilite',
+      contact: 'Regles de contact',
+      family: 'Aide familiale',
+      risk: 'Outils de risque',
+      records: 'Historique',
+    },
+    family: {
+      point1: 'L acces familial ne commence qu apres votre accord explicite.',
+      point2: 'La famille doit ajouter du contexte, pas remplacer vos conversations ni vos decisions.',
+      point3: 'Vous devez pouvoir retirer cet acces a tout moment.',
+    },
+    notes: {
+      point1: 'Le contact conseiller releve du service, pas d une implication familiale.',
+      point2: 'La collaboration familiale convient mieux quand la direction est deja plus claire.',
+      point3: 'Avant d ouvrir plus de champs, verifiez que cela aide vraiment la progression.',
+    },
+  },
+  membership: {
+    eyebrow: 'Service',
+    title: 'Abonnement et services',
+    subtitle: 'L abonnement doit clarifier la valeur de service sans prendre toute la structure du compte.',
+    sections: {
+      current: 'Formule actuelle',
+      benefits: 'Matrice des avantages',
+      service: 'Entree service',
+      plans: 'Formules',
+    },
+  },
+  activity: {
+    eyebrow: 'Activite',
+    title: 'Mes activites',
+    subtitle: 'Les evenements restent une page secondaire du compte, pas une destination principale.',
+    filters: {
+      confirmed: 'Confirme',
+      waitlist: 'Attente',
+      completed: 'Termine',
+    },
+    sections: {
+      list: 'Inscriptions',
+      followup: 'Suivi',
+    },
+    list: {
+      action: 'Voir l evenement',
+    },
+    support: {
+      point1: 'Relisez lieu, horaire et notes en avance pour les activites confirmees.',
+      point2: 'Restez leger sur le suivi des listes d attente au lieu de forcer le rythme.',
+      point3: 'Une activite terminee sert mieux a la relecture qu a une repetition mecanique.',
+    },
+    family: {
+      title: 'Ou la famille peut aider',
+      point1: 'Le contexte des evenements et les informations du salon famille peuvent etre partages.',
+      point2: 'La decision finale de continuer reste du cote de la personne.',
+      point3: 'Si vous ne voulez pas d intervention familiale, garder la limite actuelle suffit.',
+    },
+  },
+}

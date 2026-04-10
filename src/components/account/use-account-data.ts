@@ -56,7 +56,7 @@ export function useAccountData() {
   }
 
   function membershipLabel(membership: 'free' | 'silver' | 'gold' | 'diamond' = account.membership) {
-    return globalT(`account.membership.${membership}`)
+    return globalT(`membership.${membership}.title`)
   }
 
   function formatLanguages(languages: string[]) {

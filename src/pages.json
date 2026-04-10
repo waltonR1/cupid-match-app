@@ -71,13 +71,6 @@
       }
     },
     {
-      "path": "pages/account/index",
-      "style": {
-        "navigationStyle": "custom",
-        "navigationBarTitleText": "用户中心"
-      }
-    },
-    {
       "path": "pages/account/profile",
       "style": {
         "navigationStyle": "custom",
@@ -85,31 +78,45 @@
       }
     },
     {
-      "path": "pages/account/events",
+      "path": "pages/account/verification",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "我的报名"
+        "navigationBarTitleText": "认证中心"
       }
     },
     {
-      "path": "pages/account/favorites",
+      "path": "pages/account/connections",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "我的收藏"
+        "navigationBarTitleText": "我的缘分"
       }
     },
     {
       "path": "pages/account/messages",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "消息中心"
+        "navigationBarTitleText": "消息"
       }
     },
     {
-      "path": "pages/account/privacy",
+      "path": "pages/account/safety",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "隐私设置"
+        "navigationBarTitleText": "隐私与安全"
+      }
+    },
+    {
+      "path": "pages/account/membership",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员与服务"
+      }
+    },
+    {
+      "path": "pages/account/activity",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "我的活动"
       }
     },
     {

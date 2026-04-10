@@ -1,0 +1,75 @@
+<template>
+  <view class="flex flex-wrap gap-3">
+    <view
+      v-for="item in items"
+      :key="item.key"
+      class="cursor-pointer rounded-button border px-4 py-3 text-[13px] font-medium tracking-[0.2px] transition-all duration-200"
+      :class="item.key === activePage
+        ? 'border-next-semantic-accent-secondary bg-next-semantic-surface-panel text-next-semantic-text-primary shadow-next-shadow-panel'
+        : 'border-next-semantic-border-default bg-next-semantic-surface-soft text-next-semantic-text-secondary hover:-translate-y-[1px] hover:border-next-component-section-card-hover-border hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'"
+      @click="openPage(item.key)"
+    >
+      {{ item.label }}
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { AccountPrimaryPageKey } from '@/components/account/account-shell.types'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import {
+  openConnectionsPage,
+  openMembershipPage,
+  openMessagesPage,
+  openMyProfilePage,
+  openSafetyPage,
+  openVerificationPage,
+} from '@/utils/demo-navigation'
+
+const props = defineProps<{
+  activePage: AccountPrimaryPageKey
+}>()
+
+const { t } = usePageI18n('accountCenter')
+
+const items = computed<Array<{ key: AccountPrimaryPageKey; label: string }>>(() => [
+  { key: 'profile', label: t('nav.profile') },
+  { key: 'verification', label: t('nav.verification') },
+  { key: 'connections', label: t('nav.connections') },
+  { key: 'messages', label: t('nav.messages') },
+  { key: 'safety', label: t('nav.safety') },
+  { key: 'membership', label: t('nav.membership') },
+])
+
+function openPage(key: AccountPrimaryPageKey) {
+  if (key === props.activePage) return
+
+  if (key === 'profile') {
+    openMyProfilePage()
+    return
+  }
+
+  if (key === 'verification') {
+    openVerificationPage()
+    return
+  }
+
+  if (key === 'connections') {
+    openConnectionsPage()
+    return
+  }
+
+  if (key === 'messages') {
+    openMessagesPage()
+    return
+  }
+
+  if (key === 'safety') {
+    openSafetyPage()
+    return
+  }
+
+  openMembershipPage()
+}
+</script>
