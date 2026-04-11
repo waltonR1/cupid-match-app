@@ -147,7 +147,7 @@
           <view
             v-for="item in accessCards"
             :key="item.title"
-        class="border border-next-semantic-border-default bg-next-component-editorial-card-background px-7 py-7 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover"
+            class="border border-next-semantic-border-default bg-next-component-editorial-card-background px-7 py-7 shadow-next-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover"
           >
             <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               {{ item.kicker }}
@@ -328,3 +328,4 @@ function acceptAgreementAndLogin() {
   handleSubmit()
 }
 </script>
+

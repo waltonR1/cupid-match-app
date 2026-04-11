@@ -25,7 +25,7 @@
           class="inline-flex min-h-[40px] cursor-pointer items-center justify-center border px-4 text-[13px] transition-all duration-200"
           :class="item.value === sortKey
             ? 'border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background text-next-component-directory-control-selected-text hover:-translate-y-[1px] hover:border-next-component-directory-control-selected-border-hover hover:bg-next-component-directory-control-selected-background-hover'
-            : 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
+            : 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
           @click="$emit('update:sort-key', item.value)"
         >
           {{ item.label }}

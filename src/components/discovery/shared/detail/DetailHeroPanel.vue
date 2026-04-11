@@ -7,19 +7,19 @@
       <view class="min-w-0">
         <view class="flex flex-wrap items-center gap-3">
           <view class="inline-flex items-center gap-3">
-            <view class="h-px w-12 bg-next-semantic-border-eyebrow" />
+            <view class="h-px w-12 bg-next-semantic-accent-secondary" />
             <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
               {{ data.eyebrow }}
             </text>
           </view>
 
-          <view class="inline-flex items-center border border-next-component-discovery-hero-badge-meta-border bg-next-component-discovery-hero-badge-meta-background px-3 py-1 text-[11px] tracking-[2px] text-next-component-discovery-hero-badge-meta-text">
+          <view class="inline-flex items-center border border-next-semantic-accent-secondary bg-next-semantic-surface-soft px-3 py-1 text-[11px] tracking-[2px] text-next-semantic-text-eyebrow">
             {{ data.recordId }}
           </view>
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-next-component-discovery-hero-avatar-border bg-next-component-discovery-hero-avatar-background text-[28px] font-semibold text-next-component-discovery-hero-avatar-text">
+          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-next-semantic-accent-secondary bg-next-semantic-surface-panel text-[28px] font-semibold text-next-semantic-accent-primary">
             {{ data.avatar }}
           </view>
 
@@ -116,6 +116,6 @@ function badgeClassName(tone?: DetailBadgeItem['tone']) {
     return 'border-next-semantic-border-default bg-next-semantic-surface-card text-next-semantic-text-muted'
   }
 
-  return 'border-next-component-discovery-hero-badge-meta-border bg-next-component-discovery-hero-badge-meta-background text-next-component-discovery-hero-badge-meta-text'
+  return 'border-next-semantic-accent-secondary bg-next-semantic-surface-soft text-next-semantic-text-eyebrow'
 }
 </script>

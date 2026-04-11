@@ -1,5 +1,5 @@
 <template>
-  <view class="overflow-hidden border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-10 text-next-semantic-text-primary shadow-next-shadow-panel">
+  <view class="overflow-hidden border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-10 text-next-semantic-text-primary shadow-next-panel">
     <view class="h-px w-14 bg-next-component-section-divider" />
     <view class="mt-6 text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">{{ eyebrow }}</view>
     <view class="mt-4 text-[34px] font-semibold text-next-semantic-text-primary">{{ title }}</view>
@@ -38,3 +38,4 @@ defineProps<{
   items: EventNoteItem[]
 }>()
 </script>
+

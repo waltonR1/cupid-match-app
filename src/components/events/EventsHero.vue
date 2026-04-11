@@ -27,7 +27,7 @@
 
         <view
           v-if="nextEvent"
-        class="group relative z-10 cursor-pointer overflow-hidden border border-next-semantic-border-hero bg-next-semantic-surface-hero-panel px-8 py-8 shadow-next-shadow-about-hero-panel backdrop-blur transition-all duration-300 hover:-translate-y-[2px] hover:shadow-next-shadow-about-hero-feature"
+          class="group relative z-10 cursor-pointer overflow-hidden border border-next-semantic-border-hero bg-next-semantic-surface-hero-panel px-8 py-8 shadow-next-about-hero-panel backdrop-blur transition-all duration-300 hover:-translate-y-[2px] hover:shadow-next-about-hero-feature"
           @click="$emit('open', nextEvent.id)"
         >
           <view class="flex flex-wrap items-start justify-between gap-4">
@@ -99,3 +99,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

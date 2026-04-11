@@ -11,7 +11,7 @@
         <view class="ml-auto flex items-center gap-2">
           <view
             v-if="secondaryFilters.length"
-            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
+            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
             @click="toggleExpanded"
           >
             <text>{{ isExpanded ? props.collapseText : props.expandText }}</text>
@@ -33,7 +33,7 @@
           </view>
 
           <view
-            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
+            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
             @click="$emit('reset')"
           >
             {{ props.resetText }}

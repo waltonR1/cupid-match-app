@@ -1,7 +1,7 @@
 <template>
   <view ref="rootRef" class="relative w-full">
     <view
-      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3 transition-all duration-150 hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel"
+      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3 transition-all duration-150 hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-panel"
       :class="isOpen ? 'border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background' : ''"
       @click.stop="toggleOpen"
     >
@@ -53,7 +53,7 @@
           >
             <view
               class="h-5 w-px shrink-0 transition-colors duration-150"
-              :class="option.value === value ? 'bg-next-component-directory-control-selected-indicator' : 'bg-transparent'"
+              :class="option.value === value ? 'bg-next-semantic-accent-secondary' : 'bg-transparent'"
             />
             <text class="min-w-0 text-[13.5px] leading-[1.35] text-left">{{ option.label }}</text>
           </view>

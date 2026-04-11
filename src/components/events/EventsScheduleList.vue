@@ -20,7 +20,7 @@
         <view
           v-for="event in events"
           :key="event.id"
-        class="group relative grid gap-5 overflow-hidden border border-next-semantic-border-default bg-next-component-event-card-background px-7 py-6 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-shadow-about-hero-panel md:grid-cols-[176px_1fr_188px] md:items-center"
+          class="group relative grid gap-5 overflow-hidden border border-next-semantic-border-default bg-next-component-event-card-background px-7 py-6 shadow-next-panel transition-all duration-300 hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-about-hero-panel md:grid-cols-[176px_1fr_188px] md:items-center"
           @click="$emit('open', event.id)"
         >
           <view class="pointer-events-none absolute inset-y-0 left-0 w-px bg-next-component-event-card-edge transition-colors duration-300 group-hover:bg-next-component-event-card-edge-hover" />
@@ -61,3 +61,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

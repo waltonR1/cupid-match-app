@@ -172,7 +172,7 @@
                 <view
                   v-for="item in tagTexts"
                   :key="item"
-                  class="rounded-full border border-next-component-discovery-detail-tag-border bg-next-component-discovery-detail-tag-background px-3 py-1.5 text-[12px] text-next-component-discovery-detail-tag-text"
+                  class="rounded-full border border-next-semantic-border-default bg-next-semantic-surface-panel px-3 py-1.5 text-[12px] text-next-semantic-text-eyebrow"
                 >
                   {{ item }}
                 </view>

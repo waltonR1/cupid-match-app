@@ -7,7 +7,7 @@
       <view
         v-for="profile in profiles"
         :key="profile.id"
-        class="group cursor-pointer border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-shadow-panel transition-all duration-200 hover:-translate-y-[1px] hover:border-next-component-event-card-border-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-shadow-panel"
+        class="group cursor-pointer border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-panel transition-all duration-200 hover:-translate-y-[1px] hover:border-next-component-event-card-border-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-panel"
         @click="$emit('open', profile.id)"
       >
         <view class="inline-flex items-center rounded-full bg-next-semantic-surface-panel px-3 py-1 text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
@@ -25,7 +25,7 @@
       </view>
     </view>
 
-    <view v-else class="border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-8 text-[16px] leading-8 text-next-semantic-text-muted shadow-next-shadow-panel">
+    <view v-else class="border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-8 text-[16px] leading-8 text-next-semantic-text-muted shadow-next-panel">
       {{ emptyText }}
     </view>
   </view>
@@ -45,3 +45,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

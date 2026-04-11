@@ -35,7 +35,7 @@
                 :key="option.value"
                 class="cursor-pointer border px-6 py-6 backdrop-blur transition-all duration-300 hover:-translate-y-[2px]"
                 :class="option.value === role
-        ? 'border-next-component-auth-selection-border bg-next-component-auth-selection-background shadow-next-shadow-panel'
+                  ? 'border-next-component-auth-selection-border bg-next-component-auth-selection-background shadow-next-panel'
                   : 'border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft hover:border-next-component-auth-selection-hover-border'"
                 @click="selectRole(option.value)"
               >
@@ -55,7 +55,7 @@
                   <view
                     class="mt-1 h-3.5 w-3.5 rounded-full border"
                     :class="option.value === role
-          ? 'border-next-component-auth-selection-indicator bg-next-component-auth-selection-indicator shadow-next-shadow-panel'
+                      ? 'border-next-component-auth-selection-indicator bg-next-component-auth-selection-indicator shadow-next-panel'
                       : 'border-next-semantic-border-hero bg-transparent'"
                   />
                 </view>
@@ -224,7 +224,7 @@
           <view
             v-for="(step, index) in processSteps"
             :key="step.title"
-          class="border border-next-semantic-border-default bg-next-semantic-surface-panel px-7 py-7 shadow-next-shadow-panel"
+            class="border border-next-semantic-border-default bg-next-semantic-surface-panel px-7 py-7 shadow-next-panel"
           >
             <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               {{ String(index + 1).padStart(2, '0') }}
@@ -395,3 +395,4 @@ onLoad((query?: Record<string, string | undefined>) => {
   }
 })
 </script>
+

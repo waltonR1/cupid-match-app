@@ -1,6 +1,6 @@
 <template>
   <view
-    class="border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-shadow-about-hero-panel"
+    class="border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-about-hero-panel"
     @click="$emit('open', event.id)"
   >
     <view class="flex items-start justify-between gap-4">
@@ -44,3 +44,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

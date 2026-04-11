@@ -18,7 +18,7 @@
       <view
         v-for="item in stats"
         :key="item.label"
-        class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel"
+        class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-panel"
       >
           <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">{{ item.label }}</view>
         <view class="mt-4 text-[34px] font-semibold text-next-semantic-text-primary">{{ item.value }}</view>
@@ -55,3 +55,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+
