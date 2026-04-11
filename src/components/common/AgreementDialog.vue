@@ -5,11 +5,11 @@
     @click="$emit('close')"
   >
     <view
-      class="relative max-h-[80vh] w-full max-w-[760px] overflow-y-auto border border-next-semantic-border-hero bg-next-semantic-surface-hero-panel px-7 py-7 text-next-semantic-text-inverse shadow-next-shadow-hero"
+      class="relative max-h-[80vh] w-full max-w-[760px] overflow-y-auto border border-semantic-border-hero bg-semantic-surface-hero-panel px-7 py-7 text-semantic-text-inverse shadow-hero"
       @click.stop
     >
       <button
-        class="absolute right-5 top-5 border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-4 py-2 text-[13px] uppercase tracking-[3px] text-next-semantic-text-hero-label"
+        class="absolute right-5 top-5 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-2 text-[13px] uppercase tracking-[3px] text-semantic-text-hero-label"
         @click="$emit('close')"
       >
         {{ closeText }}
@@ -17,16 +17,16 @@
 
       <view class="flex items-start gap-6 pr-24">
         <view>
-          <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-hero-label">
+          <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
             {{ kicker }}
           </view>
-          <view class="mt-4 text-[30px] font-semibold leading-[1.25] text-next-semantic-text-inverse">
+          <view class="mt-4 text-[30px] font-semibold leading-[1.25] text-semantic-text-inverse">
             {{ title }}
           </view>
         </view>
       </view>
 
-      <view class="mt-6 border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4 text-[15px] leading-8 text-next-semantic-text-hero-body whitespace-pre-line">
+      <view class="mt-6 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4 text-[15px] leading-8 text-semantic-text-hero-body whitespace-pre-line">
         {{ body }}
       </view>
     </view>

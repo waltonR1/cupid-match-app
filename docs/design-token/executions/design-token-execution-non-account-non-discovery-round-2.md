@@ -2,9 +2,9 @@
 
 - 日期：`2026-04-10`
 - 关联审计：
-  - `docs/design-token-audit-non-account-non-discovery.md`
-  - `docs/design-token-replacement-list-non-account-non-discovery.md`
-  - `docs/design-token-execution-non-account-non-discovery-round-1.md`
+  - `docs/design-token/audits/design-token-audit-non-account-non-discovery.md`
+  - `docs/design-token/mappings/design-token-replacement-list-non-account-non-discovery.md`
+  - `docs/design-token/executions/design-token-execution-non-account-non-discovery-round-1.md`
 - 范围：排除 `account`、`discovery`
 - 本轮策略：先清理硬问题，只处理 `opacity` 违规和 `section-line` 属性错位
 

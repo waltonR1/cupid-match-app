@@ -7,7 +7,7 @@
   >
     <view class="grid gap-6 xl:grid-cols-[0.94fr_1.06fr]">
       <view class="grid gap-6">
-        <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('membership.eyebrow')"
             :title="t('membership.sections.current')"
@@ -15,15 +15,15 @@
 
           <view class="mt-6 flex flex-wrap items-center justify-between gap-4">
             <view>
-              <view class="text-[30px] font-semibold text-next-semantic-text-primary">
+              <view class="text-[30px] font-semibold text-semantic-text-primary">
                 {{ membershipLabel(account.membership) }}
               </view>
-              <view class="mt-3 text-[15px] leading-7 text-next-semantic-text-secondary">
+              <view class="mt-3 text-[15px] leading-7 text-semantic-text-secondary">
                 {{ membershipT('rules.description') }}
               </view>
             </view>
 
-            <view class="rounded-full border border-next-component-account-badge-meta-border bg-next-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-next-component-account-badge-meta-text">
+            <view class="rounded-full border border-component-account-badge-meta-border bg-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-component-account-badge-meta-text">
               {{ membershipLabel(account.membership) }}
             </view>
           </view>
@@ -32,19 +32,19 @@
             <view
               v-for="item in currentItems"
               :key="item.label"
-              class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5"
+              class="border border-semantic-border-soft bg-semantic-surface-panel px-5 py-5"
             >
-              <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+              <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
                 {{ item.label }}
               </view>
-              <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">
+              <view class="mt-3 text-[24px] font-semibold text-semantic-text-primary">
                 {{ item.value }}
               </view>
             </view>
           </view>
         </view>
 
-        <view class="border border-next-semantic-border-default bg-next-semantic-surface-panel px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-semantic-border-default bg-semantic-surface-panel px-6 py-6 shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('membership.eyebrow')"
             :title="t('membership.sections.service')"
@@ -106,7 +106,7 @@
 
             <view
               v-if="plan.key === account.membership"
-              class="rounded-full border border-next-component-account-badge-status-border bg-next-component-account-badge-status-background px-3 py-1 text-[11px] uppercase tracking-[2px] text-next-component-account-badge-status-text"
+              class="rounded-full border border-component-account-badge-status-border bg-component-account-badge-status-background px-3 py-1 text-[11px] uppercase tracking-[2px] text-component-account-badge-status-text"
             >
               {{ t('common.enabled') }}
             </view>
@@ -193,11 +193,11 @@ const planCards = computed(() => [
       membershipT('free.f2'),
       membershipT('free.f3'),
     ],
-    cardClass: 'border border-next-component-membership-tier-free-card-border bg-next-component-membership-tier-free-card-background shadow-next-shadow-panel',
-    eyebrowClass: 'text-next-semantic-text-secondary',
-    titleClass: 'text-next-semantic-text-primary',
-    metaClass: 'text-next-semantic-text-secondary',
-    featureClass: 'border-next-component-membership-tier-free-feature-border bg-next-component-membership-tier-free-feature-background text-next-semantic-text-secondary',
+    cardClass: 'border border-component-membership-tier-free-card-border bg-component-membership-tier-free-card-background shadow-panel',
+    eyebrowClass: 'text-semantic-text-secondary',
+    titleClass: 'text-semantic-text-primary',
+    metaClass: 'text-semantic-text-secondary',
+    featureClass: 'border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background text-semantic-text-secondary',
     variant: 'secondary' as const,
     context: 'membership-free' as const,
   },
@@ -211,11 +211,11 @@ const planCards = computed(() => [
       membershipT('silver.f2'),
       membershipT('silver.f3'),
     ],
-      cardClass: 'border border-next-component-membership-tier-silver-border bg-next-gradient-membership-tier-silver-card text-next-semantic-text-primary shadow-next-shadow-panel',
-    eyebrowClass: 'text-next-semantic-text-secondary',
-    titleClass: 'text-next-semantic-text-primary',
-    metaClass: 'text-next-semantic-text-secondary',
-    featureClass: 'border-next-component-membership-tier-silver-feature-border bg-next-component-membership-tier-silver-feature-background text-next-semantic-text-secondary',
+      cardClass: 'border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card text-semantic-text-primary shadow-panel',
+    eyebrowClass: 'text-semantic-text-secondary',
+    titleClass: 'text-semantic-text-primary',
+    metaClass: 'text-semantic-text-secondary',
+    featureClass: 'border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background text-semantic-text-secondary',
     variant: 'secondary' as const,
     context: 'membership-silver' as const,
   },
@@ -229,11 +229,11 @@ const planCards = computed(() => [
       membershipT('gold.f2'),
       membershipT('gold.f3'),
     ],
-      cardClass: 'border border-next-component-membership-tier-gold-border bg-next-gradient-membership-tier-gold-card text-next-semantic-text-inverse shadow-next-shadow-emphasis',
-    eyebrowClass: 'text-next-semantic-text-inverse-muted',
-    titleClass: 'text-next-semantic-text-inverse',
-    metaClass: 'text-next-semantic-text-inverse-muted',
-    featureClass: 'border-next-component-membership-tier-gold-feature-border bg-next-component-membership-tier-gold-feature-background text-next-semantic-text-inverse-muted',
+      cardClass: 'border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card text-semantic-text-inverse shadow-emphasis',
+    eyebrowClass: 'text-semantic-text-inverse-muted',
+    titleClass: 'text-semantic-text-inverse',
+    metaClass: 'text-semantic-text-inverse-muted',
+    featureClass: 'border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background text-semantic-text-inverse-muted',
     variant: 'primary' as const,
     context: 'membership-gold' as const,
   },
@@ -247,11 +247,11 @@ const planCards = computed(() => [
       membershipT('diamond.f2'),
       membershipT('diamond.f3'),
     ],
-      cardClass: 'border border-next-component-membership-tier-diamond-border bg-next-gradient-membership-tier-diamond-card text-next-semantic-text-inverse shadow-next-shadow-luxe ring-1 ring-next-component-membership-tier-diamond-ring',
-    eyebrowClass: 'text-next-semantic-text-inverse-muted',
-    titleClass: 'text-next-semantic-text-inverse',
-    metaClass: 'text-next-semantic-text-inverse-muted',
-    featureClass: 'border-next-component-membership-tier-diamond-feature-border bg-next-component-membership-tier-diamond-feature-background text-next-semantic-text-inverse-muted',
+      cardClass: 'border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card text-semantic-text-inverse shadow-luxe ring-1 ring-component-membership-tier-diamond-ring',
+    eyebrowClass: 'text-semantic-text-inverse-muted',
+    titleClass: 'text-semantic-text-inverse',
+    metaClass: 'text-semantic-text-inverse-muted',
+    featureClass: 'border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background text-semantic-text-inverse-muted',
     variant: 'primary' as const,
     context: 'membership-diamond' as const,
   },

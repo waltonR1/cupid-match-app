@@ -6,12 +6,12 @@
     <view
       v-for="item in items"
       :key="String(item.key)"
-      class="inline-flex min-h-[28px] items-center gap-2 border border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background px-2.5 text-[12px] text-next-component-directory-control-selected-text"
+      class="inline-flex min-h-[28px] items-center gap-2 border border-component-directory-control-selected-border bg-component-directory-control-selected-background px-2.5 text-[12px] text-component-directory-control-selected-text"
     >
-      <text class="text-next-semantic-text-muted">{{ item.label }}</text>
+      <text class="text-semantic-text-muted">{{ item.label }}</text>
       <text class="font-medium">{{ item.value }}</text>
       <text
-        class="cursor-pointer text-[12px] leading-none transition-colors duration-200 hover:text-next-semantic-text-primary"
+        class="cursor-pointer text-[12px] leading-none transition-colors duration-200 hover:text-semantic-text-primary"
         @click="$emit('remove', item.key)"
       >
         x

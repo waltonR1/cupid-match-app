@@ -88,52 +88,52 @@ const motionClass = computed(() => {
   }
 
   if (props.variant === 'primary') {
-    return 'hover:-translate-y-[2px] hover:scale-[1.02] hover:shadow-next-shadow-emphasis'
+    return 'hover:-translate-y-[2px] hover:scale-[1.02] hover:shadow-emphasis'
   }
 
-  return 'hover:-translate-y-[2px] hover:scale-[1.02] hover:shadow-next-shadow-panel'
+  return 'hover:-translate-y-[2px] hover:scale-[1.02] hover:shadow-panel'
 })
 
 const disabledClass = 'cursor-not-allowed'
 
 const variantClass = computed(() => {
   if (props.disabled) {
-    return 'border-next-semantic-action-disabled-border bg-next-semantic-action-disabled text-next-semantic-action-disabled-contrast'
+    return 'border-semantic-action-disabled-border bg-semantic-action-disabled text-semantic-action-disabled-contrast'
   }
 
   if (props.variant === 'primary') {
-    return 'border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast hover:border-next-semantic-action-primary-hover hover:bg-next-semantic-action-primary-hover'
+    return 'border-semantic-action-primary bg-semantic-action-primary text-semantic-action-primary-contrast hover:border-semantic-action-primary-hover hover:bg-semantic-action-primary-hover'
   }
 
   if (props.context === 'header') {
-    return 'border-next-component-header-ghost-border bg-next-component-header-ghost text-next-component-header-ghost-label hover:border-next-component-header-ghost-border-hover hover:bg-next-component-header-ghost-hover hover:text-next-component-header-ghost-label-hover'
+    return 'border-component-header-ghost-border bg-component-header-ghost text-component-header-ghost-label hover:border-component-header-ghost-border-hover hover:bg-component-header-ghost-hover hover:text-component-header-ghost-label-hover'
   }
 
   if (props.context === 'hero') {
-    return 'border-next-component-hero-secondary-action-border bg-next-component-hero-secondary-action-background text-next-semantic-text-secondary hover:border-next-component-hero-secondary-action-emphasis hover:bg-next-component-hero-secondary-action-background-hover hover:text-next-component-hero-secondary-action-emphasis hover:shadow-next-shadow-panel'
+    return 'border-component-hero-secondary-action-border bg-component-hero-secondary-action-background text-semantic-text-secondary hover:border-component-hero-secondary-action-emphasis hover:bg-component-hero-secondary-action-background-hover hover:text-component-hero-secondary-action-emphasis hover:shadow-panel'
   }
 
   if (props.context === 'section') {
-    return 'border-next-semantic-border-default bg-next-semantic-surface-soft text-next-component-section-action-emphasis hover:border-next-component-section-action-emphasis hover:bg-next-semantic-page-subtle hover:text-next-semantic-text-primary hover:shadow-next-shadow-panel'
+    return 'border-semantic-border-default bg-semantic-surface-soft text-component-section-action-emphasis hover:border-component-section-action-emphasis hover:bg-semantic-page-subtle hover:text-semantic-text-primary hover:shadow-panel'
   }
 
   if (props.context === 'membership-silver') {
-    return 'border-next-component-membership-tier-silver-button-border bg-next-component-membership-tier-silver-button-fill text-next-semantic-text-primary hover:border-next-component-membership-tier-silver-button-border hover:bg-next-component-membership-tier-silver-button-fill-hover hover:text-next-semantic-text-primary'
+    return 'border-component-membership-tier-silver-button-border bg-component-membership-tier-silver-button-fill text-semantic-text-primary hover:border-component-membership-tier-silver-button-border hover:bg-component-membership-tier-silver-button-fill-hover hover:text-semantic-text-primary'
   }
 
   if (props.context === 'membership-gold') {
-    return 'border-next-component-membership-tier-gold-border bg-next-component-membership-tier-gold-fill text-next-semantic-action-primary-contrast hover:border-next-component-membership-tier-gold-border-hover hover:bg-next-component-membership-tier-gold-fill-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-component-membership-tier-gold-border bg-component-membership-tier-gold-fill text-semantic-action-primary-contrast hover:border-component-membership-tier-gold-border-hover hover:bg-component-membership-tier-gold-fill-hover hover:text-semantic-action-primary-contrast hover:shadow-emphasis'
   }
 
   if (props.context === 'membership-diamond') {
-    return 'border-next-component-membership-tier-diamond-button-border bg-next-component-membership-tier-diamond-button-fill text-next-semantic-action-primary-contrast hover:border-next-component-membership-tier-diamond-button-border-hover hover:bg-next-component-membership-tier-diamond-button-fill-hover hover:text-next-semantic-action-primary-contrast hover:shadow-next-shadow-emphasis'
+    return 'border-component-membership-tier-diamond-button-border bg-component-membership-tier-diamond-button-fill text-semantic-action-primary-contrast hover:border-component-membership-tier-diamond-button-border-hover hover:bg-component-membership-tier-diamond-button-fill-hover hover:text-semantic-action-primary-contrast hover:shadow-emphasis'
   }
 
   if (props.context === 'membership-free') {
-    return 'border-next-component-membership-tier-free-button-border bg-transparent text-next-semantic-text-primary hover:border-next-component-membership-tier-free-button-border hover:bg-next-component-membership-tier-free-button-fill-hover hover:text-next-semantic-text-primary'
+    return 'border-component-membership-tier-free-button-border bg-transparent text-semantic-text-primary hover:border-component-membership-tier-free-button-border hover:bg-component-membership-tier-free-button-fill-hover hover:text-semantic-text-primary'
   }
 
-  return 'border-next-semantic-border-default bg-next-semantic-surface-soft text-next-semantic-text-secondary hover:border-next-semantic-border-soft hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'
+  return 'border-semantic-border-default bg-semantic-surface-soft text-semantic-text-secondary hover:border-semantic-border-soft hover:bg-semantic-surface-panel hover:text-semantic-text-primary'
 })
 
 function handleClick(event: unknown) {

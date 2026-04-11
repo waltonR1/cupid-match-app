@@ -8,7 +8,7 @@
 
 关联基线：
 
-- [design-token-account-benchmark-rewrite.md](/D:/uniapp/cupid-match/docs/design-token-account-benchmark-rewrite.md)
+- [design-token-account-benchmark-rewrite.md](design-token-account-benchmark-rewrite.md)
 
 ## 一版定稿 IA
 

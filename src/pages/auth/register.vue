@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav=""
@@ -7,25 +7,25 @@
       @register-click="handleRegisterClick"
     />
 
-    <view class="relative overflow-hidden bg-next-gradient-auth-hero text-next-semantic-text-inverse">
-      <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-next-semantic-border-hero-ornament" />
-      <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-next-semantic-border-hero-ornament" />
+    <view class="relative overflow-hidden bg-gradient-auth-hero text-semantic-text-inverse">
+      <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-semantic-border-hero-ornament" />
+      <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
         <view class="grid gap-12 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
           <view class="max-w-[740px]">
-            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
-              <view class="h-[1px] w-12 bg-next-semantic-border-eyebrow" />
-              <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-hero-eyebrow">
+            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
+              <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+              <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
                 {{ labels.eyebrow }}
               </text>
             </view>
 
-            <view class="max-w-[700px] text-[52px] font-semibold leading-[1.04] text-next-semantic-text-inverse lg:text-[84px]">
+            <view class="max-w-[700px] text-[52px] font-semibold leading-[1.04] text-semantic-text-inverse lg:text-[84px]">
               {{ labels.title }}
             </view>
 
-            <view class="mt-8 max-w-[680px] text-[18px] leading-8 text-next-semantic-text-hero-body lg:text-[20px]">
+            <view class="mt-8 max-w-[680px] text-[18px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
               {{ labels.subtitle }}
             </view>
 
@@ -35,19 +35,19 @@
                 :key="option.value"
                 class="cursor-pointer border px-6 py-6 backdrop-blur transition-all duration-300 hover:-translate-y-[2px]"
                 :class="option.value === role
-                  ? 'border-next-component-auth-selection-border bg-next-component-auth-selection-background shadow-next-panel'
-                  : 'border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft hover:border-next-component-auth-selection-hover-border'"
+                  ? 'border-component-auth-selection-border bg-component-auth-selection-background shadow-panel'
+                  : 'border-semantic-border-hero bg-component-auth-overlay-background-soft hover:border-component-auth-selection-hover-border'"
                 @click="selectRole(option.value)"
               >
                 <view class="flex items-start justify-between gap-4">
                   <view>
                     <view
                       class="text-[12px] uppercase tracking-[4px]"
-                      :class="option.value === role ? 'text-next-semantic-text-hero-label' : 'text-next-semantic-text-hero-secondary'"
+                      :class="option.value === role ? 'text-semantic-text-hero-label' : 'text-semantic-text-hero-secondary'"
                     >
                       {{ option.badge }}
                     </view>
-                    <view class="mt-4 text-[24px] font-semibold text-next-semantic-text-inverse">
+                    <view class="mt-4 text-[24px] font-semibold text-semantic-text-inverse">
                       {{ option.title }}
                     </view>
                   </view>
@@ -55,125 +55,125 @@
                   <view
                     class="mt-1 h-3.5 w-3.5 rounded-full border"
                     :class="option.value === role
-                      ? 'border-next-component-auth-selection-indicator bg-next-component-auth-selection-indicator shadow-next-panel'
-                      : 'border-next-semantic-border-hero bg-transparent'"
+                      ? 'border-component-auth-selection-indicator bg-component-auth-selection-indicator shadow-panel'
+                      : 'border-semantic-border-hero bg-transparent'"
                   />
                 </view>
 
-                <view class="mt-4 text-[15px] leading-7" :class="option.value === role ? 'text-next-semantic-text-hero-body' : 'text-next-semantic-text-hero-secondary'">
+                <view class="mt-4 text-[15px] leading-7" :class="option.value === role ? 'text-semantic-text-hero-body' : 'text-semantic-text-hero-secondary'">
                   {{ option.desc }}
                 </view>
               </view>
             </view>
 
-            <view class="mt-6 border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-6 py-6 backdrop-blur">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-hero-label">
+            <view class="mt-6 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-6 py-6 backdrop-blur">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
                 {{ labels.selectedRole }}
               </view>
-              <view class="mt-4 text-[28px] font-semibold text-next-semantic-text-inverse">
+              <view class="mt-4 text-[28px] font-semibold text-semantic-text-inverse">
                 {{ activeRoleLabel }}
               </view>
-              <view class="mt-3 text-[16px] leading-8 text-next-semantic-text-hero-body">
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-hero-body">
                 {{ activeRoleNote }}
               </view>
             </view>
           </view>
 
           <view class="relative lg:ml-auto lg:w-full lg:max-w-[520px]">
-            <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft" />
+            <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-semantic-border-hero bg-component-auth-overlay-background-soft" />
 
-            <view class="relative border border-next-semantic-border-hero bg-next-semantic-surface-hero-panel px-8 py-8 text-next-semantic-text-inverse shadow-next-shadow-hero backdrop-blur">
+            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 text-semantic-text-inverse shadow-hero backdrop-blur">
               <view>
-                <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-hero-label">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
                   {{ labels.formTitle }}
                 </view>
-                <view class="mt-4 text-[30px] leading-[1.3] text-next-semantic-text-inverse">
+                <view class="mt-4 text-[30px] leading-[1.3] text-semantic-text-inverse">
                   {{ labels.panelTitle }}
                 </view>
               </view>
 
-              <view class="mt-4 text-[15px] leading-7 text-next-semantic-text-hero-body">
+              <view class="mt-4 text-[15px] leading-7 text-semantic-text-hero-body">
                 {{ labels.panelHint }}
               </view>
 
               <view class="mt-8 grid gap-5">
-                <view class="border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
-                  <view class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
                     {{ formLabels.name }}
                   </view>
                   <input
                     v-model="name"
-                    class="mt-3 h-12 w-full border-b border-next-semantic-border-hero bg-transparent px-0 text-[16px] text-next-semantic-text-inverse placeholder:text-next-semantic-text-hero-secondary"
+                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                     :placeholder="formPlaceholders.name"
-                    placeholder-class="text-next-semantic-text-hero-secondary"
+                    placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
 
                 <view class="grid gap-5 md:grid-cols-2">
-                  <view class="border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
                       {{ formLabels.email }}
                     </view>
                     <input
                       v-model="email"
-                      class="mt-3 h-12 w-full border-b border-next-semantic-border-hero bg-transparent px-0 text-[16px] text-next-semantic-text-inverse placeholder:text-next-semantic-text-hero-secondary"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                       :placeholder="formPlaceholders.email"
-                      placeholder-class="text-next-semantic-text-hero-secondary"
+                      placeholder-class="text-semantic-text-hero-secondary"
                     >
                   </view>
 
-                  <view class="border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
                       {{ formLabels.city }}
                     </view>
                     <input
                       v-model="city"
-                      class="mt-3 h-12 w-full border-b border-next-semantic-border-hero bg-transparent px-0 text-[16px] text-next-semantic-text-inverse placeholder:text-next-semantic-text-hero-secondary"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                       :placeholder="formPlaceholders.city"
-                      placeholder-class="text-next-semantic-text-hero-secondary"
+                      placeholder-class="text-semantic-text-hero-secondary"
                     >
                   </view>
 
                 </view>
 
                 <view class="grid gap-5 md:grid-cols-2">
-                  <view class="border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
                       {{ formLabels.password }}
                     </view>
                     <input
                       v-model="password"
                       password
-                      class="mt-3 h-12 w-full border-b border-next-semantic-border-hero bg-transparent px-0 text-[16px] text-next-semantic-text-inverse placeholder:text-next-semantic-text-hero-secondary"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                       :placeholder="formPlaceholders.password"
-                      placeholder-class="text-next-semantic-text-hero-secondary"
+                      placeholder-class="text-semantic-text-hero-secondary"
                     >
                   </view>
 
-                  <view class="border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
                       {{ formLabels.confirmPassword }}
                     </view>
                     <input
                       v-model="confirmPassword"
                       password
-                      class="mt-3 h-12 w-full border-b border-next-semantic-border-hero bg-transparent px-0 text-[16px] text-next-semantic-text-inverse placeholder:text-next-semantic-text-hero-secondary"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                       :placeholder="formPlaceholders.confirmPassword"
-                      placeholder-class="text-next-semantic-text-hero-secondary"
+                      placeholder-class="text-semantic-text-hero-secondary"
                     >
                   </view>
                 </view>
               </view>
 
-              <label class="mt-6 flex items-start gap-3 border border-next-semantic-border-hero bg-next-component-auth-overlay-background-soft px-5 py-4">
+              <label class="mt-6 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
                 <checkbox :checked="agreed" @click="toggleAgreement" />
-                <view class="text-[14px] leading-7 text-next-semantic-text-hero-body">
+                <view class="text-[14px] leading-7 text-semantic-text-hero-body">
                   <text>{{ agreement.prefix }}</text>
-                  <text class="text-next-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
                     {{ agreement.terms }}
                   </text>
                   <text>{{ agreement.connector }}</text>
-                  <text class="text-next-semantic-text-link underline" @click.stop="openAgreementDialog('privacy')">
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('privacy')">
                     {{ agreement.privacy }}
                   </text>
                   <text>{{ agreement.suffix }}</text>
@@ -202,7 +202,7 @@
                 </AppButton>
               </view>
 
-              <view class="mt-6 text-[14px] leading-7 text-next-semantic-text-hero-secondary">
+              <view class="mt-6 text-[14px] leading-7 text-semantic-text-hero-secondary">
                 {{ labels.formFootnote }}
               </view>
             </view>
@@ -211,11 +211,11 @@
       </view>
     </view>
 
-    <view class="bg-next-semantic-page-subtle">
+    <view class="bg-semantic-page-subtle">
       <view class="mx-auto max-w-[1280px] px-8 py-20">
         <view class="mb-10 inline-flex items-center gap-4">
-          <view class="h-[1px] w-12 bg-next-semantic-border-eyebrow" />
-          <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
+          <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
             {{ labels.processTitle }}
           </text>
         </view>
@@ -224,15 +224,15 @@
           <view
             v-for="(step, index) in processSteps"
             :key="step.title"
-            class="border border-next-semantic-border-default bg-next-semantic-surface-panel px-7 py-7 shadow-next-panel"
+            class="border border-semantic-border-default bg-semantic-surface-panel px-7 py-7 shadow-panel"
           >
-            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
+            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
               {{ String(index + 1).padStart(2, '0') }}
             </view>
-            <view class="mt-4 text-[24px] font-semibold leading-[1.35] text-next-semantic-text-primary">
+            <view class="mt-4 text-[24px] font-semibold leading-[1.35] text-semantic-text-primary">
               {{ step.title }}
             </view>
-            <view class="mt-4 text-[15px] leading-8 text-next-semantic-text-secondary">
+            <view class="mt-4 text-[15px] leading-8 text-semantic-text-secondary">
               {{ step.desc }}
             </view>
           </view>

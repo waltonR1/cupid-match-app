@@ -1,13 +1,13 @@
 <template>
   <view
     v-if="totalPages > 1"
-    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-next-semantic-border-default bg-next-semantic-surface-card px-5 py-4 shadow-next-shadow-panel"
+    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-5 py-4 shadow-panel"
   >
     <view
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page <= 1
-        ? 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-subtle'
-        : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
+        ? 'border-semantic-border-default bg-semantic-surface-panel text-semantic-text-subtle'
+        : 'cursor-pointer border-semantic-border-default bg-semantic-surface-panel text-semantic-text-muted hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
       @click="handlePrev"
     >
       {{ prevText }}
@@ -18,10 +18,10 @@
       :key="item.key"
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="item.type === 'ellipsis'
-        ? 'border-next-semantic-border-divider bg-next-semantic-surface-card text-next-semantic-text-subtle'
+        ? 'border-semantic-border-divider bg-semantic-surface-card text-semantic-text-subtle'
         : item.value === page
-          ? 'border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background text-next-component-directory-control-selected-text hover:-translate-y-[1px] hover:border-next-component-directory-control-selected-border-hover hover:bg-next-component-directory-control-selected-background-hover'
-          : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
+          ? 'border-component-directory-control-selected-border bg-component-directory-control-selected-background text-component-directory-control-selected-text hover:-translate-y-[1px] hover:border-component-directory-control-selected-border-hover hover:bg-component-directory-control-selected-background-hover'
+          : 'cursor-pointer border-semantic-border-default bg-semantic-surface-panel text-semantic-text-muted hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
       @click="handleTokenClick(item)"
     >
       {{ item.label }}
@@ -30,8 +30,8 @@
     <view
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page >= totalPages
-        ? 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-subtle'
-        : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
+        ? 'border-semantic-border-default bg-semantic-surface-panel text-semantic-text-subtle'
+        : 'cursor-pointer border-semantic-border-default bg-semantic-surface-panel text-semantic-text-muted hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
       @click="handleNext"
     >
       {{ nextText }}

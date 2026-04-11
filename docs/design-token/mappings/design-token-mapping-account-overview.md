@@ -3,7 +3,7 @@
 > Status: legacy audit only. Superseded on 2026-04-10 by benchmark-first rewrite strategy.
 >
 > Account should not be implemented by following current page structure or current class mapping.
-> Use `docs/design-token-account-benchmark-rewrite.md` as the rewrite baseline.
+> Use `docs/design-token/mappings/design-token-account-benchmark-rewrite.md` as the rewrite baseline.
 
 ## Scope
 

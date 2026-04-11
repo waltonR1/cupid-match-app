@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-next-semantic-page-subtle text-next-semantic-text-primary">
+  <view class="min-h-screen bg-semantic-page-subtle text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav="common.nav.family"
@@ -9,7 +9,7 @@
 
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
-        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-next-semantic-border-default bg-next-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-next-semantic-text-muted transition-colors duration-200 hover:text-next-semantic-text-link"
+        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
         @click="handleBack"
       >
         <svg
@@ -34,8 +34,8 @@
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <view class="space-y-6">
-            <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.overview') }}
               </view>
 
@@ -43,12 +43,12 @@
                 <view
                   v-for="item in overviewFacts"
                   :key="item.label"
-                  class="border-b border-next-semantic-border-divider pb-3"
+                  class="border-b border-semantic-border-divider pb-3"
                 >
-                  <view class="text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ item.label }}
                   </view>
-                  <view class="mt-2 text-[16px] leading-7 text-next-semantic-text-secondary">
+                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                     {{ item.value }}
                   </view>
                 </view>
@@ -56,23 +56,23 @@
             </view>
 
             <view class="grid gap-6 lg:grid-cols-2">
-              <view class="border border-next-semantic-border-default bg-next-semantic-surface-soft px-6 py-7 shadow-next-shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+              <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                   {{ t('sections.relationship') }}
                 </view>
 
-                <view class="mt-6 border border-next-semantic-border-divider bg-next-semantic-surface-card px-5 py-5">
-                  <view class="text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                <view class="mt-6 border border-semantic-border-divider bg-semantic-surface-card px-5 py-5">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ t('fields.intent') }}
                   </view>
-                  <view class="mt-3 text-[22px] leading-8 text-next-semantic-text-primary">
+                  <view class="mt-3 text-[22px] leading-8 text-semantic-text-primary">
                     {{ intentText }}
                   </view>
 
-                  <view class="mt-5 text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                  <view class="mt-5 text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ t('fields.maritalPlan') }}
                   </view>
-                  <view class="mt-3 text-[16px] leading-8 text-next-semantic-text-secondary">
+                  <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
                     {{ maritalPlanText }}
                   </view>
                 </view>
@@ -81,20 +81,20 @@
                   <view
                     v-for="item in relationshipFacts"
                     :key="item.label"
-                    class="border-b border-next-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
+                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                   >
-                    <view class="text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                       {{ item.label }}
                     </view>
-                    <view class="mt-2 text-[16px] leading-7 text-next-semantic-text-secondary">
+                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                       {{ item.value }}
                     </view>
                   </view>
                 </view>
               </view>
 
-              <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+              <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                   {{ t('sections.lifestyle') }}
                 </view>
 
@@ -102,12 +102,12 @@
                   <view
                     v-for="item in lifestyleFacts"
                     :key="item.label"
-                    class="border-b border-next-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
+                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                   >
-                    <view class="text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                       {{ item.label }}
                     </view>
-                    <view class="mt-2 text-[16px] leading-7 text-next-semantic-text-secondary">
+                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                       {{ item.value }}
                     </view>
                   </view>
@@ -117,17 +117,17 @@
           </view>
 
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <view class="border border-next-semantic-border-default bg-next-semantic-surface-soft px-6 py-7 shadow-next-shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+            <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.accessPolicy') }}
               </view>
-              <view class="mt-4 text-[16px] leading-8 text-next-semantic-text-muted">
+              <view class="mt-4 text-[16px] leading-8 text-semantic-text-muted">
                 {{ t('hero.accessNote') }}
               </view>
             </view>
 
-            <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.curationFocus') }}
               </view>
 
@@ -135,20 +135,20 @@
                 <view
                   v-for="item in spotlightFacts"
                   :key="item.label"
-                  class="border-b border-next-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
+                  class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                 >
-                  <view class="text-[12px] tracking-[1px] text-next-semantic-text-muted">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ item.label }}
                   </view>
-                  <view class="mt-2 text-[16px] leading-7 text-next-semantic-text-secondary">
+                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                     {{ item.value }}
                   </view>
                 </view>
               </view>
             </view>
 
-            <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.highlights') }}
               </view>
 
@@ -156,15 +156,15 @@
                 <view
                   v-for="item in highlightTexts"
                   :key="item"
-                  class="border border-next-semantic-border-divider bg-next-semantic-surface-soft px-4 py-4 text-[16px] leading-7 text-next-semantic-text-secondary"
+                  class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4 text-[16px] leading-7 text-semantic-text-secondary"
                 >
                   {{ item }}
                 </view>
               </view>
             </view>
 
-            <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-7 shadow-next-shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.tags') }}
               </view>
 
@@ -172,7 +172,7 @@
                 <view
                   v-for="item in tagTexts"
                   :key="item"
-                  class="rounded-full border border-next-semantic-border-default bg-next-semantic-surface-panel px-3 py-1.5 text-[12px] text-next-semantic-text-eyebrow"
+                  class="rounded-full border border-semantic-border-default bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-eyebrow"
                 >
                   {{ item }}
                 </view>

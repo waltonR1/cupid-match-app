@@ -9,7 +9,7 @@
 
 配套 IA：
 
-- [account-rewrite-ia.md](/D:/uniapp/cupid-match/docs/account-rewrite-ia.md)
+- [account-rewrite-ia.md](account-rewrite-ia.md)
 
 ## Market Baseline
 

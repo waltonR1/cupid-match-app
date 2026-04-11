@@ -3,10 +3,10 @@
 - Date: `2026-04-10`
 - Scope: exclude `account` and `discovery`
 - Related docs:
-  - `docs/design-token-audit-non-account-non-discovery.md`
-  - `docs/design-token-replacement-list-non-account-non-discovery.md`
-  - `docs/design-token-execution-non-account-non-discovery-round-1.md`
-  - `docs/design-token-execution-non-account-non-discovery-round-2.md`
+  - `docs/design-token/audits/design-token-audit-non-account-non-discovery.md`
+  - `docs/design-token/mappings/design-token-replacement-list-non-account-non-discovery.md`
+  - `docs/design-token/executions/design-token-execution-non-account-non-discovery-round-1.md`
+  - `docs/design-token/executions/design-token-execution-non-account-non-discovery-round-2.md`
 
 ## Strategy
 

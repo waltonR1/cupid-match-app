@@ -2,198 +2,143 @@
 
 ## 文档目的
 
-这份文档只回答两件事：
+这份文档说明当前项目里的真实页面、主导航关系和演示跳转关系。它面向主分支长期维护，不记录设计 token 迁移过程。
 
-- 当前项目里实际有哪些页面
-- 这些页面之间现在是怎么跳转和串联的
+依据文件：
 
-它基于当前仓库里的真实路由、导航配置和演示跳转逻辑整理，不再沿用旧版页面命名。
+- [src/pages.json](../src/pages.json)
+- [src/constants/nav.ts](../src/constants/nav.ts)
+- [src/utils/navigation.ts](../src/utils/navigation.ts)
+- [src/utils/demo-navigation.ts](../src/utils/demo-navigation.ts)
 
-## 当前页面结构
+## 页面清单
 
-### 1. 公共品牌页
+### 公共品牌页
 
 - `/pages/index`
-  首页。站点主入口，承担品牌说明、核心能力展示、发现入口、会员入口和活动入口。
+  首页。站点主入口，承接品牌说明、核心能力、资料发现、活动和会员转化。
 - `/pages/public/about`
-  项目介绍页。说明这个相亲平台的定位、目标人群、差异点和价值观。
-- `/pages/public/membership`
-  会员体系页。展示免费会员、银卡、金卡、钻石会员和对应支持深度。
+  关于我们。说明平台定位、目标人群、服务边界和信任基础。
 - `/pages/public/contact`
-  联系页。承接咨询、服务分流和联络信息。
+  联系我们。承接咨询、服务分流和联络信息。
+- `/pages/public/membership`
+  会员体系。展示会员权益、服务分层和注册/升级入口。
 
-### 2. 发现与详情页
-
-- `/pages/discovery/self/index`
-  本人视角资料列表。面向普通用户浏览候选资料。
-- `/pages/discovery/self/detail`
-  本人视角资料详情。强调本人判断、匹配信息和关系推进线索。
-- `/pages/discovery/family/index`
-  家长视角资料列表。只展示允许家庭辅助了解的资料。
-- `/pages/discovery/family/detail`
-  家长视角资料详情。强调家庭可见边界、关系计划和协助信息。
-- `/pages/events/index`
-  活动列表页。展示活动卡片和报名入口。
-- `/pages/events/detail`
-  活动详情页。展示活动内容、报名状态和后续动作。
-
-### 3. 认证与注册页
+### 认证与注册页
 
 - `/pages/auth/login`
-  登录页。当前属于演示流程入口之一。
+  登录页。当前用于演示登录入口。
 - `/pages/auth/register`
-  注册与选套餐页。承接免费注册、会员升级和部分 CTA 转化。
+  注册页。承接免费注册、会员方案和 CTA 转化，支持 `?plan=` 参数。
 
-### 4. 用户账户页
+### 发现页
 
-- `/pages/account/index`
-  账户总览。当前账号的总控页，强调“本人主导 + 家长协同边界”。
+- `/pages/discovery/self/index`
+  本人视角资料列表。面向本人筛选候选资料。
+- `/pages/discovery/self/detail`
+  本人视角资料详情。通过 `?id=` 参数进入指定资料。
+- `/pages/discovery/family/index`
+  家庭视角资料列表。展示允许家庭辅助了解的资料。
+- `/pages/discovery/family/detail`
+  家庭视角资料详情。通过 `?id=` 参数进入指定资料。
+
+### 账户页
+
 - `/pages/account/profile`
-  我的资料。管理资料质量、可见范围和资料边界。
-- `/pages/account/events`
-  我的报名。查看已确认、候补和已完成的活动记录。
-- `/pages/account/favorites`
-  我的收藏。区分仅本人可见和可与家长共享的收藏资料。
+  我的资料。当前账户入口，`openAccountPage()` 也落到这里。
+- `/pages/account/verification`
+  认证中心。承接实名、学历、婚况、职业等信任能力。
+- `/pages/account/connections`
+  我的缘分。承接收藏、推荐、互相喜欢和关系机会。
 - `/pages/account/messages`
-  消息沟通。查看会话、未读状态和沟通边界。
-- `/pages/account/privacy`
-  隐私授权。管理顾问联系、家庭辅助和资料字段开放权限。
+  消息。承接会话、未读状态和沟通入口。
+- `/pages/account/safety`
+  隐私与安全。承接资料可见性、联系规则、风险提示和安全控制。
+- `/pages/account/membership`
+  会员与服务。承接当前会员、权益、人工服务和升级入口。
+- `/pages/account/activity`
+  我的活动。承接报名、候补、已完成活动和活动后跟进。
 
-### 5. 辅助页
+### 活动页
+
+- `/pages/events/index`
+  活动列表。展示活动卡片和活动详情入口。
+- `/pages/events/detail`
+  活动详情。通过 `?id=` 参数进入指定活动。
+
+### 辅助页
 
 - `/pages/not-found`
   404 / 找不到页面。
 
-## 全局导航关系
+## 全局导航
 
-顶部和底部主导航统一来自 [nav.ts](/D:/uniapp/cupid-match/src/constants/nav.ts)。
-
-当前主导航只覆盖公共品牌层：
+主导航由 `NAV_LIST` 统一配置，跳转逻辑走 `navigateByNavKey()`。
 
 - `common.nav.about` -> `/pages/public/about`
-- `common.nav.profiles` -> `/pages/discovery/self/index`
+- `common.nav.self` -> `/pages/discovery/self/index`
 - `common.nav.family` -> `/pages/discovery/family/index`
 - `common.nav.events` -> `/pages/events/index`
 - `common.nav.membership` -> `/pages/public/membership`
 - `common.nav.contact` -> `/pages/public/contact`
 
-主导航跳转统一走 [navigation.ts](/D:/uniapp/cupid-match/src/utils/navigation.ts) 的 `navigateByNavKey()`。
+## 演示跳转入口
 
-## 账户页内部关系
+这些函数集中在 `src/utils/demo-navigation.ts`，用于页面 CTA、卡片和演示流程跳转。
 
-账户页之间的跳转统一走 [demo-navigation.ts](/D:/uniapp/cupid-match/src/utils/demo-navigation.ts)。
+- `openLoginPage()` -> `/pages/auth/login`
+- `openRegisterPage(plan?)` -> `/pages/auth/register?plan=...`
+- `openSelfDetail(id)` -> `/pages/discovery/self/detail?id=...`
+- `openFamilyProfileDetail(id)` -> `/pages/discovery/family/detail?id=...`
+- `openEventDetail(id)` -> `/pages/events/detail?id=...`
+- `openAccountPage()` -> `/pages/account/profile`
+- `openMyProfilePage()` -> `/pages/account/profile`
+- `openActivityPage()` -> `/pages/account/activity`
+- `openMessagesPage()` -> `/pages/account/messages`
+- `openVerificationPage()` -> `/pages/account/verification`
+- `openConnectionsPage()` -> `/pages/account/connections`
+- `openSafetyPage()` -> `/pages/account/safety`
+- `openMembershipPage()` -> `/pages/account/membership`
 
-- 账户总览 -> 我的资料
-- 账户总览 -> 我的报名
-- 账户总览 -> 我的收藏
-- 账户总览 -> 消息沟通
-- 账户总览 -> 隐私授权
-- 账户总览 -> 注册 / 升级
+## 核心路径
 
-账户子页之间通过二级导航互跳：
+### 访客了解平台
 
-- 账户总览
-- 我的资料
-- 我的报名
-- 我的收藏
-- 消息沟通
-- 隐私授权
+1. 进入首页。
+2. 浏览关于我们、会员体系、家庭参与、活动或联系方式。
+3. 从 CTA 进入注册页。
 
-## 核心浏览路径
+### 本人筛选对象
 
-### 路径 1：普通访客先了解平台
+1. 从首页或主导航进入 `/pages/discovery/self/index`。
+2. 浏览本人视角资料列表。
+3. 进入 `/pages/discovery/self/detail?id=...`。
+4. 根据资料信息进入注册、活动或后续账户流程。
 
-1. 进入首页
-2. 浏览项目介绍、会员资料、家庭参与、活动或会员体系
-3. 进入资料详情或活动详情
-4. 从 CTA 进入注册页
+### 家庭辅助了解
 
-### 路径 2：普通用户本人筛选对象
+1. 从首页或主导航进入 `/pages/discovery/family/index`。
+2. 浏览家庭可见资料。
+3. 进入 `/pages/discovery/family/detail?id=...`。
+4. 在授权边界内辅助理解候选人背景和关系节奏。
 
-1. 从首页或导航进入本人视角资料列表
-2. 浏览资料卡片
-3. 进入本人视角详情页
-4. 根据资料质量和匹配方向决定收藏、活动或注册
+### 活动推进
 
-### 路径 3：家长辅助了解资料
+1. 从首页或主导航进入 `/pages/events/index`。
+2. 浏览活动列表。
+3. 进入 `/pages/events/detail?id=...`。
+4. 从活动详情进入注册或后续报名动作。
 
-1. 从首页或导航进入家庭参与页
-2. 浏览允许家长查看的资料
-3. 进入家长视角详情页
-4. 在授权边界内理解背景、节奏和家庭可参与部分
+### 账户维护
 
-### 路径 4：活动推进
+1. 从注册、会员或其它账户 CTA 进入 `/pages/account/profile`。
+2. 按需进入认证中心、我的缘分、消息、隐私与安全、会员与服务或我的活动。
+3. 账户区以资料质量、信任认证、关系机会、沟通和安全边界为核心。
 
-1. 从首页或导航进入活动列表
-2. 浏览活动卡片
-3. 进入活动详情
-4. 从活动详情进入注册或后续报名动作
+## 路由一致性要求
 
-### 路径 5：用户进入账户流程
-
-1. 从首页、会员页或其它 CTA 进入注册页
-2. 从注册进入账户总览
-3. 再进入资料、报名、收藏、消息或隐私子页
-
-## 页面之间的实际跳转
-
-### 首页相关
-
-- 首页 CTA -> 注册页
-- 首页模块入口 -> 项目介绍页 / 本人视角资料页 / 家长视角资料页 / 活动页 / 会员页
-
-### 资料相关
-
-- 本人视角资料列表 -> 本人视角资料详情
-- 家长视角资料列表 -> 家长视角资料详情
-- 收藏页中的普通收藏 -> 本人视角资料详情
-- 收藏页中的家庭共享收藏 -> 家长视角资料详情
-- 消息页 -> 本人视角资料详情
-
-### 活动相关
-
-- 活动列表 -> 活动详情
-- 我的报名 -> 活动详情
-
-### 注册与会员相关
-
-- 会员页 CTA -> 注册页
-- 首页 CTA -> 注册页
-- Header / Footer Register CTA -> 注册页
-
-### 账户相关
-
-- 注册页 -> 账户总览
-- 账户总览 -> 全部账户子页
-- 账户子页二级导航 -> 其它账户子页
-
-## 当前项目的页面语义
-
-当前站点不是通用社交产品，而是一个带有明确婚恋意图的相亲平台前台演示站。
-
-因此页面关系也遵循下面这套语义：
-
-- 公共页负责建立平台定位和信任感
-- 本人视角页负责筛选、判断和关系推进
-- 家长视角页负责“有限辅助”，而不是替代本人
-- 活动页负责把线上兴趣和关系判断带到线下
-- 账户页负责把资料、收藏、活动、消息和隐私边界收口到同一套用户流程里
-
-## 目前不在主链路，但后面可能补的页面
-
-这些页面当前不是必需项，但未来若进入更完整业务阶段，可能需要：
-
-- 搜索结果页
-- 高级筛选页
-- 单独聊天会话详情页
-- 支付确认页
-- 举报 / 拉黑页
-- 审核后台页
-- 顾问跟进记录页
-
-## 相关文件
-
-- [pages.json](/D:/uniapp/cupid-match/src/pages.json)
-- [nav.ts](/D:/uniapp/cupid-match/src/constants/nav.ts)
-- [navigation.ts](/D:/uniapp/cupid-match/src/utils/navigation.ts)
-- [demo-navigation.ts](/D:/uniapp/cupid-match/src/utils/demo-navigation.ts)
+- 账户入口统一落到 `/pages/account/profile`。
+- 账户活动页统一使用 `/pages/account/activity`。
+- 账户关系机会页统一使用 `/pages/account/connections`。
+- 账户隐私与安全页统一使用 `/pages/account/safety`。
+- 新增页面时必须先更新 `src/pages.json`，再补充导航或演示跳转函数，最后同步更新本文档。

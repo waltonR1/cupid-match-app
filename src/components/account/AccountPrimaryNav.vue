@@ -5,8 +5,8 @@
       :key="item.key"
       class="cursor-pointer rounded-button border px-4 py-3 text-[13px] font-medium tracking-[0.2px] transition-all duration-200"
       :class="item.key === activePage
-        ? 'border-next-component-account-nav-current-border bg-next-semantic-surface-panel text-next-semantic-text-primary shadow-next-shadow-panel'
-        : 'border-next-semantic-border-default bg-next-semantic-surface-soft text-next-semantic-text-secondary hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'"
+        ? 'border-component-account-nav-current-border bg-semantic-surface-panel text-semantic-text-primary shadow-panel'
+        : 'border-semantic-border-default bg-semantic-surface-soft text-semantic-text-secondary hover:-translate-y-[1px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-panel hover:text-semantic-text-primary'"
       @click="openPage(item.key)"
     >
       {{ item.label }}

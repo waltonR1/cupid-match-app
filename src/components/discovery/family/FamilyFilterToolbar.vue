@@ -1,9 +1,9 @@
 <template>
-  <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-4 py-4 shadow-next-shadow-panel">
+  <view class="border border-semantic-border-default bg-semantic-surface-card px-4 py-4 shadow-panel">
     <view class="flex flex-col gap-3">
       <view class="flex flex-wrap items-center gap-3">
         <view class="min-w-0 flex-1">
-          <view class="text-[12.5px] tracking-[2.6px] text-next-semantic-text-muted">
+          <view class="text-[12.5px] tracking-[2.6px] text-semantic-text-muted">
             {{ props.title }}
           </view>
         </view>
@@ -11,13 +11,13 @@
         <view class="ml-auto flex items-center gap-2">
           <view
             v-if="secondaryFilters.length"
-            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
+            class="inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-semantic-border-default bg-semantic-surface-soft px-3.5 text-[12.5px] text-semantic-text-muted transition-all duration-200 hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel hover:text-semantic-text-primary"
             @click="toggleExpanded"
           >
             <text>{{ isExpanded ? props.collapseText : props.expandText }}</text>
             <svg
               class="h-2 w-2 shrink-0 transition-transform duration-150"
-              :class="isExpanded ? 'rotate-180 text-next-component-directory-control-selected-text' : ''"
+              :class="isExpanded ? 'rotate-180 text-component-directory-control-selected-text' : ''"
               viewBox="0 0 12 12"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
           </view>
 
           <view
-            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3.5 text-[12.5px] text-next-semantic-text-muted transition-all duration-200 hover:border-next-semantic-border-interactive-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary"
+            class="inline-flex min-h-[36px] cursor-pointer items-center justify-center border border-semantic-border-default bg-semantic-surface-soft px-3.5 text-[12.5px] text-semantic-text-muted transition-all duration-200 hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel hover:text-semantic-text-primary"
             @click="$emit('reset')"
           >
             {{ props.resetText }}

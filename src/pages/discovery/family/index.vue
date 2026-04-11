@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav="common.nav.family"

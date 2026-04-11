@@ -2,8 +2,8 @@
 
 - 日期：`2026-04-10`
 - 关联审计：
-  - `docs/design-token-audit-non-account-non-discovery.md`
-  - `docs/design-token-replacement-list-non-account-non-discovery.md`
+  - `docs/design-token/audits/design-token-audit-non-account-non-discovery.md`
+  - `docs/design-token/mappings/design-token-replacement-list-non-account-non-discovery.md`
 - 范围：排除 `account`、`discovery`
 - 本轮策略：只执行“可直接替换为现有更准确 token”的项
 

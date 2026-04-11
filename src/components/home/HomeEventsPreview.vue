@@ -1,22 +1,22 @@
 <template>
-  <view class="bg-next-semantic-page-subtle text-next-semantic-text-primary">
+  <view class="bg-semantic-page-subtle text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-next-semantic-border-eyebrow" />
-            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
+            <view class="h-px w-14 bg-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">
               {{ t('events.eyebrow') }}
             </text>
           </view>
 
-          <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
+          <view class="text-[40px] font-semibold leading-[1.06] text-semantic-text-primary lg:text-[56px]">
             {{ t('events.title') }}
-            <text class="text-next-semantic-text-section-highlight"> {{ t('events.titleAccent') }}</text>
+            <text class="text-semantic-text-section-highlight"> {{ t('events.titleAccent') }}</text>
           </view>
         </view>
 
-        <view class="max-w-[420px] text-[18px] leading-8 text-next-semantic-text-muted">
+        <view class="max-w-[420px] text-[18px] leading-8 text-semantic-text-muted">
           {{ t('events.subtitle') }}
         </view>
       </view>

@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav=""
@@ -14,7 +14,7 @@
         <AccountPrimaryNav :active-page="activePage" />
       </view>
 
-      <view class="mt-6 border border-next-semantic-border-default bg-next-semantic-surface-panel px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+      <view class="mt-6 border border-semantic-border-default bg-semantic-surface-panel px-6 py-6 shadow-panel lg:px-8 lg:py-8">
         <AccountSectionHeader
           :label="headerEyebrow"
           :title="headerTitle"

@@ -1,17 +1,17 @@
 <template>
-  <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+  <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel lg:px-8 lg:py-8">
     <view class="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
       <view>
         <view class="flex items-center gap-3">
-          <view class="h-px w-10 bg-next-semantic-border-eyebrow" />
-          <text class="text-[11px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
+          <view class="h-px w-10 bg-semantic-border-eyebrow" />
+          <text class="text-[11px] uppercase tracking-[4px] text-semantic-text-eyebrow">
             {{ t('topSummary.title') }}
           </text>
         </view>
-        <view class="mt-4 text-[30px] font-semibold leading-[1.2] text-next-semantic-text-primary lg:text-[38px]">
+        <view class="mt-4 text-[30px] font-semibold leading-[1.2] text-semantic-text-primary lg:text-[38px]">
           {{ profile?.name ?? account.name }}
         </view>
-        <view class="mt-3 max-w-[760px] text-[15px] leading-7 text-next-semantic-text-secondary">
+        <view class="mt-3 max-w-[760px] text-[15px] leading-7 text-semantic-text-secondary">
           {{ t('topSummary.subtitle') }}
         </view>
 
@@ -54,12 +54,12 @@
         <view
           v-for="item in summaryItems"
           :key="item.label"
-          class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5"
+          class="border border-semantic-border-soft bg-semantic-surface-panel px-5 py-5"
         >
-          <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
+          <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
             {{ item.label }}
           </view>
-          <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">
+          <view class="mt-3 text-[24px] font-semibold text-semantic-text-primary">
             {{ item.value }}
           </view>
         </view>
