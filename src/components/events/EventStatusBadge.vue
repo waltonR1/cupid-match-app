@@ -19,11 +19,11 @@ const props = defineProps<{
 
 const badgeClassName = computed(() => {
   if (props.status === 'open') {
-    return 'rounded-full border-next-semantic-state-event-open-border bg-next-semantic-state-event-open-background text-next-semantic-state-event-open-text shadow-next-panel tracking-[1.5px]'
+      return 'rounded-full border-next-semantic-state-event-open-border bg-next-semantic-state-event-open-background text-next-semantic-state-event-open-text shadow-next-shadow-panel tracking-[1.5px]'
   }
 
   if (props.status === 'waitlist') {
-    return 'rounded-full border-next-semantic-state-event-waitlist-border bg-next-semantic-state-event-waitlist-background text-next-semantic-state-event-waitlist-text shadow-next-panel tracking-[1.5px]'
+      return 'rounded-full border-next-semantic-state-event-waitlist-border bg-next-semantic-state-event-waitlist-background text-next-semantic-state-event-waitlist-text shadow-next-shadow-panel tracking-[1.5px]'
   }
 
   return 'rounded-[10px] border-dashed border-next-semantic-state-event-closed-border bg-next-semantic-state-event-closed-background text-next-semantic-state-event-closed-text tracking-[1.2px]'

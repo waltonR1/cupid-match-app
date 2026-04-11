@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="safety">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('safety.eyebrow')"
-        :title="t('safety.title')"
-        :description="t('safety.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="safety"
+    :header-eyebrow="t('safety.eyebrow')"
+    :header-title="t('safety.title')"
+    :header-description="t('safety.subtitle')"
+  >
     <view class="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]">
       <view class="grid gap-6">
         <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
@@ -57,7 +54,7 @@
                 <view
                   class="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[2px]"
                   :class="item.enabled
-                    ? 'border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast'
+                    ? 'border-next-component-account-badge-status-border bg-next-component-account-badge-status-background text-next-component-account-badge-status-text'
                     : 'border-next-semantic-border-soft bg-next-semantic-surface-soft text-next-semantic-text-secondary'"
                 >
                   {{ item.enabled ? t('common.enabled') : t('common.disabled') }}
@@ -82,13 +79,13 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-secondary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
         </view>
 
-        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-soft px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('safety.eyebrow')"
             :title="t('safety.sections.risk')"
@@ -100,7 +97,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-action-primary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -130,7 +127,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'

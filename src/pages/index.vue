@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <view class="min-h-screen bg-next-semantic-page-default text-next-semantic-text-primary">
     <AppHeader
         :nav-list="navList"

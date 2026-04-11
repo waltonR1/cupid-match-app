@@ -5,10 +5,10 @@
       <view class="grid gap-12 md:grid-cols-4">
         <!-- 品牌 -->
         <view>
-          <view class="text-[22px] font-semibold tracking-[2px] text-next-semantic-accent-primary">
+          <view class="text-[22px] font-semibold tracking-[2px] text-next-component-footer-brand-wordmark">
             {{ t('common.brand.name') }}
           </view>
-          <view class="mt-2 text-[13px] italic tracking-[2px] text-next-semantic-accent-muted">
+          <view class="mt-2 text-[13px] italic tracking-[2px] text-next-component-footer-brand-tagline">
             {{ t('common.brand.tagline') }}
           </view>
           <view class="mt-4 text-[14px] leading-6 text-next-semantic-text-secondary">
@@ -18,7 +18,7 @@
 
         <!-- 导航 -->
         <view>
-          <view class="text-[16px] font-medium text-next-semantic-accent-secondary">
+          <view class="text-[16px] font-medium text-next-component-footer-heading">
             {{ t('common.footer.nav') }}
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-next-semantic-text-secondary">
@@ -33,14 +33,14 @@
               >
                 {{ t(item.key) }}
               </view>
-              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-next-semantic-accent-secondary transition-all duration-200 group-hover:w-full" />
+              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-next-component-footer-nav-indicator transition-all duration-200 group-hover:w-full" />
             </view>
           </view>
         </view>
 
         <!-- 联系 -->
         <view>
-          <view class="text-[16px] font-medium text-next-semantic-accent-secondary">
+          <view class="text-[16px] font-medium text-next-component-footer-heading">
             {{ t('common.footer.contact') }}
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-next-semantic-text-secondary">
@@ -52,7 +52,7 @@
 
         <!-- 语言 -->
         <view>
-          <view class="text-[16px] font-medium text-next-semantic-accent-secondary">
+          <view class="text-[16px] font-medium text-next-component-footer-heading">
             {{ t('common.footer.lang') }}
           </view>
           <view class="mt-3 text-[14px] leading-7 text-next-semantic-text-secondary">

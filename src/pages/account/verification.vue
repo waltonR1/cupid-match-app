@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="verification">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('verification.eyebrow')"
-        :title="t('verification.title')"
-        :description="t('verification.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="verification"
+    :header-eyebrow="t('verification.eyebrow')"
+    :header-title="t('verification.title')"
+    :header-description="t('verification.subtitle')"
+  >
     <view class="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
       <view class="grid gap-6">
         <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
@@ -22,7 +19,7 @@
               :key="item.label"
               class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5"
             >
-              <view class="text-[11px] uppercase tracking-[3px] text-next-component-card-label">
+              <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
                 {{ item.label }}
               </view>
               <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">
@@ -51,7 +48,7 @@
                 <view
                   class="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[2px]"
                   :class="item.done
-                    ? 'border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast'
+                    ? 'border-next-component-account-badge-status-border bg-next-component-account-badge-status-background text-next-component-account-badge-status-text'
                     : 'border-next-semantic-border-soft bg-next-semantic-surface-soft text-next-semantic-text-secondary'"
                 >
                   {{ item.done ? t('verification.status.done') : t('verification.status.pending') }}
@@ -85,8 +82,8 @@
           </view>
         </view>
 
-        <view class="relative overflow-hidden border border-next-component-emphasis-card-border bg-next-component-emphasis-card-background px-6 py-6 shadow-next-shadow-emphasis lg:px-8 lg:py-8">
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-emphasis-card-line" />
+        <view class="relative overflow-hidden border border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis px-6 py-6 shadow-next-shadow-emphasis lg:px-8 lg:py-8">
+          <view class="absolute inset-x-0 top-0 h-px bg-next-semantic-border-emphasis-divider" />
 
           <AccountSectionHeader
             :label="t('verification.eyebrow')"
@@ -119,7 +116,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'

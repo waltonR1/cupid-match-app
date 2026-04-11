@@ -1,11 +1,11 @@
 <template>
   <view
-    class="border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-component-event-card-background-hover hover:shadow-next-about-hero-panel"
+    class="border border-next-semantic-border-default bg-next-component-event-card-background px-8 py-8 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-component-event-card-background-hover hover:shadow-next-shadow-about-hero-panel"
     @click="$emit('open', event.id)"
   >
     <view class="flex items-start justify-between gap-4">
       <view>
-        <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">{{ event.date }}</view>
+      <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">{{ event.date }}</view>
         <view class="mt-4 text-[30px] font-semibold leading-[1.25] text-next-semantic-text-primary">
           {{ event.title }}
         </view>

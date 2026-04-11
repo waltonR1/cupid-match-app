@@ -4,8 +4,8 @@
       <view class="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
         <view class="lg:sticky lg:top-24 lg:self-start">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-next-semantic-accent-secondary" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-secondary">
+            <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
               {{ t('cases.eyebrow') }}
             </text>
           </view>
@@ -13,7 +13,7 @@
           <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[64px]">
             <view class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
               <text>{{ t('cases.title') }}</text>
-              <text class="whitespace-nowrap italic text-next-semantic-accent-primary">& {{ t('cases.titleAccent') }}</text>
+              <text class="whitespace-nowrap italic text-next-semantic-text-section-highlight">& {{ t('cases.titleAccent') }}</text>
             </view>
           </view>
 
@@ -22,7 +22,7 @@
           </view>
 
           <view class="mt-10 border border-next-semantic-border-soft bg-next-semantic-surface-soft px-7 py-8 shadow-next-shadow-panel">
-            <view class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
+            <view class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-card-label">
               {{ t('cases.deskLabel') }}
             </view>
             <view class="mt-4 text-[16px] leading-8 text-next-semantic-text-secondary">
@@ -75,37 +75,38 @@ const { t } = usePageI18n('contact')
 
 function cardClass(index: number) {
   if (index % 3 === 2) {
-    return 'border-next-component-emphasis-card-border bg-next-component-emphasis-card-background'
+    return 'border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis'
   }
 
-  return 'border-next-semantic-border-soft bg-next-semantic-surface-info-card hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover'
+  return 'border-next-semantic-border-soft bg-next-component-editorial-card-background hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover'
 }
 
 function lineClass(index: number) {
   if (index % 3 === 2) {
-    return 'bg-next-component-emphasis-card-line'
+    return 'bg-next-semantic-border-emphasis-divider'
   }
 
-  return 'bg-next-component-info-card-line'
+  return 'bg-next-component-editorial-card-line'
 }
 
 function iconClass(index: number) {
   if (index % 3 === 2) {
-    return 'border-next-component-emphasis-card-border bg-next-component-emphasis-card-background text-next-semantic-accent-primary'
+    return 'border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis text-next-component-contact-case-emphasis'
   }
 
   if (index % 3 === 1) {
-    return 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-accent-primary'
+    return 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-component-contact-case-default'
   }
 
-  return 'border-next-semantic-border-soft bg-next-semantic-surface-soft text-next-semantic-accent-secondary'
+  return 'border-next-semantic-border-soft bg-next-semantic-surface-soft text-next-component-contact-case-soft'
 }
 
 function indexClass(index: number) {
   if (index % 3 === 2) {
-    return 'text-next-semantic-accent-primary'
+    return 'text-next-component-contact-case-emphasis'
   }
 
-  return 'text-next-semantic-accent-secondary'
+  return 'text-next-component-contact-case-soft'
 }
 </script>
+

@@ -3,15 +3,15 @@
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="mb-12">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-[1px] w-16 bg-next-semantic-accent-secondary" />
-          <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-secondary">
+          <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
             {{ t('audience.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[64px]">
           {{ t('audience.title') }}
-          <text class="italic text-next-semantic-accent-primary">& {{ t('audience.titleAccent') }}</text>
+          <text class="italic text-next-semantic-text-section-highlight">& {{ t('audience.titleAccent') }}</text>
         </view>
 
         <view class="mt-5 max-w-[780px] text-[19px] italic leading-8 text-next-semantic-text-lead lg:text-[21px]">
@@ -29,7 +29,7 @@
           <view class="absolute inset-x-0 top-0 h-px" :class="lineClass(item.emphasis)" />
 
           <view class="flex items-start justify-between">
-            <view class="text-[12px] uppercase tracking-[4px]" :class="item.emphasis ? 'text-next-semantic-accent-primary' : 'text-next-semantic-accent-secondary'">
+            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               Profile
             </view>
             <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-subtle">
@@ -64,17 +64,18 @@ const audienceCards = [
 
 function cardClass(emphasis: boolean) {
   if (emphasis) {
-    return 'border border-next-component-emphasis-card-border bg-next-component-emphasis-card-background text-next-semantic-text-primary shadow-next-shadow-emphasis lg:translate-y-4'
+    return 'border border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis text-next-semantic-text-primary shadow-next-shadow-emphasis lg:translate-y-4'
   }
 
-  return 'border border-next-semantic-border-soft bg-next-semantic-surface-info-card text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-panel'
+  return 'border border-next-semantic-border-soft bg-next-component-editorial-card-background text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover hover:shadow-next-shadow-panel'
 }
 
 function lineClass(emphasis: boolean) {
   if (emphasis) {
-    return 'bg-next-component-emphasis-card-line'
+    return 'bg-next-semantic-border-emphasis-divider'
   }
 
-  return 'bg-next-component-info-card-line'
+  return 'bg-next-component-editorial-card-line'
 }
 </script>
+

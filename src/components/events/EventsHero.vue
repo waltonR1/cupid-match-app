@@ -1,17 +1,17 @@
 <template>
   <view class="relative overflow-hidden bg-next-gradient-events-hero text-next-semantic-text-inverse">
     <view class="pointer-events-none absolute right-[-215px] top-[-12px] hidden h-[430px] w-[430px] lg:block">
-      <view class="absolute inset-0 rounded-full border border-next-component-hero-ornament-line" />
-      <view class="absolute inset-[34px] rounded-full border border-next-component-hero-ornament-line" />
-      <view class="absolute inset-[104px] rounded-full border border-next-component-hero-ornament-line" />
+      <view class="absolute inset-0 rounded-full border border-next-semantic-border-hero-ornament" />
+      <view class="absolute inset-[34px] rounded-full border border-next-semantic-border-hero-ornament" />
+      <view class="absolute inset-[104px] rounded-full border border-next-semantic-border-hero-ornament" />
     </view>
 
     <view class="relative mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
       <view class="grid gap-12 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
         <view class="max-w-[680px]">
-          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-component-hero-border bg-next-component-hero-overlay-background-soft px-5 py-2 backdrop-blur">
-            <view class="h-[1px] w-12 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-hero-eyebrow">
+          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-next-semantic-border-hero bg-next-semantic-surface-hero-soft px-5 py-2 backdrop-blur">
+            <view class="h-[1px] w-12 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-hero-eyebrow">
               {{ eyebrow }}
             </text>
           </view>
@@ -20,20 +20,20 @@
             {{ title }}
           </view>
 
-          <view class="mt-10 max-w-[640px] text-[19px] leading-8 text-next-component-hero-description lg:text-[20px]">
+          <view class="mt-10 max-w-[640px] text-[19px] leading-8 text-next-semantic-text-hero-body lg:text-[20px]">
             {{ subtitle }}
           </view>
         </view>
 
         <view
           v-if="nextEvent"
-          class="group relative z-10 cursor-pointer overflow-hidden border border-next-component-hero-border bg-next-component-hero-overlay-background-panel px-8 py-8 shadow-next-about-hero-panel backdrop-blur transition-all duration-300 hover:-translate-y-[2px] hover:shadow-next-about-hero-feature"
+        class="group relative z-10 cursor-pointer overflow-hidden border border-next-semantic-border-hero bg-next-semantic-surface-hero-panel px-8 py-8 shadow-next-shadow-about-hero-panel backdrop-blur transition-all duration-300 hover:-translate-y-[2px] hover:shadow-next-shadow-about-hero-feature"
           @click="$emit('open', nextEvent.id)"
         >
           <view class="flex flex-wrap items-start justify-between gap-4">
             <view>
-              <view class="text-[12px] uppercase tracking-[4px] text-next-component-hero-label transition-colors duration-300 group-hover:text-next-semantic-accent-muted">{{ nextEventLabel }}</view>
-              <view class="mt-4 text-[34px] font-semibold leading-[1.25] text-next-semantic-text-inverse transition-colors duration-300 group-hover:text-next-component-hero-description">
+              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-hero-label transition-colors duration-300 group-hover:text-next-component-hero-label-hover">{{ nextEventLabel }}</view>
+              <view class="mt-4 text-[34px] font-semibold leading-[1.25] text-next-semantic-text-inverse transition-colors duration-300 group-hover:text-next-semantic-text-hero-body">
                 {{ nextEvent.title }}
               </view>
             </view>
@@ -41,7 +41,7 @@
             <EventStatusBadge :status="nextEvent.status" :label="nextEvent.statusLabel" />
           </view>
 
-          <view class="mt-8 grid gap-4 text-[15px] leading-7 text-next-component-hero-secondary-description transition-colors duration-300 group-hover:text-next-semantic-text-inverse">
+          <view class="mt-8 grid gap-4 text-[15px] leading-7 text-next-semantic-text-hero-secondary transition-colors duration-300 group-hover:text-next-semantic-text-inverse">
             <view>{{ fields.date }} {{ nextEvent.date }}</view>
             <view>{{ fields.city }} {{ nextEvent.city }}</view>
             <view>{{ fields.venue }} {{ nextEvent.venue }}</view>
@@ -50,10 +50,10 @@
           </view>
 
           <view class="mt-8 flex items-end justify-between gap-6">
-            <view class="text-[15px] leading-8 text-next-semantic-text-inverse-muted transition-colors duration-300 group-hover:text-next-component-hero-description">
+            <view class="text-[15px] leading-8 text-next-semantic-text-inverse-muted transition-colors duration-300 group-hover:text-next-semantic-text-hero-body">
               {{ nextEvent.summary }}
             </view>
-            <view class="hidden shrink-0 items-center text-next-component-section-line transition-colors duration-300 group-hover:text-next-semantic-accent-muted md:inline-flex">
+            <view class="hidden shrink-0 items-center text-next-component-hero-affordance transition-colors duration-300 group-hover:text-next-component-hero-affordance-hover md:inline-flex">
               <svg
                 class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
                 viewBox="0 0 12 12"

@@ -4,16 +4,10 @@ const themeTokens = require('./src/constants/theme-tokens.json')
 
 const DEFAULT_THEME = 'dark'
 
-const LEGACY_RAW_TOKEN_ROOTS = new Set(['gradient', 'shadow', 'hero'])
 const NEXT_COLOR_ROOTS = new Set(['semantic', 'component'])
 const NEXT_EFFECT_ROOTS = new Set(['gradient', 'shadow'])
 
-const LEGACY_THEME_NAMES = Object.keys(themeTokens.legacy.themes)
 const NEXT_THEME_NAMES = Object.keys(themeTokens.next.themes)
-
-const legacySharedTokens = themeTokens.legacy.shared
-const legacyThemeOverrides = themeTokens.legacy.themes
-const legacyBaseThemeTokens = getMergedLegacyThemeTokens(DEFAULT_THEME)
 
 const nextBaseThemeTokens = getMergedNextThemeTokens(DEFAULT_THEME)
 
@@ -25,17 +19,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ...buildLegacyTailwindColors(legacyBaseThemeTokens),
         ...buildNextTailwindColors(nextBaseThemeTokens),
       },
 
       backgroundImage: {
-        ...buildLegacyRawTokenUtilities('gradient', legacyBaseThemeTokens.gradient),
         ...buildNextEffectUtilities('gradient', nextBaseThemeTokens.effect?.gradient),
       },
 
       boxShadow: {
-        ...buildLegacyRawTokenUtilities('shadow', legacyBaseThemeTokens.shadow),
         ...buildNextEffectUtilities('shadow', nextBaseThemeTokens.effect?.shadow),
       },
 
@@ -77,80 +68,6 @@ module.exports = {
     }),
   ],
 }
-
-// ==============================
-// legacy
-// ==============================
-
-function getMergedLegacyThemeTokens(themeName) {
-  return mergeDeep(legacySharedTokens, legacyThemeOverrides[themeName])
-}
-
-function buildLegacyTailwindColors(tokens, path = []) {
-  return Object.entries(tokens).reduce((acc, [key, value]) => {
-    if (isLegacyRawTokenRoot(key)) {
-      return acc
-    }
-
-    const nextPath = [...path, key]
-
-    if (typeof value === 'string') {
-      acc[key] = `rgb(var(--color-${nextPath.join('-')}) / <alpha-value>)`
-      return acc
-    }
-
-    acc[key] = buildLegacyTailwindColors(value, nextPath)
-    return acc
-  }, {})
-}
-
-function buildLegacyRawTokenUtilities(tokenRoot, tokens) {
-  const tokenEntries = flattenTokenEntries(tokens)
-
-  return Object.keys(tokenEntries).reduce((acc, key) => {
-    acc[key] = `var(--${tokenRoot}-${key})`
-    return acc
-  }, {})
-}
-
-function buildLegacyThemeVariableMap(themeName) {
-  const mergedTokens = getMergedLegacyThemeTokens(themeName)
-  const variables = {}
-
-  flattenLegacyVariables(mergedTokens, [], variables)
-
-  return variables
-}
-
-function flattenLegacyVariables(tokens, path, variables) {
-  Object.entries(tokens).forEach(([key, value]) => {
-    const nextPath = [...path, key]
-
-    if (typeof value === 'string') {
-      if (isLegacyRawTokenPath(path)) {
-        variables[`--${nextPath.join('-')}`] = value
-        return
-      }
-
-      variables[`--color-${nextPath.join('-')}`] = hexToRgbChannels(value)
-      return
-    }
-
-    flattenLegacyVariables(value, nextPath, variables)
-  })
-}
-
-function isLegacyRawTokenRoot(key) {
-  return LEGACY_RAW_TOKEN_ROOTS.has(key)
-}
-
-function isLegacyRawTokenPath(path) {
-  return LEGACY_RAW_TOKEN_ROOTS.has(path[0])
-}
-
-// ==============================
-// next
-// ==============================
 
 function getMergedNextThemeTokens(themeName) {
   const theme = themeTokens.next.themes[themeName] || {}
@@ -244,18 +161,9 @@ function flattenNextVariables(tokens, path, variables) {
 function buildThemeBaseStyles() {
   const styles = {
     ':root': {
-      ...buildLegacyThemeVariableMap(DEFAULT_THEME),
       ...buildNextThemeVariableMap(DEFAULT_THEME),
     },
   }
-
-  LEGACY_THEME_NAMES.forEach((themeName) => {
-    const selector = `.theme-${themeName}, [data-theme="${themeName}"]`
-    styles[selector] = {
-      ...(styles[selector] || {}),
-      ...buildLegacyThemeVariableMap(themeName),
-    }
-  })
 
   NEXT_THEME_NAMES.forEach((themeName) => {
     const selector = `.theme-${themeName}, [data-theme="${themeName}"]`
@@ -282,21 +190,6 @@ function flattenTokenEntries(tokens, path = [], result = {}) {
     }
 
     flattenTokenEntries(value, nextPath, result)
-  })
-
-  return result
-}
-
-function mergeDeep(base, override) {
-  const result = { ...base }
-
-  Object.entries(override || {}).forEach(([key, value]) => {
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      result[key] = mergeDeep(base[key] || {}, value)
-      return
-    }
-
-    result[key] = value
   })
 
   return result

@@ -4,8 +4,8 @@
       <view class="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view class="max-w-[760px]">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-next-semantic-accent-secondary" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-secondary">
+            <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
               {{ t('info.eyebrow') }}
             </text>
           </view>
@@ -13,7 +13,7 @@
           <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[64px]">
             <view class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
               <text>{{ t('info.title') }}</text>
-              <text class="whitespace-nowrap italic text-next-semantic-accent-primary">& {{ t('info.titleAccent') }}</text>
+            <text class="whitespace-nowrap italic text-next-semantic-text-section-highlight">& {{ t('info.titleAccent') }}</text>
             </view>
           </view>
         </view>
@@ -27,12 +27,12 @@
         <view
           v-for="item in cards"
           :key="item.title"
-          class="group relative overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-8 py-10 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-1 hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-emphasis"
+        class="group relative overflow-hidden border border-next-semantic-border-soft bg-next-component-editorial-card-background px-8 py-10 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-1 hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover hover:shadow-next-shadow-emphasis"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
+        <view class="absolute inset-x-0 top-0 h-px bg-next-component-editorial-card-line" />
           <view class="flex items-center justify-between gap-4">
             <view class="text-[32px]">{{ item.icon }}</view>
-            <view class="text-[13px] uppercase tracking-[4px] text-next-component-card-label">
+            <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               {{ t('info.cardLabel') }}
             </view>
           </view>
@@ -62,3 +62,4 @@ defineProps<{
 
 const { t } = usePageI18n('contact')
 </script>
+

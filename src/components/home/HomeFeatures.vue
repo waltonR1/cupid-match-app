@@ -1,18 +1,18 @@
 <template>
   <view class="bg-next-semantic-page-default text-next-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-      <!-- 标题区 -->
+      <!-- Section intro -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-next-semantic-accent-primary" />
-          <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
+          <view class="h-px w-14 bg-next-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
             {{ t('features.eyebrow') }}
           </text>
         </view>
 
         <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
           <text>{{ t('features.title') }}</text>
-          <text class="text-next-semantic-accent-primary"> · {{ t('features.titleAccent') }}</text>
+          <text class="text-next-semantic-text-section-highlight"> {{ t('features.titleAccent') }}</text>
         </view>
 
         <view class="mt-5 max-w-[760px] text-[18px] leading-8 text-next-semantic-text-muted lg:text-[19px]">
@@ -20,19 +20,19 @@
         </view>
       </view>
 
-      <!-- 服务卡片区 -->
+      <!-- Feature cards -->
       <view class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <view
           v-for="card in serviceCards"
           :key="card.title"
-          class="flex min-h-[280px] cursor-pointer flex-col border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-semantic-surface-soft hover:shadow-next-shadow-panel"
+          class="flex min-h-[280px] cursor-pointer flex-col border border-next-semantic-border-default bg-next-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft hover:shadow-next-shadow-panel"
           @click="openPath(card.path)"
         >
           <view class="text-[20px] font-semibold uppercase tracking-[2px] text-next-semantic-text-subtle">
             {{ card.icon }}
           </view>
 
-          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-next-semantic-accent-primary lg:text-[28px]">
+          <view class="mt-4 text-[26px] font-semibold leading-[1.24] text-next-component-home-feature-title lg:text-[28px]">
             {{ t(card.title) }}
           </view>
 
@@ -42,7 +42,7 @@
 
           <view
             v-if="showBrandLabel"
-            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-next-semantic-accent-secondary"
+            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-next-component-home-feature-label"
           >
             {{ t(card.label) }}
           </view>
@@ -52,7 +52,7 @@
   </view>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
@@ -68,42 +68,42 @@ interface ServiceCardItem {
 
 const serviceCards: ServiceCardItem[] = [
   {
-    icon: '🤖',
+    icon: 'AI',
     title: 'features.ai.title',
     desc: 'features.ai.desc',
     label: 'features.ai.label',
     path: '/pages/discovery/self/index',
   },
   {
-    icon: '💌',
+    icon: 'MSG',
     title: 'features.message.title',
     desc: 'features.message.desc',
     label: 'features.message.label',
     path: '/pages/discovery/self/index',
   },
   {
-    icon: '🎭',
+    icon: 'EVT',
     title: 'features.event.title',
     desc: 'features.event.desc',
     label: 'features.event.label',
     path: '/pages/events/index',
   },
   {
-    icon: '👨‍👩‍👧',
+    icon: 'FAM',
     title: 'features.family.title',
     desc: 'features.family.desc',
     label: 'features.family.label',
     path: '/pages/discovery/family/index',
   },
   {
-    icon: '💎',
+    icon: 'VIP',
     title: 'features.vip.title',
     desc: 'features.vip.desc',
     label: 'features.vip.label',
     path: '/pages/public/membership',
   },
   {
-    icon: '🏆',
+    icon: 'STORY',
     title: 'features.story.title',
     desc: 'features.story.desc',
     label: 'features.story.label',
@@ -112,8 +112,8 @@ const serviceCards: ServiceCardItem[] = [
 ]
 
 /**
- * 当前语言是法文时，不再显示法文品牌副标签，避免重复。
- * 中文 / 英文环境下继续显示，作为品牌点缀。
+ * Hide the brand sublabel in the French locale to avoid repeating the same cue.
+ * Keep it for zh/en, where it still works as a light brand accent.
  */
 const showBrandLabel = computed(() => {
   return locale.value !== 'fr'

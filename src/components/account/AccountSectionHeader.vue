@@ -1,8 +1,8 @@
 <template>
   <view>
     <view class="flex items-center gap-3">
-      <view class="h-px w-10 bg-next-component-section-line" />
-      <text class="text-[11px] uppercase tracking-[4px] text-next-component-section-eyebrow">
+      <view class="h-px w-10 bg-next-semantic-border-eyebrow" />
+      <text class="text-[11px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
         {{ label }}
       </text>
     </view>

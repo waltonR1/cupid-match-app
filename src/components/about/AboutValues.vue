@@ -4,17 +4,17 @@
       <view class="grid gap-10 lg:grid-cols-[1.06fr_0.94fr]">
         <view class="grid gap-6">
           <view class="relative overflow-hidden border border-next-semantic-border-default bg-next-semantic-surface-panel px-9 py-10 text-next-semantic-text-primary shadow-next-shadow-emphasis">
-            <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
+  <view class="absolute inset-x-0 top-0 h-px bg-next-component-editorial-card-line" />
             <view class="mb-5 inline-flex items-center gap-4">
-              <view class="h-[1px] w-16 bg-next-semantic-accent-secondary" />
-              <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-secondary">
+            <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
                 {{ t('values.eyebrow') }}
               </text>
             </view>
 
             <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[62px]">
               {{ t('values.title') }}
-              <text class="italic text-next-semantic-accent-secondary">& {{ t('values.titleAccent') }}</text>
+              <text class="italic text-next-semantic-text-section-highlight">& {{ t('values.titleAccent') }}</text>
             </view>
 
             <view class="mt-6 max-w-[560px] text-[19px] italic leading-8 text-next-semantic-text-muted lg:text-[20px]">
@@ -26,10 +26,10 @@
             <view
               v-for="item in valueCards.slice(0, 2)"
               :key="item.title"
-              class="relative overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-8 py-9 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-panel"
+        class="relative overflow-hidden border border-next-semantic-border-soft bg-next-component-editorial-card-background px-8 py-9 shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover hover:shadow-next-shadow-panel"
             >
-              <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
-              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
+        <view class="absolute inset-x-0 top-0 h-px bg-next-component-editorial-card-line" />
+              <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
                 {{ item.index }}
               </view>
               <view class="mt-6 text-[28px] font-semibold text-next-semantic-text-primary">
@@ -43,9 +43,9 @@
         </view>
 
         <view class="grid gap-6">
-          <view class="relative overflow-hidden border border-next-component-emphasis-card-border bg-next-component-emphasis-card-background px-8 py-9 shadow-next-shadow-panel lg:mr-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-next-component-emphasis-card-line" />
-            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
+          <view class="relative overflow-hidden border border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis px-8 py-9 shadow-next-shadow-panel lg:mr-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-next-semantic-border-emphasis-divider" />
+            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               {{ valueCards[2].index }}
             </view>
             <view class="mt-6 text-[30px] font-semibold text-next-semantic-text-primary">
@@ -56,9 +56,9 @@
             </view>
           </view>
 
-          <view class="relative overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-8 py-9 text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-semantic-border-info-card-hover hover:bg-next-semantic-surface-info-card-hover hover:shadow-next-shadow-panel lg:ml-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-next-component-info-card-line" />
-            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
+        <view class="relative overflow-hidden border border-next-semantic-border-soft bg-next-component-editorial-card-background px-8 py-9 text-next-semantic-text-primary shadow-next-shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-next-component-editorial-card-border-hover hover:bg-next-component-editorial-card-background-hover hover:shadow-next-shadow-panel lg:ml-12">
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-editorial-card-line" />
+            <view class="text-[12px] uppercase tracking-[4px] text-next-semantic-text-card-label">
               {{ valueCards[3].index }}
             </view>
             <view class="mt-6 text-[30px] font-semibold text-next-semantic-text-primary">
@@ -86,3 +86,4 @@ const valueCards = [
   { index: '04', title: 'values.card4.title', desc: 'values.card4.desc' },
 ]
 </script>
+

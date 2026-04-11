@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="profile">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('profile.eyebrow')"
-        :title="t('profile.title')"
-        :description="t('profile.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="profile"
+    :header-eyebrow="t('profile.eyebrow')"
+    :header-title="t('profile.title')"
+    :header-description="t('profile.subtitle')"
+  >
     <view
       v-if="profile"
       class="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
@@ -21,7 +18,7 @@
               :description="localize(account.bio)"
             />
 
-            <view class="rounded-full border border-next-semantic-accent-secondary bg-next-semantic-surface-soft px-4 py-2 text-[12px] font-medium text-next-semantic-accent-secondary">
+            <view class="rounded-full border border-next-component-account-badge-meta-border bg-next-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-next-component-account-badge-meta-text">
               {{ membershipLabel(account.membership) }}
             </view>
           </view>
@@ -32,7 +29,7 @@
               :key="item.label"
               class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5"
             >
-              <view class="text-[11px] uppercase tracking-[3px] text-next-component-card-label">
+              <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
                 {{ item.label }}
               </view>
               <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">
@@ -64,8 +61,8 @@
           </view>
         </view>
 
-        <view class="relative overflow-hidden border border-next-component-emphasis-card-border bg-next-component-emphasis-card-background px-6 py-6 shadow-next-shadow-emphasis lg:px-8 lg:py-8">
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-emphasis-card-line" />
+        <view class="relative overflow-hidden border border-next-semantic-border-emphasis bg-next-semantic-surface-emphasis px-6 py-6 shadow-next-shadow-emphasis lg:px-8 lg:py-8">
+          <view class="absolute inset-x-0 top-0 h-px bg-next-semantic-border-emphasis-divider" />
 
           <AccountSectionHeader
             :label="t('profile.eyebrow')"
@@ -78,7 +75,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-action-primary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -98,7 +95,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-secondary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -126,7 +123,7 @@
           </view>
         </view>
 
-        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('profile.eyebrow')"
             :title="t('profile.sections.preview')"
@@ -139,7 +136,7 @@
               :key="localize(item)"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ localize(item) }}</text>
             </view>
           </view>
@@ -161,7 +158,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'

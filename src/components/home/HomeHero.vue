@@ -5,8 +5,8 @@
     >
       <view class="max-w-[680px]">
         <view class="mb-6 inline-flex items-center gap-4">
-          <view class="h-[1px] w-16 bg-next-semantic-accent-muted" />
-          <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-accent-muted">
+          <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-hero-eyebrow">
             {{ t('hero.meta', { year }) }}
           </text>
         </view>
@@ -15,7 +15,7 @@
           {{ t('hero.title') }}
         </view>
 
-        <view class="mt-3 text-[42px] italic leading-[1.15] text-next-semantic-accent-primary lg:text-[68px]">
+        <view class="mt-3 text-[42px] italic leading-[1.15] text-next-semantic-text-hero-highlight lg:text-[68px]">
           {{ t('hero.titleAccent') }}
         </view>
 
@@ -38,25 +38,25 @@
             {{ t('hero.actions.primary') }}
           </AppButton>
 
-            <AppButton
-              variant="secondary"
-              context="hero"
-              size="lg"
-              width="cta"
-              rounded="none"
+          <AppButton
+            variant="secondary"
+            context="hero"
+            size="lg"
+            width="cta"
+            rounded="none"
             @click="openProfiles"
           >
             {{ t('hero.actions.secondary') }}
           </AppButton>
         </view>
 
-        <view class="mt-14 border-l-2 border-next-semantic-accent-secondary pl-5 text-[20px] text-next-semantic-text-muted">
-          「{{ t('hero.quote') }}」
+        <view class="mt-14 border-l-2 border-next-component-home-hero-quote-border pl-5 text-[20px] text-next-semantic-text-muted">
+          "{{ t('hero.quote') }}"
         </view>
 
         <view class="mt-5 grid grid-cols-3 gap-10 border-t border-next-component-home-hero-divider pt-5">
           <view v-for="item in stats" :key="item.label">
-            <view class="text-[36px] font-semibold text-next-semantic-accent-primary lg:text-[48px]">
+            <view class="text-[36px] font-semibold text-next-component-home-hero-metric-value lg:text-[48px]">
               {{ t(item.value) }}
             </view>
             <view class="mt-2 text-[13px] leading-6 text-next-semantic-text-subtle">
@@ -67,15 +67,15 @@
       </view>
 
       <view class="relative mt-16 hidden h-[560px] w-[420px] lg:block">
-        <view class="absolute inset-0 rounded-t-[220px] border border-next-component-hero-ornament-line" />
+        <view class="absolute inset-0 rounded-t-[220px] border border-next-semantic-border-hero-ornament" />
         <view
-            class="absolute left-1/2 top-[34px] h-0 w-0 -translate-x-1/2 border-b-[420px] border-l-[130px] border-l-transparent border-r-[130px] border-r-transparent border-b-next-component-hero-ornament-fill"
+          class="absolute left-1/2 top-[34px] h-0 w-0 -translate-x-1/2 border-b-[420px] border-l-[130px] border-l-transparent border-r-[130px] border-r-transparent border-b-next-component-hero-ornament-fill"
         />
-        <view class="absolute left-1/2 top-[34px] h-[440px] w-[2px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
-        <view class="absolute left-1/2 top-[128px] h-[1px] w-[170px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
-        <view class="absolute left-1/2 top-[220px] h-[1px] w-[210px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
-        <view class="absolute left-1/2 top-[312px] h-[1px] w-[250px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
-        <view class="absolute left-1/2 top-[404px] h-[1px] w-[290px] -translate-x-1/2 bg-next-component-hero-ornament-line" />
+        <view class="absolute left-1/2 top-[34px] h-[440px] w-[2px] -translate-x-1/2 bg-next-semantic-border-hero-ornament" />
+        <view class="absolute left-1/2 top-[128px] h-[1px] w-[170px] -translate-x-1/2 bg-next-semantic-border-hero-ornament" />
+        <view class="absolute left-1/2 top-[220px] h-[1px] w-[210px] -translate-x-1/2 bg-next-semantic-border-hero-ornament" />
+        <view class="absolute left-1/2 top-[312px] h-[1px] w-[250px] -translate-x-1/2 bg-next-semantic-border-hero-ornament" />
+        <view class="absolute left-1/2 top-[404px] h-[1px] w-[290px] -translate-x-1/2 bg-next-semantic-border-hero-ornament" />
       </view>
     </view>
   </view>

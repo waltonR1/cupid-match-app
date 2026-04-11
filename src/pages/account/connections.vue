@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="connections">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('connections.eyebrow')"
-        :title="t('connections.title')"
-        :description="t('connections.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="connections"
+    :header-eyebrow="t('connections.eyebrow')"
+    :header-title="t('connections.title')"
+    :header-description="t('connections.subtitle')"
+  >
     <view class="grid gap-6 xl:grid-cols-[1.06fr_0.94fr]">
       <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
         <AccountSectionHeader
@@ -29,7 +26,7 @@
           <view
             v-for="item in favorites"
             :key="item.profile.id"
-            class="cursor-pointer border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5 shadow-next-shadow-panel transition-all duration-200 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-semantic-surface-soft"
+            class="cursor-pointer border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5 shadow-next-shadow-panel transition-all duration-200 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft"
             @click="openProfile(item.profile.id, item.profile.familyVisible)"
           >
             <view class="flex items-start gap-4">
@@ -51,7 +48,7 @@
                   <view
                     class="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[2px]"
                     :class="item.profile.familyVisible
-                      ? 'border-next-semantic-accent-secondary bg-next-semantic-surface-soft text-next-semantic-accent-secondary'
+                      ? 'border-next-component-account-badge-meta-border bg-next-component-account-badge-meta-background text-next-component-account-badge-meta-text'
                       : 'border-next-semantic-border-soft bg-next-semantic-surface-card text-next-semantic-text-secondary'"
                   >
                     {{ item.profile.familyVisible ? t('common.familyVisible') : t('common.privateOnly') }}
@@ -90,7 +87,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-secondary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -108,7 +105,7 @@
               :key="item.label"
               class="border border-next-semantic-border-soft bg-next-semantic-surface-card px-5 py-5"
             >
-              <view class="text-[11px] uppercase tracking-[3px] text-next-component-card-label">
+              <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
                 {{ item.label }}
               </view>
               <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">
@@ -124,7 +121,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'

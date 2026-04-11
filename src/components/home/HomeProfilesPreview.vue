@@ -4,15 +4,15 @@
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-next-semantic-accent-primary" />
-            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
+            <view class="h-px w-14 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
               {{ t('profilesPreview.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
             <text>{{ t('profilesPreview.title') }}</text>
-            <text class="text-next-semantic-accent-primary"> · {{ t('profilesPreview.titleAccent') }}</text>
+            <text class="text-next-semantic-text-section-highlight"> {{ t('profilesPreview.titleAccent') }}</text>
           </view>
         </view>
 
@@ -102,3 +102,4 @@ function handleProfileOpen(id: string) {
   openSelfDetail(id)
 }
 </script>
+

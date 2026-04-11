@@ -2,19 +2,18 @@
   <view class="bg-next-semantic-page-default">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-
-        <!-- 左侧 -->
+        <!-- Sidebar intro -->
         <view class="border border-next-semantic-border-default bg-next-semantic-surface-panel px-8 py-10">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-14 bg-next-semantic-accent-primary" />
-            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-primary">
+            <view class="h-[1px] w-14 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
               {{ t('family.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[44px] font-semibold leading-[1.1] text-next-semantic-text-primary">
             {{ t('family.title') }}
-            <text class="text-next-semantic-accent-primary">
+            <text class="text-next-semantic-text-section-highlight">
               {{ t('family.titleAccent') }}
             </text>
           </view>
@@ -28,10 +27,9 @@
           </view>
         </view>
 
-        <!-- 右侧 -->
+        <!-- Content stack -->
         <view class="space-y-6">
-
-          <!-- 三个点 -->
+          <!-- Family points -->
           <view class="grid gap-5 sm:grid-cols-3">
             <view
               v-for="item in familyItems"
@@ -48,10 +46,10 @@
             </view>
           </view>
 
-          <!-- 强调卡 -->
+          <!-- Principle cards -->
           <view class="grid gap-6 md:grid-cols-2">
             <view class="min-h-[204px] border border-next-component-principle-card-border bg-next-component-principle-card-background px-8 py-8 text-next-semantic-text-primary">
-              <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-accent-primary">
+              <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-text-card-label">
                 {{ t('family.card1Label') }}
               </view>
 
@@ -61,7 +59,7 @@
             </view>
 
             <view class="min-h-[204px] border border-next-component-home-family-highlight-border bg-next-component-home-family-highlight-background px-8 py-8 text-next-semantic-text-primary shadow-next-shadow-emphasis">
-              <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-accent-secondary">
+              <view class="text-[13px] uppercase tracking-[4px] text-next-semantic-text-card-label">
                 {{ t('family.card2Label') }}
               </view>
 

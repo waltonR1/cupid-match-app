@@ -3,8 +3,8 @@
     <view class="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
       <view>
         <view class="flex items-center gap-3">
-          <view class="h-px w-10 bg-next-component-section-line" />
-          <text class="text-[11px] uppercase tracking-[4px] text-next-component-section-eyebrow">
+          <view class="h-px w-10 bg-next-semantic-border-eyebrow" />
+          <text class="text-[11px] uppercase tracking-[4px] text-next-semantic-text-eyebrow">
             {{ t('topSummary.title') }}
           </text>
         </view>
@@ -56,7 +56,7 @@
           :key="item.label"
           class="border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5"
         >
-          <view class="text-[11px] uppercase tracking-[3px] text-next-component-card-label">
+          <view class="text-[11px] uppercase tracking-[3px] text-next-semantic-text-card-label">
             {{ item.label }}
           </view>
           <view class="mt-3 text-[24px] font-semibold text-next-semantic-text-primary">

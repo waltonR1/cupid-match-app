@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="activity">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('activity.eyebrow')"
-        :title="t('activity.title')"
-        :description="t('activity.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="activity"
+    :header-eyebrow="t('activity.eyebrow')"
+    :header-title="t('activity.title')"
+    :header-description="t('activity.subtitle')"
+  >
     <view class="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
       <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
         <AccountSectionHeader
@@ -63,7 +60,7 @@
               <text class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-muted">
                 {{ localize(item.event.venue) }}
               </text>
-              <text class="text-[14px] font-medium text-next-semantic-accent-secondary">
+              <text class="text-[14px] font-medium text-next-semantic-text-link">
                 {{ t('activity.list.action') }}
               </text>
             </view>
@@ -84,13 +81,13 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-secondary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
         </view>
 
-        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-info-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-soft px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('activity.eyebrow')"
             :title="t('activity.family.title')"
@@ -102,7 +99,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-action-primary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -114,7 +111,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'
@@ -160,21 +156,21 @@ function statusLabel(status: 'confirmed' | 'waitlist' | 'completed') {
 function statusTone(status: 'confirmed' | 'waitlist' | 'completed') {
   if (status === 'confirmed') {
     return {
-      card: 'border-next-semantic-action-primary bg-next-semantic-surface-soft',
-      badge: 'border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast',
+      card: 'border-next-component-account-registration-confirmed-card-border bg-next-component-account-registration-confirmed-card-background',
+      badge: 'border-next-component-account-registration-confirmed-badge-border bg-next-component-account-registration-confirmed-badge-background text-next-component-account-registration-confirmed-badge-text',
     }
   }
 
   if (status === 'waitlist') {
     return {
-      card: 'border-next-semantic-accent-secondary bg-next-semantic-surface-panel',
-      badge: 'border-next-semantic-accent-secondary bg-next-semantic-surface-soft text-next-semantic-accent-secondary',
+      card: 'border-next-component-account-registration-waitlist-card-border bg-next-component-account-registration-waitlist-card-background',
+      badge: 'border-next-component-account-registration-waitlist-badge-border bg-next-component-account-registration-waitlist-badge-background text-next-component-account-registration-waitlist-badge-text',
     }
   }
 
   return {
-    card: 'border-next-semantic-border-soft bg-next-semantic-surface-info-card',
-    badge: 'border-next-semantic-border-soft bg-next-semantic-surface-card text-next-semantic-text-secondary',
+    card: 'border-next-component-account-registration-completed-card-border bg-next-component-account-registration-completed-card-background',
+    badge: 'border-next-component-account-registration-completed-badge-border bg-next-component-account-registration-completed-badge-background text-next-component-account-registration-completed-badge-text',
   }
 }
 </script>

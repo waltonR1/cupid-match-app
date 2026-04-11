@@ -6,7 +6,7 @@
   >
     <view class="flex items-start justify-between gap-4">
       <view class="flex min-w-0 items-center gap-4">
-        <view class="flex h-14 w-14 items-center justify-center rounded-full border border-next-semantic-border-soft bg-next-semantic-surface-panel text-[20px] font-semibold text-next-semantic-accent-primary">
+        <view class="flex h-14 w-14 items-center justify-center rounded-full border border-next-semantic-border-soft bg-next-semantic-surface-panel text-[20px] font-semibold text-next-component-directory-card-avatar-text">
           {{ data.avatar }}
         </view>
 
@@ -49,7 +49,7 @@
         </view>
       </view>
 
-      <view class="rounded-full border border-next-component-directory-card-badge-border bg-next-component-directory-card-badge-background px-3 py-1 text-[12px] text-next-semantic-accent-secondary">
+      <view class="rounded-full border border-next-component-directory-card-badge-border bg-next-component-directory-card-badge-background px-3 py-1 text-[12px] text-next-component-directory-card-meta-text">
         {{ data.badge }}
       </view>
     </view>
@@ -79,7 +79,7 @@
       </view>
     </view>
 
-    <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-next-semantic-accent-secondary">
+    <view class="mt-auto pt-8 text-[13px] italic tracking-[2px] text-next-component-directory-card-meta-text">
       {{ data.footer }}
     </view>
   </view>

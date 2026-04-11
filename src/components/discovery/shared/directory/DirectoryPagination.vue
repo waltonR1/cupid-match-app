@@ -1,13 +1,13 @@
 <template>
   <view
     v-if="totalPages > 1"
-    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-border-base bg-surface-card px-5 py-4 shadow-panel"
+    class="mt-6 flex flex-wrap items-center justify-center gap-2 border border-next-semantic-border-default bg-next-semantic-surface-card px-5 py-4 shadow-next-shadow-panel"
   >
     <view
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page <= 1
-        ? 'border-border-base bg-surface-panel text-text-subtle'
-        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
+        ? 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-subtle'
+        : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
       @click="handlePrev"
     >
       {{ prevText }}
@@ -18,10 +18,10 @@
       :key="item.key"
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="item.type === 'ellipsis'
-        ? 'border-border-light bg-surface-card text-text-subtle'
+        ? 'border-next-semantic-border-divider bg-next-semantic-surface-card text-next-semantic-text-subtle'
         : item.value === page
-          ? 'border-brand-accent/60 bg-brand-accent/10 text-brand-support hover:-translate-y-[1px] hover:border-brand-accent/80 hover:bg-brand-accent/20'
-          : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
+          ? 'border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background text-next-component-directory-control-selected-text hover:-translate-y-[1px] hover:border-next-component-directory-control-selected-border-hover hover:bg-next-component-directory-control-selected-background-hover'
+          : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
       @click="handleTokenClick(item)"
     >
       {{ item.label }}
@@ -30,8 +30,8 @@
     <view
       class="inline-flex min-h-[40px] min-w-[44px] items-center justify-center border px-4 text-[13px] transition-all duration-200"
       :class="page >= totalPages
-        ? 'border-border-base bg-surface-panel text-text-subtle'
-        : 'cursor-pointer border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'"
+        ? 'border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-subtle'
+        : 'cursor-pointer border-next-semantic-border-default bg-next-semantic-surface-panel text-next-semantic-text-muted hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-primary'"
       @click="handleNext"
     >
       {{ nextText }}

@@ -1,12 +1,12 @@
 <template>
   <view ref="rootRef" class="relative w-full">
     <view
-      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-border-base bg-surface-card-soft px-3 transition-all duration-150 hover:border-border-accent/60 hover:bg-surface-panel"
-      :class="isOpen ? 'border-border-accent/70 bg-surface-panel' : ''"
+      class="group flex min-h-[38px] w-full cursor-pointer items-center border border-next-semantic-border-default bg-next-semantic-surface-soft px-3 transition-all duration-150 hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel"
+      :class="isOpen ? 'border-next-component-directory-control-selected-border bg-next-component-directory-control-selected-background' : ''"
       @click.stop="toggleOpen"
     >
       <view class="min-w-0 flex flex-1 items-center gap-1.5">
-        <view class="truncate text-[11px] leading-none tracking-[0.4px] text-text-muted">
+        <view class="truncate text-[11px] leading-none tracking-[0.4px] text-next-semantic-text-muted">
           {{ label }}
         </view>
         <view class="truncate text-[13.5px] leading-none" :class="selectedLabelClassName">
@@ -15,8 +15,8 @@
       </view>
 
       <svg
-        class="ml-1 h-[7.5px] w-[7.5px] shrink-0 text-text-muted transition-transform duration-150 group-hover:text-brand-support"
-        :class="isOpen ? 'rotate-180 text-brand-support' : ''"
+        class="ml-1 h-[7.5px] w-[7.5px] shrink-0 text-next-semantic-text-muted transition-transform duration-150 group-hover:text-next-component-directory-control-selected-text"
+        :class="isOpen ? 'rotate-180 text-next-component-directory-control-selected-text' : ''"
         viewBox="0 0 12 12"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@
 
     <view
       v-if="isOpen"
-      class="absolute left-0 top-[calc(100%+6px)] z-30 min-w-full w-[220px] max-w-[calc(100vw-32px)] overflow-hidden border border-border-soft bg-surface-card shadow-dropdown"
+      class="absolute left-0 top-[calc(100%+6px)] z-30 min-w-full w-[220px] max-w-[calc(100vw-32px)] overflow-hidden border border-next-semantic-border-soft bg-next-semantic-surface-card shadow-next-shadow-dropdown"
       @click.stop
     >
       <view
@@ -42,18 +42,18 @@
         <view
           v-for="option in options"
           :key="option.value || '__all__'"
-          class="border-b border-border-light last:border-b-0"
+          class="border-b border-next-semantic-border-divider last:border-b-0"
         >
           <view
             class="flex cursor-pointer items-center gap-2.5 px-3 py-2 transition-colors duration-150"
             :class="option.value === value
-              ? 'bg-surface-panel text-brand-support'
-              : 'bg-surface-card text-text-body-soft hover:bg-surface-card-soft hover:text-text-body'"
+              ? 'bg-next-component-directory-control-selected-background text-next-component-directory-control-selected-text'
+              : 'bg-next-semantic-surface-card text-next-semantic-text-muted hover:bg-next-semantic-surface-soft hover:text-next-semantic-text-secondary'"
             @click.stop="handleSelect(option.value)"
           >
             <view
-              class="h-5 w-px shrink-0 transition-opacity duration-150"
-              :class="option.value === value ? 'bg-brand-support opacity-100' : 'opacity-0'"
+              class="h-5 w-px shrink-0 transition-colors duration-150"
+              :class="option.value === value ? 'bg-next-component-directory-control-selected-indicator' : 'bg-transparent'"
             />
             <text class="min-w-0 text-[13.5px] leading-[1.35] text-left">{{ option.label }}</text>
           </view>
@@ -90,7 +90,7 @@ const selectedLabel = computed(() => {
 })
 
 const selectedLabelClassName = computed(() => {
-  return props.value ? 'text-brand-support' : 'text-text-body-soft'
+  return props.value ? 'text-next-component-directory-control-selected-text' : 'text-next-semantic-text-muted'
 })
 
 function closeOpen() {

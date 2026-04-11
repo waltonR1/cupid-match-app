@@ -4,15 +4,15 @@
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <view>
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-14 bg-next-semantic-accent-primary" />
-            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-accent-secondary">
+            <view class="h-px w-14 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[5px] text-next-semantic-text-eyebrow">
               {{ t('events.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[56px]">
             {{ t('events.title') }}
-            <text class="text-next-semantic-accent-primary"> · {{ t('events.titleAccent') }}</text>
+            <text class="text-next-semantic-text-section-highlight"> {{ t('events.titleAccent') }}</text>
           </view>
         </view>
 
@@ -60,11 +60,11 @@ const previewEvents = getHomePreviewEvents()
 
 const fieldLabelsByLocale: Record<'zh' | 'fr' | 'en', Pick<EventFieldLabels, 'city' | 'venue' | 'format' | 'audience' | 'seats'>> = {
   zh: {
-    city: '城市',
-    venue: '场地',
-    format: '形式',
-    audience: '适合人群',
-    seats: '席位',
+    city: '\u57CE\u5E02',
+    venue: '\u573A\u5730',
+    format: '\u5F62\u5F0F',
+    audience: '\u9002\u5408\u4EBA\u7FA4',
+    seats: '\u5E2D\u4F4D',
   },
   fr: {
     city: 'Ville',
@@ -102,9 +102,9 @@ const events = computed<EventOverviewItem[]>(() =>
 
 const statusLabelByLocale = {
   zh: {
-    open: '报名中',
-    waitlist: '候补',
-    closed: '已满额',
+    open: '\u62A5\u540D\u4E2D',
+    waitlist: '\u5019\u8865',
+    closed: '\u5DF2\u6EE1\u989D',
   },
   fr: {
     open: 'Ouvert',
@@ -144,3 +144,4 @@ function handleEventOpen(id: string) {
   openEventDetail(id)
 }
 </script>
+

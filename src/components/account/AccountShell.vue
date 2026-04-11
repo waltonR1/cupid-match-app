@@ -14,8 +14,12 @@
         <AccountPrimaryNav :active-page="activePage" />
       </view>
 
-      <view class="mt-6">
-        <slot name="header" />
+      <view class="mt-6 border border-next-semantic-border-default bg-next-semantic-surface-panel px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <AccountSectionHeader
+          :label="headerEyebrow"
+          :title="headerTitle"
+          :description="headerDescription"
+        />
       </view>
 
       <view class="mt-6">
@@ -34,6 +38,7 @@
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AccountPrimaryNav from '@/components/account/AccountPrimaryNav.vue'
+import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountTopSummary from '@/components/account/AccountTopSummary.vue'
 import type { AccountPrimaryPageKey } from '@/components/account/account-shell.types'
 import { NAV_LIST } from '@/constants/nav'
@@ -42,6 +47,9 @@ import { navigateByNavKey } from '@/utils/navigation'
 
 defineProps<{
   activePage: AccountPrimaryPageKey
+  headerEyebrow: string
+  headerTitle: string
+  headerDescription?: string
 }>()
 
 const navList = NAV_LIST

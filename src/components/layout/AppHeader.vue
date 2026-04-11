@@ -6,10 +6,10 @@
     <view class="relative mx-auto flex max-w-[1280px] items-center justify-between px-8 py-3">
       <!-- 品牌 -->
       <view class="flex cursor-pointer flex-col pr-8" @click.stop="handleNavIndex">
-        <text class="text-[24px] font-semibold tracking-[2px] text-next-semantic-accent-primary">
+        <text class="text-[24px] font-semibold tracking-[2px] text-next-component-header-brand-wordmark">
           {{ t('common.brand.name') }}
         </text>
-        <text class="mt-1 text-[13px] italic tracking-[2px] text-next-semantic-accent-muted">
+        <text class="mt-1 text-[13px] italic tracking-[2px] text-next-component-header-brand-tagline">
           {{ t('common.brand.tagline') }}
         </text>
       </view>
@@ -25,14 +25,14 @@
           >
             <text
               class="whitespace-nowrap text-[16px] transition-colors duration-200"
-              :class="activeNav === item.key ? 'text-next-semantic-accent-primary' : 'text-next-semantic-text-muted group-hover:text-next-semantic-text-primary'"
+              :class="activeNav === item.key ? 'text-next-component-header-nav-current' : 'text-next-semantic-text-muted group-hover:text-next-semantic-text-primary'"
             >
               {{ t(item.key) }}
             </text>
 
             <view
               class="absolute left-1/2 top-[calc(100%+8px)] h-[2px] -translate-x-1/2 rounded-full transition-all duration-200"
-              :class="activeNav === item.key ? 'w-full bg-next-semantic-accent-primary' : 'w-0 bg-next-semantic-accent-secondary group-hover:w-full'"
+              :class="activeNav === item.key ? 'w-full bg-next-component-header-nav-indicator' : 'w-0 bg-next-component-header-nav-indicator-hover group-hover:w-full'"
             />
           </view>
         </view>
@@ -40,7 +40,7 @@
 
       <!-- 右侧区域 -->
       <view class="flex items-center gap-4">
-        <!-- 未登录 -->
+        <!-- 未登�?-->
         <template v-if="!auth.isLoggedIn">
           <AppButton
             variant="secondary"
@@ -62,7 +62,7 @@
           </AppButton>
         </template>
 
-        <!-- 已登录 -->
+        <!-- Signed in -->
         <template v-else>
           <view class="relative inline-block" @click.stop>
             <view
@@ -132,7 +132,7 @@
                 v-for="item in locales"
                 :key="item"
                 class="cursor-pointer px-1 py-3.5 text-center text-[13px] transition-colors duration-200"
-                :class="locale === item ? 'bg-next-component-header-menu-selected text-next-semantic-accent-primary' : 'text-next-semantic-text-secondary hover:bg-next-component-header-menu-hover hover:text-next-semantic-text-primary'"
+                :class="locale === item ? 'bg-next-component-header-menu-selected text-next-component-header-menu-selected-label' : 'text-next-semantic-text-secondary hover:bg-next-component-header-menu-hover hover:text-next-semantic-text-primary'"
                 @click="handleLocaleChange(item)"
               >
                 {{ item.toUpperCase() }}

@@ -2,7 +2,7 @@
   <view class="relative overflow-hidden bg-next-semantic-page-default text-next-semantic-text-primary">
     <!-- ambient background -->
     <view class="pointer-events-none absolute inset-0">
-      <view class="absolute inset-0 bg-next-gradient-home-membership-ambient" />
+      <view class="absolute inset-0 bg-next-gradient-membership-showcase-ambient" />
     </view>
 
     <view class="relative mx-auto max-w-[1240px] px-6 py-16 lg:px-8 lg:py-20">
@@ -10,7 +10,7 @@
       <view class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-10">
         <view class="pt-2">
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-10 bg-next-semantic-accent-primary" />
+            <view class="h-px w-10 bg-next-semantic-border-eyebrow" />
             <text class="text-[10px] uppercase tracking-[4px] text-next-semantic-text-subtle">
               {{ t('membership.eyebrow') }}
             </text>
@@ -19,7 +19,7 @@
           <view class="max-w-[760px]">
             <view class="text-[32px] font-semibold leading-[1.06] text-next-semantic-text-primary lg:text-[52px]">
               <text>{{ t('membership.title') }}</text>
-              <text class="text-next-semantic-accent-primary"> · {{ t('membership.titleAccent') }}</text>
+              <text class="text-next-semantic-text-section-highlight"> {{ t('membership.titleAccent') }}</text>
             </view>
 
             <view class="mt-4 max-w-[700px] text-[14px] leading-7 text-next-semantic-text-secondary lg:text-[15px]">
@@ -33,16 +33,16 @@
       <view class="grid gap-4 lg:grid-cols-[0.92fr_1fr_1.06fr]">
         <!-- silver -->
         <view
-          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-component-membership-tier-silver-border bg-next-gradient-home-membership-silver-card px-5 py-6 shadow-next-shadow-panel lg:px-6"
+          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-component-membership-tier-silver-border bg-next-gradient-membership-tier-silver-card px-5 py-6 shadow-next-shadow-panel lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-silver-line" />
-          <view class="absolute inset-0 bg-next-gradient-home-membership-silver-glow" />
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-silver-accent-line" />
+          <view class="absolute inset-0 bg-next-gradient-membership-tier-silver-glow" />
 
-          <view class="relative text-[10px] uppercase tracking-[3px] text-next-semantic-accent-muted">
+          <view class="relative text-[10px] uppercase tracking-[3px] text-next-component-membership-tier-silver-badge-label">
             {{ t('membership.vip.silver.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-silver-line" />
+          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-silver-accent-line" />
 
           <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-next-semantic-text-primary lg:text-[32px]">
             {{ t('membership.vip.silver.name') }}
@@ -64,19 +64,19 @@
             </view>
           </view>
 
-          <view class="relative mt-6 h-px w-full bg-next-component-membership-tier-silver-line" />
+          <view class="relative mt-6 h-px w-full bg-next-component-membership-tier-silver-divider" />
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-secondary">
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.silver.f1') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.silver.f2') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.silver.f3') }}</text>
             </view>
           </view>
@@ -96,16 +96,16 @@
 
         <!-- gold -->
         <view
-          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-semantic-accent-secondary bg-next-gradient-home-membership-gold-card px-5 py-6 shadow-next-shadow-emphasis lg:px-6"
+          class="relative flex min-h-[460px] flex-col overflow-hidden border border-next-component-membership-tier-gold-border bg-next-gradient-membership-tier-gold-card px-5 py-6 shadow-next-shadow-emphasis lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-gold-accent" />
-          <view class="absolute inset-0 bg-next-gradient-home-membership-gold-glow" />
+          <view class="absolute inset-x-0 top-0 h-px bg-next-component-membership-tier-gold-accent-line" />
+          <view class="absolute inset-0 bg-next-gradient-membership-tier-gold-glow" />
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse-subtle">
             {{ t('membership.vip.gold.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-gold-accent" />
+          <view class="relative mt-3 h-px w-10 bg-next-component-membership-tier-gold-accent-line" />
 
           <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-next-semantic-text-inverse lg:text-[32px]">
             {{ t('membership.vip.gold.name') }}
@@ -131,15 +131,15 @@
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-inverse-muted">
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.gold.f1') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.gold.f2') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.gold.f3') }}</text>
             </view>
           </view>
@@ -159,10 +159,10 @@
 
         <!-- diamond -->
         <view
-          class="relative flex min-h-[490px] flex-col overflow-hidden border border-next-component-membership-tier-diamond-border bg-next-gradient-home-membership-diamond-card px-5 py-6 shadow-next-shadow-luxe ring-1 ring-next-component-membership-tier-diamond-ring lg:-translate-y-1 lg:px-6"
+          class="relative flex min-h-[490px] flex-col overflow-hidden border border-next-component-membership-tier-diamond-border bg-next-gradient-membership-tier-diamond-card px-5 py-6 shadow-next-shadow-luxe ring-1 ring-next-component-membership-tier-diamond-ring lg:-translate-y-1 lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-[2px] bg-next-component-membership-tier-diamond-line" />
-          <view class="absolute inset-y-0 right-0 w-[46%] bg-next-gradient-home-membership-diamond-glow" />
+          <view class="absolute inset-x-0 top-0 h-[2px] bg-next-component-membership-tier-diamond-accent-line" />
+          <view class="absolute inset-y-0 right-0 w-[46%] bg-next-gradient-membership-tier-diamond-glow" />
 
           <view
             class="relative inline-flex w-fit items-center border border-next-component-membership-tier-diamond-badge-border bg-next-component-membership-tier-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-next-semantic-text-inverse"
@@ -170,7 +170,7 @@
             {{ t('membership.vip.diamond.badge') }}
           </view>
 
-          <view class="relative mt-4 h-px w-12 bg-next-component-membership-tier-diamond-line" />
+          <view class="relative mt-4 h-px w-12 bg-next-component-membership-tier-diamond-accent-line" />
 
           <view class="relative mt-5 text-[30px] font-semibold leading-[1.1] text-next-semantic-text-inverse lg:text-[34px]">
             {{ t('membership.vip.diamond.name') }}
@@ -196,15 +196,15 @@
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-next-semantic-text-inverse-muted">
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.diamond.f1') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.diamond.f2') }}</text>
             </view>
             <view class="flex gap-3">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.vip.diamond.f3') }}</text>
             </view>
           </view>
@@ -230,7 +230,7 @@
 
       <!-- complimentary access -->
       <view
-        class="mt-4 border border-next-component-membership-tier-free-panel-border bg-next-component-membership-tier-free-panel-background px-5 py-5 shadow-next-shadow-panel lg:px-6"
+        class="mt-4 border border-next-component-membership-tier-free-card-border bg-next-component-membership-tier-free-card-background px-5 py-5 shadow-next-shadow-panel lg:px-6"
       >
         <view class="grid gap-5 lg:grid-cols-[210px_120px_minmax(0,1fr)_150px] lg:items-center">
           <view>
@@ -259,15 +259,15 @@
 
           <view class="grid gap-2 text-[12px] leading-6 text-next-semantic-text-secondary lg:grid-cols-3 lg:gap-4">
             <view class="flex gap-2">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.free.f1') }}</text>
             </view>
             <view class="flex gap-2">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.free.f2') }}</text>
             </view>
             <view class="flex gap-2">
-              <text class="text-next-semantic-accent-primary">—</text>
+              <text class="text-next-component-membership-feature-bullet">-</text>
               <text>{{ t('membership.free.f3') }}</text>
             </view>
           </view>
@@ -299,3 +299,6 @@ function openPlan(plan: string) {
   openRegisterPage(plan)
 }
 </script>
+
+
+

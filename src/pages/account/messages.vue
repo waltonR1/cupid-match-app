@@ -1,13 +1,10 @@
 <template>
-  <AccountShell active-page="messages">
-    <template #header>
-      <AccountPageHeader
-        :eyebrow="t('messages.eyebrow')"
-        :title="t('messages.title')"
-        :description="t('messages.subtitle')"
-      />
-    </template>
-
+  <AccountShell
+    active-page="messages"
+    :header-eyebrow="t('messages.eyebrow')"
+    :header-title="t('messages.title')"
+    :header-description="t('messages.subtitle')"
+  >
     <view class="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
       <view class="border border-next-semantic-border-default bg-next-semantic-surface-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
         <AccountSectionHeader
@@ -29,7 +26,7 @@
           <view
             v-for="item in threads"
             :key="item.thread.id"
-            class="cursor-pointer border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5 shadow-next-shadow-panel transition-all duration-200 hover:-translate-y-[2px] hover:border-next-component-section-card-hover-border hover:bg-next-semantic-surface-soft"
+            class="cursor-pointer border border-next-semantic-border-soft bg-next-semantic-surface-panel px-5 py-5 shadow-next-shadow-panel transition-all duration-200 hover:-translate-y-[2px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-soft"
             @click="handleProfileOpen(item.profile.id)"
           >
             <view class="flex items-start gap-4">
@@ -51,13 +48,13 @@
                   <view class="flex flex-wrap items-center justify-end gap-2">
                     <view
                       v-if="item.profile.familyVisible"
-                      class="rounded-full border border-next-semantic-accent-secondary bg-next-semantic-surface-soft px-3 py-1 text-[11px] uppercase tracking-[2px] text-next-semantic-accent-secondary"
+                      class="rounded-full border border-next-component-account-badge-meta-border bg-next-component-account-badge-meta-background px-3 py-1 text-[11px] uppercase tracking-[2px] text-next-component-account-badge-meta-text"
                     >
                       {{ t('messages.list.familyBadge') }}
                     </view>
                     <view
                       v-if="item.thread.unread > 0"
-                      class="rounded-full border border-next-semantic-action-primary bg-next-semantic-action-primary px-3 py-1 text-[11px] uppercase tracking-[2px] text-next-semantic-action-primary-contrast"
+                      class="rounded-full border border-next-component-account-badge-status-border bg-next-component-account-badge-status-background px-3 py-1 text-[11px] uppercase tracking-[2px] text-next-component-account-badge-status-text"
                     >
                       {{ t('messages.list.unreadLabel') }} {{ item.thread.unread }}
                     </view>
@@ -72,7 +69,7 @@
                   <text class="text-[12px] uppercase tracking-[3px] text-next-semantic-text-muted">
                     {{ formatDateTime(item.thread.updatedAt) }}
                   </text>
-                  <text class="text-[14px] font-medium text-next-semantic-accent-secondary">
+                  <text class="text-[14px] font-medium text-next-semantic-text-link">
                     {{ t('messages.list.open') }}
                   </text>
                 </view>
@@ -95,13 +92,13 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-secondary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-accent-secondary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
         </view>
 
-        <view class="border border-next-semantic-border-default bg-next-semantic-surface-info-card px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
+        <view class="border border-next-semantic-border-soft bg-next-semantic-surface-soft px-6 py-6 shadow-next-shadow-panel lg:px-8 lg:py-8">
           <AccountSectionHeader
             :label="t('messages.eyebrow')"
             :title="t('messages.boundary.title')"
@@ -113,7 +110,7 @@
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-next-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-semantic-action-primary" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-next-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -125,7 +122,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageHeader from '@/components/account/AccountPageHeader.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'

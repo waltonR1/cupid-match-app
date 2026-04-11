@@ -1,14 +1,14 @@
 <template>
   <view
-    class="border border-border-base bg-surface-card text-center"
+    class="border border-next-semantic-border-default bg-next-semantic-surface-card text-center"
     :class="variantClassName"
   >
-    <view v-if="code" class="text-[64px] leading-none text-brand-primary lg:text-[72px]">
+    <view v-if="code" class="text-[64px] leading-none text-next-component-empty-state-code lg:text-[72px]">
       {{ code }}
     </view>
 
     <view
-      class="font-semibold text-text-heading"
+      class="font-semibold text-next-semantic-text-primary"
       :class="variant === 'compact' ? 'mt-0 text-[24px]' : 'mt-6 text-[34px]'"
     >
       {{ title }}
@@ -16,7 +16,7 @@
 
     <view
       v-if="subtitle"
-      class="mx-auto text-text-body-soft"
+      class="mx-auto text-next-semantic-text-muted"
       :class="variant === 'compact' ? 'mt-3 max-w-[520px] text-[15px] leading-7' : 'mt-5 max-w-[560px] text-[17px] leading-8'"
     >
       {{ subtitle }}
@@ -84,17 +84,17 @@ const variantClassName = computed(() => {
 
 const primaryButtonClassName = computed(() => {
   if (props.primaryVariant === 'outline') {
-    return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'
+    return 'border border-next-semantic-border-default bg-next-semantic-surface-card text-next-semantic-text-secondary hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'
   }
 
-  return 'border border-button-primary bg-button-primary text-white hover:border-button-primary-hover hover:bg-button-primary-hover'
+  return 'border border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast hover:border-next-semantic-action-primary-hover hover:bg-next-semantic-action-primary-hover'
 })
 
 const secondaryButtonClassName = computed(() => {
   if (props.secondaryVariant === 'solid') {
-    return 'border border-button-primary bg-button-primary text-white hover:border-button-primary-hover hover:bg-button-primary-hover'
+    return 'border border-next-semantic-action-primary bg-next-semantic-action-primary text-next-semantic-action-primary-contrast hover:border-next-semantic-action-primary-hover hover:bg-next-semantic-action-primary-hover'
   }
 
-  return 'border border-border-base bg-surface-base text-text-body-soft hover:-translate-y-[1px] hover:border-border-accent hover:bg-surface-panel hover:text-text-heading'
+  return 'border border-next-semantic-border-default bg-next-semantic-surface-card text-next-semantic-text-secondary hover:-translate-y-[1px] hover:border-next-semantic-border-card-hover hover:bg-next-semantic-surface-panel hover:text-next-semantic-text-primary'
 })
 </script>

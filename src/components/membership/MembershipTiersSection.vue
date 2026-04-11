@@ -4,15 +4,15 @@
       <view class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <view class="lg:sticky lg:top-24 lg:self-start">
           <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-next-component-section-line" />
-            <text class="text-[12px] uppercase tracking-[6px] text-next-component-section-eyebrow">
+            <view class="h-[1px] w-16 bg-next-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-next-semantic-text-eyebrow">
               {{ t('tiers.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[44px] font-semibold leading-tight text-next-semantic-text-primary lg:text-[64px]">
             {{ t('tiers.title') }}
-            <text class="italic text-next-semantic-accent-primary"> {{ t('tiers.titleAccent') }}</text>
+            <text class="italic text-next-semantic-text-section-highlight"> {{ t('tiers.titleAccent') }}</text>
           </view>
 
           <view class="mt-5 max-w-[400px] text-[19px] italic leading-8 text-next-semantic-text-lead lg:text-[21px]">
@@ -32,7 +32,7 @@
         </view>
 
         <view class="grid gap-6">
-          <view class="border border-next-component-membership-tier-free-panel-border bg-next-component-membership-tier-free-panel-background px-7 py-8 shadow-next-shadow-panel">
+          <view class="border border-next-component-membership-tier-free-card-border bg-next-component-membership-tier-free-card-background px-7 py-8 shadow-next-shadow-panel">
             <view class="flex flex-wrap items-start justify-between gap-4">
               <view>
                 <view class="text-[13px] uppercase tracking-[5px] text-next-semantic-text-subtle">{{ t('free.badge') }}</view>
@@ -75,8 +75,8 @@
             </AppButton>
           </view>
 
-          <view class="border border-next-component-membership-tier-silver-border bg-next-gradient-home-membership-silver-card px-8 py-10 text-next-semantic-text-primary shadow-next-shadow-panel">
-            <view class="text-[13px] uppercase tracking-[5px] text-next-semantic-accent-secondary">{{ t('silver.badge') }}</view>
+          <view class="border border-next-component-membership-tier-silver-border bg-next-gradient-membership-tier-silver-card px-8 py-10 text-next-semantic-text-primary shadow-next-shadow-panel">
+            <view class="text-[13px] uppercase tracking-[5px] text-next-component-membership-tier-silver-badge-label">{{ t('silver.badge') }}</view>
             <view class="mt-5 text-[40px] font-semibold">{{ t('silver.title') }}</view>
             <view class="mt-3 max-w-[460px] text-[15px] italic leading-7 text-next-semantic-text-secondary">
               {{ t('tiers.silverFit') }}
@@ -113,7 +113,7 @@
             </AppButton>
           </view>
 
-          <view class="border border-next-semantic-accent-secondary bg-next-gradient-home-membership-gold-card px-8 py-10 text-next-semantic-text-inverse shadow-next-shadow-emphasis">
+          <view class="border border-next-component-membership-tier-gold-border bg-next-gradient-membership-tier-gold-card px-8 py-10 text-next-semantic-text-inverse shadow-next-shadow-emphasis">
             <view class="flex items-start justify-between gap-4">
               <view>
                 <view class="text-[13px] uppercase tracking-[5px] text-next-semantic-text-inverse-subtle">{{ t('gold.badge') }}</view>
@@ -123,7 +123,7 @@
                 </view>
               </view>
 
-              <view class="rounded-full border border-next-semantic-accent-secondary px-4 py-2 text-[12px] uppercase tracking-[3px] text-next-semantic-accent-muted">
+              <view class="rounded-full border border-next-component-membership-tier-gold-border px-4 py-2 text-[12px] uppercase tracking-[3px] text-next-component-membership-tier-gold-badge-label">
                 {{ t('tiers.popular') }}
               </view>
             </view>
@@ -159,8 +159,8 @@
             </AppButton>
           </view>
 
-          <view class="border border-next-component-membership-tier-diamond-border bg-next-gradient-home-membership-diamond-card px-8 py-10 text-next-semantic-text-inverse shadow-next-shadow-luxe">
-            <view class="text-[13px] uppercase tracking-[5px] text-next-semantic-accent-muted">{{ t('diamond.badge') }}</view>
+          <view class="border border-next-component-membership-tier-diamond-border bg-next-gradient-membership-tier-diamond-card px-8 py-10 text-next-semantic-text-inverse shadow-next-shadow-luxe">
+            <view class="text-[13px] uppercase tracking-[5px] text-next-component-membership-tier-diamond-badge-label">{{ t('diamond.badge') }}</view>
             <view class="mt-5 text-[40px] font-semibold text-next-semantic-text-inverse">{{ t('diamond.title') }}</view>
             <view class="mt-3 max-w-[520px] text-[15px] italic leading-7 text-next-semantic-text-inverse-muted">
               {{ t('tiers.diamondFit') }}
@@ -212,3 +212,4 @@ const emit = defineEmits<{
 
 const { t } = usePageI18n('membership')
 </script>
+
