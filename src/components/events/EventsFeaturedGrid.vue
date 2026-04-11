@@ -1,63 +1,52 @@
 <template>
-  <view class="mx-auto max-w-[1280px] px-8 pb-24">
-    <view class="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+  <view class="bg-semantic-page-subtle">
+    <view class="mx-auto max-w-[1280px] px-8 pb-24">
+    <view class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <view>
-        <view class="text-[12px] uppercase tracking-[5px] text-brand-support">{{ eyebrow }}</view>
-        <view class="mt-4 text-[44px] font-semibold leading-tight text-text-heading lg:text-[62px]">
+        <view class="mt-6 text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">{{ eyebrow }}</view>
+        <view class="mt-4 text-[44px] font-semibold leading-tight text-semantic-text-primary lg:text-[62px]">
           {{ title }}
         </view>
       </view>
 
-      <view class="max-w-[420px] text-[17px] leading-8 text-text-body-soft">
+      <view class="max-w-[420px] text-[17px] leading-8 text-semantic-text-muted">
         {{ subtitle }}
       </view>
     </view>
 
-    <view class="grid gap-6 xl:grid-cols-3">
+    <view class="mb-12 mt-6 grid gap-5 md:grid-cols-4">
       <view
+        v-for="item in stats"
+        :key="item.label"
+        class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+      >
+          <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">{{ item.label }}</view>
+        <view class="mt-4 text-[34px] font-semibold text-semantic-text-primary">{{ item.value }}</view>
+      </view>
+    </view>
+
+    <view class="grid gap-6 xl:grid-cols-3">
+      <EventOverviewCard
         v-for="event in events"
         :key="event.id"
-        class="border border-border-base bg-surface-base px-8 py-8 shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:shadow-card"
-        @click="$emit('open', event.id)"
-      >
-        <view class="flex items-start justify-between gap-4">
-          <view>
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">{{ event.date }}</view>
-            <view class="mt-4 text-[30px] font-semibold leading-[1.25] text-text-heading">
-              {{ event.title }}
-            </view>
-          </view>
-
-          <EventStatusBadge :status="event.status" :label="event.statusLabel" />
-        </view>
-
-        <view class="mt-6 grid gap-3 text-[15px] leading-7 text-text-body">
-          <view><text class="font-medium text-text-heading">{{ fields.city }}:</text> {{ event.city }}</view>
-          <view><text class="font-medium text-text-heading">{{ fields.venue }}:</text> {{ event.venue }}</view>
-          <view><text class="font-medium text-text-heading">{{ fields.format }}:</text> {{ event.format }}</view>
-          <view><text class="font-medium text-text-heading">{{ fields.audience }}:</text> {{ event.audience }}</view>
-        </view>
-
-        <view class="mt-6 text-[15px] leading-8 text-text-body-soft">
-          {{ event.summary }}
-        </view>
-
-        <view class="mt-6 border-t border-border-light pt-5 text-[14px] text-text-muted">
-          {{ fields.seats }} {{ event.seats }}
-        </view>
-      </view>
+        :event="event"
+        :fields="fields"
+        @open="$emit('open', $event)"
+      />
+    </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventFieldLabels, EventOverviewItem } from './events.types'
+import EventOverviewCard from './EventOverviewCard.vue'
+import type { EventFieldLabels, EventOverviewItem, EventStatItem } from './events.types'
 
 defineProps<{
   eyebrow: string
   title: string
   subtitle: string
+  stats: EventStatItem[]
   fields: EventFieldLabels
   events: EventOverviewItem[]
 }>()
@@ -66,3 +55,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

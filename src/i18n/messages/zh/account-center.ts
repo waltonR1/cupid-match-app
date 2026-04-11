@@ -1,0 +1,210 @@
+import type { AppMessageSchema } from '@/i18n/types'
+
+export const accountCenterMessages: AppMessageSchema = {
+  nav: {
+    profile: '我的资料',
+    verification: '认证中心',
+    connections: '我的缘分',
+    messages: '消息',
+    safety: '隐私与安全',
+    membership: '会员与服务',
+  },
+  topSummary: {
+    title: '账户中心',
+    subtitle: '把资料质量、信任状态、缘分推进和服务入口放进一个真正可操作的工作台。',
+    metrics: {
+      completion: '资料完整度',
+      verification: '已认证项',
+      membership: '当前会员',
+      activity: '活动报名',
+    },
+    actions: {
+      profile: '去完善资料',
+      verification: '去认证',
+      connections: '看我的缘分',
+      membership: '看服务权益',
+    },
+  },
+  common: {
+    open: '查看',
+    manage: '管理',
+    review: '检查',
+    upgrade: '升级',
+    enabled: '已开启',
+    disabled: '未开启',
+    visibility: '可见范围',
+    familyVisible: '家庭可见',
+    familyAssist: '家庭协助',
+    privateOnly: '仅自己可见',
+    currentTier: '当前档位',
+    visibleFields: '开放字段',
+    joinedAt: '加入时间',
+  },
+  profile: {
+    eyebrow: '资料中心',
+    title: '我的资料',
+    subtitle: '资料质量优先。先把你的信息做完整、做真实、做成适合匹配与沟通的状态。',
+    sections: {
+      summary: '资料概览',
+      media: '照片与形象',
+      base: '基础信息',
+      visibility: '可见范围与边界',
+      tasks: '下一步完善任务',
+      preview: '公开资料预览',
+    },
+    rows: {
+      city: '所在城市',
+      education: '学历',
+      occupation: '职业',
+      languages: '语言',
+    },
+    media: {
+      photos: '照片组已具备基础展示能力',
+      video: '形象视频仍可继续补强',
+      order: '首屏展示顺序还可以继续优化',
+    },
+    tasks: {
+      photos: '补一张更有第一印象优势的照片',
+      introduction: '收紧自我介绍和婚恋意向表达',
+      verification: '优先完成实名与学历认证',
+    },
+  },
+  verification: {
+    eyebrow: '信任中心',
+    title: '认证中心',
+    subtitle: '严肃婚恋里，信任必须独立可见。认证、风控和邀请认证不应该埋在普通设置里。',
+    sections: {
+      overview: '认证概览',
+      grid: '可完成认证',
+      risk: '风险核查',
+      invite: '邀请对方认证',
+    },
+    items: {
+      realName: '实名认证',
+      education: '学历认证',
+      marital: '婚况认证',
+      career: '职业认证',
+      video: '视频认证',
+      assets: '资产认证',
+    },
+    status: {
+      done: '已完成',
+      pending: '待完成',
+    },
+    summary: {
+      progress: '已完成认证项',
+    },
+  },
+  connections: {
+    eyebrow: '缘分池',
+    title: '我的缘分',
+    subtitle: '把收藏、互相喜欢、家庭可见对象和推荐对象统一成一条关系推进链路。',
+    filters: {
+      likedMe: '喜欢我的',
+      liked: '我收藏的',
+      mutual: '互相喜欢',
+      family: '家庭可见',
+    },
+    sections: {
+      pool: '缘分列表',
+      reason: '推荐理由',
+      summary: '缘分概览',
+    },
+    reasons: {
+      complete: '资料质量已经比较完整',
+      family: '需要时可进入家庭协同阶段',
+      active: '近期活跃度稳定',
+    },
+  },
+  messages: {
+    eyebrow: '沟通中心',
+    title: '消息',
+    subtitle: '消息页只负责沟通推进，把信任状态和安全提醒放在近处，不再塞入旧式总览卡片。',
+    filters: {
+      all: '全部',
+      unread: '未读',
+      family: '家庭协助',
+    },
+    sections: {
+      threads: '最近会话',
+      safety: '安全提醒',
+    },
+    list: {
+      familyBadge: '家庭可见',
+      unreadLabel: '未读',
+      open: '查看资料',
+    },
+    support: {
+      point1: '未读不一定是风险，更重要的是回复质量和推进清晰度。',
+      point2: '如果准备进入线下或家庭协同，再把说明放到聊天之外处理。',
+      point3: '优先保留你自己的语气，而不是写成流程化沟通。',
+    },
+    boundary: {
+      title: '家庭在消息页的边界',
+      point1: '不代发消息，不代替判断关系温度。',
+      point2: '如需家庭参与，只补充背景或后续建议。',
+      point3: '真正的匹配感只能通过本人互动来判断。',
+    },
+  },
+  safety: {
+    eyebrow: '安全控制台',
+    title: '隐私与安全',
+    subtitle: '公开范围、联系边界、家庭协助和风险处理应集中在一个明确的安全页里。',
+    sections: {
+      visibility: '可见范围',
+      contact: '联系规则',
+      family: '家庭协助',
+      risk: '风险工具',
+      records: '记录入口',
+    },
+    family: {
+      point1: '仅在你授权后进入家庭协助视角。',
+      point2: '家庭适合补充背景，不代替本人沟通和决策。',
+      point3: '需要时可以随时收回家庭协助权限。',
+    },
+    notes: {
+      point1: '顾问联系属于服务协同，不等于家庭介入。',
+      point2: '家庭协助更适合在方向明确后再开启。',
+      point3: '开放更多资料字段前，先确认它确实有助于推进。',
+    },
+  },
+  membership: {
+    eyebrow: '服务中心',
+    title: '会员与服务',
+    subtitle: '会员页负责解释服务价值和权益，不再主导整个账户区的视觉结构。',
+    sections: {
+      current: '当前档位',
+      benefits: '权益矩阵',
+      service: '服务入口',
+      plans: '升级方案',
+    },
+  },
+  activity: {
+    eyebrow: '活动跟进',
+    title: '我的活动',
+    subtitle: '活动保留在账户区，但作为二级运营页存在，不再承担一级主入口角色。',
+    filters: {
+      confirmed: '已确认',
+      waitlist: '候补中',
+      completed: '已完成',
+    },
+    sections: {
+      list: '活动列表',
+      followup: '活动后跟进',
+    },
+    list: {
+      action: '查看活动',
+    },
+    support: {
+      point1: '对已确认活动提前看清地点、时间和注意事项。',
+      point2: '候补中的活动保持轻跟进，不要把节奏压得过满。',
+      point3: '已完成活动更适合回看反馈，而不是简单重复报名。',
+    },
+    family: {
+      title: '适合家庭协同的部分',
+      point1: '活动背景说明与家长沙龙信息可共享。',
+      point2: '本人仍保留是否继续推进的最终判断。',
+      point3: '如果不希望家长介入，直接保持当前边界即可。',
+    },
+  },
+}

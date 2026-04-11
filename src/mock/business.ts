@@ -1,4 +1,4 @@
-﻿import type { AppLocale } from '@/i18n/types'
+import type { AppLocale } from '@/i18n/types'
 
 import { getMockEventById, type MockEvent } from './events'
 

@@ -19,29 +19,29 @@ const props = defineProps<{
 
 const badgeClassName = computed(() => {
   if (props.status === 'open') {
-    return 'rounded-full border-brand-accent/72 bg-button-accent text-button-neutral-ink shadow-panel tracking-[1.5px]'
+    return 'rounded-full border-semantic-state-event-open-border bg-semantic-state-event-open-background text-semantic-state-event-open-text shadow-panel tracking-[1.5px]'
   }
 
   if (props.status === 'waitlist') {
-    return 'rounded-full border-brand-secondary-soft/72 bg-brand-primary-soft text-brand-secondary shadow-panel tracking-[1.5px]'
+    return 'rounded-full border-semantic-state-event-waitlist-border bg-semantic-state-event-waitlist-background text-semantic-state-event-waitlist-text shadow-panel tracking-[1.5px]'
   }
 
-  return 'rounded-[10px] border-dashed border-border-base/90 bg-surface-panel/88 text-text-muted tracking-[1.2px]'
+  return 'rounded-[10px] border-dashed border-semantic-state-event-closed-border bg-semantic-state-event-closed-background text-semantic-state-event-closed-text tracking-[1.2px]'
 })
 
 const dotClassName = computed(() => {
   if (props.status === 'open') {
-    return 'h-1.5 w-1.5 rounded-full bg-button-neutral-ink'
+    return 'h-1.5 w-1.5 rounded-full bg-semantic-state-event-open-dot'
   }
 
   if (props.status === 'waitlist') {
-    return 'h-1.5 w-1.5 rounded-full bg-brand-secondary'
+    return 'h-1.5 w-1.5 rounded-full bg-semantic-state-event-waitlist-dot'
   }
 
   if (props.status === 'closed') {
-    return 'h-[5px] w-[5px] rounded-[1px] bg-text-muted'
+    return 'h-[5px] w-[5px] rounded-[1px] bg-semantic-state-event-closed-dot'
   }
 
-  return 'h-1.5 w-1.5 rounded-full bg-button-neutral-ink'
+  return 'h-1.5 w-1.5 rounded-full bg-semantic-state-event-open-dot'
 })
 </script>

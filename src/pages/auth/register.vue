@@ -1,169 +1,254 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
-        :nav-list="navList"
-        active-nav=""
-        @nav-click="handleNavClick"
-        @register-click="handleRegisterClick"
+      :nav-list="navList"
+      active-nav=""
+      @nav-click="handleNavClick"
+      @register-click="handleRegisterClick"
     />
 
-    <view class="relative overflow-hidden bg-membership-hero text-text-inverse">
-      <view class="pointer-events-none absolute right-[-140px] top-14 h-[320px] w-[320px] rounded-full border border-border-inverse/24" />
-      <view class="pointer-events-none absolute left-[-72px] top-[-44px] h-[240px] w-[240px] rounded-full bg-brand-accent/10 blur-[86px]" />
+    <view class="relative overflow-hidden bg-gradient-auth-hero text-semantic-text-inverse">
+      <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-semantic-border-hero-ornament" />
+      <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
-        <view class="grid gap-12 lg:min-h-[620px] lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
-          <view class="max-w-[640px]">
-            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/34 bg-surface-inverse-panel/24 px-5 py-2 backdrop-blur">
-              <view class="h-[1px] w-12 bg-brand-accent" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
+        <view class="grid gap-12 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
+          <view class="max-w-[740px]">
+            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
+              <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+              <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
                 {{ labels.eyebrow }}
               </text>
             </view>
 
-            <view class="text-[50px] font-semibold leading-[1.04] text-text-inverse lg:text-[84px]">
+            <view class="max-w-[700px] text-[52px] font-semibold leading-[1.04] text-semantic-text-inverse lg:text-[84px]">
               {{ labels.title }}
             </view>
 
-            <view class="mt-8 max-w-[620px] text-[18px] leading-8 text-text-inverse-soft lg:text-[20px]">
+            <view class="mt-8 max-w-[680px] text-[18px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
               {{ labels.subtitle }}
             </view>
-          </view>
 
-          <view class="grid gap-6 lg:ml-auto lg:max-w-[560px]">
-            <view class="grid gap-4 sm:grid-cols-2">
+            <view class="mt-12 grid gap-4 sm:grid-cols-2">
               <view
-                  v-for="role in roleOptions"
-                  :key="role.key"
-                  class="cursor-pointer border px-6 py-6 transition-all duration-300"
-                  :class="role.className"
-                  @click="selectRole(role.key)"
+                v-for="option in roleOptions"
+                :key="option.value"
+                class="cursor-pointer border px-6 py-6 backdrop-blur transition-all duration-300 hover:-translate-y-[2px]"
+                :class="option.value === role
+                  ? 'border-component-auth-selection-border bg-component-auth-selection-background shadow-panel'
+                  : 'border-semantic-border-hero bg-component-auth-overlay-background-soft hover:border-component-auth-selection-hover-border'"
+                @click="selectRole(option.value)"
               >
                 <view class="flex items-start justify-between gap-4">
-                  <view class="text-[12px] uppercase tracking-[4px]" :class="role.kickerClassName">
-                    {{ role.kicker }}
+                  <view>
+                    <view
+                      class="text-[12px] uppercase tracking-[4px]"
+                      :class="option.value === role ? 'text-semantic-text-hero-label' : 'text-semantic-text-hero-secondary'"
+                    >
+                      {{ option.badge }}
+                    </view>
+                    <view class="mt-4 text-[24px] font-semibold text-semantic-text-inverse">
+                      {{ option.title }}
+                    </view>
                   </view>
-                  <view class="mt-[2px] h-3.5 w-3.5 rounded-full border" :class="role.dotClassName" />
+
+                  <view
+                    class="mt-1 h-3.5 w-3.5 rounded-full border"
+                    :class="option.value === role
+                      ? 'border-component-auth-selection-indicator bg-component-auth-selection-indicator shadow-panel'
+                      : 'border-semantic-border-hero bg-transparent'"
+                  />
                 </view>
 
-                <view class="mt-4 text-[24px] font-medium text-text-inverse">
-                  {{ role.title }}
-                </view>
-
-                <view class="mt-3 text-[14px] leading-7" :class="role.descClassName">
-                  {{ role.desc }}
+                <view class="mt-4 text-[15px] leading-7" :class="option.value === role ? 'text-semantic-text-hero-body' : 'text-semantic-text-hero-secondary'">
+                  {{ option.desc }}
                 </view>
               </view>
             </view>
 
-            <view class="border border-border-inverse/30 bg-surface-inverse-panel/18 px-6 py-6 backdrop-blur">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-accent">
+            <view class="mt-6 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-6 py-6 backdrop-blur">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
                 {{ labels.selectedRole }}
               </view>
-              <view class="mt-4 text-[34px] font-semibold text-text-inverse">
+              <view class="mt-4 text-[28px] font-semibold text-semantic-text-inverse">
                 {{ activeRoleLabel }}
               </view>
-              <view class="mt-3 text-[15px] leading-8 text-text-inverse-soft">
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-hero-body">
                 {{ activeRoleNote }}
               </view>
             </view>
           </view>
-        </view>
-      </view>
-    </view>
 
-    <view class="mx-auto max-w-[1280px] px-8 py-20">
-      <view class="grid gap-8 lg:grid-cols-[1.02fr_0.98fr]">
-            <view class="border border-border-base bg-surface-card-soft px-8 py-8 shadow-card">
-          <view class="flex flex-wrap items-center justify-between gap-4">
-            <view>
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-secondary">
-                {{ labels.formTitle }}
-              </view>
-              <view class="mt-4 text-[30px] font-semibold text-text-heading">
-                {{ activeRoleLabel }}
-              </view>
-            </view>
-            <view class="rounded-full border border-border-accent/45 bg-brand-accent/10 px-3 py-1 text-[11px] uppercase tracking-[3px] text-brand-support">
-              {{ activeRoleShort }}
-            </view>
-          </view>
+          <view class="relative lg:ml-auto lg:w-full lg:max-w-[520px]">
+            <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-semantic-border-hero bg-component-auth-overlay-background-soft" />
 
-          <view class="mt-8 grid gap-5">
-            <view
-                v-for="field in formFields"
-                :key="field.label"
-                class="border border-border-soft bg-surface-card px-5 py-4"
-            >
-              <view class="text-[12px] uppercase tracking-[3px] text-text-subtle">
-                {{ field.label }}
-              </view>
-              <view class="mt-3 text-[16px] text-text-body">
-                {{ field.placeholder }}
-              </view>
-            </view>
-          </view>
-
-          <view class="mt-8 border border-border-soft bg-surface-card-soft px-5 py-5">
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
-              {{ labels.roleBenefitTitle }}
-            </view>
-            <view class="mt-4 text-[22px] font-medium text-text-heading">
-              {{ activeRoleBenefit.title }}
-            </view>
-            <view class="mt-3 text-[15px] leading-8 text-text-body">
-              {{ activeRoleBenefit.desc }}
-            </view>
-          </view>
-
-          <view class="mt-8 flex flex-col gap-4 sm:flex-row">
-            <button
-                class="[margin-left:0] [margin-right:0] inline-flex min-w-btn-cta items-center justify-center rounded-button border border-button-primary bg-button-primary px-btn-cta-x py-btn-cta-y text-[16px] font-medium text-button-neutral-contrast transition-all duration-300 hover:-translate-y-[1px] hover:border-button-primary-hover hover:bg-button-primary-hover hover:shadow-emphasis"
-                @click="handleSubmit"
-            >
-              {{ labels.submit }}
-            </button>
-
-            <button
-                class="[margin-left:0] [margin-right:0] inline-flex min-w-btn-cta items-center justify-center rounded-button border border-border-base bg-surface-card px-btn-cta-x py-btn-cta-y text-[15px] font-medium text-text-body transition-all duration-300 hover:-translate-y-[1px] hover:border-border-accent/50 hover:text-text-heading"
-                @click="handleLoginClick"
-            >
-              {{ loginText }}
-            </button>
-          </view>
-        </view>
-
-        <view class="border border-border-base bg-surface-card px-8 py-8 shadow-card">
-          <view class="text-[12px] uppercase tracking-[4px] text-brand-secondary">
-            {{ labels.processTitle }}
-          </view>
-
-          <view class="mt-8 grid gap-4">
-            <view
-                v-for="step in processSteps"
-                :key="step.index"
-                class="grid gap-3 border border-border-soft bg-surface-card-soft px-5 py-5 md:grid-cols-[72px_1fr]"
-            >
-              <view class="text-[13px] uppercase tracking-[4px] text-brand-support">
-                {{ step.index }}
-              </view>
+            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 text-semantic-text-inverse shadow-hero backdrop-blur">
               <view>
-                <view class="text-[22px] font-medium text-text-heading">
-                  {{ step.title }}
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
+                  {{ labels.formTitle }}
                 </view>
-                <view class="mt-3 text-[15px] leading-8 text-text-body">
-                  {{ step.desc }}
+                <view class="mt-4 text-[30px] leading-[1.3] text-semantic-text-inverse">
+                  {{ labels.panelTitle }}
                 </view>
+              </view>
+
+              <view class="mt-4 text-[15px] leading-7 text-semantic-text-hero-body">
+                {{ labels.panelHint }}
+              </view>
+
+              <view class="mt-8 grid gap-5">
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.name }}
+                  </view>
+                  <input
+                    v-model="name"
+                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.name"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
+
+                <view class="grid gap-5 md:grid-cols-2">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                      {{ formLabels.email }}
+                    </view>
+                    <input
+                      v-model="email"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                      :placeholder="formPlaceholders.email"
+                      placeholder-class="text-semantic-text-hero-secondary"
+                    >
+                  </view>
+
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                      {{ formLabels.city }}
+                    </view>
+                    <input
+                      v-model="city"
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                      :placeholder="formPlaceholders.city"
+                      placeholder-class="text-semantic-text-hero-secondary"
+                    >
+                  </view>
+
+                </view>
+
+                <view class="grid gap-5 md:grid-cols-2">
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                      {{ formLabels.password }}
+                    </view>
+                    <input
+                      v-model="password"
+                      password
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                      :placeholder="formPlaceholders.password"
+                      placeholder-class="text-semantic-text-hero-secondary"
+                    >
+                  </view>
+
+                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                      {{ formLabels.confirmPassword }}
+                    </view>
+                    <input
+                      v-model="confirmPassword"
+                      password
+                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                      :placeholder="formPlaceholders.confirmPassword"
+                      placeholder-class="text-semantic-text-hero-secondary"
+                    >
+                  </view>
+                </view>
+              </view>
+
+              <label class="mt-6 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                <checkbox :checked="agreed" @click="toggleAgreement" />
+                <view class="text-[14px] leading-7 text-semantic-text-hero-body">
+                  <text>{{ agreement.prefix }}</text>
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
+                    {{ agreement.terms }}
+                  </text>
+                  <text>{{ agreement.connector }}</text>
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('privacy')">
+                    {{ agreement.privacy }}
+                  </text>
+                  <text>{{ agreement.suffix }}</text>
+                </view>
+              </label>
+
+              <view class="mt-8 grid gap-4">
+                <AppButton
+                  width="cta"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  @click="handleSubmit"
+                >
+                  {{ labels.submit }}
+                </AppButton>
+
+                <AppButton
+                  variant="secondary"
+                  context="hero"
+                  width="cta"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  @click="handleLoginClick"
+                >
+                  {{ loginText }}
+                </AppButton>
+              </view>
+
+              <view class="mt-6 text-[14px] leading-7 text-semantic-text-hero-secondary">
+                {{ labels.formFootnote }}
               </view>
             </view>
           </view>
         </view>
       </view>
     </view>
+
+    <view class="bg-semantic-page-subtle">
+      <view class="mx-auto max-w-[1280px] px-8 py-20">
+        <view class="mb-10 inline-flex items-center gap-4">
+          <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
+            {{ labels.processTitle }}
+          </text>
+        </view>
+
+        <view class="grid gap-6 lg:grid-cols-3">
+          <view
+            v-for="(step, index) in processSteps"
+            :key="step.title"
+            class="border border-semantic-border-default bg-semantic-surface-panel px-7 py-7 shadow-panel"
+          >
+            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
+              {{ String(index + 1).padStart(2, '0') }}
+            </view>
+            <view class="mt-4 text-[24px] font-semibold leading-[1.35] text-semantic-text-primary">
+              {{ step.title }}
+            </view>
+            <view class="mt-4 text-[15px] leading-8 text-semantic-text-secondary">
+              {{ step.desc }}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <AgreementDialog
+      :open="Boolean(agreementDialog)"
+      :kind="agreementDialog || 'terms'"
+      @close="closeAgreementDialog"
+    />
 
     <AppFooter
-        :nav-list="navList"
-        @nav-click="handleNavClick"
+      :nav-list="navList"
+      @nav-click="handleNavClick"
     />
   </view>
 </template>
@@ -171,27 +256,30 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AgreementDialog from '@/components/common/AgreementDialog.vue'
+import AppButton from '@/components/common/AppButton.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openLoginPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
-const SELF_ROUTE = '/pages/discovery/self/index'
-const PARENT_ROUTE = '/pages/discovery/family/index'
+type RegisterRole = 'self' | 'parent'
+type AgreementDialogType = 'terms' | 'privacy' | null
 
 const navList = NAV_LIST
 const { t } = usePageI18n('register')
-const { t: appT } = useAppI18n()
-const selectedRole = ref<'self' | 'parent'>('self')
-
-onLoad((query) => {
-  if (query && typeof query.role === 'string' && (query.role === 'self' || query.role === 'parent')) {
-    selectedRole.value = query.role
-  }
-})
+const { t: tApp } = useAppI18n()
+const role = ref<RegisterRole>('self')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const name = ref('')
+const city = ref('')
+const agreed = ref(false)
+const agreementDialog = ref<AgreementDialogType>(null)
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -199,55 +287,75 @@ const labels = computed(() => ({
   subtitle: t('hero.subtitle'),
   selectedRole: t('hero.selectedRole'),
   formTitle: t('hero.formTitle'),
+  panelTitle: t('hero.panelTitle'),
+  panelHint: t('hero.panelHint'),
   submit: t('hero.submit'),
   processTitle: t('hero.processTitle'),
-  roleBenefitTitle: t('hero.roleBenefitTitle'),
+  formFootnote: t('hero.formFootnote'),
 }))
 
-const loginText = computed(() => appT('common.nav.login'))
-const activeRoleLabel = computed(() => t(`roles.${selectedRole.value}.title`))
-const activeRoleShort = computed(() => t(`roles.${selectedRole.value}.badge`))
-const activeRoleNote = computed(() => t(`roles.${selectedRole.value}.note`))
+const loginText = computed(() => tApp('common.nav.login'))
+const agreement = computed(() => ({
+  prefix: t('hero.agreementPrefix'),
+  terms: t('hero.agreementTerms'),
+  connector: t('hero.agreementConnector'),
+  privacy: t('hero.agreementPrivacy'),
+  suffix: t('hero.agreementSuffix'),
+}))
 
-const formFields = computed(() => [
-  { label: t('form.name.label'), placeholder: t('form.name.placeholder') },
-  { label: t('form.city.label'), placeholder: t('form.city.placeholder') },
-  { label: t('form.contact.label'), placeholder: t('form.contact.placeholder') },
-  { label: t('form.intent.label'), placeholder: t(`form.intent.placeholder.${selectedRole.value}`) },
+const roleOptions = computed(() => [
+  {
+    value: 'self' as const,
+    badge: t('roles.self.badge'),
+    title: t('roles.self.title'),
+    desc: t('roles.self.desc'),
+    note: t('roles.self.note'),
+  },
+  {
+    value: 'parent' as const,
+    badge: t('roles.parent.badge'),
+    title: t('roles.parent.title'),
+    desc: t('roles.parent.desc'),
+    note: t('roles.parent.note'),
+  },
 ])
+
+const activeRoleLabel = computed(() => t(`roles.${role.value}.title`))
+const activeRoleNote = computed(() => t(`roles.${role.value}.note`))
+
+const formLabels = computed(() => ({
+  email: t('form.email.label'),
+  password: t('form.password.label'),
+  confirmPassword: t('form.confirmPassword.label'),
+  name: t('form.name.label'),
+  city: t('form.city.label'),
+}))
+
+const formPlaceholders = computed(() => ({
+  email: t('form.email.placeholder'),
+  password: t('form.password.placeholder'),
+  confirmPassword: t('form.confirmPassword.placeholder'),
+  name: t('form.name.placeholder'),
+  city: t('form.city.placeholder'),
+}))
 
 const processSteps = computed(() => [
-  { index: '01', title: t('process.step1.title'), desc: t(`process.step1.desc.${selectedRole.value}`) },
-  { index: '02', title: t('process.step2.title'), desc: t(`process.step2.desc.${selectedRole.value}`) },
-  { index: '03', title: t('process.step3.title'), desc: t(`process.step3.desc.${selectedRole.value}`) },
+  {
+    title: t('process.step1.title'),
+    desc: t(`process.step1.desc.${role.value}`),
+  },
+  {
+    title: t('process.step2.title'),
+    desc: t(`process.step2.desc.${role.value}`),
+  },
+  {
+    title: t('process.step3.title'),
+    desc: t(`process.step3.desc.${role.value}`),
+  },
 ])
 
-const activeRoleBenefit = computed(() => ({
-  title: t(`roleBenefits.${selectedRole.value}.title`),
-  desc: t(`roleBenefits.${selectedRole.value}.desc`),
-}))
-
-const roleOptions = computed(() => {
-  return ['self', 'parent'].map((roleKey, index) => {
-    const isActive = roleKey === selectedRole.value
-
-    return {
-      key: roleKey as 'self' | 'parent',
-      kicker: index === 0 ? 'ME' : 'FA',
-      title: t(`roles.${roleKey}.title`),
-      desc: t(`roles.${roleKey}.desc`),
-      className: isActive
-          ? 'border-brand-accent bg-brand-accent/10 shadow-card'
-          : 'border-border-inverse/30 bg-surface-inverse-panel/16 hover:border-border-accent/40 hover:bg-surface-inverse-card/24',
-      kickerClassName: isActive ? 'text-brand-accent' : 'text-text-inverse-muted',
-      descClassName: isActive ? 'text-text-inverse-soft' : 'text-text-inverse-muted',
-      dotClassName: isActive ? 'border-brand-accent bg-brand-accent shadow-card' : 'border-border-inverse/50 bg-transparent',
-    }
-  })
-})
-
-function selectRole(role: 'self' | 'parent') {
-  selectedRole.value = role
+function selectRole(nextRole: RegisterRole) {
+  role.value = nextRole
 }
 
 function handleNavClick(key: string) {
@@ -255,8 +363,9 @@ function handleNavClick(key: string) {
 }
 
 function handleSubmit() {
-  uni.redirectTo({
-    url: selectedRole.value === 'parent' ? PARENT_ROUTE : SELF_ROUTE,
+  uni.showToast({
+    title: labels.value.submit,
+    icon: 'none',
   })
 }
 
@@ -264,7 +373,26 @@ function handleLoginClick() {
   openLoginPage()
 }
 
-function handleRegisterClick() {
-  return
+function toggleAgreement() {
+  agreed.value = !agreed.value
 }
+
+function openAgreementDialog(kind: Exclude<AgreementDialogType, null>) {
+  agreementDialog.value = kind
+}
+
+function closeAgreementDialog() {
+  agreementDialog.value = null
+}
+
+function handleRegisterClick() {
+  handleSubmit()
+}
+
+onLoad((query?: Record<string, string | undefined>) => {
+  if (query?.plan === 'parent') {
+    role.value = 'parent'
+  }
+})
 </script>
+

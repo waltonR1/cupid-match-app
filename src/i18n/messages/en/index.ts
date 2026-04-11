@@ -3,20 +3,16 @@ import { commonMessages } from '@/i18n/messages/en/common'
 import { homeMessages } from '@/i18n/messages/en/home'
 import { loginMessages } from '@/i18n/messages/en/login'
 import { aboutMessages } from '@/i18n/messages/en/about'
-import { accountMessages } from '@/i18n/messages/en/account'
-import { profilesMessages } from '@/i18n/messages/en/profiles'
+import { accountCenterMessages } from '@/i18n/messages/en/account-center'
+import { selfMessages } from '@/i18n/messages/en/self'
 import { eventsMessages } from '@/i18n/messages/en/events'
 import { eventDetailMessages } from '@/i18n/messages/en/event-detail'
-import { favoritesMessages } from '@/i18n/messages/en/favorites'
 import { membershipMessages } from '@/i18n/messages/en/membership'
-import { messagesPageMessages } from '@/i18n/messages/en/messages-page'
-import { myEventsMessages } from '@/i18n/messages/en/my-events'
-import { myProfileMessages } from '@/i18n/messages/en/my-profile'
 import { familyMessages } from '@/i18n/messages/en/family'
 import { familyDetailMessages } from '@/i18n/messages/en/family-detail'
-import { privacyMessages } from '@/i18n/messages/en/privacy'
-import { profileDetailMessages } from '@/i18n/messages/en/profile-detail'
+import { selfDetailMessages } from '@/i18n/messages/en/self-detail'
 import { registerMessages } from '@/i18n/messages/en/register'
+import { agreementsMessages } from '@/i18n/messages/en/agreements'
 import { contactMessages } from '@/i18n/messages/en/contact'
 import { notFoundMessages } from '@/i18n/messages/en/not-found'
 
@@ -25,20 +21,16 @@ export const en: AppMessages['en'] = {
   home: homeMessages,
   login: loginMessages,
   about: aboutMessages,
-  account: accountMessages,
-  profiles: profilesMessages,
+  accountCenter: accountCenterMessages,
+  self: selfMessages,
   events: eventsMessages,
   eventDetail: eventDetailMessages,
-  favorites: favoritesMessages,
   membership: membershipMessages,
-  messages: messagesPageMessages,
-  myEvents: myEventsMessages,
-  myProfile: myProfileMessages,
   family: familyMessages,
   familyDetail: familyDetailMessages,
-  privacy: privacyMessages,
-  profileDetail: profileDetailMessages,
+  selfDetail: selfDetailMessages,
   register: registerMessages,
+  agreements: agreementsMessages,
   contact: contactMessages,
   notFound: notFoundMessages,
 }

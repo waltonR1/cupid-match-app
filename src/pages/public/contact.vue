@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navListWithContact"
       active-nav="common.nav.contact"
@@ -12,12 +12,12 @@
       :email="email"
       @primary-action="handlePrimaryAction"
     />
-    <ContactInfoSection
+    <ContactInfo
       :cards="contactCards"
       :email="email"
     />
-    <ContactCasesSection :cards="caseCards" />
-    <ContactGuideSection :tags="guideTags" />
+    <ContactCases :cards="caseCards" />
+    <ContactGuide :tags="guideTags" />
 
     <AppFooter
       :nav-list="navListWithContact"
@@ -27,10 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import ContactCasesSection from '@/components/contact/ContactCasesSection.vue'
-import ContactGuideSection from '@/components/contact/ContactGuideSection.vue'
+import ContactCases from '@/components/contact/ContactCases.vue'
+import ContactGuide from '@/components/contact/ContactGuide.vue'
 import ContactHero from '@/components/contact/ContactHero.vue'
-import ContactInfoSection from '@/components/contact/ContactInfoSection.vue'
+import ContactInfo from '@/components/contact/ContactInfo.vue'
 import type {
   ContactCardItem,
   ContactCaseItem,
@@ -61,9 +61,9 @@ const caseCards: ContactCaseItem[] = [
 ]
 
 const guideTags: ContactGuideTag[] = [
-  { title: 'guide.tag1.title', desc: 'guide.tag1.desc', accent: true },
-  { title: 'guide.tag2.title', desc: 'guide.tag2.desc', accent: false },
-  { title: 'guide.tag3.title', desc: 'guide.tag3.desc', accent: false },
+  { title: 'guide.tag1.title', desc: 'guide.tag1.desc' },
+  { title: 'guide.tag2.title', desc: 'guide.tag2.desc' },
+  { title: 'guide.tag3.title', desc: 'guide.tag3.desc' },
 ]
 
 function handleNavClick(key: string) {

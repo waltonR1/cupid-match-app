@@ -1,41 +1,42 @@
 <template>
-  <view class="relative overflow-hidden bg-events-hero text-text-inverse">
-    <view class="pointer-events-none absolute left-[-48px] top-[-32px] h-[220px] w-[220px] rounded-full bg-brand-accent/10 blur-[84px]" />
-
+  <view class="relative overflow-hidden bg-gradient-contact-hero text-semantic-text-inverse">
     <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
       <view class="grid gap-12 lg:min-h-[560px] lg:grid-cols-[1fr_0.94fr] lg:items-start">
         <view class="max-w-[680px]">
-          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/34 bg-surface-inverse-panel/34 px-5 py-2 backdrop-blur">
-            <view class="h-[1px] w-12 bg-brand-accent" />
-            <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
+          <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-semantic-surface-hero-soft px-5 py-2 backdrop-blur">
+            <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+            <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
               {{ t('hero.eyebrow') }}
             </text>
           </view>
 
           <view class="mt-1">
-            <view class="text-[52px] font-semibold leading-[1.02] text-text-inverse lg:text-[86px]">
+            <view class="text-[52px] font-semibold leading-[1.02] text-semantic-text-inverse lg:text-[86px]">
               {{ t('hero.title') }}
             </view>
-            <view class="mt-4 text-[32px] italic leading-[1.08] text-brand-accent-strong lg:text-[58px]">
+            <view class="mt-4 text-[32px] italic leading-[1.08] text-semantic-text-hero-highlight lg:text-[58px]">
               {{ t('hero.titleAccent') }}
             </view>
           </view>
 
-          <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-text-inverse-soft lg:text-[20px]">
+          <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
             {{ t('hero.description') }}
           </view>
 
-          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-text-inverse-muted lg:text-[18px]">
+          <view class="mt-5 max-w-[620px] text-[17px] italic leading-8 text-semantic-text-hero-secondary lg:text-[18px]">
             {{ t('hero.secondaryDescription') }}
           </view>
 
           <view class="mt-10 flex justify-start">
-            <view
-                class="[margin-left:0] [margin-right:0] inline-flex min-w-btn-cta cursor-pointer items-center justify-center self-start rounded-button border border-button-accent bg-button-accent px-btn-cta-x py-btn-cta-y text-[16px] font-medium text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:border-button-accent-hover hover:bg-button-accent-hover hover:shadow-card"
-                @click="emit('primaryAction')"
+            <AppButton
+              variant="primary"
+              size="lg"
+              width="cta"
+              class="[margin-left:0] [margin-right:0] self-start"
+              @click="emit('primaryAction')"
             >
               {{ t('hero.actions.primary') }}
-            </view>
+            </AppButton>
           </view>
         </view>
 
@@ -43,18 +44,18 @@
           <view
             v-for="item in cards"
             :key="item.title"
-            class="border border-border-inverse/32 bg-surface-inverse-panel/34 px-6 py-6 shadow-card backdrop-blur"
+            class="border border-semantic-border-hero bg-semantic-surface-hero-soft px-6 py-6 shadow-about-hero-panel backdrop-blur"
           >
             <view class="flex items-center gap-4">
               <view class="text-[28px]">{{ item.icon }}</view>
-              <view class="text-[18px] font-medium text-brand-accent">
+              <view class="text-[18px] font-medium text-semantic-text-hero-label">
                 {{ t(item.title) }}
               </view>
             </view>
-            <view class="mt-4 text-[17px] leading-8 text-text-inverse-soft">
+            <view class="mt-4 text-[17px] leading-8 text-semantic-text-hero-body">
               {{ t(item.desc) }}
             </view>
-            <view class="mt-6 text-[18px] font-medium text-text-inverse">
+            <view class="mt-6 text-[18px] font-medium text-semantic-text-inverse">
               {{ t(item.value, { email }) }}
             </view>
           </view>
@@ -65,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { ContactCardItem } from '@/components/contact/contact.types'
 
@@ -79,3 +81,4 @@ const emit = defineEmits<{
 
 const { t } = usePageI18n('contact')
 </script>
+

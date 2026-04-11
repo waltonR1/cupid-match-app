@@ -1,57 +1,81 @@
 <template>
-  <AccountPageShell
+  <AccountShell
     active-page="profile"
-    hero-tone="home"
-    :eyebrow="t('hero.eyebrow')"
-    :title="t('hero.title')"
-    :subtitle="t('hero.subtitle')"
-    :stats="heroStats"
+    :header-eyebrow="t('profile.eyebrow')"
+    :header-title="t('profile.title')"
+    :header-description="t('profile.subtitle')"
   >
-    <template #intro>
-      <AccountPerspectiveGrid :items="perspectiveItems" />
-    </template>
-
-    <view v-if="profile" class="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
+    <view
+      v-if="profile"
+      class="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
+    >
       <view class="grid gap-6">
-        <view class="border border-border-base bg-surface-base px-7 py-7 shadow-card">
-          <view class="text-[11px] uppercase tracking-[3px] text-brand-support">
-            {{ t('basics.eyebrow') }}
+        <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel lg:px-8 lg:py-8">
+          <view class="flex flex-wrap items-start justify-between gap-4">
+            <AccountSectionHeader
+              :label="t('profile.eyebrow')"
+              :title="t('profile.sections.summary')"
+              :description="localize(account.bio)"
+            />
+
+            <view class="rounded-full border border-component-account-badge-meta-border bg-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-component-account-badge-meta-text">
+              {{ membershipLabel(account.membership) }}
+            </view>
           </view>
-          <view class="mt-3 text-[28px] font-semibold text-text-heading">
-            {{ t('basics.title') }}
+
+          <view class="mt-6 grid gap-4 sm:grid-cols-3">
+            <view
+              v-for="item in summaryItems"
+              :key="item.label"
+              class="border border-semantic-border-soft bg-semantic-surface-panel px-5 py-5"
+            >
+              <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                {{ item.label }}
+              </view>
+              <view class="mt-3 text-[24px] font-semibold text-semantic-text-primary">
+                {{ item.value }}
+              </view>
+            </view>
           </view>
+        </view>
+
+        <view class="border border-semantic-border-default bg-semantic-surface-panel px-6 py-6 shadow-panel lg:px-8 lg:py-8">
+          <AccountSectionHeader
+            :label="t('profile.eyebrow')"
+            :title="t('profile.sections.base')"
+          />
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="item in basicRows"
-              :key="item.label"
-              class="flex items-start justify-between gap-6 border-t border-border-soft pt-4"
+              v-for="row in baseRows"
+              :key="row.label"
+              class="flex items-start justify-between gap-6 border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
-              <text class="text-[13px] uppercase tracking-[2px] text-text-subtle">
-                {{ item.label }}
+              <text class="text-[12px] uppercase tracking-[3px] text-semantic-text-muted">
+                {{ row.label }}
               </text>
-              <text class="max-w-[300px] text-right text-[15px] leading-7 text-text-heading">
-                {{ item.value }}
+              <text class="max-w-[340px] text-right text-[15px] leading-7 text-semantic-text-primary">
+                {{ row.value }}
               </text>
             </view>
           </view>
         </view>
 
-        <view class="border border-border-accent/35 bg-surface-card-soft px-7 py-7 shadow-card">
-          <view class="text-[11px] uppercase tracking-[3px] text-brand-support">
-            {{ t('boundaries.eyebrow') }}
-          </view>
-          <view class="mt-3 text-[28px] font-semibold text-text-heading">
-            {{ t('boundaries.title') }}
-          </view>
+        <view class="relative overflow-hidden border border-semantic-border-emphasis bg-semantic-surface-emphasis px-6 py-6 shadow-emphasis lg:px-8 lg:py-8">
+          <view class="absolute inset-x-0 top-0 h-px bg-semantic-border-emphasis-divider" />
+
+          <AccountSectionHeader
+            :label="t('profile.eyebrow')"
+            :title="t('profile.sections.tasks')"
+          />
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="point in boundaryPoints"
+              v-for="point in taskPoints"
               :key="point"
-              class="flex items-start gap-3 text-[15px] leading-7 text-text-body"
+              class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-primary"
             >
-              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent" />
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-component-account-list-marker-dot" />
               <text>{{ point }}</text>
             </view>
           </view>
@@ -59,141 +83,148 @@
       </view>
 
       <view class="grid gap-6">
-        <view class="border border-border-base bg-surface-card px-7 py-7 shadow-card">
-          <view class="text-[11px] uppercase tracking-[3px] text-brand-support">
-            {{ t('narrative.eyebrow') }}
-          </view>
-          <view class="mt-3 text-[28px] font-semibold text-text-heading">
-            {{ t('narrative.title') }}
-          </view>
-          <view class="mt-5 text-[16px] leading-8 text-text-body">
-            {{ localize(profile.summary) }}
+        <view class="border border-semantic-border-soft bg-semantic-surface-soft px-6 py-6 shadow-panel lg:px-8 lg:py-8">
+          <AccountSectionHeader
+            :label="t('profile.eyebrow')"
+            :title="t('profile.sections.media')"
+          />
+
+          <view class="mt-6 grid gap-4">
+            <view
+              v-for="point in mediaPoints"
+              :key="point"
+              class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-secondary"
+            >
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-component-account-list-marker-dot" />
+              <text>{{ point }}</text>
+            </view>
           </view>
         </view>
 
-        <view class="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-          <view class="border border-border-base bg-surface-base px-7 py-7 shadow-card">
-            <view class="text-[11px] uppercase tracking-[3px] text-brand-support">
-              {{ t('highlights.eyebrow') }}
-            </view>
-            <view class="mt-3 text-[28px] font-semibold text-text-heading">
-              {{ t('highlights.title') }}
-            </view>
+        <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel lg:px-8 lg:py-8">
+          <AccountSectionHeader
+            :label="t('profile.eyebrow')"
+            :title="t('profile.sections.visibility')"
+          />
 
-            <view class="mt-6 grid gap-4">
-              <view
-                v-for="item in profile.highlights"
-                :key="localize(item)"
-                class="flex items-start gap-3 text-[15px] leading-7 text-text-body"
-              >
-                <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-accent" />
-                <text>{{ localize(item) }}</text>
-              </view>
+          <view class="mt-6 grid gap-4">
+            <view
+              v-for="row in visibilityRows"
+              :key="row.label"
+              class="flex items-start justify-between gap-6 border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
+            >
+              <text class="text-[12px] uppercase tracking-[3px] text-semantic-text-muted">
+                {{ row.label }}
+              </text>
+              <text class="max-w-[320px] text-right text-[15px] leading-7 text-semantic-text-primary">
+                {{ row.value }}
+              </text>
+            </view>
+          </view>
+        </view>
+
+        <view class="border border-semantic-border-soft bg-semantic-surface-panel px-6 py-6 shadow-panel lg:px-8 lg:py-8">
+          <AccountSectionHeader
+            :label="t('profile.eyebrow')"
+            :title="t('profile.sections.preview')"
+            :description="localize(profile.summary)"
+          />
+
+          <view class="mt-6 grid gap-4">
+            <view
+              v-for="item in profile.highlights"
+              :key="localize(item)"
+              class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-primary"
+            >
+              <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-component-account-list-marker-dot" />
+              <text>{{ localize(item) }}</text>
             </view>
           </view>
 
-          <view class="border border-border-inverse bg-surface-inverse-panel px-7 py-7 shadow-card">
-            <view class="text-[11px] uppercase tracking-[3px] text-brand-accent-foreground">
-              {{ t('highlights.eyebrow') }}
-            </view>
-            <view class="mt-3 text-[28px] font-semibold text-text-inverse">
-              {{ t('highlights.tagsTitle') }}
-            </view>
-
-            <view class="mt-6 flex flex-wrap gap-3">
-              <view
-                v-for="item in profile.tags"
-                :key="localize(item)"
-                class="rounded-full border border-border-inverse-hover bg-white/5 px-4 py-2 text-[13px] text-text-inverse-soft"
-              >
-                {{ localize(item) }}
-              </view>
+          <view class="mt-6 flex flex-wrap gap-3">
+            <view
+              v-for="item in profile.tags"
+              :key="localize(item)"
+              class="rounded-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[13px] text-semantic-text-secondary"
+            >
+              {{ localize(item) }}
             </view>
           </view>
         </view>
       </view>
     </view>
-  </AccountPageShell>
+  </AccountShell>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AccountPageShell from '@/components/account/AccountPageShell.vue'
-import AccountPerspectiveGrid from '@/components/account/AccountPerspectiveGrid.vue'
+import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
+import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/components/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
-const { t } = usePageI18n('myProfile')
-const { t: accountT } = usePageI18n('account')
+const { t } = usePageI18n('accountCenter')
 const {
   account,
   profile,
-  advisorContactSetting,
+  familyAssistSetting,
   visibleFieldsSetting,
   localize,
   formatLanguages,
+  membershipLabel,
 } = useAccountData()
 
-const heroStats = computed(() => [
+const summaryItems = computed(() => [
   {
-    label: t('stats.completion'),
+    label: t('topSummary.metrics.completion'),
     value: `${account.completion}%`,
-    caption: profile?.name ?? '',
   },
   {
-    label: t('stats.visibility'),
-    value: profile?.familyVisible ? accountT('snapshot.enabled') : accountT('snapshot.disabled'),
-    caption: advisorContactSetting.value?.enabled ? accountT('snapshot.enabled') : accountT('snapshot.disabled'),
+    label: t('common.currentTier'),
+    value: membershipLabel(account.membership),
   },
   {
-    label: t('stats.highlights'),
-    value: String(profile?.highlights.length ?? 0),
-    caption: profile ? formatLanguages(profile.languages) : '',
+    label: t('common.visibility'),
+    value: profile?.familyVisible ? t('common.familyVisible') : t('common.privateOnly'),
   },
 ])
 
-const perspectiveItems = computed(() => [
-  {
-    eyebrow: t('perspective.user.eyebrow'),
-    title: t('perspective.user.title'),
-    description: t('perspective.user.description'),
-    points: [
-      t('perspective.user.point1'),
-      t('perspective.user.point2'),
-      t('perspective.user.point3'),
-    ],
-    tone: 'base' as const,
-  },
-  {
-    eyebrow: t('perspective.family.eyebrow'),
-    title: t('perspective.family.title'),
-    description: t('perspective.family.description'),
-    points: [
-      t('perspective.family.point1'),
-      t('perspective.family.point2'),
-      t('perspective.family.point3'),
-    ],
-    badge: profile?.familyVisible ? accountT('snapshot.enabled') : accountT('snapshot.disabled'),
-    tone: 'accent' as const,
-  },
-])
-
-const basicRows = computed(() => {
+const baseRows = computed(() => {
   if (!profile) return []
 
   return [
-    { label: t('basics.city'), value: localize(profile.city) },
-    { label: t('basics.education'), value: localize(profile.education) },
-    { label: t('basics.occupation'), value: localize(profile.occupation) },
-    { label: t('basics.intent'), value: localize(profile.intent) },
-    { label: t('basics.residence'), value: localize(profile.residencePlan) },
-    { label: t('basics.languages'), value: formatLanguages(profile.languages) },
+    { label: t('profile.rows.city'), value: localize(profile.city) },
+    { label: t('profile.rows.education'), value: localize(profile.education) },
+    { label: t('profile.rows.occupation'), value: localize(profile.occupation) },
+    { label: t('profile.rows.languages'), value: formatLanguages(profile.languages) },
+    { label: t('common.currentTier'), value: membershipLabel(account.membership) },
   ]
 })
 
-const boundaryPoints = computed(() => [
-  profile?.familyVisible ? t('boundaries.visibilityOn') : t('boundaries.visibilityOff'),
-  profile?.allowFamilyContact ? t('boundaries.familyContactOn') : t('boundaries.familyContactOff'),
-  visibleFieldsSetting.value?.enabled ? t('boundaries.fieldsOpen') : t('boundaries.fieldsClosed'),
+const visibilityRows = computed(() => [
+  {
+    label: t('common.familyVisible'),
+    value: profile?.familyVisible ? t('common.enabled') : t('common.disabled'),
+  },
+  {
+    label: t('common.familyAssist'),
+    value: familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
+  },
+  {
+    label: t('common.visibleFields'),
+    value: visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
+  },
+])
+
+const mediaPoints = computed(() => [
+  t('profile.media.photos'),
+  t('profile.media.video'),
+  t('profile.media.order'),
+])
+
+const taskPoints = computed(() => [
+  t('profile.tasks.photos'),
+  t('profile.tasks.introduction'),
+  t('profile.tasks.verification'),
 ])
 </script>

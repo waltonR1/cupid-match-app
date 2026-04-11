@@ -1,27 +1,27 @@
 <template>
-  <view class="border-t border-border-base bg-page-soft text-text-body">
+  <view class="border-t border-semantic-border-default bg-component-footer-background text-semantic-text-secondary">
     <view class="mx-auto max-w-[1280px] px-8 py-10">
       <!-- 上半部分 -->
       <view class="grid gap-12 md:grid-cols-4">
         <!-- 品牌 -->
         <view>
-          <view class="text-[22px] font-semibold tracking-[2px] text-brand-accent-strong">
+          <view class="text-[22px] font-semibold tracking-[2px] text-component-footer-brand-wordmark">
             {{ t('common.brand.name') }}
           </view>
-          <view class="mt-2 text-[13px] italic tracking-[2px] text-brand-support-soft">
+          <view class="mt-2 text-[13px] italic tracking-[2px] text-component-footer-brand-tagline">
             {{ t('common.brand.tagline') }}
           </view>
-          <view class="mt-4 text-[14px] leading-6 text-text-body">
+          <view class="mt-4 text-[14px] leading-6 text-semantic-text-secondary">
             {{ t('common.footer.brandDesc') }}
           </view>
         </view>
 
         <!-- 导航 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-support">
+          <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.nav') }}
           </view>
-          <view class="mt-3 space-y-2 text-[14px] text-text-body">
+          <view class="mt-3 space-y-2 text-[14px] text-semantic-text-secondary">
             <view
               v-for="item in navList"
               :key="item.key"
@@ -29,21 +29,21 @@
               @click="handleNavClick(item.key)"
             >
               <view
-                class="text-[14px] text-text-body-soft transition-colors duration-200 group-hover:text-text-heading"
+                class="text-[14px] text-semantic-text-muted transition-colors duration-200 group-hover:text-semantic-text-primary"
               >
                 {{ t(item.key) }}
               </view>
-              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-brand-support transition-all duration-200 group-hover:w-full" />
+              <view class="absolute left-0 top-[calc(100%+2px)] h-px w-0 bg-component-footer-nav-indicator transition-all duration-200 group-hover:w-full" />
             </view>
           </view>
         </view>
 
         <!-- 联系 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-support">
+          <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.contact') }}
           </view>
-          <view class="mt-3 space-y-2 text-[14px] text-text-body">
+          <view class="mt-3 space-y-2 text-[14px] text-semantic-text-secondary">
             <view>{{ t('common.contact.email', { email }) }}</view>
             <view>{{ t('common.contact.wechat') }}</view>
             <view>{{ t('common.contact.location') }}</view>
@@ -52,10 +52,10 @@
 
         <!-- 语言 -->
         <view>
-          <view class="text-[16px] font-medium text-brand-support">
+          <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.lang') }}
           </view>
-          <view class="mt-3 text-[14px] leading-7 text-text-body">
+          <view class="mt-3 text-[14px] leading-7 text-semantic-text-secondary">
             {{ t('common.footer.languageList') }}
           </view>
         </view>
@@ -63,8 +63,8 @@
     </view>
 
     <!-- 底部收口区 -->
-    <view class="border-t border-border-soft py-4">
-      <view class="text-center text-[12px] tracking-wide text-text-subtle">
+    <view class="border-t border-component-footer-divider py-4">
+      <view class="text-center text-[12px] tracking-wide text-semantic-text-subtle">
         {{ t('common.footer.rights', { year }) }}
       </view>
     </view>

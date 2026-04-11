@@ -1,5 +1,5 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       active-nav="common.nav.family"
@@ -98,17 +98,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import DirectoryCardFrame from '@/components/common/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/common/directory/directory-card.types'
-import DirectoryGridShell from '@/components/common/directory/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/common/directory/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/common/directory/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/common/directory/DirectoryResultToolbar.vue'
+import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
+import type { DirectoryCardViewModel } from '@/components/discovery/shared/directory/directory-card.types'
+import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/discovery/shared/directory/DirectoryResultToolbar.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import FamilyFilterToolbar from '@/components/family/FamilyFilterToolbar.vue'
-import type { FamilyDirectoryFilters } from '@/components/family/family.types'
-import { useFamilyDirectory } from '@/components/family/useFamilyDirectory'
+import FamilyFilterToolbar from '@/components/discovery/family/FamilyFilterToolbar.vue'
+import type { FamilyDirectoryFilters } from '@/components/discovery/family/family.types'
+import { useFamilyDirectory } from '@/components/discovery/family/use-family-directory'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { pickLocalized, type MockProfile } from '@/mock/business'

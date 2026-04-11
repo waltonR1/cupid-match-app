@@ -7,7 +7,7 @@ export const commonMessages: AppMessageSchema = {
     },
     nav: {
       about: '关于我们',
-      profiles: '会员资料',
+      self: '会员资料',
       family: '家庭参与',
       events: '活动日历',
       membership: '会员体系',

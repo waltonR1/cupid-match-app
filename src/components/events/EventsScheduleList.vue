@@ -1,17 +1,17 @@
 <template>
-  <view class="bg-page-soft text-text-heading">
+  <view class="text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
-      <view class="mb-12 h-px bg-border-base/55" />
+      <view class="mb-12 h-px bg-component-section-divider-subtle" />
 
       <view class="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <view>
-          <view class="text-[12px] uppercase tracking-[5px] text-brand-support">{{ eyebrow }}</view>
-          <view class="mt-4 text-[42px] font-semibold leading-tight text-text-heading lg:text-[60px]">
+          <view class="text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">{{ eyebrow }}</view>
+          <view class="mt-4 text-[42px] font-semibold leading-tight text-semantic-text-primary lg:text-[60px]">
             {{ title }}
           </view>
         </view>
 
-        <view class="max-w-[460px] text-[17px] leading-8 text-text-body-soft">
+        <view class="max-w-[460px] text-[17px] leading-8 text-semantic-text-muted">
           {{ note }}
         </view>
       </view>
@@ -20,25 +20,25 @@
         <view
           v-for="event in events"
           :key="event.id"
-          class="group relative grid gap-5 overflow-hidden border border-border-base bg-surface-card px-7 py-6 shadow-panel transition-all duration-300 hover:-translate-y-[1px] hover:border-brand-accent/24 hover:bg-surface-base hover:shadow-card md:grid-cols-[176px_1fr_188px] md:items-center"
+          class="group relative grid gap-5 overflow-hidden border border-semantic-border-default bg-component-event-card-background px-7 py-6 shadow-panel transition-all duration-300 hover:-translate-y-[1px] hover:border-semantic-border-card-hover hover:bg-component-event-card-background-hover hover:shadow-about-hero-panel md:grid-cols-[176px_1fr_188px] md:items-center"
           @click="$emit('open', event.id)"
         >
-          <view class="pointer-events-none absolute inset-y-0 left-0 w-px bg-brand-accent/18 transition-all duration-300 group-hover:bg-brand-accent/42" />
-          <view class="pointer-events-none absolute inset-x-0 top-0 h-px bg-brand-accent/18 transition-all duration-300 group-hover:bg-brand-accent/34" />
+          <view class="pointer-events-none absolute inset-y-0 left-0 w-px bg-component-event-card-edge transition-colors duration-300 group-hover:bg-component-event-card-edge-hover" />
+          <view class="pointer-events-none absolute inset-x-0 top-0 h-px bg-component-event-card-edge transition-colors duration-300 group-hover:bg-component-event-card-edge-hover" />
 
           <view>
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-support">{{ event.date }}</view>
-            <view class="mt-3 text-[16px] text-text-muted">{{ event.city }}</view>
+            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">{{ event.date }}</view>
+            <view class="mt-3 text-[16px] text-semantic-text-subtle">{{ event.city }}</view>
           </view>
 
-          <view class="md:border-l md:border-border-light md:pl-7">
-            <view class="text-[26px] font-semibold text-text-heading transition-colors duration-300 group-hover:text-brand-support">{{ event.title }}</view>
-            <view class="mt-3 text-[15px] leading-7 text-text-body-soft">{{ event.summary }}</view>
+          <view class="md:border-l md:border-semantic-border-soft md:pl-7">
+            <view class="text-[26px] font-semibold text-semantic-text-primary transition-colors duration-300 group-hover:text-component-event-card-title-hover">{{ event.title }}</view>
+            <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">{{ event.summary }}</view>
           </view>
 
           <view class="flex flex-col items-start gap-3 md:items-end">
             <EventStatusBadge :status="event.status" :label="event.statusLabel" />
-            <view class="text-[14px] text-text-muted">{{ event.seats }}</view>
+            <view class="text-[14px] text-semantic-text-subtle">{{ event.seats }}</view>
           </view>
         </view>
       </view>
@@ -61,3 +61,4 @@ defineEmits<{
   (e: 'open', id: string): void
 }>()
 </script>
+

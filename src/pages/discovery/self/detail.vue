@@ -1,15 +1,15 @@
 <template>
-  <view class="min-h-screen bg-page-soft text-text-heading">
+  <view class="min-h-screen bg-semantic-page-subtle text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
-      active-nav="common.nav.profiles"
+      active-nav="common.nav.self"
       @nav-click="handleNavClick"
       @register-click="handleRegisterClick"
     />
 
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
-        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-border-base bg-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-text-body-soft transition-colors duration-200 hover:text-brand-support"
+        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
         @click="handleBack"
       >
         <svg
@@ -26,7 +26,7 @@
             stroke-linejoin="round"
           />
         </svg>
-        <text>{{ t('actions.backToProfiles') }}</text>
+        <text>{{ t('actions.backToSelf') }}</text>
       </view>
 
       <view v-if="heroData" class="space-y-6">
@@ -34,8 +34,8 @@
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <view class="space-y-6">
-            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.overview') }}
               </view>
 
@@ -43,12 +43,12 @@
                 <view
                   v-for="item in overviewFacts"
                   :key="item.label"
-                  class="border-b border-border-light pb-3"
+                  class="border-b border-semantic-border-divider pb-3"
                 >
-                  <view class="text-[12px] tracking-[1px] text-text-muted">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ item.label }}
                   </view>
-                  <view class="mt-2 text-[16px] leading-7 text-text-body">
+                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                     {{ item.value }}
                   </view>
                 </view>
@@ -56,23 +56,23 @@
             </view>
 
             <view class="grid gap-6 lg:grid-cols-2">
-              <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+              <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                   {{ t('sections.relationship') }}
                 </view>
 
-                <view class="mt-6 border border-border-light bg-surface-card px-5 py-5">
-                  <view class="text-[12px] tracking-[1px] text-text-muted">
+                <view class="mt-6 border border-semantic-border-divider bg-semantic-surface-card px-5 py-5">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ t('fields.intent') }}
                   </view>
-                  <view class="mt-3 text-[22px] leading-8 text-text-heading">
+                  <view class="mt-3 text-[22px] leading-8 text-semantic-text-primary">
                     {{ intentText }}
                   </view>
 
-                  <view class="mt-5 text-[12px] tracking-[1px] text-text-muted">
+                  <view class="mt-5 text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ t('fields.maritalPlan') }}
                   </view>
-                  <view class="mt-3 text-[16px] leading-8 text-text-body">
+                  <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
                     {{ maritalPlanText }}
                   </view>
                 </view>
@@ -81,20 +81,20 @@
                   <view
                     v-for="item in relationshipFacts"
                     :key="item.label"
-                    class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                   >
-                    <view class="text-[12px] tracking-[1px] text-text-muted">
+                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                       {{ item.label }}
                     </view>
-                    <view class="mt-2 text-[16px] leading-7 text-text-body">
+                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                       {{ item.value }}
                     </view>
                   </view>
                 </view>
               </view>
 
-              <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+              <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                   {{ t('sections.lifestyle') }}
                 </view>
 
@@ -102,12 +102,12 @@
                   <view
                     v-for="item in lifestyleFacts"
                     :key="item.label"
-                    class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                   >
-                    <view class="text-[12px] tracking-[1px] text-text-muted">
+                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                       {{ item.label }}
                     </view>
-                    <view class="mt-2 text-[16px] leading-7 text-text-body">
+                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                       {{ item.value }}
                     </view>
                   </view>
@@ -117,17 +117,17 @@
           </view>
 
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <view class="border border-border-base bg-surface-card-soft px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+            <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.accessPolicy') }}
               </view>
-              <view class="mt-4 text-[16px] leading-8 text-text-body-soft">
+              <view class="mt-4 text-[16px] leading-8 text-semantic-text-muted">
                 {{ t('hero.accessNote') }}
               </view>
             </view>
 
-            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.curationFocus') }}
               </view>
 
@@ -135,20 +135,20 @@
                 <view
                   v-for="item in spotlightFacts"
                   :key="item.label"
-                  class="border-b border-border-light pb-3 last:border-b-0 last:pb-0"
+                  class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                 >
-                  <view class="text-[12px] tracking-[1px] text-text-muted">
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ item.label }}
                   </view>
-                  <view class="mt-2 text-[16px] leading-7 text-text-body">
+                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
                     {{ item.value }}
                   </view>
                 </view>
               </view>
             </view>
 
-            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.highlights') }}
               </view>
 
@@ -156,15 +156,15 @@
                 <view
                   v-for="item in highlightTexts"
                   :key="item"
-                  class="border border-border-light bg-surface-card-soft px-4 py-4 text-[16px] leading-7 text-text-body"
+                  class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4 text-[16px] leading-7 text-semantic-text-secondary"
                 >
                   {{ item }}
                 </view>
               </view>
             </view>
 
-            <view class="border border-border-base bg-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
                 {{ t('sections.tags') }}
               </view>
 
@@ -172,7 +172,7 @@
                 <view
                   v-for="item in tagTexts"
                   :key="item"
-                  class="rounded-full border border-border-base bg-surface-panel px-3 py-1.5 text-[12px] text-brand-support"
+                  class="rounded-full border border-semantic-border-default bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-eyebrow"
                 >
                   {{ item }}
                 </view>
@@ -186,7 +186,7 @@
         v-else
         :title="t('sections.notFoundTitle')"
         :subtitle="t('sections.notFoundSubtitle')"
-        :primary-text="t('actions.backToProfiles')"
+        :primary-text="t('actions.backToSelf')"
         primary-variant="outline"
         variant="compact"
         @primary="handleBack"
@@ -206,15 +206,15 @@ import { onLoad } from '@dcloudio/uni-app'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import DetailHeroPanel from '@/components/common/detail/DetailHeroPanel.vue'
-import { useProfileDetailViewModel } from '@/components/profiles/useProfileDetailViewModel'
+import DetailHeroPanel from '@/components/discovery/shared/detail/DetailHeroPanel.vue'
+import { useSelfDetailViewModel } from '@/components/discovery/self/use-self-detail-view-model'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('profileDetail')
+const { t, locale } = usePageI18n('selfDetail')
 
 const profileId = ref('')
 
@@ -234,7 +234,7 @@ const {
   maritalPlanText,
   highlightTexts,
   tagTexts,
-} = useProfileDetailViewModel(profileId, locale, t)
+} = useSelfDetailViewModel(profileId, locale, t)
 
 function handleBack() {
   if (getCurrentPages().length > 1) {

@@ -1,128 +1,161 @@
 <template>
-  <view class="min-h-screen bg-page-base text-text-heading">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
-        :nav-list="navList"
-        active-nav=""
-        @nav-click="handleNavClick"
-        @register-click="handleRegisterClick"
+      :nav-list="navList"
+      active-nav=""
+      @nav-click="handleNavClick"
+      @register-click="handleRegisterClick"
     />
 
-    <view class="relative overflow-hidden bg-auth-hero text-text-heading">
-      <view class="pointer-events-none absolute left-[-72px] top-[-48px] h-[240px] w-[240px] rounded-full bg-brand-accent/10 blur-[88px]" />
-      <view class="pointer-events-none absolute right-[-120px] top-14 h-[320px] w-[320px] rounded-full border border-border-light/20" />
+    <view class="relative overflow-hidden bg-gradient-auth-hero text-semantic-text-inverse">
+      <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-semantic-border-hero-ornament" />
+      <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
-        <view class="grid gap-12 lg:min-h-[680px] lg:grid-cols-[1.06fr_0.94fr] lg:items-start">
-          <view class="max-w-[720px]">
-            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-border-inverse/34 bg-surface-inverse-panel/34 px-5 py-2 backdrop-blur">
-              <view class="h-[1px] w-12 bg-brand-accent" />
-              <text class="text-[12px] uppercase tracking-[6px] text-brand-accent-soft">
+        <view class="grid gap-12 lg:min-h-[620px] lg:grid-cols-[1.04fr_0.96fr] lg:items-start">
+          <view class="max-w-[700px]">
+            <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
+              <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+              <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
                 {{ labels.eyebrow }}
               </text>
             </view>
 
-            <view class="max-w-[660px] text-[50px] font-semibold leading-[1.04] text-text-heading lg:text-[84px]">
+            <view class="max-w-[640px] text-[52px] font-semibold leading-[1.02] text-semantic-text-inverse lg:text-[86px]">
               {{ labels.title }}
             </view>
 
-            <view class="mt-8 max-w-[660px] text-[18px] leading-8 text-text-body lg:text-[20px]">
+            <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
               {{ labels.subtitle }}
             </view>
 
-            <view class="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <view class="mt-12 grid gap-4 sm:grid-cols-2">
               <view
-                  v-for="item in accessCards"
-                  :key="item.title"
-                  class="border border-border-base/70 bg-surface-card/18 px-5 py-5 backdrop-blur transition-all duration-300 hover:-translate-y-[2px] hover:border-border-accent/50"
+                v-for="item in accessCards.slice(0, 2)"
+                :key="item.title"
+                class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-6 py-5 backdrop-blur"
               >
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
                   {{ item.kicker }}
                 </view>
-                <view class="mt-4 text-[22px] font-medium text-text-heading">
+                <view class="mt-4 text-[22px] font-medium text-semantic-text-inverse">
                   {{ item.title }}
                 </view>
-                <view class="mt-3 text-[14px] leading-7 text-text-body">
+                <view class="mt-3 text-[15px] leading-7 text-semantic-text-hero-body">
                   {{ item.desc }}
                 </view>
               </view>
             </view>
           </view>
 
-          <view class="relative lg:ml-auto lg:w-full lg:max-w-[520px]">
-            <view class="pointer-events-none absolute inset-0 translate-x-5 translate-y-5 border border-border-base/30 bg-surface-card/10" />
+          <view class="relative lg:ml-auto lg:w-full lg:max-w-[500px]">
+            <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-semantic-border-hero bg-component-auth-overlay-background-soft" />
 
-        <view class="relative border border-border-base/70 bg-surface-card-soft/32 px-8 py-8 shadow-hero backdrop-blur">
+            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 shadow-hero backdrop-blur lg:px-9 lg:py-9">
               <view>
-                <view class="text-[12px] uppercase tracking-[4px] text-brand-support">
+                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
                   {{ labels.formTitle }}
                 </view>
-                <view class="mt-4 text-[30px] leading-[1.35] text-text-heading">
+                <view class="mt-4 text-[32px] leading-[1.25] text-semantic-text-inverse">
                   {{ labels.panelTitle }}
                 </view>
               </view>
 
-              <view class="mt-4 text-[15px] leading-7 text-text-body">
+              <view class="mt-4 text-[15px] leading-7 text-semantic-text-hero-body">
                 {{ labels.panelHint }}
               </view>
 
               <view class="mt-8 grid gap-5">
-                <view
-                    v-for="field in formFields"
-                    :key="field.label"
-                  class="border border-border-base/60 bg-surface-card-soft/52 px-5 py-4"
-                >
-                  <view class="text-[12px] uppercase tracking-[3px] text-brand-support">
-                    {{ field.label }}
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.identity }}
                   </view>
-                  <view class="mt-3 text-[16px] text-text-body">
-                    {{ field.placeholder }}
+                  <input
+                    v-model="identity"
+                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.identity"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
+
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.password }}
                   </view>
+                  <input
+                    v-model="password"
+                    password="false"
+                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.password"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
                 </view>
               </view>
 
               <view class="mt-8 grid gap-4">
-                <button
-                    class="[margin-left:0] [margin-right:0] inline-flex w-full items-center justify-center rounded-button border border-button-accent bg-button-accent px-btn-cta-x py-btn-cta-y text-[16px] font-medium text-button-neutral-ink transition-all duration-300 hover:-translate-y-[1px] hover:border-button-accent-hover hover:bg-button-accent-hover hover:shadow-card"
-                    @click="handleSubmit"
+                <AppButton
+                  width="full"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  @click="handleSubmit"
                 >
                   {{ labels.submit }}
-                </button>
+                </AppButton>
 
-                <button
-                    class="[margin-left:0] [margin-right:0] inline-flex w-full items-center justify-center rounded-button border border-border-base/70 bg-transparent px-btn-cta-x py-btn-cta-y text-[15px] font-medium text-text-body transition-all duration-300 hover:-translate-y-[1px] hover:border-border-accent/55 hover:bg-surface-card/24 hover:text-text-heading"
-                    @click="handleRegisterClick"
+                <AppButton
+                  variant="secondary"
+                  context="hero"
+                  width="full"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  @click="handleRegisterClick"
                 >
                   {{ labels.secondary }}
-                </button>
+                </AppButton>
               </view>
+
+              <label class="mt-6 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+                <checkbox :checked="agreed" @click="toggleAgreement" />
+                <view class="text-[14px] leading-7 text-semantic-text-hero-body">
+                  <text>{{ agreement.prefix }}</text>
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
+                    {{ agreement.terms }}
+                  </text>
+                  <text>{{ agreement.connector }}</text>
+                  <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('privacy')">
+                    {{ agreement.privacy }}
+                  </text>
+                  <text>{{ agreement.suffix }}</text>
+                </view>
+              </label>
             </view>
           </view>
         </view>
       </view>
     </view>
 
-    <view class="bg-page-soft">
+    <view class="bg-semantic-page-subtle">
       <view class="mx-auto max-w-[1280px] px-8 py-20">
-        <view class="mb-8 inline-flex items-center gap-4">
-          <view class="h-[1px] w-12 bg-border-accent-soft" />
-          <text class="text-[12px] uppercase tracking-[6px] text-brand-support">
+        <view class="mb-10 inline-flex items-center gap-4">
+          <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
+          <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
             {{ labels.accessTitle }}
           </text>
         </view>
 
         <view class="grid gap-6 lg:grid-cols-3">
           <view
-              v-for="item in accessCards"
-              :key="item.title"
-              class="border border-border-base bg-surface-card px-7 py-7 shadow-card transition-all duration-300 hover:-translate-y-[2px] hover:border-border-accent/50"
+            v-for="item in accessCards"
+            :key="item.title"
+            class="border border-semantic-border-default bg-component-editorial-card-background px-7 py-7 shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover"
           >
-            <view class="text-[12px] uppercase tracking-[4px] text-brand-secondary">
+            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
               {{ item.kicker }}
             </view>
-            <view class="mt-4 text-[26px] font-semibold text-text-heading">
+            <view class="mt-4 text-[26px] font-semibold text-semantic-text-primary">
               {{ item.title }}
             </view>
-            <view class="mt-4 text-[16px] leading-8 text-text-body">
+            <view class="mt-4 text-[16px] leading-8 text-semantic-text-secondary">
               {{ item.desc }}
             </view>
           </view>
@@ -131,14 +164,65 @@
     </view>
 
     <AppFooter
-        :nav-list="navList"
-        @nav-click="handleNavClick"
+      :nav-list="navList"
+      @nav-click="handleNavClick"
     />
+
+    <AgreementDialog
+      :open="Boolean(agreementDialog)"
+      :kind="agreementDialog || 'terms'"
+      @close="closeAgreementDialog"
+    />
+
+    <view
+      v-if="showConsentConfirm"
+      class="fixed inset-0 z-[71] flex items-center justify-center bg-[#07131fcc] px-6 py-10"
+      @click="closeConsentConfirm"
+    >
+      <view
+        class="w-full max-w-[520px] border border-semantic-border-hero bg-semantic-surface-hero-panel px-7 py-7 text-semantic-text-inverse shadow-hero"
+        @click.stop
+      >
+        <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
+          {{ consentConfirm.kicker }}
+        </view>
+        <view class="mt-4 text-[28px] font-semibold leading-[1.3] text-semantic-text-inverse">
+          {{ consentConfirm.title }}
+        </view>
+        <view class="mt-4 text-[15px] leading-8 text-semantic-text-hero-body">
+          {{ consentConfirm.desc }}
+        </view>
+
+        <view class="mt-8 grid gap-4 sm:grid-cols-2">
+          <AppButton
+            variant="secondary"
+            context="hero"
+            width="full"
+            size="lg"
+            class="[margin-left:0] [margin-right:0]"
+            @click="closeConsentConfirm"
+          >
+            {{ consentConfirm.reject }}
+          </AppButton>
+
+          <AppButton
+            width="full"
+            size="lg"
+            class="[margin-left:0] [margin-right:0]"
+            @click="acceptAgreementAndLogin"
+          >
+            {{ consentConfirm.accept }}
+          </AppButton>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import AgreementDialog from '@/components/common/AgreementDialog.vue'
+import AppButton from '@/components/common/AppButton.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import { NAV_LIST } from '@/constants/nav'
@@ -152,6 +236,11 @@ const SELF_ROUTE = '/pages/discovery/self/index'
 const auth = useAuthStore()
 const navList = NAV_LIST
 const { t } = usePageI18n('login')
+const identity = ref('')
+const password = ref('')
+const agreed = ref(false)
+const agreementDialog = ref<'terms' | 'privacy' | null>(null)
+const showConsentConfirm = ref(false)
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -163,15 +252,33 @@ const labels = computed(() => ({
   submit: t('hero.submit'),
   secondary: t('hero.secondary'),
   accessTitle: t('hero.accessTitle'),
-  autoRouteTitle: t('hero.autoRouteTitle'),
-  autoRouteHeading: t('hero.autoRouteHeading'),
-  autoRouteDesc: t('hero.autoRouteDesc'),
 }))
 
-const formFields = computed(() => [
-  { label: t('form.identity.label'), placeholder: t('form.identity.placeholder') },
-  { label: t('form.password.label'), placeholder: t('form.password.placeholder') },
-])
+const agreement = computed(() => ({
+  prefix: t('hero.agreementPrefix'),
+  terms: t('hero.agreementTerms'),
+  connector: t('hero.agreementConnector'),
+  privacy: t('hero.agreementPrivacy'),
+  suffix: t('hero.agreementSuffix'),
+}))
+
+const consentConfirm = computed(() => ({
+  kicker: t('hero.consentConfirm.kicker'),
+  title: t('hero.consentConfirm.title'),
+  desc: t('hero.consentConfirm.desc'),
+  accept: t('hero.consentConfirm.accept'),
+  reject: t('hero.consentConfirm.reject'),
+}))
+
+const formLabels = computed(() => ({
+  identity: t('form.identity.label'),
+  password: t('form.password.label'),
+}))
+
+const formPlaceholders = computed(() => ({
+  identity: t('form.identity.placeholder'),
+  password: t('form.password.placeholder'),
+}))
 
 const accessCards = computed(() => [
   { kicker: '01', title: t('access.account.title'), desc: t('access.account.desc') },
@@ -184,6 +291,11 @@ function handleNavClick(key: string) {
 }
 
 function handleSubmit() {
+  if (!agreed.value) {
+    showConsentConfirm.value = true
+    return
+  }
+
   auth.loginMock()
   uni.redirectTo({
     url: SELF_ROUTE,
@@ -193,4 +305,27 @@ function handleSubmit() {
 function handleRegisterClick() {
   openRegisterPage('free')
 }
+
+function toggleAgreement() {
+  agreed.value = !agreed.value
+}
+
+function openAgreementDialog(kind: 'terms' | 'privacy') {
+  agreementDialog.value = kind
+}
+
+function closeAgreementDialog() {
+  agreementDialog.value = null
+}
+
+function closeConsentConfirm() {
+  showConsentConfirm.value = false
+}
+
+function acceptAgreementAndLogin() {
+  agreed.value = true
+  showConsentConfirm.value = false
+  handleSubmit()
+}
 </script>
+

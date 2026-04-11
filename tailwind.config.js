@@ -3,10 +3,11 @@ const plugin = require('tailwindcss/plugin')
 const themeTokens = require('./src/constants/theme-tokens.json')
 
 const DEFAULT_THEME = 'dark'
-const RAW_TOKEN_ROOTS = new Set(['gradient', 'shadow', 'hero'])
+
+const COLOR_ROOTS = new Set(['semantic', 'component'])
+const EFFECT_ROOTS = new Set(['gradient', 'shadow'])
+
 const THEME_NAMES = Object.keys(themeTokens.themes)
-const sharedTokens = themeTokens.shared
-const themeOverrides = themeTokens.themes
 const baseThemeTokens = getMergedThemeTokens(DEFAULT_THEME)
 
 module.exports = {
@@ -16,19 +17,31 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: buildTailwindColors(baseThemeTokens),
-      backgroundImage: buildRawTokenUtilities('gradient', baseThemeTokens.gradient),
-      boxShadow: buildRawTokenUtilities('shadow', baseThemeTokens.shadow),
+      colors: {
+        ...buildTailwindColors(baseThemeTokens),
+      },
+
+      backgroundImage: {
+        ...buildEffectUtilities('gradient', baseThemeTokens.effect?.gradient),
+      },
+
+      boxShadow: {
+        ...buildEffectUtilities('shadow', baseThemeTokens.effect?.shadow),
+      },
+
       minWidth: {
         'btn-cta': '190px',
       },
+
       spacing: {
         'btn-cta-x': '1.5rem',
         'btn-cta-y': '1rem',
       },
+
       borderRadius: {
         button: '2px',
       },
+
       keyframes: {
         dropdownFade: {
           '0%': {
@@ -41,11 +54,13 @@ module.exports = {
           },
         },
       },
+
       animation: {
         dropdown: 'dropdownFade 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards',
       },
     },
   },
+
   plugins: [
     plugin(({ addBase }) => {
       addBase(buildThemeBaseStyles())
@@ -53,44 +68,49 @@ module.exports = {
   ],
 }
 
+function getMergedThemeTokens(themeName) {
+  const theme = themeTokens.themes[themeName] || {}
+
+  return {
+    semantic: theme.semantic || {},
+    component: theme.component || {},
+    effect: theme.effect || {},
+  }
+}
+
 function buildTailwindColors(tokens, path = []) {
   return Object.entries(tokens).reduce((acc, [key, value]) => {
-    if (isRawTokenRoot(key)) {
+    if (!COLOR_ROOTS.has(key) && path.length === 0) {
       return acc
     }
 
     const nextPath = [...path, key]
 
     if (typeof value === 'string') {
-      acc[key] = `rgb(var(--color-${nextPath.join('-')}) / <alpha-value>)`
+      const utilityKey = nextPath.join('-')
+
+      if (isHexColor(value)) {
+        acc[utilityKey] = `rgb(var(--color-${nextPath.join('-')}) / <alpha-value>)`
+        return acc
+      }
+
+      acc[utilityKey] = `var(--raw-color-${nextPath.join('-')})`
       return acc
     }
 
-    acc[key] = buildTailwindColors(value, nextPath)
+    Object.assign(acc, buildTailwindColors(value, nextPath))
     return acc
   }, {})
 }
 
-function buildThemeBaseStyles() {
-  return THEME_NAMES.reduce((styles, themeName) => {
-    styles[`.theme-${themeName}, [data-theme="${themeName}"]`] = buildThemeVariableMap(themeName)
-    return styles
-  }, {
-    ':root': buildThemeVariableMap(DEFAULT_THEME),
-  })
-}
-
-function buildRawTokenUtilities(tokenRoot, tokens) {
+function buildEffectUtilities(effectRoot, tokens = {}) {
   const tokenEntries = flattenTokenEntries(tokens)
 
   return Object.keys(tokenEntries).reduce((acc, key) => {
-    acc[key] = `var(--${tokenRoot}-${key})`
+    const utilityKey = effectRoot === 'shadow' ? key : `${effectRoot}-${key}`
+    acc[utilityKey] = `var(--${effectRoot}-${key})`
     return acc
   }, {})
-}
-
-function getMergedThemeTokens(themeName) {
-  return mergeDeep(sharedTokens, themeOverrides[themeName])
 }
 
 function buildThemeVariableMap(themeName) {
@@ -107,17 +127,48 @@ function flattenVariables(tokens, path, variables) {
     const nextPath = [...path, key]
 
     if (typeof value === 'string') {
-      if (isRawTokenPath(path)) {
-        variables[`--${nextPath.join('-')}`] = value
+      const root = nextPath[0]
+
+      if (root === 'effect') {
+        const [, effectType, ...rest] = nextPath
+        if (EFFECT_ROOTS.has(effectType)) {
+          variables[`--${effectType}-${rest.join('-')}`] = value
+        }
         return
       }
 
-      variables[`--color-${nextPath.join('-')}`] = hexToRgbChannels(value)
+      if (root === 'semantic' || root === 'component') {
+        if (isHexColor(value)) {
+          variables[`--color-${nextPath.join('-')}`] = hexToRgbChannels(value)
+          return
+        }
+
+        variables[`--raw-color-${nextPath.join('-')}`] = value
+      }
+
       return
     }
 
     flattenVariables(value, nextPath, variables)
   })
+}
+
+function buildThemeBaseStyles() {
+  const styles = {
+    ':root': {
+      ...buildThemeVariableMap(DEFAULT_THEME),
+    },
+  }
+
+  THEME_NAMES.forEach((themeName) => {
+    const selector = `.theme-${themeName}, [data-theme="${themeName}"]`
+    styles[selector] = {
+      ...(styles[selector] || {}),
+      ...buildThemeVariableMap(themeName),
+    }
+  })
+
+  return styles
 }
 
 function flattenTokenEntries(tokens, path = [], result = {}) {
@@ -135,34 +186,11 @@ function flattenTokenEntries(tokens, path = [], result = {}) {
   return result
 }
 
-function isRawTokenRoot(key) {
-  return RAW_TOKEN_ROOTS.has(key)
-}
-
-function isRawTokenPath(path) {
-  return RAW_TOKEN_ROOTS.has(path[0])
-}
-
-function mergeDeep(base, override) {
-  const result = { ...base }
-
-  Object.entries(override).forEach(([key, value]) => {
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      result[key] = mergeDeep(base[key] || {}, value)
-      return
-    }
-
-    result[key] = value
-  })
-
-  return result
-}
-
 function hexToRgbChannels(hex) {
   const normalized = hex.replace('#', '')
   const full = normalized.length === 3
-    ? normalized.split('').map(char => `${char}${char}`).join('')
-    : normalized
+      ? normalized.split('').map((char) => `${char}${char}`).join('')
+      : normalized
 
   const value = Number.parseInt(full, 16)
   const red = (value >> 16) & 255
@@ -170,4 +198,8 @@ function hexToRgbChannels(hex) {
   const blue = value & 255
 
   return `${red} ${green} ${blue}`
+}
+
+function isHexColor(value) {
+  return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(value)
 }
