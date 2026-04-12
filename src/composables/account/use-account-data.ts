@@ -1,16 +1,18 @@
-import { computed } from 'vue'
-import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
+import { computed, onMounted, reactive, ref } from 'vue'
 import {
-  getCurrentMockProfile,
-  getMockFavorites,
-  getLocalizedLanguageLabel,
-  getMockThreads,
-  getMockUserEvents,
-  mockCurrentUser,
-  mockPrivacySettings,
+  getAccountLanguageLabel,
+  getAccountOverview,
+  getAccountOverviewSnapshot,
   pickLocalized,
+  type AccountFavoriteRecord,
+  type AccountMembershipLevel,
+  type AccountPrivacySetting,
+  type AccountProfile,
+  type AccountThreadRecord,
+  type AccountUserEventRecord,
   type LocalizedText,
-} from '@/mock/business'
+} from '@/api/modules/account'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 
 const LOCALE_MAP = {
   zh: 'zh-CN',
@@ -20,13 +22,20 @@ const LOCALE_MAP = {
 
 export function useAccountData() {
   const { locale, t: globalT } = useLocaleBridge()
+  const initialData = getAccountOverviewSnapshot()
 
-  const account = mockCurrentUser
-  const profile = getCurrentMockProfile()
-  const userEvents = getMockUserEvents()
-  const favorites = getMockFavorites()
-  const threads = getMockThreads()
-  const privacySettings = mockPrivacySettings
+  const account = reactive({ ...initialData.account })
+  const profile = reactive((initialData.profile ?? {}) as AccountProfile)
+  const userEvents = reactive<AccountUserEventRecord[]>([...initialData.userEvents])
+  const favorites = reactive<AccountFavoriteRecord[]>([...initialData.favorites])
+  const threads = reactive<AccountThreadRecord[]>([...initialData.threads])
+  const privacySettings = reactive<AccountPrivacySetting[]>([...initialData.privacySettings])
+  const loading = ref(false)
+  const error = ref<unknown>(null)
+
+  onMounted(() => {
+    void refresh()
+  })
 
   const latestEvent = computed(() => userEvents[0] ?? null)
   const unreadCount = computed(() => threads.reduce((sum, item) => sum + item.thread.unread, 0))
@@ -55,15 +64,39 @@ export function useAccountData() {
     )
   }
 
-  function membershipLabel(membership: 'free' | 'silver' | 'gold' | 'diamond' = account.membership) {
+  function membershipLabel(membership: AccountMembershipLevel = account.membership) {
     return globalT(`membership.${membership}.title`)
   }
 
   function formatLanguages(languages: string[]) {
-    return languages.map(language => getLocalizedLanguageLabel(locale.value, language)).join(' / ')
+    return languages.map(language => getAccountLanguageLabel(locale.value, language)).join(' / ')
+  }
+
+  async function refresh() {
+    loading.value = true
+    error.value = null
+
+    try {
+      const response = await getAccountOverview()
+      const data = response.data
+
+      Object.assign(account, data.account)
+      Object.assign(profile, data.profile ?? {})
+      replaceArray(userEvents, data.userEvents)
+      replaceArray(favorites, data.favorites)
+      replaceArray(threads, data.threads)
+      replaceArray(privacySettings, data.privacySettings)
+    } catch (requestError) {
+      error.value = requestError
+      console.warn('Failed to load account data.', requestError)
+    } finally {
+      loading.value = false
+    }
   }
 
   return {
+    loading,
+    error,
     account,
     profile,
     userEvents,
@@ -83,5 +116,10 @@ export function useAccountData() {
     formatDateTime,
     formatLanguages,
     membershipLabel,
+    refresh,
   }
+}
+
+function replaceArray<T>(target: T[], value: T[]) {
+  target.splice(0, target.length, ...value)
 }

@@ -77,21 +77,26 @@ import type {
   EventNoteItem,
   EventOverviewItem,
   EventRelatedProfileItem,
-} from '@/components/events/events.types'
+} from '@/types/events'
+import {
+  pickLocalized,
+  type CupidEvent,
+  type EventRelatedProfile,
+  type LocalizedText,
+} from '@/api/modules/events'
+import { useEventDetail } from '@/composables/events/use-event-detail'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { mockProfiles, type MockProfile } from '@/mock/business'
-import { getMockEventById, type MockEvent } from '@/mock/events'
-import { pickLocalized, type LocalizedText } from '@/mock/shared'
 import { openSelfDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
+const eventDetail = useEventDetail(eventId)
 
 onLoad((query) => {
   if (query && typeof query.id === 'string') {
@@ -99,7 +104,7 @@ onLoad((query) => {
   }
 })
 
-const event = computed(() => getMockEventById(eventId.value))
+const event = computed(() => eventDetail.event.value)
 
 const detailFieldLabels = computed<EventDetailFieldLabels>(() => ({
   status: t('fields.status'),
@@ -137,12 +142,7 @@ const relatedProfiles = computed<EventRelatedProfileItem[]>(() => {
   if (!event.value) return []
 
   const cityKey = event.value.city.en
-  const rankedProfiles = [...mockProfiles].sort((left, right) => profilePriority(right) - profilePriority(left))
-  const sameCityProfiles = rankedProfiles.filter(profile => profile.city.en === cityKey)
-  const fallbackProfiles = rankedProfiles.filter(profile => profile.city.en !== cityKey)
-
-  return [...sameCityProfiles, ...fallbackProfiles]
-    .slice(0, 2)
+  return eventDetail.relatedProfiles.value
     .map(profile => ({
       id: profile.id,
       name: profile.name,
@@ -170,7 +170,7 @@ function formatDetailDate(date: string) {
   return map[locale.value]
 }
 
-function buildEventOverviewItem(item: MockEvent): EventOverviewItem {
+function buildEventOverviewItem(item: CupidEvent): EventOverviewItem {
   return {
     id: item.id,
     title: localize(item.title),
@@ -186,17 +186,7 @@ function buildEventOverviewItem(item: MockEvent): EventOverviewItem {
   }
 }
 
-function profilePriority(profile: MockProfile) {
-  let score = 0
-
-  if (profile.status === 'vip') score += 4
-  if (profile.isVerified) score += 2
-  if (profile.familyVisible) score += 1
-
-  return score
-}
-
-function formatRelatedProfileMeta(profile: MockProfile) {
+function formatRelatedProfileMeta(profile: EventRelatedProfile) {
   const city = localize(profile.city)
   const intent = localize(profile.intent)
 
@@ -205,7 +195,7 @@ function formatRelatedProfileMeta(profile: MockProfile) {
   return `${profile.age} | ${city} | ${intent}`
 }
 
-function buildRelatedReason(profile: MockProfile, cityKey: string) {
+function buildRelatedReason(profile: EventRelatedProfile, cityKey: string) {
   if (profile.city.en === cityKey) return t('relatedReason.sameCity')
   if (profile.status === 'vip') return t('relatedReason.priority')
   if (profile.isVerified) return t('relatedReason.verified')

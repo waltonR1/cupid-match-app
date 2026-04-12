@@ -225,17 +225,17 @@ import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import { useLogin } from '@/composables/auth/use-login'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { useAuthStore } from '@/stores/modules/auth'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const SELF_ROUTE = '/pages/discovery/self/index'
 
-const auth = useAuthStore()
 const navList = NAV_LIST
 const { t } = usePageI18n('login')
+const loginAction = useLogin()
 const identity = ref('')
 const password = ref('')
 const agreed = ref(false)
@@ -290,13 +290,17 @@ function handleNavClick(key: string) {
   navigateByNavKey(key, navList)
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!agreed.value) {
     showConsentConfirm.value = true
     return
   }
 
-  auth.loginMock()
+  await loginAction.login({
+    identity: identity.value,
+    password: password.value,
+  })
+
   uni.redirectTo({
     url: SELF_ROUTE,
   })
@@ -325,7 +329,7 @@ function closeConsentConfirm() {
 function acceptAgreementAndLogin() {
   agreed.value = true
   showConsentConfirm.value = false
-  handleSubmit()
+  void handleSubmit()
 }
 </script>
 

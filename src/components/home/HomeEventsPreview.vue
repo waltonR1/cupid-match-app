@@ -48,15 +48,18 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/components/events/events.types'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
 import { computed } from 'vue'
+import {
+  pickLocalized,
+  type CupidEvent,
+} from '@/api/modules/events'
+import { useHomePreviewEvents } from '@/composables/events/use-home-preview-events'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { getHomePreviewEvents, type MockEvent } from '@/mock/events'
-import { pickLocalized } from '@/mock/shared'
 import { openEventDetail } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('home')
-const previewEvents = getHomePreviewEvents()
+const previewEvents = useHomePreviewEvents()
 
 const fieldLabelsByLocale: Record<'zh' | 'fr' | 'en', Pick<EventFieldLabels, 'city' | 'venue' | 'format' | 'audience' | 'seats'>> = {
   zh: {
@@ -85,7 +88,7 @@ const fieldLabelsByLocale: Record<'zh' | 'fr' | 'en', Pick<EventFieldLabels, 'ci
 const fieldLabels = computed(() => fieldLabelsByLocale[locale.value])
 
 const events = computed<EventOverviewItem[]>(() =>
-  previewEvents.map(event => ({
+  previewEvents.events.value.map(event => ({
     id: event.id,
     date: formatDate(event.date),
     title: localize(event.title),
@@ -118,7 +121,7 @@ const statusLabelByLocale = {
   },
 } as const
 
-function localize(text: MockEvent['title']) {
+function localize(text: CupidEvent['title']) {
   return pickLocalized(locale.value, text)
 }
 

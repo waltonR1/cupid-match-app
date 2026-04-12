@@ -1,23 +1,21 @@
 import { computed, type Ref } from 'vue'
 import type { AppLocale } from '@/i18n/types'
 import {
-  getLocalizedLanguageLabel,
-  getMockProfileById,
+  getProfileLanguageLabel,
   pickLocalized,
   type LocalizedText,
-} from '@/mock/business'
+  type Profile,
+} from '@/api/modules/profiles'
 
 export type DetailTranslator = (key: string) => string
 type MaritalStatusValue = 'single' | 'divorced' | 'widowed'
 type HabitValue = 'never' | 'social' | 'often'
 
 export function createDetailProfileState(
-  profileId: Ref<string>,
+  profile: Ref<Profile | null>,
   locale: Ref<AppLocale>,
   t: DetailTranslator,
 ) {
-  const profile = computed(() => getMockProfileById(profileId.value))
-
   const recordId = computed(() => {
     return profile.value ? profile.value.id.toUpperCase() : ''
   })
@@ -60,7 +58,7 @@ export function createDetailProfileState(
 
   function formatLanguagesText(languages: string[]) {
     return languages
-      .map(language => getLocalizedLanguageLabel(locale.value, language))
+      .map(language => getProfileLanguageLabel(locale.value, language))
       .join(' / ')
   }
 

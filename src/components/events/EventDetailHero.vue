@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventDetailFieldLabels, EventOverviewItem } from './events.types'
+import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/events'
 import EventStatusBadge from './EventStatusBadge.vue'
 
 const props = defineProps<{

@@ -260,6 +260,7 @@ import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
+import { useRegister } from '@/composables/auth/use-register'
 import { NAV_LIST } from '@/constants/nav'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -272,6 +273,7 @@ type AgreementDialogType = 'terms' | 'privacy' | null
 const navList = NAV_LIST
 const { t } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
+const registerAction = useRegister()
 const role = ref<RegisterRole>('self')
 const email = ref('')
 const password = ref('')
@@ -362,7 +364,15 @@ function handleNavClick(key: string) {
   navigateByNavKey(key, navList)
 }
 
-function handleSubmit() {
+async function handleSubmit() {
+  await registerAction.register({
+    role: role.value,
+    email: email.value,
+    password: password.value,
+    name: name.value,
+    city: city.value,
+  })
+
   uni.showToast({
     title: labels.value.submit,
     icon: 'none',
@@ -386,7 +396,7 @@ function closeAgreementDialog() {
 }
 
 function handleRegisterClick() {
-  handleSubmit()
+  void handleSubmit()
 }
 
 onLoad((query?: Record<string, string | undefined>) => {

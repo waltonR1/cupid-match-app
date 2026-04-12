@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import EventOverviewCard from './EventOverviewCard.vue'
-import type { EventFieldLabels, EventOverviewItem, EventStatItem } from './events.types'
+import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events'
 
 defineProps<{
   eyebrow: string

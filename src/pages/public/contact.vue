@@ -35,7 +35,7 @@ import type {
   ContactCardItem,
   ContactCaseItem,
   ContactGuideTag,
-} from '@/components/contact/contact.types'
+} from '@/types/contact'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'

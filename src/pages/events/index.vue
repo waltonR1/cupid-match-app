@@ -49,18 +49,23 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import EventsHero from '@/components/events/EventsHero.vue'
 import EventsFeaturedGrid from '@/components/events/EventsFeaturedGrid.vue'
 import EventsScheduleList from '@/components/events/EventsScheduleList.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/components/events/events.types'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
+import {
+  pickLocalized,
+  type CupidEvent,
+  type LocalizedText,
+} from '@/api/modules/events'
+import { useEvents } from '@/composables/events/use-events'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { mockEvents, type MockEvent } from '@/mock/events'
-import { pickLocalized, type LocalizedText } from '@/mock/shared'
 import { openEventDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('events')
+const eventData = useEvents()
 
-const events = computed(() => [...mockEvents].sort((left, right) => left.date.localeCompare(right.date)))
+const events = computed(() => [...eventData.events.value].sort((left, right) => left.date.localeCompare(right.date)))
 const nextEvent = computed(() => events.value[0])
 const featuredEvents = computed(() => events.value.filter(item => item.status !== 'closed'))
 
@@ -82,12 +87,12 @@ const heroFields = computed(() => ({
 }))
 
 const statCards = computed(() => {
-  const openCount = mockEvents.filter(item => item.status === 'open').length
-  const waitlistCount = mockEvents.filter(item => item.status === 'waitlist').length
-  const cityCount = new Set(mockEvents.map(item => pickLocalized(locale.value, item.city))).size
+  const openCount = events.value.filter(item => item.status === 'open').length
+  const waitlistCount = events.value.filter(item => item.status === 'waitlist').length
+  const cityCount = new Set(events.value.map(item => pickLocalized(locale.value, item.city))).size
 
   return [
-    { label: t('stats.totalEvents'), value: String(mockEvents.length) },
+    { label: t('stats.totalEvents'), value: String(events.value.length) },
     { label: t('stats.openEvents'), value: String(openCount) },
     { label: t('stats.waitlistEvents'), value: String(waitlistCount) },
     { label: t('stats.cities'), value: String(cityCount) },
@@ -125,7 +130,7 @@ function formatDate(date: string) {
   return map[locale.value]
 }
 
-function buildEventOverviewItem(event: MockEvent): EventOverviewItem {
+function buildEventOverviewItem(event: CupidEvent): EventOverviewItem {
   return {
     id: event.id,
     title: localize(event.title),

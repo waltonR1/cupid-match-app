@@ -102,7 +102,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/discovery/shared/directory/directory-card.types'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
@@ -110,11 +110,11 @@ import DirectoryResultToolbar from '@/components/discovery/shared/directory/Dire
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import SelfFilterToolbar from '@/components/discovery/self/SelfFilterToolbar.vue'
-import type { SelfDirectoryFilters } from '@/components/discovery/self/self.types'
-import { useSelfDirectory } from '@/components/discovery/self/use-self-directory'
+import type { SelfDirectoryFilters } from '@/types/self-directory'
+import { useSelfDirectory } from '@/composables/profiles/use-self-directory'
+import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { NAV_LIST } from '@/constants/nav'
-import { getLocalizedProfileCardData, type MockProfile } from '@/mock/business'
 import { navigateByNavKey } from '@/utils/navigation'
 import { openSelfDetail, openRegisterPage } from '@/utils/demo-navigation'
 
@@ -158,7 +158,7 @@ const heroTags = computed(() => [
   t('hero.tags.third'),
 ])
 
-function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+function createProfileCardViewModel(profile: Profile): DirectoryCardViewModel {
   const cardData = getLocalizedProfileCardData(locale.value, profile)
   const goalText = cardData.goalCode === 'marriage'
     ? t('card.goalMarriage')

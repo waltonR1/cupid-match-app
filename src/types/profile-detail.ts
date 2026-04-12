@@ -1,4 +1,6 @@
-import type { Gender } from '@/mock/business'
+import type { Profile } from '@/api/modules/profiles'
+
+export type Gender = Profile['gender']
 
 export interface DetailFactItem {
   label: string

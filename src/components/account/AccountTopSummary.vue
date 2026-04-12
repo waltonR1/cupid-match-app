@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
-import { useAccountData } from '@/components/account/use-account-data'
+import { useAccountData } from '@/composables/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
   openConnectionsPage,

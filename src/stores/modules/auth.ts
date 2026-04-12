@@ -19,13 +19,17 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value?.avatar || ''
   })
 
-  function loginMock() {
+  function login(nextUser: UserInfo) {
     isLoggedIn.value = true
-    user.value = {
+    user.value = nextUser
+  }
+
+  function loginMock() {
+    login({
       id: '1',
       displayName: 'Claire',
       avatar: '',
-    }
+    })
   }
 
   function logout() {
@@ -46,6 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     displayName,
     avatar,
+    login,
     loginMock,
     logout,
     toggleLoginStatus,

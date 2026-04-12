@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { AccountPrimaryPageKey } from '@/components/account/account-shell.types'
+import type { AccountPrimaryPageKey } from '@/types/account-shell'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
   openConnectionsPage,

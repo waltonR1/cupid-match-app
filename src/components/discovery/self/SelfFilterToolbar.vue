@@ -73,7 +73,7 @@ import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
   SelfDirectoryFilters,
-} from './self.types'
+} from '@/types/self-directory'
 
 const emit = defineEmits<{
   (e: 'update:filters', value: Partial<SelfDirectoryFilters>): void

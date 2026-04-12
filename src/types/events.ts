@@ -1,4 +1,4 @@
-import type { EventStatus } from '@/mock/events'
+import type { EventStatus } from '@/api/modules/events'
 
 export interface EventFieldLabels {
   date: string

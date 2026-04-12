@@ -1,5 +1,6 @@
 import { computed, type Ref } from 'vue'
-import type { DetailFactItem, DetailHeroData } from '@/components/discovery/shared/detail/detail.types'
+import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
+import { useProfileDetail } from '@/composables/profiles/use-profile-detail'
 import type { AppLocale } from '@/i18n/types'
 import {
   createDetailProfileState,
@@ -11,7 +12,8 @@ export function useFamilyDetailViewModel(
   locale: Ref<AppLocale>,
   t: DetailTranslator,
 ) {
-  const state = createDetailProfileState(profileId, locale, t)
+  const profileDetail = useProfileDetail(profileId)
+  const state = createDetailProfileState(profileDetail.profile, locale, t)
 
   const heroMeta = computed(() => {
     if (!state.profile.value) return ''
@@ -133,6 +135,9 @@ export function useFamilyDetailViewModel(
   })
 
   return {
+    loading: profileDetail.loading,
+    error: profileDetail.error,
+    refresh: profileDetail.refresh,
     heroData,
     overviewFacts,
     relationshipFacts,

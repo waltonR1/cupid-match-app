@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventOverviewItem } from './events.types'
+import type { EventOverviewItem } from '@/types/events'
 
 defineProps<{
   eyebrow: string

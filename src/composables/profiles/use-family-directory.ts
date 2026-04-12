@@ -1,32 +1,29 @@
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
   getLocalizedIntentOptions,
-  getLocalizedLanguageOptions,
   getLocalizedProfileOptions,
+  listProfiles,
   localized,
-  mockProfiles,
-} from '@/mock/business'
-import type { MockProfile } from '@/mock/business'
+  type Profile,
+} from '@/api/modules/profiles'
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
-  SelfDirectoryFilters,
-  SelfSortKey,
-  UseSelfDirectoryResult,
-} from './self.types'
+  FamilyDirectoryFilters,
+  FamilySortKey,
+  UseFamilyDirectoryResult,
+} from '@/types/family-directory'
 
-const DEFAULT_FILTERS: SelfDirectoryFilters = {
+const DEFAULT_FILTERS: FamilyDirectoryFilters = {
   gender: '',
   ageRange: '',
   city: '',
-  heightRange: '',
   education: '',
   intentCode: '',
-  industry: '',
+  familyMode: '',
   occupation: '',
-  language: '',
-  verified: '',
+  industry: '',
   maritalStatus: '',
   hasChildren: '',
   acceptLongDistance: '',
@@ -50,7 +47,7 @@ function resolveOptionLabel(options: DirectoryOption[], value: string) {
 }
 
 function buildActiveChip(
-  key: keyof SelfDirectoryFilters,
+  key: keyof FamilyDirectoryFilters,
   label: string,
   options: DirectoryOption[],
   value: string,
@@ -83,31 +80,12 @@ function matchAgeRange(age: number, range: string) {
   }
 }
 
-function matchGender(gender: MockProfile['gender'], value: string) {
+function matchGender(gender: Profile['gender'], value: string) {
   if (!value) return true
   return gender === value
 }
 
-function matchHeightRange(height: number, range: string) {
-  if (!range) return true
-
-  switch (range) {
-    case 'under165':
-      return height < 165
-    case '165to169':
-      return height >= 165 && height <= 169
-    case '170to174':
-      return height >= 170 && height <= 174
-    case '175to179':
-      return height >= 175 && height <= 179
-    case '180plus':
-      return height >= 180
-    default:
-      return true
-  }
-}
-
-function matchEducation(profile: MockProfile, education: string) {
+function matchEducation(profile: Profile, education: string) {
   if (!education) return true
 
   switch (education) {
@@ -117,19 +95,6 @@ function matchEducation(profile: MockProfile, education: string) {
       return profile.degreeLevel === 'master'
     case 'phd':
       return profile.degreeLevel === 'phd'
-    default:
-      return true
-  }
-}
-
-function matchVerified(isVerified: boolean, value: string) {
-  if (!value) return true
-
-  switch (value) {
-    case 'verified':
-      return isVerified
-    case 'unverified':
-      return !isVerified
     default:
       return true
   }
@@ -161,17 +126,39 @@ function matchAcceptLongDistance(acceptLongDistance: boolean, value: string) {
   }
 }
 
-function getPriorityRank(profile: MockProfile) {
-  return profile.status === 'vip' ? 0 : 1
+function matchFamilyMode(profile: Profile, value: string) {
+  if (!value) return true
+
+  switch (value) {
+    case 'context_only':
+      return profile.familyVisible && !profile.allowFamilyContact && !profile.familyPriority
+    case 'contact_ready':
+      return profile.allowFamilyContact
+    case 'priority':
+      return profile.familyPriority
+    default:
+      return true
+  }
 }
 
-export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
-  const { locale, t } = usePageI18n('self')
+function getFamilyPriorityRank(profile: Profile) {
+  if (profile.familyPriority) return 0
+  if (profile.allowFamilyContact) return 1
+  return 2
+}
 
-  const filters = ref<SelfDirectoryFilters>({ ...DEFAULT_FILTERS })
-  const sortKey = ref<SelfSortKey>('recentActive')
+export function useFamilyDirectory(): UseFamilyDirectoryResult<Profile> {
+  const { locale, t } = usePageI18n('family')
+
+  const filters = ref<FamilyDirectoryFilters>({ ...DEFAULT_FILTERS })
+  const sortKey = ref<FamilySortKey>('priorityFirst')
   const page = ref(1)
   const pageSize = ref(6)
+  const sourceItems = ref<Profile[]>([])
+
+  onMounted(() => {
+    void loadProfiles()
+  })
 
   const text = computed(() => ({
     gender: t('filters.gender'),
@@ -180,13 +167,11 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     all: localized('全部', 'Tous', 'All')[locale.value],
     age: localized('年龄', 'Age', 'Age')[locale.value],
     city: localized('城市', 'Ville', 'City')[locale.value],
-    height: localized('身高', 'Taille', 'Height')[locale.value],
     education: localized('学历', 'Formation', 'Education')[locale.value],
-    intent: localized('关系意向', 'Intention', 'Intent')[locale.value],
-    industry: localized('行业', 'Secteur', 'Industry')[locale.value],
+    intent: localized('关系目标', 'Intention', 'Intent')[locale.value],
+    familyMode: localized('家庭协作', 'Mode famille', 'Family mode')[locale.value],
     occupation: localized('职业', 'Metier', 'Occupation')[locale.value],
-    languages: localized('语言', 'Langues', 'Languages')[locale.value],
-    verified: localized('认证状态', 'Verification', 'Verification')[locale.value],
+    industry: localized('行业', 'Secteur', 'Industry')[locale.value],
     maritalStatus: localized('婚姻状态', 'Statut marital', 'Marital status')[locale.value],
     children: localized('子女情况', 'Enfants', 'Children')[locale.value],
     longDistance: localized('异地接受度', 'Distance', 'Long-distance')[locale.value],
@@ -198,17 +183,18 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     degreeBachelor: localized('本科', 'Licence', 'Bachelor')[locale.value],
     degreeMaster: localized('硕士', 'Master', 'Master')[locale.value],
     degreePhd: localized('博士', 'Doctorat', 'PhD')[locale.value],
-    verifiedYes: localized('已认证', 'Verifie', 'Verified')[locale.value],
-    verifiedNo: localized('未认证', 'Non verifie', 'Unverified')[locale.value],
-    childrenYes: localized('有孩子', 'Avec enfants', 'Has children')[locale.value],
-    childrenNo: localized('无孩子', 'Sans enfant', 'No children')[locale.value],
-    longDistanceYes: localized('接受异地', 'Ouvert a distance', 'Open to long-distance')[locale.value],
-    longDistanceNo: localized('不接受异地', 'Pas de distance', 'No long-distance')[locale.value],
+    contextOnly: localized('仅背景可见', 'Contexte seulement', 'Context only')[locale.value],
+    contactReady: localized('可辅助沟通', 'Pret pour echange famille', 'Contact-ready')[locale.value],
+    priority: localized('优先家长评估', 'Priorite famille', 'Priority review')[locale.value],
     maritalSingle: localized('未婚', 'Celibataire', 'Single')[locale.value],
     maritalDivorced: localized('离异', 'Divorce', 'Divorced')[locale.value],
     maritalWidowed: localized('丧偶', 'Veuf / veuve', 'Widowed')[locale.value],
+    childrenYes: localized('有孩子', 'Avec enfants', 'Has children')[locale.value],
+    childrenNo: localized('无孩子', 'Sans enfant', 'No children')[locale.value],
+    longDistanceYes: localized('接受异地', 'Ouvert a distance', 'Open to long-distance')[locale.value],
+    longDistanceNo: localized('更偏同城', 'Plutot meme ville', 'Prefers same city')[locale.value],
+    sortPriority: localized('优先家长评估', 'Priorite famille', 'Priority review')[locale.value],
     sortRecent: localized('最近活跃', 'Activite recente', 'Recently active')[locale.value],
-    sortPriority: localized('优先资料', 'Profils prioritaires', 'Priority profiles')[locale.value],
     sortAgeAsc: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value],
     sortAgeDesc: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value],
   }))
@@ -228,13 +214,13 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     { label: text.value.genderFemale, value: 'female' },
   ])
 
-  const heightOptions = computed<DirectoryOption[]>(() => [
+  const cityOptions = computed<DirectoryOption[]>(() => [
     buildBaseAllOption(text.value.all),
-    { label: '165cm-', value: 'under165' },
-    { label: '165-169cm', value: '165to169' },
-    { label: '170-174cm', value: '170to174' },
-    { label: '175-179cm', value: '175to179' },
-    { label: '180cm+', value: '180plus' },
+    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.city)
+      .map(value => ({
+        label: value,
+        value,
+      })),
   ])
 
   const educationOptions = computed<DirectoryOption[]>(() => [
@@ -244,47 +230,38 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     { label: text.value.degreePhd, value: 'phd' },
   ])
 
-  const cityOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(locale.value, profile => profile.city).map(value => ({
-      label: value,
-      value,
-    })),
-  ])
-
   const intentOptions = computed<DirectoryOption[]>(() => [
     buildBaseAllOption(text.value.all),
-    ...getLocalizedIntentOptions(locale.value).map(item => ({
-      label: item.label,
-      value: item.code,
-    })),
+    ...getLocalizedIntentOptions(sourceItems.value, locale.value)
+      .map(item => ({
+        label: item.label,
+        value: item.code,
+      })),
   ])
 
-  const industryOptions = computed<DirectoryOption[]>(() => [
+  const familyModeOptions = computed<DirectoryOption[]>(() => [
     buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(locale.value, profile => profile.industry).map(value => ({
-      label: value,
-      value,
-    })),
+    { label: text.value.contextOnly, value: 'context_only' },
+    { label: text.value.contactReady, value: 'contact_ready' },
+    { label: text.value.priority, value: 'priority' },
   ])
 
   const occupationOptions = computed<DirectoryOption[]>(() => [
     buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(locale.value, profile => profile.occupation).map(value => ({
-      label: value,
-      value,
-    })),
+    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.occupation)
+      .map(value => ({
+        label: value,
+        value,
+      })),
   ])
 
-  const languageOptions = computed<DirectoryOption[]>(() => [
+  const industryOptions = computed<DirectoryOption[]>(() => [
     buildBaseAllOption(text.value.all),
-    ...getLocalizedLanguageOptions(locale.value),
-  ])
-
-  const verifiedOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.verifiedYes, value: 'verified' },
-    { label: text.value.verifiedNo, value: 'unverified' },
+    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.industry)
+      .map(value => ({
+        label: value,
+        value,
+      })),
   ])
 
   const maritalStatusOptions = computed<DirectoryOption[]>(() => [
@@ -307,31 +284,29 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
   ])
 
   const sortOptions = computed<DirectoryOption[]>(() => [
-    { label: text.value.sortRecent, value: 'recentActive' },
     { label: text.value.sortPriority, value: 'priorityFirst' },
+    { label: text.value.sortRecent, value: 'recentActive' },
     { label: text.value.sortAgeAsc, value: 'ageAsc' },
     { label: text.value.sortAgeDesc, value: 'ageDesc' },
   ])
 
-  const filteredItems = computed<MockProfile[]>(() => {
-    return mockProfiles.filter(profile => {
+  const filteredItems = computed<Profile[]>(() => {
+    return sourceItems.value.filter(profile => {
       const localizedCity = profile.city[locale.value]
-      const localizedIndustry = profile.industry[locale.value]
       const localizedOccupation = profile.occupation[locale.value]
+      const localizedIndustry = profile.industry[locale.value]
 
       const passedGender = matchGender(profile.gender, filters.value.gender)
       const passedAge = matchAgeRange(profile.age, filters.value.ageRange)
       const passedCity = !filters.value.city || localizedCity === filters.value.city
-      const passedHeight = matchHeightRange(profile.height, filters.value.heightRange)
       const passedEducation = matchEducation(profile, filters.value.education)
       const passedIntent = !filters.value.intentCode || profile.intentCode === filters.value.intentCode
-      const passedIndustry = !filters.value.industry || localizedIndustry === filters.value.industry
+      const passedFamilyMode = matchFamilyMode(profile, filters.value.familyMode)
       const passedOccupation = !filters.value.occupation || localizedOccupation === filters.value.occupation
-      const passedLanguage = !filters.value.language || profile.languages.includes(filters.value.language)
-      const passedVerified = matchVerified(profile.isVerified, filters.value.verified)
+      const passedIndustry = !filters.value.industry || localizedIndustry === filters.value.industry
       const passedMaritalStatus =
         !filters.value.maritalStatus || profile.maritalStatus === filters.value.maritalStatus
-      const passedHasChildren = matchHasChildren(profile.hasChildren, filters.value.hasChildren)
+      const passedChildren = matchHasChildren(profile.hasChildren, filters.value.hasChildren)
       const passedLongDistance = matchAcceptLongDistance(
         profile.acceptLongDistance,
         filters.value.acceptLongDistance,
@@ -341,33 +316,31 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
         passedGender,
         passedAge,
         passedCity,
-        passedHeight,
         passedEducation,
         passedIntent,
-        passedIndustry,
+        passedFamilyMode,
         passedOccupation,
-        passedLanguage,
-        passedVerified,
+        passedIndustry,
         passedMaritalStatus,
-        passedHasChildren,
+        passedChildren,
         passedLongDistance,
       ].every(Boolean)
     })
   })
 
-  const sortedItems = computed<MockProfile[]>(() => {
+  const sortedItems = computed<Profile[]>(() => {
     const list = [...filteredItems.value]
 
     switch (sortKey.value) {
-      case 'recentActive':
-        return list.sort((a, b) => toTimestamp(b.lastActiveAt) - toTimestamp(a.lastActiveAt))
-
       case 'priorityFirst':
         return list.sort((a, b) => {
-          const rankDiff = getPriorityRank(a) - getPriorityRank(b)
+          const rankDiff = getFamilyPriorityRank(a) - getFamilyPriorityRank(b)
           if (rankDiff !== 0) return rankDiff
           return toTimestamp(b.lastActiveAt) - toTimestamp(a.lastActiveAt)
         })
+
+      case 'recentActive':
+        return list.sort((a, b) => toTimestamp(b.lastActiveAt) - toTimestamp(a.lastActiveAt))
 
       case 'ageAsc':
         return list.sort((a, b) => a.age - b.age)
@@ -387,7 +360,7 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     return Math.ceil(total.value / pageSize.value)
   })
 
-  const pagedItems = computed<MockProfile[]>(() => {
+  const pagedItems = computed<Profile[]>(() => {
     const start = (page.value - 1) * pageSize.value
     const end = start + pageSize.value
     return sortedItems.value.slice(start, end)
@@ -408,13 +381,11 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
       buildActiveChip('gender', text.value.gender, genderOptions.value, filters.value.gender),
       buildActiveChip('ageRange', text.value.age, ageOptions.value, filters.value.ageRange),
       buildActiveChip('city', text.value.city, cityOptions.value, filters.value.city),
-      buildActiveChip('heightRange', text.value.height, heightOptions.value, filters.value.heightRange),
       buildActiveChip('education', text.value.education, educationOptions.value, filters.value.education),
       buildActiveChip('intentCode', text.value.intent, intentOptions.value, filters.value.intentCode),
-      buildActiveChip('industry', text.value.industry, industryOptions.value, filters.value.industry),
+      buildActiveChip('familyMode', text.value.familyMode, familyModeOptions.value, filters.value.familyMode),
       buildActiveChip('occupation', text.value.occupation, occupationOptions.value, filters.value.occupation),
-      buildActiveChip('language', text.value.languages, languageOptions.value, filters.value.language),
-      buildActiveChip('verified', text.value.verified, verifiedOptions.value, filters.value.verified),
+      buildActiveChip('industry', text.value.industry, industryOptions.value, filters.value.industry),
       buildActiveChip(
         'maritalStatus',
         text.value.maritalStatus,
@@ -433,7 +404,7 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
   })
 
-  function updateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
+  function updateFilters(nextFilters: Partial<FamilyDirectoryFilters>) {
     filters.value = {
       ...filters.value,
       ...nextFilters,
@@ -441,33 +412,42 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     page.value = 1
   }
 
-  function removeFilter(key: keyof SelfDirectoryFilters) {
+  function removeFilter(key: keyof FamilyDirectoryFilters) {
     updateFilters({ [key]: '' })
   }
 
   function resetFilters() {
     filters.value = { ...DEFAULT_FILTERS }
-    sortKey.value = 'recentActive'
+    sortKey.value = 'priorityFirst'
     page.value = 1
   }
 
   function updateSort(nextSortKey: string) {
-    const allowed: SelfSortKey[] = [
-      'recentActive',
+    const allowed: FamilySortKey[] = [
       'priorityFirst',
+      'recentActive',
       'ageAsc',
       'ageDesc',
     ]
 
-    if (!allowed.includes(nextSortKey as SelfSortKey)) return
+    if (!allowed.includes(nextSortKey as FamilySortKey)) return
 
-    sortKey.value = nextSortKey as SelfSortKey
+    sortKey.value = nextSortKey as FamilySortKey
     page.value = 1
   }
 
   function changePage(nextPage: number) {
     if (nextPage < 1 || nextPage > totalPages.value) return
     page.value = nextPage
+  }
+
+  async function loadProfiles() {
+    try {
+      const response = await listProfiles({ mode: 'family' })
+      sourceItems.value = response.data
+    } catch (error) {
+      console.warn('Failed to load family profiles.', error)
+    }
   }
 
   return {
@@ -486,13 +466,11 @@ export function useSelfDirectory(): UseSelfDirectoryResult<MockProfile> {
     ageOptions,
     genderOptions,
     cityOptions,
-    heightOptions,
     educationOptions,
     intentOptions,
-    industryOptions,
+    familyModeOptions,
     occupationOptions,
-    languageOptions,
-    verifiedOptions,
+    industryOptions,
     maritalStatusOptions,
     childrenOptions,
     longDistanceOptions,

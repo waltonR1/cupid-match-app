@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventStatus } from '@/mock/events'
+import type { EventStatus } from '@/api/modules/events'
 
 const props = defineProps<{
   status: EventStatus

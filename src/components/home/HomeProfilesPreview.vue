@@ -48,20 +48,21 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/discovery/shared/directory/directory-card.types'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 import {
-  getHomePreviewProfiles,
   getLocalizedProfileCardData,
-  type MockProfile,
-} from '@/mock/business'
+  type Profile,
+} from '@/api/modules/profiles'
+import { useHomePreviewProfiles } from '@/composables/profiles/use-home-preview-profiles'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/demo-navigation'
 
 const { t, locale } = usePageI18n('home')
 const { t: profileT } = usePageI18n('self')
-const profiles = getHomePreviewProfiles()
+const profilePreview = useHomePreviewProfiles()
+const profiles = profilePreview.profiles
 
-function createProfileCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+function createProfileCardViewModel(profile: Profile): DirectoryCardViewModel {
   const cardData = getLocalizedProfileCardData(locale.value, profile)
   const goalText = cardData.goalCode === 'marriage'
     ? profileT('card.goalMarriage')

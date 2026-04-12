@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DetailBadgeItem, DetailHeroData } from './detail.types'
+import type { DetailBadgeItem, DetailHeroData } from '@/types/profile-detail'
 
 defineProps<{
   data: DetailHeroData

@@ -87,7 +87,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { DirectoryCardViewModel } from './directory-card.types'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 
 const props = withDefaults(defineProps<{
   data: DirectoryCardViewModel

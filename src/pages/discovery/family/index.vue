@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/components/discovery/shared/directory/directory-card.types'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
@@ -107,11 +107,11 @@ import DirectoryResultToolbar from '@/components/discovery/shared/directory/Dire
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import FamilyFilterToolbar from '@/components/discovery/family/FamilyFilterToolbar.vue'
-import type { FamilyDirectoryFilters } from '@/components/discovery/family/family.types'
-import { useFamilyDirectory } from '@/components/discovery/family/use-family-directory'
+import type { FamilyDirectoryFilters } from '@/types/family-directory'
+import { useFamilyDirectory } from '@/composables/profiles/use-family-directory'
+import { pickLocalized, type Profile } from '@/api/modules/profiles'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { pickLocalized, type MockProfile } from '@/mock/business'
 import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
@@ -154,7 +154,7 @@ const heroTags = computed(() => [
   t('hero.tags.third'),
 ])
 
-function createFamilyCardViewModel(profile: MockProfile): DirectoryCardViewModel {
+function createFamilyCardViewModel(profile: Profile): DirectoryCardViewModel {
   const occupation = pickLocalized(locale.value, profile.occupation)
   const meta = locale.value === 'zh'
     ? `${profile.age}岁 / ${occupation}`

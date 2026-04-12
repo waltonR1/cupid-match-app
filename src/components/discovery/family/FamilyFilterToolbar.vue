@@ -73,7 +73,7 @@ import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
   FamilyDirectoryFilters,
-} from './family.types'
+} from '@/types/family-directory'
 
 const props = defineProps<{
   title: string
