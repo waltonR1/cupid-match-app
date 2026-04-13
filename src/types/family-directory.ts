@@ -64,4 +64,5 @@ export interface UseFamilyDirectoryResult<TProfile> {
   resetFilters: () => void
   updateSort: (nextSortKey: string) => void
   changePage: (nextPage: number) => void
+  buildCardViewModel: (profile: TProfile) => import('@/types/directory-card').DirectoryCardViewModel
 }

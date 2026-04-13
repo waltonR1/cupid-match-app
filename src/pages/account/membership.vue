@@ -152,7 +152,7 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account/use-account-data'
+import { useAccountDataContext } from '@/composables/account/use-account-data'
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
@@ -165,7 +165,7 @@ import {
 
 const { t } = usePageI18n('accountCenter')
 const { t: membershipT } = usePageI18n('membership')
-const { account, formatDate, membershipLabel } = useAccountData()
+const { account, formatDate, membershipLabel } = useAccountDataContext()
 
 const currentItems = computed(() => [
   {

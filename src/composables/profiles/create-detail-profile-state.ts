@@ -47,7 +47,7 @@ export function createDetailProfileState(
   }
 
   function formatAgeText(age: number) {
-    if (locale.value === 'zh') return `${age}\u5c81`
+    if (locale.value === 'zh') return `${age}岁`
     if (locale.value === 'fr') return `${age} ans`
     return `${age}`
   }

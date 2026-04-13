@@ -1,4 +1,4 @@
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, inject, onMounted, provide, reactive, ref, type InjectionKey } from 'vue'
 import {
   getAccountLanguageLabel,
   getAccountOverview,
@@ -45,6 +45,33 @@ export function useAccountData() {
   const familyVisibleFavorites = computed(() => favorites.filter(item => item.profile.familyVisible))
   const privateFavorites = computed(() => favorites.filter(item => !item.profile.familyVisible))
   const familyVisibleThreads = computed(() => threads.filter(item => item.profile.familyVisible))
+  const verificationCount = computed(() => {
+    let count = 1
+
+    if (profile.familyVisible) count += 1
+    if (familyAssistSetting.value?.enabled) count += 1
+    if (account.membership !== 'free') count += 1
+
+    return count
+  })
+  const topSummaryItems = computed(() => [
+    {
+      key: 'completion',
+      value: `${account.completion}%`,
+    },
+    {
+      key: 'verification',
+      value: String(verificationCount.value),
+    },
+    {
+      key: 'membership',
+      value: membershipLabel(account.membership),
+    },
+    {
+      key: 'activity',
+      value: String(userEvents.length),
+    },
+  ])
 
   function localize(text: LocalizedText) {
     return pickLocalized(locale.value, text)
@@ -111,6 +138,7 @@ export function useAccountData() {
     familyVisibleFavorites,
     privateFavorites,
     familyVisibleThreads,
+    topSummaryItems,
     localize,
     formatDate,
     formatDateTime,
@@ -118,6 +146,23 @@ export function useAccountData() {
     membershipLabel,
     refresh,
   }
+}
+
+export type AccountDataContext = ReturnType<typeof useAccountData>
+export const accountDataKey: InjectionKey<AccountDataContext> = Symbol('account-data')
+
+export function provideAccountDataContext(accountData: AccountDataContext) {
+  provide(accountDataKey, accountData)
+}
+
+export function useAccountDataContext() {
+  const accountData = inject(accountDataKey)
+
+  if (!accountData) {
+    throw new Error('Account data context is not available outside AccountShell.')
+  }
+
+  return accountData
 }
 
 function replaceArray<T>(target: T[], value: T[]) {

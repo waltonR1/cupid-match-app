@@ -23,10 +23,10 @@
 
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <EventOverviewCard
-          v-for="event in events"
+          v-for="event in viewModel.events"
           :key="event.id"
           :event="event"
-          :fields="fieldLabels"
+          :fields="viewModel.fieldLabels"
           @open="handleEventOpen"
         />
       </view>
@@ -48,96 +48,15 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
-import { computed } from 'vue'
-import {
-  pickLocalized,
-  type CupidEvent,
-} from '@/api/modules/events'
-import { useHomePreviewEvents } from '@/composables/events/use-home-preview-events'
+import type { HomeEventsPreviewViewModel } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/demo-navigation'
 
-const { t, locale } = usePageI18n('home')
-const previewEvents = useHomePreviewEvents()
+defineProps<{
+  viewModel: HomeEventsPreviewViewModel
+}>()
 
-const fieldLabelsByLocale: Record<'zh' | 'fr' | 'en', Pick<EventFieldLabels, 'city' | 'venue' | 'format' | 'audience' | 'seats'>> = {
-  zh: {
-    city: '\u57CE\u5E02',
-    venue: '\u573A\u5730',
-    format: '\u5F62\u5F0F',
-    audience: '\u9002\u5408\u4EBA\u7FA4',
-    seats: '\u5E2D\u4F4D',
-  },
-  fr: {
-    city: 'Ville',
-    venue: 'Lieu',
-    format: 'Format',
-    audience: 'Public',
-    seats: 'Places',
-  },
-  en: {
-    city: 'City',
-    venue: 'Venue',
-    format: 'Format',
-    audience: 'Audience',
-    seats: 'Seats',
-  },
-}
-
-const fieldLabels = computed(() => fieldLabelsByLocale[locale.value])
-
-const events = computed<EventOverviewItem[]>(() =>
-  previewEvents.events.value.map(event => ({
-    id: event.id,
-    date: formatDate(event.date),
-    title: localize(event.title),
-    summary: localize(event.summary),
-    city: localize(event.city),
-    venue: localize(event.venue),
-    format: localize(event.format),
-    audience: localize(event.audience),
-    seats: `${event.registered} / ${event.seats}`,
-    status: event.status,
-    statusLabel: statusLabelByLocale[locale.value][event.status],
-  })),
-)
-
-const statusLabelByLocale = {
-  zh: {
-    open: '\u62A5\u540D\u4E2D',
-    waitlist: '\u5019\u8865',
-    closed: '\u5DF2\u6EE1\u989D',
-  },
-  fr: {
-    open: 'Ouvert',
-    waitlist: 'Attente',
-    closed: 'Complet',
-  },
-  en: {
-    open: 'Open',
-    waitlist: 'Waitlist',
-    closed: 'Full',
-  },
-} as const
-
-function localize(text: CupidEvent['title']) {
-  return pickLocalized(locale.value, text)
-}
-
-function formatDate(date: string) {
-  const value = new Date(date)
-
-  if (locale.value === 'zh') {
-    return value.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })
-  }
-
-  if (locale.value === 'fr') {
-    return value.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })
-  }
-
-  return value.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
+const { t } = usePageI18n('home')
 
 function goEvents() {
   uni.navigateTo({ url: '/pages/events/index' })
@@ -147,4 +66,3 @@ function handleEventOpen(id: string) {
   openEventDetail(id)
 }
 </script>
-

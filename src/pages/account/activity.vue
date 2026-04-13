@@ -113,12 +113,12 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account/use-account-data'
+import { useAccountDataContext } from '@/composables/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/demo-navigation'
 
 const { t } = usePageI18n('accountCenter')
-const { userEvents, localize, formatDate } = useAccountData()
+const { userEvents, localize, formatDate } = useAccountDataContext()
 
 const filterItems = computed(() => [
   {

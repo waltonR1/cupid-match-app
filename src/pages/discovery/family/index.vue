@@ -71,7 +71,7 @@
       >
         <template #default="{ item }">
           <DirectoryCardFrame
-            :data="createFamilyCardViewModel(item)"
+            :data="buildCardViewModel(item)"
             clickable
             summary-class="line-clamp-3"
             @select="handleProfileOpen(item.id)"
@@ -98,25 +98,23 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import FamilyFilterToolbar from '@/components/discovery/family/FamilyFilterToolbar.vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
 import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/discovery/shared/directory/DirectoryResultToolbar.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import FamilyFilterToolbar from '@/components/discovery/family/FamilyFilterToolbar.vue'
-import type { FamilyDirectoryFilters } from '@/types/family-directory'
+import AppHeader from '@/components/layout/AppHeader.vue'
 import { useFamilyDirectory } from '@/composables/profiles/use-family-directory'
-import { pickLocalized, type Profile } from '@/api/modules/profiles'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { FamilyDirectoryFilters } from '@/types/family-directory'
 import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('family')
+const { t } = usePageI18n('family')
 
 const {
   filters,
@@ -145,69 +143,14 @@ const {
   resetFilters,
   updateSort,
   changePage,
+  buildCardViewModel,
 } = useFamilyDirectory()
-
 
 const heroTags = computed(() => [
   t('hero.tags.first'),
   t('hero.tags.second'),
   t('hero.tags.third'),
 ])
-
-function createFamilyCardViewModel(profile: Profile): DirectoryCardViewModel {
-  const occupation = pickLocalized(locale.value, profile.occupation)
-  const meta = locale.value === 'zh'
-    ? `${profile.age}岁 / ${occupation}`
-    : locale.value === 'fr'
-      ? `${profile.age} ans / ${occupation}`
-      : `${profile.age} / ${occupation}`
-
-  const familyMode = profile.familyPriority
-    ? t('modes.priority')
-    : profile.allowFamilyContact
-      ? t('modes.contactReady')
-      : t('modes.contextOnly')
-
-  const maritalStatus = profile.maritalStatus === 'divorced'
-    ? t('tags.maritalDivorced')
-    : profile.maritalStatus === 'widowed'
-      ? t('tags.maritalWidowed')
-      : t('tags.maritalSingle')
-
-  const familyContext = profile.acceptLongDistance
-    ? t('tags.longDistanceYes')
-    : profile.hasChildren
-      ? t('tags.childrenYes')
-      : t('tags.childrenNo')
-
-  const decisionLabel = profile.status === 'review'
-    ? t('card.labelReview')
-    : profile.familyPriority
-      ? t('card.labelPriority')
-      : profile.allowFamilyContact
-        ? t('card.labelContactReady')
-        : t('card.labelObserve')
-
-  return {
-    avatar: profile.avatar,
-    name: profile.name,
-    gender: profile.gender,
-    meta,
-    badge: familyMode,
-    summary: pickLocalized(locale.value, profile.maritalPlan),
-    facts: [
-      { label: t('fields.city'), value: pickLocalized(locale.value, profile.city) },
-      { label: t('fields.education'), value: pickLocalized(locale.value, profile.education) },
-      { label: t('fields.residencePlan'), value: pickLocalized(locale.value, profile.residencePlan) },
-    ],
-    tags: [
-      pickLocalized(locale.value, profile.intent),
-      maritalStatus,
-      familyContext,
-    ],
-    footer: decisionLabel,
-  }
-}
 
 function handleUpdateFilters(nextFilters: Partial<FamilyDirectoryFilters>) {
   updateFilters(nextFilters)

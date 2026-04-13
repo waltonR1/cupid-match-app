@@ -5,7 +5,7 @@ import type { AppLocale } from '@/i18n/types'
 import {
   createDetailProfileState,
   type DetailTranslator,
-} from '@/utils/detail-view-model'
+} from '@/composables/profiles/create-detail-profile-state'
 
 export function useSelfDetailViewModel(
   profileId: Ref<string>,

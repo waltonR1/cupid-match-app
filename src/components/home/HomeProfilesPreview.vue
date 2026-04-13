@@ -25,7 +25,7 @@
         <DirectoryCardFrame
           v-for="profile in profiles"
           :key="profile.id"
-          :data="createProfileCardViewModel(profile)"
+          :data="profile.card"
           clickable
           @select="handleProfileOpen(profile.id)"
         />
@@ -48,52 +48,15 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
-import {
-  getLocalizedProfileCardData,
-  type Profile,
-} from '@/api/modules/profiles'
-import { useHomePreviewProfiles } from '@/composables/profiles/use-home-preview-profiles'
+import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/demo-navigation'
 
-const { t, locale } = usePageI18n('home')
-const { t: profileT } = usePageI18n('self')
-const profilePreview = useHomePreviewProfiles()
-const profiles = profilePreview.profiles
+defineProps<{
+  profiles: HomeProfilesPreviewItem[]
+}>()
 
-function createProfileCardViewModel(profile: Profile): DirectoryCardViewModel {
-  const cardData = getLocalizedProfileCardData(locale.value, profile)
-  const goalText = cardData.goalCode === 'marriage'
-    ? profileT('card.goalMarriage')
-    : cardData.goalCode === 'exclusive'
-      ? profileT('card.goalExclusive')
-      : cardData.goalCode === 'cross_border'
-        ? profileT('card.goalCrossBorder')
-        : profileT('card.goalSerious')
-
-  const labelText = cardData.status === 'review'
-    ? profileT('card.labelReview')
-    : cardData.status === 'vip'
-      ? profileT('card.labelPriority')
-      : profileT('card.labelSelected')
-
-  return {
-    avatar: cardData.avatar,
-    name: cardData.name,
-    gender: profile.gender,
-    meta: cardData.meta,
-    badge: goalText,
-    summary: cardData.summary,
-    facts: [
-      { label: t('profilesPreview.fields.city'), value: cardData.facts.city },
-      { label: t('profilesPreview.fields.education'), value: cardData.facts.education },
-      { label: t('profilesPreview.fields.languages'), value: cardData.facts.languages },
-    ],
-    tags: cardData.tags,
-    footer: labelText,
-  }
-}
+const { t } = usePageI18n('home')
 
 function goProfiles() {
   uni.navigateTo({ url: '/pages/discovery/self/index' })
@@ -103,4 +66,3 @@ function handleProfileOpen(id: string) {
   openSelfDetail(id)
 }
 </script>
-

@@ -5,6 +5,7 @@ import {
   getLocalizedProfileOptions,
   listProfiles,
   localized,
+  pickLocalized,
   type Profile,
 } from '@/api/modules/profiles'
 import type {
@@ -14,6 +15,7 @@ import type {
   FamilySortKey,
   UseFamilyDirectoryResult,
 } from '@/types/family-directory'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 
 const DEFAULT_FILTERS: FamilyDirectoryFilters = {
   gender: '',
@@ -450,6 +452,61 @@ export function useFamilyDirectory(): UseFamilyDirectoryResult<Profile> {
     }
   }
 
+  function buildCardViewModel(profile: Profile): DirectoryCardViewModel {
+    const occupation = pickLocalized(locale.value, profile.occupation)
+    const meta = locale.value === 'zh'
+      ? `${profile.age}岁 / ${occupation}`
+      : locale.value === 'fr'
+        ? `${profile.age} ans / ${occupation}`
+        : `${profile.age} / ${occupation}`
+
+    const familyMode = profile.familyPriority
+      ? t('modes.priority')
+      : profile.allowFamilyContact
+        ? t('modes.contactReady')
+        : t('modes.contextOnly')
+
+    const maritalStatus = profile.maritalStatus === 'divorced'
+      ? t('tags.maritalDivorced')
+      : profile.maritalStatus === 'widowed'
+        ? t('tags.maritalWidowed')
+        : t('tags.maritalSingle')
+
+    const familyContext = profile.acceptLongDistance
+      ? t('tags.longDistanceYes')
+      : profile.hasChildren
+        ? t('tags.childrenYes')
+        : t('tags.childrenNo')
+
+    const decisionLabel = profile.status === 'review'
+      ? t('card.labelReview')
+      : profile.familyPriority
+        ? t('card.labelPriority')
+        : profile.allowFamilyContact
+          ? t('card.labelContactReady')
+          : t('card.labelObserve')
+
+    return {
+      avatar: profile.avatar,
+      name: profile.name,
+      gender: profile.gender,
+      meta,
+      badge: familyMode,
+      summary: pickLocalized(locale.value, profile.maritalPlan),
+      facts: [
+        { label: t('fields.city'), value: pickLocalized(locale.value, profile.city) },
+        { label: t('fields.education'), value: pickLocalized(locale.value, profile.education) },
+        { label: t('fields.residencePlan'), value: pickLocalized(locale.value, profile.residencePlan) },
+      ],
+      tags: [
+        pickLocalized(locale.value, profile.intent),
+        maritalStatus,
+        familyContext,
+      ],
+      footer: decisionLabel,
+    }
+  }
+
   return {
     filters,
     sortKey,
@@ -480,5 +537,6 @@ export function useFamilyDirectory(): UseFamilyDirectoryResult<Profile> {
     resetFilters,
     updateSort,
     changePage,
+    buildCardViewModel,
   }
 }

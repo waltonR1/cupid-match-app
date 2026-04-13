@@ -123,7 +123,7 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account/use-account-data'
+import { useAccountDataContext } from '@/composables/account/use-account-data'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openFamilyProfileDetail, openSelfDetail } from '@/utils/demo-navigation'
 
@@ -133,7 +133,7 @@ const {
   familyVisibleFavorites,
   privateFavorites,
   localize,
-} = useAccountData()
+} = useAccountDataContext()
 
 const filterItems = computed(() => [
   { label: t('connections.filters.likedMe'), value: String(familyVisibleFavorites.value.length) },

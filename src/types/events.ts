@@ -1,4 +1,4 @@
-import type { EventStatus } from '@/api/modules/events'
+export type EventStatus = 'open' | 'waitlist' | 'closed'
 
 export interface EventFieldLabels {
   date: string

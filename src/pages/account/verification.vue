@@ -118,7 +118,7 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account/use-account-data'
+import { useAccountDataContext } from '@/composables/account/use-account-data'
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openConnectionsPage, openMyProfilePage } from '@/utils/demo-navigation'
@@ -131,7 +131,7 @@ const {
   visibleFieldsSetting,
   localize,
   membershipLabel,
-} = useAccountData()
+} = useAccountDataContext()
 
 const verificationItems = computed(() => [
   { label: t('verification.items.realName'), done: true },

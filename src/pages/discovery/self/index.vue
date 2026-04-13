@@ -75,7 +75,7 @@
       >
         <template #default="{ item }">
           <DirectoryCardFrame
-            :data="createProfileCardViewModel(item)"
+            :data="buildCardViewModel(item)"
             clickable
             @select="handleProfileOpen(item.id)"
           />
@@ -101,24 +101,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import SelfFilterToolbar from '@/components/discovery/self/SelfFilterToolbar.vue'
 import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
 import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/discovery/shared/directory/DirectoryResultToolbar.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import SelfFilterToolbar from '@/components/discovery/self/SelfFilterToolbar.vue'
-import type { SelfDirectoryFilters } from '@/types/self-directory'
+import AppHeader from '@/components/layout/AppHeader.vue'
 import { useSelfDirectory } from '@/composables/profiles/use-self-directory'
-import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { NAV_LIST } from '@/constants/nav'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { SelfDirectoryFilters } from '@/types/self-directory'
+import { openRegisterPage, openSelfDetail } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
-import { openSelfDetail, openRegisterPage } from '@/utils/demo-navigation'
 
-const { t, locale } = usePageI18n('self')
+const { t } = usePageI18n('self')
 const navList = NAV_LIST
 
 const {
@@ -150,6 +148,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
+  buildCardViewModel,
 } = useSelfDirectory()
 
 const heroTags = computed(() => [
@@ -157,39 +156,6 @@ const heroTags = computed(() => [
   t('hero.tags.second'),
   t('hero.tags.third'),
 ])
-
-function createProfileCardViewModel(profile: Profile): DirectoryCardViewModel {
-  const cardData = getLocalizedProfileCardData(locale.value, profile)
-  const goalText = cardData.goalCode === 'marriage'
-    ? t('card.goalMarriage')
-    : cardData.goalCode === 'exclusive'
-      ? t('card.goalExclusive')
-      : cardData.goalCode === 'cross_border'
-        ? t('card.goalCrossBorder')
-        : t('card.goalSerious')
-
-  const labelText = cardData.status === 'review'
-    ? t('card.labelReview')
-    : cardData.status === 'vip'
-      ? t('card.labelPriority')
-      : t('card.labelSelected')
-
-  return {
-    avatar: cardData.avatar,
-    name: cardData.name,
-    gender: profile.gender,
-    meta: cardData.meta,
-    badge: goalText,
-    summary: cardData.summary,
-    facts: [
-      { label: t('fields.city'), value: cardData.facts.city },
-      { label: t('fields.education'), value: cardData.facts.education },
-      { label: t('fields.languages'), value: cardData.facts.languages },
-    ],
-    tags: cardData.tags,
-    footer: labelText,
-  }
-}
 
 function handleUpdateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
   updateFilters(nextFilters)

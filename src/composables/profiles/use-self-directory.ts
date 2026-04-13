@@ -1,6 +1,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
+  getLocalizedProfileCardData,
   getLocalizedIntentOptions,
   getLocalizedLanguageOptions,
   getLocalizedProfileOptions,
@@ -15,6 +16,7 @@ import type {
   SelfSortKey,
   UseSelfDirectoryResult,
 } from '@/types/self-directory'
+import type { DirectoryCardViewModel } from '@/types/directory-card'
 
 const DEFAULT_FILTERS: SelfDirectoryFilters = {
   gender: '',
@@ -484,6 +486,39 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     }
   }
 
+  function buildCardViewModel(profile: Profile): DirectoryCardViewModel {
+    const cardData = getLocalizedProfileCardData(locale.value, profile)
+    const goalText = cardData.goalCode === 'marriage'
+      ? t('card.goalMarriage')
+      : cardData.goalCode === 'exclusive'
+        ? t('card.goalExclusive')
+        : cardData.goalCode === 'cross_border'
+          ? t('card.goalCrossBorder')
+          : t('card.goalSerious')
+
+    const labelText = cardData.status === 'review'
+      ? t('card.labelReview')
+      : cardData.status === 'vip'
+        ? t('card.labelPriority')
+        : t('card.labelSelected')
+
+    return {
+      avatar: cardData.avatar,
+      name: cardData.name,
+      gender: profile.gender,
+      meta: cardData.meta,
+      badge: goalText,
+      summary: cardData.summary,
+      facts: [
+        { label: t('fields.city'), value: cardData.facts.city },
+        { label: t('fields.education'), value: cardData.facts.education },
+        { label: t('fields.languages'), value: cardData.facts.languages },
+      ],
+      tags: cardData.tags,
+      footer: labelText,
+    }
+  }
+
   return {
     filters,
     sortKey,
@@ -516,5 +551,6 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     resetFilters,
     updateSort,
     changePage,
+    buildCardViewModel,
   }
 }

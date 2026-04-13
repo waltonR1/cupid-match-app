@@ -12,8 +12,8 @@
       :title="t('hero.title')"
       :subtitle="t('hero.subtitle')"
       :next-event-label="t('hero.nextEvent')"
-      :fields="heroFields"
-      :next-event="nextEventCard"
+      :fields="eventData.heroFields.value"
+      :next-event="eventData.nextEventCard.value"
       @open="handleEventOpen"
     />
 
@@ -21,9 +21,9 @@
       :eyebrow="t('featured.eyebrow')"
       :title="t('featured.title')"
       :subtitle="t('featured.subtitle')"
-      :stats="statCards"
-      :fields="fieldLabels"
-      :events="featuredEventCards"
+      :stats="eventData.statCards.value"
+      :fields="eventData.fieldLabels.value"
+      :events="eventData.featuredEventCards.value"
       @open="handleEventOpen"
     />
 
@@ -31,7 +31,7 @@
       :eyebrow="t('schedule.eyebrow')"
       :title="t('schedule.title')"
       :note="t('schedule.note')"
-      :events="scheduleEventCards"
+      :events="eventData.scheduleEventCards.value"
       @open="handleEventOpen"
     />
 
@@ -43,18 +43,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
-import EventsHero from '@/components/events/EventsHero.vue'
+import AppHeader from '@/components/layout/AppHeader.vue'
 import EventsFeaturedGrid from '@/components/events/EventsFeaturedGrid.vue'
+import EventsHero from '@/components/events/EventsHero.vue'
 import EventsScheduleList from '@/components/events/EventsScheduleList.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
-import {
-  pickLocalized,
-  type CupidEvent,
-  type LocalizedText,
-} from '@/api/modules/events'
 import { useEvents } from '@/composables/events/use-events'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -62,89 +55,8 @@ import { openEventDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('events')
+const { t } = usePageI18n('events')
 const eventData = useEvents()
-
-const events = computed(() => [...eventData.events.value].sort((left, right) => left.date.localeCompare(right.date)))
-const nextEvent = computed(() => events.value[0])
-const featuredEvents = computed(() => events.value.filter(item => item.status !== 'closed'))
-
-const fieldLabels = computed<EventFieldLabels>(() => ({
-  date: t('fields.date'),
-  city: t('fields.city'),
-  venue: t('fields.venue'),
-  format: t('fields.format'),
-  audience: t('fields.audience'),
-  seats: t('fields.seats'),
-}))
-
-const heroFields = computed(() => ({
-  date: fieldLabels.value.date,
-  city: fieldLabels.value.city,
-  venue: fieldLabels.value.venue,
-  format: fieldLabels.value.format,
-  seats: fieldLabels.value.seats,
-}))
-
-const statCards = computed(() => {
-  const openCount = events.value.filter(item => item.status === 'open').length
-  const waitlistCount = events.value.filter(item => item.status === 'waitlist').length
-  const cityCount = new Set(events.value.map(item => pickLocalized(locale.value, item.city))).size
-
-  return [
-    { label: t('stats.totalEvents'), value: String(events.value.length) },
-    { label: t('stats.openEvents'), value: String(openCount) },
-    { label: t('stats.waitlistEvents'), value: String(waitlistCount) },
-    { label: t('stats.cities'), value: String(cityCount) },
-  ]
-})
-
-const nextEventCard = computed<EventOverviewItem | undefined>(() => {
-  if (!nextEvent.value) return undefined
-  return buildEventOverviewItem(nextEvent.value)
-})
-
-const featuredEventCards = computed(() => {
-  return featuredEvents.value.map(item => buildEventOverviewItem(item))
-})
-
-const scheduleEventCards = computed(() => {
-  return events.value.map(item => buildEventOverviewItem(item))
-})
-
-function localize(text: LocalizedText) {
-  return pickLocalized(locale.value, text)
-}
-
-function eventStatusLabel(status: EventOverviewItem['status']) {
-  return t(`status.${status}`)
-}
-
-function formatDate(date: string) {
-  const map = {
-    zh: new Date(date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }),
-    fr: new Date(date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-    en: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-  } as const
-
-  return map[locale.value]
-}
-
-function buildEventOverviewItem(event: CupidEvent): EventOverviewItem {
-  return {
-    id: event.id,
-    title: localize(event.title),
-    summary: localize(event.summary),
-    date: formatDate(event.date),
-    city: localize(event.city),
-    venue: localize(event.venue),
-    format: localize(event.format),
-    audience: localize(event.audience),
-    seats: `${event.registered} / ${event.seats}`,
-    status: event.status,
-    statusLabel: eventStatusLabel(event.status),
-  }
-}
 
 function handleNavClick(key: string) {
   navigateByNavKey(key, navList)
