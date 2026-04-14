@@ -43,28 +43,28 @@
       }
     },
     {
-      "path": "pages/discovery/self/index",
+      "path": "pages/profile/self/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员资料"
       }
     },
     {
-      "path": "pages/discovery/self/detail",
+      "path": "pages/profile/self/detail",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员详情"
       }
     },
     {
-      "path": "pages/discovery/family/index",
+      "path": "pages/profile/family/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "家庭参与"
       }
     },
     {
-      "path": "pages/discovery/family/detail",
+      "path": "pages/profile/family/detail",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员详情"

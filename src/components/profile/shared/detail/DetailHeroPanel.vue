@@ -1,5 +1,5 @@
 <template>
-  <view class="relative overflow-hidden border border-semantic-border-default bg-gradient-discovery-hero px-6 py-6 text-semantic-text-primary shadow-discovery-hero lg:px-8 lg:py-7">
+  <view class="relative overflow-hidden border border-semantic-border-default bg-gradient-profile-hero px-6 py-6 text-semantic-text-primary shadow-profile-hero lg:px-8 lg:py-7">
     <view class="absolute inset-x-0 top-0 h-px bg-semantic-border-divider" />
     <view class="absolute right-[-80px] top-[-70px] hidden h-[220px] w-[220px] rounded-full border border-semantic-border-default xl:block" />
 

@@ -67,8 +67,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import DirectoryActiveFilterChips from '@/components/discovery/shared/directory/DirectoryActiveFilterChips.vue'
-import DirectoryFilterSelectCard from '@/components/discovery/shared/directory/DirectoryFilterSelectCard.vue'
+import DirectoryActiveFilterChips from '@/components/profile/shared/directory/DirectoryActiveFilterChips.vue'
+import DirectoryFilterSelectCard from '@/components/profile/shared/directory/DirectoryFilterSelectCard.vue'
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,

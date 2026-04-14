@@ -104,7 +104,7 @@ src/components/
   account/
   common/
   contact/
-  discovery/
+  profile/
   events/
   home/
   layout/
@@ -135,7 +135,7 @@ src/types/
 src/pages/
   account/              账号中心页面
   auth/                 登录与注册页面
-  discovery/
+  profile/
     family/             家庭视角资料列表和详情
     self/               本人视角资料列表和详情
   events/               活动列表和详情

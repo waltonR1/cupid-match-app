@@ -206,7 +206,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import DetailHeroPanel from '@/components/discovery/shared/detail/DetailHeroPanel.vue'
+import DetailHeroPanel from '@/components/profile/shared/detail/DetailHeroPanel.vue'
 import { useSelfDetailViewModel } from '@/composables/profiles/use-self-detail-view-model'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -243,7 +243,7 @@ function handleBack() {
   }
 
   uni.redirectTo({
-    url: '/pages/discovery/self/index',
+    url: '/pages/profile/self/index',
   })
 }
 

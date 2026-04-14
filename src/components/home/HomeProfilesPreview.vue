@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
-import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
+import DirectoryCardFrame from '@/components/profile/shared/directory/DirectoryCardFrame.vue'
 import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/demo-navigation'
@@ -59,7 +59,7 @@ defineProps<{
 const { t } = usePageI18n('home')
 
 function goProfiles() {
-  uni.navigateTo({ url: '/pages/discovery/self/index' })
+  uni.navigateTo({ url: '/pages/profile/self/index' })
 }
 
 function handleProfileOpen(id: string) {

@@ -231,7 +231,7 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
-const SELF_ROUTE = '/pages/discovery/self/index'
+const SELF_ROUTE = '/pages/profile/self/index'
 
 const navList = NAV_LIST
 const { t } = usePageI18n('login')

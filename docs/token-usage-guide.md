@@ -57,7 +57,7 @@ component.membership-tier.gold.fill
 
 ```text
 effect.gradient.home-hero
-effect.gradient.discovery-hero
+effect.gradient.profile-hero
 effect.shadow.panel
 effect.shadow.hero
 effect.shadow.dropdown
@@ -82,7 +82,7 @@ component.directory-control.selected.text -> text-component-directory-control-se
 ```text
 effect.gradient.home-hero -> bg-gradient-home-hero
 effect.gradient.events-hero -> bg-gradient-events-hero
-effect.gradient.discovery-hero -> bg-gradient-discovery-hero
+effect.gradient.profile-hero -> bg-gradient-profile-hero
 effect.gradient.auth-hero -> bg-gradient-auth-hero
 ```
 

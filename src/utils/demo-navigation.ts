@@ -14,13 +14,13 @@ export function openRegisterPage(plan?: string) {
 
 export function openSelfDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/discovery/self/detail?id=${encodeURIComponent(id)}`,
+    url: `/pages/profile/self/detail?id=${encodeURIComponent(id)}`,
   })
 }
 
 export function openFamilyProfileDetail(id: string) {
   uni.navigateTo({
-    url: `/pages/discovery/family/detail?id=${encodeURIComponent(id)}`,
+    url: `/pages/profile/family/detail?id=${encodeURIComponent(id)}`,
   })
 }
 

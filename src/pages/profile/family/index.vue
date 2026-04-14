@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
-      active-nav="common.nav.self"
+      active-nav="common.nav.family"
       @nav-click="handleNavClick"
       @register-click="handleRegisterClick"
     />
@@ -15,7 +15,7 @@
         :tags="heroTags"
       />
 
-      <SelfFilterToolbar
+      <FamilyFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
         :expand-text="t('filters.expand')"
@@ -23,13 +23,11 @@
         :gender-label="t('filters.gender')"
         :age-label="t('filters.age')"
         :city-label="t('filters.city')"
-        :height-label="t('filters.height')"
         :education-label="t('filters.education')"
         :intent-label="t('filters.intent')"
+        :family-mode-label="t('filters.familyMode')"
+        :occupation-label="t('filters.occupation')"
         :industry-label="t('filters.industry')"
-        :occupation-label="t('fields.job')"
-        :language-label="t('filters.languages')"
-        :verified-label="t('filters.verified')"
         :marital-status-label="t('filters.maritalStatus')"
         :children-label="t('filters.children')"
         :long-distance-label="t('filters.longDistance')"
@@ -37,13 +35,11 @@
         :gender-options="genderOptions"
         :age-options="ageOptions"
         :city-options="cityOptions"
-        :height-options="heightOptions"
         :education-options="educationOptions"
         :intent-options="intentOptions"
-        :industry-options="industryOptions"
+        :family-mode-options="familyModeOptions"
         :occupation-options="occupationOptions"
-        :language-options="languageOptions"
-        :verified-options="verifiedOptions"
+        :industry-options="industryOptions"
         :marital-status-options="maritalStatusOptions"
         :children-options="childrenOptions"
         :long-distance-options="longDistanceOptions"
@@ -77,6 +73,7 @@
           <DirectoryCardFrame
             :data="buildCardViewModel(item)"
             clickable
+            summary-class="line-clamp-3"
             @select="handleProfileOpen(item.id)"
           />
         </template>
@@ -101,23 +98,23 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import SelfFilterToolbar from '@/components/discovery/self/SelfFilterToolbar.vue'
-import DirectoryCardFrame from '@/components/discovery/shared/directory/DirectoryCardFrame.vue'
-import DirectoryGridShell from '@/components/discovery/shared/directory/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/discovery/shared/directory/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/discovery/shared/directory/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/discovery/shared/directory/DirectoryResultToolbar.vue'
+import FamilyFilterToolbar from '@/components/profile/family/FamilyFilterToolbar.vue'
+import DirectoryCardFrame from '@/components/profile/shared/directory/DirectoryCardFrame.vue'
+import DirectoryGridShell from '@/components/profile/shared/directory/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/profile/shared/directory/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/profile/shared/directory/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/profile/shared/directory/DirectoryResultToolbar.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
-import { useSelfDirectory } from '@/composables/profiles/use-self-directory'
+import { useFamilyDirectory } from '@/composables/profiles/use-family-directory'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { SelfDirectoryFilters } from '@/types/self-directory'
-import { openRegisterPage, openSelfDetail } from '@/utils/demo-navigation'
+import type { FamilyDirectoryFilters } from '@/types/family-directory'
+import { openFamilyProfileDetail, openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
-const { t } = usePageI18n('self')
 const navList = NAV_LIST
+const { t } = usePageI18n('family')
 
 const {
   filters,
@@ -132,13 +129,11 @@ const {
   ageOptions,
   genderOptions,
   cityOptions,
-  heightOptions,
   educationOptions,
   intentOptions,
-  industryOptions,
+  familyModeOptions,
   occupationOptions,
-  languageOptions,
-  verifiedOptions,
+  industryOptions,
   maritalStatusOptions,
   childrenOptions,
   longDistanceOptions,
@@ -149,7 +144,7 @@ const {
   updateSort,
   changePage,
   buildCardViewModel,
-} = useSelfDirectory()
+} = useFamilyDirectory()
 
 const heroTags = computed(() => [
   t('hero.tags.first'),
@@ -157,16 +152,16 @@ const heroTags = computed(() => [
   t('hero.tags.third'),
 ])
 
-function handleUpdateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
+function handleUpdateFilters(nextFilters: Partial<FamilyDirectoryFilters>) {
   updateFilters(nextFilters)
+}
+
+function handleRemoveFilter(key: keyof FamilyDirectoryFilters) {
+  removeFilter(key)
 }
 
 function handleResetFilters() {
   resetFilters()
-}
-
-function handleRemoveFilter(key: keyof SelfDirectoryFilters) {
-  removeFilter(key)
 }
 
 function handleUpdateSort(nextSortKey: string) {
@@ -181,11 +176,11 @@ function handleNavClick(key: string) {
   navigateByNavKey(key, navList)
 }
 
-function handleRegisterClick() {
-  openRegisterPage()
+function handleProfileOpen(id: string) {
+  openFamilyProfileDetail(id)
 }
 
-function handleProfileOpen(id: string) {
-  openSelfDetail(id)
+function handleRegisterClick() {
+  openRegisterPage('contact')
 }
 </script>
