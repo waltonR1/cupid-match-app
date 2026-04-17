@@ -15,7 +15,7 @@
           {{ t('hero.title') }}
         </view>
 
-        <view class="mt-3 text-[42px] italic leading-[1.15] text-semantic-text-hero-highlight lg:text-[68px]">
+        <view class="mt-3 text-[64px] italic leading-[1.15] text-semantic-text-hero-highlight lg:text-[68px]">
           {{ t('hero.titleAccent') }}
         </view>
 
