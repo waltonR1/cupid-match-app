@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="verification"
+    :account-data="accountData"
     :header-eyebrow="t('verification.eyebrow')"
     :header-title="t('verification.title')"
     :header-description="t('verification.subtitle')"
@@ -118,20 +119,26 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import {
+  pickLocalized,
+  type AccountMembershipLevel,
+  type LocalizedText,
+} from '@/api/modules/account'
 import AppButton from '@/components/common/AppButton.vue'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openConnectionsPage, openMyProfilePage } from '@/utils/demo-navigation'
 
-const { t } = usePageI18n('accountCenter')
+const { t, locale } = usePageI18n('accountCenter')
+const { t: globalT } = useLocaleBridge()
+const accountData = useAccountData()
 const {
   account,
   profile,
   familyAssistSetting,
   visibleFieldsSetting,
-  localize,
-  membershipLabel,
-} = useAccountDataContext()
+} = accountData
 
 const verificationItems = computed(() => [
   { label: t('verification.items.realName'), done: true },
@@ -173,4 +180,12 @@ const controlRows = computed(() => [
     value: visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
   },
 ])
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
+}
+
+function membershipLabel(membership: AccountMembershipLevel = account.membership) {
+  return globalT(`membership.${membership}.title`)
+}
 </script>

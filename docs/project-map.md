@@ -89,10 +89,10 @@
 
 ### 发现页
 
-- `/pages/profile/self/index`：本人视角资料列表
-- `/pages/profile/self/detail`：本人视角资料详情
-- `/pages/profile/family/index`：家庭视角资料列表
-- `/pages/profile/family/detail`：家庭视角资料详情
+- `/pages/profiles/self/index`：本人视角资料列表
+- `/pages/profiles/self/detail`：本人视角资料详情
+- `/pages/profiles/family/index`：家庭视角资料列表
+- `/pages/profiles/family/detail`：家庭视角资料详情
 
 ### 活动页
 

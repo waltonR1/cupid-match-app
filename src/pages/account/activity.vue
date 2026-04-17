@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="activity"
+    :account-data="accountData"
     :header-eyebrow="t('activity.eyebrow')"
     :header-title="t('activity.title')"
     :header-description="t('activity.subtitle')"
@@ -113,12 +114,15 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/demo-navigation'
+import { formatLocalizedDate } from '@/utils/locale-format'
 
-const { t } = usePageI18n('accountCenter')
-const { userEvents, localize, formatDate } = useAccountDataContext()
+const { t, locale } = usePageI18n('accountCenter')
+const accountData = useAccountData()
+const { userEvents } = accountData
 
 const filterItems = computed(() => [
   {
@@ -172,5 +176,13 @@ function statusTone(status: 'confirmed' | 'waitlist' | 'completed') {
     card: 'border-component-account-registration-completed-card-border bg-component-account-registration-completed-card-background',
     badge: 'border-component-account-registration-completed-badge-border bg-component-account-registration-completed-badge-background text-component-account-registration-completed-badge-text',
   }
+}
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
+}
+
+function formatDate(date: string) {
+  return formatLocalizedDate(locale.value, date)
 }
 </script>

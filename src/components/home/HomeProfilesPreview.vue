@@ -23,7 +23,7 @@
 
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <DirectoryCardFrame
-          v-for="profile in profiles"
+          v-for="profile in profileCards"
           :key="profile.id"
           :data="profile.card"
           clickable
@@ -46,23 +46,65 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
-import DirectoryCardFrame from '@/components/profile/shared/directory/DirectoryCardFrame.vue'
+import DirectoryCardFrame from '@/components/profiles/shared/directory/DirectoryCardFrame.vue'
+import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/demo-navigation'
 
-defineProps<{
-  profiles: HomeProfilesPreviewItem[]
+const props = defineProps<{
+  profiles: Profile[]
 }>()
 
-const { t } = usePageI18n('home')
+const { t, locale } = usePageI18n('home')
+const { t: profileT } = usePageI18n('self')
+const profileCards = computed<HomeProfilesPreviewItem[]>(() =>
+  props.profiles.map(profile => ({
+    id: profile.id,
+    card: createProfileCardViewModel(profile),
+  })),
+)
 
 function goProfiles() {
-  uni.navigateTo({ url: '/pages/profile/self/index' })
+  uni.navigateTo({ url: '/pages/profiles/self/index' })
 }
 
 function handleProfileOpen(id: string) {
   openSelfDetail(id)
+}
+
+function createProfileCardViewModel(profile: Profile): HomeProfilesPreviewItem['card'] {
+  const cardData = getLocalizedProfileCardData(locale.value, profile)
+  const goalText = cardData.goalCode === 'marriage'
+    ? profileT('card.goalMarriage')
+    : cardData.goalCode === 'exclusive'
+      ? profileT('card.goalExclusive')
+      : cardData.goalCode === 'cross_border'
+        ? profileT('card.goalCrossBorder')
+        : profileT('card.goalSerious')
+
+  const labelText = cardData.status === 'review'
+    ? profileT('card.labelReview')
+    : cardData.status === 'vip'
+      ? profileT('card.labelPriority')
+      : profileT('card.labelSelected')
+
+  return {
+    avatar: cardData.avatar,
+    name: cardData.name,
+    gender: profile.gender,
+    meta: cardData.meta,
+    badge: goalText,
+    summary: cardData.summary,
+    facts: [
+      { label: t('profilesPreview.fields.city'), value: cardData.facts.city },
+      { label: t('profilesPreview.fields.education'), value: cardData.facts.education },
+      { label: t('profilesPreview.fields.languages'), value: cardData.facts.languages },
+    ],
+    tags: cardData.tags,
+    footer: labelText,
+  }
 }
 </script>

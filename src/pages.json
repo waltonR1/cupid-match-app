@@ -43,28 +43,28 @@
       }
     },
     {
-      "path": "pages/profile/self/index",
+      "path": "pages/profiles/self/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员资料"
       }
     },
     {
-      "path": "pages/profile/self/detail",
+      "path": "pages/profiles/self/detail",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员详情"
       }
     },
     {
-      "path": "pages/profile/family/index",
+      "path": "pages/profiles/family/index",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "家庭参与"
       }
     },
     {
-      "path": "pages/profile/family/detail",
+      "path": "pages/profiles/family/detail",
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": "会员详情"

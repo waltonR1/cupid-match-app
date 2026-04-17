@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="connections"
+    :account-data="accountData"
     :header-eyebrow="t('connections.eyebrow')"
     :header-title="t('connections.title')"
     :header-description="t('connections.subtitle')"
@@ -123,17 +124,18 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openFamilyProfileDetail, openSelfDetail } from '@/utils/demo-navigation'
 
-const { t } = usePageI18n('accountCenter')
+const { t, locale } = usePageI18n('accountCenter')
+const accountData = useAccountData()
 const {
   favorites,
   familyVisibleFavorites,
   privateFavorites,
-  localize,
-} = useAccountDataContext()
+} = accountData
 
 const filterItems = computed(() => [
   { label: t('connections.filters.likedMe'), value: String(familyVisibleFavorites.value.length) },
@@ -166,5 +168,9 @@ function openProfile(id: string, familyVisible: boolean) {
   }
 
   openSelfDetail(id)
+}
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
 }
 </script>

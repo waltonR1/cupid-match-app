@@ -2,7 +2,7 @@
   <view class="min-h-screen bg-semantic-page-subtle text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
-      active-nav="common.nav.family"
+      active-nav="common.nav.self"
       @nav-click="handleNavClick"
       @register-click="handleRegisterClick"
     />
@@ -26,7 +26,7 @@
             stroke-linejoin="round"
           />
         </svg>
-        <text>{{ t('actions.backToFamily') }}</text>
+        <text>{{ t('actions.backToSelf') }}</text>
       </view>
 
       <view v-if="heroData" class="space-y-6">
@@ -186,7 +186,7 @@
         v-else
         :title="t('sections.notFoundTitle')"
         :subtitle="t('sections.notFoundSubtitle')"
-        :primary-text="t('actions.backToFamily')"
+        :primary-text="t('actions.backToSelf')"
         primary-variant="outline"
         variant="compact"
         @primary="handleBack"
@@ -206,15 +206,15 @@ import { onLoad } from '@dcloudio/uni-app'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import DetailHeroPanel from '@/components/profile/shared/detail/DetailHeroPanel.vue'
-import { useFamilyDetailViewModel } from '@/composables/profiles/use-family-detail-view-model'
+import DetailHeroPanel from '@/components/profiles/shared/detail/DetailHeroPanel.vue'
+import { useSelfDetailViewModel } from '@/view-models/profiles/self-detail-view-model'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
-const { t, locale } = usePageI18n('familyDetail')
+const { t, locale } = usePageI18n('selfDetail')
 
 const profileId = ref('')
 
@@ -234,7 +234,7 @@ const {
   maritalPlanText,
   highlightTexts,
   tagTexts,
-} = useFamilyDetailViewModel(profileId, locale, t)
+} = useSelfDetailViewModel(profileId, locale, t)
 
 function handleBack() {
   if (getCurrentPages().length > 1) {
@@ -243,7 +243,7 @@ function handleBack() {
   }
 
   uni.redirectTo({
-    url: '/pages/profile/family/index',
+    url: '/pages/profiles/self/index',
   })
 }
 
@@ -252,6 +252,6 @@ function handleNavClick(key: string) {
 }
 
 function handleRegisterClick() {
-  openRegisterPage('contact')
+  openRegisterPage('free')
 }
 </script>

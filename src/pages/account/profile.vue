@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="profile"
+    :account-data="accountData"
     :header-eyebrow="t('profile.eyebrow')"
     :header-title="t('profile.title')"
     :header-description="t('profile.subtitle')"
@@ -160,19 +161,25 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import {
+  getAccountLanguageLabel,
+  pickLocalized,
+  type AccountMembershipLevel,
+  type LocalizedText,
+} from '@/api/modules/account'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
-const { t } = usePageI18n('accountCenter')
+const { t, locale } = usePageI18n('accountCenter')
+const { t: globalT } = useLocaleBridge()
+const accountData = useAccountData()
 const {
   account,
   profile,
   familyAssistSetting,
   visibleFieldsSetting,
-  localize,
-  formatLanguages,
-  membershipLabel,
-} = useAccountDataContext()
+} = accountData
 
 const summaryItems = computed(() => [
   {
@@ -227,4 +234,16 @@ const taskPoints = computed(() => [
   t('profile.tasks.introduction'),
   t('profile.tasks.verification'),
 ])
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
+}
+
+function formatLanguages(languages: string[]) {
+  return languages.map(language => getAccountLanguageLabel(locale.value, language)).join(' / ')
+}
+
+function membershipLabel(membership: AccountMembershipLevel = account.membership) {
+  return globalT(`membership.${membership}.title`)
+}
 </script>

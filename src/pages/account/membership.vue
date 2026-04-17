@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="membership"
+    :account-data="accountData"
     :header-eyebrow="t('membership.eyebrow')"
     :header-title="t('membership.title')"
     :header-description="t('membership.subtitle')"
@@ -152,8 +153,10 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import type { AccountMembershipLevel } from '@/api/modules/account'
 import AppButton from '@/components/common/AppButton.vue'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
   openActivityPage,
@@ -162,10 +165,13 @@ import {
   openRegisterPage,
   openVerificationPage,
 } from '@/utils/demo-navigation'
+import { formatLocalizedDate } from '@/utils/locale-format'
 
-const { t } = usePageI18n('accountCenter')
+const { t, locale } = usePageI18n('accountCenter')
+const { t: globalT } = useLocaleBridge()
 const { t: membershipT } = usePageI18n('membership')
-const { account, formatDate, membershipLabel } = useAccountDataContext()
+const accountData = useAccountData()
+const { account } = accountData
 
 const currentItems = computed(() => [
   {
@@ -256,4 +262,12 @@ const planCards = computed(() => [
     context: 'membership-diamond' as const,
   },
 ])
+
+function membershipLabel(membership: AccountMembershipLevel = account.membership) {
+  return globalT(`membership.${membership}.title`)
+}
+
+function formatDate(date: string) {
+  return formatLocalizedDate(locale.value, date)
+}
 </script>

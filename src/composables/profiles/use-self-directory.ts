@@ -1,22 +1,6 @@
 import { computed, onMounted, ref } from 'vue'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import {
-  getLocalizedProfileCardData,
-  getLocalizedIntentOptions,
-  getLocalizedLanguageOptions,
-  getLocalizedProfileOptions,
-  listProfiles,
-  localized,
-  type Profile,
-} from '@/api/modules/profiles'
-import type {
-  ActiveDirectoryFilterChip,
-  DirectoryOption,
-  SelfDirectoryFilters,
-  SelfSortKey,
-  UseSelfDirectoryResult,
-} from '@/types/self-directory'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
+import { listProfiles, type Profile } from '@/api/modules/profiles'
+import type { SelfDirectoryFilters, SelfSortKey, UseSelfDirectoryResult } from '@/types/self-directory'
 
 const DEFAULT_FILTERS: SelfDirectoryFilters = {
   gender: '',
@@ -38,32 +22,6 @@ function toTimestamp(dateText?: string) {
   if (!dateText) return 0
   const value = new Date(dateText).getTime()
   return Number.isNaN(value) ? 0 : value
-}
-
-function buildBaseAllOption(label: string): DirectoryOption {
-  return {
-    label,
-    value: '',
-  }
-}
-
-function resolveOptionLabel(options: DirectoryOption[], value: string) {
-  return options.find(item => item.value === value)?.label || value
-}
-
-function buildActiveChip(
-  key: keyof SelfDirectoryFilters,
-  label: string,
-  options: DirectoryOption[],
-  value: string,
-): ActiveDirectoryFilterChip | undefined {
-  if (!value) return undefined
-
-  return {
-    key,
-    label,
-    value: resolveOptionLabel(options, value),
-  }
 }
 
 function matchAgeRange(age: number, range: string) {
@@ -168,8 +126,6 @@ function getPriorityRank(profile: Profile) {
 }
 
 export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
-  const { locale, t } = usePageI18n('self')
-
   const filters = ref<SelfDirectoryFilters>({ ...DEFAULT_FILTERS })
   const sortKey = ref<SelfSortKey>('recentActive')
   const page = ref(1)
@@ -180,160 +136,16 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     void loadProfiles()
   })
 
-  const text = computed(() => ({
-    gender: t('filters.gender'),
-    genderMale: t('filters.genderMale'),
-    genderFemale: t('filters.genderFemale'),
-    all: localized('全部', 'Tous', 'All')[locale.value],
-    age: localized('年龄', 'Age', 'Age')[locale.value],
-    city: localized('城市', 'Ville', 'City')[locale.value],
-    height: localized('身高', 'Taille', 'Height')[locale.value],
-    education: localized('学历', 'Formation', 'Education')[locale.value],
-    intent: localized('关系意向', 'Intention', 'Intent')[locale.value],
-    industry: localized('行业', 'Secteur', 'Industry')[locale.value],
-    occupation: localized('职业', 'Metier', 'Occupation')[locale.value],
-    languages: localized('语言', 'Langues', 'Languages')[locale.value],
-    verified: localized('认证状态', 'Verification', 'Verification')[locale.value],
-    maritalStatus: localized('婚姻状态', 'Statut marital', 'Marital status')[locale.value],
-    children: localized('子女情况', 'Enfants', 'Children')[locale.value],
-    longDistance: localized('异地接受度', 'Distance', 'Long-distance')[locale.value],
-    ageUnder25: localized('25岁以下', 'Moins de 25 ans', 'Under 25')[locale.value],
-    age25to29: localized('25-29岁', '25-29 ans', '25-29')[locale.value],
-    age30to34: localized('30-34岁', '30-34 ans', '30-34')[locale.value],
-    age35to39: localized('35-39岁', '35-39 ans', '35-39')[locale.value],
-    age40plus: localized('40岁以上', '40 ans et plus', '40+')[locale.value],
-    degreeBachelor: localized('本科', 'Licence', 'Bachelor')[locale.value],
-    degreeMaster: localized('硕士', 'Master', 'Master')[locale.value],
-    degreePhd: localized('博士', 'Doctorat', 'PhD')[locale.value],
-    verifiedYes: localized('已认证', 'Verifie', 'Verified')[locale.value],
-    verifiedNo: localized('未认证', 'Non verifie', 'Unverified')[locale.value],
-    childrenYes: localized('有孩子', 'Avec enfants', 'Has children')[locale.value],
-    childrenNo: localized('无孩子', 'Sans enfant', 'No children')[locale.value],
-    longDistanceYes: localized('接受异地', 'Ouvert a distance', 'Open to long-distance')[locale.value],
-    longDistanceNo: localized('不接受异地', 'Pas de distance', 'No long-distance')[locale.value],
-    maritalSingle: localized('未婚', 'Celibataire', 'Single')[locale.value],
-    maritalDivorced: localized('离异', 'Divorce', 'Divorced')[locale.value],
-    maritalWidowed: localized('丧偶', 'Veuf / veuve', 'Widowed')[locale.value],
-    sortRecent: localized('最近活跃', 'Activite recente', 'Recently active')[locale.value],
-    sortPriority: localized('优先资料', 'Profils prioritaires', 'Priority profiles')[locale.value],
-    sortAgeAsc: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value],
-    sortAgeDesc: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value],
-  }))
-
-  const ageOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.ageUnder25, value: 'under25' },
-    { label: text.value.age25to29, value: '25to29' },
-    { label: text.value.age30to34, value: '30to34' },
-    { label: text.value.age35to39, value: '35to39' },
-    { label: text.value.age40plus, value: '40plus' },
-  ])
-
-  const genderOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.genderMale, value: 'male' },
-    { label: text.value.genderFemale, value: 'female' },
-  ])
-
-  const heightOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: '165cm-', value: 'under165' },
-    { label: '165-169cm', value: '165to169' },
-    { label: '170-174cm', value: '170to174' },
-    { label: '175-179cm', value: '175to179' },
-    { label: '180cm+', value: '180plus' },
-  ])
-
-  const educationOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.degreeBachelor, value: 'bachelor' },
-    { label: text.value.degreeMaster, value: 'master' },
-    { label: text.value.degreePhd, value: 'phd' },
-  ])
-
-  const cityOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.city).map(value => ({
-      label: value,
-      value,
-    })),
-  ])
-
-  const intentOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedIntentOptions(sourceItems.value, locale.value).map(item => ({
-      label: item.label,
-      value: item.code,
-    })),
-  ])
-
-  const industryOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.industry).map(value => ({
-      label: value,
-      value,
-    })),
-  ])
-
-  const occupationOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedProfileOptions(sourceItems.value, locale.value, profile => profile.occupation).map(value => ({
-      label: value,
-      value,
-    })),
-  ])
-
-  const languageOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    ...getLocalizedLanguageOptions(sourceItems.value, locale.value),
-  ])
-
-  const verifiedOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.verifiedYes, value: 'verified' },
-    { label: text.value.verifiedNo, value: 'unverified' },
-  ])
-
-  const maritalStatusOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.maritalSingle, value: 'single' },
-    { label: text.value.maritalDivorced, value: 'divorced' },
-    { label: text.value.maritalWidowed, value: 'widowed' },
-  ])
-
-  const childrenOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.childrenYes, value: 'yes' },
-    { label: text.value.childrenNo, value: 'no' },
-  ])
-
-  const longDistanceOptions = computed<DirectoryOption[]>(() => [
-    buildBaseAllOption(text.value.all),
-    { label: text.value.longDistanceYes, value: 'yes' },
-    { label: text.value.longDistanceNo, value: 'no' },
-  ])
-
-  const sortOptions = computed<DirectoryOption[]>(() => [
-    { label: text.value.sortRecent, value: 'recentActive' },
-    { label: text.value.sortPriority, value: 'priorityFirst' },
-    { label: text.value.sortAgeAsc, value: 'ageAsc' },
-    { label: text.value.sortAgeDesc, value: 'ageDesc' },
-  ])
-
   const filteredItems = computed<Profile[]>(() => {
     return sourceItems.value.filter(profile => {
-      const localizedCity = profile.city[locale.value]
-      const localizedIndustry = profile.industry[locale.value]
-      const localizedOccupation = profile.occupation[locale.value]
-
       const passedGender = matchGender(profile.gender, filters.value.gender)
       const passedAge = matchAgeRange(profile.age, filters.value.ageRange)
-      const passedCity = !filters.value.city || localizedCity === filters.value.city
+      const passedCity = !filters.value.city || profile.city.en === filters.value.city
       const passedHeight = matchHeightRange(profile.height, filters.value.heightRange)
       const passedEducation = matchEducation(profile, filters.value.education)
       const passedIntent = !filters.value.intentCode || profile.intentCode === filters.value.intentCode
-      const passedIndustry = !filters.value.industry || localizedIndustry === filters.value.industry
-      const passedOccupation = !filters.value.occupation || localizedOccupation === filters.value.occupation
+      const passedIndustry = !filters.value.industry || profile.industry.en === filters.value.industry
+      const passedOccupation = !filters.value.occupation || profile.occupation.en === filters.value.occupation
       const passedLanguage = !filters.value.language || profile.languages.includes(filters.value.language)
       const passedVerified = matchVerified(profile.isVerified, filters.value.verified)
       const passedMaritalStatus =
@@ -368,76 +180,38 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     switch (sortKey.value) {
       case 'recentActive':
         return list.sort((a, b) => toTimestamp(b.lastActiveAt) - toTimestamp(a.lastActiveAt))
-
       case 'priorityFirst':
         return list.sort((a, b) => {
           const rankDiff = getPriorityRank(a) - getPriorityRank(b)
           if (rankDiff !== 0) return rankDiff
           return toTimestamp(b.lastActiveAt) - toTimestamp(a.lastActiveAt)
         })
-
       case 'ageAsc':
         return list.sort((a, b) => a.age - b.age)
-
       case 'ageDesc':
         return list.sort((a, b) => b.age - a.age)
-
       default:
         return list
     }
   })
 
   const total = computed(() => sortedItems.value.length)
-
   const totalPages = computed(() => {
     if (!total.value) return 1
     return Math.ceil(total.value / pageSize.value)
   })
-
   const pagedItems = computed<Profile[]>(() => {
     const start = (page.value - 1) * pageSize.value
     const end = start + pageSize.value
     return sortedItems.value.slice(start, end)
   })
-
   const pageStart = computed(() => {
     if (!total.value) return 0
     return (page.value - 1) * pageSize.value + 1
   })
-
   const pageEnd = computed(() => {
     if (!total.value) return 0
     return Math.min(page.value * pageSize.value, total.value)
-  })
-
-  const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
-    const chips = [
-      buildActiveChip('gender', text.value.gender, genderOptions.value, filters.value.gender),
-      buildActiveChip('ageRange', text.value.age, ageOptions.value, filters.value.ageRange),
-      buildActiveChip('city', text.value.city, cityOptions.value, filters.value.city),
-      buildActiveChip('heightRange', text.value.height, heightOptions.value, filters.value.heightRange),
-      buildActiveChip('education', text.value.education, educationOptions.value, filters.value.education),
-      buildActiveChip('intentCode', text.value.intent, intentOptions.value, filters.value.intentCode),
-      buildActiveChip('industry', text.value.industry, industryOptions.value, filters.value.industry),
-      buildActiveChip('occupation', text.value.occupation, occupationOptions.value, filters.value.occupation),
-      buildActiveChip('language', text.value.languages, languageOptions.value, filters.value.language),
-      buildActiveChip('verified', text.value.verified, verifiedOptions.value, filters.value.verified),
-      buildActiveChip(
-        'maritalStatus',
-        text.value.maritalStatus,
-        maritalStatusOptions.value,
-        filters.value.maritalStatus,
-      ),
-      buildActiveChip('hasChildren', text.value.children, childrenOptions.value, filters.value.hasChildren),
-      buildActiveChip(
-        'acceptLongDistance',
-        text.value.longDistance,
-        longDistanceOptions.value,
-        filters.value.acceptLongDistance,
-      ),
-    ]
-
-    return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
   })
 
   function updateFilters(nextFilters: Partial<SelfDirectoryFilters>) {
@@ -459,12 +233,7 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
   }
 
   function updateSort(nextSortKey: string) {
-    const allowed: SelfSortKey[] = [
-      'recentActive',
-      'priorityFirst',
-      'ageAsc',
-      'ageDesc',
-    ]
+    const allowed: SelfSortKey[] = ['recentActive', 'priorityFirst', 'ageAsc', 'ageDesc']
 
     if (!allowed.includes(nextSortKey as SelfSortKey)) return
 
@@ -486,44 +255,12 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     }
   }
 
-  function buildCardViewModel(profile: Profile): DirectoryCardViewModel {
-    const cardData = getLocalizedProfileCardData(locale.value, profile)
-    const goalText = cardData.goalCode === 'marriage'
-      ? t('card.goalMarriage')
-      : cardData.goalCode === 'exclusive'
-        ? t('card.goalExclusive')
-        : cardData.goalCode === 'cross_border'
-          ? t('card.goalCrossBorder')
-          : t('card.goalSerious')
-
-    const labelText = cardData.status === 'review'
-      ? t('card.labelReview')
-      : cardData.status === 'vip'
-        ? t('card.labelPriority')
-        : t('card.labelSelected')
-
-    return {
-      avatar: cardData.avatar,
-      name: cardData.name,
-      gender: profile.gender,
-      meta: cardData.meta,
-      badge: goalText,
-      summary: cardData.summary,
-      facts: [
-        { label: t('fields.city'), value: cardData.facts.city },
-        { label: t('fields.education'), value: cardData.facts.education },
-        { label: t('fields.languages'), value: cardData.facts.languages },
-      ],
-      tags: cardData.tags,
-      footer: labelText,
-    }
-  }
-
   return {
     filters,
     sortKey,
     page,
     pageSize,
+    sourceItems,
     total,
     totalPages,
     filteredItems,
@@ -531,26 +268,10 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     pagedItems,
     pageStart,
     pageEnd,
-    activeFilterChips,
-    ageOptions,
-    genderOptions,
-    cityOptions,
-    heightOptions,
-    educationOptions,
-    intentOptions,
-    industryOptions,
-    occupationOptions,
-    languageOptions,
-    verifiedOptions,
-    maritalStatusOptions,
-    childrenOptions,
-    longDistanceOptions,
-    sortOptions,
     updateFilters,
     removeFilter,
     resetFilters,
     updateSort,
     changePage,
-    buildCardViewModel,
   }
 }

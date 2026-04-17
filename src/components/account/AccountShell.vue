@@ -10,7 +10,7 @@
     <view class="mx-auto max-w-[1280px] px-5 py-6 sm:px-8 lg:py-8">
       <AccountTopSummary
         :account-name="accountData.profile?.name ?? accountData.account.name"
-        :summary-items="accountData.topSummaryItems.value"
+        :summary-items="topSummaryItems"
       />
 
       <view class="mt-5">
@@ -38,18 +38,21 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AccountPrimaryNav from '@/components/account/AccountPrimaryNav.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountTopSummary from '@/components/account/AccountTopSummary.vue'
-import { provideAccountDataContext, useAccountData } from '@/composables/account/use-account-data'
+import type { AccountDataContext } from '@/composables/account'
 import type { AccountPrimaryPageKey } from '@/types/account-shell'
 import { NAV_LIST } from '@/constants/nav'
+import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
 
 const props = defineProps<{
+  accountData: AccountDataContext
   activePage: AccountPrimaryPageKey
   headerEyebrow: string
   headerTitle: string
@@ -57,8 +60,26 @@ const props = defineProps<{
 }>()
 
 const navList = NAV_LIST
-const accountData = useAccountData()
-provideAccountDataContext(accountData)
+const accountData = props.accountData
+const { t: globalT } = useLocaleBridge()
+const topSummaryItems = computed(() => [
+  {
+    key: 'completion',
+    value: `${accountData.account.completion}%`,
+  },
+  {
+    key: 'verification',
+    value: String(accountData.verificationCount.value),
+  },
+  {
+    key: 'membership',
+    value: globalT(`membership.${accountData.account.membership}.title`),
+  },
+  {
+    key: 'activity',
+    value: String(accountData.userEvents.length),
+  },
+])
 
 function handleNavClick(key: string) {
   navigateByNavKey(key, navList)

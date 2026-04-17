@@ -15,8 +15,8 @@ Vue 页面
 
 对应规则：
 
-- 页面只负责页面组合、表单状态、事件绑定和导航。
-- `src/composables` 负责业务状态、异步加载、筛选分页、页面 view-model。
+- 页面负责页面组合、表单状态、事件绑定、导航和 i18n 展示文案。
+- `src/composables` 负责业务状态、异步加载、筛选分页和数据行为，不直接依赖页面 i18n。
 - `src/api/modules` 负责接口形状、mock 适配和后续真实接口替换点。
 - `src/mock` 只作为临时数据源，不应被页面、组件或 composable 直接引用。
 - `src/components` 只放 `.vue` 展示组件，不再放业务 hook 或 `.types.ts`。
@@ -41,7 +41,7 @@ cupid-match/
 src/
   api/                  接口层；当前内部读取 mock，后续替换真实后端
   components/           展示组件；只保留 .vue
-  composables/          业务 hook / view-model
+  composables/          业务 hook
   constants/            全局常量
   i18n/                 多语言初始化、语言包和 i18n hook
   mock/                 临时 mock 数据源
@@ -77,24 +77,53 @@ src/api/
 ```txt
 src/composables/
   account/
+    index.ts
     use-account-data.ts
   auth/
+    index.ts
     use-login.ts
     use-register.ts
   events/
+    index.ts
     use-event-detail.ts
     use-events.ts
     use-home-preview-events.ts
   profiles/
-    use-family-detail-view-model.ts
+    index.ts
     use-family-directory.ts
     use-home-preview-profiles.ts
     use-profile-detail.ts
-    use-self-detail-view-model.ts
     use-self-directory.ts
 ```
 
-`composables` 是页面与 API 之间的业务层。这里可以维护 `loading`、`error`、`refresh`、筛选条件、分页状态和页面展示模型。
+`composables` 是页面与 API 之间的业务层。这里可以维护 `loading`、`error`、`refresh`、筛选条件、分页状态和数据行为。
+
+`composables` 按业务资源目录聚合，目录内按业务场景拆分具体 hook。页面和组件优先从资源目录入口导入，例如 `@/composables/profiles`，同目录内部依赖使用相对路径，避免通过入口文件形成循环引用。
+
+`composables` 不直接调用 `usePageI18n()`、`useLocaleBridge()`，也不负责生成依赖翻译文案的展示模型。页面或展示组件负责 `t(...)`、当前语言、状态文案、字段 label 和卡片文案。跨页面复用的展示模型适配放在 `src/view-models`。
+
+## view-models
+
+```txt
+src/view-models/
+  profiles/
+    family-detail-view-model.ts  家庭资料详情展示适配
+    profile-detail-state.ts      资料详情展示状态辅助
+    self-detail-view-model.ts    本人资料详情展示适配
+```
+
+`view-models` 放跨页面复用的展示模型适配。依赖 `t`、`locale` 的 view-model 只能接收页面传入的 `t`、`locale`，不要在 `view-models` 内部自行调用 i18n hook。
+
+## utils
+
+```txt
+src/utils/
+  demo-navigation.ts   演示跳转函数
+  locale-format.ts     日期和时间本地化格式化
+  navigation.ts        导航工具
+```
+
+`utils` 放跨页面复用的纯工具函数，不承载页面展示模型。
 
 ## components
 
@@ -104,11 +133,11 @@ src/components/
   account/
   common/
   contact/
-  profile/
   events/
   home/
   layout/
   membership/
+  profiles/
 ```
 
 组件目录只放 Vue SFC。组件可以接收 view-model 类型的数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的共享类型从 `src/types` 引入。
@@ -135,7 +164,7 @@ src/types/
 src/pages/
   account/              账号中心页面
   auth/                 登录与注册页面
-  profile/
+  profiles/
     family/             家庭视角资料列表和详情
     self/               本人视角资料列表和详情
   events/               活动列表和详情
@@ -175,8 +204,8 @@ mock 是无后端阶段的临时数据源。除 `src/api/modules/*` 外，不要
 
 1. 先定义或复用 `src/types` 中的类型。
 2. 在 `src/api/modules` 新增接口方法，当前可通过 `mockRequest()` 返回 mock 数据。
-3. 在 `src/composables` 新增业务 hook，处理加载状态、错误状态和 view-model。
-4. 页面调用 composable，组件只接收 props 和 emit 事件。
+3. 在 `src/composables` 新增业务 hook，处理加载状态、错误状态、筛选和分页。
+4. 页面调用 composable，并在页面或展示组件中处理 i18n 文案和展示 view-model。
 5. 如果新增页面，更新 `src/pages.json` 和 `docs/page-relationships.md`。
 6. 完成后运行 `npm.cmd run type-check`。
 

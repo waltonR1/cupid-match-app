@@ -67,27 +67,13 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import DirectoryActiveFilterChips from '@/components/profile/shared/directory/DirectoryActiveFilterChips.vue'
-import DirectoryFilterSelectCard from '@/components/profile/shared/directory/DirectoryFilterSelectCard.vue'
+import DirectoryActiveFilterChips from '@/components/profiles/shared/directory/DirectoryActiveFilterChips.vue'
+import DirectoryFilterSelectCard from '@/components/profiles/shared/directory/DirectoryFilterSelectCard.vue'
 import type {
   ActiveDirectoryFilterChip,
   DirectoryOption,
-  SelfDirectoryFilters,
-} from '@/types/self-directory'
-
-const emit = defineEmits<{
-  (e: 'update:filters', value: Partial<SelfDirectoryFilters>): void
-  (e: 'remove-filter', key: keyof SelfDirectoryFilters): void
-  (e: 'reset'): void
-}>()
-
-interface SelfFilterItem {
-  key: keyof SelfDirectoryFilters
-  label: string
-  options: DirectoryOption[]
-  value: string
-  widthClass: string
-}
+  FamilyDirectoryFilters,
+} from '@/types/family-directory'
 
 const props = defineProps<{
   title: string
@@ -97,32 +83,42 @@ const props = defineProps<{
   genderLabel: string
   ageLabel: string
   cityLabel: string
-  heightLabel: string
   educationLabel: string
   intentLabel: string
-  industryLabel: string
+  familyModeLabel: string
   occupationLabel: string
-  languageLabel: string
-  verifiedLabel: string
+  industryLabel: string
   maritalStatusLabel: string
   childrenLabel: string
   longDistanceLabel: string
-  filters: SelfDirectoryFilters
+  filters: FamilyDirectoryFilters
   genderOptions: DirectoryOption[]
   ageOptions: DirectoryOption[]
   cityOptions: DirectoryOption[]
-  heightOptions: DirectoryOption[]
   educationOptions: DirectoryOption[]
   intentOptions: DirectoryOption[]
-  industryOptions: DirectoryOption[]
+  familyModeOptions: DirectoryOption[]
   occupationOptions: DirectoryOption[]
-  languageOptions: DirectoryOption[]
-  verifiedOptions: DirectoryOption[]
+  industryOptions: DirectoryOption[]
   maritalStatusOptions: DirectoryOption[]
   childrenOptions: DirectoryOption[]
   longDistanceOptions: DirectoryOption[]
   activeFilters: ActiveDirectoryFilterChip[]
 }>()
+
+const emit = defineEmits<{
+  (e: 'update:filters', value: Partial<FamilyDirectoryFilters>): void
+  (e: 'remove-filter', key: keyof FamilyDirectoryFilters): void
+  (e: 'reset'): void
+}>()
+
+interface FamilyFilterItem {
+  key: keyof FamilyDirectoryFilters
+  label: string
+  options: DirectoryOption[]
+  value: string
+  widthClass: string
+}
 
 const isExpanded = ref(false)
 
@@ -130,7 +126,7 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-const primaryFilters = computed<SelfFilterItem[]>(() => [
+const primaryFilters = computed<FamilyFilterItem[]>(() => [
   {
     key: 'gender',
     label: props.genderLabel,
@@ -146,18 +142,18 @@ const primaryFilters = computed<SelfFilterItem[]>(() => [
     widthClass: compactWidthClass,
   },
   {
+    key: 'familyMode',
+    label: props.familyModeLabel,
+    options: props.familyModeOptions,
+    value: props.filters.familyMode,
+    widthClass: wideWidthClass,
+  },
+  {
     key: 'city',
     label: props.cityLabel,
     options: props.cityOptions,
     value: props.filters.city,
     widthClass: regularWidthClass,
-  },
-  {
-    key: 'heightRange',
-    label: props.heightLabel,
-    options: props.heightOptions,
-    value: props.filters.heightRange,
-    widthClass: compactWidthClass,
   },
   {
     key: 'education',
@@ -175,14 +171,7 @@ const primaryFilters = computed<SelfFilterItem[]>(() => [
   },
 ])
 
-const secondaryFilters = computed<SelfFilterItem[]>(() => [
-  {
-    key: 'industry',
-    label: props.industryLabel,
-    options: props.industryOptions,
-    value: props.filters.industry,
-    widthClass: regularWidthClass,
-  },
+const secondaryFilters = computed<FamilyFilterItem[]>(() => [
   {
     key: 'occupation',
     label: props.occupationLabel,
@@ -191,17 +180,10 @@ const secondaryFilters = computed<SelfFilterItem[]>(() => [
     widthClass: wideWidthClass,
   },
   {
-    key: 'language',
-    label: props.languageLabel,
-    options: props.languageOptions,
-    value: props.filters.language,
-    widthClass: regularWidthClass,
-  },
-  {
-    key: 'verified',
-    label: props.verifiedLabel,
-    options: props.verifiedOptions,
-    value: props.filters.verified,
+    key: 'industry',
+    label: props.industryLabel,
+    options: props.industryOptions,
+    value: props.filters.industry,
     widthClass: regularWidthClass,
   },
   {
@@ -237,11 +219,11 @@ function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 
-function handleSelect(key: keyof SelfDirectoryFilters, value: string) {
+function handleSelect(key: keyof FamilyDirectoryFilters, value: string) {
   emit('update:filters', { [key]: value })
 }
 
 function handleRemoveFilter(key: string) {
-  emit('remove-filter', key as keyof SelfDirectoryFilters)
+  emit('remove-filter', key as keyof FamilyDirectoryFilters)
 }
 </script>

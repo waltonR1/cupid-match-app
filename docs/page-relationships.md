@@ -33,13 +33,13 @@
 
 ### 发现页
 
-- `/pages/profile/self/index`
+- `/pages/profiles/self/index`
   本人视角资料列表。面向本人筛选候选资料。
-- `/pages/profile/self/detail`
+- `/pages/profiles/self/detail`
   本人视角资料详情。通过 `?id=` 参数进入指定资料。
-- `/pages/profile/family/index`
+- `/pages/profiles/family/index`
   家庭视角资料列表。展示允许家庭辅助了解的资料。
-- `/pages/profile/family/detail`
+- `/pages/profiles/family/detail`
   家庭视角资料详情。通过 `?id=` 参数进入指定资料。
 
 ### 账户页
@@ -76,8 +76,8 @@
 主导航由 `NAV_LIST` 统一配置，跳转逻辑走 `navigateByNavKey()`。
 
 - `common.nav.about` -> `/pages/public/about`
-- `common.nav.self` -> `/pages/profile/self/index`
-- `common.nav.family` -> `/pages/profile/family/index`
+- `common.nav.self` -> `/pages/profiles/self/index`
+- `common.nav.family` -> `/pages/profiles/family/index`
 - `common.nav.events` -> `/pages/events/index`
 - `common.nav.membership` -> `/pages/public/membership`
 - `common.nav.contact` -> `/pages/public/contact`
@@ -88,8 +88,8 @@
 
 - `openLoginPage()` -> `/pages/auth/login`
 - `openRegisterPage(plan?)` -> `/pages/auth/register?plan=...`
-- `openSelfDetail(id)` -> `/pages/profile/self/detail?id=...`
-- `openFamilyProfileDetail(id)` -> `/pages/profile/family/detail?id=...`
+- `openSelfDetail(id)` -> `/pages/profiles/self/detail?id=...`
+- `openFamilyProfileDetail(id)` -> `/pages/profiles/family/detail?id=...`
 - `openEventDetail(id)` -> `/pages/events/detail?id=...`
 - `openAccountPage()` -> `/pages/account/profile`
 - `openMyProfilePage()` -> `/pages/account/profile`
@@ -110,16 +110,16 @@
 
 ### 本人筛选对象
 
-1. 从首页或主导航进入 `/pages/profile/self/index`。
+1. 从首页或主导航进入 `/pages/profiles/self/index`。
 2. 浏览本人视角资料列表。
-3. 进入 `/pages/profile/self/detail?id=...`。
+3. 进入 `/pages/profiles/self/detail?id=...`。
 4. 根据资料信息进入注册、活动或后续账户流程。
 
 ### 家庭辅助了解
 
-1. 从首页或主导航进入 `/pages/profile/family/index`。
+1. 从首页或主导航进入 `/pages/profiles/family/index`。
 2. 浏览家庭可见资料。
-3. 进入 `/pages/profile/family/detail?id=...`。
+3. 进入 `/pages/profiles/family/detail?id=...`。
 4. 在授权边界内辅助理解候选人背景和关系节奏。
 
 ### 活动推进

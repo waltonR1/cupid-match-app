@@ -92,7 +92,7 @@ const year = new Date().getFullYear()
 
 function openProfiles() {
   uni.navigateTo({
-          url: '/pages/profile/self/index',
+          url: '/pages/profiles/self/index',
   })
 }
 

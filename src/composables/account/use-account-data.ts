@@ -1,27 +1,15 @@
-import { computed, inject, onMounted, provide, reactive, ref, type InjectionKey } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import {
-  getAccountLanguageLabel,
   getAccountOverview,
   getAccountOverviewSnapshot,
-  pickLocalized,
   type AccountFavoriteRecord,
-  type AccountMembershipLevel,
   type AccountPrivacySetting,
   type AccountProfile,
   type AccountThreadRecord,
   type AccountUserEventRecord,
-  type LocalizedText,
 } from '@/api/modules/account'
-import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
-
-const LOCALE_MAP = {
-  zh: 'zh-CN',
-  fr: 'fr-FR',
-  en: 'en-US',
-} as const
 
 export function useAccountData() {
-  const { locale, t: globalT } = useLocaleBridge()
   const initialData = getAccountOverviewSnapshot()
 
   const account = reactive({ ...initialData.account })
@@ -54,50 +42,6 @@ export function useAccountData() {
 
     return count
   })
-  const topSummaryItems = computed(() => [
-    {
-      key: 'completion',
-      value: `${account.completion}%`,
-    },
-    {
-      key: 'verification',
-      value: String(verificationCount.value),
-    },
-    {
-      key: 'membership',
-      value: membershipLabel(account.membership),
-    },
-    {
-      key: 'activity',
-      value: String(userEvents.length),
-    },
-  ])
-
-  function localize(text: LocalizedText) {
-    return pickLocalized(locale.value, text)
-  }
-
-  function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
-    return new Date(date).toLocaleDateString(
-      LOCALE_MAP[locale.value],
-      options ?? { year: 'numeric', month: 'short', day: 'numeric' }
-    )
-  }
-
-  function formatDateTime(date: string, options?: Intl.DateTimeFormatOptions) {
-    return new Date(date).toLocaleString(
-      LOCALE_MAP[locale.value],
-      options ?? { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
-    )
-  }
-
-  function membershipLabel(membership: AccountMembershipLevel = account.membership) {
-    return globalT(`membership.${membership}.title`)
-  }
-
-  function formatLanguages(languages: string[]) {
-    return languages.map(language => getAccountLanguageLabel(locale.value, language)).join(' / ')
-  }
 
   async function refresh() {
     loading.value = true
@@ -138,32 +82,12 @@ export function useAccountData() {
     familyVisibleFavorites,
     privateFavorites,
     familyVisibleThreads,
-    topSummaryItems,
-    localize,
-    formatDate,
-    formatDateTime,
-    formatLanguages,
-    membershipLabel,
+    verificationCount,
     refresh,
   }
 }
 
 export type AccountDataContext = ReturnType<typeof useAccountData>
-export const accountDataKey: InjectionKey<AccountDataContext> = Symbol('account-data')
-
-export function provideAccountDataContext(accountData: AccountDataContext) {
-  provide(accountDataKey, accountData)
-}
-
-export function useAccountDataContext() {
-  const accountData = inject(accountDataKey)
-
-  if (!accountData) {
-    throw new Error('Account data context is not available outside AccountShell.')
-  }
-
-  return accountData
-}
 
 function replaceArray<T>(target: T[], value: T[]) {
   target.splice(0, target.length, ...value)

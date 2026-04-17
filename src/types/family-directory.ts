@@ -36,6 +36,7 @@ export interface UseFamilyDirectoryResult<TProfile> {
   sortKey: Ref<FamilySortKey>
   page: Ref<number>
   pageSize: Ref<number>
+  sourceItems: Ref<TProfile[]>
 
   total: ComputedRef<number>
   totalPages: ComputedRef<number>
@@ -44,25 +45,10 @@ export interface UseFamilyDirectoryResult<TProfile> {
   pagedItems: ComputedRef<TProfile[]>
   pageStart: ComputedRef<number>
   pageEnd: ComputedRef<number>
-  activeFilterChips: ComputedRef<ActiveDirectoryFilterChip[]>
-
-  ageOptions: ComputedRef<DirectoryOption[]>
-  genderOptions: ComputedRef<DirectoryOption[]>
-  cityOptions: ComputedRef<DirectoryOption[]>
-  educationOptions: ComputedRef<DirectoryOption[]>
-  intentOptions: ComputedRef<DirectoryOption[]>
-  familyModeOptions: ComputedRef<DirectoryOption[]>
-  occupationOptions: ComputedRef<DirectoryOption[]>
-  industryOptions: ComputedRef<DirectoryOption[]>
-  maritalStatusOptions: ComputedRef<DirectoryOption[]>
-  childrenOptions: ComputedRef<DirectoryOption[]>
-  longDistanceOptions: ComputedRef<DirectoryOption[]>
-  sortOptions: ComputedRef<DirectoryOption[]>
 
   updateFilters: (nextFilters: Partial<FamilyDirectoryFilters>) => void
   removeFilter: (key: keyof FamilyDirectoryFilters) => void
   resetFilters: () => void
   updateSort: (nextSortKey: string) => void
   changePage: (nextPage: number) => void
-  buildCardViewModel: (profile: TProfile) => import('@/types/directory-card').DirectoryCardViewModel
 }

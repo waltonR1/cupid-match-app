@@ -1,6 +1,7 @@
 <template>
   <AccountShell
     active-page="messages"
+    :account-data="accountData"
     :header-eyebrow="t('messages.eyebrow')"
     :header-title="t('messages.title')"
     :header-description="t('messages.subtitle')"
@@ -124,18 +125,19 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountDataContext } from '@/composables/account/use-account-data'
+import { useAccountData } from '@/composables/account'
+import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/demo-navigation'
+import { formatLocalizedDateTime } from '@/utils/locale-format'
 
-const { t } = usePageI18n('accountCenter')
+const { t, locale } = usePageI18n('accountCenter')
+const accountData = useAccountData()
 const {
   threads,
   unreadCount,
   familyVisibleThreads,
-  localize,
-  formatDateTime,
-} = useAccountDataContext()
+} = accountData
 
 const filterItems = computed(() => [
   { label: t('messages.filters.all'), value: String(threads.length) },
@@ -157,5 +159,13 @@ const boundaryPoints = computed(() => [
 
 function handleProfileOpen(id: string) {
   openSelfDetail(id)
+}
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
+}
+
+function formatDateTime(date: string) {
+  return formatLocalizedDateTime(locale.value, date)
 }
 </script>

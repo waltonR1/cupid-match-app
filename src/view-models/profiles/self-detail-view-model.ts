@@ -1,11 +1,11 @@
 import { computed, type Ref } from 'vue'
 import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
-import { useProfileDetail } from '@/composables/profiles/use-profile-detail'
+import { useProfileDetail } from '@/composables/profiles'
 import type { AppLocale } from '@/i18n/types'
 import {
   createDetailProfileState,
   type DetailTranslator,
-} from '@/composables/profiles/create-detail-profile-state'
+} from './profile-detail-state'
 
 export function useSelfDetailViewModel(
   profileId: Ref<string>,

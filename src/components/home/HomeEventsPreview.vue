@@ -46,17 +46,42 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
+import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
 import type { HomeEventsPreviewViewModel } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/demo-navigation'
 
-defineProps<{
-  viewModel: HomeEventsPreviewViewModel
+const props = defineProps<{
+  events: CupidEvent[]
 }>()
 
 const { t } = usePageI18n('home')
+const { t: eventsT, locale } = usePageI18n('events')
+const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
+  fieldLabels: {
+    city: eventsT('fields.city'),
+    venue: eventsT('fields.venue'),
+    format: eventsT('fields.format'),
+    audience: eventsT('fields.audience'),
+    seats: eventsT('fields.seats'),
+  },
+  events: props.events.map(event => ({
+    id: event.id,
+    date: formatDate(event.date),
+    title: localize(event.title),
+    summary: localize(event.summary),
+    city: localize(event.city),
+    venue: localize(event.venue),
+    format: localize(event.format),
+    audience: localize(event.audience),
+    seats: `${event.registered} / ${event.seats}`,
+    status: event.status,
+    statusLabel: eventsT(`status.${event.status}`),
+  })),
+}))
 
 function goEvents() {
   uni.navigateTo({ url: '/pages/events/index' })
@@ -64,5 +89,19 @@ function goEvents() {
 
 function handleEventOpen(id: string) {
   openEventDetail(id)
+}
+
+function localize(text: LocalizedText) {
+  return pickLocalized(locale.value, text)
+}
+
+function formatDate(date: string) {
+  const map = {
+    zh: new Date(date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }),
+    fr: new Date(date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
+    en: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+  } as const
+
+  return map[locale.value]
 }
 </script>
