@@ -1,5 +1,5 @@
 <template>
-  <view :class="['min-h-screen text-semantic-text-primary', pageBackgroundClass]">
+  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
     <AppHeader
       :nav-list="navList"
       :active-nav="activeNav"
@@ -42,14 +42,6 @@ const activeNav = computed(() => {
   })
 
   return matched?.key ?? ''
-})
-
-const pageBackgroundClass = computed(() => {
-  if (currentPath.value.startsWith('/pages/profiles/') && currentPath.value.endsWith('/detail')) {
-    return 'bg-semantic-page-subtle'
-  }
-
-  return 'bg-semantic-page-default'
 })
 
 function handleNavClick(key: string) {
