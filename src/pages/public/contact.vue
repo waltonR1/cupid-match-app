@@ -52,7 +52,7 @@ const guideTags: ContactGuideTag[] = [
 
 
 function handlePrimaryAction() {
-  openRegisterPage('contact')
+  openRegisterPage()
 }
 
 </script>

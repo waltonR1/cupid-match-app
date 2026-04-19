@@ -23,10 +23,8 @@ export function openHomePage() {
   openPage('/pages/index')
 }
 
-export function openRegisterPage(plan?: string) {
-  const query = plan ? `?plan=${encodeURIComponent(plan)}` : ''
-
-  openPage(`/pages/auth/register${query}`)
+export function openRegisterPage() {
+  openPage('/pages/auth/register')
 }
 
 export function openSelfDirectoryPage() {

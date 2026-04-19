@@ -28,7 +28,7 @@
 - `/pages/auth/login`
   登录页。当前用于演示登录入口。
 - `/pages/auth/register`
-  注册页。承接免费注册、会员方案和 CTA 转化，支持 `?plan=` 参数。
+  注册页。承接免费注册、会员方案和 CTA 转化。
 
 ### 发现页
 
@@ -86,7 +86,7 @@
 这些函数集中在 `src/utils/navigation.ts`，用于主导航、页面 CTA、卡片和页面流程跳转。
 
 - `openLoginPage()` -> `/pages/auth/login`
-- `openRegisterPage(plan?)` -> `/pages/auth/register?plan=...`
+- `openRegisterPage()` -> `/pages/auth/register`
 - `openSelfDetail(id)` -> `/pages/profiles/self/detail?id=...`
 - `openFamilyProfileDetail(id)` -> `/pages/profiles/family/detail?id=...`
 - `openEventDetail(id)` -> `/pages/events/detail?id=...`

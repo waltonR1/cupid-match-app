@@ -57,14 +57,6 @@ function handleNavClick(key: string) {
 }
 
 function handleRegisterClick() {
-  openRegisterPage(registerPlanForPath(currentPath.value))
-}
-
-function registerPlanForPath(path: string) {
-  if (path.startsWith('/pages/events')) return 'event'
-  if (path.startsWith('/pages/profiles/family')) return 'contact'
-  if (path.startsWith('/pages/public/contact')) return 'contact'
-  if (path.startsWith('/pages/public/membership')) return 'vip'
-  return 'free'
+  openRegisterPage()
 }
 </script>

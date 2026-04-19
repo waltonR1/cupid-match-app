@@ -133,7 +133,7 @@ function handleBackToEvents() {
 }
 
 function handleRegisterClick() {
-  openRegisterPage('event')
+  openRegisterPage()
 }
 
 function localize(text: LocalizedText) {

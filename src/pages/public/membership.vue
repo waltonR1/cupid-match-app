@@ -18,8 +18,8 @@ import { openRegisterPage } from '@/utils/navigation'
 
 
 
-function openPlan(plan: string) {
-  openRegisterPage(plan)
+function openPlan() {
+  openRegisterPage()
 }
 
 function openCompare() {

@@ -33,7 +33,7 @@
             size="lg"
             width="cta"
             rounded="none"
-            @click="openPlan('free')"
+            @click="openPlan"
           >
             {{ t('hero.actions.primary') }}
           </AppButton>
@@ -94,8 +94,8 @@ function openProfiles() {
   openSelfDirectoryPage()
 }
 
-function openPlan(plan: string) {
-  openRegisterPage(plan)
+function openPlan() {
+  openRegisterPage()
 }
 
 const stats = [

@@ -88,7 +88,7 @@
             width="full"
             rounded="none"
             class="relative mt-auto"
-            @click="openPlan('silver')"
+            @click="openPlan"
           >
             {{ t('membership.vip.cta') }}
           </AppButton>
@@ -151,7 +151,7 @@
             width="full"
             rounded="none"
             class="relative mt-auto"
-            @click="openPlan('gold')"
+            @click="openPlan"
           >
             {{ t('membership.vip.cta') }}
           </AppButton>
@@ -220,7 +220,7 @@
               size="sm"
               width="full"
               rounded="none"
-              @click="openPlan('diamond')"
+              @click="openPlan"
             >
               {{ t('membership.vip.cta') }}
             </AppButton>
@@ -278,7 +278,7 @@
             size="sm"
             width="full"
             rounded="none"
-            @click="openPlan('free')"
+            @click="openPlan"
           >
             {{ t('membership.free.button') }}
           </AppButton>
@@ -295,8 +295,8 @@ import { openRegisterPage } from '@/utils/navigation'
 
 const { t } = usePageI18n('home')
 
-function openPlan(plan: string) {
-  openRegisterPage(plan)
+function openPlan() {
+  openRegisterPage()
 }
 </script>
 

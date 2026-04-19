@@ -286,7 +286,7 @@ async function handleSubmit() {
 }
 
 function handleRegisterClick() {
-  openRegisterPage('free')
+  openRegisterPage()
 }
 
 function toggleAgreement() {

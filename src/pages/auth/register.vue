@@ -243,7 +243,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
@@ -375,10 +374,5 @@ function closeAgreementDialog() {
   agreementDialog.value = null
 }
 
-onLoad((query?: Record<string, string | undefined>) => {
-  if (query?.plan === 'parent') {
-    role.value = 'parent'
-  }
-})
 </script>
 

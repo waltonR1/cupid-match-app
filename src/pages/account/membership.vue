@@ -138,7 +138,7 @@
               :context="plan.context"
               size="sm"
               :disabled="plan.key === account.membership"
-              @click="openRegisterPage(plan.key)"
+              @click="openRegisterPage()"
             >
               {{ plan.key === account.membership ? t('common.enabled') : t('common.upgrade') }}
             </AppButton>

@@ -85,7 +85,7 @@
 ### 认证页
 
 - `/pages/auth/login`：登录
-- `/pages/auth/register`：注册，支持 `?plan=` 参数
+- `/pages/auth/register`：注册
 
 ### 发现页
 
