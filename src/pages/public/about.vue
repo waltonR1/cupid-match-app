@@ -1,44 +1,22 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-        :nav-list="navList"
-        active-nav="common.nav.about"
-        @nav-click="handleNavClick"
-        @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <AboutHero />
     <AboutOrigin />
     <AboutAudience />
     <AboutDifference />
     <AboutValues />
-
-    <AppFooter
-        :nav-list="navList"
-        @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
-import AppHeader from '@/components/layout/AppHeader.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AboutHero from '@/components/about/AboutHero.vue'
 import AboutOrigin from '@/components/about/AboutOrigin.vue'
 import AboutAudience from '@/components/about/AboutAudience.vue'
 import AboutDifference from '@/components/about/AboutDifference.vue'
 import AboutValues from '@/components/about/AboutValues.vue'
 
-import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
-const navList = NAV_LIST
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
-function handleRegisterClick() {
-  openRegisterPage('free')
-}
 </script>

@@ -1,40 +1,22 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav="common.nav.membership"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <MembershipHero
       @open-plan="openPlan"
       @open-compare="openCompare"
     />
     <MembershipTiersSection @open-plan="openPlan" />
     <MembershipRulesSection @open-plan="openPlan" />
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import MembershipHero from '@/components/membership/MembershipHero.vue'
 import MembershipRulesSection from '@/components/membership/MembershipRulesSection.vue'
 import MembershipTiersSection from '@/components/membership/MembershipTiersSection.vue'
-import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage } from '@/utils/navigation'
 
-const navList = NAV_LIST
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
 function openPlan(plan: string) {
   openRegisterPage(plan)
@@ -47,7 +29,4 @@ function openCompare() {
   })
 }
 
-function handleRegisterClick() {
-  openRegisterPage('vip')
-}
 </script>

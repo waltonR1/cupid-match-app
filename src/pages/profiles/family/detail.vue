@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-subtle text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav="common.nav.family"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
         class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
@@ -192,26 +185,18 @@
         @primary="handleBack"
       />
     </view>
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import DetailHeroPanel from '@/components/profiles/shared/detail/DetailHeroPanel.vue'
 import { useProfileDetail } from '@/composables/profiles'
-import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 import {
   formatProfileAge,
   formatProfileDate,
@@ -219,7 +204,6 @@ import {
   localizeProfileText,
 } from '@/utils/profile-format'
 
-const navList = NAV_LIST
 const { t, locale } = usePageI18n('familyDetail')
 
 const profileId = ref('')
@@ -387,11 +371,5 @@ function handleBack() {
   })
 }
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
-function handleRegisterClick() {
-  openRegisterPage('contact')
-}
 </script>

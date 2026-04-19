@@ -130,6 +130,8 @@ src/components/
 
 组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的共享类型从 `src/types` 引入。
 
+`src/components/layout/AppPageLayout.vue` 负责标准页面外壳，统一接入 `AppHeader`、`AppFooter`、主导航跳转、注册入口和当前导航高亮。常规页面优先包裹 `AppPageLayout`，只有需要自定义 Header 行为的页面才直接使用 `AppHeader` / `AppFooter`。
+
 ## types
 
 ```txt

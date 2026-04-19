@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav=""
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view class="relative overflow-hidden bg-gradient-auth-hero text-semantic-text-inverse">
       <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-semantic-border-hero-ornament" />
       <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
@@ -245,12 +238,7 @@
       :kind="agreementDialog || 'terms'"
       @close="closeAgreementDialog"
     />
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
@@ -258,18 +246,15 @@ import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { useRegister } from '@/composables/auth'
-import { NAV_LIST } from '@/constants/nav'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openLoginPage, navigateByNavKey } from '@/utils/navigation'
+import { openLoginPage } from '@/utils/navigation'
 
 type RegisterRole = 'self' | 'parent'
 type AgreementDialogType = 'terms' | 'privacy' | null
 
-const navList = NAV_LIST
 const { t } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
 const registerAction = useRegister()
@@ -359,10 +344,6 @@ function selectRole(nextRole: RegisterRole) {
   role.value = nextRole
 }
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
-
 async function handleSubmit() {
   await registerAction.register({
     role: role.value,
@@ -392,10 +373,6 @@ function openAgreementDialog(kind: Exclude<AgreementDialogType, null>) {
 
 function closeAgreementDialog() {
   agreementDialog.value = null
-}
-
-function handleRegisterClick() {
-  void handleSubmit()
 }
 
 onLoad((query?: Record<string, string | undefined>) => {

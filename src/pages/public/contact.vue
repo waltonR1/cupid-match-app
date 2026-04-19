@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navListWithContact"
-      active-nav="common.nav.contact"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <ContactHero
       :cards="contactCards"
       :email="email"
@@ -18,15 +11,11 @@
     />
     <ContactCases :cards="caseCards" />
     <ContactGuide :tags="guideTags" />
-
-    <AppFooter
-      :nav-list="navListWithContact"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import ContactCases from '@/components/contact/ContactCases.vue'
 import ContactGuide from '@/components/contact/ContactGuide.vue'
 import ContactHero from '@/components/contact/ContactHero.vue'
@@ -36,12 +25,8 @@ import type {
   ContactCaseItem,
   ContactGuideTag,
 } from '@/types/contact'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
-import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage } from '@/utils/navigation'
 
-const navListWithContact = NAV_LIST
 const email = 'contact@rencontreaparis.com'
 
 const contactCards: ContactCardItem[] = [
@@ -65,15 +50,9 @@ const guideTags: ContactGuideTag[] = [
   { title: 'guide.tag3.title', desc: 'guide.tag3.desc' },
 ]
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navListWithContact)
-}
 
 function handlePrimaryAction() {
   openRegisterPage('contact')
 }
 
-function handleRegisterClick() {
-  openRegisterPage('contact')
-}
 </script>

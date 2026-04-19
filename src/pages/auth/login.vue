@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav=""
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view class="relative overflow-hidden bg-gradient-auth-hero text-semantic-text-inverse">
       <view class="pointer-events-none absolute -right-16 top-10 h-[280px] w-[280px] rounded-full border border-semantic-border-hero-ornament" />
       <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
@@ -163,11 +156,6 @@
       </view>
     </view>
 
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-
     <AgreementDialog
       :open="Boolean(agreementDialog)"
       :kind="agreementDialog || 'terms'"
@@ -216,23 +204,18 @@
         </view>
       </view>
     </view>
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { computed, ref } from 'vue'
-import AgreementDialog from '@/components/common/AgreementDialog.vue'
-import AppButton from '@/components/common/AppButton.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
 import { useLogin } from '@/composables/auth'
-import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage } from '@/utils/navigation'
 
 const SELF_ROUTE = '/pages/profiles/self/index'
 
-const navList = NAV_LIST
 const { t } = usePageI18n('login')
 const loginAction = useLogin()
 const identity = ref('')
@@ -285,9 +268,6 @@ const accessCards = computed(() => [
   { kicker: '03', title: t('access.events.title'), desc: t('access.events.desc') },
 ])
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
 async function handleSubmit() {
   if (!agreed.value) {

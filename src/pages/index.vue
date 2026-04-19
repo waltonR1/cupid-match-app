@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav=""
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <HomeHero />
     <HomeVision />
 
@@ -19,17 +12,11 @@
     <HomeFeatures />
     <HomeAudience />
     <HomeMembership />
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
-import AppHeader from '@/components/layout/AppHeader.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import HomeAudience from '@/components/home/HomeAudience.vue'
 import HomeEventsPreview from '@/components/home/HomeEventsPreview.vue'
 import HomeFamily from '@/components/home/HomeFamily.vue'
@@ -40,18 +27,9 @@ import HomeProfilesPreview from '@/components/home/HomeProfilesPreview.vue'
 import HomeVision from '@/components/home/HomeVision.vue'
 import { useHomePreviewEvents } from '@/composables/events'
 import { useHomePreviewProfiles } from '@/composables/profiles'
-import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
-const navList = NAV_LIST
 const homePreviewEvents = useHomePreviewEvents()
 const homePreviewProfiles = useHomePreviewProfiles()
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
-function handleRegisterClick() {
-  openRegisterPage('free')
-}
 </script>

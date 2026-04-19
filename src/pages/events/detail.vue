@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav="common.nav.events"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view v-if="eventCard" class="pb-20">
       <EventDetailHero
         :eyebrow="t('hero.eyebrow')"
@@ -56,32 +49,20 @@
         @primary="handleBackToEvents"
       />
     </view>
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import EventDetailAgenda from '@/components/events/EventDetailAgenda.vue'
 import EventDetailHero from '@/components/events/EventDetailHero.vue'
 import EventDetailNotes from '@/components/events/EventDetailNotes.vue'
 import EventDetailRelatedProfiles from '@/components/events/EventDetailRelatedProfiles.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import { useEventDetail } from '@/composables/events'
-import {
-  pickLocalized,
-  type CupidEvent,
-  type EventRelatedProfile,
-  type LocalizedText,
-} from '@/api/modules/events'
-import { NAV_LIST } from '@/constants/nav'
+import { pickLocalized, type CupidEvent, type EventRelatedProfile, type LocalizedText } from '@/api/modules/events'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type {
   EventAgendaItem,
@@ -90,9 +71,8 @@ import type {
   EventOverviewItem,
   EventRelatedProfileItem,
 } from '@/types/events'
-import { openRegisterPage, openSelfDetail, navigateByNavKey } from '@/utils/navigation'
+import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
 
-const navList = NAV_LIST
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
 const eventDetail = useEventDetail(eventId)
@@ -147,12 +127,9 @@ function handleProfileOpen(id: string) {
   openSelfDetail(id)
 }
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
 function handleBackToEvents() {
-  navigateByNavKey('common.nav.events', navList)
+  openEventsPage()
 }
 
 function handleRegisterClick() {

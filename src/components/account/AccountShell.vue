@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav=""
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-5 py-6 sm:px-8 lg:py-8">
       <AccountTopSummary
         :account-name="accountData.profile?.name ?? accountData.account.name"
@@ -29,26 +22,18 @@
         <slot />
       </view>
     </view>
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AccountPrimaryNav from '@/components/account/AccountPrimaryNav.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountTopSummary from '@/components/account/AccountTopSummary.vue'
 import type { AccountDataContext } from '@/composables/account'
 import type { AccountPrimaryPageKey } from '@/types/account-shell'
-import { NAV_LIST } from '@/constants/nav'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
-import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const props = defineProps<{
   accountData: AccountDataContext
@@ -58,7 +43,6 @@ const props = defineProps<{
   headerDescription?: string
 }>()
 
-const navList = NAV_LIST
 const accountData = props.accountData
 const { t: globalT } = useLocaleBridge()
 const topSummaryItems = computed(() => [
@@ -80,11 +64,5 @@ const topSummaryItems = computed(() => [
   },
 ])
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
-function handleRegisterClick() {
-  openRegisterPage('free')
-}
 </script>

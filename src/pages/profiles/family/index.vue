@@ -1,12 +1,5 @@
 <template>
-  <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-    <AppHeader
-      :nav-list="navList"
-      active-nav="common.nav.family"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
-    />
-
+  <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <DirectoryIntro
         :eyebrow="t('hero.eyebrow')"
@@ -88,24 +81,18 @@
         @change="handleChangePage"
       />
     </view>
-
-    <AppFooter
-      :nav-list="navList"
-      @nav-click="handleNavClick"
-    />
-  </view>
+  </AppPageLayout>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import FamilyFilterToolbar from '@/components/profiles/family/FamilyFilterToolbar.vue'
 import DirectoryCardFrame from '@/components/profiles/shared/directory/DirectoryCardFrame.vue'
 import DirectoryGridShell from '@/components/profiles/shared/directory/DirectoryGridShell.vue'
 import DirectoryIntro from '@/components/profiles/shared/directory/DirectoryIntro.vue'
 import DirectoryPagination from '@/components/profiles/shared/directory/DirectoryPagination.vue'
 import DirectoryResultToolbar from '@/components/profiles/shared/directory/DirectoryResultToolbar.vue'
-import AppFooter from '@/components/layout/AppFooter.vue'
-import AppHeader from '@/components/layout/AppHeader.vue'
 import { useFamilyDirectory } from '@/composables/profiles'
 import {
   localized,
@@ -113,13 +100,11 @@ import {
   type LocalizedText,
   type Profile,
 } from '@/api/modules/profiles'
-import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { DirectoryCardViewModel } from '@/types/directory-card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/family-directory'
-import { openFamilyProfileDetail, openRegisterPage, navigateByNavKey } from '@/utils/navigation'
+import { openFamilyProfileDetail } from '@/utils/navigation'
 
-const navList = NAV_LIST
 const { t, locale } = usePageI18n('family')
 
 const {
@@ -251,17 +236,11 @@ function handleChangePage(nextPage: number) {
   changePage(nextPage)
 }
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
 
 function handleProfileOpen(id: string) {
   openFamilyProfileDetail(id)
 }
 
-function handleRegisterClick() {
-  openRegisterPage('contact')
-}
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)
