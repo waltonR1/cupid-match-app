@@ -48,8 +48,7 @@ import type { AccountDataContext } from '@/composables/account'
 import type { AccountPrimaryPageKey } from '@/types/account-shell'
 import { NAV_LIST } from '@/constants/nav'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const props = defineProps<{
   accountData: AccountDataContext

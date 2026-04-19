@@ -52,7 +52,7 @@ import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
 import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
 import type { HomeEventsPreviewViewModel } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openEventDetail } from '@/utils/demo-navigation'
+import { openEventDetail, openEventsPage } from '@/utils/navigation'
 
 const props = defineProps<{
   events: CupidEvent[]
@@ -84,7 +84,7 @@ const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
 }))
 
 function goEvents() {
-  uni.navigateTo({ url: '/pages/events/index' })
+  openEventsPage()
 }
 
 function handleEventOpen(id: string) {

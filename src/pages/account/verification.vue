@@ -128,7 +128,7 @@ import {
 import AppButton from '@/components/common/AppButton.vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openConnectionsPage, openMyProfilePage } from '@/utils/demo-navigation'
+import { openConnectionsPage, openMyProfilePage } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()

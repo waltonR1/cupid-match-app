@@ -54,8 +54,7 @@ import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/module
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events'
-import { openEventDetail, openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openEventDetail, openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('events')

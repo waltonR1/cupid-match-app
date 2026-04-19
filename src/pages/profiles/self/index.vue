@@ -122,8 +122,7 @@ import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { DirectoryCardViewModel } from '@/types/directory-card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, SelfDirectoryFilters, SelfSortKey } from '@/types/self-directory'
-import { openRegisterPage, openSelfDetail } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, openSelfDetail, navigateByNavKey } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('self')
 const navList = NAV_LIST

@@ -84,16 +84,14 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openRegisterPage } from '@/utils/demo-navigation'
+import { openRegisterPage, openSelfDirectoryPage } from '@/utils/navigation'
 
 const { t } = usePageI18n('home')
 
 const year = new Date().getFullYear()
 
 function openProfiles() {
-  uni.navigateTo({
-          url: '/pages/profiles/self/index',
-  })
+  openSelfDirectoryPage()
 }
 
 function openPlan(plan: string) {

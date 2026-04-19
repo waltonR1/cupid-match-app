@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { openPage } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('home')
 
@@ -120,9 +121,6 @@ const showBrandLabel = computed(() => {
 })
 
 function openPath(path: string) {
-  if (!path) return
-  uni.navigateTo({
-    url: path,
-  })
+  openPage(path)
 }
 </script>

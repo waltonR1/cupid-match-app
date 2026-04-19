@@ -106,9 +106,8 @@ src/composables/
 
 ```txt
 src/utils/
-  demo-navigation.ts   演示跳转函数
   locale-format.ts     日期和时间本地化格式化
-  navigation.ts        导航工具
+  navigation.ts        导航与页面跳转工具
   profile-format.ts    资料字段纯格式化函数
 ```
 

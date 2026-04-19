@@ -39,8 +39,7 @@ import type {
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const navListWithContact = NAV_LIST
 const email = 'contact@rencontreaparis.com'

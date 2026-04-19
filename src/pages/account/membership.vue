@@ -164,7 +164,7 @@ import {
   openMessagesPage,
   openRegisterPage,
   openVerificationPage,
-} from '@/utils/demo-navigation'
+} from '@/utils/navigation'
 import { formatLocalizedDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('accountCenter')

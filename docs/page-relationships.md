@@ -2,14 +2,13 @@
 
 ## 文档目的
 
-这份文档说明当前项目里的真实页面、主导航关系和演示跳转关系。它面向主分支长期维护，不记录设计 token 迁移过程。
+这份文档说明当前项目里的真实页面、主导航关系和页面跳转关系。它面向主分支长期维护，不记录设计 token 迁移过程。
 
 依据文件：
 
 - [src/pages.json](../src/pages.json)
 - [src/constants/nav.ts](../src/constants/nav.ts)
 - [src/utils/navigation.ts](../src/utils/navigation.ts)
-- [src/utils/demo-navigation.ts](../src/utils/demo-navigation.ts)
 
 ## 页面清单
 
@@ -82,9 +81,9 @@
 - `common.nav.membership` -> `/pages/public/membership`
 - `common.nav.contact` -> `/pages/public/contact`
 
-## 演示跳转入口
+## 页面跳转入口
 
-这些函数集中在 `src/utils/demo-navigation.ts`，用于页面 CTA、卡片和演示流程跳转。
+这些函数集中在 `src/utils/navigation.ts`，用于主导航、页面 CTA、卡片和页面流程跳转。
 
 - `openLoginPage()` -> `/pages/auth/login`
 - `openRegisterPage(plan?)` -> `/pages/auth/register?plan=...`

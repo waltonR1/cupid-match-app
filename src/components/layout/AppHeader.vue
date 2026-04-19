@@ -168,7 +168,7 @@ import { ref } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
-import { openLoginPage } from '@/utils/demo-navigation'
+import { openAccountPage, openHomePage, openLoginPage, openMessagesPage } from '@/utils/navigation'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useThemeStore } from '@/stores/modules/theme'
 
@@ -197,9 +197,7 @@ const showUserDropdown = ref(false)
 
 function handleNavIndex(): void {
   closeAllDropdowns()
-  uni.navigateTo({
-    url: '/pages/index',
-  })
+  openHomePage()
 }
 
 function handleLocaleChange(value: AppLocale) {
@@ -234,23 +232,17 @@ function handleLogin() {
 function handleAccount() {
   closeAllDropdowns()
   emit('account-click')
-  uni.navigateTo({
-    url: '/pages/account/profile',
-  })
+  openAccountPage()
 }
 
 function handleMyProfile() {
   closeAllDropdowns()
-  uni.navigateTo({
-    url: '/pages/account/profile',
-  })
+  openAccountPage()
 }
 
 function handleMessages() {
   closeAllDropdowns()
-  uni.navigateTo({
-    url: '/pages/account/messages',
-  })
+  openMessagesPage()
 }
 
 function handleLogout() {

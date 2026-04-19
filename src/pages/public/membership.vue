@@ -28,8 +28,7 @@ import MembershipHero from '@/components/membership/MembershipHero.vue'
 import MembershipRulesSection from '@/components/membership/MembershipRulesSection.vue'
 import MembershipTiersSection from '@/components/membership/MembershipTiersSection.vue'
 import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 

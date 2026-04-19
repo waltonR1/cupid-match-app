@@ -211,8 +211,7 @@ import { useProfileDetail } from '@/composables/profiles'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 import {
   formatProfileAge,
   formatProfileDate,

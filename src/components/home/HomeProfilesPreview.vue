@@ -52,7 +52,7 @@ import DirectoryCardFrame from '@/components/profiles/shared/directory/Directory
 import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openSelfDetail } from '@/utils/demo-navigation'
+import { openSelfDetail, openSelfDirectoryPage } from '@/utils/navigation'
 
 const props = defineProps<{
   profiles: Profile[]
@@ -68,7 +68,7 @@ const profileCards = computed<HomeProfilesPreviewItem[]>(() =>
 )
 
 function goProfiles() {
-  uni.navigateTo({ url: '/pages/profiles/self/index' })
+  openSelfDirectoryPage()
 }
 
 function handleProfileOpen(id: string) {

@@ -90,8 +90,7 @@ import type {
   EventOverviewItem,
   EventRelatedProfileItem,
 } from '@/types/events'
-import { openRegisterPage, openSelfDetail } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, openSelfDetail, navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('eventDetail')

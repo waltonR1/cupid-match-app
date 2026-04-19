@@ -228,8 +228,7 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import { useLogin } from '@/composables/auth'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const SELF_ROUTE = '/pages/profiles/self/index'
 

@@ -25,7 +25,7 @@ import {
   openMyProfilePage,
   openSafetyPage,
   openVerificationPage,
-} from '@/utils/demo-navigation'
+} from '@/utils/navigation'
 
 const props = defineProps<{
   activePage: AccountPrimaryPageKey

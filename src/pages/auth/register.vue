@@ -264,8 +264,7 @@ import { useRegister } from '@/composables/auth'
 import { NAV_LIST } from '@/constants/nav'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openLoginPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openLoginPage, navigateByNavKey } from '@/utils/navigation'
 
 type RegisterRole = 'self' | 'parent'
 type AgreementDialogType = 'terms' | 'privacy' | null

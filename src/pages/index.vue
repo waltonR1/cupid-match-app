@@ -41,8 +41,7 @@ import HomeVision from '@/components/home/HomeVision.vue'
 import { useHomePreviewEvents } from '@/composables/events'
 import { useHomePreviewProfiles } from '@/composables/profiles'
 import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 const homePreviewEvents = useHomePreviewEvents()

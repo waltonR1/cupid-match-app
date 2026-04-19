@@ -76,7 +76,7 @@ import {
   openMembershipPage,
   openMyProfilePage,
   openVerificationPage,
-} from '@/utils/demo-navigation'
+} from '@/utils/navigation'
 
 defineProps<{
   accountName: string

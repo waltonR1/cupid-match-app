@@ -117,7 +117,7 @@ import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/composables/account'
 import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openEventDetail } from '@/utils/demo-navigation'
+import { openEventDetail } from '@/utils/navigation'
 import { formatLocalizedDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('accountCenter')

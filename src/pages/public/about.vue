@@ -30,8 +30,7 @@ import AboutDifference from '@/components/about/AboutDifference.vue'
 import AboutValues from '@/components/about/AboutValues.vue'
 
 import { NAV_LIST } from '@/constants/nav'
-import { openRegisterPage } from '@/utils/demo-navigation'
-import { navigateByNavKey } from '@/utils/navigation'
+import { openRegisterPage, navigateByNavKey } from '@/utils/navigation'
 
 const navList = NAV_LIST
 
