@@ -27,7 +27,7 @@
           :key="profile.id"
           :data="profile.card"
           clickable
-          @select="handleProfileOpen(profile.id)"
+          @select="openSelfDetail(profile.id)"
         />
       </view>
 
@@ -36,7 +36,7 @@
           variant="secondary"
           context="section"
           class="min-w-[178px] px-8 tracking-[0.6px]"
-          @click="goProfiles"
+          @click="openSelfDirectoryPage"
         >
           {{ t('profilesPreview.cta') }}
         </AppButton>
@@ -66,14 +66,6 @@ const profileCards = computed<HomeProfilesPreviewItem[]>(() =>
     card: createProfileCardViewModel(profile),
   })),
 )
-
-function goProfiles() {
-  openSelfDirectoryPage()
-}
-
-function handleProfileOpen(id: string) {
-  openSelfDetail(id)
-}
 
 function createProfileCardViewModel(profile: Profile): HomeProfilesPreviewItem['card'] {
   const cardData = getLocalizedProfileCardData(locale.value, profile)

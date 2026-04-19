@@ -11,7 +11,7 @@
         :register-hint="t('actions.registerHint')"
         :waitlist-hint="t('actions.waitlistHint')"
         :full-hint="t('actions.fullHint')"
-        @register="handleRegisterClick"
+        @register="openRegisterPage"
       />
 
       <view class="mx-auto max-w-[1280px] px-8 py-24">
@@ -34,7 +34,7 @@
               :title="t('sections.relatedProfiles')"
               :empty-text="t('sections.relatedEmpty')"
               :profiles="relatedProfileItems"
-              @open="handleProfileOpen"
+              @open="openSelfDetail"
             />
           </view>
         </view>
@@ -46,7 +46,7 @@
         :title="t('sections.notFound')"
         :primary-text="t('actions.backToEvents')"
         variant="compact"
-        @primary="handleBackToEvents"
+        @primary="openEventsPage"
       />
     </view>
   </AppPageLayout>
@@ -122,19 +122,6 @@ onLoad((query) => {
     eventId.value = query.id
   }
 })
-
-function handleProfileOpen(id: string) {
-  openSelfDetail(id)
-}
-
-
-function handleBackToEvents() {
-  openEventsPage()
-}
-
-function handleRegisterClick() {
-  openRegisterPage()
-}
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)

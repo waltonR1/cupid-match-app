@@ -26,7 +26,7 @@
           v-for="card in serviceCards"
           :key="card.title"
           class="flex min-h-[280px] cursor-pointer flex-col border border-semantic-border-default bg-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft hover:shadow-panel"
-          @click="openPath(card.path)"
+          @click="openPage(card.path)"
         >
           <view class="text-[20px] font-semibold uppercase tracking-[2px] text-semantic-text-subtle">
             {{ card.icon }}
@@ -120,7 +120,4 @@ const showBrandLabel = computed(() => {
   return locale.value !== 'fr'
 })
 
-function openPath(path: string) {
-  openPage(path)
-}
 </script>

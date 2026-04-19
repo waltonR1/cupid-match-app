@@ -27,7 +27,7 @@
           :key="event.id"
           :event="event"
           :fields="viewModel.fieldLabels"
-          @open="handleEventOpen"
+          @open="openEventDetail"
         />
       </view>
 
@@ -36,7 +36,7 @@
           variant="secondary"
           context="section"
           class="min-w-[178px] px-8 tracking-[0.6px]"
-          @click="goEvents"
+          @click="openEventsPage"
         >
           {{ t('events.cta') }}
         </AppButton>
@@ -82,14 +82,6 @@ const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
     statusLabel: eventsT(`status.${event.status}`),
   })),
 }))
-
-function goEvents() {
-  openEventsPage()
-}
-
-function handleEventOpen(id: string) {
-  openEventDetail(id)
-}
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)

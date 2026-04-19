@@ -1,11 +1,11 @@
 <template>
   <AppPageLayout>
     <MembershipHero
-      @open-plan="openPlan"
+      @open-plan="openRegisterPage"
       @open-compare="openCompare"
     />
-    <MembershipTiersSection @open-plan="openPlan" />
-    <MembershipRulesSection @open-plan="openPlan" />
+    <MembershipTiersSection @open-plan="openRegisterPage" />
+    <MembershipRulesSection @open-plan="openRegisterPage" />
   </AppPageLayout>
 </template>
 
@@ -17,10 +17,6 @@ import MembershipTiersSection from '@/components/membership/MembershipTiersSecti
 import { openRegisterPage } from '@/utils/navigation'
 
 
-
-function openPlan() {
-  openRegisterPage()
-}
 
 function openCompare() {
   uni.pageScrollTo({

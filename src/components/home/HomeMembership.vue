@@ -88,7 +88,7 @@
             width="full"
             rounded="none"
             class="relative mt-auto"
-            @click="openPlan"
+            @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
           </AppButton>
@@ -151,7 +151,7 @@
             width="full"
             rounded="none"
             class="relative mt-auto"
-            @click="openPlan"
+            @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
           </AppButton>
@@ -220,7 +220,7 @@
               size="sm"
               width="full"
               rounded="none"
-              @click="openPlan"
+              @click="openRegisterPage"
             >
               {{ t('membership.vip.cta') }}
             </AppButton>
@@ -278,7 +278,7 @@
             size="sm"
             width="full"
             rounded="none"
-            @click="openPlan"
+            @click="openRegisterPage"
           >
             {{ t('membership.free.button') }}
           </AppButton>
@@ -294,10 +294,6 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/navigation'
 
 const { t } = usePageI18n('home')
-
-function openPlan() {
-  openRegisterPage()
-}
 </script>
 
 

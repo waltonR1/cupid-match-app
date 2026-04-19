@@ -3,7 +3,7 @@
     <ContactHero
       :cards="contactCards"
       :email="email"
-      @primary-action="handlePrimaryAction"
+      @primary-action="openRegisterPage"
     />
     <ContactInfo
       :cards="contactCards"
@@ -49,10 +49,5 @@ const guideTags: ContactGuideTag[] = [
   { title: 'guide.tag2.title', desc: 'guide.tag2.desc' },
   { title: 'guide.tag3.title', desc: 'guide.tag3.desc' },
 ]
-
-
-function handlePrimaryAction() {
-  openRegisterPage()
-}
 
 </script>

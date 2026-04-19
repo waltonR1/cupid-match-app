@@ -189,7 +189,7 @@
                   width="cta"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
-                  @click="handleLoginClick"
+                  @click="openLoginPage"
                 >
                   {{ loginText }}
                 </AppButton>
@@ -356,10 +356,6 @@ async function handleSubmit() {
     title: labels.value.submit,
     icon: 'none',
   })
-}
-
-function handleLoginClick() {
-  openLoginPage()
 }
 
 function toggleAgreement() {

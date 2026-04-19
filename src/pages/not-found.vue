@@ -8,7 +8,7 @@
         :primary-text="t('actions.home')"
         :secondary-text="t('actions.account')"
         @primary="goHome"
-        @secondary="goAccount"
+        @secondary="openAccountPage"
       />
     </view>
   </AppPageLayout>
@@ -27,10 +27,5 @@ function goHome() {
     url: '/pages/index',
   })
 }
-
-function goAccount() {
-  openAccountPage()
-}
-
 
 </script>

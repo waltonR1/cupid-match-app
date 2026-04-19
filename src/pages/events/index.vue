@@ -7,7 +7,7 @@
       :next-event-label="t('hero.nextEvent')"
       :fields="heroFields"
       :next-event="nextEventCard"
-      @open="handleEventOpen"
+      @open="openEventDetail"
     />
 
     <EventsFeaturedGrid
@@ -17,7 +17,7 @@
       :stats="statCards"
       :fields="fieldLabels"
       :events="featuredEventCards"
-      @open="handleEventOpen"
+      @open="openEventDetail"
     />
 
     <EventsScheduleList
@@ -25,7 +25,7 @@
       :title="t('schedule.title')"
       :note="t('schedule.note')"
       :events="scheduleEventCards"
-      @open="handleEventOpen"
+      @open="openEventDetail"
     />
   </AppPageLayout>
 </template>
@@ -40,7 +40,7 @@ import { useEvents } from '@/composables/events'
 import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events'
-import { openEventDetail, openRegisterPage } from '@/utils/navigation'
+import { openEventDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('events')
 const eventData = useEvents()
@@ -77,12 +77,6 @@ const statCards = computed<EventStatItem[]>(() => {
     { label: t('stats.cities'), value: String(cityCount) },
   ]
 })
-
-
-function handleEventOpen(id: string) {
-  openEventDetail(id)
-}
-
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)

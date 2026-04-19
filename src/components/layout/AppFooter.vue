@@ -26,7 +26,7 @@
               v-for="item in navList"
               :key="item.key"
               class="group relative w-fit cursor-pointer pb-2 transition-colors duration-200"
-              @click="handleNavClick(item.key)"
+              @click="emit('nav-click', item.key)"
             >
               <view
                 class="text-[14px] text-semantic-text-muted transition-colors duration-200 group-hover:text-semantic-text-primary"
@@ -90,8 +90,4 @@ const email = 'contact@rencontreaparis.com'
 const emit = defineEmits<{
   (e: 'nav-click', key: string): void
 }>()
-
-function handleNavClick(key: string) {
-  emit('nav-click', key)
-}
 </script>

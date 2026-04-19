@@ -28,7 +28,7 @@
             v-for="item in threads"
             :key="item.thread.id"
             class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-5 py-5 shadow-panel transition-all duration-200 hover:-translate-y-[2px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft"
-            @click="handleProfileOpen(item.profile.id)"
+            @click="openSelfDetail(item.profile.id)"
           >
             <view class="flex items-start gap-4">
               <view class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-semantic-border-default bg-semantic-surface-soft text-[18px] font-semibold text-semantic-text-primary">
@@ -156,10 +156,6 @@ const boundaryPoints = computed(() => [
   t('messages.boundary.point2'),
   t('messages.boundary.point3'),
 ])
-
-function handleProfileOpen(id: string) {
-  openSelfDetail(id)
-}
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)

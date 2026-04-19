@@ -70,7 +70,7 @@
           <DirectoryCardFrame
             :data="buildCardViewModel(item)"
             clickable
-            @select="handleProfileOpen(item.id)"
+            @select="openSelfDetail(item.id)"
           />
         </template>
       </DirectoryGridShell>
@@ -259,10 +259,6 @@ function handleChangePage(nextPage: number) {
   changePage(nextPage)
 }
 
-
-function handleProfileOpen(id: string) {
-  openSelfDetail(id)
-}
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)

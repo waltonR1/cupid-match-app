@@ -33,7 +33,7 @@
             size="lg"
             width="cta"
             rounded="none"
-            @click="openPlan"
+            @click="openRegisterPage"
           >
             {{ t('hero.actions.primary') }}
           </AppButton>
@@ -44,7 +44,7 @@
             size="lg"
             width="cta"
             rounded="none"
-            @click="openProfiles"
+            @click="openSelfDirectoryPage"
           >
             {{ t('hero.actions.secondary') }}
           </AppButton>
@@ -89,14 +89,6 @@ import { openRegisterPage, openSelfDirectoryPage } from '@/utils/navigation'
 const { t } = usePageI18n('home')
 
 const year = new Date().getFullYear()
-
-function openProfiles() {
-  openSelfDirectoryPage()
-}
-
-function openPlan() {
-  openRegisterPage()
-}
 
 const stats = [
   { value: 'hero.stats.members.value', label: 'hero.stats.members.label' },

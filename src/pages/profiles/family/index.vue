@@ -67,7 +67,7 @@
             :data="buildCardViewModel(item)"
             clickable
             summary-class="line-clamp-3"
-            @select="handleProfileOpen(item.id)"
+            @select="openFamilyProfileDetail(item.id)"
           />
         </template>
       </DirectoryGridShell>
@@ -234,11 +234,6 @@ function handleUpdateSort(nextSortKey: string) {
 
 function handleChangePage(nextPage: number) {
   changePage(nextPage)
-}
-
-
-function handleProfileOpen(id: string) {
-  openFamilyProfileDetail(id)
 }
 
 

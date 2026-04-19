@@ -3,15 +3,15 @@
     <AppHeader
       :nav-list="navList"
       :active-nav="activeNav"
-      @nav-click="handleNavClick"
-      @register-click="handleRegisterClick"
+      @nav-click="navigateByNavKey($event, navList)"
+      @register-click="openRegisterPage"
     />
 
     <slot />
 
     <AppFooter
       :nav-list="navList"
-      @nav-click="handleNavClick"
+      @nav-click="navigateByNavKey($event, navList)"
     />
   </view>
 </template>
@@ -44,11 +44,4 @@ const activeNav = computed(() => {
   return matched?.key ?? ''
 })
 
-function handleNavClick(key: string) {
-  navigateByNavKey(key, navList)
-}
-
-function handleRegisterClick() {
-  openRegisterPage()
-}
 </script>

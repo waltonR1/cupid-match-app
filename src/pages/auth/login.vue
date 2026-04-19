@@ -101,7 +101,7 @@
                   width="full"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
-                  @click="handleRegisterClick"
+                  @click="openRegisterPage"
                 >
                   {{ labels.secondary }}
                 </AppButton>
@@ -283,10 +283,6 @@ async function handleSubmit() {
   uni.redirectTo({
     url: SELF_ROUTE,
   })
-}
-
-function handleRegisterClick() {
-  openRegisterPage()
 }
 
 function toggleAgreement() {
