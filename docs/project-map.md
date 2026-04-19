@@ -197,7 +197,7 @@
 
 - 承接页面和 API 之间的业务逻辑
 - 管理 `loading`、`error`、`refresh`
-- 处理筛选、分页、view-model
+- 处理筛选、分页和数据行为
 
 ### 接口层 `src/api/modules`
 

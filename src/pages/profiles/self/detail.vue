@@ -201,17 +201,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import DetailHeroPanel from '@/components/profiles/shared/detail/DetailHeroPanel.vue'
-import { useSelfDetailViewModel } from '@/view-models/profiles/self-detail-view-model'
+import { useProfileDetail } from '@/composables/profiles'
 import { NAV_LIST } from '@/constants/nav'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
 import { openRegisterPage } from '@/utils/demo-navigation'
 import { navigateByNavKey } from '@/utils/navigation'
+import {
+  formatProfileAge,
+  formatProfileDate,
+  formatProfileHeight,
+  formatProfileLanguages,
+  localizeProfileText,
+} from '@/utils/profile-format'
 
 const navList = NAV_LIST
 const { t, locale } = usePageI18n('selfDetail')
@@ -224,17 +232,153 @@ onLoad((query) => {
   }
 })
 
-const {
-  heroData,
-  overviewFacts,
-  relationshipFacts,
-  lifestyleFacts,
-  spotlightFacts,
-  intentText,
-  maritalPlanText,
-  highlightTexts,
-  tagTexts,
-} = useSelfDetailViewModel(profileId, locale, t)
+const { profile } = useProfileDetail(profileId)
+
+const recordId = computed(() => {
+  return profile.value ? profile.value.id.toUpperCase() : ''
+})
+
+const statusText = computed(() => {
+  if (!profile.value) return ''
+  return t(`status.${profile.value.status}`)
+})
+
+const verificationText = computed(() => {
+  if (!profile.value) return ''
+  return profile.value.isVerified ? t('badges.verified') : t('badges.unverified')
+})
+
+const visibilityText = computed(() => {
+  if (!profile.value) return ''
+  return profile.value.familyVisible ? t('visibility.familyVisible') : t('visibility.userVisible')
+})
+
+const familyModeText = computed(() => {
+  if (!profile.value) return ''
+  if (profile.value.familyPriority) return t('familySupport.priority')
+  if (profile.value.allowFamilyContact) return t('familySupport.contactReady')
+  return t('familySupport.contextOnly')
+})
+
+const heroMeta = computed(() => {
+  if (!profile.value) return ''
+
+  return [
+    localizeProfileText(locale.value, profile.value.occupation),
+    formatProfileAge(locale.value, profile.value.age),
+    localizeProfileText(locale.value, profile.value.city),
+  ].join(' / ')
+})
+
+const archiveFacts = computed<DetailFactItem[]>(() => {
+  if (!profile.value) return []
+
+  return [
+    { label: t('fields.recordNumber'), value: recordId.value },
+    { label: t('fields.status'), value: statusText.value },
+    { label: t('fields.verification'), value: verificationText.value },
+    { label: t('fields.visibility'), value: visibilityText.value },
+    { label: t('fields.lastActive'), value: formatProfileDate(locale.value, profile.value.lastActiveAt) },
+    { label: t('fields.joinedAt'), value: formatProfileDate(locale.value, profile.value.joinedAt) },
+  ]
+})
+
+const heroData = computed<DetailHeroData | null>(() => {
+  if (!profile.value) return null
+
+  return {
+    eyebrow: t('hero.eyebrow'),
+    recordId: recordId.value,
+    avatar: profile.value.avatar,
+    name: profile.value.name,
+    gender: profile.value.gender,
+    meta: heroMeta.value,
+    summary: localizeProfileText(locale.value, profile.value.summary),
+    badges: [
+      { label: statusText.value },
+      { label: verificationText.value, tone: profile.value.isVerified ? 'highlight' : 'muted' },
+      { label: visibilityText.value, tone: profile.value.familyVisible ? 'highlight' : 'muted' },
+    ],
+    indexTitle: t('sections.archiveIndex'),
+    indexFacts: archiveFacts.value,
+  }
+})
+
+const overviewFacts = computed<DetailFactItem[]>(() => {
+  if (!profile.value) return []
+
+  return [
+    { label: t('fields.age'), value: formatProfileAge(locale.value, profile.value.age) },
+    { label: t('fields.height'), value: formatProfileHeight(profile.value.height) },
+    { label: t('fields.city'), value: localizeProfileText(locale.value, profile.value.city) },
+    { label: t('fields.country'), value: localizeProfileText(locale.value, profile.value.country) },
+    { label: t('fields.nationality'), value: localizeProfileText(locale.value, profile.value.nationality) },
+    { label: t('fields.education'), value: localizeProfileText(locale.value, profile.value.education) },
+    { label: t('fields.job'), value: localizeProfileText(locale.value, profile.value.occupation) },
+    { label: t('fields.industry'), value: localizeProfileText(locale.value, profile.value.industry) },
+    { label: t('fields.employer'), value: localizeProfileText(locale.value, profile.value.employer) },
+    { label: t('fields.income'), value: localizeProfileText(locale.value, profile.value.incomeRange) },
+  ]
+})
+
+const relationshipFacts = computed<DetailFactItem[]>(() => {
+  if (!profile.value) return []
+
+  return [
+    { label: t('fields.maritalStatus'), value: t(`maritalStatus.${profile.value.maritalStatus}`) },
+    { label: t('fields.children'), value: booleanText(profile.value.hasChildren) },
+    { label: t('fields.wantChildren'), value: booleanText(profile.value.wantChildren) },
+    { label: t('fields.longDistance'), value: booleanText(profile.value.acceptLongDistance) },
+    { label: t('fields.familySupport'), value: familyModeText.value },
+  ]
+})
+
+const lifestyleFacts = computed<DetailFactItem[]>(() => {
+  if (!profile.value) return []
+
+  return [
+    { label: t('fields.languages'), value: formatProfileLanguages(locale.value, profile.value.languages) },
+    { label: t('fields.smoke'), value: t(`habits.${profile.value.smoke}`) },
+    { label: t('fields.drink'), value: t(`habits.${profile.value.drink}`) },
+    { label: t('fields.exercise'), value: localizeProfileText(locale.value, profile.value.exercise) },
+    { label: t('fields.residencePlan'), value: localizeProfileText(locale.value, profile.value.residencePlan) },
+  ]
+})
+
+const spotlightFacts = computed<DetailFactItem[]>(() => {
+  if (!profile.value) return []
+
+  return [
+    { label: t('fields.education'), value: localizeProfileText(locale.value, profile.value.education) },
+    { label: t('fields.job'), value: localizeProfileText(locale.value, profile.value.occupation) },
+    { label: t('fields.languages'), value: formatProfileLanguages(locale.value, profile.value.languages) },
+    { label: t('fields.residencePlan'), value: localizeProfileText(locale.value, profile.value.residencePlan) },
+  ]
+})
+
+const intentText = computed(() => {
+  if (!profile.value) return ''
+  return localizeProfileText(locale.value, profile.value.intent)
+})
+
+const maritalPlanText = computed(() => {
+  if (!profile.value) return ''
+  return localizeProfileText(locale.value, profile.value.maritalPlan)
+})
+
+const highlightTexts = computed(() => {
+  if (!profile.value) return []
+  return profile.value.highlights.map(item => localizeProfileText(locale.value, item))
+})
+
+const tagTexts = computed(() => {
+  if (!profile.value) return []
+  return profile.value.tags.map(item => localizeProfileText(locale.value, item))
+})
+
+function booleanText(value: boolean) {
+  return value ? t('values.yes') : t('values.no')
+}
 
 function handleBack() {
   if (getCurrentPages().length > 1) {

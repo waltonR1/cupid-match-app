@@ -100,19 +100,7 @@ src/composables/
 
 `composables` 按业务资源目录聚合，目录内按业务场景拆分具体 hook。页面和组件优先从资源目录入口导入，例如 `@/composables/profiles`，同目录内部依赖使用相对路径，避免通过入口文件形成循环引用。
 
-`composables` 不直接调用 `usePageI18n()`、`useLocaleBridge()`，也不负责生成依赖翻译文案的展示模型。页面或展示组件负责 `t(...)`、当前语言、状态文案、字段 label 和卡片文案。跨页面复用的展示模型适配放在 `src/view-models`。
-
-## view-models
-
-```txt
-src/view-models/
-  profiles/
-    family-detail-view-model.ts  家庭资料详情展示适配
-    profile-detail-state.ts      资料详情展示状态辅助
-    self-detail-view-model.ts    本人资料详情展示适配
-```
-
-`view-models` 放跨页面复用的展示模型适配。依赖 `t`、`locale` 的 view-model 只能接收页面传入的 `t`、`locale`，不要在 `view-models` 内部自行调用 i18n hook。
+`composables` 不直接调用 `usePageI18n()`、`useLocaleBridge()`，也不负责生成依赖翻译文案的展示模型。页面或展示组件负责 `t(...)`、当前语言、状态文案、字段 label 和卡片文案。
 
 ## utils
 
@@ -121,9 +109,10 @@ src/utils/
   demo-navigation.ts   演示跳转函数
   locale-format.ts     日期和时间本地化格式化
   navigation.ts        导航工具
+  profile-format.ts    资料字段纯格式化函数
 ```
 
-`utils` 放跨页面复用的纯工具函数，不承载页面展示模型。
+`utils` 放跨页面复用的纯工具函数，例如日期格式化、本地化文本选择、资料年龄和语言格式化。依赖 `t(...)` 的展示组装留在页面或展示组件内。
 
 ## components
 
@@ -140,7 +129,7 @@ src/components/
   profiles/
 ```
 
-组件目录只放 Vue SFC。组件可以接收 view-model 类型的数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的共享类型从 `src/types` 引入。
+组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的共享类型从 `src/types` 引入。
 
 ## types
 
@@ -205,7 +194,7 @@ mock 是无后端阶段的临时数据源。除 `src/api/modules/*` 外，不要
 1. 先定义或复用 `src/types` 中的类型。
 2. 在 `src/api/modules` 新增接口方法，当前可通过 `mockRequest()` 返回 mock 数据。
 3. 在 `src/composables` 新增业务 hook，处理加载状态、错误状态、筛选和分页。
-4. 页面调用 composable，并在页面或展示组件中处理 i18n 文案和展示 view-model。
+4. 页面调用 composable，并在页面或展示组件中处理 i18n 文案和展示数据组装。
 5. 如果新增页面，更新 `src/pages.json` 和 `docs/page-relationships.md`。
 6. 完成后运行 `npm.cmd run type-check`。
 
