@@ -3,11 +3,11 @@
     <HomeHero />
     <HomeVision />
 
-    <HomeProfilesPreview :profiles="homePreviewProfiles.profiles.value" />
+    <HomeProfilesPreview :profiles="profiles" />
 
     <HomeFamily />
 
-    <HomeEventsPreview :events="homePreviewEvents.events.value" />
+    <HomeEventsPreview :events="events" />
 
     <HomeFeatures />
     <HomeAudience />
@@ -25,11 +25,10 @@ import HomeHero from '@/components/home/HomeHero.vue'
 import HomeMembership from '@/components/home/HomeMembership.vue'
 import HomeProfilesPreview from '@/components/home/HomeProfilesPreview.vue'
 import HomeVision from '@/components/home/HomeVision.vue'
-import { useHomePreviewEvents } from '@/composables/events'
-import { useHomePreviewProfiles } from '@/composables/profiles'
+import { useEvents } from '@/composables/events'
+import { useSelfDirectory } from '@/composables/profiles'
 
-const homePreviewEvents = useHomePreviewEvents()
-const homePreviewProfiles = useHomePreviewProfiles()
-
+const { featuredEvents: events } = useEvents()
+const { featuredProfiles: profiles } = useSelfDirectory()
 
 </script>

@@ -301,13 +301,6 @@ export const mockEvents: MockEvent[] = [
   },
 ]
 
-export function getHomePreviewEvents() {
-  return [...mockEvents]
-    .filter(item => item.status !== 'closed')
-    .sort((left, right) => left.date.localeCompare(right.date))
-    .slice(0, 3)
-}
-
 export function getMockEventById(id: string) {
   return mockEvents.find(item => item.id === id)
 }

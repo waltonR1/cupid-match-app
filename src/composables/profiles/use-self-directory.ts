@@ -1,3 +1,4 @@
+import { computed } from 'vue'
 import type { Profile } from '@/api/modules/profiles'
 import type { SelfDirectoryFilters, SelfSortKey, UseSelfDirectoryResult } from '@/types/self-directory'
 import {
@@ -71,7 +72,7 @@ function sortSelfProfiles(list: Profile[], sortKey: SelfSortKey) {
 }
 
 export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
-  return useProfileDirectoryState<SelfDirectoryFilters, SelfSortKey>({
+  const directory = useProfileDirectoryState<SelfDirectoryFilters, SelfSortKey>({
     mode: 'self',
     defaultFilters: DEFAULT_FILTERS,
     defaultSortKey: 'recentActive',
@@ -80,4 +81,11 @@ export function useSelfDirectory(): UseSelfDirectoryResult<Profile> {
     sortProfiles: sortSelfProfiles,
     loadErrorMessage: 'Failed to load self profiles.',
   })
+
+  const featuredProfiles = computed(() => directory.sortedItems.value.slice(0, 3))
+
+  return {
+    ...directory,
+    featuredProfiles,
+  }
 }

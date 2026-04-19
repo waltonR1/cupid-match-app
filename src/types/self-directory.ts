@@ -46,6 +46,7 @@ export interface UseSelfDirectoryResult<TProfile> {
     filteredItems: ComputedRef<TProfile[]>
     sortedItems: ComputedRef<TProfile[]>
     pagedItems: ComputedRef<TProfile[]>
+    featuredProfiles: ComputedRef<TProfile[]>
     pageStart: ComputedRef<number>
     pageEnd: ComputedRef<number>
 

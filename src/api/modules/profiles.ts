@@ -2,7 +2,6 @@ import type { AppLocale } from '@/i18n/types'
 import {
   getLocalizedLanguageLabel,
   getLocalizedProfileCardData as getMockLocalizedProfileCardData,
-  getHomePreviewProfiles as getMockHomePreviewProfiles,
   localized,
   mockProfiles,
   pickLocalized,
@@ -31,10 +30,6 @@ export function listProfiles(params: ListProfilesParams = {}) {
 
 export function getProfileDetail(id: string) {
   return mockRequest(mockProfiles.find(item => item.id === id) ?? null)
-}
-
-export function listHomePreviewProfiles() {
-  return mockRequest(getMockHomePreviewProfiles())
 }
 
 export function getProfileLanguageLabel(locale: AppLocale, language: string) {

@@ -7,7 +7,6 @@ export type LocalizedText = Record<AppLocale, string>
 export function localized(zh: string, fr: string, en: string): LocalizedText {
   return { zh, fr, en }
 }
-
 export type Gender = 'male' | 'female'
 export type ProfileStatus = 'open' | 'review' | 'vip'
 export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
@@ -1354,12 +1353,4 @@ export function getLocalizedLanguageOptions(locale: AppLocale): LocalizedChoiceO
         label: getLocalizedLanguageLabel(locale, value),
         value,
       }))
-}
-
-const HOME_PROFILE_PREVIEW_IDS = ['p-002', 'p-005', 'p-006'] as const
-
-export function getHomePreviewProfiles() {
-  return HOME_PROFILE_PREVIEW_IDS
-      .map(id => getMockProfileById(id))
-      .filter((item): item is MockProfile => Boolean(item))
 }

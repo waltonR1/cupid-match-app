@@ -12,7 +12,7 @@ export function useEvents() {
 
   const sortedEvents = computed(() => [...events.value].sort((left, right) => left.date.localeCompare(right.date)))
   const nextEvent = computed(() => sortedEvents.value[0])
-  const featuredEvents = computed(() => sortedEvents.value.filter(item => item.status !== 'closed'))
+  const featuredEvents = computed(() => sortedEvents.value.filter(item => item.status !== 'closed').slice(0, 3))
 
   async function loadEvents() {
     loading.value = true

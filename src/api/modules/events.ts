@@ -1,6 +1,5 @@
 import { mockProfiles, type MockProfile } from '@/mock/business'
 import {
-  getHomePreviewEvents as getMockHomePreviewEvents,
   getMockEventById,
   mockEvents,
   type EventStatus,
@@ -15,10 +14,6 @@ export type { EventStatus, LocalizedText }
 
 export function listEvents() {
   return mockRequest([...mockEvents].sort((left, right) => left.date.localeCompare(right.date)))
-}
-
-export function listHomePreviewEvents() {
-  return mockRequest(getMockHomePreviewEvents())
 }
 
 export function getEventDetail(id: string) {
