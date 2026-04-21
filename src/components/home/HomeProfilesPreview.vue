@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
-import DirectoryCardFrame from '@/components/profiles/shared/directory/DirectoryCardFrame.vue'
+import DirectoryCardFrame from '@/components/profiles/directory/DirectoryCardFrame.vue'
 import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'

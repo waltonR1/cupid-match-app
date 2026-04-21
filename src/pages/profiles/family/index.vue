@@ -8,36 +8,14 @@
         :tags="heroTags"
       />
 
-      <FamilyFilterToolbar
+      <DirectoryFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
         :expand-text="t('filters.expand')"
         :collapse-text="t('filters.collapse')"
-        :gender-label="t('filters.gender')"
-        :age-label="t('filters.age')"
-        :city-label="t('filters.city')"
-        :education-label="t('filters.education')"
-        :intent-label="t('filters.intent')"
-        :family-mode-label="t('filters.familyMode')"
-        :occupation-label="t('filters.occupation')"
-        :industry-label="t('filters.industry')"
-        :marital-status-label="t('filters.maritalStatus')"
-        :children-label="t('filters.children')"
-        :long-distance-label="t('filters.longDistance')"
-        :filters="filters"
-        :gender-options="genderOptions"
-        :age-options="ageOptions"
-        :city-options="cityOptions"
-        :education-options="educationOptions"
-        :intent-options="intentOptions"
-        :family-mode-options="familyModeOptions"
-        :occupation-options="occupationOptions"
-        :industry-options="industryOptions"
-        :marital-status-options="maritalStatusOptions"
-        :children-options="childrenOptions"
-        :long-distance-options="longDistanceOptions"
+        :items="filterItems"
         :active-filters="activeFilterChips"
-        @update:filters="handleUpdateFilters"
+        @update:filter="handleUpdateFilter"
         @remove-filter="handleRemoveFilter"
         @reset="handleResetFilters"
       />
@@ -87,12 +65,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import FamilyFilterToolbar from '@/components/profiles/family/FamilyFilterToolbar.vue'
-import DirectoryCardFrame from '@/components/profiles/shared/directory/DirectoryCardFrame.vue'
-import DirectoryGridShell from '@/components/profiles/shared/directory/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/profiles/shared/directory/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/profiles/shared/directory/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/profiles/shared/directory/DirectoryResultToolbar.vue'
+import DirectoryFilterToolbar from '@/components/profiles/directory/DirectoryFilterToolbar.vue'
+import DirectoryCardFrame from '@/components/profiles/directory/DirectoryCardFrame.vue'
+import DirectoryGridShell from '@/components/profiles/directory/DirectoryGridShell.vue'
+import DirectoryIntro from '@/components/profiles/directory/DirectoryIntro.vue'
+import DirectoryPagination from '@/components/profiles/directory/DirectoryPagination.vue'
+import DirectoryResultToolbar from '@/components/profiles/directory/DirectoryResultToolbar.vue'
 import { useFamilyDirectory } from '@/composables/profiles'
 import {
   localized,
@@ -129,6 +107,20 @@ const heroTags = computed(() => [
   t('hero.tags.second'),
   t('hero.tags.third'),
 ])
+
+interface FamilyFilterToolbarItem {
+  key: keyof FamilyDirectoryFilters
+  label: string
+  options: DirectoryOption[]
+  value: string
+  widthClass: string
+  group?: 'primary' | 'secondary'
+}
+
+const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
+const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
+const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
+
 const allLabel = computed(() => localized('全部', 'Tous', 'All')[locale.value])
 const ageOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
@@ -198,6 +190,96 @@ const sortOptions = computed<DirectoryOption[]>(() => [
   { label: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value], value: 'ageAsc' },
   { label: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value], value: 'ageDesc' },
 ])
+const filterItems = computed<FamilyFilterToolbarItem[]>(() => [
+  {
+    key: 'gender',
+    label: t('filters.gender'),
+    options: genderOptions.value,
+    value: filters.value.gender,
+    widthClass: compactWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'ageRange',
+    label: t('filters.age'),
+    options: ageOptions.value,
+    value: filters.value.ageRange,
+    widthClass: compactWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'familyMode',
+    label: t('filters.familyMode'),
+    options: familyModeOptions.value,
+    value: filters.value.familyMode,
+    widthClass: wideWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'city',
+    label: t('filters.city'),
+    options: cityOptions.value,
+    value: filters.value.city,
+    widthClass: regularWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'education',
+    label: t('filters.education'),
+    options: educationOptions.value,
+    value: filters.value.education,
+    widthClass: regularWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'intentCode',
+    label: t('filters.intent'),
+    options: intentOptions.value,
+    value: filters.value.intentCode,
+    widthClass: wideWidthClass,
+    group: 'primary',
+  },
+  {
+    key: 'occupation',
+    label: t('filters.occupation'),
+    options: occupationOptions.value,
+    value: filters.value.occupation,
+    widthClass: wideWidthClass,
+    group: 'secondary',
+  },
+  {
+    key: 'industry',
+    label: t('filters.industry'),
+    options: industryOptions.value,
+    value: filters.value.industry,
+    widthClass: regularWidthClass,
+    group: 'secondary',
+  },
+  {
+    key: 'maritalStatus',
+    label: t('filters.maritalStatus'),
+    options: maritalStatusOptions.value,
+    value: filters.value.maritalStatus,
+    widthClass: regularWidthClass,
+    group: 'secondary',
+  },
+  {
+    key: 'hasChildren',
+    label: t('filters.children'),
+    options: childrenOptions.value,
+    value: filters.value.hasChildren,
+    widthClass: regularWidthClass,
+    group: 'secondary',
+  },
+  {
+    key: 'acceptLongDistance',
+    label: t('filters.longDistance'),
+    options: longDistanceOptions.value,
+    value: filters.value.acceptLongDistance,
+    widthClass: regularWidthClass,
+    group: 'secondary',
+  },
+])
 const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
   const chips = [
     buildActiveChip('gender', t('filters.gender'), genderOptions.value, filters.value.gender),
@@ -216,12 +298,13 @@ const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
   return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
 })
 
-function handleUpdateFilters(nextFilters: Partial<FamilyDirectoryFilters>) {
-  updateFilters(nextFilters)
+function handleUpdateFilter(payload: { key: string, value: string }) {
+  const key = payload.key as keyof FamilyDirectoryFilters
+  updateFilters({ [key]: payload.value } as Partial<FamilyDirectoryFilters>)
 }
 
-function handleRemoveFilter(key: keyof FamilyDirectoryFilters) {
-  removeFilter(key)
+function handleRemoveFilter(key: string) {
+  removeFilter(key as keyof FamilyDirectoryFilters)
 }
 
 function handleResetFilters() {
