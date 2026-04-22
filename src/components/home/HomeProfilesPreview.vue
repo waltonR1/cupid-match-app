@@ -26,7 +26,6 @@
           v-for="profile in profileCards"
           :key="profile.id"
           :data="profile.card"
-          clickable
           @select="openSelfDetail(profile.id)"
         />
       </view>

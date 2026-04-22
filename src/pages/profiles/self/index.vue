@@ -36,7 +36,6 @@
         <template #default="{ item }">
           <ProfileCardFrame
             :data="buildCardViewModel(item)"
-            clickable
             @select="openSelfDetail(item.id)"
           />
         </template>

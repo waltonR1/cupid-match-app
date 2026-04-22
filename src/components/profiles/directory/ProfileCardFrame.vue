@@ -1,7 +1,6 @@
 ﻿<template>
   <view
-    class="flex h-full min-h-[460px] flex-col border border-semantic-border-default bg-semantic-surface-card p-6 transition-all duration-300 hover:-translate-y-[3px] hover:shadow-panel"
-    :class="rootClassName"
+    class="flex h-full min-h-[460px] cursor-pointer flex-col border border-semantic-border-default bg-semantic-surface-card p-6 transition-all duration-300 hover:-translate-y-[3px] hover:border-component-directory-card-hover-border hover:bg-semantic-surface-soft hover:shadow-panel"
     @click="handleSelect"
   >
     <view class="flex items-start justify-between gap-4">
@@ -54,7 +53,7 @@
       </view>
     </view>
 
-    <view class="mt-6 text-[15px] leading-7 text-semantic-text-secondary" :class="summaryClass">
+    <view class="mt-6 text-[15px] leading-7 text-semantic-text-secondary">
       {{ data.summary }}
     </view>
 
@@ -86,28 +85,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { DirectoryCardViewModel } from '@/types/view-models/profiles/directory-card'
 
-const props = withDefaults(defineProps<{
+defineProps<{
   data: DirectoryCardViewModel
-  clickable?: boolean
-  summaryClass?: string
-}>(), {
-  clickable: false,
-  summaryClass: '',
-})
+}>()
 
 const emit = defineEmits<{
   (e: 'select'): void
 }>()
 
-const rootClassName = computed(() => {
-  return props.clickable ? 'cursor-pointer hover:border-component-directory-card-hover-border hover:bg-semantic-surface-soft' : ''
-})
-
 function handleSelect() {
-  if (!props.clickable) return
   emit('select')
 }
 </script>

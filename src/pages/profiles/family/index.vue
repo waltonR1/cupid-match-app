@@ -36,8 +36,6 @@
         <template #default="{ item }">
           <ProfileCardFrame
             :data="buildCardViewModel(item)"
-            clickable
-            summary-class="line-clamp-3"
             @select="openFamilyProfileDetail(item.id)"
           />
         </template>
