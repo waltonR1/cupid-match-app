@@ -81,17 +81,13 @@
             </view>
           </view>
 
-          <AppButton
-            variant="secondary"
-            context="membership-silver"
-            size="sm"
-            width="full"
-            rounded="none"
+          <MembershipPlanButton
+            tier="silver"
             class="relative mt-auto"
             @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
-          </AppButton>
+          </MembershipPlanButton>
         </view>
 
         <!-- gold -->
@@ -144,17 +140,13 @@
             </view>
           </view>
 
-          <AppButton
-            variant="secondary"
-            context="membership-gold"
-            size="sm"
-            width="full"
-            rounded="none"
+          <MembershipPlanButton
+            tier="gold"
             class="relative mt-auto"
             @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
-          </AppButton>
+          </MembershipPlanButton>
         </view>
 
         <!-- diamond -->
@@ -214,16 +206,12 @@
               {{ t('membership.vip.diamond.accessLabel') }}
             </view>
 
-            <AppButton
-              variant="secondary"
-              context="membership-diamond"
-              size="sm"
-              width="full"
-              rounded="none"
+            <MembershipPlanButton
+              tier="diamond"
               @click="openRegisterPage"
             >
               {{ t('membership.vip.cta') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
         </view>
       </view>
@@ -272,16 +260,12 @@
             </view>
           </view>
 
-          <AppButton
-            variant="secondary"
-            context="membership-free"
-            size="sm"
-            width="full"
-            rounded="none"
+          <MembershipPlanButton
+            tier="free"
             @click="openRegisterPage"
           >
             {{ t('membership.free.button') }}
-          </AppButton>
+          </MembershipPlanButton>
         </view>
       </view>
     </view>
@@ -289,9 +273,9 @@
 </template>
 
 <script setup lang="ts">
-import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/navigation'
+import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 
 const { t } = usePageI18n('home')
 </script>

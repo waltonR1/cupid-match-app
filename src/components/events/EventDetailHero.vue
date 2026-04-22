@@ -54,11 +54,11 @@
             :class="[buttonClassName, isDisabled ? 'cursor-not-allowed' : 'cursor-pointer']"
             @click="handleActionClick"
           >
-            {{ actionText }}
+            {{ action.text }}
           </view>
 
           <view class="mt-4 text-[15px] leading-8 text-semantic-text-inverse-muted">
-            {{ actionHint }}
+            {{ action.hint }}
           </view>
         </view>
       </view>
@@ -71,16 +71,17 @@ import { computed } from 'vue'
 import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/events'
 import EventStatusBadge from './EventStatusBadge.vue'
 
+interface EventDetailAction {
+  text: string
+  hint: string
+  disabled: boolean
+}
+
 const props = defineProps<{
   eyebrow: string
   fields: EventDetailFieldLabels
   event: EventOverviewItem
-  registerText: string
-  waitlistText: string
-  fullText: string
-  registerHint: string
-  waitlistHint: string
-  fullHint: string
+  action: EventDetailAction
 }>()
 
 const emit = defineEmits<{
@@ -96,19 +97,7 @@ const detailItems = computed(() => [
   { label: props.fields.seats, value: props.event.seats, full: false },
 ])
 
-const actionText = computed(() => {
-  if (props.event.status === 'waitlist') return props.waitlistText
-  if (props.event.status === 'closed') return props.fullText
-  return props.registerText
-})
-
-const actionHint = computed(() => {
-  if (props.event.status === 'waitlist') return props.waitlistHint
-  if (props.event.status === 'closed') return props.fullHint
-  return props.registerHint
-})
-
-const isDisabled = computed(() => props.event.status === 'closed')
+const isDisabled = computed(() => props.action.disabled)
 
 const buttonClassName = computed(() => {
   if (props.event.status === 'waitlist') {
@@ -123,7 +112,7 @@ const buttonClassName = computed(() => {
 })
 
 function handleActionClick() {
-  if (props.event.status === 'closed') return
+  if (props.action.disabled) return
   emit('register')
 }
 </script>

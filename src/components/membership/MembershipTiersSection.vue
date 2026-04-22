@@ -62,17 +62,13 @@
               </view>
             </view>
 
-            <AppButton
-              variant="secondary"
-              context="membership-free"
-              size="sm"
-              width="full"
-              rounded="none"
+            <MembershipPlanButton
+              tier="free"
               class="mt-8"
               @click="emit('openPlan', 'free')"
             >
               {{ t('free.cta') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
 
           <view class="border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-8 py-10 text-semantic-text-primary shadow-panel">
@@ -100,17 +96,13 @@
               </view>
             </view>
 
-            <AppButton
-              variant="secondary"
-              context="membership-silver"
-              size="sm"
-              width="full"
-              rounded="none"
+            <MembershipPlanButton
+              tier="silver"
               class="mt-8"
               @click="emit('openPlan', 'silver')"
             >
               {{ t('tiers.cardCta') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
 
           <view class="border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-8 py-10 text-semantic-text-inverse shadow-emphasis">
@@ -146,17 +138,13 @@
               </view>
             </view>
 
-            <AppButton
-              variant="secondary"
-              context="membership-gold"
-              size="sm"
-              width="full"
-              rounded="none"
+            <MembershipPlanButton
+              tier="gold"
               class="mt-8"
               @click="emit('openPlan', 'gold')"
             >
               {{ t('tiers.cardCta') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
 
           <view class="border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-8 py-10 text-semantic-text-inverse shadow-luxe">
@@ -184,17 +172,13 @@
               </view>
             </view>
 
-            <AppButton
-              variant="secondary"
-              context="membership-diamond"
-              size="sm"
-              width="full"
-              rounded="none"
+            <MembershipPlanButton
+              tier="diamond"
               class="mt-8"
               @click="emit('openPlan', 'diamond')"
             >
               {{ t('tiers.cardCta') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
         </view>
       </view>
@@ -204,6 +188,7 @@
 
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
+import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
 const emit = defineEmits<{

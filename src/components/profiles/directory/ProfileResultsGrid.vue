@@ -3,7 +3,7 @@
     <view v-if="items.length" class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
       <slot
         v-for="(item, index) in items"
-        :key="resolveItemKey(item, index)"
+        :key="item.id ?? index"
         :item="item"
       />
     </view>
@@ -19,28 +19,24 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends { id?: string | number }">
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 
 const props = withDefaults(defineProps<{
-  items: any[]
+  items: T[]
   emptyText: string
   emptyActionText?: string
   showEmptyAction?: boolean
-  itemKeyField?: string
 }>(), {
   emptyActionText: '',
   showEmptyAction: false,
-  itemKeyField: 'id',
 })
+
+defineSlots<{
+  default(props: { item: T }): unknown
+}>()
 
 defineEmits<{
   (e: 'reset'): void
 }>()
-
-function resolveItemKey(item: any, index: number) {
-  const field = props.itemKeyField
-  const key = item?.[field]
-  return key ?? index
-}
 </script>

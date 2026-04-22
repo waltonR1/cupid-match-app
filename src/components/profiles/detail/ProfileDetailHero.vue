@@ -105,13 +105,13 @@
 </template>
 
 <script setup lang="ts">
-import type { DetailBadgeItem, DetailHeroData } from '@/types/profile-detail'
+import type { ProfileDetailBadgeItem, ProfileDetailHeroData } from '@/types/profile-detail'
 
 defineProps<{
-  data: DetailHeroData
+  data: ProfileDetailHeroData
 }>()
 
-function badgeClassName(tone?: DetailBadgeItem['tone']) {
+function badgeClassName(tone?: ProfileDetailBadgeItem['tone']) {
   if (tone === 'muted') {
     return 'border-semantic-border-default bg-semantic-surface-card text-semantic-text-muted'
   }

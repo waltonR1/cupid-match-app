@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -22,7 +22,7 @@
       </view>
 
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <DirectoryCardFrame
+        <ProfileCardFrame
           v-for="profile in profileCards"
           :key="profile.id"
           :data="profile.card"
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
-import DirectoryCardFrame from '@/components/profiles/directory/DirectoryCardFrame.vue'
+import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
 import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'

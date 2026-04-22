@@ -41,7 +41,7 @@
         </view>
       </view>
 
-      <DirectoryActiveFilterChips
+      <ProfileActiveFilterChips
         v-if="props.activeFilters.length"
         :items="props.activeFilters"
         @remove="handleRemoveFilter"
@@ -53,7 +53,7 @@
           :key="filter.key"
           :class="filter.widthClass"
         >
-          <DirectoryFilterSelectCard
+          <ProfileFilterSelectCard
             :label="filter.label"
             :options="filter.options"
             :value="filter.value"
@@ -67,8 +67,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import DirectoryActiveFilterChips from '@/components/profiles/directory/DirectoryActiveFilterChips.vue'
-import DirectoryFilterSelectCard from '@/components/profiles/directory/DirectoryFilterSelectCard.vue'
+import ProfileActiveFilterChips from '@/components/profiles/directory/ProfileActiveFilterChips.vue'
+import ProfileFilterSelectCard from '@/components/profiles/directory/ProfileFilterSelectCard.vue'
 
 interface FilterOption {
   label: string
@@ -81,7 +81,7 @@ interface ActiveFilterChip {
   value: string
 }
 
-export interface DirectoryFilterToolbarItem {
+export interface ProfileFilterToolbarItem {
   key: string
   label: string
   options: FilterOption[]
@@ -95,7 +95,7 @@ const props = defineProps<{
   resetText: string
   expandText: string
   collapseText: string
-  items: DirectoryFilterToolbarItem[]
+  items: ProfileFilterToolbarItem[]
   activeFilters: ActiveFilterChip[]
 }>()
 
@@ -107,11 +107,11 @@ const emit = defineEmits<{
 
 const isExpanded = ref(false)
 
-const primaryFilters = computed<DirectoryFilterToolbarItem[]>(() => {
+const primaryFilters = computed<ProfileFilterToolbarItem[]>(() => {
   return props.items.filter(item => item.group !== 'secondary')
 })
 
-const secondaryFilters = computed<DirectoryFilterToolbarItem[]>(() => {
+const secondaryFilters = computed<ProfileFilterToolbarItem[]>(() => {
   return props.items.filter(item => item.group === 'secondary')
 })
 

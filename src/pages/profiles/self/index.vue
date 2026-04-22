@@ -1,14 +1,14 @@
-<template>
+﻿<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
-      <DirectoryIntro
+      <ProfileDirectoryIntro
         :eyebrow="t('hero.eyebrow')"
         :title="t('hero.title')"
         :subtitle="t('hero.subtitle')"
         :tags="heroTags"
       />
 
-      <DirectoryFilterToolbar
+      <ProfileFilterToolbar
         :title="t('directory.title')"
         :reset-text="t('filters.clear')"
         :expand-text="t('filters.expand')"
@@ -20,20 +20,13 @@
         @reset="handleResetFilters"
       />
 
-      <DirectoryResultToolbar
-        :result-prefix="t('directory.resultPrefix')"
-        :result-suffix="t('directory.resultSuffix')"
-        :page-text="t('directory.pagePrefix')"
-        :sort-label="t('toolbar.sortLabel')"
-        :total="total"
-        :start="pageStart"
-        :end="pageEnd"
-        :sort-key="sortKey"
-        :sort-options="sortOptions"
+      <ProfileResultToolbar
+        :summary="resultSummary"
+        :sort="resultSort"
         @update:sort-key="handleUpdateSort"
       />
 
-      <DirectoryGridShell
+      <ProfileResultsGrid
         :items="pagedItems"
         :empty-text="t('directory.empty')"
         :empty-action-text="t('filters.clear')"
@@ -41,15 +34,15 @@
         @reset="handleResetFilters"
       >
         <template #default="{ item }">
-          <DirectoryCardFrame
+          <ProfileCardFrame
             :data="buildCardViewModel(item)"
             clickable
             @select="openSelfDetail(item.id)"
           />
         </template>
-      </DirectoryGridShell>
+      </ProfileResultsGrid>
 
-      <DirectoryPagination
+      <ProfileDirectoryPagination
         :page="page"
         :page-size="pageSize"
         :total="total"
@@ -64,12 +57,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import DirectoryFilterToolbar from '@/components/profiles/directory/DirectoryFilterToolbar.vue'
-import DirectoryCardFrame from '@/components/profiles/directory/DirectoryCardFrame.vue'
-import DirectoryGridShell from '@/components/profiles/directory/DirectoryGridShell.vue'
-import DirectoryIntro from '@/components/profiles/directory/DirectoryIntro.vue'
-import DirectoryPagination from '@/components/profiles/directory/DirectoryPagination.vue'
-import DirectoryResultToolbar from '@/components/profiles/directory/DirectoryResultToolbar.vue'
+import ProfileFilterToolbar from '@/components/profiles/directory/ProfileFilterToolbar.vue'
+import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
+import ProfileResultsGrid from '@/components/profiles/directory/ProfileResultsGrid.vue'
+import ProfileDirectoryIntro from '@/components/profiles/directory/ProfileDirectoryIntro.vue'
+import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileDirectoryPagination.vue'
+import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
 import { useSelfDirectory } from '@/composables/profiles'
 import {
   getLocalizedProfileCardData,
@@ -82,6 +75,12 @@ import {
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { DirectoryCardViewModel } from '@/types/directory-card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, SelfDirectoryFilters } from '@/types/self-directory'
+import {
+  buildActiveProfileFilterChip,
+  buildBaseAllOption,
+  buildLocalizedProfileOptions,
+  dedupeProfileOption,
+} from '@/utils/profile-directory-options'
 import { openSelfDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('self')
@@ -152,7 +151,7 @@ const educationOptions = computed<DirectoryOption[]>(() => [
 ])
 const cityOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
-  ...buildLocalizedOptions(sourceItems.value, profile => profile.city),
+  ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.city),
 ])
 const intentOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
@@ -161,15 +160,15 @@ const intentOptions = computed<DirectoryOption[]>(() => [
       label: localize(profile.intent),
       value: profile.intentCode,
     }))
-    .filter(dedupeOption),
+    .filter(dedupeProfileOption),
 ])
 const industryOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
-  ...buildLocalizedOptions(sourceItems.value, profile => profile.industry),
+  ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.industry),
 ])
 const occupationOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
-  ...buildLocalizedOptions(sourceItems.value, profile => profile.occupation),
+  ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.occupation),
 ])
 const languageOptions = computed<DirectoryOption[]>(() => [
   buildBaseAllOption(allLabel.value),
@@ -207,6 +206,19 @@ const sortOptions = computed<DirectoryOption[]>(() => [
   { label: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value], value: 'ageAsc' },
   { label: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value], value: 'ageDesc' },
 ])
+const resultSummary = computed(() => ({
+  prefix: t('directory.resultPrefix'),
+  suffix: t('directory.resultSuffix'),
+  pageText: t('directory.pagePrefix'),
+  total: total.value,
+  start: pageStart.value,
+  end: pageEnd.value,
+}))
+const resultSort = computed(() => ({
+  label: t('toolbar.sortLabel'),
+  key: sortKey.value,
+  options: sortOptions.value,
+}))
 const filterItems = computed<SelfFilterToolbarItem[]>(() => [
   {
     key: 'gender',
@@ -316,19 +328,19 @@ const filterItems = computed<SelfFilterToolbarItem[]>(() => [
 
 const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
   const chips = [
-    buildActiveChip('gender', t('filters.gender'), genderOptions.value, filters.value.gender),
-    buildActiveChip('ageRange', t('filters.age'), ageOptions.value, filters.value.ageRange),
-    buildActiveChip('city', t('filters.city'), cityOptions.value, filters.value.city),
-    buildActiveChip('heightRange', t('filters.height'), heightOptions.value, filters.value.heightRange),
-    buildActiveChip('education', t('filters.education'), educationOptions.value, filters.value.education),
-    buildActiveChip('intentCode', t('filters.intent'), intentOptions.value, filters.value.intentCode),
-    buildActiveChip('industry', t('filters.industry'), industryOptions.value, filters.value.industry),
-    buildActiveChip('occupation', t('fields.job'), occupationOptions.value, filters.value.occupation),
-    buildActiveChip('language', t('filters.languages'), languageOptions.value, filters.value.language),
-    buildActiveChip('verified', t('filters.verified'), verifiedOptions.value, filters.value.verified),
-    buildActiveChip('maritalStatus', t('filters.maritalStatus'), maritalStatusOptions.value, filters.value.maritalStatus),
-    buildActiveChip('hasChildren', t('filters.children'), childrenOptions.value, filters.value.hasChildren),
-    buildActiveChip('acceptLongDistance', t('filters.longDistance'), longDistanceOptions.value, filters.value.acceptLongDistance),
+    buildActiveProfileFilterChip('gender', t('filters.gender'), genderOptions.value, filters.value.gender),
+    buildActiveProfileFilterChip('ageRange', t('filters.age'), ageOptions.value, filters.value.ageRange),
+    buildActiveProfileFilterChip('city', t('filters.city'), cityOptions.value, filters.value.city),
+    buildActiveProfileFilterChip('heightRange', t('filters.height'), heightOptions.value, filters.value.heightRange),
+    buildActiveProfileFilterChip('education', t('filters.education'), educationOptions.value, filters.value.education),
+    buildActiveProfileFilterChip('intentCode', t('filters.intent'), intentOptions.value, filters.value.intentCode),
+    buildActiveProfileFilterChip('industry', t('filters.industry'), industryOptions.value, filters.value.industry),
+    buildActiveProfileFilterChip('occupation', t('fields.job'), occupationOptions.value, filters.value.occupation),
+    buildActiveProfileFilterChip('language', t('filters.languages'), languageOptions.value, filters.value.language),
+    buildActiveProfileFilterChip('verified', t('filters.verified'), verifiedOptions.value, filters.value.verified),
+    buildActiveProfileFilterChip('maritalStatus', t('filters.maritalStatus'), maritalStatusOptions.value, filters.value.maritalStatus),
+    buildActiveProfileFilterChip('hasChildren', t('filters.children'), childrenOptions.value, filters.value.hasChildren),
+    buildActiveProfileFilterChip('acceptLongDistance', t('filters.longDistance'), longDistanceOptions.value, filters.value.acceptLongDistance),
   ]
 
   return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
@@ -358,48 +370,6 @@ function handleChangePage(nextPage: number) {
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)
-}
-
-function buildBaseAllOption(label: string): DirectoryOption {
-  return {
-    label,
-    value: '',
-  }
-}
-
-function resolveOptionLabel(options: DirectoryOption[], value: string) {
-  return options.find(item => item.value === value)?.label || value
-}
-
-function buildActiveChip(
-  key: keyof SelfDirectoryFilters,
-  label: string,
-  options: DirectoryOption[],
-  value: string,
-): ActiveDirectoryFilterChip | undefined {
-  if (!value) return undefined
-
-  return {
-    key,
-    label,
-    value: resolveOptionLabel(options, value),
-  }
-}
-
-function buildLocalizedOptions(profiles: Profile[], getter: (profile: Profile) => LocalizedText) {
-  const options = profiles
-    .map(profile => ({
-      label: localize(getter(profile)),
-      value: getter(profile).en,
-    }))
-    .filter(dedupeOption)
-
-  return options.sort((left, right) => left.label.localeCompare(right.label))
-}
-
-function dedupeOption<T extends DirectoryOption>(item: T, index: number, items: T[]) {
-  if (!item.value || !item.label) return false
-  return items.findIndex(option => option.value === item.value) === index
 }
 
 function buildCardViewModel(profile: Profile): DirectoryCardViewModel {

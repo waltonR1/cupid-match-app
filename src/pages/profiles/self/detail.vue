@@ -23,37 +23,21 @@
       </view>
 
       <view v-if="heroData" class="space-y-6">
-        <DetailHeroPanel :data="heroData" />
+        <ProfileDetailHero :data="heroData" />
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <view class="space-y-6">
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.overview') }}
-              </view>
-
-              <view class="mt-6 grid gap-x-6 gap-y-4 md:grid-cols-2 xl:grid-cols-3">
-                <view
-                  v-for="item in overviewFacts"
-                  :key="item.label"
-                  class="border-b border-semantic-border-divider pb-3"
-                >
-                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ item.label }}
-                  </view>
-                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
-                    {{ item.value }}
-                  </view>
-                </view>
-              </view>
-            </view>
+            <ProfileDetailFactGrid
+              :title="t('sections.overview')"
+              :items="overviewFacts"
+            />
 
             <view class="grid gap-6 lg:grid-cols-2">
-              <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                  {{ t('sections.relationship') }}
-                </view>
-
+              <ProfileDetailFactSection
+                :title="t('sections.relationship')"
+                :items="relationshipFacts"
+                surface="soft"
+              >
                 <view class="mt-6 border border-semantic-border-divider bg-semantic-surface-card px-5 py-5">
                   <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
                     {{ t('fields.intent') }}
@@ -69,43 +53,12 @@
                     {{ maritalPlanText }}
                   </view>
                 </view>
+              </ProfileDetailFactSection>
 
-                <view class="mt-6 grid gap-4">
-                  <view
-                    v-for="item in relationshipFacts"
-                    :key="item.label"
-                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
-                  >
-                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                      {{ item.label }}
-                    </view>
-                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
-                      {{ item.value }}
-                    </view>
-                  </view>
-                </view>
-              </view>
-
-              <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                  {{ t('sections.lifestyle') }}
-                </view>
-
-                <view class="mt-6 grid gap-4">
-                  <view
-                    v-for="item in lifestyleFacts"
-                    :key="item.label"
-                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
-                  >
-                    <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                      {{ item.label }}
-                    </view>
-                    <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
-                      {{ item.value }}
-                    </view>
-                  </view>
-                </view>
-              </view>
+              <ProfileDetailFactSection
+                :title="t('sections.lifestyle')"
+                :items="lifestyleFacts"
+              />
             </view>
           </view>
 
@@ -119,26 +72,10 @@
               </view>
             </view>
 
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.curationFocus') }}
-              </view>
-
-              <view class="mt-6 grid gap-4">
-                <view
-                  v-for="item in spotlightFacts"
-                  :key="item.label"
-                  class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
-                >
-                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ item.label }}
-                  </view>
-                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
-                    {{ item.value }}
-                  </view>
-                </view>
-              </view>
-            </view>
+            <ProfileDetailFactSection
+              :title="t('sections.curationFocus')"
+              :items="spotlightFacts"
+            />
 
             <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
               <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
@@ -193,10 +130,12 @@ import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import DetailHeroPanel from '@/components/profiles/detail/DetailHeroPanel.vue'
+import ProfileDetailFactGrid from '@/components/profiles/detail/ProfileDetailFactGrid.vue'
+import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetailFactSection.vue'
+import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import { useProfileDetail } from '@/composables/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { DetailFactItem, DetailHeroData } from '@/types/profile-detail'
+import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/profile-detail'
 import {
   formatProfileAge,
   formatProfileDate,
@@ -253,7 +192,7 @@ const heroMeta = computed(() => {
   ].join(' / ')
 })
 
-const archiveFacts = computed<DetailFactItem[]>(() => {
+const archiveFacts = computed<ProfileDetailFactItem[]>(() => {
   if (!profile.value) return []
 
   return [
@@ -266,7 +205,7 @@ const archiveFacts = computed<DetailFactItem[]>(() => {
   ]
 })
 
-const heroData = computed<DetailHeroData | null>(() => {
+const heroData = computed<ProfileDetailHeroData | null>(() => {
   if (!profile.value) return null
 
   return {
@@ -287,7 +226,7 @@ const heroData = computed<DetailHeroData | null>(() => {
   }
 })
 
-const overviewFacts = computed<DetailFactItem[]>(() => {
+const overviewFacts = computed<ProfileDetailFactItem[]>(() => {
   if (!profile.value) return []
 
   return [
@@ -304,7 +243,7 @@ const overviewFacts = computed<DetailFactItem[]>(() => {
   ]
 })
 
-const relationshipFacts = computed<DetailFactItem[]>(() => {
+const relationshipFacts = computed<ProfileDetailFactItem[]>(() => {
   if (!profile.value) return []
 
   return [
@@ -316,7 +255,7 @@ const relationshipFacts = computed<DetailFactItem[]>(() => {
   ]
 })
 
-const lifestyleFacts = computed<DetailFactItem[]>(() => {
+const lifestyleFacts = computed<ProfileDetailFactItem[]>(() => {
   if (!profile.value) return []
 
   return [
@@ -328,7 +267,7 @@ const lifestyleFacts = computed<DetailFactItem[]>(() => {
   ]
 })
 
-const spotlightFacts = computed<DetailFactItem[]>(() => {
+const spotlightFacts = computed<ProfileDetailFactItem[]>(() => {
   if (!profile.value) return []
 
   return [

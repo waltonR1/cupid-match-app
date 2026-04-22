@@ -133,15 +133,13 @@
           </view>
 
           <view class="mt-6">
-            <AppButton
-              :variant="plan.variant"
-              :context="plan.context"
-              size="sm"
+            <MembershipPlanButton
+              :tier="plan.key"
               :disabled="plan.key === account.membership"
               @click="openRegisterPage"
             >
               {{ plan.key === account.membership ? t('common.enabled') : t('common.upgrade') }}
-            </AppButton>
+            </MembershipPlanButton>
           </view>
         </view>
       </view>
@@ -156,6 +154,7 @@ import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountData } from '@/composables/account'
 import type { AccountMembershipLevel } from '@/api/modules/account'
 import AppButton from '@/components/common/AppButton.vue'
+import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
@@ -173,6 +172,19 @@ const { t: membershipT } = usePageI18n('membership')
 const accountData = useAccountData()
 const { account } = accountData
 
+interface AccountMembershipPlanCard {
+  key: AccountMembershipLevel
+  badge: string
+  title: string
+  period: string
+  features: string[]
+  cardClass: string
+  eyebrowClass: string
+  titleClass: string
+  metaClass: string
+  featureClass: string
+}
+
 const currentItems = computed(() => [
   {
     label: t('common.currentTier'),
@@ -188,7 +200,7 @@ const currentItems = computed(() => [
   },
 ])
 
-const planCards = computed(() => [
+const planCards = computed<AccountMembershipPlanCard[]>(() => [
   {
     key: 'free',
     badge: membershipT('free.badge'),
@@ -204,8 +216,6 @@ const planCards = computed(() => [
     titleClass: 'text-semantic-text-primary',
     metaClass: 'text-semantic-text-secondary',
     featureClass: 'border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background text-semantic-text-secondary',
-    variant: 'secondary' as const,
-    context: 'membership-free' as const,
   },
   {
     key: 'silver',
@@ -222,8 +232,6 @@ const planCards = computed(() => [
     titleClass: 'text-semantic-text-primary',
     metaClass: 'text-semantic-text-secondary',
     featureClass: 'border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background text-semantic-text-secondary',
-    variant: 'secondary' as const,
-    context: 'membership-silver' as const,
   },
   {
     key: 'gold',
@@ -240,8 +248,6 @@ const planCards = computed(() => [
     titleClass: 'text-semantic-text-inverse',
     metaClass: 'text-semantic-text-inverse-muted',
     featureClass: 'border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background text-semantic-text-inverse-muted',
-    variant: 'primary' as const,
-    context: 'membership-gold' as const,
   },
   {
     key: 'diamond',
@@ -258,8 +264,6 @@ const planCards = computed(() => [
     titleClass: 'text-semantic-text-inverse',
     metaClass: 'text-semantic-text-inverse-muted',
     featureClass: 'border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background text-semantic-text-inverse-muted',
-    variant: 'primary' as const,
-    context: 'membership-diamond' as const,
   },
 ])
 

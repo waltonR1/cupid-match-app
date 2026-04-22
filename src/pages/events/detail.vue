@@ -5,12 +5,7 @@
         :eyebrow="t('hero.eyebrow')"
         :fields="detailFieldLabels"
         :event="eventCard"
-        :register-text="t('actions.register')"
-        :waitlist-text="t('actions.joinWaitlist')"
-        :full-text="t('actions.full')"
-        :register-hint="t('actions.registerHint')"
-        :waitlist-hint="t('actions.waitlistHint')"
-        :full-hint="t('actions.fullHint')"
+        :action="eventAction"
         @register="openRegisterPage"
       />
 
@@ -88,6 +83,31 @@ const detailFieldLabels = computed<EventDetailFieldLabels>(() => ({
 const eventCard = computed<EventOverviewItem | undefined>(() => {
   if (!eventDetail.event.value) return undefined
   return buildEventOverviewItem(eventDetail.event.value)
+})
+const eventAction = computed(() => {
+  const status = eventCard.value?.status
+
+  if (status === 'waitlist') {
+    return {
+      text: t('actions.joinWaitlist'),
+      hint: t('actions.waitlistHint'),
+      disabled: false,
+    }
+  }
+
+  if (status === 'closed') {
+    return {
+      text: t('actions.full'),
+      hint: t('actions.fullHint'),
+      disabled: true,
+    }
+  }
+
+  return {
+    text: t('actions.register'),
+    hint: t('actions.registerHint'),
+    disabled: false,
+  }
 })
 const agenda = computed<EventAgendaItem[]>(() => {
   if (!eventDetail.event.value) return []

@@ -19,10 +19,6 @@ type ButtonContext =
   | 'header'
   | 'hero'
   | 'section'
-  | 'membership-silver'
-  | 'membership-gold'
-  | 'membership-diamond'
-  | 'membership-free'
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
 type ButtonWidth = 'auto' | 'cta' | 'full'
 type ButtonRadius = 'none' | 'button' | 'xl'
@@ -115,22 +111,6 @@ const variantClass = computed(() => {
 
   if (props.context === 'section') {
     return 'border-semantic-border-default bg-semantic-surface-soft text-component-section-action-emphasis hover:border-component-section-action-emphasis hover:bg-semantic-page-subtle hover:text-semantic-text-primary hover:shadow-panel'
-  }
-
-  if (props.context === 'membership-silver') {
-    return 'border-component-membership-tier-silver-button-border bg-component-membership-tier-silver-button-fill text-semantic-text-primary hover:border-component-membership-tier-silver-button-border hover:bg-component-membership-tier-silver-button-fill-hover hover:text-semantic-text-primary'
-  }
-
-  if (props.context === 'membership-gold') {
-    return 'border-component-membership-tier-gold-border bg-component-membership-tier-gold-fill text-semantic-action-primary-contrast hover:border-component-membership-tier-gold-border-hover hover:bg-component-membership-tier-gold-fill-hover hover:text-semantic-action-primary-contrast hover:shadow-emphasis'
-  }
-
-  if (props.context === 'membership-diamond') {
-    return 'border-component-membership-tier-diamond-button-border bg-component-membership-tier-diamond-button-fill text-semantic-action-primary-contrast hover:border-component-membership-tier-diamond-button-border-hover hover:bg-component-membership-tier-diamond-button-fill-hover hover:text-semantic-action-primary-contrast hover:shadow-emphasis'
-  }
-
-  if (props.context === 'membership-free') {
-    return 'border-component-membership-tier-free-button-border bg-transparent text-semantic-text-primary hover:border-component-membership-tier-free-button-border hover:bg-component-membership-tier-free-button-fill-hover hover:text-semantic-text-primary'
   }
 
   return 'border-semantic-border-default bg-semantic-surface-soft text-semantic-text-secondary hover:border-semantic-border-soft hover:bg-semantic-surface-panel hover:text-semantic-text-primary'

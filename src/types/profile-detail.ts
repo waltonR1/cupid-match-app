@@ -1,16 +1,19 @@
 export type Gender = 'male' | 'female'
+export type ProfileDetailAccessState = 'visible' | 'masked' | 'hidden'
 
-export interface DetailFactItem {
+export interface ProfileDetailFactItem {
   label: string
   value: string
+  access?: ProfileDetailAccessState
+  maskText?: string
 }
 
-export interface DetailBadgeItem {
+export interface ProfileDetailBadgeItem {
   label: string
   tone?: 'highlight' | 'muted'
 }
 
-export interface DetailHeroData {
+export interface ProfileDetailHeroData {
   eyebrow: string
   recordId: string
   avatar: string
@@ -18,7 +21,7 @@ export interface DetailHeroData {
   gender?: Gender
   meta: string
   summary: string
-  badges: DetailBadgeItem[]
+  badges: ProfileDetailBadgeItem[]
   indexTitle: string
-  indexFacts: DetailFactItem[]
+  indexFacts: ProfileDetailFactItem[]
 }
