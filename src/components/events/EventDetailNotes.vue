@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="overflow-hidden border border-semantic-border-default bg-semantic-surface-card px-8 py-10 text-semantic-text-primary shadow-panel">
     <view class="h-px w-14 bg-component-section-divider" />
     <view class="mt-6 text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">{{ eyebrow }}</view>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventNoteItem } from '@/types/events'
+import type { EventNoteItem } from '@/types/view-models/events'
 
 defineProps<{
   eyebrow: string

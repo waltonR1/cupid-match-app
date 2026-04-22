@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="mb-12 h-px bg-component-section-divider-subtle" />
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventOverviewItem } from '@/types/events'
+import type { EventOverviewItem } from '@/types/view-models/events'
 
 defineProps<{
   eyebrow: string

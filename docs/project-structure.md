@@ -48,7 +48,7 @@ src/
   pages/                uni-app 页面
   static/               静态资源
   stores/               Pinia 状态管理
-  types/                全局和跨模块类型
+  types/                类型定义；按 API / model / view model / UI 状态分组
   utils/                通用工具函数
   App.vue               应用入口组件
   main.ts               uni-app 应用初始化
@@ -128,7 +128,7 @@ src/components/
   profiles/
 ```
 
-组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的共享类型从 `src/types` 引入。
+组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。组件需要的展示模型从 `src/types/view-models` 引入，筛选、导航 key 等 UI 状态类型从 `src/types` 引入。
 
 `common` 目录只放跨业务复用的通用组件。带有明确业务语义的组件应放在对应业务目录，例如会员等级按钮放在 `components/membership`。
 
@@ -139,16 +139,23 @@ src/components/
 ```txt
 src/types/
   account-shell.ts
-  contact.ts
-  directory-card.ts
-  events.ts
   family-directory.ts
   pinia-persist.d.ts
-  profile-detail.ts
   self-directory.ts
+  view-models/
+    contact.ts
+    events.ts
+    home.ts
+    profiles/
+      detail.ts
+      directory-card.ts
 ```
 
-放置跨组件、跨页面或跨 composable 使用的类型。新增类型时优先按业务域命名，例如 `events.ts`、`profile-detail.ts`；只有单个组件私有且不会复用的类型才考虑内联在 `.vue` 中。
+`types` 是类型根目录，按职责分组，不作为无差别类型堆放目录。当前根层保留 UI 状态类型和全局声明，例如筛选条件、排序 key、导航 key、composable 返回结构。
+
+`types/view-models` 放置组件和页面渲染用的展示模型。真实 API 接入后，页面或 mapper 负责把 API DTO 转成 view model，组件继续依赖稳定的展示结构。
+
+后续如果 API DTO 或前端领域模型增多，可以在 `types/api`、`types/models` 下继续分组；真实接口请求实现仍保留在 `src/api/modules`。
 
 ## pages
 

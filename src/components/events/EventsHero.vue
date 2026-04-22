@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="relative overflow-hidden bg-gradient-events-hero text-semantic-text-inverse">
     <view class="pointer-events-none absolute right-[-215px] top-[-12px] hidden h-[430px] w-[430px] lg:block">
       <view class="absolute inset-0 rounded-full border border-semantic-border-hero-ornament" />
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/view-models/events'
 import EventStatusBadge from './EventStatusBadge.vue'
 
 defineProps<{

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
@@ -135,7 +135,7 @@ import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetail
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import { useProfileDetail } from '@/composables/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/profile-detail'
+import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/view-models/profiles/detail'
 import {
   formatProfileAge,
   formatProfileDate,

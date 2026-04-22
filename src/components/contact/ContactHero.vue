@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="relative overflow-hidden bg-gradient-contact-hero text-semantic-text-inverse">
     <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
       <view class="grid gap-12 lg:min-h-[560px] lg:grid-cols-[1fr_0.94fr] lg:items-start">
@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactCardItem } from '@/types/contact'
+import type { ContactCardItem } from '@/types/view-models/contact'
 
 defineProps<{
   cards: ContactCardItem[]

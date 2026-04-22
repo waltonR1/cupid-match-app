@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="bg-semantic-page-default">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactCardItem } from '@/types/contact'
+import type { ContactCardItem } from '@/types/view-models/contact'
 
 defineProps<{
   cards: ContactCardItem[]

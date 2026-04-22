@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
       <view class="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactCaseItem } from '@/types/contact'
+import type { ContactCaseItem } from '@/types/view-models/contact'
 
 defineProps<{
   cards: ContactCaseItem[]

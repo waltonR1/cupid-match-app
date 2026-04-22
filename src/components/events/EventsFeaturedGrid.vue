@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-8 pb-24">
     <view class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import EventOverviewCard from './EventOverviewCard.vue'
-import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events'
+import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/view-models/events'
 
 defineProps<{
   eyebrow: string

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="px-6 py-7 shadow-panel" :class="surfaceClass">
     <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
       {{ title }}
@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ProfileDetailFactItem } from '@/types/profile-detail'
+import type { ProfileDetailFactItem } from '@/types/view-models/profiles/detail'
 
 const props = withDefaults(defineProps<{
   title: string
@@ -51,7 +51,7 @@ const visibleItems = computed(() => props.items.filter(item => item.access !== '
 
 function displayValue(item: ProfileDetailFactItem) {
   if (item.access === 'masked') {
-    return item.maskText || '••••'
+    return item.maskText || '****'
   }
 
   return item.value

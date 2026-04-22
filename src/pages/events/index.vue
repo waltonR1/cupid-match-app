@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AppPageLayout>
     <EventsHero
       :eyebrow="t('hero.eyebrow')"
@@ -39,7 +39,7 @@ import EventsScheduleList from '@/components/events/EventsScheduleList.vue'
 import { useEvents } from '@/composables/events'
 import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events'
+import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/view-models/events'
 import { openEventDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('events')

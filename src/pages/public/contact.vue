@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AppPageLayout>
     <ContactHero
       :cards="contactCards"
@@ -24,7 +24,7 @@ import type {
   ContactCardItem,
   ContactCaseItem,
   ContactGuideTag,
-} from '@/types/contact'
+} from '@/types/view-models/contact'
 import { openRegisterPage } from '@/utils/navigation'
 
 const email = 'contact@rencontreaparis.com'

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="bg-semantic-page-subtle text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -50,7 +50,7 @@ import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
 import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
-import type { HomeEventsPreviewViewModel } from '@/types/home'
+import type { HomeEventsPreviewViewModel } from '@/types/view-models/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail, openEventsPage } from '@/utils/navigation'
 

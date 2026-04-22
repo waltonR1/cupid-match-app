@@ -50,7 +50,7 @@ import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
 import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
-import type { HomeProfilesPreviewItem } from '@/types/home'
+import type { HomeProfilesPreviewItem } from '@/types/view-models/home'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail, openSelfDirectoryPage } from '@/utils/navigation'
 

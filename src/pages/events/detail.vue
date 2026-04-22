@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AppPageLayout>
     <view v-if="eventCard" class="pb-20">
       <EventDetailHero
@@ -65,7 +65,7 @@ import type {
   EventNoteItem,
   EventOverviewItem,
   EventRelatedProfileItem,
-} from '@/types/events'
+} from '@/types/view-models/events'
 import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('eventDetail')
@@ -181,7 +181,7 @@ function formatRelatedProfileMeta(profile: EventRelatedProfile) {
   const city = localize(profile.city)
   const intent = localize(profile.intent)
 
-  if (locale.value === 'zh') return `${profile.age}岁 | ${city} | ${intent}`
+  if (locale.value === 'zh') return `${profile.age}宀?| ${city} | ${intent}`
   if (locale.value === 'fr') return `${profile.age} ans | ${city} | ${intent}`
   return `${profile.age} | ${city} | ${intent}`
 }

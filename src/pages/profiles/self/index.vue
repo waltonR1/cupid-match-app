@@ -73,7 +73,7 @@ import {
   type Profile,
 } from '@/api/modules/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
+import type { DirectoryCardViewModel } from '@/types/view-models/profiles/directory-card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, SelfDirectoryFilters } from '@/types/self-directory'
 import {
   buildActiveProfileFilterChip,

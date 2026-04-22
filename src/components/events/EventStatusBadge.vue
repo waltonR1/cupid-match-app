@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view
     class="inline-flex min-h-[36px] min-w-[114px] shrink-0 items-center justify-center gap-2 border px-3.5 py-2 text-center text-[11.5px] font-medium uppercase leading-none"
     :class="badgeClassName"
@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventStatus } from '@/types/events'
+import type { EventStatus } from '@/types/view-models/events'
 
 const props = defineProps<{
   status: EventStatus

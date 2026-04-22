@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view
     class="flex h-full min-h-[460px] flex-col border border-semantic-border-default bg-semantic-surface-card p-6 transition-all duration-300 hover:-translate-y-[3px] hover:shadow-panel"
     :class="rootClassName"
@@ -87,7 +87,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { DirectoryCardViewModel } from '@/types/directory-card'
+import type { DirectoryCardViewModel } from '@/types/view-models/profiles/directory-card'
 
 const props = withDefaults(defineProps<{
   data: DirectoryCardViewModel

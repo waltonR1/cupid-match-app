@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="relative overflow-hidden bg-gradient-events-hero text-semantic-text-inverse">
     <view class="pointer-events-none absolute right-[-260px] top-1/2 hidden h-[520px] w-[520px] -translate-y-1/2 lg:block">
       <view class="absolute inset-0 rounded-full border border-semantic-border-hero-ornament" />
@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/events'
+import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/view-models/events'
 import EventStatusBadge from './EventStatusBadge.vue'
 
 interface EventDetailAction {

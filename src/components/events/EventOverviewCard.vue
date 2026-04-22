@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view
     class="border border-semantic-border-default bg-component-event-card-background px-8 py-8 shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-semantic-border-card-hover hover:bg-component-event-card-background-hover hover:shadow-about-hero-panel"
     @click="$emit('open', event.id)"
@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/view-models/events'
 
 defineProps<{
   event: EventOverviewItem

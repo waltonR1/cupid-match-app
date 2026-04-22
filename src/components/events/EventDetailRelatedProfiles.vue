@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <view class="grid gap-6">
     <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">{{ eyebrow }}</view>
     <view class="text-[34px] font-semibold text-semantic-text-primary">{{ title }}</view>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventRelatedProfileItem } from '@/types/events'
+import type { EventRelatedProfileItem } from '@/types/view-models/events'
 
 defineProps<{
   eyebrow: string
