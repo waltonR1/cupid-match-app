@@ -14,33 +14,7 @@
             <view class="min-w-0 truncate text-[22px] font-semibold text-semantic-text-primary">
               {{ data.name }}
             </view>
-            <view
-              v-if="data.gender"
-              class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-muted"
-            >
-              <svg
-                v-if="data.gender === 'female'"
-                class="h-3 w-3"
-                viewBox="0 0 12 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="6" cy="3.75" r="2.75" stroke="currentColor" stroke-width="1.25" />
-                <path d="M6 6.75V11" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                <path d="M4.25 9.25H7.75" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-              </svg>
-              <svg
-                v-else
-                class="h-3 w-3"
-                viewBox="0 0 12 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="4.5" cy="7.5" r="2.75" stroke="currentColor" stroke-width="1.25" />
-                <path d="M6.75 5.25L11 1" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                <path d="M8.25 1H11V3.75" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </view>
+            <AppGenderBadge :gender="data.gender" />
           </view>
           <view class="mt-1 text-[14px] text-semantic-text-muted">
             {{ data.meta }}
@@ -85,10 +59,11 @@
 </template>
 
 <script setup lang="ts">
-import type { DirectoryCardViewModel } from '@/types/view-models/profiles/directory-card'
+import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
+import type { ProfileCardViewModel } from '@/types/view-models/profiles/card'
 
 defineProps<{
-  data: DirectoryCardViewModel
+  data: ProfileCardViewModel
 }>()
 
 const emit = defineEmits<{

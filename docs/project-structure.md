@@ -147,8 +147,8 @@ src/types/
     events.ts
     home.ts
     profiles/
+      card.ts
       detail.ts
-      directory-card.ts
 ```
 
 `types` 是类型根目录，按职责分组，不作为无差别类型堆放目录。当前根层保留 UI 状态类型和全局声明，例如筛选条件、排序 key、导航 key、composable 返回结构。

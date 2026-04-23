@@ -70,7 +70,7 @@ import {
   type Profile,
 } from '@/api/modules/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { DirectoryCardViewModel } from '@/types/view-models/profiles/directory-card'
+import type { ProfileCardViewModel } from '@/types/view-models/profiles/card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/family-directory'
 import {
   buildActiveProfileFilterChip,
@@ -334,7 +334,7 @@ function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)
 }
 
-function buildCardViewModel(profile: Profile): DirectoryCardViewModel {
+function buildCardViewModel(profile: Profile): ProfileCardViewModel {
   const occupation = localize(profile.occupation)
   const meta = locale.value === 'zh'
     ? `${profile.age}岁 / ${occupation}`

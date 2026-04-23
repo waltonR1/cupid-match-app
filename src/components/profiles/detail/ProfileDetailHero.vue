@@ -29,33 +29,7 @@
                 {{ data.name }}
               </view>
 
-              <view
-                v-if="data.gender"
-                class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-semantic-border-default bg-semantic-surface-panel text-semantic-text-muted"
-              >
-                <svg
-                  v-if="data.gender === 'female'"
-                  class="h-3.5 w-3.5"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle cx="6" cy="3.75" r="2.75" stroke="currentColor" stroke-width="1.2" />
-                  <path d="M6 6.75V11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-                  <path d="M4.25 9.25H7.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-                </svg>
-                <svg
-                  v-else
-                  class="h-3.5 w-3.5"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle cx="4.5" cy="7.5" r="2.75" stroke="currentColor" stroke-width="1.2" />
-                  <path d="M6.75 5.25L11 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-                  <path d="M8.25 1H11V3.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </view>
+              <AppGenderBadge :gender="data.gender" size="md" />
             </view>
 
             <view class="mt-3 text-[17px] leading-7 text-semantic-text-muted">
@@ -105,6 +79,7 @@
 </template>
 
 <script setup lang="ts">
+import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
 import type { ProfileDetailBadgeItem, ProfileDetailHeroData } from '@/types/view-models/profiles/detail'
 
 defineProps<{
