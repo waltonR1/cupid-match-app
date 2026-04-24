@@ -65,7 +65,7 @@ import type {
   EventNoteItem,
   EventOverviewItem,
   EventRelatedProfileItem,
-} from '@/types/view-models/events'
+} from '@/types/events/view'
 import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('eventDetail')

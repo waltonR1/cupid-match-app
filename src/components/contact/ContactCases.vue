@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactCaseItem } from '@/types/view-models/contact'
+import type { ContactCaseItem } from '@/types/contact/view'
 
 defineProps<{
   cards: ContactCaseItem[]

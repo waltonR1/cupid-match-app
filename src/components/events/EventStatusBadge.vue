@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventStatus } from '@/types/view-models/events'
+import type { EventStatus } from '@/types/events/view'
 
 const props = defineProps<{
   status: EventStatus

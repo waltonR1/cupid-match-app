@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventAgendaItem } from '@/types/view-models/events'
+import type { EventAgendaItem } from '@/types/events/view'
 
 defineProps<{
   eyebrow: string

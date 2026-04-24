@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { ProfileDetailFactItem } from '@/types/view-models/profiles/detail'
+import type { ProfileDetailFactItem } from '@/types/profiles/detail'
 
 const props = withDefaults(defineProps<{
   title: string

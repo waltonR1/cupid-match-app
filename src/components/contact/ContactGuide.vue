@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactGuideTag } from '@/types/view-models/contact'
+import type { ContactGuideTag } from '@/types/contact/view'
 
 defineProps<{
   tags: ContactGuideTag[]

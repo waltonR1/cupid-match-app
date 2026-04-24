@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import type { Profile } from '@/api/modules/profiles'
-import type { SelfDirectoryFilters, SelfSortKey, UseSelfDirectoryResult } from '@/types/self-directory'
+import type { SelfDirectoryFilters, SelfSortKey, UseSelfDirectoryResult } from '@/types/profiles/directory'
 import {
   compareAgeAsc,
   compareAgeDesc,

@@ -209,6 +209,7 @@
 
 <script setup lang="ts">
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
+import AppButton from "@/components/common/AppButton.vue";
 import { computed, ref } from 'vue'
 import { useLogin } from '@/composables/auth'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -275,7 +276,7 @@ async function handleSubmit() {
     return
   }
 
-  await loginAction.login({
+  loginAction.login({
     identity: identity.value,
     password: password.value,
   })

@@ -24,7 +24,7 @@ import type {
   ContactCardItem,
   ContactCaseItem,
   ContactGuideTag,
-} from '@/types/view-models/contact'
+} from '@/types/contact/view'
 import { openRegisterPage } from '@/utils/navigation'
 
 const email = 'contact@rencontreaparis.com'

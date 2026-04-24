@@ -1,5 +1,5 @@
-﻿import type { EventFieldLabels, EventOverviewItem } from '@/types/view-models/events'
-import type { ProfileCardViewModel } from '@/types/view-models/profiles/card'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events/view'
+import type { ProfileCardViewModel } from '@/types/profiles/card'
 
 export interface HomeProfilesPreviewItem {
   id: string

@@ -50,7 +50,7 @@ import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
 import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
-import type { HomeEventsPreviewViewModel } from '@/types/view-models/home'
+import type { HomeEventsPreviewViewModel } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail, openEventsPage } from '@/utils/navigation'
 

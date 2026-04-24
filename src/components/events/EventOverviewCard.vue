@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/types/view-models/events'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events/view'
 
 defineProps<{
   event: EventOverviewItem

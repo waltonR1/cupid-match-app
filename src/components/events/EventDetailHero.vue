@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/view-models/events'
+import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/events/view'
 import EventStatusBadge from './EventStatusBadge.vue'
 
 interface EventDetailAction {

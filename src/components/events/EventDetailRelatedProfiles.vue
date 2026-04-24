@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventRelatedProfileItem } from '@/types/view-models/events'
+import type { EventRelatedProfileItem } from '@/types/events/view'
 
 defineProps<{
   eyebrow: string

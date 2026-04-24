@@ -70,8 +70,8 @@ import {
   type Profile,
 } from '@/api/modules/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ProfileCardViewModel } from '@/types/view-models/profiles/card'
-import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/family-directory'
+import type { ProfileCardViewModel } from '@/types/profiles/card'
+import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
 import {
   buildActiveProfileFilterChip,
   buildBaseAllOption,
@@ -290,7 +290,7 @@ const filterItems = computed<FamilyFilterToolbarItem[]>(() => [
     group: 'secondary',
   },
 ])
-const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
+const activeFilterChips = computed<Array<ActiveDirectoryFilterChip<keyof FamilyDirectoryFilters>>>(() => {
   const chips = [
     buildActiveProfileFilterChip('gender', t('filters.gender'), genderOptions.value, filters.value.gender),
     buildActiveProfileFilterChip('ageRange', t('filters.age'), ageOptions.value, filters.value.ageRange),
@@ -305,7 +305,7 @@ const activeFilterChips = computed<ActiveDirectoryFilterChip[]>(() => {
     buildActiveProfileFilterChip('acceptLongDistance', t('filters.longDistance'), longDistanceOptions.value, filters.value.acceptLongDistance),
   ]
 
-  return chips.filter((item): item is ActiveDirectoryFilterChip => Boolean(item))
+  return chips.filter((item): item is ActiveDirectoryFilterChip<keyof FamilyDirectoryFilters> => Boolean(item))
 })
 
 function handleUpdateFilter(payload: { key: string, value: string }) {

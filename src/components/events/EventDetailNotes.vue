@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventNoteItem } from '@/types/view-models/events'
+import type { EventNoteItem } from '@/types/events/view'
 
 defineProps<{
   eyebrow: string

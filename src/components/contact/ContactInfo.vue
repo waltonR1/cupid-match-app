@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ContactCardItem } from '@/types/view-models/contact'
+import type { ContactCardItem } from '@/types/contact/view'
 
 defineProps<{
   cards: ContactCardItem[]

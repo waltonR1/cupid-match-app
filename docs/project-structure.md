@@ -130,28 +130,33 @@ src/components/
 
 组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。
 
-组件需要的展示模型从 `src/types/view-models` 引入，筛选、导航 key 等 UI 状态类型从 `src/types` 引入。
+组件需要的展示模型从对应 feature 的 `src/types/*/view.ts`、`card.ts`、`detail.ts` 等文件引入，筛选、导航 key 等 UI 状态类型从 `src/types` 引入。
 
 ## types
 
 ```txt
 src/types/
-  account-shell.ts
-  family-directory.ts
-  pinia-persist.d.ts
-  self-directory.ts
-  view-models/
-    contact.ts
-    events.ts
-    home.ts
-    profiles/
-      card.ts
-      detail.ts
+  account/
+    navigation.ts
+  contact/
+    view.ts
+  declarations/
+    pinia-persist.d.ts
+  events/
+    view.ts
+  home/
+    view.ts
+  profiles/
+    card.ts
+    detail.ts
+    directory.ts
 ```
 
-`types` 是类型根目录，按职责分组，不作为无差别堆放目录。当前根层保留 UI 状态类型和全局声明，例如筛选条件、排序 key、导航 key、composable 返回结构。
+`types` 是类型根目录，按 feature 分组，再在 feature 内按职责拆文件，不作为无差别堆放目录。
 
-`types/view-models` 放置组件和页面渲染用的展示模型。真实 API 接入后，页面或 mapper 负责把 API DTO 转成 view model，组件继续依赖稳定的展示结构。
+- `account/`、`profiles/` 放 feature 级状态和导航类型
+- `contact/`、`events/`、`home/`、`profiles/` 下的 `view.ts`、`card.ts`、`detail.ts` 放展示契约
+- `declarations/` 放 `*.d.ts` 这类全局声明
 
 ## pages
 

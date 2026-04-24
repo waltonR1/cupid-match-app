@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import AppAvatar from '@/components/common/AppAvatar.vue'
 import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
-import type { ProfileCardViewModel } from '@/types/view-models/profiles/card'
+import type { ProfileCardViewModel } from '@/types/profiles/card'
 
 defineProps<{
   data: ProfileCardViewModel

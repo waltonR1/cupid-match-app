@@ -1,5 +1,5 @@
 import type { Profile } from '@/api/modules/profiles'
-import type { FamilyDirectoryFilters, FamilySortKey, UseFamilyDirectoryResult } from '@/types/family-directory'
+import type { FamilyDirectoryFilters, FamilySortKey, UseFamilyDirectoryResult } from '@/types/profiles/directory'
 import {
   compareAgeAsc,
   compareAgeDesc,

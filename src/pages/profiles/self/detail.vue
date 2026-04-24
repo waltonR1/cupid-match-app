@@ -135,7 +135,7 @@ import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetail
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import { useProfileDetail } from '@/composables/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/view-models/profiles/detail'
+import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/profiles/detail'
 import {
   formatProfileAge,
   formatProfileDate,
