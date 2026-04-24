@@ -19,9 +19,7 @@
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <view class="flex h-[82px] w-[82px] shrink-0 items-center justify-center border border-semantic-accent-secondary bg-semantic-surface-panel text-[28px] font-semibold text-semantic-accent-primary">
-            {{ data.avatar }}
-          </view>
+          <AppAvatar :value="data.avatar" :label="data.name" size="lg" tone="accent" />
 
           <view class="min-w-0 flex-1">
             <view class="flex flex-wrap items-center gap-2.5">
@@ -79,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+import AppAvatar from '@/components/common/AppAvatar.vue'
 import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
 import type { ProfileDetailBadgeItem, ProfileDetailHeroData } from '@/types/view-models/profiles/detail'
 
