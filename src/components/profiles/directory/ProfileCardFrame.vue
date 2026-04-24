@@ -5,11 +5,11 @@
   >
     <view class="flex items-start justify-between gap-4">
       <view class="flex min-w-0 items-center gap-4">
-        <AppAvatar :value="data.avatar" :label="data.name" />
+        <AppAvatar :value="data.avatarUrl" :fallback="data.avatarFallback" />
         <view class="min-w-0">
           <view class="flex items-center gap-2">
             <view class="min-w-0 truncate text-[22px] font-semibold text-semantic-text-primary">
-              {{ data.name }}
+              {{ data.displayName }}
             </view>
             <AppGenderBadge :gender="data.gender" />
           </view>

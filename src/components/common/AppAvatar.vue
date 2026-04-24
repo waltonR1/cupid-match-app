@@ -6,7 +6,7 @@
       :src="imageSrc"
       mode="aspectFill"
     />
-    <text v-else>
+    <text v-else :class="textClassName">
       {{ fallbackText }}
     </text>
   </view>
@@ -17,12 +17,12 @@ import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   value?: string
-  label?: string
+  fallback?: string
   size?: 'sm' | 'lg'
   tone?: 'default' | 'accent'
 }>(), {
   value: '',
-  label: '',
+  fallback: '',
   size: 'sm',
   tone: 'default',
 })
@@ -37,18 +37,26 @@ const imageSrc = computed(() => {
 })
 
 const fallbackText = computed(() => {
-  const value = props.value.trim()
-  if (value && !imageSrc.value) return value
+  const fallback = props.fallback.trim()
+  return fallback || '?'
+})
 
-  const label = props.label.trim()
-  if (!label) return '?'
+const textClassName = computed(() => {
+  const fallbackLength = fallbackText.value.length
 
-  const parts = label.split(/\s+/).filter(Boolean)
-  if (parts.length === 1) {
-    return parts[0].slice(0, 1).toUpperCase()
+  if (fallbackLength >= 5) {
+    return props.size === 'lg'
+      ? 'text-[18px] tracking-[1px]'
+      : 'text-[12px] tracking-[0.5px]'
   }
 
-  return `${parts[0][0] || ''}${parts[1][0] || ''}`.toUpperCase() || '?'
+  if (fallbackLength >= 3) {
+    return props.size === 'lg'
+      ? 'text-[22px] tracking-[0.5px]'
+      : 'text-[15px] tracking-[0.5px]'
+  }
+
+  return ''
 })
 
 const rootClassName = computed(() => {

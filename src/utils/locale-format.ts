@@ -1,13 +1,13 @@
-import type { AppLocale } from '@/i18n/types'
+export type FormatLocale = 'zh' | 'fr' | 'en'
 
 const LOCALE_MAP = {
   zh: 'zh-CN',
   fr: 'fr-FR',
   en: 'en-US',
-} as const
+} as const satisfies Record<FormatLocale, string>
 
 export function formatLocalizedDate(
-  locale: AppLocale,
+  locale: FormatLocale,
   date: string,
   options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' },
 ) {
@@ -15,7 +15,7 @@ export function formatLocalizedDate(
 }
 
 export function formatLocalizedDateTime(
-  locale: AppLocale,
+  locale: FormatLocale,
   date: string,
   options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' },
 ) {

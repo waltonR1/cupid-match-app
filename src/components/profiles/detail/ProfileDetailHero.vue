@@ -19,12 +19,12 @@
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <AppAvatar :value="data.avatar" :label="data.name" size="lg" tone="accent" />
+          <AppAvatar :value="data.avatarUrl" :fallback="data.avatarFallback" size="lg" tone="accent" />
 
           <view class="min-w-0 flex-1">
             <view class="flex flex-wrap items-center gap-2.5">
               <view class="text-[36px] font-semibold leading-[1.02] text-semantic-text-primary lg:text-[48px]">
-                {{ data.name }}
+                {{ data.displayName }}
               </view>
 
               <AppGenderBadge :gender="data.gender" size="md" />

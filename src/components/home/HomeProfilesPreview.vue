@@ -83,8 +83,9 @@ function createProfileCardViewModel(profile: Profile): HomeProfilesPreviewItem['
       : profileT('card.labelSelected')
 
   return {
-    avatar: cardData.avatar,
-    name: cardData.name,
+    avatarUrl: cardData.avatarUrl,
+    avatarFallback: cardData.displayName,
+    displayName: cardData.displayName,
     gender: profile.gender,
     meta: cardData.meta,
     badge: goalText,

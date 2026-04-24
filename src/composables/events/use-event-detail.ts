@@ -11,11 +11,9 @@ export function useEventDetail(eventId: Ref<string>) {
   const relatedProfiles = ref<EventRelatedProfile[]>([])
   const loading = ref(false)
   const error = ref<unknown>(null)
-  let requestId = 0
 
-  async function loadEventDetail() {
+  function loadEventDetail() {
     const id = eventId.value
-    const currentRequestId = ++requestId
 
     if (!id) {
       event.value = null
@@ -27,33 +25,22 @@ export function useEventDetail(eventId: Ref<string>) {
     error.value = null
 
     try {
-      const [eventResponse, relatedProfilesResponse] = await Promise.all([
-        getEventDetail(id),
-        listEventRelatedProfiles(id),
-      ])
-
-      if (currentRequestId !== requestId) return
-
-      event.value = eventResponse.data
-      relatedProfiles.value = relatedProfilesResponse.data
+      event.value = getEventDetail(id)
+      relatedProfiles.value = listEventRelatedProfiles(id)
     } catch (requestError) {
-      if (currentRequestId !== requestId) return
-
       event.value = null
       relatedProfiles.value = []
       error.value = requestError
       console.warn('Failed to load event detail.', requestError)
     } finally {
-      if (currentRequestId === requestId) {
-        loading.value = false
-      }
+      loading.value = false
     }
   }
 
   watch(
     eventId,
     () => {
-      void loadEventDetail()
+      loadEventDetail()
     },
     { immediate: true },
   )

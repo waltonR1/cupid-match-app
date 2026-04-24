@@ -205,8 +205,9 @@ const heroData = computed<ProfileDetailHeroData | null>(() => {
   return {
     eyebrow: t('hero.eyebrow'),
     recordId: recordId.value,
-    avatar: profile.value.avatar,
-    name: profile.value.name,
+    avatarUrl: profile.value.avatarUrl,
+    avatarFallback: profile.value.displayName,
+    displayName: profile.value.displayName,
     gender: profile.value.gender,
     meta: heroMeta.value,
     summary: localizeProfileText(locale.value, profile.value.maritalPlan),

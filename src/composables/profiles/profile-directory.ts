@@ -43,7 +43,7 @@ export function useProfileDirectoryState<TFilters extends object, TSortKey exten
   const sourceItems = ref<Profile[]>([])
 
   onMounted(() => {
-    void loadProfiles()
+    loadProfiles()
   })
 
   const filteredItems = computed<Profile[]>(() => {
@@ -103,10 +103,9 @@ export function useProfileDirectoryState<TFilters extends object, TSortKey exten
     page.value = nextPage
   }
 
-  async function loadProfiles() {
+  function loadProfiles() {
     try {
-      const response = await listProfiles({ mode: options.mode })
-      sourceItems.value = response.data
+      sourceItems.value = listProfiles({ mode: options.mode })
     } catch (error) {
       console.warn(options.loadErrorMessage, error)
     }

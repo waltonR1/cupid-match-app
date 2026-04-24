@@ -369,8 +369,9 @@ function buildCardViewModel(profile: Profile): ProfileCardViewModel {
         : t('card.labelObserve')
 
   return {
-    avatar: profile.avatar,
-    name: profile.name,
+    avatarUrl: profile.avatarUrl,
+    avatarFallback: profile.displayName,
+    displayName: profile.displayName,
     gender: profile.gender,
     meta,
     badge: familyMode,

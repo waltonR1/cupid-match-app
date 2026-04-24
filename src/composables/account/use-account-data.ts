@@ -22,7 +22,7 @@ export function useAccountData() {
   const error = ref<unknown>(null)
 
   onMounted(() => {
-    void refresh()
+    refresh()
   })
 
   const latestEvent = computed(() => userEvents[0] ?? null)
@@ -43,13 +43,12 @@ export function useAccountData() {
     return count
   })
 
-  async function refresh() {
+  function refresh() {
     loading.value = true
     error.value = null
 
     try {
-      const response = await getAccountOverview()
-      const data = response.data
+      const data = getAccountOverview()
 
       Object.assign(account, data.account)
       Object.assign(profile, data.profile ?? {})

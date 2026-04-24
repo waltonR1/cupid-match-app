@@ -1,48 +1,44 @@
-import type { AppLocale } from '@/i18n/types'
 import {
-  getLocalizedLanguageLabel,
-  getLocalizedProfileCardData as getMockLocalizedProfileCardData,
+  getLocalizedProfileCard,
+  getProfileLanguageLabel as getMockProfileLanguageLabel,
+  getProfileRecord,
+  listProfileRecords,
   localized,
-  mockProfiles,
   pickLocalized,
   type LocalizedProfileCardData,
   type LocalizedText,
-  type MockProfile,
-} from '@/mock/business'
-import { mockRequest } from '../mock-request'
+  type MockLocale,
+  type ProfileDirectoryMode,
+  type ProfileRecord,
+} from '@/mock/gateways/profiles'
 
-export type Profile = MockProfile
-export type ProfileDirectoryMode = 'self' | 'family'
+export type Profile = ProfileRecord
+export type { LocalizedProfileCardData, LocalizedText, ProfileDirectoryMode }
 export type ProfileOptionGetter = (profile: Profile) => LocalizedText
-export type { LocalizedProfileCardData, LocalizedText }
 
 export interface ListProfilesParams {
   mode?: ProfileDirectoryMode
 }
 
 export function listProfiles(params: ListProfilesParams = {}) {
-  const profiles = params.mode === 'family'
-    ? mockProfiles.filter(profile => profile.familyVisible)
-    : [...mockProfiles]
-
-  return mockRequest(profiles)
+  return listProfileRecords(params.mode)
 }
 
 export function getProfileDetail(id: string) {
-  return mockRequest(mockProfiles.find(item => item.id === id) ?? null)
+  return getProfileRecord(id)
 }
 
-export function getProfileLanguageLabel(locale: AppLocale, language: string) {
-  return getLocalizedLanguageLabel(locale, language)
+export function getProfileLanguageLabel(locale: MockLocale, language: string) {
+  return getMockProfileLanguageLabel(locale, language)
 }
 
-export function getLocalizedProfileCardData(locale: AppLocale, profile: Profile) {
-  return getMockLocalizedProfileCardData(locale, profile)
+export function getLocalizedProfileCardData(locale: MockLocale, profile: Profile) {
+  return getLocalizedProfileCard(locale, profile)
 }
 
 export function getLocalizedProfileOptions(
   profiles: Profile[],
-  locale: AppLocale,
+  locale: MockLocale,
   getter: ProfileOptionGetter,
 ) {
   const values = new Set<string>()
@@ -56,7 +52,7 @@ export function getLocalizedProfileOptions(
   return Array.from(values).sort((a, b) => a.localeCompare(b))
 }
 
-export function getLocalizedIntentOptions(profiles: Profile[], locale: AppLocale) {
+export function getLocalizedIntentOptions(profiles: Profile[], locale: MockLocale) {
   const seen = new Set<string>()
 
   return profiles
@@ -72,7 +68,7 @@ export function getLocalizedIntentOptions(profiles: Profile[], locale: AppLocale
     })
 }
 
-export function getLocalizedLanguageOptions(profiles: Profile[], locale: AppLocale) {
+export function getLocalizedLanguageOptions(profiles: Profile[], locale: MockLocale) {
   const values = new Set<string>()
 
   profiles.forEach(profile => {

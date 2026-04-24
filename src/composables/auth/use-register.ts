@@ -5,13 +5,12 @@ export function useRegister() {
   const loading = ref(false)
   const error = ref<unknown>(null)
 
-  async function register(payload: RegisterPayload) {
+  function register(payload: RegisterPayload) {
     loading.value = true
     error.value = null
 
     try {
-      const response = await registerApi(payload)
-      return response.data
+      return registerApi(payload)
     } catch (requestError) {
       error.value = requestError
       console.warn('Failed to register.', requestError)

@@ -1,58 +1,39 @@
 import {
-  getCurrentMockProfile,
-  getLocalizedLanguageLabel,
-  getMockFavorites,
-  getMockThreads,
-  getMockUserEvents,
-  mockCurrentUser,
-  mockPrivacySettings,
+  getAccountLanguageLabel as getMockAccountLanguageLabel,
+  getAccountOverviewRecord,
   pickLocalized,
+  type AccountFavoriteRecord as AccountFavoriteRecordSource,
+  type AccountMembershipLevel as AccountMembershipLevelSource,
+  type AccountOverviewRecord as AccountOverviewRecordSource,
+  type AccountPrivacySettingRecord as AccountPrivacySettingRecordSource,
+  type AccountProfileRecord as AccountProfileRecordSource,
+  type AccountRecord as AccountRecordSource,
+  type AccountThreadRecord as AccountThreadRecordSource,
+  type AccountUserEventRecord as AccountUserEventRecordSource,
   type LocalizedText,
-  type MembershipLevel,
-  type MockFavoriteRecord,
-  type MockPrivacySetting,
-  type MockProfile,
-  type MockThreadRecord,
-  type MockUserAccount,
-  type MockUserEventRecord,
-} from '@/mock/business'
-import { mockRequest } from '../mock-request'
+} from '@/mock/gateways/account'
 
-export type Account = MockUserAccount
-export type AccountProfile = MockProfile
-export type AccountFavoriteRecord = MockFavoriteRecord
-export type AccountPrivacySetting = MockPrivacySetting
-export type AccountThreadRecord = MockThreadRecord
-export type AccountUserEventRecord = MockUserEventRecord
-export type AccountMembershipLevel = MembershipLevel
+export type Account = AccountRecordSource
+export type AccountProfile = AccountProfileRecordSource
+export type AccountFavoriteRecord = AccountFavoriteRecordSource
+export type AccountPrivacySetting = AccountPrivacySettingRecordSource
+export type AccountThreadRecord = AccountThreadRecordSource
+export type AccountUserEventRecord = AccountUserEventRecordSource
+export type AccountMembershipLevel = AccountMembershipLevelSource
 export type { LocalizedText }
 
-export interface AccountOverview {
-  account: Account
-  profile: AccountProfile | null
-  userEvents: AccountUserEventRecord[]
-  favorites: AccountFavoriteRecord[]
-  threads: AccountThreadRecord[]
-  privacySettings: AccountPrivacySetting[]
-}
+export type AccountOverview = AccountOverviewRecordSource
 
 export function getAccountOverview() {
-  return mockRequest(getAccountOverviewSnapshot())
+  return getAccountOverviewSnapshot()
 }
 
 export function getAccountOverviewSnapshot(): AccountOverview {
-  return {
-    account: mockCurrentUser,
-    profile: getCurrentMockProfile() ?? null,
-    userEvents: getMockUserEvents(),
-    favorites: getMockFavorites(),
-    threads: getMockThreads(),
-    privacySettings: [...mockPrivacySettings],
-  }
+  return getAccountOverviewRecord()
 }
 
-export function getAccountLanguageLabel(locale: Parameters<typeof getLocalizedLanguageLabel>[0], language: string) {
-  return getLocalizedLanguageLabel(locale, language)
+export function getAccountLanguageLabel(locale: Parameters<typeof getMockAccountLanguageLabel>[0], language: string) {
+  return getMockAccountLanguageLabel(locale, language)
 }
 
 export {

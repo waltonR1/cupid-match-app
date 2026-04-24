@@ -92,12 +92,12 @@
               <view class="mt-8 grid gap-5">
                 <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
                   <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.name }}
+                    {{ formLabels.nickName }}
                   </view>
                   <input
-                    v-model="name"
+                    v-model="nickName"
                     class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.name"
+                    :placeholder="formPlaceholders.nickName"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
@@ -261,7 +261,7 @@ const role = ref<RegisterRole>('self')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const name = ref('')
+const nickName = ref('')
 const city = ref('')
 const agreed = ref(false)
 const agreementDialog = ref<AgreementDialogType>(null)
@@ -312,7 +312,7 @@ const formLabels = computed(() => ({
   email: t('form.email.label'),
   password: t('form.password.label'),
   confirmPassword: t('form.confirmPassword.label'),
-  name: t('form.name.label'),
+  nickName: t('form.nickName.label'),
   city: t('form.city.label'),
 }))
 
@@ -320,7 +320,7 @@ const formPlaceholders = computed(() => ({
   email: t('form.email.placeholder'),
   password: t('form.password.placeholder'),
   confirmPassword: t('form.confirmPassword.placeholder'),
-  name: t('form.name.placeholder'),
+  nickName: t('form.nickName.placeholder'),
   city: t('form.city.placeholder'),
 }))
 
@@ -348,7 +348,7 @@ async function handleSubmit() {
     role: role.value,
     email: email.value,
     password: password.value,
-    name: name.value,
+    nickName: nickName.value,
     city: city.value,
   })
 

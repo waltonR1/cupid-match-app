@@ -7,14 +7,14 @@ export function useLogin() {
   const loading = ref(false)
   const error = ref<unknown>(null)
 
-  async function login(payload: LoginPayload) {
+  function login(payload: LoginPayload) {
     loading.value = true
     error.value = null
 
     try {
-      const response = await loginApi(payload)
-      auth.login(response.data.user)
-      return response.data
+      const session = loginApi(payload)
+      auth.login(session.user)
+      return session
     } catch (requestError) {
       error.value = requestError
       console.warn('Failed to login.', requestError)

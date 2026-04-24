@@ -5,7 +5,7 @@ export const agreementsMessages: AppMessageSchema = {
   close: 'Fermer',
   terms: {
     title: 'Conditions de la plateforme',
-    p1: 'La creation du compte signifie que vous utilisez la plateforme avec une identite reelle et joignable. Le nom affiche, la ville et les coordonnees du compte doivent rester globalement exacts et ne doivent pas usurper une autre personne.',
+    p1: 'La creation du compte signifie que vous utilisez la plateforme avec une identite reelle et joignable. Le surnom du compte, la ville et les coordonnees du compte doivent rester globalement exacts et ne doivent pas usurper une autre personne.',
     p2: 'La plateforme propose un service de mise en relation, de coordination conseiller et de consultation des profils. Elle ne garantit ni resultat de matching, ni introduction reussie, ni evolution d une recommandation ou d un evenement vers une relation formelle.',
     p3: 'En cas de harcelement, de fausse declaration, d abus de confidentialite ou de contournement du parcours de service pour un detournement prive, la plateforme peut limiter l acces, suspendre le service ou arreter la cooperation ulterieure.',
   },

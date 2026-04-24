@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 export interface UserInfo {
   id?: string
   displayName: string
-  avatar?: string
+  avatarUrl?: string
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -15,8 +15,8 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value?.displayName || ''
   })
 
-  const avatar = computed(() => {
-    return user.value?.avatar || ''
+  const avatarUrl = computed(() => {
+    return user.value?.avatarUrl || ''
   })
 
   function login(nextUser: UserInfo) {
@@ -26,9 +26,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   function loginMock() {
     login({
-      id: '1',
-      displayName: 'Claire',
-      avatar: '',
+      id: 'u-001',
+      displayName: 'U-001',
+      avatarUrl: '',
     })
   }
 
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoggedIn,
     user,
     displayName,
-    avatar,
+    avatarUrl,
     login,
     loginMock,
     logout,

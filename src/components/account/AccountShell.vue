@@ -2,7 +2,7 @@
   <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-5 py-6 sm:px-8 lg:py-8">
       <AccountTopSummary
-        :account-name="accountData.profile?.name ?? accountData.account.name"
+        :account-name="accountData.profile.displayName || accountData.account.displayName"
         :summary-items="topSummaryItems"
       />
 

@@ -1,5 +1,5 @@
+import { getDisplayName } from '@/utils/display-name'
 import type { UserInfo } from '@/stores/modules/auth'
-import { mockRequest } from '../mock-request'
 
 export interface LoginPayload {
   identity: string
@@ -10,7 +10,7 @@ export interface RegisterPayload {
   role: 'self' | 'parent'
   email: string
   password: string
-  name: string
+  nickName: string
   city: string
 }
 
@@ -20,23 +20,23 @@ export interface AuthSession {
 }
 
 export function login(payload: LoginPayload) {
-  return mockRequest<AuthSession>({
+  return {
     token: 'mock-token',
     user: {
-      id: '1',
-      displayName: payload.identity.trim() || 'Claire',
-      avatar: '',
+      id: 'u-001',
+      displayName: getDisplayName({ id: 'u-001' }),
+      avatarUrl: '',
     },
-  })
+  }
 }
 
 export function register(payload: RegisterPayload) {
-  return mockRequest<AuthSession>({
+  return {
     token: 'mock-token',
     user: {
-      id: '1',
-      displayName: payload.name.trim() || payload.email.trim() || 'Claire',
-      avatar: '',
+      id: 'u-001',
+      displayName: getDisplayName({ id: 'u-001' }),
+      avatarUrl: '',
     },
-  })
+  }
 }

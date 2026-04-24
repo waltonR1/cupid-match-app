@@ -36,7 +36,7 @@ export const registerMessages: AppMessageSchema = {
     email: { label: 'Email ou WeChat', placeholder: 'Entrez votre email principal ou WeChat' },
     password: { label: 'Mot de passe', placeholder: 'Definissez votre mot de passe' },
     confirmPassword: { label: 'Confirmation du mot de passe', placeholder: 'Saisissez a nouveau le mot de passe' },
-    name: { label: 'Nom ou surnom', placeholder: 'Entrez votre nom ou le nom a afficher' },
+    nickName: { label: 'Surnom du compte', placeholder: 'Entrez un surnom pour votre compte' },
     city: { label: 'Ville', placeholder: 'Exemple : Paris / Lyon / Bruxelles' },
   },
   process: {
@@ -50,8 +50,8 @@ export const registerMessages: AppMessageSchema = {
     step2: {
       title: 'Ajouter les bases',
       desc: {
-        self: 'Ajoutez d abord votre nom et votre ville, puis completez le profil personnel plus en detail ensuite.',
-        parent: 'Ajoutez d abord le nom et la ville cote parent, puis continuez vers la configuration familiale ensuite.',
+        self: 'Ajoutez d abord le surnom du compte et votre ville, puis completez le profil personnel plus en detail ensuite.',
+        parent: 'Ajoutez d abord le surnom cote parent et la ville, puis continuez vers la configuration familiale ensuite.',
       },
     },
     step3: {

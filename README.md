@@ -1,4 +1,4 @@
-# cupid-match
+﻿# cupid-match
 
 一个面向长期关系与真实相亲流程的婚恋平台前台原型。
 
@@ -23,6 +23,8 @@
 page -> composable -> api module -> mock
 ```
 
+当前 `api/modules/*` 是同步接口适配层，不再使用 `mockRequest()` 或 `ApiResult<T>` 包装；`mock` 作为本地数据源，由 `api` 统一读取。
+
 目录职责概览：
 
 ```text
@@ -43,7 +45,23 @@ src/stores        全局状态
 src/types         共享类型
 ```
 
-详细架构规则见 [docs/project-structure.md](./docs/project-structure.md)。
+`src/mock` 当前统一为：
+
+```text
+src/mock
+  data        原始 mock 数据
+  gateways    mock 统一出口
+  types       mock 类型
+  shared.ts   mock 本地化小工具
+```
+
+边界约束：
+
+- 页面、组件、composable 不直接读取 `src/mock`
+- `api` / `mock` / `utils` 不依赖 `src/i18n`
+- `i18n` 只负责界面文案和当前语言状态
+
+详细结构规则见 [docs/project-structure.md](./docs/project-structure.md)。
 
 ## 快速开始
 
@@ -68,12 +86,8 @@ npm run generate:token-docs
 npm run build:h5
 ```
 
-## 文档
-
-建议阅读顺序：
-
 1. [docs/project-map.md](./docs/project-map.md)：产品 / 技术总览
-2. [docs/README.md](./docs/README.md)：文档索引
+2. [docs/project-introduction.md](./docs/project-introduction.md)：项目介绍
 3. [docs/project-structure.md](./docs/project-structure.md)：代码分层与新增功能约束
 4. [docs/page-relationships.md](./docs/page-relationships.md)：页面结构与跳转关系
 5. [docs/token-usage-guide.md](./docs/token-usage-guide.md)：设计 token 使用规范

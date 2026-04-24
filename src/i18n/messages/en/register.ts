@@ -36,7 +36,7 @@ export const registerMessages: AppMessageSchema = {
     email: { label: 'Email or WeChat', placeholder: 'Enter your main email or WeChat' },
     password: { label: 'Password', placeholder: 'Set your login password' },
     confirmPassword: { label: 'Confirm password', placeholder: 'Enter the password again' },
-    name: { label: 'Name or display name', placeholder: 'Enter your name or the name you want to use' },
+    nickName: { label: 'Account nickname', placeholder: 'Enter a nickname for your account' },
     city: { label: 'City', placeholder: 'Example: Paris / Lyon / Brussels' },
   },
   process: {
@@ -50,8 +50,8 @@ export const registerMessages: AppMessageSchema = {
     step2: {
       title: 'Add the basics',
       desc: {
-        self: 'Add your name and city first, then continue into the broader personal profile afterwards.',
-        parent: 'Add the parent-side name and city first, then continue into the broader family setup afterwards.',
+        self: 'Add your account nickname and city first, then continue into the broader personal profile afterwards.',
+        parent: 'Add the parent-side nickname and city first, then continue into the broader family setup afterwards.',
       },
     },
     step3: {

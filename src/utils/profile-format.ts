@@ -1,7 +1,6 @@
-import type { AppLocale } from '@/i18n/types'
-import { formatLocalizedDate } from './locale-format'
+import { formatLocalizedDate, type FormatLocale } from './locale-format'
 
-export type LocalizedTextValue = Record<AppLocale, string>
+export type LocalizedTextValue = Record<FormatLocale, string>
 
 const PROFILE_LANGUAGE_LABELS: Record<string, LocalizedTextValue> = {
   FR: { zh: '\u6cd5\u8bed', fr: 'Francais', en: 'French' },
@@ -12,11 +11,11 @@ const PROFILE_LANGUAGE_LABELS: Record<string, LocalizedTextValue> = {
   DE: { zh: '\u5fb7\u8bed', fr: 'Allemand', en: 'German' },
 }
 
-export function localizeProfileText(locale: AppLocale, text: LocalizedTextValue) {
+export function localizeProfileText(locale: FormatLocale, text: LocalizedTextValue) {
   return text[locale] || text.en || ''
 }
 
-export function formatProfileAge(locale: AppLocale, age: number) {
+export function formatProfileAge(locale: FormatLocale, age: number) {
   if (locale === 'zh') return `${age}\u5c81`
   if (locale === 'fr') return `${age} ans`
   return String(age)
@@ -26,17 +25,17 @@ export function formatProfileHeight(height: number) {
   return `${height} cm`
 }
 
-export function formatProfileLanguages(locale: AppLocale, languages: string[]) {
+export function formatProfileLanguages(locale: FormatLocale, languages: string[]) {
   return languages
     .map(language => getProfileLanguageLabel(locale, language))
     .join(' / ')
 }
 
-export function formatProfileDate(locale: AppLocale, date: string) {
+export function formatProfileDate(locale: FormatLocale, date: string) {
   return formatLocalizedDate(locale, date)
 }
 
-function getProfileLanguageLabel(locale: AppLocale, language: string) {
+function getProfileLanguageLabel(locale: FormatLocale, language: string) {
   const key = String(language || '').trim()
   const label = PROFILE_LANGUAGE_LABELS[key]
   if (!label) return key

@@ -14,7 +14,7 @@
           {{ profile.reason }}
         </view>
         <view class="mt-4 text-[28px] font-semibold text-semantic-text-primary transition-colors duration-200 group-hover:text-component-event-card-title-hover">
-          {{ profile.name }}
+          {{ profile.displayName }}
         </view>
         <view class="mt-3 text-[13px] uppercase tracking-[3px] text-semantic-text-subtle">
           {{ profile.meta }}

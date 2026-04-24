@@ -16,8 +16,9 @@ export interface ProfileDetailBadgeItem {
 export interface ProfileDetailHeroData {
   eyebrow: string
   recordId: string
-  avatar: string
-  name: string
+  avatarUrl: string
+  avatarFallback: string
+  displayName: string
   gender?: Gender
   meta: string
   summary: string

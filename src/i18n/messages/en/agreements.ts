@@ -5,7 +5,7 @@ export const agreementsMessages: AppMessageSchema = {
   close: 'Close',
   terms: {
     title: 'Platform Terms',
-    p1: 'Creating an account means you will use the platform with real and reachable identity information. Your display name, city, and account contact details should remain basically accurate and must not impersonate another person.',
+    p1: 'Creating an account means you will use the platform with real and reachable identity information. Your account nickname, city, and account contact details should remain basically accurate and must not impersonate another person.',
     p2: 'The platform provides matchmaking services, advisor coordination, and profile browsing. It does not guarantee a match result, a successful introduction, or that any single recommendation or event will become a formal relationship.',
     p3: 'If the platform detects harassment, false statements, privacy abuse, or attempts to bypass the service flow for private diversion, it may limit account access, suspend service, or terminate later cooperation.',
   },

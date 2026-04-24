@@ -31,15 +31,13 @@
             @click="openProfile(item.profile.id, item.profile.familyVisible)"
           >
             <view class="flex items-start gap-4">
-              <view class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-semantic-border-default bg-semantic-surface-soft text-[18px] font-semibold text-semantic-text-primary">
-                {{ item.profile.avatar }}
-              </view>
+              <AppAvatar :value="item.profile.avatarUrl" :fallback="item.profile.displayName" />
 
               <view class="min-w-0 flex-1">
                 <view class="flex flex-wrap items-start justify-between gap-3">
                   <view class="min-w-0">
                     <view class="text-[24px] font-semibold text-semantic-text-primary">
-                      {{ item.profile.name }}
+                      {{ item.profile.displayName }}
                     </view>
                     <view class="mt-2 text-[15px] text-semantic-text-secondary">
                       {{ localize(item.profile.city) }} · {{ item.profile.age }}
@@ -124,6 +122,7 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
+import AppAvatar from '@/components/common/AppAvatar.vue'
 import { useAccountData } from '@/composables/account'
 import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'

@@ -130,7 +130,7 @@ const relatedProfileItems = computed<EventRelatedProfileItem[]>(() => {
   const cityKey = eventDetail.event.value.city.en
   return eventDetail.relatedProfiles.value.map(profile => ({
     id: profile.id,
-    name: profile.name,
+    displayName: profile.displayName,
     meta: formatRelatedProfileMeta(profile),
     reason: buildRelatedReason(profile, cityKey),
     summary: localize(profile.summary),

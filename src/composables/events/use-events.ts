@@ -7,20 +7,19 @@ export function useEvents() {
   const error = ref<unknown>(null)
 
   onMounted(() => {
-    void loadEvents()
+    loadEvents()
   })
 
   const sortedEvents = computed(() => [...events.value].sort((left, right) => left.date.localeCompare(right.date)))
   const nextEvent = computed(() => sortedEvents.value[0])
   const featuredEvents = computed(() => sortedEvents.value.filter(item => item.status !== 'closed').slice(0, 3))
 
-  async function loadEvents() {
+  function loadEvents() {
     loading.value = true
     error.value = null
 
     try {
-      const response = await listEvents()
-      events.value = response.data
+      events.value = listEvents()
     } catch (requestError) {
       events.value = []
       error.value = requestError

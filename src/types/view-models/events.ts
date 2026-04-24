@@ -45,7 +45,7 @@ export interface EventNoteItem {
 
 export interface EventRelatedProfileItem {
   id: string
-  name: string
+  displayName: string
   meta: string
   reason: string
   summary: string

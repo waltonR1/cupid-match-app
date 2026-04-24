@@ -1,27 +1,7 @@
-import { localized, type LocalizedText } from './shared'
+import { localized } from '@/mock/shared'
+import type { MockEvent } from '@/mock/types/events'
 
-export type EventStatus = 'open' | 'waitlist' | 'closed'
-
-export interface MockEventAgendaItem {
-  time: string
-  title: LocalizedText
-  desc: LocalizedText
-}
-
-export interface MockEvent {
-  id: string
-  date: string
-  city: LocalizedText
-  venue: LocalizedText
-  status: EventStatus
-  title: LocalizedText
-  format: LocalizedText
-  audience: LocalizedText
-  summary: LocalizedText
-  seats: number
-  registered: number
-  agenda: MockEventAgendaItem[]
-}
+export type { EventStatus, MockEvent, MockEventAgendaItem } from '@/mock/types/events'
 
 export const mockEvents: MockEvent[] = [
   {
@@ -300,7 +280,3 @@ export const mockEvents: MockEvent[] = [
     ],
   },
 ]
-
-export function getMockEventById(id: string) {
-  return mockEvents.find(item => item.id === id)
-}

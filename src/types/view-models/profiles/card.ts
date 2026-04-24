@@ -6,8 +6,9 @@ export interface ProfileCardFact {
 export type ProfileCardGender = 'male' | 'female'
 
 export interface ProfileCardViewModel {
-  avatar: string
-  name: string
+  avatarUrl: string
+  avatarFallback: string
+  displayName: string
   gender?: ProfileCardGender
   meta: string
   badge: string
