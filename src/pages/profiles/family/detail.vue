@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
@@ -139,6 +139,7 @@ import type { ProfileDetailFactItem, ProfileDetailHeroData } from '@/types/profi
 import {
   formatProfileAge,
   formatProfileDate,
+  formatProfileHeight,
   formatProfileLanguages,
   localizeProfileText,
 } from '@/utils/profile-format'
@@ -183,7 +184,7 @@ const heroMeta = computed(() => {
     formatProfileAge(locale.value, profile.value.age),
     localizeProfileText(locale.value, profile.value.city),
     localizeProfileText(locale.value, profile.value.education),
-  ].join(' / ')
+  ].filter(Boolean).join(' / ')
 })
 
 const archiveFacts = computed<ProfileDetailFactItem[]>(() => {
@@ -286,8 +287,8 @@ const highlightTexts = computed(() => {
 
   return [
     localizeProfileText(locale.value, profile.value.summary),
-    `${t('fields.residencePlan')}: ${localizeProfileText(locale.value, profile.value.residencePlan)}`,
-    `${t('fields.longDistance')}: ${booleanText(profile.value.acceptLongDistance)}`,
+    t('fields.residencePlan') + ': ' + localizeProfileText(locale.value, profile.value.residencePlan),
+    t('fields.longDistance') + ': ' + booleanText(profile.value.acceptLongDistance),
   ]
 })
 

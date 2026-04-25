@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <ProfileDirectoryIntro
@@ -81,6 +81,7 @@ import {
   dedupeProfileOption,
 } from '@/utils/profile-directory-options'
 import { openSelfDetail } from '@/utils/navigation'
+import { buildProfileCardViewModel } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('self')
 
@@ -120,22 +121,21 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-const allLabel = computed(() => localized('全部', 'Tous', 'All')[locale.value])
 const ageOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('25岁以下', 'Moins de 25 ans', 'Under 25')[locale.value], value: 'under25' },
-  { label: localized('25-29岁', '25-29 ans', '25-29')[locale.value], value: '25to29' },
-  { label: localized('30-34岁', '30-34 ans', '30-34')[locale.value], value: '30to34' },
-  { label: localized('35-39岁', '35-39 ans', '35-39')[locale.value], value: '35to39' },
-  { label: localized('40岁以上', '40 ans et plus', '40+')[locale.value], value: '40plus' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.ageUnder25'), value: 'under25' },
+  { label: t('filters.age25to29'), value: '25to29' },
+  { label: t('filters.age30to34'), value: '30to34' },
+  { label: t('filters.age35to39'), value: '35to39' },
+  { label: t('filters.age40plus'), value: '40plus' },
 ])
 const genderOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   { label: t('filters.genderMale'), value: 'male' },
   { label: t('filters.genderFemale'), value: 'female' },
 ])
 const heightOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   { label: '165cm-', value: 'under165' },
   { label: '165-169cm', value: '165to169' },
   { label: '170-174cm', value: '170to174' },
@@ -143,17 +143,17 @@ const heightOptions = computed<DirectoryOption[]>(() => [
   { label: '180cm+', value: '180plus' },
 ])
 const educationOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('本科', 'Licence', 'Bachelor')[locale.value], value: 'bachelor' },
-  { label: localized('硕士', 'Master', 'Master')[locale.value], value: 'master' },
-  { label: localized('博士', 'Doctorat', 'PhD')[locale.value], value: 'phd' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.eduBachelor'), value: 'bachelor' },
+  { label: t('filters.eduMaster'), value: 'master' },
+  { label: t('filters.eduPhD'), value: 'phd' },
 ])
 const cityOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.city),
 ])
 const intentOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...sourceItems.value
     .map(profile => ({
       label: localize(profile.intent),
@@ -162,15 +162,15 @@ const intentOptions = computed<DirectoryOption[]>(() => [
     .filter(dedupeProfileOption),
 ])
 const industryOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.industry),
 ])
 const occupationOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.occupation),
 ])
 const languageOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...Array.from(new Set(sourceItems.value.flatMap(profile => profile.languages)))
     .sort((left, right) => getProfileLanguageLabel(locale.value, left).localeCompare(getProfileLanguageLabel(locale.value, right)))
     .map(value => ({
@@ -179,31 +179,31 @@ const languageOptions = computed<DirectoryOption[]>(() => [
     })),
 ])
 const verifiedOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('已认证', 'Verifie', 'Verified')[locale.value], value: 'verified' },
-  { label: localized('未认证', 'Non verifie', 'Unverified')[locale.value], value: 'unverified' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.verifiedYes'), value: 'verified' },
+  { label: t('filters.verifiedNo'), value: 'unverified' },
 ])
 const maritalStatusOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('未婚', 'Celibataire', 'Single')[locale.value], value: 'single' },
-  { label: localized('离异', 'Divorce', 'Divorced')[locale.value], value: 'divorced' },
-  { label: localized('丧偶', 'Veuf / veuve', 'Widowed')[locale.value], value: 'widowed' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.maritalSingle'), value: 'single' },
+  { label: t('filters.maritalDivorced'), value: 'divorced' },
+  { label: t('filters.maritalWidowed'), value: 'widowed' },
 ])
 const childrenOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('有孩子', 'Avec enfants', 'Has children')[locale.value], value: 'yes' },
-  { label: localized('无孩子', 'Sans enfant', 'No children')[locale.value], value: 'no' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.childrenYes'), value: 'yes' },
+  { label: t('filters.childrenNo'), value: 'no' },
 ])
 const longDistanceOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('接受异地', 'Ouvert a distance', 'Open to long-distance')[locale.value], value: 'yes' },
-  { label: localized('不接受异地', 'Pas de distance', 'No long-distance')[locale.value], value: 'no' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.longDistanceYes'), value: 'yes' },
+  { label: t('filters.longDistanceNo'), value: 'no' },
 ])
 const sortOptions = computed<DirectoryOption[]>(() => [
-  { label: localized('最近活跃', 'Activite recente', 'Recently active')[locale.value], value: 'recentActive' },
-  { label: localized('优先资料', 'Profils prioritaires', 'Priority profiles')[locale.value], value: 'priorityFirst' },
-  { label: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value], value: 'ageAsc' },
-  { label: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value], value: 'ageDesc' },
+  { label: t('sort.recentActive'), value: 'recentActive' },
+  { label: t('sort.priorityFirst'), value: 'priorityFirst' },
+  { label: t('sort.ageAsc'), value: 'ageAsc' },
+  { label: t('sort.ageDesc'), value: 'ageDesc' },
 ])
 const resultSummary = computed(() => ({
   prefix: t('directory.resultPrefix'),
@@ -372,36 +372,7 @@ function localize(text: LocalizedText) {
 }
 
 function buildCardViewModel(profile: Profile): ProfileCardViewModel {
-  const cardData = getLocalizedProfileCardData(locale.value, profile)
-  const goalText = cardData.goalCode === 'marriage'
-    ? t('card.goalMarriage')
-    : cardData.goalCode === 'exclusive'
-      ? t('card.goalExclusive')
-      : cardData.goalCode === 'cross_border'
-        ? t('card.goalCrossBorder')
-        : t('card.goalSerious')
-
-  const labelText = cardData.status === 'review'
-    ? t('card.labelReview')
-    : cardData.status === 'vip'
-      ? t('card.labelPriority')
-      : t('card.labelSelected')
-
-  return {
-    avatarUrl: cardData.avatarUrl,
-    avatarFallback: cardData.displayName,
-    displayName: cardData.displayName,
-    gender: profile.gender,
-    meta: cardData.meta,
-    badge: goalText,
-    summary: cardData.summary,
-    facts: [
-      { label: t('fields.city'), value: cardData.facts.city },
-      { label: t('fields.education'), value: cardData.facts.education },
-      { label: t('fields.languages'), value: cardData.facts.languages },
-    ],
-    tags: cardData.tags,
-    footer: labelText,
-  }
+  const cardData = getLocalizedProfileCardData(locale.value, profile, 'self')
+  return buildProfileCardViewModel(cardData, t, locale.value)
 }
 </script>

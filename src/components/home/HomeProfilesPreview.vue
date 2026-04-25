@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -52,6 +52,7 @@ import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profile
 import type { HomeProfilesPreviewItem } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail, openSelfDirectoryPage } from '@/utils/navigation'
+import { buildProfileCardViewModel } from '@/utils/profile-format'
 
 const props = defineProps<{
   profiles: Profile[]
@@ -59,44 +60,14 @@ const props = defineProps<{
 
 const { t, locale } = usePageI18n('home')
 const { t: profileT } = usePageI18n('self')
+
 const profileCards = computed<HomeProfilesPreviewItem[]>(() =>
-  props.profiles.map(profile => ({
-    id: profile.id,
-    card: createProfileCardViewModel(profile),
-  })),
+  props.profiles.map(profile => {
+    const cardData = getLocalizedProfileCardData(locale.value, profile, 'self')
+    return {
+      id: profile.id,
+      card: buildProfileCardViewModel(cardData, profileT, locale.value),
+    }
+  }),
 )
-
-function createProfileCardViewModel(profile: Profile): HomeProfilesPreviewItem['card'] {
-  const cardData = getLocalizedProfileCardData(locale.value, profile)
-  const goalText = cardData.goalCode === 'marriage'
-    ? profileT('card.goalMarriage')
-    : cardData.goalCode === 'exclusive'
-      ? profileT('card.goalExclusive')
-      : cardData.goalCode === 'cross_border'
-        ? profileT('card.goalCrossBorder')
-        : profileT('card.goalSerious')
-
-  const labelText = cardData.status === 'review'
-    ? profileT('card.labelReview')
-    : cardData.status === 'vip'
-      ? profileT('card.labelPriority')
-      : profileT('card.labelSelected')
-
-  return {
-    avatarUrl: cardData.avatarUrl,
-    avatarFallback: cardData.displayName,
-    displayName: cardData.displayName,
-    gender: profile.gender,
-    meta: cardData.meta,
-    badge: goalText,
-    summary: cardData.summary,
-    facts: [
-      { label: t('profilesPreview.fields.city'), value: cardData.facts.city },
-      { label: t('profilesPreview.fields.education'), value: cardData.facts.education },
-      { label: t('profilesPreview.fields.languages'), value: cardData.facts.languages },
-    ],
-    tags: cardData.tags,
-    footer: labelText,
-  }
-}
 </script>

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <view v-if="eventCard" class="pb-20">
       <EventDetailHero
@@ -67,6 +67,7 @@ import type {
   EventRelatedProfileItem,
 } from '@/types/events/view'
 import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
+import { formatEventDetailDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
@@ -151,22 +152,12 @@ function eventStatusLabel(status: EventOverviewItem['status']) {
   return t(`status.${status}`)
 }
 
-function formatDetailDate(date: string) {
-  const map = {
-    zh: new Date(date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }),
-    fr: new Date(date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' }),
-    en: new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-  } as const
-
-  return map[locale.value]
-}
-
 function buildEventOverviewItem(item: CupidEvent): EventOverviewItem {
   return {
     id: item.id,
     title: localize(item.title),
     summary: localize(item.summary),
-    date: formatDetailDate(item.date),
+    date: formatEventDetailDate(locale.value, item.date),
     city: localize(item.city),
     venue: localize(item.venue),
     format: localize(item.format),
@@ -178,12 +169,11 @@ function buildEventOverviewItem(item: CupidEvent): EventOverviewItem {
 }
 
 function formatRelatedProfileMeta(profile: EventRelatedProfile) {
-  const city = localize(profile.city)
-  const intent = localize(profile.intent)
-
-  if (locale.value === 'zh') return `${profile.age}宀?| ${city} | ${intent}`
-  if (locale.value === 'fr') return `${profile.age} ans | ${city} | ${intent}`
-  return `${profile.age} | ${city} | ${intent}`
+  return [
+    profile.age.toString(),
+    localize(profile.city),
+    localize(profile.intent),
+  ].join(' | ')
 }
 
 function buildRelatedReason(profile: EventRelatedProfile, cityKey: string) {

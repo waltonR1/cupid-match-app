@@ -40,7 +40,7 @@
                       {{ item.profile.displayName }}
                     </view>
                     <view class="mt-2 text-[15px] text-semantic-text-secondary">
-                      {{ localize(item.profile.city) }} · {{ item.profile.age }}
+                      {{ localize(item.profile.city) }} · {{ formatProfileAge(locale, item.profile.age) }}
                     </view>
                   </view>
 
@@ -127,6 +127,7 @@ import { useAccountData } from '@/composables/account'
 import { pickLocalized, type LocalizedText } from '@/api/modules/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openFamilyProfileDetail, openSelfDetail } from '@/utils/navigation'
+import { formatProfileAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountData()

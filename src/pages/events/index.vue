@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <EventsHero
       :eyebrow="t('hero.eyebrow')"
@@ -41,6 +41,7 @@ import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/module
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { EventFieldLabels, EventOverviewItem, EventStatItem } from '@/types/events/view'
 import { openEventDetail } from '@/utils/navigation'
+import { formatEventDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('events')
 const eventData = useEvents()
@@ -86,22 +87,12 @@ function eventStatusLabel(status: EventOverviewItem['status']) {
   return t(`status.${status}`)
 }
 
-function formatDate(date: string) {
-  const map = {
-    zh: new Date(date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }),
-    fr: new Date(date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-    en: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-  } as const
-
-  return map[locale.value]
-}
-
 function buildEventOverviewItem(event: CupidEvent): EventOverviewItem {
   return {
     id: event.id,
     title: localize(event.title),
     summary: localize(event.summary),
-    date: formatDate(event.date),
+    date: formatEventDate(locale.value, event.date),
     city: localize(event.city),
     venue: localize(event.venue),
     format: localize(event.format),

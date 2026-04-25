@@ -23,19 +23,34 @@ export interface LocalizedChoiceOption {
   value: string
 }
 
-export interface LocalizedProfileCardData {
+/**
+ * 资料卡片资源 (Semantic Resource)
+ * 业界通用做法：返回语义化 Code 和标准 Schema，不包含 UI 翻译路径
+ */
+export interface ProfileCard {
   id: string
   displayName: string
   avatarUrl: string
-  meta: string
-  goalCode: MockProfile['intentCode']
-  status: MockProfile['status']
+  gender: MockProfile['gender']
+  age: number
+  occupation: string // 已本地化的文本
+  city: string       // 已本地化的文本
+  
+  // 业务语义 Code
+  intentCode: MockProfile['intentCode']
+  statusCode: MockProfile['status']
+  
+  // 视角特有语义
+  familyMode?: 'CONTEXT_ONLY' | 'CONTACT_READY' | 'PRIORITY'
+  maritalStatus?: MockProfile['maritalStatus']
+  hasChildren?: boolean
+  acceptLongDistance?: boolean
+
+  // 基础数据
   summary: string
-  facts: {
-    city: string
-    education: string
-    languages: string
-  }
+  education: string
+  languages?: string
+  residencePlan?: string
   tags: string[]
 }
 
@@ -58,21 +73,54 @@ export function getProfileLanguageLabel(locale: MockLocale, language: string) {
   return pickLocalized(locale, label)
 }
 
-export function getLocalizedProfileCard(locale: MockLocale, profile: ProfileRecord) {
+/**
+ * 构造资料卡片资源
+ * Gateway 只负责提供标准的、结构化的业务数据
+ */
+export function getLocalizedProfileCard(
+  locale: MockLocale,
+  profile: ProfileRecord,
+  mode: ProfileDirectoryMode = 'self'
+): ProfileCard {
+  const isFamily = mode === 'family'
+
+  // 视角特有语义转换
+  let familyMode: ProfileCard['familyMode']
+  if (isFamily) {
+    familyMode = profile.familyPriority
+      ? 'PRIORITY'
+      : profile.allowFamilyContact
+        ? 'CONTACT_READY'
+        : 'CONTEXT_ONLY'
+  }
+
   return {
     id: profile.id,
     displayName: profile.displayName,
     avatarUrl: profile.avatarUrl,
-    meta: formatProfileDirectoryMeta(locale, profile),
-    goalCode: profile.intentCode,
-    status: profile.status,
-    summary: pickLocalized(locale, profile.summary),
-    facts: {
-      city: pickLocalized(locale, profile.city),
-      education: pickLocalized(locale, profile.education),
-      languages: formatProfileDirectoryLanguages(locale, profile.languages),
-    },
-    tags: profile.tags.slice(0, 3).map(item => pickLocalized(locale, item)),
+    gender: profile.gender,
+    age: profile.age,
+    occupation: pickLocalized(locale, profile.occupation),
+    city: pickLocalized(locale, profile.city),
+    
+    // 业务语义
+    intentCode: profile.intentCode,
+    statusCode: profile.status,
+    
+    // 家庭视角特有
+    familyMode,
+    maritalStatus: isFamily ? profile.maritalStatus : undefined,
+    hasChildren: isFamily ? profile.hasChildren : undefined,
+    acceptLongDistance: isFamily ? profile.acceptLongDistance : undefined,
+
+    // 基础数据
+    summary: pickLocalized(locale, isFamily ? (profile.maritalPlan || profile.summary) : profile.summary),
+    education: pickLocalized(locale, profile.education),
+    languages: isFamily ? undefined : formatProfileDirectoryLanguages(locale, profile.languages),
+    residencePlan: isFamily ? pickLocalized(locale, profile.residencePlan) : undefined,
+    
+    // Tags 处理：Data 中的内容仍然返回本地化文本
+    tags: (profile.tags || []).slice(0, 3).map(item => pickLocalized(locale, item))
   }
 }
 

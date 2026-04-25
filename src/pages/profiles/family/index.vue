@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <ProfileDirectoryIntro
@@ -64,6 +64,7 @@ import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileD
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
 import { useFamilyDirectory } from '@/composables/profiles'
 import {
+  getLocalizedProfileCardData,
   localized,
   pickLocalized,
   type LocalizedText,
@@ -79,6 +80,7 @@ import {
   dedupeProfileOption,
 } from '@/utils/profile-directory-options'
 import { openFamilyProfileDetail } from '@/utils/navigation'
+import { buildProfileCardViewModel } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('family')
 
@@ -118,32 +120,31 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-const allLabel = computed(() => localized('全部', 'Tous', 'All')[locale.value])
 const ageOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('25岁以下', 'Moins de 25 ans', 'Under 25')[locale.value], value: 'under25' },
-  { label: localized('25-29岁', '25-29 ans', '25-29')[locale.value], value: '25to29' },
-  { label: localized('30-34岁', '30-34 ans', '30-34')[locale.value], value: '30to34' },
-  { label: localized('35-39岁', '35-39 ans', '35-39')[locale.value], value: '35to39' },
-  { label: localized('40岁以上', '40 ans et plus', '40+')[locale.value], value: '40plus' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.ageUnder25'), value: 'under25' },
+  { label: t('filters.age25to29'), value: '25to29' },
+  { label: t('filters.age30to34'), value: '30to34' },
+  { label: t('filters.age35to39'), value: '35to39' },
+  { label: t('filters.age40plus'), value: '40plus' },
 ])
 const genderOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   { label: t('filters.genderMale'), value: 'male' },
   { label: t('filters.genderFemale'), value: 'female' },
 ])
 const cityOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.city),
 ])
 const educationOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('本科', 'Licence', 'Bachelor')[locale.value], value: 'bachelor' },
-  { label: localized('硕士', 'Master', 'Master')[locale.value], value: 'master' },
-  { label: localized('博士', 'Doctorat', 'PhD')[locale.value], value: 'phd' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.eduBachelor'), value: 'bachelor' },
+  { label: t('filters.eduMaster'), value: 'master' },
+  { label: t('filters.eduPhD'), value: 'phd' },
 ])
 const intentOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...sourceItems.value
     .map(profile => ({
       label: localize(profile.intent),
@@ -152,40 +153,40 @@ const intentOptions = computed<DirectoryOption[]>(() => [
     .filter(dedupeProfileOption),
 ])
 const familyModeOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('仅背景可见', 'Contexte seulement', 'Context only')[locale.value], value: 'context_only' },
-  { label: localized('可辅助沟通', 'Pret pour echange famille', 'Contact-ready')[locale.value], value: 'contact_ready' },
-  { label: localized('优先家长评估', 'Priorite famille', 'Priority review')[locale.value], value: 'priority' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.modeContextOnly'), value: 'context_only' },
+  { label: t('filters.modeContactReady'), value: 'contact_ready' },
+  { label: t('filters.modePriority'), value: 'priority' },
 ])
 const occupationOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.occupation),
 ])
 const industryOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
+  buildBaseAllOption(t('filters.all')),
   ...buildLocalizedProfileOptions(sourceItems.value, localize, profile => profile.industry),
 ])
 const maritalStatusOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('未婚', 'Celibataire', 'Single')[locale.value], value: 'single' },
-  { label: localized('离异', 'Divorce', 'Divorced')[locale.value], value: 'divorced' },
-  { label: localized('丧偶', 'Veuf / veuve', 'Widowed')[locale.value], value: 'widowed' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.maritalSingle'), value: 'single' },
+  { label: t('filters.maritalDivorced'), value: 'divorced' },
+  { label: t('filters.maritalWidowed'), value: 'widowed' },
 ])
 const childrenOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('有孩子', 'Avec enfants', 'Has children')[locale.value], value: 'yes' },
-  { label: localized('无孩子', 'Sans enfant', 'No children')[locale.value], value: 'no' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.childrenYes'), value: 'yes' },
+  { label: t('filters.childrenNo'), value: 'no' },
 ])
 const longDistanceOptions = computed<DirectoryOption[]>(() => [
-  buildBaseAllOption(allLabel.value),
-  { label: localized('接受异地', 'Ouvert a distance', 'Open to long-distance')[locale.value], value: 'yes' },
-  { label: localized('更偏同城', 'Plutot meme ville', 'Prefers same city')[locale.value], value: 'no' },
+  buildBaseAllOption(t('filters.all')),
+  { label: t('filters.longDistanceYes'), value: 'yes' },
+  { label: t('filters.longDistanceNo'), value: 'no' },
 ])
 const sortOptions = computed<DirectoryOption[]>(() => [
-  { label: localized('优先家长评估', 'Priorite famille', 'Priority review')[locale.value], value: 'priorityFirst' },
-  { label: localized('最近活跃', 'Activite recente', 'Recently active')[locale.value], value: 'recentActive' },
-  { label: localized('年龄从低到高', 'Age croissant', 'Age: low to high')[locale.value], value: 'ageAsc' },
-  { label: localized('年龄从高到低', 'Age decroissant', 'Age: high to low')[locale.value], value: 'ageDesc' },
+  { label: t('sort.priorityFirst'), value: 'priorityFirst' },
+  { label: t('sort.recentActive'), value: 'recentActive' },
+  { label: t('sort.ageAsc'), value: 'ageAsc' },
+  { label: t('sort.ageDesc'), value: 'ageDesc' },
 ])
 const resultSummary = computed(() => ({
   prefix: t('directory.resultPrefix'),
@@ -335,58 +336,7 @@ function localize(text: LocalizedText) {
 }
 
 function buildCardViewModel(profile: Profile): ProfileCardViewModel {
-  const occupation = localize(profile.occupation)
-  const meta = locale.value === 'zh'
-    ? `${profile.age}岁 / ${occupation}`
-    : locale.value === 'fr'
-      ? `${profile.age} ans / ${occupation}`
-      : `${profile.age} / ${occupation}`
-
-  const familyMode = profile.familyPriority
-    ? t('modes.priority')
-    : profile.allowFamilyContact
-      ? t('modes.contactReady')
-      : t('modes.contextOnly')
-
-  const maritalStatus = profile.maritalStatus === 'divorced'
-    ? t('tags.maritalDivorced')
-    : profile.maritalStatus === 'widowed'
-      ? t('tags.maritalWidowed')
-      : t('tags.maritalSingle')
-
-  const familyContext = profile.acceptLongDistance
-    ? t('tags.longDistanceYes')
-    : profile.hasChildren
-      ? t('tags.childrenYes')
-      : t('tags.childrenNo')
-
-  const decisionLabel = profile.status === 'review'
-    ? t('card.labelReview')
-    : profile.familyPriority
-      ? t('card.labelPriority')
-      : profile.allowFamilyContact
-        ? t('card.labelContactReady')
-        : t('card.labelObserve')
-
-  return {
-    avatarUrl: profile.avatarUrl,
-    avatarFallback: profile.displayName,
-    displayName: profile.displayName,
-    gender: profile.gender,
-    meta,
-    badge: familyMode,
-    summary: localize(profile.maritalPlan),
-    facts: [
-      { label: t('fields.city'), value: localize(profile.city) },
-      { label: t('fields.education'), value: localize(profile.education) },
-      { label: t('fields.residencePlan'), value: localize(profile.residencePlan) },
-    ],
-    tags: [
-      localize(profile.intent),
-      maritalStatus,
-      familyContext,
-    ],
-    footer: decisionLabel,
-  }
+  const cardData = getLocalizedProfileCardData(locale.value, profile, 'family')
+  return buildProfileCardViewModel(cardData, t, locale.value)
 }
 </script>

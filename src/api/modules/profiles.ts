@@ -5,7 +5,7 @@ import {
   listProfileRecords,
   localized,
   pickLocalized,
-  type LocalizedProfileCardData,
+  type ProfileCard,
   type LocalizedText,
   type MockLocale,
   type ProfileDirectoryMode,
@@ -13,7 +13,7 @@ import {
 } from '@/mock/gateways/profiles'
 
 export type Profile = ProfileRecord
-export type { LocalizedProfileCardData, LocalizedText, ProfileDirectoryMode }
+export type { ProfileCard, LocalizedText, ProfileDirectoryMode }
 export type ProfileOptionGetter = (profile: Profile) => LocalizedText
 
 export interface ListProfilesParams {
@@ -32,8 +32,12 @@ export function getProfileLanguageLabel(locale: MockLocale, language: string) {
   return getMockProfileLanguageLabel(locale, language)
 }
 
-export function getLocalizedProfileCardData(locale: MockLocale, profile: Profile) {
-  return getLocalizedProfileCard(locale, profile)
+export function getLocalizedProfileCardData(
+  locale: MockLocale,
+  profile: Profile,
+  mode: ProfileDirectoryMode = 'self'
+) {
+  return getLocalizedProfileCard(locale, profile, mode)
 }
 
 export function getLocalizedProfileOptions(

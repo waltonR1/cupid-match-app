@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
       <view
@@ -186,10 +186,10 @@ const heroMeta = computed(() => {
   if (!profile.value) return ''
 
   return [
-    localizeProfileText(locale.value, profile.value.occupation),
     formatProfileAge(locale.value, profile.value.age),
+    localizeProfileText(locale.value, profile.value.occupation),
     localizeProfileText(locale.value, profile.value.city),
-  ].join(' / ')
+  ].filter(Boolean).join(' / ')
 })
 
 const archiveFacts = computed<ProfileDetailFactItem[]>(() => {

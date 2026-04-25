@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <view class="bg-semantic-page-subtle text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="mb-14 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -53,6 +53,7 @@ import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/module
 import type { HomeEventsPreviewViewModel } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail, openEventsPage } from '@/utils/navigation'
+import { formatEventDate } from '@/utils/locale-format'
 
 const props = defineProps<{
   events: CupidEvent[]
@@ -70,7 +71,7 @@ const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
   },
   events: props.events.map(event => ({
     id: event.id,
-    date: formatDate(event.date),
+    date: formatEventDate(locale.value, event.date),
     title: localize(event.title),
     summary: localize(event.summary),
     city: localize(event.city),
@@ -85,15 +86,5 @@ const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
 
 function localize(text: LocalizedText) {
   return pickLocalized(locale.value, text)
-}
-
-function formatDate(date: string) {
-  const map = {
-    zh: new Date(date).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }),
-    fr: new Date(date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }),
-    en: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-  } as const
-
-  return map[locale.value]
 }
 </script>
