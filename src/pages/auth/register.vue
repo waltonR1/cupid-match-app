@@ -246,7 +246,7 @@ import { computed, ref } from 'vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import { useRegister } from '@/composables/auth'
+import { useRegisterAction } from '@/hooks/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openLoginPage } from '@/utils/navigation'
@@ -256,7 +256,7 @@ type AgreementDialogType = 'terms' | 'privacy' | null
 
 const { t } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
-const registerAction = useRegister()
+const registerAction = useRegisterAction()
 const role = ref<RegisterRole>('self')
 const email = ref('')
 const password = ref('')

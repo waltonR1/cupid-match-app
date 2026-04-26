@@ -31,12 +31,12 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AccountPrimaryNav from '@/components/account/AccountPrimaryNav.vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountTopSummary from '@/components/account/AccountTopSummary.vue'
-import type { AccountDataContext } from '@/composables/account'
+import type { AccountOverviewContext } from '@/hooks/account'
 import type { AccountPrimaryPageKey } from '@/types/account/navigation'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 
 const props = defineProps<{
-  accountData: AccountDataContext
+  accountData: AccountOverviewContext
   activePage: AccountPrimaryPageKey
   headerEyebrow: string
   headerTitle: string

@@ -149,6 +149,8 @@
 - 活动展示结构
 - 登录与注册基础流程
 - 账户模块基础结构
+- 页面数据链路重构为 `hooks + mappers + api/http`
+- 本地 `json-server` mock server 接入
 
 ### 未完成
 
@@ -156,9 +158,9 @@
 - 活动报名闭环
 - 消息与撮合系统
 - 权限控制与审核机制
-- 后端接口与真实数据接入
+- Rust 后端接入
 
-当前阶段更接近“结构验证完成的前台原型”，还不是完整业务系统。
+当前阶段仍然是“结构验证完成的前台原型”，但前端数据边界已经收敛到正式的 HTTP API 形式。
 
 ---
 
@@ -174,14 +176,25 @@
 - `Tailwind CSS`
 - `weapp-tailwindcss`
 - `Vite`
+- `json-server`
 
 ### 当前数据方式
 
-项目目前没有真实后端，采用：
+项目当前没有真实业务后端，运行时统一通过本地 HTTP mock server 取数：
 
-`page -> composable -> api module -> mock`
+```txt
+page -> hook -> mapper -> api client -> http -> mock-server
+```
 
-这意味着页面虽然按真实接口方式开发，但实际数据来源还是 mock。当前 `api/modules/*` 为同步适配层，直接从 `src/mock` 读取本地数据，不再使用 `mockRequest()` 或 `ApiResult<T>` 包装。
+其中：
+
+- 页面只消费 page VM
+- hooks 负责异步状态和页面动作
+- mappers 负责 DTO -> VM 转换
+- `src/api/*/http.ts` 负责访问 `/api/...`
+- `mock-server/server.js` 负责聚合、筛选、排序、分页和响应整形
+
+已经不再存在运行中的 `src/composables`、`src/api/modules`、`src/mock` 数据链路。
 
 ---
 
@@ -190,42 +203,47 @@
 ### 页面层 `src/pages`
 
 - 负责页面组合、事件绑定、表单状态、导航
-- 不直接读取 `src/mock`
+- 不直接发起 HTTP 请求
 - 不直接写复杂业务聚合逻辑
 
-### 业务层 `src/composables`
+### hook 层 `src/hooks`
 
-- 承接页面和 API 之间的业务逻辑
+- 承接页面与 API 之间的业务逻辑
 - 管理 `loading`、`error`、`refresh`
-- 处理筛选、分页和数据行为
+- 管理筛选、分页、提交等页面动作
 
-### 接口层 `src/api/modules`
+### 接口层 `src/api`
 
-- 定义接口形状
-- 当前负责 mock 适配
-- 当前为同步返回
-- 未来作为真实后端替换点
+- 定义 DTO、query、payload 和 client contract
+- `http.ts` 负责 HTTP 调用
+- `client.ts` 作为域入口暴露稳定接口
 
-### 数据层 `src/mock`
+### 映射层 `src/mappers`
 
-- 只作为临时数据源
-- 除 `src/api/modules/*` 外，不应被其他层直接引用
-- 当前按 `data / gateways / types / shared` 组织
+- 负责 DTO -> VM / page model 转换
+- 不依赖页面组件
+- 不直接发请求
 
 ### 展示层 `src/components`
 
 - 只放 `.vue` 展示组件
 - 不直接承载接口请求逻辑
-- 不直接读取 mock
+- 不直接知道后端 schema
 
 ### 类型层 `src/types`
 
-- 放跨组件、跨页面、跨 composable 复用的类型
+- 放跨组件、跨页面复用的展示类型和 view model 类型
 
 ### 全局状态 `src/stores`
 
 - 存放跨页面共享状态，如登录状态、语言、主题
 - 一般不直接承载接口请求
+
+### mock server `mock-server`
+
+- `db.json`：HTTP mock 的事实数据源
+- `server.js`：聚合和接口整形逻辑
+- `routes.json`：服务配置
 
 ---
 
@@ -233,15 +251,15 @@
 
 ### 页面和数据约束
 
-- 页面不要直接 import `@/mock/...`
-- 新功能优先走 `types -> api -> composable -> page -> component`
-- `api` / `mock` 不依赖 `src/i18n`
+- 页面不要直接 import `@/api/*/http`
+- 页面优先走 `types/vm -> mappers -> hooks -> page -> component`
+- `src/api` 不依赖 `src/i18n`
 - `i18n` 只负责界面文案和当前语言状态
 
 ### 组件约束
 
 - `src/components` 下只放 Vue SFC
-- 共享类型从 `src/types` 引入
+- 共享类型从 `src/types` 或 `src/types/vm` 引入
 
 ### 路由约束
 
@@ -269,7 +287,7 @@
 例如：
 
 - `feat(home): 添加首页模块`
-- `fix(vite): 禁用 weapp-tailwindcss 在 H5`
+- `fix(api): 修正 profiles 列表请求参数`
 
 ---
 
@@ -292,11 +310,11 @@
 
 ## 12. 建议的后续优先级
 
-如果按当前文档继续往前推进，建议优先顺序是：
+如果按当前代码继续往前推进，建议优先顺序是：
 
 1. 先补齐活动报名闭环，让“线上到线下”真正成立
 2. 再明确家庭交互与决策机制，让家庭路径从浏览走向可执行推进
 3. 然后补消息 / 撮合 / 权限审核
-4. 最后再逐步替换 mock，接入真实后端
+4. 最后把本地 `json-server` 契约逐步替换为真实 Rust 后端
 
-这样可以先把产品核心机制跑通，再进入工程化落地阶段。
+这样可以先把产品核心机制跑通，再进入完整业务系统阶段。

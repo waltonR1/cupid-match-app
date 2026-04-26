@@ -211,14 +211,14 @@
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AppButton from "@/components/common/AppButton.vue";
 import { computed, ref } from 'vue'
-import { useLogin } from '@/composables/auth'
+import { useLoginAction } from '@/hooks/auth'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openRegisterPage } from '@/utils/navigation'
 
 const SELF_ROUTE = '/pages/profiles/self/index'
 
 const { t } = usePageI18n('login')
-const loginAction = useLogin()
+const loginAction = useLoginAction()
 const identity = ref('')
 const password = ref('')
 const agreed = ref(false)
@@ -276,7 +276,7 @@ async function handleSubmit() {
     return
   }
 
-  loginAction.login({
+  await loginAction.login({
     identity: identity.value,
     password: password.value,
   })

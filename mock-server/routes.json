@@ -1,0 +1,6 @@
+{
+  "apiPrefix": "/api",
+  "port": 52173,
+  "defaultAccountId": "u-001",
+  "enableRequestLogging": true
+}
