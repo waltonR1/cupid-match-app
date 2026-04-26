@@ -131,12 +131,39 @@ import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountSafetyPageViewModel } from '@/mappers/account/account.mapper'
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMessagesPage, openVerificationPage } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountSafetyPageViewModel(accountData, locale.value, t))
+const pageData = computed(() => ({
+  visibilityRows: [
+    { label: t('common.familyVisible'), value: accountData.profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+    { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    {
+      label: localizeAccountText(locale.value, accountData.advisorContactSetting.value?.title ?? { zh: '', fr: '', en: '' }),
+      value: accountData.advisorContactSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
+    },
+  ],
+  privacyCards: accountData.privacySettings.map(item => ({
+    id: item.id,
+    title: localizeAccountText(locale.value, item.title),
+    desc: localizeAccountText(locale.value, item.desc),
+    enabled: item.enabled,
+  })),
+  familyDescription: accountData.familyAssistSetting.value ? localizeAccountText(locale.value, accountData.familyAssistSetting.value.desc) : '',
+  familyPoints: [
+    t('safety.family.point1'),
+    t('safety.family.point2'),
+    t('safety.family.point3'),
+  ],
+  notePoints: [
+    t('safety.notes.point1'),
+    t('safety.notes.point2'),
+    t('safety.notes.point3'),
+  ],
+}))
 </script>

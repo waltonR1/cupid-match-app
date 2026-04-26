@@ -1,70 +1,61 @@
-# JSON Server Migration Plan
+# JSON Server 迁移记录
 
-## Goal
+## 目标
 
-Replace the previous in-repo TypeScript mock implementation with a real HTTP mock layer based on `json-server`, while keeping the frontend structure aligned with a future Rust backend.
+把旧的内存 mock 与前端直连假数据方案，替换成真正的 HTTP mock 边界，同时保持未来切换真实后端时的前端稳定性。
 
-The frontend should behave like a real app:
+## 当前状态
 
-- pages do not import mock data directly
-- hooks do not know whether the backend is mock or real
-- API clients speak stable HTTP contracts
-- mock-specific query syntax does not leak into frontend code
+这轮迁移已经完成，当前事实是：
 
-## Current Status
+- 旧 `src/mock/*` 已退出运行
+- 旧 `src/composables/*` 和 `src/api/modules/*` 已退出运行
+- 前端只通过 `src/api/*/{domain}.ts` 发 HTTP 请求
+- `mock-server/*` 是当前唯一 mock 数据源
 
-The migration is now functionally complete.
+## 当前结构
 
-Completed:
-
-- old `src/api/modules/*` chain removed
-- old `src/composables/*` chain removed from runtime
-- old in-memory `src/mock/*` implementation removed
-- frontend runtime uses only `src/api/*/http.ts`
-- local `mock-server/*` is the only mock data source
-
-Current active structure:
-
-```text
+```txt
 src/
   api/
-    account/
-      account.client.ts
-      account.contract.ts
-      account.http.ts
-      account.types.ts
-    auth/
-      auth.client.ts
-      auth.contract.ts
-      auth.http.ts
-      auth.types.ts
-    events/
-      events.client.ts
-      events.contract.ts
-      events.http.ts
-      events.types.ts
-    profiles/
-      profiles.client.ts
-      profiles.contract.ts
-      profiles.http.ts
-      profiles.types.ts
-    shared/
-      http.ts
+    account/account.ts
+    account/account.types.ts
+    auth/auth.ts
+    auth/auth.types.ts
+    events/events.ts
+    events/events.types.ts
+    profiles/profiles.ts
+    profiles/profiles.types.ts
+    shared/http.ts
+    shared/config.ts
   hooks/
-  mappers/
-  types/vm/
 mock-server/
-    db.json
-    config.js
-    server.js
+  config.js
+  db.json
+  server.js
 ```
 
-## Design Principles
+## 当前技术方案
 
-### 1. Frontend contracts follow future Rust API, not `json-server`
+当前 mock 层不是“前端读本地 TS mock”，也不是“纯 json-server 资源直出”，而是：
 
-Frontend requests look like:
+- `json-server` 提供底层数据访问与中间件能力
+- `mock-server/server.js` 提供统一的 `/api/...` 自定义路由
+- `db.json` 只作为事实数据源
 
+## 当前约束
+
+前端不能依赖：
+
+- `?_expand=`
+- `?_embed=`
+- `?_like=`
+- 资源表名直接暴露给页面
+- json-server 默认分页格式作为正式契约
+
+前端只依赖这些接口：
+
+- `GET /api/health`
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
 - `GET /api/profiles/:id`
@@ -74,98 +65,26 @@ Frontend requests look like:
 - `POST /api/auth/login`
 - `POST /api/auth/register`
 
-Frontend must not rely on:
+## 当前回归结果
 
-- `?_expand=`
-- `?_embed=`
-- `?_like=`
-- raw collection names as public API
-- `json-server` pagination conventions as contract
+最近一次最小回归已验证：
 
-### 2. `db.json` is storage only
+- `type-check` 通过
+- `health` 正常
+- `profiles` 列表与详情正常
+- `events` 列表与详情正常
+- `account overview` 正常
+- `auth login` 使用 mock 账号可正常返回 session
 
-`db.json` holds normalized or semi-normalized source data.
+当前使用过的有效 mock 登录账号：
 
-Recommended top-level collections:
+- `identity: lin@example.com`
+- `password: password123`
 
-- `profiles`
-- `events`
-- `accounts`
-- `user_registrations`
-- `favorite_profiles`
-- `message_threads`
-- `privacy_settings`
-- `auth_users`
+## 剩余工作
 
-Recommended key rules:
+这份文档现在更多是历史记录。后续工作不再是“完成 json-server 迁移”，而是：
 
-- every collection uses stable `id`
-- relations use explicit foreign keys
-- no page-level view model fields in `db.json`
-- no frontend-only display labels in `db.json`
-
-### 3. Middleware owns aggregation
-
-The following endpoints are implemented in `mock-server/server.js`, not by raw `json-server` passthrough:
-
-- profile directory filtering
-- profile directory sorting
-- profile directory pagination
-- profile directory facets
-- event detail related-profiles recommendation
-- account overview aggregation
-- login/register response shaping
-
-This mirrors the real backend boundary and prevents frontend leakage of mock-specific logic.
-
-### 4. i18n remains frontend-owned
-
-Localized copy that is already in i18n stays in i18n.
-
-API should only return:
-
-- stable enums
-- raw values
-- localized content only when the resource itself is multilingual content
-
-Examples:
-
-- `membership: "gold"` is API
-- `membership.gold.title` remains i18n
-- `profile.city` or `event.title` may stay localized resource fields for now
-
-## What Was Removed
-
-The following implementation layers are no longer part of runtime:
-
-- `src/api/modules/*`
-- `src/composables/*`
-- `src/mock/data/*`
-- `src/mock/types/*`
-- `src/mock/shared.ts`
-- `src/mock/async/request.ts`
-- all `*.mock.ts`
-- provider switching for mock vs http
-
-## Remaining Work
-
-The migration document is now mostly historical. The remaining work is not “finish json-server migration”, but:
-
-1. keep `mock-server/db.json` aligned with current UI needs
-2. verify endpoint parity against future Rust contracts
-3. add tests or regression checks around critical HTTP paths
-4. replace `mock-server` endpoint-by-endpoint with real backend services
-
-## Why This Matters
-
-`profiles` was the hardest domain because it exercises:
-
-- list endpoint
-- detail endpoint
-- filters
-- sorting
-- pagination
-- facets
-- localized text
-
-Now that `profiles`, `events`, `account`, and `auth` are all on the same HTTP boundary, the next backend migration should be incremental rather than another frontend rewrite.
+1. 保持 `db.json` 与 UI 数据需求一致
+2. 为关键接口补回归脚本或测试
+3. 逐步用真实后端替换 `mock-server`

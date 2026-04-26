@@ -124,13 +124,39 @@ import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AppAvatar from '@/components/common/AppAvatar.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountConnectionsPageViewModel } from '@/mappers/account/account.mapper'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openFamilyProfileDetail, openSelfDetail } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
+import { formatProfileAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountConnectionsPageViewModel(accountData, locale.value, t))
+const pageData = computed(() => ({
+  filterItems: [
+    { label: t('connections.filters.likedMe'), value: String(accountData.familyVisibleFavorites.value.length) },
+    { label: t('connections.filters.liked'), value: String(accountData.favorites.length) },
+    { label: t('connections.filters.mutual'), value: String(Math.min(accountData.privateFavorites.value.length, accountData.familyVisibleFavorites.value.length)) },
+    { label: t('connections.filters.family'), value: String(accountData.familyVisibleFavorites.value.length) },
+  ],
+  summaryItems: [
+    { label: t('common.privateOnly'), value: String(accountData.privateFavorites.value.length) },
+    { label: t('common.familyVisible'), value: String(accountData.familyVisibleFavorites.value.length) },
+  ],
+  reasonPoints: [
+    t('connections.reasons.complete'),
+    t('connections.reasons.family'),
+    t('connections.reasons.active'),
+  ],
+  items: accountData.favorites.map(item => ({
+    id: item.profile.id,
+    familyVisible: item.profile.familyVisible,
+    displayName: item.profile.displayName,
+    city: localizeAccountText(locale.value, item.profile.city),
+    ageText: formatProfileAge(locale.value, item.profile.age),
+    note: localizeAccountText(locale.value, item.favorite.note),
+    tags: item.profile.tags.slice(0, 3).map(tag => localizeAccountText(locale.value, tag)),
+  })),
+}))
 
 function openProfile(id: string, familyVisible: boolean) {
   if (familyVisible) {

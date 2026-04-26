@@ -7,7 +7,7 @@ import {
   type AccountProfileDTO,
   type AccountThreadRecordDTO,
   type AccountUserEventRecordDTO,
-} from '@/api/account/account.client'
+} from '@/api/account/account'
 
 export function useAccountOverview() {
   const initialData = createEmptyAccountOverview()

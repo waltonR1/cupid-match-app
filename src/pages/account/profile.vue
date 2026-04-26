@@ -162,13 +162,55 @@ import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountProfilePageViewModel } from '@/mappers/account/account.mapper'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { formatAccountLanguages, localizeAccountText } from '@/utils/account-format'
+import type { AccountMembershipLevel } from '@/api/account/account.types'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
 const accountData = useAccountOverview()
 const { profile } = accountData
-const pageData = computed(() => buildAccountProfilePageViewModel(accountData, locale.value, t, globalT))
+const pageData = computed(() => {
+  const membership = membershipLabel(accountData.account.membership)
+
+  return {
+    bio: localizeAccountText(locale.value, accountData.account.bio),
+    membershipLabel: membership,
+    summaryItems: [
+      { label: t('topSummary.metrics.completion'), value: `${accountData.account.completion}%` },
+      { label: t('common.currentTier'), value: membership },
+      { label: t('common.visibility'), value: profile.familyVisible ? t('common.familyVisible') : t('common.privateOnly') },
+    ],
+    baseRows: profile.id ? [
+      { label: t('profile.rows.city'), value: localizeAccountText(locale.value, profile.city) },
+      { label: t('profile.rows.education'), value: localizeAccountText(locale.value, profile.education) },
+      { label: t('profile.rows.occupation'), value: localizeAccountText(locale.value, profile.occupation) },
+      { label: t('profile.rows.languages'), value: formatAccountLanguages(locale.value, profile.languages) },
+      { label: t('common.currentTier'), value: membership },
+    ] : [],
+    visibilityRows: [
+      { label: t('common.familyVisible'), value: profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    ],
+    mediaPoints: [
+      t('profile.media.photos'),
+      t('profile.media.video'),
+      t('profile.media.order'),
+    ],
+    taskPoints: [
+      t('profile.tasks.photos'),
+      t('profile.tasks.introduction'),
+      t('profile.tasks.verification'),
+    ],
+    summaryText: profile.id ? localizeAccountText(locale.value, profile.summary) : '',
+    highlightTexts: profile.highlights?.map(item => localizeAccountText(locale.value, item)) ?? [],
+    tagTexts: profile.tags?.map(item => localizeAccountText(locale.value, item)) ?? [],
+  }
+})
+
+function membershipLabel(membership: AccountMembershipLevel) {
+  return globalT(`membership.${membership}.title`)
+}
 </script>

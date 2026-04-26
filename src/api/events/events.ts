@@ -1,5 +1,4 @@
-import type { EventsApiClient } from './events.contract'
-import { createHttpEventsApiClient } from './events.http'
+import { isApiStatusError, requestJson } from '@/api/shared/http'
 import type {
   EventDTO,
   EventDetailResponseDTO,
@@ -11,9 +10,6 @@ import type {
   RelatedProfileStatusDTO,
 } from './events.types'
 
-const eventsApiClient = createHttpEventsApiClient()
-
-export type { EventsApiClient }
 export type {
   EventDTO,
   EventDetailResponseDTO,
@@ -25,14 +21,15 @@ export type {
   RelatedProfileStatusDTO,
 } from './events.types'
 
-export function getEventsApiClient() {
-  return eventsApiClient
-}
-
 export function listEvents(): Promise<EventsListResponseDTO> {
-  return eventsApiClient.listEvents()
+  return requestJson<EventsListResponseDTO>('/events')
 }
 
-export function getEventDetail(id: string): Promise<EventDetailResponseDTO | null> {
-  return eventsApiClient.getEventDetail(id)
+export async function getEventDetail(id: string): Promise<EventDetailResponseDTO | null> {
+  try {
+    return await requestJson<EventDetailResponseDTO>(`/events/${id}`)
+  } catch (error) {
+    if (isApiStatusError(error, 404)) return null
+    throw error
+  }
 }

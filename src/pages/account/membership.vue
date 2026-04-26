@@ -132,11 +132,12 @@ import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountMembershipPageViewModel } from '@/mappers/account/account.mapper'
 import AppButton from '@/components/common/AppButton.vue'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { AccountMembershipLevel } from '@/api/account/account.types'
+import { formatLocalizedDate } from '@/utils/locale-format'
 import {
   openActivityPage,
   openConnectionsPage,
@@ -149,5 +150,66 @@ const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
 const { t: membershipT } = usePageI18n('membership')
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountMembershipPageViewModel(accountData, locale.value, t, membershipT, globalT))
+const pageData = computed(() => ({
+  membershipLabel: membershipLabel(accountData.account.membership),
+  currentItems: [
+    { label: t('common.currentTier'), value: membershipLabel(accountData.account.membership) },
+    { label: t('topSummary.metrics.completion'), value: `${accountData.account.completion}%` },
+    { label: t('common.joinedAt'), value: formatLocalizedDate(locale.value, accountData.account.joinedAt) },
+  ],
+  planCards: [
+    {
+      key: 'free' as const,
+      badge: membershipT('free.badge'),
+      title: membershipLabel('free'),
+      period: membershipT('free.priceNote'),
+      features: [membershipT('free.f1'), membershipT('free.f2'), membershipT('free.f3')],
+      cardClass: 'border border-component-membership-tier-free-card-border bg-component-membership-tier-free-card-background shadow-panel',
+      eyebrowClass: 'text-semantic-text-secondary',
+      titleClass: 'text-semantic-text-primary',
+      metaClass: 'text-semantic-text-secondary',
+      featureClass: 'border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background text-semantic-text-secondary',
+    },
+    {
+      key: 'silver' as const,
+      badge: membershipT('silver.badge'),
+      title: membershipLabel('silver'),
+      period: membershipT('silver.period'),
+      features: [membershipT('silver.f1'), membershipT('silver.f2'), membershipT('silver.f3')],
+      cardClass: 'border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card text-semantic-text-primary shadow-panel',
+      eyebrowClass: 'text-semantic-text-secondary',
+      titleClass: 'text-semantic-text-primary',
+      metaClass: 'text-semantic-text-secondary',
+      featureClass: 'border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background text-semantic-text-secondary',
+    },
+    {
+      key: 'gold' as const,
+      badge: membershipT('gold.badge'),
+      title: membershipLabel('gold'),
+      period: membershipT('gold.period'),
+      features: [membershipT('gold.f1'), membershipT('gold.f2'), membershipT('gold.f3')],
+      cardClass: 'border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card text-semantic-text-inverse shadow-emphasis',
+      eyebrowClass: 'text-semantic-text-inverse-muted',
+      titleClass: 'text-semantic-text-inverse',
+      metaClass: 'text-semantic-text-inverse-muted',
+      featureClass: 'border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background text-semantic-text-inverse-muted',
+    },
+    {
+      key: 'diamond' as const,
+      badge: membershipT('diamond.badge'),
+      title: membershipLabel('diamond'),
+      period: membershipT('diamond.period'),
+      features: [membershipT('diamond.f1'), membershipT('diamond.f2'), membershipT('diamond.f3')],
+      cardClass: 'border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card text-semantic-text-inverse shadow-luxe ring-1 ring-component-membership-tier-diamond-ring',
+      eyebrowClass: 'text-semantic-text-inverse-muted',
+      titleClass: 'text-semantic-text-inverse',
+      metaClass: 'text-semantic-text-inverse-muted',
+      featureClass: 'border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background text-semantic-text-inverse-muted',
+    },
+  ],
+}))
+
+function membershipLabel(membership: AccountMembershipLevel) {
+  return globalT(`membership.${membership}.title`)
+}
 </script>

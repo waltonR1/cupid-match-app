@@ -125,11 +125,40 @@ import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AppAvatar from '@/components/common/AppAvatar.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountMessagesPageViewModel } from '@/mappers/account/account.mapper'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
+import { formatLocalizedDateTime } from '@/utils/locale-format'
+import { formatProfileAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountMessagesPageViewModel(accountData, locale.value, t))
+const pageData = computed(() => ({
+  filterItems: [
+    { label: t('messages.filters.all'), value: String(accountData.threads.length) },
+    { label: t('messages.filters.unread'), value: String(accountData.unreadCount.value) },
+    { label: t('messages.filters.family'), value: String(accountData.familyVisibleThreads.value.length) },
+  ],
+  supportPoints: [
+    t('messages.support.point1'),
+    t('messages.support.point2'),
+    t('messages.support.point3'),
+  ],
+  boundaryPoints: [
+    t('messages.boundary.point1'),
+    t('messages.boundary.point2'),
+    t('messages.boundary.point3'),
+  ],
+  items: accountData.threads.map(item => ({
+    id: item.thread.id,
+    profileId: item.profile.id,
+    displayName: item.profile.displayName,
+    city: localizeAccountText(locale.value, item.profile.city),
+    ageText: formatProfileAge(locale.value, item.profile.age),
+    familyVisible: item.profile.familyVisible,
+    unread: item.thread.unread,
+    lastMessage: localizeAccountText(locale.value, item.thread.lastMessage),
+    updatedAt: formatLocalizedDateTime(locale.value, item.thread.updatedAt),
+  })),
+}))
 </script>

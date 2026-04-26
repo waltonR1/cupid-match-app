@@ -115,11 +115,69 @@ import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountActivityPageViewModel } from '@/mappers/account/account.mapper'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
+import { formatLocalizedDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountActivityPageViewModel(accountData, locale.value, t))
+const pageData = computed(() => ({
+  filterItems: [
+    { label: t('activity.filters.confirmed'), value: String(accountData.userEvents.filter(item => item.registration.status === 'confirmed').length) },
+    { label: t('activity.filters.waitlist'), value: String(accountData.userEvents.filter(item => item.registration.status === 'waitlist').length) },
+    { label: t('activity.filters.completed'), value: String(accountData.userEvents.filter(item => item.registration.status === 'completed').length) },
+  ],
+  supportPoints: [
+    t('activity.support.point1'),
+    t('activity.support.point2'),
+    t('activity.support.point3'),
+  ],
+  familyPoints: [
+    t('activity.family.point1'),
+    t('activity.family.point2'),
+    t('activity.family.point3'),
+  ],
+  items: accountData.userEvents.map(item => {
+    const tone = activityTone(item.registration.status)
+    return {
+      id: item.event.id,
+      date: formatLocalizedDate(locale.value, item.event.date),
+      city: localizeAccountText(locale.value, item.event.city),
+      title: localizeAccountText(locale.value, item.event.title),
+      note: localizeAccountText(locale.value, item.registration.note),
+      venue: localizeAccountText(locale.value, item.event.venue),
+      statusLabel: activityStatusLabel(item.registration.status),
+      cardClass: tone.card,
+      badgeClass: tone.badge,
+    }
+  }),
+}))
+
+function activityStatusLabel(status: 'confirmed' | 'waitlist' | 'completed') {
+  if (status === 'confirmed') return t('activity.filters.confirmed')
+  if (status === 'waitlist') return t('activity.filters.waitlist')
+  return t('activity.filters.completed')
+}
+
+function activityTone(status: 'confirmed' | 'waitlist' | 'completed') {
+  if (status === 'confirmed') {
+    return {
+      card: 'border-component-account-registration-confirmed-card-border bg-component-account-registration-confirmed-card-background',
+      badge: 'border-component-account-registration-confirmed-badge-border bg-component-account-registration-confirmed-badge-background text-component-account-registration-confirmed-badge-text',
+    }
+  }
+
+  if (status === 'waitlist') {
+    return {
+      card: 'border-component-account-registration-waitlist-card-border bg-component-account-registration-waitlist-card-background',
+      badge: 'border-component-account-registration-waitlist-badge-border bg-component-account-registration-waitlist-badge-background text-component-account-registration-waitlist-badge-text',
+    }
+  }
+
+  return {
+    card: 'border-component-account-registration-completed-card-border bg-component-account-registration-completed-card-background',
+    badge: 'border-component-account-registration-completed-badge-border bg-component-account-registration-completed-badge-background text-component-account-registration-completed-badge-text',
+  }
+}
 </script>

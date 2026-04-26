@@ -1,5 +1,4 @@
-import type { AccountApiClient } from './account.contract'
-import { createHttpAccountApiClient } from './account.http'
+import { requestJson } from '@/api/shared/http'
 import type {
   AccountDTO,
   AccountFavoriteRecordDTO,
@@ -13,9 +12,6 @@ import type {
   LocalizedTextDTO,
 } from './account.types'
 
-const accountApiClient = createHttpAccountApiClient()
-
-export type { AccountApiClient }
 export type {
   AccountDTO,
   AccountFavoriteRecordDTO,
@@ -29,10 +25,6 @@ export type {
   LocalizedTextDTO,
 } from './account.types'
 
-export function getAccountApiClient() {
-  return accountApiClient
-}
-
 export function getAccountOverview(): Promise<AccountOverviewDTO> {
-  return accountApiClient.getAccountOverview()
+  return requestJson<AccountOverviewDTO>('/account/overview')
 }

@@ -1,7 +1,7 @@
 import { computed, ref, watch, type Ref } from 'vue'
-import { buildSelfProfileCardViewModel } from '@/mappers/profiles/profile-directory.mapper'
-import { getSelfProfileDirectory, type FormatLocale } from '@/api/profiles/profiles.client'
+import { getSelfProfileDirectory, type FormatLocale, type ProfileDTO } from '@/api/profiles/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home/view'
+import { formatProfileAge, formatProfileLanguages, localizeProfileText } from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
@@ -48,7 +48,7 @@ export function useHomeSelfProfilesPreview(t: Translate, locale: Ref<FormatLocal
 
       items.value = response.items.map(profile => ({
         id: profile.id,
-        card: buildSelfProfileCardViewModel(profile, locale.value, t),
+        card: toSelfProfileCard(profile, locale.value, t),
       }))
     } catch (requestError) {
       if (currentToken !== requestToken) return
@@ -66,5 +66,50 @@ export function useHomeSelfProfilesPreview(t: Translate, locale: Ref<FormatLocal
     error,
     featuredProfiles: computed(() => items.value),
     refresh: load,
+  }
+}
+
+function toSelfProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Translate) {
+  return {
+    avatarUrl: profile.avatarUrl,
+    avatarFallback: profile.displayName,
+    displayName: profile.displayName,
+    gender: profile.gender,
+    meta: `${formatProfileAge(locale, profile.age)} / ${localizeProfileText(locale, profile.occupation)}`,
+    badge: t(intentBadgeKey(profile.intentCode)),
+    summary: localizeProfileText(locale, profile.summary),
+    facts: [
+      { label: t('fields.city'), value: localizeProfileText(locale, profile.city) },
+      { label: t('fields.education'), value: localizeProfileText(locale, profile.education) },
+      { label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages) },
+    ],
+    tags: profile.tags.slice(0, 3).map(item => localizeProfileText(locale, item)),
+    footer: t(statusFooterKey(profile.status)),
+  }
+}
+
+function intentBadgeKey(intentCode: ProfileDTO['intentCode']) {
+  switch (intentCode) {
+    case 'marriage':
+      return 'card.goalMarriage'
+    case 'exclusive':
+      return 'card.goalExclusive'
+    case 'cross_border':
+      return 'card.goalCrossBorder'
+    case 'serious':
+    default:
+      return 'card.goalSerious'
+  }
+}
+
+function statusFooterKey(status: ProfileDTO['status']) {
+  switch (status) {
+    case 'review':
+      return 'card.labelReview'
+    case 'vip':
+      return 'card.labelPriority'
+    case 'open':
+    default:
+      return 'card.labelSelected'
   }
 }

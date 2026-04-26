@@ -120,14 +120,44 @@ import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import { useAccountOverview } from '@/hooks/account'
-import { buildAccountVerificationPageViewModel } from '@/mappers/account/account.mapper'
 import AppButton from '@/components/common/AppButton.vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openConnectionsPage, openMyProfilePage } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
+import type { AccountMembershipLevel } from '@/api/account/account.types'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
 const accountData = useAccountOverview()
-const pageData = computed(() => buildAccountVerificationPageViewModel(accountData, locale.value, t, globalT))
+const pageData = computed(() => {
+  const verificationItems = [
+    { label: t('verification.items.realName'), done: true },
+    { label: t('verification.items.education'), done: Boolean(accountData.profile.education) },
+    { label: t('verification.items.marital'), done: Boolean(accountData.profile.maritalStatus) },
+    { label: t('verification.items.career'), done: Boolean(accountData.profile.occupation) },
+    { label: t('verification.items.video'), done: false },
+    { label: t('verification.items.assets'), done: accountData.account.membership !== 'free' },
+  ]
+  const verifiedCount = verificationItems.filter(item => item.done).length
+
+  return {
+    verificationItems,
+    overviewItems: [
+      { label: t('verification.summary.progress'), value: `${verifiedCount}/${verificationItems.length}` },
+      { label: t('common.currentTier'), value: membershipLabel(accountData.account.membership) },
+      { label: t('common.familyVisible'), value: accountData.profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+    ],
+    controlRows: [
+      { label: t('common.familyVisible'), value: accountData.profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    ],
+    inviteDescription: accountData.profile.id ? localizeAccountText(locale.value, accountData.profile.summary) : '',
+  }
+})
+
+function membershipLabel(membership: AccountMembershipLevel) {
+  return globalT(`membership.${membership}.title`)
+}
 </script>

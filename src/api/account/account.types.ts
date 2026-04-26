@@ -1,5 +1,5 @@
-import type { EventDTO } from '@/api/events/events.client'
-import type { ProfileDTO } from '@/api/profiles/profiles.client'
+import type { EventDTO } from '@/api/events/events.types'
+import type { ProfileDTO } from '@/api/profiles/profiles.types'
 import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
