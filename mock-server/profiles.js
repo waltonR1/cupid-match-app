@@ -1,3 +1,4 @@
+// 归一化目录页查询参数，补齐默认值。
 function normalizeProfileQuery(query) {
   return {
     page: toInt(query.page, 1),
@@ -20,6 +21,7 @@ function normalizeProfileQuery(query) {
   }
 }
 
+// 生成本人筛选目录的 facets 数据。
 function buildSelfDirectoryFacets(items) {
   return {
     cities: uniqueLocalized(items.map((item) => item.city)),
@@ -30,6 +32,7 @@ function buildSelfDirectoryFacets(items) {
   }
 }
 
+// 生成家长筛选目录的 facets 数据。
 function buildFamilyDirectoryFacets(items) {
   return {
     cities: uniqueLocalized(items.map((item) => item.city)),
@@ -39,6 +42,7 @@ function buildFamilyDirectoryFacets(items) {
   }
 }
 
+// 判断资料是否符合本人目录筛选条件。
 function matchesSelfDirectory(profile, query) {
   return [
     !query.gender || profile.gender === query.gender,
@@ -57,6 +61,7 @@ function matchesSelfDirectory(profile, query) {
   ].every(Boolean)
 }
 
+// 判断资料是否符合家长目录筛选条件。
 function matchesFamilyDirectory(profile, query) {
   return [
     !query.gender || profile.gender === query.gender,
@@ -73,6 +78,7 @@ function matchesFamilyDirectory(profile, query) {
   ].every(Boolean)
 }
 
+// 按本人目录的排序规则整理资料列表。
 function sortSelfProfiles(items, sort) {
   const next = [...items]
   switch (sort) {
@@ -92,6 +98,7 @@ function sortSelfProfiles(items, sort) {
   }
 }
 
+// 按家长目录的排序规则整理资料列表。
 function sortFamilyProfiles(items, sort) {
   const next = [...items]
   switch (sort) {
@@ -111,6 +118,7 @@ function sortFamilyProfiles(items, sort) {
   }
 }
 
+// 根据总数和分页参数生成分页信息。
 function buildPagination(total, page, pageSize) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
   const safePage = Math.min(Math.max(page, 1), totalPages)
@@ -122,12 +130,14 @@ function buildPagination(total, page, pageSize) {
   }
 }
 
+// 按分页参数裁剪当前页数据。
 function paginate(items, page, pageSize) {
   const pagination = buildPagination(items.length, page, pageSize)
   const start = (pagination.page - 1) * pagination.pageSize
   return items.slice(start, start + pagination.pageSize)
 }
 
+// 对本地化字段去重并保持稳定排序。
 function uniqueLocalized(items) {
   const seen = new Set()
   return items
@@ -139,6 +149,7 @@ function uniqueLocalized(items) {
     .sort((left, right) => left.en.localeCompare(right.en))
 }
 
+// 提取并去重意向筛选项。
 function uniqueIntents(items) {
   const seen = new Set()
   return items
@@ -150,25 +161,30 @@ function uniqueIntents(items) {
     })
 }
 
+// 按最近活跃时间倒序比较两条资料。
 function compareRecentActive(left, right) {
   return toTimestamp(right.lastActiveAt) - toTimestamp(left.lastActiveAt)
 }
 
+// 把时间字符串安全转换成时间戳。
 function toTimestamp(value) {
   const next = new Date(value).getTime()
   return Number.isNaN(next) ? 0 : next
 }
 
+// 计算本人目录里的优先级排序权重。
 function getSelfPriorityRank(profile) {
   return profile.status === 'vip' ? 0 : 1
 }
 
+// 计算家长目录里的优先级排序权重。
 function getFamilyPriorityRank(profile) {
   if (profile.familyPriority) return 0
   if (profile.allowFamilyContact) return 1
   return 2
 }
 
+// 判断年龄是否命中指定区间。
 function matchAgeRange(age, range) {
   if (!range) return true
   switch (range) {
@@ -187,6 +203,7 @@ function matchAgeRange(age, range) {
   }
 }
 
+// 判断身高是否命中指定区间。
 function matchHeightRange(height, range) {
   if (!range) return true
   switch (range) {
@@ -205,6 +222,7 @@ function matchHeightRange(height, range) {
   }
 }
 
+// 判断实名校验筛选是否命中。
 function matchVerified(isVerified, value) {
   if (!value) return true
   if (value === 'verified') return isVerified
@@ -212,6 +230,7 @@ function matchVerified(isVerified, value) {
   return true
 }
 
+// 判断 yes/no 布尔筛选是否命中。
 function matchBooleanFlag(source, value) {
   if (!value) return true
   if (value === 'yes') return source
@@ -219,6 +238,7 @@ function matchBooleanFlag(source, value) {
   return true
 }
 
+// 判断家长协作模式筛选是否命中。
 function matchFamilyMode(profile, value) {
   if (!value) return true
   switch (value) {
@@ -233,11 +253,13 @@ function matchFamilyMode(profile, value) {
   }
 }
 
+// 把整数字符串安全转换成数字。
 function toInt(value, fallback) {
   const next = Number.parseInt(getString(value) || '', 10)
   return Number.isNaN(next) ? fallback : next
 }
 
+// 从 query 值里取出单个字符串。
 function getString(value) {
   if (Array.isArray(value)) return typeof value[0] === 'string' ? value[0] : ''
   return typeof value === 'string' ? value : ''

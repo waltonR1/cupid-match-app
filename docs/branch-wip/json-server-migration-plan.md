@@ -54,9 +54,9 @@ src/
   mappers/
   types/vm/
 mock-server/
-  db.json
-  routes.json
-  server.js
+    db.json
+    config.js
+    server.js
 ```
 
 ## Design Principles

@@ -142,9 +142,9 @@ src/
   stores/
   utils/
 mock-server/
-  db.json
-  routes.json
-  server.js
+    db.json
+    config.js
+    server.js
 ```
 
 ## 已完成的重构结果

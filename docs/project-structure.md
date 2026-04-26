@@ -225,15 +225,15 @@ src/stores/
 ```txt
 mock-server/
   db.json
-  routes.json
+  config.js
   server.js
 ```
 
 `mock-server` 是当前唯一 mock 数据源。
 
 - `db.json` 放事实数据
+- `config.js` 放端口、前缀和默认账户等配置
 - `server.js` 负责聚合逻辑、筛选、排序、分页和响应整形
-- `routes.json` 放端口和前缀等配置
 
 前端禁止新增 `src/mock/*` 形式的数据直读文件。
 

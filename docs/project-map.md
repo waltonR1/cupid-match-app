@@ -243,7 +243,7 @@ page -> hook -> mapper -> api client -> http -> mock-server
 
 - `db.json`：HTTP mock 的事实数据源
 - `server.js`：聚合和接口整形逻辑
-- `routes.json`：服务配置
+- `config.js`：服务配置
 
 ---
 
