@@ -8,7 +8,7 @@
 page -> hook -> api -> mock-server
 ```
 
-`mock-server` 是当前唯一 mock 数据入口。前端不再直接依赖 `src/mock/*`，也不再通过内存 mock 取数。
+`mock-server` 是当前唯一 mock 数据入口。
 
 ## 当前实现方式
 
@@ -61,13 +61,13 @@ const enableRequestLogging = true
 在项目根目录执行：
 
 ```powershell
-npm.cmd run mock:server
+node mock-server/server.js
 ```
 
 监听模式：
 
 ```powershell
-npm.cmd run mock:server:watch
+node --watch mock-server/server.js
 ```
 
 ## 前端如何连接
