@@ -26,14 +26,18 @@ page -> hook -> api -> mock-server
 mock-server/
   config.js
   db.json
+  profiles.js
   server.js
+  utils.js
 ```
 
 说明：
 
 - `config.js`：host、port、前缀、默认账户、请求日志开关
 - `db.json`：mock 数据源
-- `server.js`：统一 `/api/...` 路由、聚合、筛选、排序、分页和响应整形
+- `profiles.js`：profiles 目录筛选、排序和 facets 逻辑
+- `server.js`：统一 `/api/...` 路由与聚合接口
+- `utils.js`：mock-server 内部通用工具
 
 ## 默认配置
 
