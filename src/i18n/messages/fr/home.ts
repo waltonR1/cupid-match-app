@@ -41,7 +41,7 @@ export const homeMessages: AppMessageSchema = {
             },
         },
     },
-    profilesPreview: {
+    profiles: {
         eyebrow: 'Apercu profils',
         title: 'Avant de rencontrer',
         titleAccent: 'voir les profils',

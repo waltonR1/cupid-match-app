@@ -48,12 +48,15 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
-import type { HomeEventsPreviewViewModel } from '@/types/home/view'
+import type { HomeEventsViewModel } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail, openEventsPage } from '@/utils/navigation'
+defineOptions({
+  name: 'HomeEvents'
+})
 
 const props = defineProps<{
-  viewModel: HomeEventsPreviewViewModel
+  viewModel: HomeEventsViewModel
 }>()
 
 const { t } = usePageI18n('home')

@@ -1,6 +1,6 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { getSelfProfileDirectory, type FormatLocale, type ProfileDTO } from '@/api/profiles/profiles'
-import type { HomeProfilesPreviewItem } from '@/types/home/view'
+import type { HomeProfilesItem } from '@/types/home/view'
 import { formatProfileAge, formatProfileLanguages, localizeProfileText } from '@/utils/profile-format'
 
 type Translate = (key: string) => string
@@ -21,10 +21,10 @@ const EMPTY_FILTERS = {
   acceptLongDistance: '',
 } as const
 
-export function useHomeSelfProfilesPreview(t: Translate, locale: Ref<FormatLocale>) {
+export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
   const loading = ref(false)
   const error = ref<unknown>(null)
-  const items = ref<HomeProfilesPreviewItem[]>([])
+  const items = ref<HomeProfilesItem[]>([])
   let requestToken = 0
 
   watch(locale, () => {

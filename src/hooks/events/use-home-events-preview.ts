@@ -1,11 +1,11 @@
 import { computed, ref } from 'vue'
 import { listEvents, type EventDTO, type FormatLocale, type LocalizedTextDTO } from '@/api/events/events'
-import type { HomeEventsPreviewViewModel } from '@/types/home/view'
+import type { HomeEventsViewModel } from '@/types/home/view'
 import { formatEventDate } from '@/utils/locale-format'
 
 type Translate = (key: string) => string
 
-export function useHomeEventsPreview(t: Translate, locale: { value: FormatLocale }) {
+export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
   const loading = ref(false)
   const error = ref<unknown>(null)
   const items = ref<EventDTO[]>([])
@@ -33,7 +33,7 @@ export function useHomeEventsPreview(t: Translate, locale: { value: FormatLocale
     }
   }
 
-  const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
+  const viewModel = computed<HomeEventsViewModel>(() => ({
     fieldLabels: {
       city: t('fields.city'),
       venue: t('fields.venue'),

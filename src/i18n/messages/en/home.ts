@@ -41,7 +41,7 @@ export const homeMessages: AppMessageSchema = {
             },
         },
     },
-    profilesPreview: {
+    profiles: {
         eyebrow: 'Profile Preview',
         title: 'Before You Meet',
         titleAccent: 'Read the Profile',

@@ -41,7 +41,7 @@ export const homeMessages: AppMessageSchema = {
             },
         },
     },
-    profilesPreview: {
+    profiles: {
         eyebrow: '资料预览',
         title: '认识之前',
         titleAccent: '先看资料',

@@ -6,18 +6,18 @@
           <view class="mb-4 inline-flex items-center gap-4">
             <view class="h-px w-14 bg-semantic-border-eyebrow" />
             <text class="text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">
-              {{ t('profilesPreview.eyebrow') }}
+              {{ t('profiles.eyebrow') }}
             </text>
           </view>
 
           <view class="text-[40px] font-semibold leading-[1.06] text-semantic-text-primary lg:text-[56px]">
-            <text>{{ t('profilesPreview.title') }}</text>
-            <text class="text-semantic-text-section-highlight"> {{ t('profilesPreview.titleAccent') }}</text>
+            <text>{{ t('profiles.title') }}</text>
+            <text class="text-semantic-text-section-highlight"> {{ t('profiles.titleAccent') }}</text>
           </view>
         </view>
 
         <view class="max-w-[430px] text-[18px] leading-8 text-semantic-text-lead lg:text-[19px]">
-          {{ t('profilesPreview.subtitle') }}
+          {{ t('profiles.subtitle') }}
         </view>
       </view>
 
@@ -37,7 +37,7 @@
           class="min-w-[178px] px-8 tracking-[0.6px]"
           @click="openSelfDirectoryPage"
         >
-          {{ t('profilesPreview.cta') }}
+          {{ t('profiles.cta') }}
         </AppButton>
       </view>
     </view>
@@ -47,12 +47,15 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
-import type { HomeProfilesPreviewItem } from '@/types/home/view'
+import type { HomeProfilesItem } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail, openSelfDirectoryPage } from '@/utils/navigation'
+defineOptions({
+  name: 'HomeProfiles'
+})
 
 const props = defineProps<{
-  profiles: HomeProfilesPreviewItem[]
+  profiles: HomeProfilesItem[]
 }>()
 
 const { t } = usePageI18n('home')
