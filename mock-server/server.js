@@ -38,6 +38,21 @@ server.get(`${apiPrefix}/health`, (_req, res) => {
   })
 })
 
+server.get(`${apiPrefix}/profiles/featured`, (req, res) => {
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max)
+  }
+
+  const pageSize = clamp(Number.parseInt(getString(req.query.pageSize) || '3', 10) || 3, 1, 12)
+  const source = getDb().get('profiles').value().map(withDisplayName)
+  const sorted = sortSelfProfiles(source, 'recentActive')
+
+  res.status(200).jsonp({
+    items: paginate(sorted, 1, pageSize),
+    pagination: buildPagination(sorted.length, 1, pageSize),
+  })
+})
+
 server.get(`${apiPrefix}/profiles/self`, (req, res) => {
   const normalizedQuery = normalizeProfileQuery(req.query)
   const source = getDb().get('profiles').value().map(withDisplayName)

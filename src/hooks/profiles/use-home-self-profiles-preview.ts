@@ -1,26 +1,10 @@
 import {computed, ref, watch, type Ref} from 'vue'
-import {getSelfProfileDirectory, type FormatLocale, type ProfileDTO} from '@/api/profiles/profiles'
+import {getFeaturedSelfProfiles, type FormatLocale, type ProfileDTO} from '@/api/profiles/profiles'
 import type {HomeProfilesItem} from '@/types/home/view'
 import {formatProfileAge, formatProfileLanguages, localizeProfileText} from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
-/** 首页预览默认筛选条件 */
-const EMPTY_FILTERS = {
-    gender: '',
-    ageRange: '',
-    city: '',
-    heightRange: '',
-    education: '',
-    intentCode: '',
-    industry: '',
-    occupation: '',
-    language: '',
-    verified: '',
-    maritalStatus: '',
-    hasChildren: '',
-    acceptLongDistance: '',
-} as const
 
 /** 首页精选会员数据 */
 export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
@@ -41,12 +25,7 @@ export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
         error.value = null
 
         try {
-            const response = await getSelfProfileDirectory({
-                page: 1,
-                pageSize: 3,
-                sort: 'recentActive',
-                ...EMPTY_FILTERS,
-            })
+            const response = await getFeaturedSelfProfiles()
 
             if (currentToken !== requestToken) return
 
