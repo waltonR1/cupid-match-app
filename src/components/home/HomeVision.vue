@@ -2,16 +2,18 @@
   <view class="bg-semantic-page-default">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
       <view class="grid gap-8 lg:grid-cols-[0.95fr_1.15fr] lg:gap-10">
-        <!-- Sticky intro panel -->
-        <view class="border border-semantic-border-default bg-semantic-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
+        <!-- 左侧介绍 -->
+        <view
+            class="border border-semantic-border-default bg-semantic-surface-panel px-7 py-8 lg:sticky lg:top-28 lg:self-start lg:px-8 lg:py-10">
           <view class="mb-6 inline-flex items-center gap-4">
-            <view class="h-px w-10 bg-semantic-border-eyebrow" />
+            <view class="h-px w-10 bg-semantic-border-eyebrow"/>
             <text class="text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">
               {{ t('vision.eyebrow') }}
             </text>
           </view>
 
-          <view class="text-[40px] font-semibold leading-[1.04] text-semantic-text-primary sm:text-[46px] lg:text-[58px]">
+          <view
+              class="text-[40px] font-semibold leading-[1.04] text-semantic-text-primary sm:text-[46px] lg:text-[58px]">
             <text>{{ t('vision.title') }}</text>
             <text class="text-semantic-text-section-highlight"> {{ t('vision.titleAccent') }}</text>
           </view>
@@ -21,9 +23,9 @@
           </view>
         </view>
 
-        <!-- Content column -->
+        <!-- 右侧内容 -->
         <view class="space-y-6">
-          <!-- Vision statement -->
+          <!-- 愿景描述 -->
           <view class="border border-semantic-border-soft bg-semantic-surface-soft px-7 py-8 lg:px-9 lg:py-9">
             <view class="text-[21px] leading-[1.85] text-semantic-text-muted lg:text-[24px]">
               {{ t('vision.description') }}
@@ -34,14 +36,15 @@
             </view>
           </view>
 
-          <!-- Vision points -->
+          <!-- 愿景要点 -->
           <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <view
-              v-for="item in visionPoints"
-              :key="item.title"
-              class="relative flex min-h-[220px] flex-col overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-7 py-8 transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel"
+                v-for="item in visionPoints"
+                :key="item.title"
+                class="relative flex min-h-[220px] flex-col overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-7 py-8 transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel"
             >
-              <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line" />
+              <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line"/>
+
               <view class="text-[13px] uppercase tracking-[4px] text-semantic-text-card-label">
                 {{ t('vision.pointLabel') }}
               </view>
@@ -62,10 +65,12 @@
 </template>
 
 <script setup lang="ts">
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 
-const { t } = usePageI18n('home')
+/** 首页文案 */
+const {t} = usePageI18n('home')
 
+/** 愿景要点 */
 const visionPoints = [
   {
     title: 'vision.points.relationship.title',
@@ -79,5 +84,5 @@ const visionPoints = [
     title: 'vision.points.intention.title',
     desc: 'vision.points.intention.desc',
   },
-]
+] as const
 </script>

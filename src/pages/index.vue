@@ -1,17 +1,17 @@
 <template>
   <AppPageLayout>
-    <HomeHero />
-    <HomeVision />
+    <HomeHero/>
+    <HomeVision/>
 
-    <HomeProfiles :profiles="profiles" />
+    <HomeProfiles :profiles="profiles"/>
 
-    <HomeFamily />
+    <HomeFamily/>
 
-    <HomeEvents :view-model="eventsPreview" />
+    <HomeEvents :view-model="eventsPreview"/>
 
-    <HomeFeatures />
-    <HomeAudience />
-    <HomeMembership />
+    <HomeFeatures/>
+    <HomeAudience/>
+    <HomeMembership/>
   </AppPageLayout>
 </template>
 
@@ -25,13 +25,13 @@ import HomeHero from '@/components/home/HomeHero.vue'
 import HomeMembership from '@/components/home/HomeMembership.vue'
 import HomeProfiles from '@/components/home/HomeProfiles.vue'
 import HomeVision from '@/components/home/HomeVision.vue'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { useHomeEvents } from '@/hooks/events'
-import { useHomeSelfProfiles } from '@/hooks/profiles'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {useHomeEvents} from '@/hooks/events'
+import {useHomeSelfProfiles} from '@/hooks/profiles'
 
-const { t: profileT, locale } = usePageI18n('self')
-const { t: eventsT } = usePageI18n('events')
-const { featuredProfiles: profiles } = useHomeSelfProfiles(profileT, locale)
-const { viewModel: eventsPreview } = useHomeEvents(eventsT, locale)
+const {t: profileT, locale} = usePageI18n('self')
+const {t: eventsT} = usePageI18n('events')
+const {featuredProfiles: profiles} = useHomeSelfProfiles(profileT, locale)
+const {viewModel: eventsPreview} = useHomeEvents(eventsT, locale)
 
 </script>

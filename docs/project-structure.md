@@ -201,3 +201,177 @@ mock-server/
 - 运行时不再 import `@/mock/...`
 - `type-check` 通过
 - 主 GET 链路和登录链路可通过 mock-server 冒烟
+
+```txt
+src/
+  api/
+    shared/
+      config.ts
+      http.ts
+    account/
+      account.ts
+      account.types.ts
+    auth/
+      auth.ts
+      auth.types.ts
+    events/
+      events.ts
+      events.types.ts
+    profiles/
+      profiles.ts
+      profiles.types.ts
+  components/
+    about/
+      AboutAudience.vue
+      AboutDifference.vue
+      AboutHero.vue
+      AboutOrigin.vue
+      AboutValues.vue
+    account/
+      AccountPrimaryNav.vue
+      AccountSectionHeader.vue
+      AccountShell.vue
+      AccountTopSummary.vue
+    common/
+      AgreementDialog.vue
+      AppAvatar.vue                ✔
+      AppButton.vue                ✔
+      AppGenderBadge.vue           ✔
+      feedback/EmptyStatePanel.vue
+    contact/
+      ContactCases.vue
+      ContactGuide.vue
+      ContactHero.vue
+      ContactInfo.vue
+    events/
+      EventDetailAgenda.vue
+      EventDetailHero.vue
+      EventDetailNotes.vue
+      EventDetailRelatedProfiles.vue
+      EventOverviewCard.vue
+      EventsFeaturedGrid.vue
+      EventsHero.vue
+      EventsScheduleList.vue
+      EventStatusBadge.vue
+    home/
+      HomeAudience.vue             ✔
+      HomeEvents.vue
+      HomeFamily.vue               ✔
+      HomeFeatures.vue             ✔ 具体功能后期再评估
+      HomeHero.vue                 ✔
+      HomeMembership.vue           ✔
+      HomeProfiles.vue
+      HomeVision.vue               ✔
+    layout/
+      AppFooter.vue
+      AppHeader.vue
+      AppPageLayout.vue
+    membership/
+      MembershipHero.vue
+      MembershipPlanButton.vue
+      MembershipRulesSection.vue
+      MembershipTiersSection.vue
+    profiles/
+      directory/
+        ProfileActiveFilterChips.vue
+        ProfileCardFrame.vue                    ✔
+        ProfileDirectoryIntro.vue
+        ProfileDirectoryPagination.vue
+        ProfileFilterSelectCard.vue
+        ProfileFilterToolbar.vue
+        ProfileResultToolbar.vue
+        ProfileResultsGrid.vue
+      detail/
+        ProfileDetailFactGrid.vue
+        ProfileDetailFactSection.vue
+        ProfileDetailHero.vue
+  constants/
+    nav.ts
+    theme-tokens.json
+  hooks/
+    account/
+      index.ts
+      use-account-overview.ts
+    auth/
+      index.ts
+      use-login-action.ts
+      use-register-action.ts
+    events/
+      index.ts
+      use-event-detail-page.ts
+      use-events-index-page.ts
+      use-home-events-preview.ts
+    profiles/
+      index.ts
+      use-family-profile-detail-page.ts
+      use-family-profile-directory-page.ts
+      use-home-self-profiles-preview.ts
+      use-self-profile-detail-page.ts
+      use-self-profile-directory-page.ts
+  i18n/
+    index.ts
+    locale.ts
+    types.ts
+    composables/
+      use-app-i18n.ts
+      use-locale-bridge.ts
+      use-page-i18n.ts
+    messages/
+  pages/
+    auth/
+      login.vue
+      register.vue
+    public/
+      about.vue
+      contact.vue
+      membership.vue
+    profiles/
+      family/
+        detail.vue
+        index.vue
+      self/
+        detail.vue
+        index.vue
+    events/
+      detail.vue
+      index.vue
+    account/
+      activity.vue
+      connections.vue
+      membership.vue
+      messages.vue
+      profile.vue
+      safety.vue
+      verification.vue
+    index.vue
+    not-found.vue
+  stores/
+    modules/
+      auth.ts
+      locale.ts
+      theme.ts
+    plugins/
+      persisted-state.ts
+  types/
+    account/
+      navigation.ts
+    contact/
+      view.ts
+    declarations/
+      pinia-persist.d.ts
+    events/
+      view.ts
+    home/
+      view.ts
+    profiles/
+      card.ts
+      detail.ts
+      directory.ts
+  utils/
+    account-format.ts
+    display-name.ts
+    locale-format.ts
+    navigation.ts
+    profile-format.ts
+```
+

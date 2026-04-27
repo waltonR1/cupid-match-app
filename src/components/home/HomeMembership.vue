@@ -1,16 +1,16 @@
 <template>
   <view class="relative overflow-hidden bg-semantic-page-default text-semantic-text-primary">
-    <!-- ambient background -->
+    <!-- 背景氛围层 -->
     <view class="pointer-events-none absolute inset-0">
-      <view class="absolute inset-0 bg-gradient-membership-showcase-ambient" />
+      <view class="absolute inset-0 bg-gradient-membership-showcase-ambient"/>
     </view>
 
     <view class="relative mx-auto max-w-[1240px] px-6 py-16 lg:px-8 lg:py-20">
-      <!-- header -->
+      <!-- 标题区 -->
       <view class="mb-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-10">
         <view class="pt-2">
           <view class="mb-4 inline-flex items-center gap-4">
-            <view class="h-px w-10 bg-semantic-border-eyebrow" />
+            <view class="h-px w-10 bg-semantic-border-eyebrow"/>
             <text class="text-[10px] uppercase tracking-[4px] text-semantic-text-subtle">
               {{ t('membership.eyebrow') }}
             </text>
@@ -29,22 +29,23 @@
         </view>
       </view>
 
-      <!-- membership cards -->
+      <!-- 会员方案卡片 -->
       <view class="grid gap-4 lg:grid-cols-[0.92fr_1fr_1.06fr]">
-        <!-- silver -->
+        <!-- 白银会员 -->
         <view
-          class="relative flex min-h-[460px] flex-col overflow-hidden border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-5 py-6 shadow-panel lg:px-6"
+            class="relative flex min-h-[460px] flex-col overflow-hidden border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-5 py-6 shadow-panel lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-component-membership-tier-silver-accent-line" />
-          <view class="absolute inset-0 bg-gradient-membership-tier-silver-glow" />
+          <view class="absolute inset-x-0 top-0 h-px bg-component-membership-tier-silver-accent-line"/>
+          <view class="absolute inset-0 bg-gradient-membership-tier-silver-glow"/>
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-component-membership-tier-silver-badge-label">
             {{ t('membership.vip.silver.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-component-membership-tier-silver-accent-line" />
+          <view class="relative mt-3 h-px w-10 bg-component-membership-tier-silver-accent-line"/>
 
-          <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-primary lg:text-[32px]">
+          <view
+              class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-primary lg:text-[32px]">
             {{ t('membership.vip.silver.name') }}
           </view>
 
@@ -64,7 +65,7 @@
             </view>
           </view>
 
-          <view class="relative mt-6 h-px w-full bg-component-membership-tier-silver-divider" />
+          <view class="relative mt-6 h-px w-full bg-component-membership-tier-silver-divider"/>
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-secondary">
             <view class="flex gap-3">
@@ -82,28 +83,29 @@
           </view>
 
           <MembershipPlanButton
-            tier="silver"
-            class="relative mt-auto"
-            @click="openRegisterPage"
+              tier="silver"
+              class="relative mt-auto"
+              @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
           </MembershipPlanButton>
         </view>
 
-        <!-- gold -->
+        <!-- 黄金会员 -->
         <view
-          class="relative flex min-h-[460px] flex-col overflow-hidden border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-5 py-6 shadow-emphasis lg:px-6"
+            class="relative flex min-h-[460px] flex-col overflow-hidden border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-5 py-6 shadow-emphasis lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-px bg-component-membership-tier-gold-accent-line" />
-          <view class="absolute inset-0 bg-gradient-membership-tier-gold-glow" />
+          <view class="absolute inset-x-0 top-0 h-px bg-component-membership-tier-gold-accent-line"/>
+          <view class="absolute inset-0 bg-gradient-membership-tier-gold-glow"/>
 
           <view class="relative text-[10px] uppercase tracking-[3px] text-semantic-text-inverse-subtle">
             {{ t('membership.vip.gold.badge') }}
           </view>
 
-          <view class="relative mt-3 h-px w-10 bg-component-membership-tier-gold-accent-line" />
+          <view class="relative mt-3 h-px w-10 bg-component-membership-tier-gold-accent-line"/>
 
-          <view class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-inverse lg:text-[32px]">
+          <view
+              class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-inverse lg:text-[32px]">
             {{ t('membership.vip.gold.name') }}
           </view>
 
@@ -123,7 +125,7 @@
             </view>
           </view>
 
-          <view class="relative mt-6 h-px w-full bg-component-membership-tier-gold-divider" />
+          <view class="relative mt-6 h-px w-full bg-component-membership-tier-gold-divider"/>
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
             <view class="flex gap-3">
@@ -141,28 +143,28 @@
           </view>
 
           <MembershipPlanButton
-            tier="gold"
-            class="relative mt-auto"
-            @click="openRegisterPage"
+              tier="gold"
+              class="relative mt-auto"
+              @click="openRegisterPage"
           >
             {{ t('membership.vip.cta') }}
           </MembershipPlanButton>
         </view>
 
-        <!-- diamond -->
+        <!-- 钻石会员 -->
         <view
-          class="relative flex min-h-[490px] flex-col overflow-hidden border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-5 py-6 shadow-luxe ring-1 ring-component-membership-tier-diamond-ring lg:-translate-y-1 lg:px-6"
+            class="relative flex min-h-[490px] flex-col overflow-hidden border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-5 py-6 shadow-luxe ring-1 ring-component-membership-tier-diamond-ring lg:-translate-y-1 lg:px-6"
         >
-          <view class="absolute inset-x-0 top-0 h-[2px] bg-component-membership-tier-diamond-accent-line" />
-          <view class="absolute inset-y-0 right-0 w-[46%] bg-gradient-membership-tier-diamond-glow" />
+          <view class="absolute inset-x-0 top-0 h-[2px] bg-component-membership-tier-diamond-accent-line"/>
+          <view class="absolute inset-y-0 right-0 w-[46%] bg-gradient-membership-tier-diamond-glow"/>
 
           <view
-            class="relative inline-flex w-fit items-center border border-component-membership-tier-diamond-badge-border bg-component-membership-tier-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-semantic-text-inverse"
+              class="relative inline-flex w-fit items-center border border-component-membership-tier-diamond-badge-border bg-component-membership-tier-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-semantic-text-inverse"
           >
             {{ t('membership.vip.diamond.badge') }}
           </view>
 
-          <view class="relative mt-4 h-px w-12 bg-component-membership-tier-diamond-accent-line" />
+          <view class="relative mt-4 h-px w-12 bg-component-membership-tier-diamond-accent-line"/>
 
           <view class="relative mt-5 text-[30px] font-semibold leading-[1.1] text-semantic-text-inverse lg:text-[34px]">
             {{ t('membership.vip.diamond.name') }}
@@ -184,7 +186,7 @@
             </view>
           </view>
 
-          <view class="relative mt-7 h-px w-full bg-component-membership-tier-diamond-divider" />
+          <view class="relative mt-7 h-px w-full bg-component-membership-tier-diamond-divider"/>
 
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
             <view class="flex gap-3">
@@ -207,8 +209,8 @@
             </view>
 
             <MembershipPlanButton
-              tier="diamond"
-              @click="openRegisterPage"
+                tier="diamond"
+                @click="openRegisterPage"
             >
               {{ t('membership.vip.cta') }}
             </MembershipPlanButton>
@@ -216,9 +218,9 @@
         </view>
       </view>
 
-      <!-- complimentary access -->
+      <!-- 免费体验入口 -->
       <view
-        class="mt-4 border border-component-membership-tier-free-card-border bg-component-membership-tier-free-card-background px-5 py-5 shadow-panel lg:px-6"
+          class="mt-4 border border-component-membership-tier-free-card-border bg-component-membership-tier-free-card-background px-5 py-5 shadow-panel lg:px-6"
       >
         <view class="grid gap-5 lg:grid-cols-[210px_120px_minmax(0,1fr)_150px] lg:items-center">
           <view>
@@ -261,8 +263,8 @@
           </view>
 
           <MembershipPlanButton
-            tier="free"
-            @click="openRegisterPage"
+              tier="free"
+              @click="openRegisterPage"
           >
             {{ t('membership.free.button') }}
           </MembershipPlanButton>
@@ -273,11 +275,12 @@
 </template>
 
 <script setup lang="ts">
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openRegisterPage } from '@/utils/navigation'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {openRegisterPage} from '@/utils/navigation'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 
-const { t } = usePageI18n('home')
+/** 首页文案 */
+const {t} = usePageI18n('home')
 </script>
 
 

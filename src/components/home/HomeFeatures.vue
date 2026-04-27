@@ -1,10 +1,10 @@
 <template>
   <view class="bg-semantic-page-default text-semantic-text-primary">
     <view class="mx-auto max-w-[1280px] px-6 py-20 lg:px-8 lg:py-24">
-      <!-- Section intro -->
+      <!-- 标题区 -->
       <view class="mb-16">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-px w-14 bg-semantic-border-eyebrow" />
+          <view class="h-px w-14 bg-semantic-border-eyebrow"/>
           <text class="text-[12px] uppercase tracking-[5px] text-semantic-text-eyebrow">
             {{ t('features.eyebrow') }}
           </text>
@@ -20,13 +20,13 @@
         </view>
       </view>
 
-      <!-- Feature cards -->
+      <!-- 功能卡片 -->
       <view class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <view
-          v-for="card in serviceCards"
-          :key="card.title"
-          class="flex min-h-[280px] cursor-pointer flex-col border border-semantic-border-default bg-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft hover:shadow-panel"
-          @click="openPage(card.path)"
+            v-for="card in serviceCards"
+            :key="card.title"
+            class="flex min-h-[280px] cursor-pointer flex-col border border-semantic-border-default bg-semantic-surface-card px-8 py-8 transition-all duration-300 hover:-translate-y-[2px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft hover:shadow-panel"
+            @click="openPage(card.path)"
         >
           <view class="text-[20px] font-semibold uppercase tracking-[2px] text-semantic-text-subtle">
             {{ card.icon }}
@@ -41,8 +41,8 @@
           </view>
 
           <view
-            v-if="showBrandLabel"
-            class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-component-home-feature-label"
+              v-if="showBrandLabel"
+              class="mt-auto pt-6 text-[14px] italic tracking-[3px] text-component-home-feature-label"
           >
             {{ t(card.label) }}
           </view>
@@ -53,21 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openPage } from '@/utils/navigation'
+import {computed} from 'vue'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {openPage} from '@/utils/navigation'
 
-const { t, locale } = usePageI18n('home')
+/** 首页文案 */
+const {t, locale} = usePageI18n('home')
 
-interface ServiceCardItem {
-  icon: string
-  title: string
-  desc: string
-  label: string
-  path: string
-}
-
-const serviceCards: ServiceCardItem[] = [
+/** 功能卡片数据 */
+const serviceCards = [
   {
     icon: 'AI',
     title: 'features.ai.title',
@@ -110,14 +104,10 @@ const serviceCards: ServiceCardItem[] = [
     label: 'features.story.label',
     path: '/pages/public/about',
   },
-]
+] as const
 
-/**
- * Hide the brand sublabel in the French locale to avoid repeating the same cue.
- * Keep it for zh/en, where it still works as a light brand accent.
- */
+/** 法语下隐藏品牌副标签，避免语义重复 */
 const showBrandLabel = computed(() => {
   return locale.value !== 'fr'
 })
-
 </script>

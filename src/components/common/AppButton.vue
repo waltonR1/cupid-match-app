@@ -1,28 +1,25 @@
 <template>
   <view
-    v-bind="$attrs"
-    class="inline-flex items-center justify-center border font-medium transition-all duration-300"
-    :class="[widthClass, sizeClass, radiusClass, variantClass, motionClass, disabled ? disabledClass : 'cursor-pointer']"
-    :aria-disabled="disabled ? 'true' : 'false'"
-    @click="handleClick"
+      v-bind="$attrs"
+      class="inline-flex items-center justify-center border font-medium transition-all duration-300"
+      :class="[widthClass, sizeClass, radiusClass, variantClass, motionClass, disabled ? disabledClass : 'cursor-pointer']"
+      :aria-disabled="disabled ? 'true' : 'false'"
+      @click="handleClick"
   >
-    <slot />
+    <slot/>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import {computed} from 'vue'
 
 type ButtonVariant = 'primary' | 'secondary'
-type ButtonContext =
-  | 'default'
-  | 'header'
-  | 'hero'
-  | 'section'
+type ButtonContext = 'default' | 'header' | 'hero' | 'section'
 type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
 type ButtonWidth = 'auto' | 'cta' | 'full'
 type ButtonRadius = 'none' | 'button' | 'xl'
 
+/** 按钮配置 */
 const props = withDefaults(defineProps<{
   variant?: ButtonVariant
   context?: ButtonContext
@@ -39,10 +36,12 @@ const props = withDefaults(defineProps<{
   disabled: false,
 })
 
+/** 点击事件 */
 const emit = defineEmits<{
   (e: 'click', event: unknown): void
 }>()
 
+/** 宽度样式 */
 const widthClass = computed(() => {
   switch (props.width) {
     case 'cta':
@@ -54,6 +53,7 @@ const widthClass = computed(() => {
   }
 })
 
+/** 尺寸样式 */
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'sm':
@@ -67,6 +67,7 @@ const sizeClass = computed(() => {
   }
 })
 
+/** 圆角样式 */
 const radiusClass = computed(() => {
   switch (props.rounded) {
     case 'xl':
@@ -78,6 +79,7 @@ const radiusClass = computed(() => {
   }
 })
 
+/** 悬浮动效 */
 const motionClass = computed(() => {
   if (props.disabled) {
     return ''
@@ -90,8 +92,10 @@ const motionClass = computed(() => {
   return 'hover:-translate-y-[2px] hover:scale-[1.02] hover:shadow-panel'
 })
 
+/** 禁用态鼠标样式 */
 const disabledClass = 'cursor-not-allowed'
 
+/** 主题样式 */
 const variantClass = computed(() => {
   if (props.disabled) {
     return 'border-semantic-action-disabled-border bg-semantic-action-disabled text-semantic-action-disabled-contrast'
@@ -116,6 +120,7 @@ const variantClass = computed(() => {
   return 'border-semantic-border-default bg-semantic-surface-soft text-semantic-text-secondary hover:border-semantic-border-soft hover:bg-semantic-surface-panel hover:text-semantic-text-primary'
 })
 
+/** 禁用时拦截点击 */
 function handleClick(event: unknown) {
   if (props.disabled) {
     return
