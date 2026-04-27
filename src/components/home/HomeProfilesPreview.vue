@@ -23,7 +23,7 @@
 
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <ProfileCardFrame
-          v-for="profile in profileCards"
+          v-for="profile in profiles"
           :key="profile.id"
           :data="profile.card"
           @select="openSelfDetail(profile.id)"
@@ -45,29 +45,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
-import { getLocalizedProfileCardData, type Profile } from '@/api/modules/profiles'
 import type { HomeProfilesPreviewItem } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail, openSelfDirectoryPage } from '@/utils/navigation'
-import { buildProfileCardViewModel } from '@/utils/profile-format'
 
 const props = defineProps<{
-  profiles: Profile[]
+  profiles: HomeProfilesPreviewItem[]
 }>()
 
-const { t, locale } = usePageI18n('home')
-const { t: profileT } = usePageI18n('self')
-
-const profileCards = computed<HomeProfilesPreviewItem[]>(() =>
-  props.profiles.map(profile => {
-    const cardData = getLocalizedProfileCardData(locale.value, profile, 'self')
-    return {
-      id: profile.id,
-      card: buildProfileCardViewModel(cardData, profileT, locale.value),
-    }
-  }),
-)
+const { t } = usePageI18n('home')
 </script>

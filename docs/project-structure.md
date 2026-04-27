@@ -1,240 +1,203 @@
-﻿# 项目结构说明
+# 项目结构说明
 
-本文档记录当前前端项目的目录职责、代码分层和新增文件约定。项目目前没有真实后端，前端通过 `api -> mock` 的方式模拟接口，但页面仍按正式接口调用链开发。
+本文档记录当前代码目录职责，只描述已经落地的结构，不保留历史方案。
 
-## 总体分层
-
-当前推荐调用链：
+## 总体调用链
 
 ```txt
-page -> composable -> api module -> mock gateway -> mock data
+page -> hook -> api -> mock-server
 ```
 
-对应规则：
+规则：
 
-- 页面负责页面组合、表单状态、事件绑定、导航和 i18n 展示文案。
-- `src/composables` 负责业务状态、筛选分页和数据行为，不直接依赖页面 i18n。
-- `src/api/modules` 负责接口形状、mock 适配和后续真实接口替换点；当前为同步接口适配层。
-- `src/mock` 只作为临时数据源，不应被页面、组件或 composable 直接引用。
-- `src/components` 只放 `.vue` 展示组件，不再放业务 hook 或 `.types.ts`。
-- 跨组件或跨页面复用的类型统一放在 `src/types`。
-- `i18n` 只负责界面文案和当前语言状态；`api` / `mock` / `utils` 不反向依赖 `i18n`。
+- 页面不直接发 HTTP 请求。
+- hook 不再额外依赖 mapper 层。
+- API 只负责 HTTP 边界与类型。
+- mock-server 是当前唯一 mock 数据入口。
 
 ## 根目录
 
 ```txt
 cupid-match/
-  docs/                 项目文档
-  scripts/              项目脚本，例如 i18n 检查、token 文档生成
-  src/                  前端源码
-  package.json          npm 脚本和依赖
-  vite.config.ts        Vite + uni-app 配置
-  tailwind.config.js    Tailwind / 设计 token 配置
-  tsconfig.json         TypeScript 配置
+  docs/
+  mock-server/
+  scripts/
+  src/
+  package.json
+  tsconfig.json
+  vite.config.ts
 ```
 
 ## src 目录
 
 ```txt
 src/
-  api/                  接口层；当前内部读取 mock，后续替换真实后端
-  components/           展示组件；只保留 .vue
-  composables/          业务 hook
-  constants/            全局常量
-  i18n/                 多语言初始化、语言包和 i18n hook
-  mock/                 临时 mock 数据源
-  pages/                uni-app 页面
-  static/               静态资源
-  stores/               Pinia 状态管理
-  types/                类型定义；按 view model / UI 状态等分组
-  utils/                通用工具函数
-  App.vue               应用入口组件
-  main.ts               uni-app 应用初始化
-  manifest.json         uni-app manifest
-  pages.json            页面路由配置
-  uni.scss              全局样式变量
+  api/
+  components/
+  constants/
+  hooks/
+  i18n/
+  pages/
+  static/
+  stores/
+  types/
+  utils/
+  App.vue
+  main.ts
+  manifest.json
+  pages.json
+  uni.scss
 ```
 
 ## api
 
 ```txt
 src/api/
-  modules/
-    account.ts          账号中心接口
-    auth.ts             登录 / 注册接口
-    events.ts           活动接口
-    profiles.ts         资料浏览与详情接口
-```
-
-当前 `api/modules/*` 可以引用 `src/mock`。后续接真实后端时，优先替换这里的实现，保持页面和 composable 的调用方式不变。
-
-当前不再使用 `mockRequest()` 或 `ApiResult<T>`，而是由 `api/modules/*` 同步返回适配后的 DTO。
-
-## composables
-
-```txt
-src/composables/
   account/
-    index.ts
-    use-account-data.ts
+    account.ts
+    account.types.ts
   auth/
-    index.ts
-    use-login.ts
-    use-register.ts
+    auth.ts
+    auth.types.ts
   events/
-    index.ts
-    use-event-detail.ts
-    use-events.ts
-    use-home-preview-events.ts
+    events.ts
+    events.types.ts
   profiles/
-    index.ts
-    use-family-directory.ts
-    use-home-preview-profiles.ts
-    use-profile-detail.ts
-    use-self-directory.ts
+    profiles.ts
+    profiles.types.ts
+  shared/
+    config.ts
+    http.ts
 ```
 
-`composables` 是页面与 API 之间的业务层。这里可以维护 `loading`、`error`、`refresh`、筛选条件、分页状态和数据行为。
+约定：
 
-`composables` 按业务资源目录聚合，目录内按业务场景拆分具体 hook。页面和组件优先从资源目录入口导入，例如 `@/composables/profiles`；同目录内部依赖使用相对路径，避免通过入口文件形成循环引用。
+- `*.types.ts` 放 DTO、payload、query、response 类型。
+- `*.ts` 放域请求方法。
+- `shared/http.ts` 负责统一请求行为。
+- `shared/config.ts` 负责 API 基础配置。
 
-`composables` 不直接调用 `usePageI18n()`、`useLocaleBridge()`，也不负责生成依赖翻译文案的展示模型。页面或展示组件负责 `t(...)`、当前语言、状态文案、字段 label 和卡片文案。
+当前已删除的旧层：
 
-## utils
+- `*.client.ts`
+- `*.contract.ts`
+- `*.mock.ts`
+- provider 切换逻辑
+
+## hooks
 
 ```txt
-src/utils/
-  locale-format.ts      日期和时间格式化
-  navigation.ts         导航与页面跳转工具
-  profile-format.ts     资料字段格式化
+src/hooks/
+  account/
+  auth/
+  events/
+  profiles/
 ```
 
-`utils` 放跨页面复用的纯工具函数，例如日期格式化、资料年龄和语言格式化。依赖 `t(...)` 的展示组装留在页面或展示组件内。
+职责：
 
-`utils` 不直接依赖 `src/i18n`；若需要 locale，仅接收 `'zh' | 'fr' | 'en'` 这类中性参数。
+- 管理 `loading / error / refresh`
+- 发起 API 请求
+- 维护筛选、排序、分页、详情加载等页面动作
+- 组装当前页面直接消费的数据结构
+
+页面应该优先从 `src/hooks/<domain>` 取数。
 
 ## components
 
-```txt
-src/components/
-  about/
-  account/
-  common/
-  contact/
-  events/
-  home/
-  layout/
-  membership/
-  profiles/
-```
+`src/components` 只放展示组件。
 
-组件目录只放 Vue SFC。组件可以接收页面组装后的展示数据，但不直接访问 mock，也不直接承载接口请求逻辑。
+规则：
 
-组件需要的展示模型从对应 feature 的 `src/types/*/view.ts`、`card.ts`、`detail.ts` 等文件引入，筛选、导航 key 等 UI 状态类型从 `src/types` 引入。
-
-## types
-
-```txt
-src/types/
-  account/
-    navigation.ts
-  contact/
-    view.ts
-  declarations/
-    pinia-persist.d.ts
-  events/
-    view.ts
-  home/
-    view.ts
-  profiles/
-    card.ts
-    detail.ts
-    directory.ts
-```
-
-`types` 是类型根目录，按 feature 分组，再在 feature 内按职责拆文件，不作为无差别堆放目录。
-
-- `account/`、`profiles/` 放 feature 级状态和导航类型
-- `contact/`、`events/`、`home/`、`profiles/` 下的 `view.ts`、`card.ts`、`detail.ts` 放展示契约
-- `declarations/` 放 `*.d.ts` 这类全局声明
+- 不直接发请求
+- 不依赖后端 schema
+- 只消费页面或 hook 提供的数据
 
 ## pages
 
-```txt
-src/pages/
-  account/              账号中心页面
-  auth/                 登录与注册页面
-  profiles/
-    family/             家庭视角资料列表和详情
-    self/               本人视角资料列表和详情
-  events/               活动列表和详情
-  public/               关于、联系、会员介绍等公开页面
-  index.vue             首页
-  not-found.vue         404 页面
-```
+`src/pages` 存放 uni-app 页面。
 
-页面应优先调用 `src/composables` 中的 hook，不直接读取 `src/mock`，也不把复杂筛选、数据聚合逻辑写在页面里。
+规则：
+
+- 负责布局、绑定和跳转
+- 负责读取 i18n 文案
+- 可以在页面本地 `computed` 中做少量展示组装
+- 不直接访问 `src/api/shared/http.ts`
 
 ## stores
 
+`src/stores` 只放跨页面共享状态，例如：
+
+- 认证状态
+- 语言
+- 主题
+
+## types
+
+当前 `src/types` 保留跨页面复用的展示类型和声明文件，例如：
+
+- `src/types/events/view.ts`
+- `src/types/home/view.ts`
+- `src/types/profiles/*`
+
+当前已删除：
+
+- `src/types/vm/*`
+
+## utils
+
+`src/utils` 放纯工具函数，例如：
+
+- 本地化时间格式化
+- profile 展示字段格式化
+- account 文本格式化
+- 导航函数
+
+规则：
+
+- 不直接依赖页面
+- 不直接依赖 HTTP
+- 不直接 import `@/i18n/...`
+
+## mock-server
+
 ```txt
-src/stores/
-  modules/
-    auth.ts
-    locale.ts
-    theme.ts
-  plugins/
-    persisted-state.ts
+mock-server/
+  config.js
+  db.json
+  server.js
 ```
 
-`stores` 用于跨页面共享状态，例如登录状态、语言和主题。接口请求不要直接写在 store 里，除非它明确属于全局状态变更；一般仍通过 `api/modules` 和 `composables` 完成。
+职责：
 
-## mock
+- 提供 `/api/...` HTTP 接口
+- 负责聚合、筛选、排序、分页和响应整形
+- 为前端模拟接近真实后端的边界
 
-```txt
-src/mock/
-  data/
-    account.ts
-    events.ts
-    profiles.ts
-  gateways/
-    account.ts
-    events.ts
-    profiles.ts
-  types/
-    account.ts
-    events.ts
-    profiles.ts
-  shared.ts
-```
+## 明确不再使用的结构
 
-mock 是无后端阶段的临时数据源。除 `src/api/modules/*` 外，不要新增对 `src/mock` 的直接引用。
+以下结构已经退出当前代码主链路：
 
-当前 mock 内部推荐链路为：
+- `src/composables`
+- `src/api/modules`
+- `src/mock`
+- `src/mappers`
+- `src/types/vm`
 
-```txt
-mock data -> mock gateways -> api modules
-```
+## 新增功能时的顺序
 
-其中：
+1. 先补 `src/api/<domain>/<domain>.types.ts`
+2. 再补 `src/api/<domain>/<domain>.ts`
+3. 然后在 `src/hooks/<domain>` 接入请求与页面状态
+4. 最后由页面消费 hook
+5. 若涉及 mock 数据，同步更新 `mock-server/server.js` 和 `mock-server/db.json`
 
-- `data/*` 放原始 mock 数据
-- `types/*` 放 mock 自己的类型
-- `gateways/*` 负责 mock 的统一查询出口和聚合逻辑
-- `shared.ts` 放 mock 本地化小工具和 locale 类型
+## 当前校验基线
 
-## 新增功能流程
+当前结构应满足：
 
-1. 先定义或复用 `src/types` 中的类型。
-2. 在 `src/api/modules` 新增接口方法，当前直接从 `src/mock/gateways/*` 读取 mock 数据。
-3. 在 `src/composables` 新增业务 hook，处理加载状态、错误状态、筛选和分页。
-4. 页面调用 composable，并在页面或展示组件中处理 i18n 文案和展示数据组装。
-5. 如果新增页面，更新 `src/pages.json` 和 `docs/page-relationships.md`。
-6. 完成后运行 `npm.cmd run type-check`。
-
-## 当前结构检查点
-
-- `src/components` 下不应存在 `.ts` 文件。
-- 非 `src/api/modules` 文件不应直接 import `@/mock/...`。
-- `api` / `mock` / `utils` 不应直接 import `@/i18n/...`。
-- 业务 hook 返回值优先保持 `loading`、`error`、`refresh` 这类一致命名。
+- 页面不再 import `@/api/...*.http`
+- 页面不再 import `@/mappers/...`
+- 运行时不再 import `@/mock/...`
+- `type-check` 通过
+- 主 GET 链路和登录链路可通过 mock-server 冒烟

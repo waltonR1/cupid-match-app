@@ -3,14 +3,12 @@ import { ref } from 'vue'
 import { DEFAULT_LOCALE, normalizeLocale } from '@/i18n/locale'
 import type { AppLocale } from '@/i18n/types'
 
-function restoreLocaleState(state: unknown): { locale: AppLocale } | null {
+function restoreLocaleState(state: unknown): void {
   if (!state || typeof state !== 'object') {
-    return null
+    return
   }
 
-  return {
-    locale: normalizeLocale((state as { locale?: unknown }).locale),
-  }
+  ;(state as { locale?: AppLocale }).locale = normalizeLocale((state as { locale?: unknown }).locale)
 }
 
 export const useLocaleStore = defineStore('locale', () => {

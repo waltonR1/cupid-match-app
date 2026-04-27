@@ -16,7 +16,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="row in visibilityRows"
+              v-for="row in pageData.visibilityRows"
               :key="row.label"
               class="flex items-start justify-between gap-6 border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
@@ -38,17 +38,17 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="item in privacySettings"
+              v-for="item in pageData.privacyCards"
               :key="item.id"
               class="border border-semantic-border-soft bg-semantic-surface-card px-5 py-5"
             >
               <view class="flex items-start justify-between gap-4">
                 <view class="min-w-0 flex-1">
                   <view class="text-[18px] font-semibold text-semantic-text-primary">
-                    {{ localize(item.title) }}
+                    {{ item.title }}
                   </view>
                   <view class="mt-3 text-[15px] leading-7 text-semantic-text-secondary">
-                    {{ localize(item.desc) }}
+                    {{ item.desc }}
                   </view>
                 </view>
 
@@ -71,12 +71,12 @@
           <AccountSectionHeader
             :label="t('safety.eyebrow')"
             :title="t('safety.sections.family')"
-            :description="familyAssistSetting ? localize(familyAssistSetting.desc) : ''"
+            :description="pageData.familyDescription"
           />
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="point in familyPoints"
+              v-for="point in pageData.familyPoints"
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-secondary"
             >
@@ -94,7 +94,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="point in notePoints"
+              v-for="point in pageData.notePoints"
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-primary"
             >
@@ -130,54 +130,40 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account'
-import { pickLocalized, type LocalizedText } from '@/api/modules/account'
+import { useAccountOverview } from '@/hooks/account'
 import AppButton from '@/components/common/AppButton.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMessagesPage, openVerificationPage } from '@/utils/navigation'
+import { localizeAccountText } from '@/utils/account-format'
 
 const { t, locale } = usePageI18n('accountCenter')
-const accountData = useAccountData()
-const {
-  profile,
-  privacySettings,
-  familyAssistSetting,
-  advisorContactSetting,
-  visibleFieldsSetting,
-} = accountData
-
-const visibilityRows = computed(() => [
-  {
-    label: t('common.familyVisible'),
-    value: profile?.familyVisible ? t('common.enabled') : t('common.disabled'),
-  },
-  {
-    label: t('common.familyAssist'),
-    value: familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
-  },
-  {
-    label: t('common.visibleFields'),
-    value: visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
-  },
-  {
-    label: localize(advisorContactSetting.value?.title ?? { zh: '', fr: '', en: '' }),
-    value: advisorContactSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
-  },
-])
-
-const familyPoints = computed(() => [
-  t('safety.family.point1'),
-  t('safety.family.point2'),
-  t('safety.family.point3'),
-])
-
-const notePoints = computed(() => [
-  t('safety.notes.point1'),
-  t('safety.notes.point2'),
-  t('safety.notes.point3'),
-])
-
-function localize(text: LocalizedText) {
-  return pickLocalized(locale.value, text)
-}
+const accountData = useAccountOverview()
+const pageData = computed(() => ({
+  visibilityRows: [
+    { label: t('common.familyVisible'), value: accountData.profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+    { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    {
+      label: localizeAccountText(locale.value, accountData.advisorContactSetting.value?.title ?? { zh: '', fr: '', en: '' }),
+      value: accountData.advisorContactSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
+    },
+  ],
+  privacyCards: accountData.privacySettings.map(item => ({
+    id: item.id,
+    title: localizeAccountText(locale.value, item.title),
+    desc: localizeAccountText(locale.value, item.desc),
+    enabled: item.enabled,
+  })),
+  familyDescription: accountData.familyAssistSetting.value ? localizeAccountText(locale.value, accountData.familyAssistSetting.value.desc) : '',
+  familyPoints: [
+    t('safety.family.point1'),
+    t('safety.family.point2'),
+    t('safety.family.point3'),
+  ],
+  notePoints: [
+    t('safety.notes.point1'),
+    t('safety.notes.point2'),
+    t('safety.notes.point3'),
+  ],
+}))
 </script>

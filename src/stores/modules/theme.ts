@@ -9,16 +9,14 @@ function isAppTheme(value: unknown): value is AppTheme {
   return value === 'light' || value === 'dark'
 }
 
-function restoreThemeState(state: unknown): { theme: AppTheme } | null {
+function restoreThemeState(state: unknown): void {
   if (!state || typeof state !== 'object') {
-    return null
+    return
   }
 
   const theme = (state as { theme?: unknown }).theme
 
-  return {
-    theme: isAppTheme(theme) ? theme : DEFAULT_THEME,
-  }
+  ;(state as { theme?: AppTheme }).theme = isAppTheme(theme) ? theme : DEFAULT_THEME
 }
 
 export const useThemeStore = defineStore('theme', () => {

@@ -7,7 +7,7 @@
 
     <HomeFamily />
 
-    <HomeEventsPreview :events="events" />
+    <HomeEventsPreview :view-model="eventsPreview" />
 
     <HomeFeatures />
     <HomeAudience />
@@ -25,10 +25,13 @@ import HomeHero from '@/components/home/HomeHero.vue'
 import HomeMembership from '@/components/home/HomeMembership.vue'
 import HomeProfilesPreview from '@/components/home/HomeProfilesPreview.vue'
 import HomeVision from '@/components/home/HomeVision.vue'
-import { useEvents } from '@/composables/events'
-import { useSelfDirectory } from '@/composables/profiles'
+import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { useHomeEventsPreview } from '@/hooks/events'
+import { useHomeSelfProfilesPreview } from '@/hooks/profiles'
 
-const { featuredEvents: events } = useEvents()
-const { featuredProfiles: profiles } = useSelfDirectory()
+const { t: profileT, locale } = usePageI18n('self')
+const { t: eventsT } = usePageI18n('events')
+const { featuredProfiles: profiles } = useHomeSelfProfilesPreview(profileT, locale)
+const { viewModel: eventsPreview } = useHomeEventsPreview(eventsT, locale)
 
 </script>

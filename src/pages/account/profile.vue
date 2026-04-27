@@ -16,17 +16,17 @@
             <AccountSectionHeader
               :label="t('profile.eyebrow')"
               :title="t('profile.sections.summary')"
-              :description="localize(account.bio)"
+              :description="pageData.bio"
             />
 
             <view class="rounded-full border border-component-account-badge-meta-border bg-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-component-account-badge-meta-text">
-              {{ membershipLabel(account.membership) }}
+              {{ pageData.membershipLabel }}
             </view>
           </view>
 
           <view class="mt-6 grid gap-4 sm:grid-cols-3">
             <view
-              v-for="item in summaryItems"
+              v-for="item in pageData.summaryItems"
               :key="item.label"
               class="border border-semantic-border-soft bg-semantic-surface-panel px-5 py-5"
             >
@@ -48,7 +48,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="row in baseRows"
+              v-for="row in pageData.baseRows"
               :key="row.label"
               class="flex items-start justify-between gap-6 border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
@@ -72,7 +72,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="point in taskPoints"
+              v-for="point in pageData.taskPoints"
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-primary"
             >
@@ -92,7 +92,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="point in mediaPoints"
+              v-for="point in pageData.mediaPoints"
               :key="point"
               class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-secondary"
             >
@@ -110,7 +110,7 @@
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="row in visibilityRows"
+              v-for="row in pageData.visibilityRows"
               :key="row.label"
               class="flex items-start justify-between gap-6 border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
@@ -128,27 +128,27 @@
           <AccountSectionHeader
             :label="t('profile.eyebrow')"
             :title="t('profile.sections.preview')"
-            :description="localize(profile.summary)"
+            :description="pageData.summaryText"
           />
 
           <view class="mt-6 grid gap-4">
             <view
-              v-for="item in profile.highlights"
-              :key="localize(item)"
+              v-for="item in pageData.highlightTexts"
+              :key="item"
               class="flex items-start gap-3 text-[15px] leading-7 text-semantic-text-primary"
             >
               <view class="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-component-account-list-marker-dot" />
-              <text>{{ localize(item) }}</text>
+              <text>{{ item }}</text>
             </view>
           </view>
 
           <view class="mt-6 flex flex-wrap gap-3">
             <view
-              v-for="item in profile.tags"
-              :key="localize(item)"
+              v-for="item in pageData.tagTexts"
+              :key="item"
               class="rounded-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[13px] text-semantic-text-secondary"
             >
-              {{ localize(item) }}
+              {{ item }}
             </view>
           </view>
         </view>
@@ -161,89 +161,56 @@
 import { computed } from 'vue'
 import AccountSectionHeader from '@/components/account/AccountSectionHeader.vue'
 import AccountShell from '@/components/account/AccountShell.vue'
-import { useAccountData } from '@/composables/account'
-import {
-  getAccountLanguageLabel,
-  pickLocalized,
-  type AccountMembershipLevel,
-  type LocalizedText,
-} from '@/api/modules/account'
+import { useAccountOverview } from '@/hooks/account'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { formatAccountLanguages, localizeAccountText } from '@/utils/account-format'
+import type { AccountMembershipLevel } from '@/api/account/account.types'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
-const accountData = useAccountData()
-const {
-  account,
-  profile,
-  familyAssistSetting,
-  visibleFieldsSetting,
-} = accountData
+const accountData = useAccountOverview()
+const { profile } = accountData
+const pageData = computed(() => {
+  const membership = membershipLabel(accountData.account.membership)
 
-const summaryItems = computed(() => [
-  {
-    label: t('topSummary.metrics.completion'),
-    value: `${account.completion}%`,
-  },
-  {
-    label: t('common.currentTier'),
-    value: membershipLabel(account.membership),
-  },
-  {
-    label: t('common.visibility'),
-    value: profile?.familyVisible ? t('common.familyVisible') : t('common.privateOnly'),
-  },
-])
-
-const baseRows = computed(() => {
-  if (!profile) return []
-
-  return [
-    { label: t('profile.rows.city'), value: localize(profile.city) },
-    { label: t('profile.rows.education'), value: localize(profile.education) },
-    { label: t('profile.rows.occupation'), value: localize(profile.occupation) },
-    { label: t('profile.rows.languages'), value: formatLanguages(profile.languages) },
-    { label: t('common.currentTier'), value: membershipLabel(account.membership) },
-  ]
+  return {
+    bio: localizeAccountText(locale.value, accountData.account.bio),
+    membershipLabel: membership,
+    summaryItems: [
+      { label: t('topSummary.metrics.completion'), value: `${accountData.account.completion}%` },
+      { label: t('common.currentTier'), value: membership },
+      { label: t('common.visibility'), value: profile.familyVisible ? t('common.familyVisible') : t('common.privateOnly') },
+    ],
+    baseRows: profile.id ? [
+      { label: t('profile.rows.city'), value: localizeAccountText(locale.value, profile.city) },
+      { label: t('profile.rows.education'), value: localizeAccountText(locale.value, profile.education) },
+      { label: t('profile.rows.occupation'), value: localizeAccountText(locale.value, profile.occupation) },
+      { label: t('profile.rows.languages'), value: formatAccountLanguages(locale.value, profile.languages) },
+      { label: t('common.currentTier'), value: membership },
+    ] : [],
+    visibilityRows: [
+      { label: t('common.familyVisible'), value: profile.familyVisible ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+      { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
+    ],
+    mediaPoints: [
+      t('profile.media.photos'),
+      t('profile.media.video'),
+      t('profile.media.order'),
+    ],
+    taskPoints: [
+      t('profile.tasks.photos'),
+      t('profile.tasks.introduction'),
+      t('profile.tasks.verification'),
+    ],
+    summaryText: profile.id ? localizeAccountText(locale.value, profile.summary) : '',
+    highlightTexts: profile.highlights?.map(item => localizeAccountText(locale.value, item)) ?? [],
+    tagTexts: profile.tags?.map(item => localizeAccountText(locale.value, item)) ?? [],
+  }
 })
 
-const visibilityRows = computed(() => [
-  {
-    label: t('common.familyVisible'),
-    value: profile?.familyVisible ? t('common.enabled') : t('common.disabled'),
-  },
-  {
-    label: t('common.familyAssist'),
-    value: familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
-  },
-  {
-    label: t('common.visibleFields'),
-    value: visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
-  },
-])
-
-const mediaPoints = computed(() => [
-  t('profile.media.photos'),
-  t('profile.media.video'),
-  t('profile.media.order'),
-])
-
-const taskPoints = computed(() => [
-  t('profile.tasks.photos'),
-  t('profile.tasks.introduction'),
-  t('profile.tasks.verification'),
-])
-
-function localize(text: LocalizedText) {
-  return pickLocalized(locale.value, text)
-}
-
-function formatLanguages(languages: string[]) {
-  return languages.map(language => getAccountLanguageLabel(locale.value, language)).join(' / ')
-}
-
-function membershipLabel(membership: AccountMembershipLevel = account.membership) {
+function membershipLabel(membership: AccountMembershipLevel) {
   return globalT(`membership.${membership}.title`)
 }
 </script>

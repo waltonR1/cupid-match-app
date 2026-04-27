@@ -23,10 +23,10 @@
 
       <view class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <EventOverviewCard
-          v-for="event in viewModel.events"
+          v-for="event in props.viewModel.events"
           :key="event.id"
           :event="event"
-          :fields="viewModel.fieldLabels"
+          :fields="props.viewModel.fieldLabels"
           @open="openEventDetail"
         />
       </view>
@@ -46,45 +46,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
-import { pickLocalized, type CupidEvent, type LocalizedText } from '@/api/modules/events'
 import type { HomeEventsPreviewViewModel } from '@/types/home/view'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openEventDetail, openEventsPage } from '@/utils/navigation'
-import { formatEventDate } from '@/utils/locale-format'
 
 const props = defineProps<{
-  events: CupidEvent[]
+  viewModel: HomeEventsPreviewViewModel
 }>()
 
 const { t } = usePageI18n('home')
-const { t: eventsT, locale } = usePageI18n('events')
-const viewModel = computed<HomeEventsPreviewViewModel>(() => ({
-  fieldLabels: {
-    city: eventsT('fields.city'),
-    venue: eventsT('fields.venue'),
-    format: eventsT('fields.format'),
-    audience: eventsT('fields.audience'),
-    seats: eventsT('fields.seats'),
-  },
-  events: props.events.map(event => ({
-    id: event.id,
-    date: formatEventDate(locale.value, event.date),
-    title: localize(event.title),
-    summary: localize(event.summary),
-    city: localize(event.city),
-    venue: localize(event.venue),
-    format: localize(event.format),
-    audience: localize(event.audience),
-    seats: `${event.registered} / ${event.seats}`,
-    status: event.status,
-    statusLabel: eventsT(`status.${event.status}`),
-  })),
-}))
-
-function localize(text: LocalizedText) {
-  return pickLocalized(locale.value, text)
-}
 </script>

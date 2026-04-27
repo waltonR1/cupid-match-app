@@ -1,11 +1,11 @@
 <template>
   <AppPageLayout>
-    <view v-if="eventCard" class="pb-20">
+    <view v-if="pageData.eventCard" class="pb-20">
       <EventDetailHero
         :eyebrow="t('hero.eyebrow')"
-        :fields="detailFieldLabels"
-        :event="eventCard"
-        :action="eventAction"
+        :fields="pageData.detailFieldLabels"
+        :event="pageData.eventCard"
+        :action="pageData.eventAction"
         @register="openRegisterPage"
       />
 
@@ -14,21 +14,21 @@
             <EventDetailAgenda
               :eyebrow="t('sections.agenda')"
               :title="t('sections.agenda')"
-              :items="agenda"
+              :items="pageData.agenda"
             />
 
           <view class="grid gap-6">
             <EventDetailNotes
               :eyebrow="t('sections.notes')"
               :title="t('sections.notes')"
-              :items="noteItems"
+              :items="pageData.noteItems"
             />
 
             <EventDetailRelatedProfiles
               :eyebrow="t('sections.relatedProfiles')"
               :title="t('sections.relatedProfiles')"
               :empty-text="t('sections.relatedEmpty')"
-              :profiles="relatedProfileItems"
+              :profiles="pageData.relatedProfileItems"
               @open="openSelfDetail"
             />
           </view>
@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
@@ -56,130 +56,17 @@ import EventDetailAgenda from '@/components/events/EventDetailAgenda.vue'
 import EventDetailHero from '@/components/events/EventDetailHero.vue'
 import EventDetailNotes from '@/components/events/EventDetailNotes.vue'
 import EventDetailRelatedProfiles from '@/components/events/EventDetailRelatedProfiles.vue'
-import { useEventDetail } from '@/composables/events'
-import { pickLocalized, type CupidEvent, type EventRelatedProfile, type LocalizedText } from '@/api/modules/events'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type {
-  EventAgendaItem,
-  EventDetailFieldLabels,
-  EventNoteItem,
-  EventOverviewItem,
-  EventRelatedProfileItem,
-} from '@/types/events/view'
+import { useEventDetailPage } from '@/hooks/events'
 import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
-import { formatEventDetailDate } from '@/utils/locale-format'
 
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
-const eventDetail = useEventDetail(eventId)
-const detailFieldLabels = computed<EventDetailFieldLabels>(() => ({
-  status: t('fields.status'),
-  date: t('fields.date'),
-  city: t('fields.city'),
-  venue: t('fields.venue'),
-  format: t('fields.format'),
-  audience: t('fields.audience'),
-  seats: t('fields.seats'),
-}))
-const eventCard = computed<EventOverviewItem | undefined>(() => {
-  if (!eventDetail.event.value) return undefined
-  return buildEventOverviewItem(eventDetail.event.value)
-})
-const eventAction = computed(() => {
-  const status = eventCard.value?.status
-
-  if (status === 'waitlist') {
-    return {
-      text: t('actions.joinWaitlist'),
-      hint: t('actions.waitlistHint'),
-      disabled: false,
-    }
-  }
-
-  if (status === 'closed') {
-    return {
-      text: t('actions.full'),
-      hint: t('actions.fullHint'),
-      disabled: true,
-    }
-  }
-
-  return {
-    text: t('actions.register'),
-    hint: t('actions.registerHint'),
-    disabled: false,
-  }
-})
-const agenda = computed<EventAgendaItem[]>(() => {
-  if (!eventDetail.event.value) return []
-
-  return eventDetail.event.value.agenda.map(item => ({
-    time: item.time,
-    title: localize(item.title),
-    desc: localize(item.desc),
-  }))
-})
-const noteItems = computed<EventNoteItem[]>(() => [
-  { title: t('rules.step1.title'), desc: t('rules.step1.desc') },
-  { title: t('rules.step2.title'), desc: t('rules.step2.desc') },
-  { title: t('rules.step3.title'), desc: t('rules.step3.desc') },
-  { title: t('rules.step4.title'), desc: t('rules.step4.desc') },
-])
-const relatedProfileItems = computed<EventRelatedProfileItem[]>(() => {
-  if (!eventDetail.event.value) return []
-
-  const cityKey = eventDetail.event.value.city.en
-  return eventDetail.relatedProfiles.value.map(profile => ({
-    id: profile.id,
-    displayName: profile.displayName,
-    meta: formatRelatedProfileMeta(profile),
-    reason: buildRelatedReason(profile, cityKey),
-    summary: localize(profile.summary),
-  }))
-})
+const { pageData } = useEventDetailPage(eventId, t, locale)
 
 onLoad((query) => {
   if (query && typeof query.id === 'string') {
     eventId.value = query.id
   }
 })
-
-function localize(text: LocalizedText) {
-  return pickLocalized(locale.value, text)
-}
-
-function eventStatusLabel(status: EventOverviewItem['status']) {
-  return t(`status.${status}`)
-}
-
-function buildEventOverviewItem(item: CupidEvent): EventOverviewItem {
-  return {
-    id: item.id,
-    title: localize(item.title),
-    summary: localize(item.summary),
-    date: formatEventDetailDate(locale.value, item.date),
-    city: localize(item.city),
-    venue: localize(item.venue),
-    format: localize(item.format),
-    audience: localize(item.audience),
-    seats: `${item.registered} / ${item.seats}`,
-    status: item.status,
-    statusLabel: eventStatusLabel(item.status),
-  }
-}
-
-function formatRelatedProfileMeta(profile: EventRelatedProfile) {
-  return [
-    profile.age.toString(),
-    localize(profile.city),
-    localize(profile.intent),
-  ].join(' | ')
-}
-
-function buildRelatedReason(profile: EventRelatedProfile, cityKey: string) {
-  if (profile.city.en === cityKey) return t('relatedReason.sameCity')
-  if (profile.status === 'vip') return t('relatedReason.priority')
-  if (profile.isVerified) return t('relatedReason.verified')
-  return t('relatedReason.curated')
-}
 </script>

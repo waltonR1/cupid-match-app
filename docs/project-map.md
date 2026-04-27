@@ -1,302 +1,140 @@
-# 项目地图（产品 / 技术总览）
+# 项目地图
 
-## 1. 项目一句话
+## 一句话
 
-`cupid-match` 是一个面向长期关系与真实相亲流程的婚恋平台前台原型，强调“筛选 -> 判断 -> 线下接触 -> 关系推进”，而不是泛社交或高频即时互动。
+`cupid-match` 是一个面向长期关系与真实相亲流程的前端原型，重点不是高频聊天，而是“筛选 -> 判断 -> 线下接触 -> 关系推进”。
+
+## 产品主路径
+
+- 本人视角：浏览资料、筛选候选人、查看详情、参与活动。
+- 家庭视角：从家庭立场筛选和判断，推动后续接触。
+- 活动视角：用线下活动把线上资料浏览转成真实接触。
+- 账户中心：维护资料、认证、消息、活动、会员与安全设置。
 
----
+## 当前页面范围
 
-## 2. 项目要解决什么问题
+- 公共页：`/pages/index`、`/pages/public/about`、`/pages/public/contact`、`/pages/public/membership`
+- 认证页：`/pages/auth/login`、`/pages/auth/register`
+- 资料页：`/pages/profiles/self/*`、`/pages/profiles/family/*`
+- 活动页：`/pages/events/*`
+- 账户页：`/pages/account/*`
+- 兜底页：`/pages/not-found`
 
-这个项目不是在做一个普通的“在线聊天配对”产品，而是在解决婚恋流程里几个更现实的问题：
+## 当前技术链路
 
-- 线上资料和聊天很难代表真实匹配度
-- 传统相亲里家庭往往是前期筛选、判断与推进主力，但大多数产品没有支持这条路径
-- 现有婚恋产品往往停留在浏览和沟通，缺少明确的关系推进机制
+当前前端已经收敛成单一链路：
 
-因此，这个项目把“家庭主导推进路径”和“线下活动路径”都纳入了产品主结构。
+```txt
+page -> hook -> api -> mock-server
+```
+
+说明：
+
+- 页面负责布局、交互绑定和展示。
+- `src/hooks/*` 负责异步状态、分页筛选、少量页面数据组装。
+- `src/api/*` 负责 DTO、请求方法和稳定 HTTP 边界。
+- `mock-server/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页。
 
----
+## 当前目录事实
 
-## 3. 产品定位
+当前已经存在并在运行中的目录：
 
-### 核心定位
+- `src/api`
+- `src/hooks`
+- `src/pages`
+- `src/components`
+- `src/stores`
+- `src/utils`
+- `mock-server`
 
-- 目标是长期关系，不是泛社交
-- 追求真实匹配，不追求高频即时互动
-- 让线上筛选自然过渡到线下接触
+已经退出运行链路的目录或层：
 
-### 目标区域
+- `src/composables`
+- `src/api/modules`
+- `src/mock`
+- `src/mappers`
+- `src/types/vm`
+- `api client / contract / provider` 额外分层
 
-- 当前设计起点是巴黎和欧洲
-- 结构上保留向更广泛用户群扩展的能力
+## API 结构
 
-### 核心角色
+当前每个域只保留两类文件：
 
-- 本人用户：自己浏览资料、做判断、参加活动、推进关系
-- 家庭用户：由父母或家庭成员主导前期筛选、判断与推进，决定是否推动子女接触
+```txt
+src/api/
+  account/
+    account.ts
+    account.types.ts
+  auth/
+    auth.ts
+    auth.types.ts
+  events/
+    events.ts
+    events.types.ts
+  profiles/
+    profiles.ts
+    profiles.types.ts
+  shared/
+    http.ts
+    config.ts
+```
 
----
+约定：
 
-## 4. 产品主结构
+- `*.types.ts` 放 DTO、query、payload、response 类型。
+- `*.ts` 放域 API 方法。
+- `src/api/shared/http.ts` 负责统一请求、错误处理和日志。
 
-整个产品围绕三条主路径展开。
+## Mock Server 事实
 
-### 4.1 个人路径
+当前 mock 层不是内存 mock，也不是纯静态 JSON 直出，而是：
 
-适用于本人主动寻找对象的使用场景，核心动作包括：
+- `json-server` 作为底层数据访问与中间件能力
+- `mock-server/server.js` 负责自定义 `/api/...` 路由
+- `mock-server/db.json` 作为事实数据源
+- `mock-server/config.js` 负责 host、port、前缀与日志开关
 
-- 浏览资料
-- 筛选候选人
-- 收藏与判断
-- 参加活动
-- 后续沟通与关系推进
+当前前端只通过 HTTP 访问：
 
-### 4.2 家庭路径
-
-适用于传统相亲里由家庭主导推进的场景，核心动作包括：
-
-- 从家庭视角浏览资料
-- 评估家庭背景与条件匹配，并主导推进节奏
-- 判断并推动双方进一步接触
-
-这条路径的特点是：家庭先判断并推动，再进入双方接触。
-
-### 4.3 活动路径
-
-活动是项目里非常关键的桥梁层，用来把线上筛选引导到真实接触。核心动作包括：
-
-- 浏览活动
-- 进入活动详情
-- 报名与参与
-- 活动后的关系延续
-
----
-
-## 5. 当前页面地图
-
-### 公共品牌页
-
-- `/pages/index`：首页，承接品牌说明、核心能力、发现入口、活动入口、会员转化
-- `/pages/public/about`：关于我们
-- `/pages/public/contact`：联系我们
-- `/pages/public/membership`：会员体系
-
-### 认证页
-
-- `/pages/auth/login`：登录
-- `/pages/auth/register`：注册
-
-### 发现页
-
-- `/pages/profiles/self/index`：本人视角资料列表
-- `/pages/profiles/self/detail`：本人视角资料详情
-- `/pages/profiles/family/index`：家庭视角资料列表
-- `/pages/profiles/family/detail`：家庭视角资料详情
-
-### 活动页
-
-- `/pages/events/index`：活动列表
-- `/pages/events/detail`：活动详情
-
-### 账户页
-
-- `/pages/account/profile`：我的资料 / 账户主入口
-- `/pages/account/verification`：认证中心
-- `/pages/account/connections`：我的缘分
-- `/pages/account/messages`：消息
-- `/pages/account/safety`：隐私与安全
-- `/pages/account/membership`：会员与服务
-- `/pages/account/activity`：我的活动
-
-### 辅助页
-
-- `/pages/not-found`：404
-
----
-
-## 6. 典型用户流
-
-### 6.1 访客了解平台
-
-首页 -> 关于 / 会员 / 联系 / 活动 -> 注册
-
-### 6.2 本人主动筛选
-
-首页或导航 -> 本人资料列表 -> 本人资料详情 -> 注册 / 活动 / 后续账户流程
-
-### 6.3 家庭主导推进
-
-首页或导航 -> 家庭资料列表 -> 家庭资料详情 -> 在授权边界内主导前期判断并推动后续接触
-
-### 6.4 通过活动推进关系
-
-首页或导航 -> 活动列表 -> 活动详情 -> 注册 / 后续报名动作
-
-### 6.5 账户维护
-
-账户主页 -> 认证 / 缘分 / 消息 / 安全 / 会员 / 活动
-
----
-
-## 7. 当前实现状态
-
-### 已完成
-
-- 多语言前台页面
-- 品牌与介绍体系
-- 本人 / 家庭双视角资料浏览
-- 活动展示结构
-- 登录与注册基础流程
-- 账户模块基础结构
-
-### 未完成
-
-- 家庭之间的交互与决策机制
-- 活动报名闭环
-- 消息与撮合系统
-- 权限控制与审核机制
-- 后端接口与真实数据接入
-
-当前阶段更接近“结构验证完成的前台原型”，还不是完整业务系统。
-
----
-
-## 8. 技术架构地图
-
-### 技术栈
-
-- `uni-app`
-- `Vue 3`
-- `TypeScript`
-- `Pinia`
-- `vue-i18n`
-- `Tailwind CSS`
-- `weapp-tailwindcss`
-- `Vite`
-
-### 当前数据方式
-
-项目目前没有真实后端，采用：
-
-`page -> composable -> api module -> mock`
-
-这意味着页面虽然按真实接口方式开发，但实际数据来源还是 mock。当前 `api/modules/*` 为同步适配层，直接从 `src/mock` 读取本地数据，不再使用 `mockRequest()` 或 `ApiResult<T>` 包装。
-
----
-
-## 9. 代码分层规则
-
-### 页面层 `src/pages`
-
-- 负责页面组合、事件绑定、表单状态、导航
-- 不直接读取 `src/mock`
-- 不直接写复杂业务聚合逻辑
-
-### 业务层 `src/composables`
-
-- 承接页面和 API 之间的业务逻辑
-- 管理 `loading`、`error`、`refresh`
-- 处理筛选、分页和数据行为
-
-### 接口层 `src/api/modules`
-
-- 定义接口形状
-- 当前负责 mock 适配
-- 当前为同步返回
-- 未来作为真实后端替换点
-
-### 数据层 `src/mock`
-
-- 只作为临时数据源
-- 除 `src/api/modules/*` 外，不应被其他层直接引用
-- 当前按 `data / gateways / types / shared` 组织
-
-### 展示层 `src/components`
-
-- 只放 `.vue` 展示组件
-- 不直接承载接口请求逻辑
-- 不直接读取 mock
-
-### 类型层 `src/types`
-
-- 放跨组件、跨页面、跨 composable 复用的类型
-
-### 全局状态 `src/stores`
-
-- 存放跨页面共享状态，如登录状态、语言、主题
-- 一般不直接承载接口请求
-
----
-
-## 10. 关键开发约束
-
-### 页面和数据约束
-
-- 页面不要直接 import `@/mock/...`
-- 新功能优先走 `types -> api -> composable -> page -> component`
-- `api` / `mock` 不依赖 `src/i18n`
-- `i18n` 只负责界面文案和当前语言状态
-
-### 组件约束
-
-- `src/components` 下只放 Vue SFC
-- 共享类型从 `src/types` 引入
-
-### 路由约束
-
-- 新增页面时先更新 `src/pages.json`
-- 再更新导航或演示跳转函数
-- 最后同步更新 `docs/page-relationships.md`
-
-### 设计 token 约束
-
-业务代码只允许使用：
-
-- `semantic-*`
-- `component-*`
-- `bg-gradient-*`
-- `shadow-*`
-
-禁止直接写颜色值、`text-*`、`palette-*` 或 token opacity 后缀。
-
-### 提交规范
-
-提交格式统一为：
-
-`type(scope): description`
-
-例如：
-
-- `feat(home): 添加首页模块`
-- `fix(vite): 禁用 weapp-tailwindcss 在 H5`
-
----
-
-## 11. 这个项目当前最重要的价值
-
-从产品角度看，这个项目最特别的地方不在“页面多”，而在于它试图把婚恋流程结构化：
-
-- 不是只做资料展示
-- 不是只做消息沟通
-- 而是在设计一条更接近现实相亲过程的推进链路
-
-这条链路的核心支点有两个：
-
-- 家庭路径
-- 线下活动路径
-
-如果后续继续演进，这两个部分会决定项目是否真正形成差异化。
-
----
-
-## 12. 建议的后续优先级
-
-如果按当前文档继续往前推进，建议优先顺序是：
-
-1. 先补齐活动报名闭环，让“线上到线下”真正成立
-2. 再明确家庭交互与决策机制，让家庭路径从浏览走向可执行推进
-3. 然后补消息 / 撮合 / 权限审核
-4. 最后再逐步替换 mock，接入真实后端
-
-这样可以先把产品核心机制跑通，再进入工程化落地阶段。
+- `GET /api/health`
+- `GET /api/profiles/self`
+- `GET /api/profiles/family`
+- `GET /api/profiles/:id`
+- `GET /api/events`
+- `GET /api/events/:id`
+- `GET /api/account/overview`
+- `POST /api/auth/login`
+- `POST /api/auth/register`
+
+## 当前完成度
+
+前端主链路重构已经完成：
+
+- 旧 `composables / api modules / mock` 链路已退出
+- 页面已切到 `hooks`
+- API 已收敛到 `src/api/*/{domain}.ts`
+- `mappers` 和 `types/vm` 已移除
+- mock 运行时已统一走 `mock-server`
+
+## 当前最小回归结果
+
+最近一次最小回归已验证：
+
+- `npm.cmd run type-check` 通过
+- `GET /api/health` 正常
+- `GET /api/profiles/self` 正常
+- `GET /api/profiles/family` 正常
+- `GET /api/profiles/:id` 正常
+- `GET /api/events` 正常
+- `GET /api/events/:id` 正常
+- `GET /api/account/overview` 正常
+- `POST /api/auth/login` 使用 mock 账号可正常返回 session
+
+## 后续优先级
+
+下一步不再是继续拆架构，而是：
+
+1. 做页面级回归。
+2. 整理并提交当前工作区。
+3. 保持文档与当前结构同步。
+4. 逐步用真实后端替换 `mock-server`。
