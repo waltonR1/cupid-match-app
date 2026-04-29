@@ -163,9 +163,15 @@ src/hooks/
 
 ```txt
 mock-server/
-  config.js
   db.json
-  server.js
+  src/
+    server.ts
+    config.ts
+    db.ts
+    routes/
+    services/
+    types/
+    utils/
 ```
 
 职责：
@@ -190,7 +196,7 @@ mock-server/
 2. 再补 `src/api/<domain>/<domain>.ts`
 3. 然后在 `src/hooks/<domain>` 接入请求与页面状态
 4. 最后由页面消费 hook
-5. 若涉及 mock 数据，同步更新 `mock-server/server.js` 和 `mock-server/db.json`
+5. 若涉及 mock 数据，同步更新 `mock-server/src/*` 和 `mock-server/db.json`
 
 ## 当前校验基线
 

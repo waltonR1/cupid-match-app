@@ -157,7 +157,7 @@ feat(i18n): 增加默认语言兜底
 
 ```
 feat(api): 新增订单接口
-chore(mock): 更新 json-server 路由
+chore(mock): 更新 Fastify + LowDB mock-server 路由
 ```
 
 ### 7.6 页面开发

@@ -81,10 +81,20 @@ npm run dev:h5
 
 ```bash
 npm run type-check
+npm run mock:dev
+npm run mock:build
 npm run check:i18n
 npm run generate:token-docs
 npm run build:h5
 ```
+
+本地 mock 接口服务使用根目录脚本启动：
+
+```bash
+npm run mock:dev
+```
+
+默认地址为 `http://127.0.0.1:52173/api`，健康检查入口为 `GET /api/ping`。
 
 1. [docs/project-map.md](./docs/project-map.md)：产品 / 技术总览
 2. [docs/project-introduction.md](./docs/project-introduction.md)：项目介绍

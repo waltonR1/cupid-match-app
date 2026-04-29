@@ -33,7 +33,7 @@ page -> hook -> api -> mock-server
 - 页面负责布局、交互绑定和展示。
 - `src/hooks/*` 负责异步状态、分页筛选、少量页面数据组装。
 - `src/api/*` 负责 DTO、请求方法和稳定 HTTP 边界。
-- `mock-server/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页。
+- `mock-server/src/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页。
 
 ## 当前目录事实
 
@@ -89,14 +89,14 @@ src/api/
 
 当前 mock 层不是内存 mock，也不是纯静态 JSON 直出，而是：
 
-- `json-server` 作为底层数据访问与中间件能力
-- `mock-server/server.js` 负责自定义 `/api/...` 路由
+- `Fastify + LowDB mock-server` 作为底层 HTTP 服务与数据访问层
+- `mock-server/src/server.ts` 负责自定义 `/api/...` 路由
 - `mock-server/db.json` 作为事实数据源
-- `mock-server/config.js` 负责 host、port、前缀与日志开关
+- `mock-server/src/config.ts` 负责 host、port、前缀与日志开关
 
 当前前端只通过 HTTP 访问：
 
-- `GET /api/health`
+- `GET /api/ping`
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
 - `GET /api/profiles/:id`
@@ -121,7 +121,7 @@ src/api/
 最近一次最小回归已验证：
 
 - `npm.cmd run type-check` 通过
-- `GET /api/health` 正常
+- `GET /api/ping` 正常
 - `GET /api/profiles/self` 正常
 - `GET /api/profiles/family` 正常
 - `GET /api/profiles/:id` 正常
