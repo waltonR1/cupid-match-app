@@ -2,8 +2,8 @@ import { computed, ref, watch, type Ref } from 'vue'
 import {
   getSelfProfileDirectory,
   type FormatLocale,
-  type ProfileDTO,
-  type SelfProfileDirectoryFacetsDTO,
+  type SelfProfileCard,
+  type SelfProfileDirectoryFacets,
   type SelfProfileDirectoryQuery,
   type SelfProfileDirectoryResponse,
   type SelfProfileSortKey,
@@ -35,7 +35,7 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-export function useSelfProfileDirectoryPage(t: Translate, locale: Ref<FormatLocale>) {
+export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
   const filters = ref<SelfDirectoryFilters>({ ...DEFAULT_FILTERS })
   const sortKey = ref<SelfProfileSortKey>(DEFAULT_SORT)
   const page = ref(1)
@@ -44,7 +44,7 @@ export function useSelfProfileDirectoryPage(t: Translate, locale: Ref<FormatLoca
   const response = ref<SelfProfileDirectoryResponse | null>(null)
   let requestToken = 0
 
-  watch([filters, sortKey, page], () => {
+  watch([filters, sortKey, page, locale], () => {
     void load()
   }, { deep: true, immediate: true })
 
@@ -171,7 +171,7 @@ type ProfileDirectoryFilterItem = {
   group: 'primary' | 'secondary'
 }
 
-function toSelfProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Translate) {
+function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Translate) {
   return {
     avatarUrl: profile.avatarUrl,
     avatarFallback: profile.displayName,
@@ -191,7 +191,7 @@ function toSelfProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Transla
 }
 
 function buildSelfDirectoryFilterItems(
-  facets: SelfProfileDirectoryFacetsDTO | null,
+  facets: SelfProfileDirectoryFacets | null,
   filters: SelfDirectoryFilters,
   locale: FormatLocale,
   t: Translate,
@@ -229,7 +229,7 @@ function buildSelfDirectoryFilterItems(
     {
       key: 'city',
       label: t('filters.city'),
-      options: [allOption(t), ...cities.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...cities.map(item => ({ label: item.label, value: item.value }))],
       value: filters.city,
       widthClass: regularWidthClass,
       group: 'primary',
@@ -260,7 +260,7 @@ function buildSelfDirectoryFilterItems(
     {
       key: 'intentCode',
       label: t('filters.intent'),
-      options: [allOption(t), ...intents.map(item => ({ label: localizeProfileText(locale, item.label), value: item.code }))],
+      options: [allOption(t), ...intents.map(item => ({ label: item.label, value: item.code }))],
       value: filters.intentCode,
       widthClass: wideWidthClass,
       group: 'primary',
@@ -268,7 +268,7 @@ function buildSelfDirectoryFilterItems(
     {
       key: 'industry',
       label: t('filters.industry'),
-      options: [allOption(t), ...industries.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...industries.map(item => ({ label: item.label, value: item.value }))],
       value: filters.industry,
       widthClass: regularWidthClass,
       group: 'secondary',
@@ -276,7 +276,7 @@ function buildSelfDirectoryFilterItems(
     {
       key: 'occupation',
       label: t('fields.job'),
-      options: [allOption(t), ...occupations.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...occupations.map(item => ({ label: item.label, value: item.value }))],
       value: filters.occupation,
       widthClass: wideWidthClass,
       group: 'secondary',
@@ -343,7 +343,7 @@ function allOption(t: Translate): DirectoryOption {
   return { label: t('filters.all'), value: '' }
 }
 
-function intentBadgeKey(intentCode: ProfileDTO['intentCode']) {
+function intentBadgeKey(intentCode: SelfProfileCard['intentCode']) {
   switch (intentCode) {
     case 'marriage':
       return 'card.goalMarriage'
@@ -357,7 +357,7 @@ function intentBadgeKey(intentCode: ProfileDTO['intentCode']) {
   }
 }
 
-function statusFooterKey(status: ProfileDTO['status']) {
+function statusFooterKey(status: SelfProfileCard['status']) {
   switch (status) {
     case 'review':
       return 'card.labelReview'

@@ -1,25 +1,33 @@
 import {isApiStatusError, requestJson} from '@/api/shared/http'
 import type {
+    FamilyProfileCard,
+    FamilyProfileDetail,
+    FamilyProfileDirectoryFacets,
     FamilyProfileDirectoryQuery,
     FamilyProfileDirectoryResponse,
-    FamilyProfileDirectoryFacetsDTO,
-    FormatLocale,
-    ProfileDTO,
     FamilyProfileSortKey,
-    SelfProfileDirectoryFacetsDTO,
+    FeaturedSelfProfilesResponse,
+    FormatLocale,
+    SelfProfileCard,
+    SelfProfileDetail,
+    SelfProfileDirectoryFacets,
     SelfProfileDirectoryQuery,
     SelfProfileDirectoryResponse,
     SelfProfileSortKey,
 } from './profiles.types'
 
 export type {
+    FamilyProfileCard,
+    FamilyProfileDetail,
+    FamilyProfileDirectoryFacets,
     FamilyProfileDirectoryQuery,
     FamilyProfileDirectoryResponse,
-    FamilyProfileDirectoryFacetsDTO,
-    FormatLocale,
-    ProfileDTO,
     FamilyProfileSortKey,
-    SelfProfileDirectoryFacetsDTO,
+    FeaturedSelfProfilesResponse,
+    FormatLocale,
+    SelfProfileCard,
+    SelfProfileDetail,
+    SelfProfileDirectoryFacets,
     SelfProfileDirectoryQuery,
     SelfProfileDirectoryResponse,
     SelfProfileSortKey,
@@ -29,17 +37,26 @@ export function getSelfProfileDirectory(query: SelfProfileDirectoryQuery): Promi
     return requestJson<SelfProfileDirectoryResponse>('/profiles/self', {query})
 }
 
-export function getFeaturedSelfProfiles(pageSize = 3): Promise<SelfProfileDirectoryResponse> {
-    return requestJson<SelfProfileDirectoryResponse>('/profiles/featured', {query: {pageSize}})
+export function getFeaturedSelfProfiles(pageSize = 3): Promise<FeaturedSelfProfilesResponse> {
+    return requestJson<FeaturedSelfProfilesResponse>('/profiles/featured', {query: {pageSize}})
 }
 
 export function getFamilyProfileDirectory(query: FamilyProfileDirectoryQuery): Promise<FamilyProfileDirectoryResponse> {
     return requestJson<FamilyProfileDirectoryResponse>('/profiles/family', {query})
 }
 
-export async function getProfileDetail(id: string): Promise<ProfileDTO | null> {
+export async function getSelfProfileDetail(id: string): Promise<SelfProfileDetail | null> {
     try {
-        return await requestJson<ProfileDTO>(`/profiles/${id}`)
+        return await requestJson<SelfProfileDetail>(`/profiles/self/${id}`)
+    } catch (error) {
+        if (isApiStatusError(error, 404)) return null
+        throw error
+    }
+}
+
+export async function getFamilyProfileDetail(id: string): Promise<FamilyProfileDetail | null> {
+    try {
+        return await requestJson<FamilyProfileDetail>(`/profiles/family/${id}`)
     } catch (error) {
         if (isApiStatusError(error, 404)) return null
         throw error

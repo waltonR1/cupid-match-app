@@ -1,19 +1,21 @@
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import {
   getAccountOverview,
   type AccountFavoriteRecordDTO,
   type AccountOverviewDTO,
   type AccountPrivacySettingDTO,
-  type AccountProfileDTO,
+  type AccountProfileSummary,
   type AccountThreadRecordDTO,
   type AccountUserEventRecordDTO,
 } from '@/api/account/account'
+import { useLocaleStore } from '@/stores/modules/locale'
 
 export function useAccountOverview() {
   const initialData = createEmptyAccountOverview()
+  const localeStore = useLocaleStore()
 
   const account = reactive({ ...initialData.account })
-  const profile = reactive((initialData.profile ?? {}) as AccountProfileDTO)
+  const profile = reactive(createEmptyAccountProfileSummary())
   const userEvents = reactive<AccountUserEventRecordDTO[]>([...initialData.userEvents])
   const favorites = reactive<AccountFavoriteRecordDTO[]>([...initialData.favorites])
   const threads = reactive<AccountThreadRecordDTO[]>([...initialData.threads])
@@ -23,12 +25,12 @@ export function useAccountOverview() {
 
   const latestEvent = computed(() => userEvents[0] ?? null)
   const unreadCount = computed(() => threads.reduce((sum, item) => sum + item.thread.unread, 0))
-  const familyAssistSetting = computed(() => privacySettings.find(item => item.id === 'privacy-family'))
-  const advisorContactSetting = computed(() => privacySettings.find(item => item.id === 'privacy-contact'))
-  const visibleFieldsSetting = computed(() => privacySettings.find(item => item.id === 'privacy-visibility'))
-  const familyVisibleFavorites = computed(() => favorites.filter(item => item.profile.familyVisible))
-  const privateFavorites = computed(() => favorites.filter(item => !item.profile.familyVisible))
-  const familyVisibleThreads = computed(() => threads.filter(item => item.profile.familyVisible))
+  const familyAssistSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-family'))
+  const advisorContactSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-contact'))
+  const visibleFieldsSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-visibility'))
+  const familyVisibleFavorites = computed(() => favorites.filter((item) => item.profile.familyVisible))
+  const privateFavorites = computed(() => favorites.filter((item) => !item.profile.familyVisible))
+  const familyVisibleThreads = computed(() => threads.filter((item) => item.profile.familyVisible))
   const verificationCount = computed(() => {
     let count = 1
 
@@ -39,7 +41,9 @@ export function useAccountOverview() {
     return count
   })
 
-  void refresh()
+  watch(() => localeStore.locale, () => {
+    void refresh()
+  }, { immediate: true })
 
   async function refresh() {
     loading.value = true
@@ -49,7 +53,7 @@ export function useAccountOverview() {
       const data = await getAccountOverview()
 
       Object.assign(account, data.account)
-      Object.assign(profile, data.profile ?? {})
+      Object.assign(profile, createEmptyAccountProfileSummary(), data.profile ?? {})
       replaceArray(userEvents, data.userEvents)
       replaceArray(favorites, data.favorites)
       replaceArray(threads, data.threads)
@@ -97,12 +101,12 @@ function createEmptyAccountOverview(): AccountOverviewDTO {
       nickName: '',
       avatarUrl: '',
       displayName: '',
-      city: localized('', '', ''),
+      city: '',
       joinedAt: '',
       profileId: '',
       completion: 0,
       membership: 'free',
-      bio: localized('', '', ''),
+      bio: '',
     },
     profile: null,
     userEvents: [],
@@ -112,6 +116,18 @@ function createEmptyAccountOverview(): AccountOverviewDTO {
   }
 }
 
-function localized(zh: string, fr: string, en: string) {
-  return { zh, fr, en }
+function createEmptyAccountProfileSummary(): AccountProfileSummary {
+  return {
+    id: '',
+    displayName: '',
+    city: '',
+    education: '',
+    occupation: '',
+    maritalStatus: 'single',
+    languages: [],
+    familyVisible: false,
+    summary: '',
+    highlights: [],
+    tags: [],
+  }
 }

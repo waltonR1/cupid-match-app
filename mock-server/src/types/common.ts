@@ -4,6 +4,8 @@ export interface LocalizedText {
   en: string
 }
 
+export type ApiLocale = 'zh' | 'fr' | 'en'
+
 export interface DisplayNameCapable {
   id?: string
   displayName?: string

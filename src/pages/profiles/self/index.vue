@@ -62,7 +62,7 @@ import ProfileResultsGrid from '@/components/profiles/directory/ProfileResultsGr
 import ProfileDirectoryIntro from '@/components/profiles/directory/ProfileDirectoryIntro.vue'
 import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileDirectoryPagination.vue'
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
-import { useSelfProfileDirectoryPage } from '@/hooks/profiles'
+import { useSelfProfileDirectory } from '@/hooks/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { SelfDirectoryFilters } from '@/types/profiles/directory'
 import { openSelfDetail } from '@/utils/navigation'
@@ -75,7 +75,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
-} = useSelfProfileDirectoryPage(t, locale)
+} = useSelfProfileDirectory(t, locale)
 
 const heroTags = computed(() => [
   t('hero.tags.first'),

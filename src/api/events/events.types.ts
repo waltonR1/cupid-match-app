@@ -5,28 +5,22 @@ export type { FormatLocale }
 export type EventStatusDTO = 'open' | 'waitlist' | 'closed'
 export type RelatedProfileStatusDTO = 'open' | 'review' | 'vip'
 
-export interface LocalizedTextDTO {
-  zh: string
-  fr: string
-  en: string
-}
-
 export interface EventAgendaItemDTO {
   time: string
-  title: LocalizedTextDTO
-  desc: LocalizedTextDTO
+  title: string
+  desc: string
 }
 
 export interface EventDTO {
   id: string
   date: string
-  city: LocalizedTextDTO
-  venue: LocalizedTextDTO
+  city: string
+  venue: string
   status: EventStatusDTO
-  title: LocalizedTextDTO
-  format: LocalizedTextDTO
-  audience: LocalizedTextDTO
-  summary: LocalizedTextDTO
+  title: string
+  format: string
+  audience: string
+  summary: string
   seats: number
   registered: number
   agenda: EventAgendaItemDTO[]
@@ -36,9 +30,9 @@ export interface EventRelatedProfileDTO {
   id: string
   displayName: string
   age: number
-  city: LocalizedTextDTO
-  intent: LocalizedTextDTO
-  summary: LocalizedTextDTO
+  city: string
+  intent: string
+  summary: string
   status: RelatedProfileStatusDTO
   isVerified: boolean
 }

@@ -13,7 +13,9 @@ const PROFILE_LANGUAGE_LABELS: Record<string, LocalizedTextValue> = {
 }
 
 /** 多语言文本本地化 */
-export function localizeProfileText(locale: FormatLocale, text: LocalizedTextValue) {
+export function localizeProfileText(locale: FormatLocale, text: LocalizedTextValue | string | null | undefined) {
+    if (typeof text === 'string') return text
+    if (!text) return ''
     return text[locale] || text.en || ''
 }
 
@@ -32,7 +34,7 @@ export function formatProfileHeight(height: number) {
 /** 语言列表格式化 */
 export function formatProfileLanguages(locale: FormatLocale, languages: string[]) {
     return languages
-        .map(language => getProfileLanguageLabel(locale, language))
+        .map((language) => getProfileLanguageLabel(locale, language))
         .join(' / ')
 }
 

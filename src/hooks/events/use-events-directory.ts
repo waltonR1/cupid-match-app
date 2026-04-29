@@ -1,16 +1,18 @@
-import { computed, ref } from 'vue'
-import { listEvents, type EventDTO, type FormatLocale, type LocalizedTextDTO } from '@/api/events/events'
+import { computed, ref, watch } from 'vue'
+import { listEvents, type EventDTO, type FormatLocale } from '@/api/events/events'
 import { formatEventDate } from '@/utils/locale-format'
 
 type Translate = (key: string) => string
 
-export function useEventsIndexPage(t: Translate, locale: { value: FormatLocale }) {
+export function useEventsDirectory(t: Translate, locale: { value: FormatLocale }) {
   const loading = ref(false)
   const error = ref<unknown>(null)
   const items = ref<EventDTO[]>([])
   let requestToken = 0
 
-  void load()
+  watch(() => locale.value, () => {
+    void load()
+  }, { immediate: true })
 
   async function load() {
     const currentToken = ++requestToken
@@ -49,15 +51,15 @@ export function useEventsIndexPage(t: Translate, locale: { value: FormatLocale }
       format: fieldLabels.format,
       seats: fieldLabels.seats,
     }
-    const scheduleEventCards = sortedEvents.map(item => toEventOverviewItem(item, locale.value, t))
+    const scheduleEventCards = sortedEvents.map((item) => toEventOverviewItem(item, locale.value, t))
     const featuredEventCards = sortedEvents
-      .filter(item => item.status !== 'closed')
+      .filter((item) => item.status !== 'closed')
       .slice(0, 3)
-      .map(item => toEventOverviewItem(item, locale.value, t))
+      .map((item) => toEventOverviewItem(item, locale.value, t))
 
-    const openCount = sortedEvents.filter(item => item.status === 'open').length
-    const waitlistCount = sortedEvents.filter(item => item.status === 'waitlist').length
-    const cityCount = new Set(sortedEvents.map(item => localizeText(locale.value, item.city))).size
+    const openCount = sortedEvents.filter((item) => item.status === 'open').length
+    const waitlistCount = sortedEvents.filter((item) => item.status === 'waitlist').length
+    const cityCount = new Set(sortedEvents.map((item) => item.city)).size
 
     return {
       fieldLabels,
@@ -85,19 +87,15 @@ export function useEventsIndexPage(t: Translate, locale: { value: FormatLocale }
 function toEventOverviewItem(event: EventDTO, locale: FormatLocale, t: Translate) {
   return {
     id: event.id,
-    title: localizeText(locale, event.title),
-    summary: localizeText(locale, event.summary),
+    title: event.title,
+    summary: event.summary,
     date: formatEventDate(locale, event.date),
-    city: localizeText(locale, event.city),
-    venue: localizeText(locale, event.venue),
-    format: localizeText(locale, event.format),
-    audience: localizeText(locale, event.audience),
+    city: event.city,
+    venue: event.venue,
+    format: event.format,
+    audience: event.audience,
     seats: `${event.registered} / ${event.seats}`,
     status: event.status,
     statusLabel: t(`status.${event.status}`),
   }
-}
-
-function localizeText(locale: FormatLocale, text: LocalizedTextDTO) {
-  return text[locale] || text.en || ''
 }

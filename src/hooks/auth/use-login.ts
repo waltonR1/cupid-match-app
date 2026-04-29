@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { login as loginApi, type LoginPayload } from '@/api/auth/auth'
 import { useAuthStore } from '@/stores/modules/auth'
 
-export function useLoginAction() {
+export function useLogin() {
   const auth = useAuthStore()
   const loading = ref(false)
   const error = ref<unknown>(null)

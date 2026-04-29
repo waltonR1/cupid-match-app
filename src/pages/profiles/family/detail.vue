@@ -133,7 +133,7 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import ProfileDetailFactGrid from '@/components/profiles/detail/ProfileDetailFactGrid.vue'
 import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetailFactSection.vue'
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
-import { useFamilyProfileDetailPage } from '@/hooks/profiles'
+import { useFamilyProfileDetail } from '@/hooks/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
 const { t, locale } = usePageI18n('familyDetail')
@@ -155,7 +155,7 @@ const {
   maritalPlanText,
   highlightTexts,
   tagTexts,
-} = useFamilyProfileDetailPage(profileId, t, locale)
+} = useFamilyProfileDetail(profileId, t, locale)
 
 function handleBack() {
   if (getCurrentPages().length > 1) {

@@ -62,7 +62,7 @@ import ProfileResultsGrid from '@/components/profiles/directory/ProfileResultsGr
 import ProfileDirectoryIntro from '@/components/profiles/directory/ProfileDirectoryIntro.vue'
 import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileDirectoryPagination.vue'
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
-import { useFamilyProfileDirectoryPage } from '@/hooks/profiles'
+import { useFamilyProfileDirectory } from '@/hooks/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import type { FamilyDirectoryFilters } from '@/types/profiles/directory'
 import { openFamilyProfileDetail } from '@/utils/navigation'
@@ -75,7 +75,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
-} = useFamilyProfileDirectoryPage(t, locale)
+} = useFamilyProfileDirectory(t, locale)
 
 const heroTags = computed(() => [
   t('hero.tags.first'),

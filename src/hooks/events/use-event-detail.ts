@@ -6,19 +6,18 @@ import {
   type EventRelatedProfileDTO,
   type EventStatusDTO,
   type FormatLocale,
-  type LocalizedTextDTO,
 } from '@/api/events/events'
 import { formatEventDetailDate } from '@/utils/locale-format'
 
 type Translate = (key: string) => string
 
-export function useEventDetailPage(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
+export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
   const loading = ref(false)
   const error = ref<unknown>(null)
   const payload = ref<EventDetailResponseDTO | null>(null)
   let requestToken = 0
 
-  watch(eventId, () => {
+  watch([eventId, () => locale.value], () => {
     void load()
   }, { immediate: true })
 
@@ -83,18 +82,18 @@ export function useEventDetailPage(eventId: Ref<string>, t: Translate, locale: {
       detailFieldLabels,
       eventCard,
       eventAction,
-      agenda: payload.value.event.agenda.map(item => ({
+      agenda: payload.value.event.agenda.map((item) => ({
         time: item.time,
-        title: localizeText(locale.value, item.title),
-        desc: localizeText(locale.value, item.desc),
+        title: item.title,
+        desc: item.desc,
       })),
       noteItems,
-      relatedProfileItems: payload.value.relatedProfiles.map(profile => ({
+      relatedProfileItems: payload.value.relatedProfiles.map((profile) => ({
         id: profile.id,
         displayName: profile.displayName,
-        meta: [String(profile.age), localizeText(locale.value, profile.city), localizeText(locale.value, profile.intent)].join(' | '),
-        reason: buildRelatedReason(profile, payload.value!.event.city.en, t),
-        summary: localizeText(locale.value, profile.summary),
+        meta: [String(profile.age), profile.city, profile.intent].join(' | '),
+        reason: buildRelatedReason(profile, payload.value!.event.city, t),
+        summary: profile.summary,
       })),
     }
   })
@@ -110,13 +109,13 @@ export function useEventDetailPage(eventId: Ref<string>, t: Translate, locale: {
 function toEventOverviewItem(event: EventDTO, locale: FormatLocale, t: Translate) {
   return {
     id: event.id,
-    title: localizeText(locale, event.title),
-    summary: localizeText(locale, event.summary),
+    title: event.title,
+    summary: event.summary,
     date: formatEventDetailDate(locale, event.date),
-    city: localizeText(locale, event.city),
-    venue: localizeText(locale, event.venue),
-    format: localizeText(locale, event.format),
-    audience: localizeText(locale, event.audience),
+    city: event.city,
+    venue: event.venue,
+    format: event.format,
+    audience: event.audience,
     seats: `${event.registered} / ${event.seats}`,
     status: event.status,
     statusLabel: t(`status.${event.status}`),
@@ -147,13 +146,9 @@ function buildEventAction(status: EventStatusDTO | undefined, t: Translate) {
   }
 }
 
-function buildRelatedReason(profile: EventRelatedProfileDTO, cityKey: string, t: Translate) {
-  if (profile.city.en === cityKey) return t('relatedReason.sameCity')
+function buildRelatedReason(profile: EventRelatedProfileDTO, eventCity: string, t: Translate) {
+  if (profile.city === eventCity) return t('relatedReason.sameCity')
   if (profile.status === 'vip') return t('relatedReason.priority')
   if (profile.isVerified) return t('relatedReason.verified')
   return t('relatedReason.curated')
-}
-
-function localizeText(locale: FormatLocale, text: LocalizedTextDTO) {
-  return text[locale] || text.en || ''
 }

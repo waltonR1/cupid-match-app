@@ -1,5 +1,5 @@
 import {computed, ref, watch, type Ref} from 'vue'
-import {getFeaturedSelfProfiles, type FormatLocale, type ProfileDTO} from '@/api/profiles/profiles'
+import {getFeaturedSelfProfiles, type FormatLocale, type SelfProfileCard} from '@/api/profiles/profiles'
 import type {HomeProfilesItem} from '@/types/home/view'
 import {formatProfileAge, formatProfileLanguages, localizeProfileText} from '@/utils/profile-format'
 
@@ -54,7 +54,7 @@ export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
 }
 
 /** 转换为首页会员卡片数据 */
-function toSelfProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Translate) {
+function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Translate) {
     return {
         avatarUrl: profile.avatarUrl,
         avatarFallback: profile.displayName,
@@ -74,7 +74,7 @@ function toSelfProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Transla
 }
 
 /** 匹配交友目标文案 */
-function intentBadgeKey(intentCode: ProfileDTO['intentCode']) {
+function intentBadgeKey(intentCode: SelfProfileCard['intentCode']) {
     switch (intentCode) {
         case 'marriage':
             return 'card.goalMarriage'
@@ -89,7 +89,7 @@ function intentBadgeKey(intentCode: ProfileDTO['intentCode']) {
 }
 
 /** 匹配卡片底部状态文案 */
-function statusFooterKey(status: ProfileDTO['status']) {
+function statusFooterKey(status: SelfProfileCard['status']) {
     switch (status) {
         case 'review':
             return 'card.labelReview'

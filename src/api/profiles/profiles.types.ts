@@ -1,11 +1,5 @@
 export type FormatLocale = 'zh' | 'fr' | 'en'
 
-export interface LocalizedTextDTO {
-  zh: string
-  fr: string
-  en: string
-}
-
 export type GenderCode = 'male' | 'female'
 export type ProfileStatusCode = 'open' | 'review' | 'vip'
 export type MaritalStatusCode = 'single' | 'divorced' | 'widowed'
@@ -15,16 +9,52 @@ export type HabitCode = 'never' | 'social' | 'often'
 export type SelfProfileSortKey = 'recentActive' | 'priorityFirst' | 'ageAsc' | 'ageDesc'
 export type FamilyProfileSortKey = 'priorityFirst' | 'recentActive' | 'ageAsc' | 'ageDesc'
 
-export interface ProfileDTO {
+export interface SelfProfileCard {
+  id: string
+  displayName: string
+  avatarUrl: string
+  gender: GenderCode
+  age: number
+  city: string
+  status: ProfileStatusCode
+  education: string
+  occupation: string
+  intentCode: IntentCode
+  summary: string
+  languages: string[]
+  tags: string[]
+}
+
+export interface FamilyProfileCard {
+  id: string
+  displayName: string
+  avatarUrl: string
+  gender: GenderCode
+  age: number
+  city: string
+  status: ProfileStatusCode
+  education: string
+  occupation: string
+  maritalStatus: MaritalStatusCode
+  hasChildren: boolean
+  acceptLongDistance: boolean
+  maritalPlan: string
+  residencePlan: string
+  tags: string[]
+  allowFamilyContact: boolean
+  familyPriority: boolean
+}
+
+export interface SelfProfileDetail {
   id: string
   displayName: string
   avatarUrl: string
   gender: GenderCode
   age: number
   height: number
-  city: LocalizedTextDTO
-  country: LocalizedTextDTO
-  nationality: LocalizedTextDTO
+  city: string
+  country: string
+  nationality: string
   status: ProfileStatusCode
   isVerified: boolean
   lastActiveAt: string
@@ -32,54 +62,91 @@ export interface ProfileDTO {
   familyVisible: boolean
   allowFamilyContact: boolean
   familyPriority: boolean
-  degreeLevel: DegreeLevelCode
-  education: LocalizedTextDTO
-  occupation: LocalizedTextDTO
-  industry: LocalizedTextDTO
-  employer: LocalizedTextDTO
-  incomeRange: LocalizedTextDTO
+  education: string
+  occupation: string
+  industry: string
+  employer: string
+  incomeRange: string
   maritalStatus: MaritalStatusCode
   hasChildren: boolean
   wantChildren: boolean
   acceptLongDistance: boolean
-  intentCode: IntentCode
-  intent: LocalizedTextDTO
-  maritalPlan: LocalizedTextDTO
+  intent: string
+  maritalPlan: string
   languages: string[]
   smoke: HabitCode
   drink: HabitCode
-  exercise: LocalizedTextDTO
-  residencePlan: LocalizedTextDTO
-  summary: LocalizedTextDTO
-  highlights: LocalizedTextDTO[]
-  tags: LocalizedTextDTO[]
+  exercise: string
+  residencePlan: string
+  summary: string
+  highlights: string[]
+  tags: string[]
 }
 
-export interface PaginationDTO {
+export interface FamilyProfileDetail {
+  id: string
+  displayName: string
+  avatarUrl: string
+  gender: GenderCode
+  age: number
+  city: string
+  country: string
+  nationality: string
+  isVerified: boolean
+  lastActiveAt: string
+  joinedAt: string
+  familyVisible: boolean
+  allowFamilyContact: boolean
+  familyPriority: boolean
+  education: string
+  occupation: string
+  industry: string
+  incomeRange: string
+  maritalStatus: MaritalStatusCode
+  hasChildren: boolean
+  wantChildren: boolean
+  acceptLongDistance: boolean
+  intent: string
+  maritalPlan: string
+  languages: string[]
+  smoke: HabitCode
+  drink: HabitCode
+  exercise: string
+  residencePlan: string
+  summary: string
+  tags: string[]
+}
+
+export interface Pagination {
   page: number
   pageSize: number
   total: number
   totalPages: number
 }
 
-export interface IntentFacetDTO {
-  code: IntentCode
-  label: LocalizedTextDTO
+export interface DirectoryFacetOption {
+  value: string
+  label: string
 }
 
-export interface SelfProfileDirectoryFacetsDTO {
-  cities: LocalizedTextDTO[]
-  intents: IntentFacetDTO[]
-  industries: LocalizedTextDTO[]
-  occupations: LocalizedTextDTO[]
+export interface IntentFacet {
+  code: IntentCode
+  label: string
+}
+
+export interface SelfProfileDirectoryFacets {
+  cities: DirectoryFacetOption[]
+  intents: IntentFacet[]
+  industries: DirectoryFacetOption[]
+  occupations: DirectoryFacetOption[]
   languages: string[]
 }
 
-export interface FamilyProfileDirectoryFacetsDTO {
-  cities: LocalizedTextDTO[]
-  intents: IntentFacetDTO[]
-  industries: LocalizedTextDTO[]
-  occupations: LocalizedTextDTO[]
+export interface FamilyProfileDirectoryFacets {
+  cities: DirectoryFacetOption[]
+  intents: IntentFacet[]
+  industries: DirectoryFacetOption[]
+  occupations: DirectoryFacetOption[]
 }
 
 export interface SelfProfileDirectoryQuery {
@@ -118,14 +185,18 @@ export interface FamilyProfileDirectoryQuery {
   acceptLongDistance?: string
 }
 
+export interface FeaturedSelfProfilesResponse {
+  items: SelfProfileCard[]
+}
+
 export interface SelfProfileDirectoryResponse {
-  items: ProfileDTO[]
-  pagination: PaginationDTO
-  facets: SelfProfileDirectoryFacetsDTO
+  items: SelfProfileCard[]
+  pagination: Pagination
+  facets: SelfProfileDirectoryFacets
 }
 
 export interface FamilyProfileDirectoryResponse {
-  items: ProfileDTO[]
-  pagination: PaginationDTO
-  facets: FamilyProfileDirectoryFacetsDTO
+  items: FamilyProfileCard[]
+  pagination: Pagination
+  facets: FamilyProfileDirectoryFacets
 }

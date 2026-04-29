@@ -57,12 +57,12 @@ import EventDetailHero from '@/components/events/EventDetailHero.vue'
 import EventDetailNotes from '@/components/events/EventDetailNotes.vue'
 import EventDetailRelatedProfiles from '@/components/events/EventDetailRelatedProfiles.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { useEventDetailPage } from '@/hooks/events'
+import { useEventDetail } from '@/hooks/events'
 import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
-const { pageData } = useEventDetailPage(eventId, t, locale)
+const { pageData } = useEventDetail(eventId, t, locale)
 
 onLoad((query) => {
   if (query && typeof query.id === 'string') {

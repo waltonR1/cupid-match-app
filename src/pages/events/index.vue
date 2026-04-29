@@ -36,9 +36,9 @@ import EventsFeaturedGrid from '@/components/events/EventsFeaturedGrid.vue'
 import EventsHero from '@/components/events/EventsHero.vue'
 import EventsScheduleList from '@/components/events/EventsScheduleList.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { useEventsIndexPage } from '@/hooks/events'
+import { useEventsDirectory } from '@/hooks/events'
 import { openEventDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('events')
-const { pageData } = useEventsIndexPage(t, locale)
+const { pageData } = useEventsDirectory(t, locale)
 </script>

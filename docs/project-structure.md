@@ -300,20 +300,20 @@ src/
       use-account-overview.ts
     auth/
       index.ts
-      use-login-action.ts
-      use-register-action.ts
+      use-login.ts
+      use-register.ts
     events/
       index.ts
-      use-event-detail-page.ts
-      use-events-index-page.ts
-      use-home-events-preview.ts
+      use-event-detail.ts
+      use-events-directory.ts
+      use-home-events.ts
     profiles/
       index.ts
-      use-family-profile-detail-page.ts
-      use-family-profile-directory-page.ts
-      use-home-self-profiles-preview.ts
-      use-self-profile-detail-page.ts
-      use-self-profile-directory-page.ts
+      use-family-profile-detail.ts
+      use-family-profile-directory.ts
+      use-home-self-profiles.ts
+      use-self-profile-detail.ts
+      use-self-profile-directory.ts
   i18n/
     index.ts
     locale.ts

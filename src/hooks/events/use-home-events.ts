@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue'
-import { listEvents, type EventDTO, type FormatLocale, type LocalizedTextDTO } from '@/api/events/events'
+import { computed, ref, watch } from 'vue'
+import { listEvents, type EventDTO, type FormatLocale } from '@/api/events/events'
 import type { HomeEventsViewModel } from '@/types/home/view'
 import { formatEventDate } from '@/utils/locale-format'
 
@@ -11,7 +11,9 @@ export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
   const items = ref<EventDTO[]>([])
   let requestToken = 0
 
-  void load()
+  watch(() => locale.value, () => {
+    void load()
+  }, { immediate: true })
 
   async function load() {
     const currentToken = ++requestToken
@@ -42,17 +44,17 @@ export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
       seats: t('fields.seats'),
     },
     events: items.value
-      .filter(item => item.status !== 'closed')
+      .filter((item) => item.status !== 'closed')
       .slice(0, 3)
-      .map(item => ({
+      .map((item) => ({
         id: item.id,
-        title: localizeText(locale.value, item.title),
-        summary: localizeText(locale.value, item.summary),
+        title: item.title,
+        summary: item.summary,
         date: formatEventDate(locale.value, item.date),
-        city: localizeText(locale.value, item.city),
-        venue: localizeText(locale.value, item.venue),
-        format: localizeText(locale.value, item.format),
-        audience: localizeText(locale.value, item.audience),
+        city: item.city,
+        venue: item.venue,
+        format: item.format,
+        audience: item.audience,
         seats: `${item.registered} / ${item.seats}`,
         status: item.status,
         statusLabel: t(`status.${item.status}`),
@@ -65,8 +67,4 @@ export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
     viewModel,
     refresh: load,
   }
-}
-
-function localizeText(locale: FormatLocale, text: LocalizedTextDTO) {
-  return text[locale] || text.en || ''
 }

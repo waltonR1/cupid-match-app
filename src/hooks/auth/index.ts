@@ -1,2 +1,2 @@
-export { useLoginAction } from './use-login-action'
-export { useRegisterAction } from './use-register-action'
+export { useLogin } from './use-login'
+export { useRegister } from './use-register'

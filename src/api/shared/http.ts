@@ -10,7 +10,7 @@ export interface ApiRequestError extends Error {
 interface RequestOptions {
     method?: HttpMethod
     query?: object
-    data?: string | ArrayBuffer | Record<string, unknown>
+    data?: string | ArrayBuffer | object
 }
 
 export async function requestJson<T>(path: string, options: RequestOptions = {}): Promise<T> {
@@ -91,14 +91,34 @@ function buildUrl(path: string, query?: RequestOptions['query']) {
     const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
     const normalizedPath = path.startsWith('/') ? path : `/${path}`
     const search = new URLSearchParams()
+    const nextQuery = {
+        ...(query ?? {}),
+        lang: resolveRequestLocale(),
+    }
 
-    Object.entries(query ?? {}).forEach(([key, value]) => {
+    Object.entries(nextQuery as Record<string, unknown>).forEach(([key, value]) => {
         if (value === undefined || value === null || value === '') return
         search.set(key, String(value))
     })
 
     const searchString = search.toString()
     return `${normalizedBase}${normalizedPath}${searchString ? `?${searchString}` : ''}`
+}
+
+function resolveRequestLocale(): 'zh' | 'fr' | 'en' {
+    try {
+        const persisted = uni.getStorageSync('pinia:locale')
+        const state = typeof persisted === 'string' ? JSON.parse(persisted) : persisted
+        const locale = state?.locale
+
+        if (locale === 'zh' || locale === 'fr' || locale === 'en') {
+            return locale
+        }
+    } catch {
+        // ignore invalid locale cache
+    }
+
+    return 'zh'
 }
 
 function createApiRequestError(message: string, statusCode?: number, payload?: unknown): ApiRequestError {

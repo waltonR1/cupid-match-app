@@ -1,7 +1,20 @@
-import type { QueryRecord } from '../types/common.js'
-import type { DirectoryFacets, DirectorySort, NormalizedProfileQuery, ProfileRecord, ProfileWithDisplayName } from '../types/profile.js'
+import type { ApiLocale, QueryRecord } from '../types/common.js'
+import type {
+  DirectoryFacetOptionDTO,
+  DirectorySort,
+  FamilyProfileCardDTO,
+  FamilyProfileDetailDTO,
+  FamilyProfileDirectoryFacetsDTO,
+  IntentFacetDTO,
+  NormalizedProfileQuery,
+  ProfileRecord,
+  ProfileWithDisplayName,
+  SelfProfileCardDTO,
+  SelfProfileDetailDTO,
+  SelfProfileDirectoryFacetsDTO,
+} from '../types/profile.js'
 import { buildPagination, paginate } from '../utils/pagination.js'
-import { withDisplayName } from '../utils/localized.js'
+import { resolveLocalizedText, resolveLocalizedTexts, withDisplayName } from '../utils/localized.js'
 import { clamp, getString, toInt } from '../utils/string.js'
 
 export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuery {
@@ -26,22 +39,22 @@ export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuer
   }
 }
 
-export function buildSelfDirectoryFacets(items: ProfileWithDisplayName[]): DirectoryFacets {
+export function buildSelfDirectoryFacets(locale: ApiLocale, items: ProfileWithDisplayName[]): SelfProfileDirectoryFacetsDTO {
   return {
-    cities: uniqueLocalized(items.map((item) => item.city)),
-    intents: uniqueIntents(items),
-    industries: uniqueLocalized(items.map((item) => item.industry)),
-    occupations: uniqueLocalized(items.map((item) => item.occupation)),
+    cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
+    intents: uniqueIntentFacetOptions(locale, items),
+    industries: uniqueLocalizedFacetOptions(locale, items.map((item) => item.industry)),
+    occupations: uniqueLocalizedFacetOptions(locale, items.map((item) => item.occupation)),
     languages: Array.from(new Set(items.flatMap((item) => item.languages))).sort((left, right) => left.localeCompare(right)),
   }
 }
 
-export function buildFamilyDirectoryFacets(items: ProfileWithDisplayName[]): DirectoryFacets {
+export function buildFamilyDirectoryFacets(locale: ApiLocale, items: ProfileWithDisplayName[]): FamilyProfileDirectoryFacetsDTO {
   return {
-    cities: uniqueLocalized(items.map((item) => item.city)),
-    intents: uniqueIntents(items),
-    industries: uniqueLocalized(items.map((item) => item.industry)),
-    occupations: uniqueLocalized(items.map((item) => item.occupation)),
+    cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
+    intents: uniqueIntentFacetOptions(locale, items),
+    industries: uniqueLocalizedFacetOptions(locale, items.map((item) => item.industry)),
+    occupations: uniqueLocalizedFacetOptions(locale, items.map((item) => item.occupation)),
   }
 }
 
@@ -121,21 +134,20 @@ export function sortFamilyProfiles(items: ProfileWithDisplayName[], sort: Direct
   }
 }
 
-export function featuredProfiles(profiles: ProfileRecord[], rawPageSize: unknown): { items: ProfileWithDisplayName[]; pagination: ReturnType<typeof buildPagination> } {
+export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], rawPageSize: unknown): { items: SelfProfileCardDTO[] } {
   const pageSize = clamp(Number.parseInt(getString(rawPageSize) || '3', 10) || 3, 1, 12)
   const source = profiles.map(withDisplayName)
   const sorted = sortSelfProfiles(source, 'recentActive')
 
   return {
-    items: paginate(sorted, 1, pageSize),
-    pagination: buildPagination(sorted.length, 1, pageSize),
+    items: paginate(sorted, 1, pageSize).map((profile) => toSelfProfileCard(locale, profile)),
   }
 }
 
-export function listSelfProfiles(profiles: ProfileRecord[], query: QueryRecord): {
-  items: ProfileWithDisplayName[]
+export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
+  items: SelfProfileCardDTO[]
   pagination: ReturnType<typeof buildPagination>
-  facets: DirectoryFacets
+  facets: SelfProfileDirectoryFacetsDTO
 } {
   const normalizedQuery = normalizeProfileQuery(query)
   const source = profiles.map(withDisplayName)
@@ -143,16 +155,16 @@ export function listSelfProfiles(profiles: ProfileRecord[], query: QueryRecord):
   const sorted = sortSelfProfiles(filtered, normalizedQuery.sort)
 
   return {
-    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize),
+    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toSelfProfileCard(locale, profile)),
     pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
-    facets: buildSelfDirectoryFacets(source),
+    facets: buildSelfDirectoryFacets(locale, source),
   }
 }
 
-export function listFamilyProfiles(profiles: ProfileRecord[], query: QueryRecord): {
-  items: ProfileWithDisplayName[]
+export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
+  items: FamilyProfileCardDTO[]
   pagination: ReturnType<typeof buildPagination>
-  facets: DirectoryFacets
+  facets: FamilyProfileDirectoryFacetsDTO
 } {
   const normalizedQuery = normalizeProfileQuery(query)
   const source = profiles.filter((profile) => profile.familyVisible).map(withDisplayName)
@@ -160,15 +172,136 @@ export function listFamilyProfiles(profiles: ProfileRecord[], query: QueryRecord
   const sorted = sortFamilyProfiles(filtered, normalizedQuery.sort)
 
   return {
-    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize),
+    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toFamilyProfileCard(locale, profile)),
     pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
-    facets: buildFamilyDirectoryFacets(source),
+    facets: buildFamilyDirectoryFacets(locale, source),
   }
 }
 
-export function profileDetail(profiles: ProfileRecord[], id: string): ProfileWithDisplayName | null {
+export function selfProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): SelfProfileDetailDTO | null {
   const profile = profiles.find((item) => item.id === id)
-  return profile ? withDisplayName(profile) : null
+  return profile ? toSelfProfileDetail(locale, withDisplayName(profile)) : null
+}
+
+export function familyProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): FamilyProfileDetailDTO | null {
+  const profile = profiles.find((item) => item.id === id && item.familyVisible)
+  return profile ? toFamilyProfileDetail(locale, withDisplayName(profile)) : null
+}
+
+export function toSelfProfileCard(locale: ApiLocale, profile: ProfileWithDisplayName): SelfProfileCardDTO {
+  return {
+    id: profile.id,
+    displayName: profile.displayName,
+    avatarUrl: profile.avatarUrl,
+    gender: profile.gender,
+    age: profile.age,
+    city: resolveLocalizedText(locale, profile.city),
+    status: profile.status,
+    education: resolveLocalizedText(locale, profile.education),
+    occupation: resolveLocalizedText(locale, profile.occupation),
+    intentCode: profile.intentCode,
+    summary: resolveLocalizedText(locale, profile.summary),
+    languages: profile.languages,
+    tags: resolveLocalizedTexts(locale, profile.tags),
+  }
+}
+
+export function toFamilyProfileCard(locale: ApiLocale, profile: ProfileWithDisplayName): FamilyProfileCardDTO {
+  return {
+    id: profile.id,
+    displayName: profile.displayName,
+    avatarUrl: profile.avatarUrl,
+    gender: profile.gender,
+    age: profile.age,
+    city: resolveLocalizedText(locale, profile.city),
+    status: profile.status,
+    education: resolveLocalizedText(locale, profile.education),
+    occupation: resolveLocalizedText(locale, profile.occupation),
+    maritalStatus: profile.maritalStatus,
+    hasChildren: profile.hasChildren,
+    acceptLongDistance: profile.acceptLongDistance,
+    maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+    residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+    tags: resolveLocalizedTexts(locale, profile.tags),
+    allowFamilyContact: profile.allowFamilyContact,
+    familyPriority: profile.familyPriority,
+  }
+}
+
+export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): SelfProfileDetailDTO {
+  return {
+    id: profile.id,
+    displayName: profile.displayName,
+    avatarUrl: profile.avatarUrl,
+    gender: profile.gender,
+    age: profile.age,
+    height: profile.height,
+    city: resolveLocalizedText(locale, profile.city),
+    country: resolveLocalizedText(locale, profile.country),
+    nationality: resolveLocalizedText(locale, profile.nationality),
+    status: profile.status,
+    isVerified: profile.isVerified,
+    lastActiveAt: profile.lastActiveAt,
+    joinedAt: profile.joinedAt,
+    familyVisible: profile.familyVisible,
+    allowFamilyContact: profile.allowFamilyContact,
+    familyPriority: profile.familyPriority,
+    education: resolveLocalizedText(locale, profile.education),
+    occupation: resolveLocalizedText(locale, profile.occupation),
+    industry: resolveLocalizedText(locale, profile.industry),
+    employer: resolveLocalizedText(locale, profile.employer),
+    incomeRange: resolveLocalizedText(locale, profile.incomeRange),
+    maritalStatus: profile.maritalStatus,
+    hasChildren: profile.hasChildren,
+    wantChildren: profile.wantChildren,
+    acceptLongDistance: profile.acceptLongDistance,
+    intent: resolveLocalizedText(locale, profile.intent),
+    maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+    languages: profile.languages,
+    smoke: profile.smoke,
+    drink: profile.drink,
+    exercise: resolveLocalizedText(locale, profile.exercise),
+    residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+    summary: resolveLocalizedText(locale, profile.summary),
+    highlights: resolveLocalizedTexts(locale, profile.highlights),
+    tags: resolveLocalizedTexts(locale, profile.tags),
+  }
+}
+
+export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): FamilyProfileDetailDTO {
+  return {
+    id: profile.id,
+    displayName: profile.displayName,
+    avatarUrl: profile.avatarUrl,
+    gender: profile.gender,
+    age: profile.age,
+    city: resolveLocalizedText(locale, profile.city),
+    country: resolveLocalizedText(locale, profile.country),
+    nationality: resolveLocalizedText(locale, profile.nationality),
+    isVerified: profile.isVerified,
+    lastActiveAt: profile.lastActiveAt,
+    joinedAt: profile.joinedAt,
+    familyVisible: profile.familyVisible,
+    allowFamilyContact: profile.allowFamilyContact,
+    familyPriority: profile.familyPriority,
+    education: resolveLocalizedText(locale, profile.education),
+    occupation: resolveLocalizedText(locale, profile.occupation),
+    industry: resolveLocalizedText(locale, profile.industry),
+    incomeRange: resolveLocalizedText(locale, profile.incomeRange),
+    maritalStatus: profile.maritalStatus,
+    hasChildren: profile.hasChildren,
+    wantChildren: profile.wantChildren,
+    acceptLongDistance: profile.acceptLongDistance,
+    intent: resolveLocalizedText(locale, profile.intent),
+    maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+    languages: profile.languages,
+    smoke: profile.smoke,
+    drink: profile.drink,
+    exercise: resolveLocalizedText(locale, profile.exercise),
+    residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+    summary: resolveLocalizedText(locale, profile.summary),
+    tags: resolveLocalizedTexts(locale, profile.tags),
+  }
 }
 
 function normalizeSort(value: string): DirectorySort {
@@ -179,7 +312,7 @@ function normalizeSort(value: string): DirectorySort {
   return 'recentActive'
 }
 
-function uniqueLocalized(items: ProfileRecord['city'][]): ProfileRecord['city'][] {
+function uniqueLocalizedFacetOptions(locale: ApiLocale, items: ProfileRecord['city'][]): DirectoryFacetOptionDTO[] {
   const seen = new Set<string>()
   return items
     .filter((item) => {
@@ -190,9 +323,13 @@ function uniqueLocalized(items: ProfileRecord['city'][]): ProfileRecord['city'][
       return true
     })
     .sort((left, right) => left.en.localeCompare(right.en))
+    .map((item) => ({
+      value: item.en,
+      label: resolveLocalizedText(locale, item),
+    }))
 }
 
-function uniqueIntents(items: ProfileWithDisplayName[]): Array<{ code: string; label: ProfileWithDisplayName['intent'] }> {
+function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayName[]): IntentFacetDTO[] {
   const seen = new Set<string>()
   return items
     .map((item) => ({ code: item.intentCode, label: item.intent }))
@@ -203,6 +340,10 @@ function uniqueIntents(items: ProfileWithDisplayName[]): Array<{ code: string; l
       seen.add(item.code)
       return true
     })
+    .map((item) => ({
+      code: item.code,
+      label: resolveLocalizedText(locale, item.label),
+    }))
 }
 
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {

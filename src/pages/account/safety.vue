@@ -144,7 +144,7 @@ const pageData = computed(() => ({
     { label: t('common.familyAssist'), value: accountData.familyAssistSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
     { label: t('common.visibleFields'), value: accountData.visibleFieldsSetting.value?.enabled ? t('common.enabled') : t('common.disabled') },
     {
-      label: localizeAccountText(locale.value, accountData.advisorContactSetting.value?.title ?? { zh: '', fr: '', en: '' }),
+      label: localizeAccountText(locale.value, accountData.advisorContactSetting.value?.title ?? ''),
       value: accountData.advisorContactSetting.value?.enabled ? t('common.enabled') : t('common.disabled'),
     },
   ],

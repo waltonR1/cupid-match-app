@@ -6,7 +6,6 @@ import type {
   EventsListResponseDTO,
   EventStatusDTO,
   FormatLocale,
-  LocalizedTextDTO,
   RelatedProfileStatusDTO,
 } from './events.types'
 
@@ -17,7 +16,6 @@ export type {
   EventsListResponseDTO,
   EventStatusDTO,
   FormatLocale,
-  LocalizedTextDTO,
   RelatedProfileStatusDTO,
 } from './events.types'
 

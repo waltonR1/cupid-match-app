@@ -1,12 +1,12 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import {
   getFamilyProfileDirectory,
-  type FamilyProfileDirectoryFacetsDTO,
+  type FamilyProfileCard,
+  type FamilyProfileDirectoryFacets,
   type FamilyProfileDirectoryQuery,
   type FamilyProfileDirectoryResponse,
   type FamilyProfileSortKey,
   type FormatLocale,
-  type ProfileDTO,
 } from '@/api/profiles/profiles'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
 import { formatProfileAge, localizeProfileText } from '@/utils/profile-format'
@@ -33,7 +33,7 @@ const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
-export function useFamilyProfileDirectoryPage(t: Translate, locale: Ref<FormatLocale>) {
+export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
   const filters = ref<FamilyDirectoryFilters>({ ...DEFAULT_FILTERS })
   const sortKey = ref<FamilyProfileSortKey>(DEFAULT_SORT)
   const page = ref(1)
@@ -42,7 +42,7 @@ export function useFamilyProfileDirectoryPage(t: Translate, locale: Ref<FormatLo
   const response = ref<FamilyProfileDirectoryResponse | null>(null)
   let requestToken = 0
 
-  watch([filters, sortKey, page], () => {
+  watch([filters, sortKey, page, locale], () => {
     void load()
   }, { deep: true, immediate: true })
 
@@ -169,7 +169,7 @@ type ProfileDirectoryFilterItem = {
   group: 'primary' | 'secondary'
 }
 
-function toFamilyProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Translate) {
+function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t: Translate) {
   const familyMode = resolveFamilyMode(profile)
   const additionalTags = [
     t(maritalStatusTagKey(profile.maritalStatus)),
@@ -196,7 +196,7 @@ function toFamilyProfileCard(profile: ProfileDTO, locale: FormatLocale, t: Trans
 }
 
 function buildFamilyDirectoryFilterItems(
-  facets: FamilyProfileDirectoryFacetsDTO | null,
+  facets: FamilyProfileDirectoryFacets | null,
   filters: FamilyDirectoryFilters,
   locale: FormatLocale,
   t: Translate,
@@ -246,7 +246,7 @@ function buildFamilyDirectoryFilterItems(
     {
       key: 'city',
       label: t('filters.city'),
-      options: [allOption(t), ...cities.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...cities.map(item => ({ label: item.label, value: item.value }))],
       value: filters.city,
       widthClass: regularWidthClass,
       group: 'primary',
@@ -262,7 +262,7 @@ function buildFamilyDirectoryFilterItems(
     {
       key: 'intentCode',
       label: t('filters.intent'),
-      options: [allOption(t), ...intents.map(item => ({ label: localizeProfileText(locale, item.label), value: item.code }))],
+      options: [allOption(t), ...intents.map(item => ({ label: item.label, value: item.code }))],
       value: filters.intentCode,
       widthClass: wideWidthClass,
       group: 'primary',
@@ -270,7 +270,7 @@ function buildFamilyDirectoryFilterItems(
     {
       key: 'occupation',
       label: t('filters.occupation'),
-      options: [allOption(t), ...occupations.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...occupations.map(item => ({ label: item.label, value: item.value }))],
       value: filters.occupation,
       widthClass: wideWidthClass,
       group: 'secondary',
@@ -278,7 +278,7 @@ function buildFamilyDirectoryFilterItems(
     {
       key: 'industry',
       label: t('filters.industry'),
-      options: [allOption(t), ...industries.map(item => ({ label: localizeProfileText(locale, item), value: item.en }))],
+      options: [allOption(t), ...industries.map(item => ({ label: item.label, value: item.value }))],
       value: filters.industry,
       widthClass: regularWidthClass,
       group: 'secondary',
@@ -329,7 +329,7 @@ function allOption(t: Translate): DirectoryOption {
   return { label: t('filters.all'), value: '' }
 }
 
-function resolveFamilyMode(profile: ProfileDTO) {
+function resolveFamilyMode(profile: FamilyProfileCard) {
   if (profile.familyPriority) return 'PRIORITY'
   if (profile.allowFamilyContact) return 'CONTACT_READY'
   return 'CONTEXT_ONLY'
@@ -347,7 +347,7 @@ function familyModeBadgeKey(mode: ReturnType<typeof resolveFamilyMode>) {
   }
 }
 
-function familyFooterKey(profile: ProfileDTO, mode: ReturnType<typeof resolveFamilyMode>) {
+function familyFooterKey(profile: FamilyProfileCard, mode: ReturnType<typeof resolveFamilyMode>) {
   if (profile.status === 'review') return 'card.labelReview'
 
   switch (mode) {
@@ -361,7 +361,7 @@ function familyFooterKey(profile: ProfileDTO, mode: ReturnType<typeof resolveFam
   }
 }
 
-function maritalStatusTagKey(value: ProfileDTO['maritalStatus']) {
+function maritalStatusTagKey(value: FamilyProfileCard['maritalStatus']) {
   switch (value) {
     case 'divorced':
       return 'tags.maritalDivorced'

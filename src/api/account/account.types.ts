@@ -1,16 +1,9 @@
 import type { EventDTO } from '@/api/events/events.types'
-import type { ProfileDTO } from '@/api/profiles/profiles.types'
 import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type AccountRegistrationStatus = 'confirmed' | 'waitlist' | 'completed'
-
-export interface LocalizedTextDTO {
-  zh: string
-  fr: string
-  en: string
-}
 
 export interface AccountDTO {
   id: string
@@ -18,52 +11,79 @@ export interface AccountDTO {
   nickName: string
   avatarUrl: string
   displayName: string
-  city: LocalizedTextDTO
+  city: string
   joinedAt: string
   profileId: string
   completion: number
   membership: AccountMembershipLevel
-  bio: LocalizedTextDTO
+  bio: string
 }
 
-export type AccountProfileDTO = ProfileDTO
+export interface AccountProfileSummary {
+  id: string
+  displayName: string
+  city: string
+  education: string
+  occupation: string
+  maritalStatus: 'single' | 'divorced' | 'widowed'
+  languages: string[]
+  familyVisible: boolean
+  summary: string
+  highlights: string[]
+  tags: string[]
+}
+
+export interface AccountFavoriteProfileCard {
+  id: string
+  displayName: string
+  age: number
+  city: string
+  familyVisible: boolean
+  tags: string[]
+}
+
+export interface AccountThreadProfileCard {
+  id: string
+  displayName: string
+  age: number
+  city: string
+  familyVisible: boolean
+}
 
 export interface AccountFavoriteDTO {
   profileId: string
   savedAt: string
-  note: LocalizedTextDTO
+  note: string
 }
 
 export interface AccountFavoriteRecordDTO {
   favorite: AccountFavoriteDTO
-  profile: AccountProfileDTO
+  profile: AccountFavoriteProfileCard
 }
 
 export interface AccountMessageThreadDTO {
-  id: string
   profileId: string
   updatedAt: string
   unread: number
-  lastMessage: LocalizedTextDTO
+  lastMessage: string
 }
 
 export interface AccountThreadRecordDTO {
   thread: AccountMessageThreadDTO
-  profile: AccountProfileDTO
+  profile: AccountThreadProfileCard
 }
 
 export interface AccountPrivacySettingDTO {
   id: string
   enabled: boolean
-  title: LocalizedTextDTO
-  desc: LocalizedTextDTO
+  title: string
+  desc: string
 }
 
 export interface AccountUserRegistrationDTO {
-  id: string
   eventId: string
   status: AccountRegistrationStatus
-  note: LocalizedTextDTO
+  note: string
 }
 
 export interface AccountUserEventRecordDTO {
@@ -73,7 +93,7 @@ export interface AccountUserEventRecordDTO {
 
 export interface AccountOverviewDTO {
   account: AccountDTO
-  profile: AccountProfileDTO | null
+  profile: AccountProfileSummary | null
   userEvents: AccountUserEventRecordDTO[]
   favorites: AccountFavoriteRecordDTO[]
   threads: AccountThreadRecordDTO[]

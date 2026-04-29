@@ -150,7 +150,7 @@ const pageData = computed(() => ({
     t('messages.boundary.point3'),
   ],
   items: accountData.threads.map(item => ({
-    id: item.thread.id,
+    id: item.profile.id,
     profileId: item.profile.id,
     displayName: item.profile.displayName,
     city: localizeAccountText(locale.value, item.profile.city),
