@@ -1,7 +1,7 @@
 import {computed, ref, watch, type Ref} from 'vue'
 import {getFeaturedSelfProfiles, type FormatLocale, type SelfProfileCard} from '@/api/profiles/profiles'
 import type {HomeProfilesItem} from '@/types/home/view'
-import {formatProfileAge, formatProfileLanguages, localizeProfileText} from '@/utils/profile-format'
+import {formatProfileAge, formatProfileLanguages} from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
@@ -60,15 +60,15 @@ function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Tr
         avatarFallback: profile.displayName,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatProfileAge(locale, profile.age)} / ${localizeProfileText(locale, profile.occupation)}`,
+        meta: `${formatProfileAge(locale, profile.age)} / ${profile.occupation}`,
         badge: t(intentBadgeKey(profile.intentCode)),
-        summary: localizeProfileText(locale, profile.summary),
+        summary: profile.summary,
         facts: [
-            {label: t('fields.city'), value: localizeProfileText(locale, profile.city)},
-            {label: t('fields.education'), value: localizeProfileText(locale, profile.education)},
+            {label: t('fields.city'), value: profile.city},
+            {label: t('fields.education'), value: profile.education},
             {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
         ],
-        tags: profile.tags.slice(0, 3).map(item => localizeProfileText(locale, item)),
+        tags: profile.tags.slice(0, 3),
         footer: t(statusFooterKey(profile.status)),
     }
 }

@@ -1,6 +1,6 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { getFamilyProfileDetail, type FamilyProfileDetail, type FormatLocale } from '@/api/profiles/profiles'
-import { formatProfileAge, formatProfileDate, formatProfileLanguages, localizeProfileText } from '@/utils/profile-format'
+import { formatProfileAge, formatProfileDate, formatProfileLanguages } from '@/utils/profile-format'
 import type { ProfileDetailBadgeItem } from '@/types/profiles/detail'
 
 type Translate = (key: string) => string
@@ -50,31 +50,31 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         gender: profile.value.gender,
         meta: [
           formatProfileAge(locale.value, profile.value.age),
-          localizeProfileText(locale.value, profile.value.city),
-          localizeProfileText(locale.value, profile.value.education),
+          profile.value.city,
+          profile.value.education,
         ].join(' / '),
-        summary: localizeProfileText(locale.value, profile.value.maritalPlan),
+        summary: profile.value.maritalPlan,
         badges,
         indexTitle: t('sections.archiveIndex'),
         indexFacts: [
           fact(t('fields.recordNumber'), recordId),
-          fact(t('fields.city'), localizeProfileText(locale.value, profile.value.city)),
-          fact(t('fields.education'), localizeProfileText(locale.value, profile.value.education)),
-          fact(t('fields.residencePlan'), localizeProfileText(locale.value, profile.value.residencePlan)),
+          fact(t('fields.city'), profile.value.city),
+          fact(t('fields.education'), profile.value.education),
+          fact(t('fields.residencePlan'), profile.value.residencePlan),
           fact(t('fields.lastActive'), formatProfileDate(locale.value, profile.value.lastActiveAt)),
           fact(t('fields.joinedAt'), formatProfileDate(locale.value, profile.value.joinedAt)),
         ],
       },
       overviewFacts: [
         fact(t('fields.age'), formatProfileAge(locale.value, profile.value.age)),
-        fact(t('fields.city'), localizeProfileText(locale.value, profile.value.city)),
-        fact(t('fields.country'), localizeProfileText(locale.value, profile.value.country)),
-        fact(t('fields.nationality'), localizeProfileText(locale.value, profile.value.nationality)),
-        fact(t('fields.education'), localizeProfileText(locale.value, profile.value.education)),
-        fact(t('fields.job'), localizeProfileText(locale.value, profile.value.occupation)),
-        fact(t('fields.industry'), localizeProfileText(locale.value, profile.value.industry)),
-        fact(t('fields.income'), localizeProfileText(locale.value, profile.value.incomeRange)),
-        fact(t('fields.residencePlan'), localizeProfileText(locale.value, profile.value.residencePlan)),
+        fact(t('fields.city'), profile.value.city),
+        fact(t('fields.country'), profile.value.country),
+        fact(t('fields.nationality'), profile.value.nationality),
+        fact(t('fields.education'), profile.value.education),
+        fact(t('fields.job'), profile.value.occupation),
+        fact(t('fields.industry'), profile.value.industry),
+        fact(t('fields.income'), profile.value.incomeRange),
+        fact(t('fields.residencePlan'), profile.value.residencePlan),
       ],
       relationshipFacts: [
         fact(t('fields.maritalStatus'), t(`maritalStatus.${profile.value.maritalStatus}`)),
@@ -85,24 +85,24 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
       ],
       lifestyleFacts: [
         fact(t('fields.languages'), formatProfileLanguages(locale.value, profile.value.languages)),
-        fact(t('fields.exercise'), localizeProfileText(locale.value, profile.value.exercise)),
+        fact(t('fields.exercise'), profile.value.exercise),
         fact(t('fields.smoke'), t(`habits.${profile.value.smoke}`)),
         fact(t('fields.drink'), t(`habits.${profile.value.drink}`)),
       ],
       spotlightFacts: [
-        fact(t('fields.intent'), localizeProfileText(locale.value, profile.value.intent)),
-        fact(t('fields.maritalPlan'), localizeProfileText(locale.value, profile.value.maritalPlan)),
+        fact(t('fields.intent'), profile.value.intent),
+        fact(t('fields.maritalPlan'), profile.value.maritalPlan),
         fact(t('fields.longDistance'), booleanText(profile.value.acceptLongDistance, t)),
         fact(t('fields.familySupport'), familyModeText),
       ],
-      intentText: localizeProfileText(locale.value, profile.value.intent),
-      maritalPlanText: localizeProfileText(locale.value, profile.value.maritalPlan),
+      intentText: profile.value.intent,
+      maritalPlanText: profile.value.maritalPlan,
       highlightTexts: [
-        localizeProfileText(locale.value, profile.value.summary),
-        `${t('fields.residencePlan')}: ${localizeProfileText(locale.value, profile.value.residencePlan)}`,
+        profile.value.summary,
+        `${t('fields.residencePlan')}: ${profile.value.residencePlan}`,
         `${t('fields.longDistance')}: ${booleanText(profile.value.acceptLongDistance, t)}`,
       ],
-      tagTexts: profile.value.tags.slice(0, 3).map(item => localizeProfileText(locale.value, item)),
+      tagTexts: profile.value.tags.slice(0, 3),
     }
   })
 

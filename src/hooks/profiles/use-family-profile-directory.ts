@@ -9,7 +9,7 @@ import {
   type FormatLocale,
 } from '@/api/profiles/profiles'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
-import { formatProfileAge, localizeProfileText } from '@/utils/profile-format'
+import { formatProfileAge } from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
@@ -182,15 +182,15 @@ function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t
     avatarFallback: profile.displayName,
     displayName: profile.displayName,
     gender: profile.gender,
-    meta: `${formatProfileAge(locale, profile.age)} / ${localizeProfileText(locale, profile.occupation)}`,
+    meta: `${formatProfileAge(locale, profile.age)} / ${profile.occupation}`,
     badge: t(familyModeBadgeKey(familyMode)),
-    summary: localizeProfileText(locale, profile.maritalPlan),
+    summary: profile.maritalPlan,
     facts: [
-      { label: t('fields.city'), value: localizeProfileText(locale, profile.city) },
-      { label: t('fields.education'), value: localizeProfileText(locale, profile.education) },
-      { label: t('fields.residencePlan'), value: localizeProfileText(locale, profile.residencePlan) },
+      { label: t('fields.city'), value: profile.city },
+      { label: t('fields.education'), value: profile.education },
+      { label: t('fields.residencePlan'), value: profile.residencePlan },
     ],
-    tags: [...profile.tags.map(item => localizeProfileText(locale, item)), ...additionalTags].slice(0, 3),
+    tags: [...profile.tags, ...additionalTags].slice(0, 3),
     footer: t(familyFooterKey(profile, familyMode)),
   }
 }
