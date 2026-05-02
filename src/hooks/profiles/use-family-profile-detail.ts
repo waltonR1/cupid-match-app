@@ -1,6 +1,7 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { getFamilyProfileDetail, type FamilyProfileDetail, type FormatLocale } from '@/api/profiles/profiles'
-import { formatProfileAge, formatProfileDate, formatProfileLanguages } from '@/utils/profile-format'
+import { formatLocalizedDate } from '@/utils/locale-format'
+import { formatLocalizedAge, formatProfileLanguages } from '@/utils/profile-format'
 import type { ProfileDetailBadgeItem } from '@/types/profiles/detail'
 
 type Translate = (key: string) => string
@@ -49,7 +50,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         displayName: profile.value.displayName,
         gender: profile.value.gender,
         meta: [
-          formatProfileAge(locale.value, profile.value.age),
+          formatLocalizedAge(locale.value, profile.value.age),
           profile.value.city,
           profile.value.education,
         ].join(' / '),
@@ -61,12 +62,12 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
           fact(t('fields.city'), profile.value.city),
           fact(t('fields.education'), profile.value.education),
           fact(t('fields.residencePlan'), profile.value.residencePlan),
-          fact(t('fields.lastActive'), formatProfileDate(locale.value, profile.value.lastActiveAt)),
-          fact(t('fields.joinedAt'), formatProfileDate(locale.value, profile.value.joinedAt)),
+          fact(t('fields.lastActive'), formatLocalizedDate(locale.value, profile.value.lastActiveAt)),
+          fact(t('fields.joinedAt'), formatLocalizedDate(locale.value, profile.value.joinedAt)),
         ],
       },
       overviewFacts: [
-        fact(t('fields.age'), formatProfileAge(locale.value, profile.value.age)),
+        fact(t('fields.age'), formatLocalizedAge(locale.value, profile.value.age)),
         fact(t('fields.city'), profile.value.city),
         fact(t('fields.country'), profile.value.country),
         fact(t('fields.nationality'), profile.value.nationality),

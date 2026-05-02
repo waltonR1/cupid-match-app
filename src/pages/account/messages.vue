@@ -129,7 +129,7 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openSelfDetail } from '@/utils/navigation'
 import { localizeAccountText } from '@/utils/account-format'
 import { formatLocalizedDateTime } from '@/utils/locale-format'
-import { formatProfileAge } from '@/utils/profile-format'
+import { formatLocalizedAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
@@ -154,7 +154,7 @@ const pageData = computed(() => ({
     profileId: item.profile.id,
     displayName: item.profile.displayName,
     city: localizeAccountText(locale.value, item.profile.city),
-    ageText: formatProfileAge(locale.value, item.profile.age),
+    ageText: formatLocalizedAge(locale.value, item.profile.age),
     familyVisible: item.profile.familyVisible,
     unread: item.thread.unread,
     lastMessage: localizeAccountText(locale.value, item.thread.lastMessage),

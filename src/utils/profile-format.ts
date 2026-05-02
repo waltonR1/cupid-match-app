@@ -1,4 +1,4 @@
-import {formatLocalizedDate, type FormatLocale} from './locale-format'
+import type {FormatLocale} from './locale-format'
 
 export type LocalizedTextValue = Record<FormatLocale, string>
 
@@ -20,7 +20,7 @@ export function localizeProfileText(locale: FormatLocale, text: LocalizedTextVal
 }
 
 /** 年龄格式化 */
-export function formatProfileAge(locale: FormatLocale, age: number) {
+export function formatLocalizedAge(locale: FormatLocale, age: number) {
     if (locale === 'zh') return `${age}岁`
     if (locale === 'fr') return `${age} ans`
     return String(age)
@@ -36,11 +36,6 @@ export function formatProfileLanguages(locale: FormatLocale, languages: string[]
     return languages
         .map((language) => getProfileLanguageLabel(locale, language))
         .join(' / ')
-}
-
-/** 日期格式化 */
-export function formatProfileDate(locale: FormatLocale, date: string) {
-    return formatLocalizedDate(locale, date)
 }
 
 /** 获取语言本地化标签 */

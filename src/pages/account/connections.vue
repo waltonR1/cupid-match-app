@@ -127,7 +127,7 @@ import { useAccountOverview } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openFamilyProfileDetail, openSelfDetail } from '@/utils/navigation'
 import { localizeAccountText } from '@/utils/account-format'
-import { formatProfileAge } from '@/utils/profile-format'
+import { formatLocalizedAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
@@ -152,7 +152,7 @@ const pageData = computed(() => ({
     familyVisible: item.profile.familyVisible,
     displayName: item.profile.displayName,
     city: localizeAccountText(locale.value, item.profile.city),
-    ageText: formatProfileAge(locale.value, item.profile.age),
+    ageText: formatLocalizedAge(locale.value, item.profile.age),
     note: localizeAccountText(locale.value, item.favorite.note),
     tags: item.profile.tags.slice(0, 3).map(tag => localizeAccountText(locale.value, tag)),
   })),

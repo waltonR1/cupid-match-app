@@ -1,7 +1,7 @@
 import {computed, ref, watch, type Ref} from 'vue'
 import {getFeaturedSelfProfiles, type FormatLocale, type SelfProfileCard} from '@/api/profiles/profiles'
 import type {HomeProfilesItem} from '@/types/home/view'
-import {formatProfileAge, formatProfileLanguages} from '@/utils/profile-format'
+import {formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
@@ -60,7 +60,7 @@ function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Tr
         avatarFallback: profile.displayName,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatProfileAge(locale, profile.age)} / ${profile.occupation}`,
+        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
         badge: t(intentBadgeKey(profile.intentCode)),
         summary: profile.summary,
         facts: [

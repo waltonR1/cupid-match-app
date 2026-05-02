@@ -9,7 +9,7 @@ import {
   type FormatLocale,
 } from '@/api/profiles/profiles'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
-import { formatProfileAge } from '@/utils/profile-format'
+import { formatLocalizedAge } from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
@@ -182,7 +182,7 @@ function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t
     avatarFallback: profile.displayName,
     displayName: profile.displayName,
     gender: profile.gender,
-    meta: `${formatProfileAge(locale, profile.age)} / ${profile.occupation}`,
+    meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
     badge: t(familyModeBadgeKey(familyMode)),
     summary: profile.maritalPlan,
     facts: [

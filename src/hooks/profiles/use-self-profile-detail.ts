@@ -1,6 +1,7 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { getSelfProfileDetail, type FormatLocale, type SelfProfileDetail } from '@/api/profiles/profiles'
-import { formatProfileAge, formatProfileDate, formatProfileHeight, formatProfileLanguages } from '@/utils/profile-format'
+import { formatLocalizedDate } from '@/utils/locale-format'
+import { formatLocalizedAge, formatProfileHeight, formatProfileLanguages } from '@/utils/profile-format'
 import type { ProfileDetailBadgeItem } from '@/types/profiles/detail'
 
 type Translate = (key: string) => string
@@ -50,7 +51,7 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
         displayName: profile.value.displayName,
         gender: profile.value.gender,
         meta: [
-          formatProfileAge(locale.value, profile.value.age),
+          formatLocalizedAge(locale.value, profile.value.age),
           profile.value.occupation,
           profile.value.city,
         ].join(' / '),
@@ -62,12 +63,12 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
           { label: t('fields.status'), value: statusText },
           { label: t('fields.verification'), value: verificationText },
           { label: t('fields.visibility'), value: visibilityText },
-          { label: t('fields.lastActive'), value: formatProfileDate(locale.value, profile.value.lastActiveAt) },
-          { label: t('fields.joinedAt'), value: formatProfileDate(locale.value, profile.value.joinedAt) },
+          { label: t('fields.lastActive'), value: formatLocalizedDate(locale.value, profile.value.lastActiveAt) },
+          { label: t('fields.joinedAt'), value: formatLocalizedDate(locale.value, profile.value.joinedAt) },
         ],
       },
       overviewFacts: [
-        fact(t('fields.age'), formatProfileAge(locale.value, profile.value.age)),
+        fact(t('fields.age'), formatLocalizedAge(locale.value, profile.value.age)),
         fact(t('fields.height'), formatProfileHeight(profile.value.height)),
         fact(t('fields.city'), profile.value.city),
         fact(t('fields.country'), profile.value.country),
