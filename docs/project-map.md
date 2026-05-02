@@ -2,16 +2,16 @@
 
 ## 一句话
 
-`cupid-match` 是一个面向长期关系与真实相亲流程的前端原型，重点不是高频聊天，而是“筛选 -> 判断 -> 线下接触 -> 关系推进”。
+`cupid-match` 是一个面向长期关系与真实相亲流程的婚恋平台前台原型，重点是“筛选 -> 判断 -> 线下接触 -> 关系推进”。
 
-## 产品主路径
+## 产品路径
 
-- 本人视角：浏览资料、筛选候选人、查看详情、参与活动。
-- 家庭视角：从家庭立场筛选和判断，推动后续接触。
-- 活动视角：用线下活动把线上资料浏览转成真实接触。
-- 账户中心：维护资料、认证、消息、活动、会员与安全设置。
+- 本人视角：浏览资料、筛选候选人、查看详情、参与活动
+- 家庭视角：从家庭立场筛选和判断，推动后续接触
+- 活动视角：用线下活动把线上浏览转成真实接触
+- 账户中心：维护资料、认证、消息、活动、会员与安全设置
 
-## 当前页面范围
+## 页面范围
 
 - 公共页：`/pages/index`、`/pages/public/about`、`/pages/public/contact`、`/pages/public/membership`
 - 认证页：`/pages/auth/login`、`/pages/auth/register`
@@ -20,24 +20,24 @@
 - 账户页：`/pages/account/*`
 - 兜底页：`/pages/not-found`
 
-## 当前技术链路
+## 技术链路
 
-当前前端已经收敛成单一链路：
+前端采用以下调用链：
 
-```txt
+```text
 page -> hook -> api -> mock-server
 ```
 
-说明：
+职责：
 
-- 页面负责布局、交互绑定和展示。
-- `src/hooks/*` 负责异步状态、分页筛选、少量页面数据组装。
-- `src/api/*` 负责 DTO、请求方法和稳定 HTTP 边界。
-- `mock-server/src/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页。
+- 页面负责布局、交互绑定和展示
+- `src/hooks/*` 负责页面级异步状态、筛选、分页和数据组装
+- `src/api/*` 负责 HTTP 边界和类型
+- `mock-server/src/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页
 
-## 当前目录事实
+## 目录事实
 
-当前已经存在并在运行中的目录：
+主目录：
 
 - `src/api`
 - `src/hooks`
@@ -47,20 +47,9 @@ page -> hook -> api -> mock-server
 - `src/utils`
 - `mock-server`
 
-已经退出运行链路的目录或层：
-
-- `src/composables`
-- `src/api/modules`
-- `src/mock`
-- `src/mappers`
-- `src/types/vm`
-- `api client / contract / provider` 额外分层
-
 ## API 结构
 
-当前每个域只保留两类文件：
-
-```txt
+```text
 src/api/
   account/
     account.ts
@@ -75,66 +64,34 @@ src/api/
     profiles.ts
     profiles.types.ts
   shared/
-    http.ts
     config.ts
+    http.ts
 ```
 
 约定：
 
-- `*.types.ts` 放 DTO、query、payload、response 类型。
-- `*.ts` 放域 API 方法。
-- `src/api/shared/http.ts` 负责统一请求、错误处理和日志。
+- `*.types.ts` 放 DTO、query、payload、response 类型
+- `*.ts` 放域 API 方法
+- `src/api/shared/http.ts` 负责统一请求、错误处理和日志
 
 ## Mock Server 事实
 
-当前 mock 层不是内存 mock，也不是纯静态 JSON 直出，而是：
+mock 层通过独立的 HTTP 服务提供接口：
 
-- `Fastify + LowDB mock-server` 作为底层 HTTP 服务与数据访问层
-- `mock-server/src/server.ts` 负责自定义 `/api/...` 路由
-- `mock-server/db.json` 作为事实数据源
-- `mock-server/src/config.ts` 负责 host、port、前缀与日志开关
+- `Fastify + LowDB`
+- `mock-server/src/server.ts` 提供 `/api/...` 路由
+- `mock-server/db.json` 提供事实数据
 
-当前前端只通过 HTTP 访问：
+前端通过 HTTP 访问：
 
 - `GET /api/ping`
+- `GET /api/profiles/featured`
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
-- `GET /api/profiles/:id`
+- `GET /api/profiles/self/:id`
+- `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
 - `GET /api/account/overview`
 - `POST /api/auth/login`
 - `POST /api/auth/register`
-
-## 当前完成度
-
-前端主链路重构已经完成：
-
-- 旧 `composables / api modules / mock` 链路已退出
-- 页面已切到 `hooks`
-- API 已收敛到 `src/api/*/{domain}.ts`
-- `mappers` 和 `types/vm` 已移除
-- mock 运行时已统一走 `mock-server`
-
-## 当前最小回归结果
-
-最近一次最小回归已验证：
-
-- `npm.cmd run type-check` 通过
-- `GET /api/ping` 正常
-- `GET /api/profiles/self` 正常
-- `GET /api/profiles/family` 正常
-- `GET /api/profiles/:id` 正常
-- `GET /api/events` 正常
-- `GET /api/events/:id` 正常
-- `GET /api/account/overview` 正常
-- `POST /api/auth/login` 使用 mock 账号可正常返回 session
-
-## 后续优先级
-
-下一步不再是继续拆架构，而是：
-
-1. 做页面级回归。
-2. 整理并提交当前工作区。
-3. 保持文档与当前结构同步。
-4. 逐步用真实后端替换 `mock-server`。

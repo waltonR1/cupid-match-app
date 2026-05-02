@@ -1,8 +1,6 @@
 # 页面关系说明
 
-## 文档目的
-
-这份文档说明当前项目里的真实页面、主导航关系和页面跳转关系。它面向主分支长期维护，不记录设计 token 迁移过程。
+本文档说明项目里的真实页面、主导航关系和页面跳转入口。
 
 依据文件：
 
@@ -23,56 +21,56 @@
 - `/pages/public/membership`
   会员体系。展示会员权益、服务分层和注册/升级入口。
 
-### 认证与注册页
+### 认证页
 
 - `/pages/auth/login`
-  登录页。当前用于演示登录入口。
+  登录页。
 - `/pages/auth/register`
-  注册页。承接免费注册、会员方案和 CTA 转化。
+  注册页。
 
-### 发现页
+### 资料页
 
 - `/pages/profiles/self/index`
-  本人视角资料列表。面向本人筛选候选资料。
+  本人视角资料列表。
 - `/pages/profiles/self/detail`
-  本人视角资料详情。通过 `?id=` 参数进入指定资料。
+  本人视角资料详情，通过 `?id=` 进入指定资料。
 - `/pages/profiles/family/index`
-  家庭视角资料列表。展示支持家庭主导前期筛选与判断的资料。
+  家庭视角资料列表。
 - `/pages/profiles/family/detail`
-  家庭视角资料详情。通过 `?id=` 参数进入指定资料。
+  家庭视角资料详情，通过 `?id=` 进入指定资料。
 
 ### 账户页
 
 - `/pages/account/profile`
-  我的资料。当前账户入口，`openAccountPage()` 也落到这里。
+  我的资料，账户主入口。
 - `/pages/account/verification`
-  认证中心。承接实名、学历、婚况、职业等信任能力。
+  认证中心。
 - `/pages/account/connections`
-  我的缘分。承接收藏、推荐、互相喜欢和关系机会。
+  我的缘分。
 - `/pages/account/messages`
-  消息。承接会话、未读状态和沟通入口。
+  消息。
 - `/pages/account/safety`
-  隐私与安全。承接资料可见性、联系规则、风险提示和安全控制。
+  隐私与安全。
 - `/pages/account/membership`
-  会员与服务。承接当前会员、权益、人工服务和升级入口。
+  会员与服务。
 - `/pages/account/activity`
-  我的活动。承接报名、候补、已完成活动和活动后跟进。
+  我的活动。
 
 ### 活动页
 
 - `/pages/events/index`
-  活动列表。展示活动卡片和活动详情入口。
+  活动列表。
 - `/pages/events/detail`
-  活动详情。通过 `?id=` 参数进入指定活动。
+  活动详情，通过 `?id=` 进入指定活动。
 
 ### 辅助页
 
 - `/pages/not-found`
-  404 / 找不到页面。
+  404 页面。
 
 ## 全局导航
 
-主导航由 `NAV_LIST` 统一配置，跳转逻辑走 `navigateByNavKey()`。
+主导航由 `NAV_LIST` 统一配置，跳转逻辑走 `navigateByNavKey()`：
 
 - `common.nav.about` -> `/pages/public/about`
 - `common.nav.self` -> `/pages/profiles/self/index`
@@ -83,7 +81,7 @@
 
 ## 页面跳转入口
 
-这些函数集中在 `src/utils/navigation.ts`，用于主导航、页面 CTA、卡片和页面流程跳转。
+这些函数集中在 `src/utils/navigation.ts`：
 
 - `openLoginPage()` -> `/pages/auth/login`
 - `openRegisterPage()` -> `/pages/auth/register`
@@ -103,41 +101,41 @@
 
 ### 访客了解平台
 
-1. 进入首页。
-2. 浏览关于我们、会员体系、家庭主导推进路径、活动或联系方式。
-3. 从 CTA 进入注册页。
+1. 进入首页
+2. 浏览关于我们、会员体系、活动和联系方式
+3. 从 CTA 进入注册页
 
 ### 本人筛选对象
 
-1. 从首页或主导航进入 `/pages/profiles/self/index`。
-2. 浏览本人视角资料列表。
-3. 进入 `/pages/profiles/self/detail?id=...`。
-4. 根据资料信息进入注册、活动或后续账户流程。
+1. 进入 `/pages/profiles/self/index`
+2. 浏览本人视角资料列表
+3. 进入 `/pages/profiles/self/detail?id=...`
+4. 根据资料信息进入注册、活动或后续账户流程
 
 ### 家庭主导推进
 
-1. 从首页或主导航进入 `/pages/profiles/family/index`。
-2. 浏览家庭可见资料。
-3. 进入 `/pages/profiles/family/detail?id=...`。
-4. 在授权边界内主导前期筛选与判断，并推动后续接触节奏。
+1. 进入 `/pages/profiles/family/index`
+2. 浏览家庭可见资料
+3. 进入 `/pages/profiles/family/detail?id=...`
+4. 在授权边界内进行前期筛选与判断，并推动后续接触
 
 ### 活动推进
 
-1. 从首页或主导航进入 `/pages/events/index`。
-2. 浏览活动列表。
-3. 进入 `/pages/events/detail?id=...`。
-4. 从活动详情进入注册或后续报名动作。
+1. 进入 `/pages/events/index`
+2. 浏览活动列表
+3. 进入 `/pages/events/detail?id=...`
+4. 从活动详情进入报名或后续动作
 
 ### 账户维护
 
-1. 从注册、会员或其它账户 CTA 进入 `/pages/account/profile`。
-2. 按需进入认证中心、我的缘分、消息、隐私与安全、会员与服务或我的活动。
-3. 账户区以资料质量、信任认证、关系机会、沟通和安全边界为核心。
+1. 进入 `/pages/account/profile`
+2. 按需进入认证、缘分、消息、安全、会员或活动页面
+3. 围绕资料质量、信任认证、关系机会、沟通和安全边界完成维护
 
 ## 路由一致性要求
 
-- 账户入口统一落到 `/pages/account/profile`。
-- 账户活动页统一使用 `/pages/account/activity`。
-- 账户关系机会页统一使用 `/pages/account/connections`。
-- 账户隐私与安全页统一使用 `/pages/account/safety`。
-- 新增页面时必须先更新 `src/pages.json`，再补充导航或演示跳转函数，最后同步更新本文档。
+- 账户入口统一使用 `/pages/account/profile`
+- 账户活动页统一使用 `/pages/account/activity`
+- 账户关系机会页统一使用 `/pages/account/connections`
+- 账户安全页统一使用 `/pages/account/safety`
+- 新增页面时先更新 `src/pages.json`，再补导航或跳转函数，最后同步本文档

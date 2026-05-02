@@ -1,80 +1,56 @@
 # 文档索引
 
-这个目录存放 `cupid-match` 项目的产品、架构和协作文档。
-
-如果你是第一次接触这个项目，建议按下面顺序阅读。
+`docs/` 目录存放项目的产品、结构、页面关系和协作说明。
 
 ## 推荐阅读顺序
 
 1. [project-map.md](./project-map.md)
-   产品 / 技术总览，适合先建立全局认知。
+   产品路径、页面范围、技术链路和项目事实。
 2. [project-introduction.md](./project-introduction.md)
-   项目背景、产品定位、核心问题、用户角色和当前状态。
+   项目背景、产品定位和核心判断。
 3. [project-structure.md](./project-structure.md)
-   代码分层、目录职责、架构约束和新增功能流程。
-4. [mock-server-guide.md](./mock-server-guide.md)
-   当前 mock-server 结构、启动方式、接口边界和联调说明。
-5. [page-relationships.md](./page-relationships.md)
-   页面清单、导航关系、演示跳转和典型用户流。
+   代码分层、目录职责和工程约定。
+4. [page-relationships.md](./page-relationships.md)
+   页面清单、导航关系和跳转入口。
+5. [mock-server-guide.md](./mock-server-guide.md)
+   mock-server 的结构、启动方式和接口边界。
 6. [token-usage-guide.md](./token-usage-guide.md)
-   设计 token 的使用规则和校验要求。
+   设计 token 使用规则。
 7. [git-commit-convention.md](./git-commit-convention.md)
-   Git 提交格式与协作规范。
+   Git 提交规范。
 
 ## 按问题查找
 
-### 想知道“这个项目到底是什么”
-
-看：
+### 想知道项目是什么
 
 - [project-map.md](./project-map.md)
 - [project-introduction.md](./project-introduction.md)
 
-### 想知道“页面有哪些、怎么跳”
-
-看：
-
-- [page-relationships.md](./page-relationships.md)
-
-### 想知道“代码应该写在哪一层”
-
-看：
+### 想知道代码应该写在哪一层
 
 - [project-structure.md](./project-structure.md)
 
-### 想知道“mock-server 怎么启动、提供哪些接口”
+### 想知道页面有哪些、怎么跳
 
-看：
+- [page-relationships.md](./page-relationships.md)
+
+### 想知道 mock-server 怎么启动、提供哪些接口
 
 - [mock-server-guide.md](./mock-server-guide.md)
 
-### 想知道“样式 token 怎么用”
-
-看：
+### 想知道 token 怎么使用
 
 - [token-usage-guide.md](./token-usage-guide.md)
 
-### 想知道“commit 怎么写”
-
-看：
+### 想知道 commit 怎么写
 
 - [git-commit-convention.md](./git-commit-convention.md)
 
 ## 文档维护约定
 
-- 新增页面时，同步更新 `page-relationships.md`
-- 调整项目结构时，同步更新 `project-structure.md`
-- 调整 mock-server 结构、脚本或接口边界时，同步更新 `mock-server-guide.md`
-- 补充全局产品认知时，优先更新 `project-map.md`
-- 修改设计 token 规范时，同步更新 `token-usage-guide.md`
-- 只在当前开发过程里有价值的草案、检查清单和收尾记录，不进入 `docs/` 根目录
-
-## 文档分工
-
-- `project-map.md`：全局认知
-- `project-introduction.md`：产品背景与定位说明
-- `project-structure.md`：代码架构与分层规则
-- `mock-server-guide.md`：mock-server 运行与接口边界说明
-- `page-relationships.md`：页面与跳转关系
-- `token-usage-guide.md`：token 规则
-- `git-commit-convention.md`：提交规范
+- 文档只描述当前状态
+- 不记录过程性说明和阶段性备注
+- 新增页面时同步更新 `page-relationships.md`
+- 调整结构时同步更新 `project-structure.md`
+- 调整 mock-server 时同步更新 `mock-server-guide.md`
+- 调整 token 规则时同步更新 `token-usage-guide.md`

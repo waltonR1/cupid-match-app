@@ -1,10 +1,10 @@
 # Token 使用指南
 
-本文档面向页面和组件开发者，用于说明在业务代码里如何选择和使用设计 token。
+本文档说明页面和组件中如何选择和使用设计 token。
 
 ## 基本原则
 
-业务代码只允许使用这几类 token utility：
+业务代码允许使用以下 token utility：
 
 ```text
 semantic-*
@@ -19,11 +19,13 @@ shadow-*
 palette-*
 next-*
 legacy token utility
-直接写色值，例如 #d8b67a
+直接写颜色值，例如 #d8b67a
 token utility opacity 后缀，例如 bg-semantic-surface-card/80
 ```
 
 ## Token 分层
+
+### semantic
 
 `semantic` 是全局语义，用于跨页面复用的 UI 角色。
 
@@ -39,6 +41,8 @@ semantic.action.primary
 semantic.state.event.open.background
 ```
 
+### component
+
 `component` 是组件或业务模块语义，只用于明确属于某个模块的局部角色。
 
 常见例子：
@@ -51,7 +55,9 @@ component.event-card.background
 component.membership-tier.gold.fill
 ```
 
-`effect` 只用于效果 token，目前包括渐变和阴影。
+### effect
+
+`effect` 用于效果 token，包括渐变和阴影。
 
 常见例子：
 
@@ -63,11 +69,13 @@ effect.shadow.hero
 effect.shadow.dropdown
 ```
 
-`palette` 只用于 token 内部取值，不允许页面或组件直接使用，也不会生成 Tailwind utility。
+### palette
+
+`palette` 只用于 token 内部取值，不直接进入业务页面或组件，也不生成 Tailwind utility。
 
 ## Class 生成规则
 
-颜色 token 按 token 路径生成 utility：
+颜色 token 按路径生成 utility：
 
 ```text
 semantic.page.default -> bg-semantic-page-default
@@ -105,13 +113,12 @@ shadow-next-shadow-panel
 
 ## 选择顺序
 
-1. 优先使用 `semantic`，前提是该 UI 角色是跨页面通用语义。
-2. 如果语义只属于某个模块或组件，使用 `component`。
-3. 渐变和阴影只使用 `effect` 对应生成的 utility。
-4. 不确定是否应该沉淀为全局语义时，先放在 `component`。
-5. 只有当同一角色稳定跨页面复用时，才考虑提升到 `semantic`。
+1. 优先使用 `semantic`
+2. 语义只属于某个模块或组件时使用 `component`
+3. 渐变和阴影只使用 `effect`
+4. 不确定是否应沉淀为全局语义时，先放在 `component`
 
-不要因为两个颜色值相同就复用同一个 token。语义准确优先，值相同但语义不同也应该拆开。
+不要因为两个颜色值相同就复用同一个 token。语义优先于颜色值。
 
 ## 常用语义
 
@@ -165,18 +172,12 @@ bg-semantic-action-primary-hover
 text-semantic-action-primary-contrast
 ```
 
-## 常见写法
+## 示例写法
 
 页面根容器：
 
 ```vue
 <view class="min-h-screen bg-semantic-page-default text-semantic-text-primary">
-```
-
-次级页面背景：
-
-```vue
-<view class="min-h-screen bg-semantic-page-subtle text-semantic-text-primary">
 ```
 
 标准卡片：
@@ -203,7 +204,7 @@ Hero 面板：
 <view class="border border-semantic-border-hero bg-semantic-surface-hero-panel shadow-hero">
 ```
 
-局部业务控件，例如 discovery 筛选选中态：
+局部业务控件：
 
 ```vue
 <view class="border border-component-directory-control-selected-border bg-component-directory-control-selected-background text-component-directory-control-selected-text">
@@ -228,10 +229,9 @@ component.directory-control.selected.background
 card-bg
 gold-text
 blue-border
-page-bg 用在卡片内部
 ```
 
-同一 UI 语义如果包含多个属性，必须拆层：
+同一 UI 语义如果包含多个属性，拆成多层：
 
 ```text
 component.directory-control.selected.background
@@ -239,15 +239,9 @@ component.directory-control.selected.text
 component.directory-control.selected.border
 ```
 
-不要写成：
+## 校验
 
-```text
-component.directory-control.selected-color
-```
-
-## 修改后的校验
-
-改 token 定义或 token class 后，至少运行：
+修改 token 定义或 token class 后，至少运行：
 
 ```bash
 npm run generate:token-docs
@@ -258,12 +252,4 @@ npm run type-check
 
 ```bash
 npm run build:h5
-```
-
-生成的 token audit 必须保持以下三项为 `0`：
-
-```text
-unknown token utility references
-residual next-prefixed token references
-token opacity suffix references
 ```
