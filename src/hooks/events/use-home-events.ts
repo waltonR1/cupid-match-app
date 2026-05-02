@@ -1,38 +1,28 @@
 import { computed, ref, watch } from 'vue'
 import { listEvents, type EventDTO, type FormatLocale } from '@/api/events/events'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { HomeEventsViewModel } from '@/types/home/view'
 import { formatEventDate } from '@/utils/locale-format'
 
 type Translate = (key: string) => string
 
 export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
-  const loading = ref(false)
-  const error = ref<unknown>(null)
+  const latest = useLatestRequest()
   const items = ref<EventDTO[]>([])
-  let requestToken = 0
 
   watch(() => locale.value, () => {
     void load()
   }, { immediate: true })
 
   async function load() {
-    const currentToken = ++requestToken
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await listEvents()
-      if (currentToken !== requestToken) return
-      items.value = response.items
-    } catch (requestError) {
-      if (currentToken !== requestToken) return
-      error.value = requestError
-      items.value = []
-    } finally {
-      if (currentToken === requestToken) {
-        loading.value = false
+    const response = await latest.run(() => listEvents())
+    if (!response) {
+      if (latest.error.value !== null) {
+        items.value = []
       }
+      return
     }
+    items.value = response.items
   }
 
   const viewModel = computed<HomeEventsViewModel>(() => ({
@@ -62,8 +52,8 @@ export function useHomeEvents(t: Translate, locale: { value: FormatLocale }) {
   }))
 
   return {
-    loading,
-    error,
+    loading: latest.loading,
+    error: latest.error,
     viewModel,
     refresh: load,
   }

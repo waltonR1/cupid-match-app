@@ -7,15 +7,14 @@ import {
   type EventStatusDTO,
   type FormatLocale,
 } from '@/api/events/events'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { formatEventDetailDate } from '@/utils/locale-format'
 
 type Translate = (key: string) => string
 
 export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
-  const loading = ref(false)
-  const error = ref<unknown>(null)
+  const latest = useLatestRequest()
   const payload = ref<EventDetailResponseDTO | null>(null)
-  let requestToken = 0
 
   watch([eventId, () => locale.value], () => {
     void load()
@@ -28,23 +27,14 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
       return
     }
 
-    const currentToken = ++requestToken
-    loading.value = true
-    error.value = null
-
-    try {
-      const response = await getEventDetail(id)
-      if (currentToken !== requestToken) return
-      payload.value = response
-    } catch (requestError) {
-      if (currentToken !== requestToken) return
-      error.value = requestError
-      payload.value = null
-    } finally {
-      if (currentToken === requestToken) {
-        loading.value = false
+    const response = await latest.run(() => getEventDetail(id))
+    if (!response) {
+      if (latest.error.value !== null) {
+        payload.value = null
       }
+      return
     }
+    payload.value = response
   }
 
   const pageData = computed(() => {
@@ -99,8 +89,8 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
   })
 
   return {
-    loading,
-    error,
+    loading: latest.loading,
+    error: latest.error,
     pageData,
     refresh: load,
   }

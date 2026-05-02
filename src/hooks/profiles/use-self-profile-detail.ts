@@ -1,5 +1,6 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { getSelfProfileDetail, type FormatLocale, type SelfProfileDetail } from '@/api/profiles/profiles'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { formatLocalizedDate } from '@/utils/locale-format'
 import { formatLocalizedAge, formatProfileHeight, formatProfileLanguages } from '@/utils/profile-format'
 import type { ProfileDetailBadgeItem } from '@/types/profiles/detail'
@@ -7,10 +8,8 @@ import type { ProfileDetailBadgeItem } from '@/types/profiles/detail'
 type Translate = (key: string) => string
 
 export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>) {
+  const latest = useLatestRequest()
   const profile = ref<Awaited<ReturnType<typeof getSelfProfileDetail>>>(null)
-  const loading = ref(false)
-  const error = ref<unknown>(null)
-  let requestToken = 0
 
   watch([profileId, locale], () => {
     void load()
@@ -108,34 +107,24 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
 
   async function load() {
     const id = profileId.value
-    const currentToken = ++requestToken
-
     if (!id) {
       profile.value = null
       return
     }
 
-    loading.value = true
-    error.value = null
-
-    try {
-      const nextProfile = await getSelfProfileDetail(id)
-      if (currentToken !== requestToken) return
-      profile.value = nextProfile
-    } catch (requestError) {
-      if (currentToken !== requestToken) return
-      profile.value = null
-      error.value = requestError
-    } finally {
-      if (currentToken === requestToken) {
-        loading.value = false
+    const nextProfile = await latest.run(() => getSelfProfileDetail(id))
+    if (nextProfile === undefined) {
+      if (latest.error.value !== null) {
+        profile.value = null
       }
+      return
     }
+    profile.value = nextProfile
   }
 
   return {
-    loading,
-    error,
+    loading: latest.loading,
+    error: latest.error,
     heroData: computed(() => pageData.value.heroData),
     overviewFacts: computed(() => pageData.value.overviewFacts),
     relationshipFacts: computed(() => pageData.value.relationshipFacts),

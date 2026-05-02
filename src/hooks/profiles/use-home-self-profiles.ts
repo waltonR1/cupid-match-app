@@ -1,17 +1,15 @@
 import {computed, ref, watch, type Ref} from 'vue'
 import {getFeaturedSelfProfiles, type FormatLocale, type SelfProfileCard} from '@/api/profiles/profiles'
+import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {HomeProfilesItem} from '@/types/home/view'
 import {formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
 
 type Translate = (key: string) => string
 
-
 /** 首页精选会员数据 */
 export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
-    const loading = ref(false)
-    const error = ref<unknown>(null)
+    const latest = useLatestRequest()
     const items = ref<HomeProfilesItem[]>([])
-    let requestToken = 0
 
     watch(locale, () => {
         void load()
@@ -19,35 +17,19 @@ export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
 
     /** 加载首页精选会员 */
     async function load() {
-        const currentToken = ++requestToken
+        const response = await latest.run(() => getFeaturedSelfProfiles())
 
-        loading.value = true
-        error.value = null
+        if (!response) return
 
-        try {
-            const response = await getFeaturedSelfProfiles()
-
-            if (currentToken !== requestToken) return
-
-            items.value = response.items.map(profile => ({
-                id: profile.id,
-                card: toSelfProfileCard(profile, locale.value, t),
-            }))
-        } catch (requestError) {
-            if (currentToken !== requestToken) return
-
-            error.value = requestError
-            items.value = []
-        } finally {
-            if (currentToken === requestToken) {
-                loading.value = false
-            }
-        }
+        items.value = response.items.map(profile => ({
+            id: profile.id,
+            card: toSelfProfileCard(profile, locale.value, t),
+        }))
     }
 
     return {
-        loading,
-        error,
+        loading: latest.loading,
+        error: latest.error,
         featuredProfiles: computed(() => items.value),
         refresh: load,
     }

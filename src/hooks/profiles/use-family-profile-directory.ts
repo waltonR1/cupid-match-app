@@ -8,6 +8,7 @@ import {
   type FamilyProfileSortKey,
   type FormatLocale,
 } from '@/api/profiles/profiles'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
 import { formatLocalizedAge } from '@/utils/profile-format'
 
@@ -34,13 +35,11 @@ const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
 export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
+  const latest = useLatestRequest()
   const filters = ref<FamilyDirectoryFilters>({ ...DEFAULT_FILTERS })
   const sortKey = ref<FamilyProfileSortKey>(DEFAULT_SORT)
   const page = ref(1)
-  const loading = ref(false)
-  const error = ref<unknown>(null)
   const response = ref<FamilyProfileDirectoryResponse | null>(null)
-  let requestToken = 0
 
   watch([filters, sortKey, page, locale], () => {
     void load()
@@ -88,23 +87,14 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
   })
 
   async function load() {
-    const currentToken = ++requestToken
-    loading.value = true
-    error.value = null
-
-    try {
-      const nextResponse = await getFamilyProfileDirectory(buildQuery())
-      if (currentToken !== requestToken) return
-      response.value = nextResponse
-    } catch (requestError) {
-      if (currentToken !== requestToken) return
-      error.value = requestError
-      response.value = null
-    } finally {
-      if (currentToken === requestToken) {
-        loading.value = false
+    const nextResponse = await latest.run(() => getFamilyProfileDirectory(buildQuery()))
+    if (!nextResponse) {
+      if (latest.error.value !== null) {
+        response.value = null
       }
+      return
     }
+    response.value = nextResponse
   }
 
   function buildQuery(): FamilyProfileDirectoryQuery {
@@ -146,8 +136,8 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
   }
 
   return {
-    loading,
-    error,
+    loading: latest.loading,
+    error: latest.error,
     filters,
     sortKey,
     pageData,
