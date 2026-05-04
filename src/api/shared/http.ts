@@ -1,4 +1,5 @@
 import {resolveApiBaseUrl, resolveApiLoggingEnabled} from './config'
+import { useLocaleStore } from '@/stores/modules/locale'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD'
 
@@ -92,8 +93,8 @@ function buildUrl(path: string, query?: RequestOptions['query']) {
     const normalizedPath = path.startsWith('/') ? path : `/${path}`
     const search = new URLSearchParams()
     const nextQuery = {
-        ...(query ?? {}),
         lang: resolveRequestLocale(),
+        ...(query ?? {}),
     }
 
     Object.entries(nextQuery as Record<string, unknown>).forEach(([key, value]) => {
@@ -106,6 +107,17 @@ function buildUrl(path: string, query?: RequestOptions['query']) {
 }
 
 function resolveRequestLocale(): 'zh' | 'fr' | 'en' {
+    try {
+        const localeStore = useLocaleStore()
+        const locale = localeStore.locale
+
+        if (locale === 'zh' || locale === 'fr' || locale === 'en') {
+            return locale
+        }
+    } catch {
+        // ignore pinia not ready
+    }
+
     try {
         const persisted = uni.getStorageSync('pinia:locale')
         const state = typeof persisted === 'string' ? JSON.parse(persisted) : persisted
