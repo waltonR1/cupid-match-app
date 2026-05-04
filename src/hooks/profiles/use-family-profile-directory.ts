@@ -10,6 +10,7 @@ import {
 } from '@/api/profiles/profiles'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { ActiveDirectoryFilterChip, DirectoryOption, FamilyDirectoryFilters } from '@/types/profiles/directory'
+import type { ProfileFilterToolbarItem } from '@/types/profiles/view'
 import { formatLocalizedAge } from '@/utils/profile-format'
 
 type Translate = (key: string) => string
@@ -61,24 +62,6 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
       })),
       filters: filterItems,
       activeFilters: buildActiveFilterChips(filterItems, filters.value),
-      resultSummary: {
-        prefix: t('directory.resultPrefix'),
-        suffix: t('directory.resultSuffix'),
-        pageText: t('directory.pagePrefix'),
-        total: pagination.total,
-        start: pagination.total ? (pagination.page - 1) * pagination.pageSize + 1 : 0,
-        end: pagination.total ? Math.min(pagination.page * pagination.pageSize, pagination.total) : 0,
-      },
-      resultSort: {
-        label: t('toolbar.sortLabel'),
-        key: sortKey.value,
-        options: [
-          { label: t('sort.priorityFirst'), value: 'priorityFirst' },
-          { label: t('sort.recentActive'), value: 'recentActive' },
-          { label: t('sort.ageAsc'), value: 'ageAsc' },
-          { label: t('sort.ageDesc'), value: 'ageDesc' },
-        ],
-      },
       page: pagination.page,
       pageSize: pagination.pageSize,
       total: pagination.total,
@@ -150,14 +133,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
   }
 }
 
-type ProfileDirectoryFilterItem = {
-  key: keyof FamilyDirectoryFilters
-  label: string
-  options: DirectoryOption[]
-  value: string
-  widthClass: string
-  group: 'primary' | 'secondary'
-}
+type ProfileDirectoryFilterItem = ProfileFilterToolbarItem<keyof FamilyDirectoryFilters>
 
 function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t: Translate) {
   const familyMode = resolveFamilyMode(profile)
