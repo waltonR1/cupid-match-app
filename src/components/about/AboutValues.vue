@@ -1,13 +1,18 @@
 <template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
+      <!-- Values 内容区域 -->
       <view class="grid gap-10 lg:grid-cols-[1.06fr_0.94fr]">
+        <!-- 左侧标题与价值卡片 -->
         <view class="grid gap-6">
-          <view class="relative overflow-hidden border border-semantic-border-default bg-semantic-surface-panel px-9 py-10 text-semantic-text-primary shadow-emphasis">
-  <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line" />
+          <view
+              class="relative overflow-hidden border border-semantic-border-default bg-semantic-surface-panel px-9 py-10 text-semantic-text-primary shadow-emphasis">
+            <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line"/>
+
+            <!-- Values 标题区 -->
             <view class="mb-5 inline-flex items-center gap-4">
-            <view class="h-[1px] w-16 bg-semantic-border-eyebrow" />
-            <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
+              <view class="h-[1px] w-16 bg-semantic-border-eyebrow"/>
+              <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
                 {{ t('values.eyebrow') }}
               </text>
             </view>
@@ -22,13 +27,14 @@
             </view>
           </view>
 
+          <!-- 左侧价值卡片列表 -->
           <view class="grid gap-6 md:grid-cols-2">
             <view
-              v-for="item in valueCards.slice(0, 2)"
-              :key="item.title"
-        class="relative overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-8 py-9 shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel"
+                v-for="item in valueCards.slice(0, 2)"
+                :key="item.title"
+                class="relative overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-8 py-9 shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel"
             >
-        <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line" />
+              <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line"/>
               <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
                 {{ item.index }}
               </view>
@@ -42,9 +48,11 @@
           </view>
         </view>
 
+        <!-- 右侧价值卡片 -->
         <view class="grid gap-6">
-          <view class="relative overflow-hidden border border-semantic-border-emphasis bg-semantic-surface-emphasis px-8 py-9 shadow-panel lg:mr-12">
-            <view class="absolute inset-x-0 top-0 h-px bg-semantic-border-emphasis-divider" />
+          <view
+              class="relative overflow-hidden border border-semantic-border-emphasis bg-semantic-surface-emphasis px-8 py-9 shadow-panel lg:mr-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-semantic-border-emphasis-divider"/>
             <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
               {{ valueCards[2].index }}
             </view>
@@ -56,8 +64,9 @@
             </view>
           </view>
 
-        <view class="relative overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-8 py-9 text-semantic-text-primary shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel lg:ml-12">
-          <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line" />
+          <view
+              class="relative overflow-hidden border border-semantic-border-soft bg-component-editorial-card-background px-8 py-9 text-semantic-text-primary shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel lg:ml-12">
+            <view class="absolute inset-x-0 top-0 h-px bg-component-editorial-card-line"/>
             <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
               {{ valueCards[3].index }}
             </view>
@@ -75,15 +84,16 @@
 </template>
 
 <script setup lang="ts">
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 
-const { t } = usePageI18n('about')
+/** About 页面命名空间文案 */
+const {t} = usePageI18n('about')
 
+/** 价值观卡片数据 */
 const valueCards = [
-  { index: '01', title: 'values.card1.title', desc: 'values.card1.desc' },
-  { index: '02', title: 'values.card2.title', desc: 'values.card2.desc' },
-  { index: '03', title: 'values.card3.title', desc: 'values.card3.desc' },
-  { index: '04', title: 'values.card4.title', desc: 'values.card4.desc' },
-]
+  {index: '01', title: 'values.card1.title', desc: 'values.card1.desc'},
+  {index: '02', title: 'values.card2.title', desc: 'values.card2.desc'},
+  {index: '03', title: 'values.card3.title', desc: 'values.card3.desc'},
+  {index: '04', title: 'values.card4.title', desc: 'values.card4.desc'},
+] as const
 </script>
-

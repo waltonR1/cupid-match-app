@@ -1,9 +1,10 @@
 <template>
   <view class="bg-semantic-page-subtle">
     <view class="mx-auto max-w-[1280px] px-8 py-24">
+      <!-- Audience 标题区 -->
       <view class="mb-12">
         <view class="mb-5 inline-flex items-center gap-4">
-          <view class="h-[1px] w-16 bg-semantic-border-eyebrow" />
+          <view class="h-[1px] w-16 bg-semantic-border-eyebrow"/>
           <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
             {{ t('audience.eyebrow') }}
           </text>
@@ -19,14 +20,15 @@
         </view>
       </view>
 
+      <!-- 目标受众卡片列表 -->
       <view class="grid gap-6 lg:grid-cols-4">
         <view
-          v-for="item in audienceCards"
-          :key="item.title"
-          class="relative min-h-[320px] overflow-hidden px-7 py-8 transition-transform duration-300"
-          :class="cardClass(item.emphasis)"
+            v-for="item in audienceCards"
+            :key="item.title"
+            class="relative min-h-[320px] overflow-hidden px-7 py-8 transition-transform duration-300"
+            :class="cardClass(item.emphasis)"
         >
-          <view class="absolute inset-x-0 top-0 h-px" :class="lineClass(item.emphasis)" />
+          <view class="absolute inset-x-0 top-0 h-px" :class="lineClass(item.emphasis)"/>
 
           <view class="flex items-start justify-between">
             <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
@@ -51,17 +53,20 @@
 </template>
 
 <script setup lang="ts">
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 
-const { t } = usePageI18n('about')
+/** About 页面命名空间文案 */
+const {t} = usePageI18n('about')
 
+/** 目标受众卡片数据 */
 const audienceCards = [
-  { index: '01', emphasis: false, title: 'audience.card1.title', desc: 'audience.card1.desc' },
-  { index: '02', emphasis: false, title: 'audience.card2.title', desc: 'audience.card2.desc' },
-  { index: '03', emphasis: false, title: 'audience.card3.title', desc: 'audience.card3.desc' },
-  { index: '04', emphasis: true, title: 'audience.card4.title', desc: 'audience.card4.desc' },
+  {index: '01', emphasis: false, title: 'audience.card1.title', desc: 'audience.card1.desc'},
+  {index: '02', emphasis: false, title: 'audience.card2.title', desc: 'audience.card2.desc'},
+  {index: '03', emphasis: false, title: 'audience.card3.title', desc: 'audience.card3.desc'},
+  {index: '04', emphasis: true, title: 'audience.card4.title', desc: 'audience.card4.desc'},
 ] as const
 
+/** 根据是否强调控制卡片样式 */
 function cardClass(emphasis: boolean) {
   if (emphasis) {
     return 'border border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary shadow-emphasis lg:translate-y-4'
@@ -70,6 +75,7 @@ function cardClass(emphasis: boolean) {
   return 'border border-semantic-border-soft bg-component-editorial-card-background text-semantic-text-primary shadow-panel transition-all duration-300 hover:-translate-y-[3px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover hover:shadow-panel'
 }
 
+/** 根据是否强调控制顶部线条样式 */
 function lineClass(emphasis: boolean) {
   if (emphasis) {
     return 'bg-semantic-border-emphasis-divider'
@@ -78,4 +84,3 @@ function lineClass(emphasis: boolean) {
   return 'bg-component-editorial-card-line'
 }
 </script>
-
