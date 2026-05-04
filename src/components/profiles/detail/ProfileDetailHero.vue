@@ -19,7 +19,7 @@
         </view>
 
         <view class="mt-5 flex flex-wrap items-start gap-5">
-          <AppAvatar :value="data.avatarUrl" :fallback="data.avatarFallback" size="lg" tone="accent" />
+          <AppAvatar :value="data.avatarUrl" :fallback="data.displayName" size="lg" tone="accent" />
 
           <view class="min-w-0 flex-1">
             <view class="flex flex-wrap items-center gap-2.5">

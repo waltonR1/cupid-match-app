@@ -169,7 +169,6 @@ function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t
 
   return {
     avatarUrl: profile.avatarUrl,
-    avatarFallback: profile.displayName,
     displayName: profile.displayName,
     gender: profile.gender,
     meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,

@@ -1,5 +1,5 @@
 export { useFamilyProfileDetail } from './use-family-profile-detail'
 export { useFamilyProfileDirectory } from './use-family-profile-directory'
-export { useHomeSelfProfiles } from './use-home-self-profiles'
+export { useHomeSelfProfiles } from './use-self-profile-directory'
 export { useSelfProfileDetail } from './use-self-profile-detail'
 export { useSelfProfileDirectory } from './use-self-profile-directory'

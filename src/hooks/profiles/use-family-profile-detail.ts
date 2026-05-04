@@ -45,7 +45,6 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         eyebrow: t('hero.eyebrow'),
         recordId,
         avatarUrl: profile.value.avatarUrl,
-        avatarFallback: profile.value.displayName,
         displayName: profile.value.displayName,
         gender: profile.value.gender,
         meta: [

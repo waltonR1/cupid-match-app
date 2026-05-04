@@ -17,7 +17,6 @@ export interface ProfileDetailHeroData {
   eyebrow: string
   recordId: string
   avatarUrl: string
-  avatarFallback: string
   displayName: string
   gender?: Gender
   meta: string

@@ -1,5 +1,6 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import {
+  getFeaturedSelfProfiles,
   getSelfProfileDirectory,
   type FormatLocale,
   type SelfProfileCard,
@@ -9,6 +10,7 @@ import {
   type SelfProfileSortKey,
 } from '@/api/profiles/profiles'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
+import type { ProfileCardListItem } from '@/types/profiles/card'
 import type { ActiveDirectoryFilterChip, DirectoryOption, SelfDirectoryFilters } from '@/types/profiles/directory'
 import { formatLocalizedAge, formatProfileLanguages } from '@/utils/profile-format'
 
@@ -35,6 +37,35 @@ const PAGE_SIZE = 6
 const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
 const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
 const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
+
+/** 首页精选会员数据 */
+export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
+  const latest = useLatestRequest()
+  const items = ref<ProfileCardListItem[]>([])
+
+  watch(locale, () => {
+    void load()
+  }, { immediate: true })
+
+  /** 加载首页精选会员 */
+  async function load() {
+    const response = await latest.run(() => getFeaturedSelfProfiles())
+
+    if (!response) return
+
+    items.value = response.items.map(profile => ({
+      id: profile.id,
+      card: toSelfProfileCard(profile, locale.value, t),
+    }))
+  }
+
+  return {
+    loading: latest.loading,
+    error: latest.error,
+    featuredProfiles: computed(() => items.value),
+    refresh: load,
+  }
+}
 
 export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
   const latest = useLatestRequest()
@@ -164,7 +195,6 @@ type ProfileDirectoryFilterItem = {
 function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Translate) {
   return {
     avatarUrl: profile.avatarUrl,
-    avatarFallback: profile.displayName,
     displayName: profile.displayName,
     gender: profile.gender,
     meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,

@@ -46,7 +46,6 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
         eyebrow: t('hero.eyebrow'),
         recordId,
         avatarUrl: profile.value.avatarUrl,
-        avatarFallback: profile.value.displayName,
         displayName: profile.value.displayName,
         gender: profile.value.gender,
         meta: [

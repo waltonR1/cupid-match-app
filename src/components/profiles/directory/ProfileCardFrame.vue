@@ -6,7 +6,7 @@
     <!-- 头部信息 -->
     <view class="flex items-start justify-between gap-4">
       <view class="flex min-w-0 items-center gap-4">
-        <AppAvatar :value="data.avatarUrl" :fallback="data.avatarFallback"/>
+        <AppAvatar :value="data.avatarUrl" :fallback="data.displayName"/>
 
         <view class="min-w-0">
           <view class="flex items-center gap-2">

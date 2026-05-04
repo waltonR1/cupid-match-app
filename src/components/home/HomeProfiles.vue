@@ -50,13 +50,13 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.vue'
-import type {HomeProfilesItem} from '@/types/home/view'
+import type {ProfileCardListItem} from '@/types/profiles/card'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openSelfDetail, openSelfDirectoryPage} from '@/utils/navigation'
 
 /** 首页会员预览数据 */
 defineProps<{
-  profiles: HomeProfilesItem[]
+  profiles: ProfileCardListItem[]
 }>()
 
 /** 首页命名空间文案 */
