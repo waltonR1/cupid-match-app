@@ -1,14 +1,17 @@
+/** 卡片信息 */
 export interface ProfileCardFact {
     label: string
     value: string
 }
 
-export type ProfileCardGender = 'male' | 'female'
+/** 卡片性别 */
+export type Gender = 'male' | 'female'
 
+/** 资料卡片 */
 export interface ProfileCardViewModel {
     avatarUrl: string
     displayName: string
-    gender?: ProfileCardGender
+    gender?: Gender
     meta: string
     badge: string
     summary: string
@@ -17,6 +20,7 @@ export interface ProfileCardViewModel {
     footer: string
 }
 
+/** 卡片列表项 */
 export interface ProfileCardListItem {
     id: string
     card: ProfileCardViewModel

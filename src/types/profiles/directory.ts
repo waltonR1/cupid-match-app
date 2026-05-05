@@ -1,90 +1,99 @@
-import type { ComputedRef, Ref } from 'vue'
+import type {ComputedRef, Ref} from 'vue'
 
+/** 筛选选项 */
 export interface DirectoryOption {
-  label: string
-  value: string
+    label: string
+    value: string
 }
 
+/** 已选筛选标签 */
 export interface ActiveDirectoryFilterChip<TKey extends PropertyKey = string> {
-  key: TKey
-  label: string
-  value: string
+    key: TKey
+    label: string
+    value: string
 }
 
+/** 家庭资料筛选条件 */
 export interface FamilyDirectoryFilters {
-  gender: string
-  ageRange: string
-  city: string
-  education: string
-  intentCode: string
-  familyMode: string
-  occupation: string
-  industry: string
-  maritalStatus: string
-  hasChildren: string
-  acceptLongDistance: string
+    gender: string
+    ageRange: string
+    city: string
+    education: string
+    intentCode: string
+    familyMode: string
+    occupation: string
+    industry: string
+    maritalStatus: string
+    hasChildren: string
+    acceptLongDistance: string
 }
 
+/** 个人资料筛选条件 */
 export interface SelfDirectoryFilters {
-  gender: string
-  ageRange: string
-  city: string
-  heightRange: string
-  education: string
-  intentCode: string
-  industry: string
-  occupation: string
-  language: string
-  verified: string
-  maritalStatus: string
-  hasChildren: string
-  acceptLongDistance: string
+    gender: string
+    ageRange: string
+    city: string
+    heightRange: string
+    education: string
+    intentCode: string
+    industry: string
+    occupation: string
+    language: string
+    verified: string
+    maritalStatus: string
+    hasChildren: string
+    acceptLongDistance: string
 }
 
+/** 家庭资料排序方式 */
 export type FamilySortKey =
-  | 'priorityFirst'
-  | 'recentActive'
-  | 'ageAsc'
-  | 'ageDesc'
+    | 'priorityFirst'
+    | 'recentActive'
+    | 'ageAsc'
+    | 'ageDesc'
 
+/** 个人资料排序方式 */
 export type SelfSortKey =
-  | 'recentActive'
-  | 'priorityFirst'
-  | 'ageAsc'
-  | 'ageDesc'
+    | 'recentActive'
+    | 'priorityFirst'
+    | 'ageAsc'
+    | 'ageDesc'
 
+/** 资料目录基础状态 */
 export interface UseProfileDirectoryResult<TProfile, TFilters extends object, TSortKey extends string> {
-  filters: Ref<TFilters>
-  sortKey: Ref<TSortKey>
-  page: Ref<number>
-  pageSize: Ref<number>
-  sourceItems: Ref<TProfile[]>
+    filters: Ref<TFilters>
+    sortKey: Ref<TSortKey>
+    page: Ref<number>
+    pageSize: Ref<number>
+    sourceItems: Ref<TProfile[]>
 
-  total: ComputedRef<number>
-  totalPages: ComputedRef<number>
-  filteredItems: ComputedRef<TProfile[]>
-  sortedItems: ComputedRef<TProfile[]>
-  pagedItems: ComputedRef<TProfile[]>
-  pageStart: ComputedRef<number>
-  pageEnd: ComputedRef<number>
+    total: ComputedRef<number>
+    totalPages: ComputedRef<number>
+    filteredItems: ComputedRef<TProfile[]>
+    sortedItems: ComputedRef<TProfile[]>
+    pagedItems: ComputedRef<TProfile[]>
+    pageStart: ComputedRef<number>
+    pageEnd: ComputedRef<number>
 
-  updateFilters: (nextFilters: Partial<TFilters>) => void
-  removeFilter: (key: keyof TFilters) => void
-  resetFilters: () => void
-  updateSort: (nextSortKey: string) => void
-  changePage: (nextPage: number) => void
+    updateFilters: (nextFilters: Partial<TFilters>) => void
+    removeFilter: (key: keyof TFilters) => void
+    resetFilters: () => void
+    updateSort: (nextSortKey: string) => void
+    changePage: (nextPage: number) => void
 }
 
+/** 家庭资料目录状态 */
 export type UseFamilyDirectoryResult<TProfile> = UseProfileDirectoryResult<
-  TProfile,
-  FamilyDirectoryFilters,
-  FamilySortKey
+    TProfile,
+    FamilyDirectoryFilters,
+    FamilySortKey
 >
 
+/** 个人资料目录状态 */
 export type UseSelfDirectoryResult<TProfile> = UseProfileDirectoryResult<
-  TProfile,
-  SelfDirectoryFilters,
-  SelfSortKey
+    TProfile,
+    SelfDirectoryFilters,
+    SelfSortKey
 > & {
-  featuredProfiles: ComputedRef<TProfile[]>
+    featuredProfiles: ComputedRef<TProfile[]>
 }
