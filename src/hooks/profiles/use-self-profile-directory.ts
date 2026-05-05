@@ -14,7 +14,7 @@ import {
     DEFAULT_SELF_DIRECTORY_FILTERS,
     DEFAULT_SELF_PROFILE_SORT,
 } from '@/mappers/self-profile-directory-query'
-import type {SelfDirectoryFilters} from '@/types/profiles/directory'
+import type {DirectoryFilterUpdatePayload, SelfDirectoryFilters} from '@/types/profiles/directory'
 
 /** 个人资料目录数据 */
 export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
@@ -67,8 +67,14 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
         page.value = 1
     }
 
+
+    /** 更新单个筛选条件 */
+    function updateFilter(payload: DirectoryFilterUpdatePayload) {
+        updateFilters({[payload.key]: payload.value} as Partial<SelfDirectoryFilters>)
+    }
+
     /** 移除单个筛选条件 */
-    function removeFilter(key: keyof SelfDirectoryFilters) {
+    function removeFilter(key: string) {
         updateFilters({[key]: ''} as Partial<SelfDirectoryFilters>)
     }
 
@@ -101,6 +107,7 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
         sortKey,
         pageData,
         updateFilters,
+        updateFilter,
         removeFilter,
         resetFilters,
         updateSort,

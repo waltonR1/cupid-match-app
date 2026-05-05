@@ -47,6 +47,12 @@ export interface SelfDirectoryFilters {
     acceptLongDistance: string
 }
 
+/** 目录筛选项更新载荷 */
+export interface DirectoryFilterUpdatePayload<TKey extends string = string> {
+    key: TKey
+    value: string
+}
+
 /** 家庭资料排序方式 */
 export type FamilySortKey =
     | 'priorityFirst'

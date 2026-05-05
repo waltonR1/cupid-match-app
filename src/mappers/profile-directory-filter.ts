@@ -1,4 +1,13 @@
-import {PROFILE_FILTER_WIDTH_CLASS} from '@/constants/profiles'
+import {
+    PROFILE_AGE_RANGE_FILTER_OPTIONS,
+    PROFILE_CHILDREN_FILTER_OPTIONS,
+    PROFILE_EDUCATION_FILTER_OPTIONS,
+    PROFILE_FILTER_WIDTH_CLASS,
+    PROFILE_GENDER_FILTER_OPTIONS,
+    PROFILE_LONG_DISTANCE_FILTER_OPTIONS,
+    PROFILE_MARITAL_STATUS_FILTER_OPTIONS,
+    type ProfileFilterOptionDefinition,
+} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
 import type {DirectoryOption} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
@@ -30,6 +39,14 @@ export function toIntentOptions(items: IntentOption[]): DirectoryOption[] {
     return items.map(item => ({label: item.label, value: item.code}))
 }
 
+/** 转换静态筛选选项 */
+export function toStaticOptions(items: readonly ProfileFilterOptionDefinition[], t: Translate): DirectoryOption[] {
+    return items.map(item => ({
+        label: 'label' in item ? item.label : t(item.labelKey),
+        value: item.value,
+    }))
+}
+
 /** 构建性别筛选项 */
 export function buildGenderFilter<TKey extends string>(
     key: TKey,
@@ -39,10 +56,7 @@ export function buildGenderFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.gender'),
-        options: [
-            {label: t('filters.genderMale'), value: 'male'},
-            {label: t('filters.genderFemale'), value: 'female'},
-        ],
+        options: toStaticOptions(PROFILE_GENDER_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
         group: 'primary',
@@ -59,13 +73,7 @@ export function buildAgeRangeFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.age'),
-        options: [
-            {label: t('filters.ageUnder25'), value: 'under25'},
-            {label: t('filters.age25to29'), value: '25to29'},
-            {label: t('filters.age30to34'), value: '30to34'},
-            {label: t('filters.age35to39'), value: '35to39'},
-            {label: t('filters.age40plus'), value: '40plus'},
-        ],
+        options: toStaticOptions(PROFILE_AGE_RANGE_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
         group: 'primary',
@@ -82,11 +90,7 @@ export function buildEducationFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.education'),
-        options: [
-            {label: t('filters.eduBachelor'), value: 'bachelor'},
-            {label: t('filters.eduMaster'), value: 'master'},
-            {label: t('filters.eduPhD'), value: 'phd'},
-        ],
+        options: toStaticOptions(PROFILE_EDUCATION_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'primary',
@@ -103,11 +107,7 @@ export function buildMaritalStatusFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.maritalStatus'),
-        options: [
-            {label: t('filters.maritalSingle'), value: 'single'},
-            {label: t('filters.maritalDivorced'), value: 'divorced'},
-            {label: t('filters.maritalWidowed'), value: 'widowed'},
-        ],
+        options: toStaticOptions(PROFILE_MARITAL_STATUS_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'secondary',
@@ -124,10 +124,7 @@ export function buildChildrenFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.children'),
-        options: [
-            {label: t('filters.childrenYes'), value: 'yes'},
-            {label: t('filters.childrenNo'), value: 'no'},
-        ],
+        options: toStaticOptions(PROFILE_CHILDREN_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'secondary',
@@ -144,10 +141,7 @@ export function buildLongDistanceFilter<TKey extends string>(
     return buildStaticFilter({
         key,
         label: t('filters.longDistance'),
-        options: [
-            {label: t('filters.longDistanceYes'), value: 'yes'},
-            {label: t('filters.longDistanceNo'), value: 'no'},
-        ],
+        options: toStaticOptions(PROFILE_LONG_DISTANCE_FILTER_OPTIONS, t),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'secondary',

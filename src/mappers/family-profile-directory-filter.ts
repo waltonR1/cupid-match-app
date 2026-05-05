@@ -1,5 +1,5 @@
 import type {FamilyProfileDirectoryFacets} from '@/api/profiles'
-import {PROFILE_FILTER_WIDTH_CLASS} from '@/constants/profiles'
+import {FAMILY_MODE_FILTER_OPTIONS, PROFILE_FILTER_WIDTH_CLASS} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
 import {
     buildAgeRangeFilter,
@@ -11,6 +11,7 @@ import {
     buildMaritalStatusFilter,
     toDirectoryOptions,
     toIntentOptions,
+    toStaticOptions,
 } from '@/mappers/profile-directory-filter'
 import type {FamilyDirectoryFilterItem, FamilyDirectoryFilters} from '@/types/profiles/directory'
 
@@ -45,11 +46,7 @@ function buildFamilyModeFilter(filters: FamilyDirectoryFilters, t: Translate): F
     return buildDynamicFilter({
         key: 'familyMode',
         label: t('filters.familyMode'),
-        options: [
-            {label: t('filters.modeContextOnly'), value: 'context_only'},
-            {label: t('filters.modeContactReady'), value: 'contact_ready'},
-            {label: t('filters.modePriority'), value: 'priority'},
-        ],
+        options: toStaticOptions(FAMILY_MODE_FILTER_OPTIONS, t),
         value: filters.familyMode,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
         group: 'primary',

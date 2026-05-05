@@ -14,7 +14,7 @@ import {
     DEFAULT_FAMILY_DIRECTORY_FILTERS,
     DEFAULT_FAMILY_PROFILE_SORT,
 } from '@/mappers/family-profile-directory-query'
-import type {FamilyDirectoryFilters} from '@/types/profiles/directory'
+import type {DirectoryFilterUpdatePayload, FamilyDirectoryFilters} from '@/types/profiles/directory'
 
 /** 家庭资料目录数据 */
 export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
@@ -67,8 +67,14 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         page.value = 1
     }
 
+
+    /** 更新单个筛选条件 */
+    function updateFilter(payload: DirectoryFilterUpdatePayload) {
+        updateFilters({[payload.key]: payload.value} as Partial<FamilyDirectoryFilters>)
+    }
+
     /** 移除单个筛选条件 */
-    function removeFilter(key: keyof FamilyDirectoryFilters) {
+    function removeFilter(key: string) {
         updateFilters({[key]: ''} as Partial<FamilyDirectoryFilters>)
     }
 
@@ -101,6 +107,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         sortKey,
         pageData,
         updateFilters,
+        updateFilter,
         removeFilter,
         resetFilters,
         updateSort,

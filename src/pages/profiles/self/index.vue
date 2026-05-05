@@ -17,8 +17,8 @@
           :collapse-text="t('filters.collapse')"
           :items="pageData.filters"
           :active-filters="pageData.activeFilters"
-          @update:filter="handleUpdateFilter"
-          @remove-filter="handleRemoveFilter"
+          @update:filter="updateFilter"
+          @remove-filter="removeFilter"
           @reset="resetFilters"
       />
 
@@ -74,7 +74,7 @@ import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileD
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
 import {useSelfProfileDirectory} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {SelfDirectoryFilters, SelfSortKey} from '@/types/profiles/directory'
+import type {SelfSortKey} from '@/types/profiles/directory'
 import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/view'
 import {openSelfDetail} from '@/utils/navigation'
 
@@ -85,7 +85,7 @@ const {t, locale} = usePageI18n('self')
 const {
   pageData,
   sortKey,
-  updateFilters,
+  updateFilter,
   removeFilter,
   resetFilters,
   updateSort,
@@ -127,13 +127,4 @@ const resultSort = computed<DirectorySortControl<SelfSortKey>>(() => ({
   ],
 }))
 
-/** 更新筛选条件 */
-function handleUpdateFilter(payload: { key: string, value: string }) {
-  updateFilters({[payload.key]: payload.value})
-}
-
-/** 移除单个筛选条件 */
-function handleRemoveFilter(key: string) {
-  removeFilter(key as keyof SelfDirectoryFilters)
-}
 </script>

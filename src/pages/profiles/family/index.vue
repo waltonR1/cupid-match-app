@@ -19,8 +19,8 @@
           :reset-text="t('filters.clear')"
           :title="t('directory.title')"
           @reset="resetFilters"
-          @update:filter="handleUpdateFilter"
-          @remove-filter="handleRemoveFilter"
+          @update:filter="updateFilter"
+          @remove-filter="removeFilter"
       />
 
       <!-- 结果工具栏 -->
@@ -75,7 +75,7 @@ import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileD
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
 import {useFamilyProfileDirectory} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {FamilyDirectoryFilters, FamilySortKey} from '@/types/profiles/directory'
+import type {FamilySortKey} from '@/types/profiles/directory'
 import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/view'
 import {openFamilyProfileDetail} from '@/utils/navigation'
 
@@ -86,7 +86,7 @@ const {t, locale} = usePageI18n('family')
 const {
   pageData,
   sortKey,
-  updateFilters,
+  updateFilter,
   removeFilter,
   resetFilters,
   updateSort,
@@ -128,13 +128,4 @@ const resultSort = computed<DirectorySortControl<FamilySortKey>>(() => ({
   ],
 }))
 
-/** 更新筛选 */
-function handleUpdateFilter(payload: { key: string, value: string }) {
-  updateFilters({[payload.key]: payload.value})
-}
-
-/** 移除筛选 */
-function handleRemoveFilter(key: string) {
-  removeFilter(key as keyof FamilyDirectoryFilters)
-}
 </script>

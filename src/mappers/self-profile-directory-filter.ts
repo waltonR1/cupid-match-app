@@ -1,5 +1,9 @@
 import type {FormatLocale, SelfProfileDirectoryFacets} from '@/api/profiles'
-import {PROFILE_FILTER_WIDTH_CLASS} from '@/constants/profiles'
+import {
+    PROFILE_FILTER_WIDTH_CLASS,
+    SELF_HEIGHT_RANGE_FILTER_OPTIONS,
+    SELF_VERIFIED_FILTER_OPTIONS,
+} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
 import {
     allOption,
@@ -12,6 +16,7 @@ import {
     buildMaritalStatusFilter,
     toDirectoryOptions,
     toIntentOptions,
+    toStaticOptions,
 } from '@/mappers/profile-directory-filter'
 import type {SelfDirectoryFilterItem, SelfDirectoryFilters} from '@/types/profiles/directory'
 import {formatProfileLanguages} from '@/utils/profile-format'
@@ -68,13 +73,7 @@ function buildHeightRangeFilter(filters: SelfDirectoryFilters, t: Translate): Se
     return buildDynamicFilter({
         key: 'heightRange',
         label: t('filters.height'),
-        options: [
-            {label: '165cm-', value: 'under165'},
-            {label: '165-169cm', value: '165to169'},
-            {label: '170-174cm', value: '170to174'},
-            {label: '175-179cm', value: '175to179'},
-            {label: '180cm+', value: '180plus'},
-        ],
+        options: toStaticOptions(SELF_HEIGHT_RANGE_FILTER_OPTIONS, t),
         value: filters.heightRange,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
         group: 'primary',
@@ -159,11 +158,7 @@ function buildVerifiedFilter(filters: SelfDirectoryFilters, t: Translate): SelfD
     return {
         key: 'verified',
         label: t('filters.verified'),
-        options: [
-            allOption(t),
-            {label: t('filters.verifiedYes'), value: 'verified'},
-            {label: t('filters.verifiedNo'), value: 'unverified'},
-        ],
+        options: [allOption(t), ...toStaticOptions(SELF_VERIFIED_FILTER_OPTIONS, t)],
         value: filters.verified,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'secondary',
