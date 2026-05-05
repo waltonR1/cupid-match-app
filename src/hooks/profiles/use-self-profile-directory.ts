@@ -7,10 +7,10 @@ import {
     type SelfProfileDirectoryResponse,
     type SelfProfileSortKey,
 } from '@/api/profiles/profiles'
-import {toProfileCardViewModel} from '@/hooks/profiles/profile-card-presenter'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isSelfProfileSortKey} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
+import {toSelfProfileCardViewModel} from '@/mappers/profile-card.mapper'
 import type {DirectoryOption, SelfDirectoryFilters} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
 import {buildActiveDirectoryFilterChips, formatProfileLanguages} from '@/utils/profile-format'
@@ -61,7 +61,7 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
         return {
             items: (response.value?.items ?? []).map(item => ({
                 id: item.id,
-                card: toProfileCardViewModel(item.card, t),
+                card: toSelfProfileCardViewModel(item, locale.value, t),
             })),
             filters: filterItems,
             activeFilters: buildActiveDirectoryFilterChips(filterItems, filters.value),

@@ -3,9 +3,9 @@ import {
     getFeaturedSelfProfiles,
     type FormatLocale,
 } from '@/api/profiles/profiles'
-import {toProfileCardViewModel} from '@/hooks/profiles/profile-card-presenter'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
+import {toSelfProfileCardViewModel} from '@/mappers/profile-card.mapper'
 import type {ProfileCardListItem} from '@/types/profiles/card'
 
 /** 首页精选会员数据 */
@@ -26,7 +26,7 @@ export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
 
         items.value = response.items.map(item => ({
             id: item.id,
-            card: toProfileCardViewModel(item.card, t),
+            card: toSelfProfileCardViewModel(item, locale.value, t),
         }))
     }
 

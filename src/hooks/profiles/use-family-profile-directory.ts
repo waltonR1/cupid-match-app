@@ -7,10 +7,10 @@ import {
     type FamilyProfileSortKey,
     type FormatLocale,
 } from '@/api/profiles/profiles'
-import {toProfileCardViewModel} from '@/hooks/profiles/profile-card-presenter'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isFamilyProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
+import {toFamilyProfileCardViewModel} from '@/mappers/profile-card.mapper'
 import type {DirectoryOption, FamilyDirectoryFilters} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
 import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
@@ -59,7 +59,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         return {
             items: (response.value?.items ?? []).map(item => ({
                 id: item.id,
-                card: toProfileCardViewModel(item.card, t),
+                card: toFamilyProfileCardViewModel(item, locale.value, t),
             })),
             filters: filterItems,
             activeFilters: buildActiveDirectoryFilterChips(filterItems, filters.value),

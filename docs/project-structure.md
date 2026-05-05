@@ -6,12 +6,14 @@
 
 ```text
 page -> hook -> api -> mock-server
+hook -> mapper
 ```
 
 规则：
 
 - 页面不直接发 HTTP 请求
-- hook 不额外依赖 mapper 层
+- hook 负责请求状态和页面动作，可以调用 mapper 组装展示模型
+- mapper 负责将接口响应转换为页面或组件可直接消费的展示模型
 - API 只负责 HTTP 边界和类型
 - mock-server 提供本地 `/api/...` HTTP 接口
 
@@ -37,6 +39,7 @@ src/
   constants/
   hooks/
   i18n/
+  mappers/
   pages/
   static/
   stores/
@@ -57,7 +60,7 @@ src/api/
 
 约定：
 
-- `*.types.ts` 放 DTO、payload、query、response 类型
+- `*.types.ts` 放 payload、query、response 类型
 - `*.ts` 放域请求方法
 - `shared/http.ts` 放统一请求行为
 - `shared/config.ts` 放 API 基础配置
@@ -78,7 +81,19 @@ src/hooks/
 - 管理 `loading`、`error`、`refresh`
 - 发起 API 请求
 - 维护筛选、排序、分页、详情加载等页面动作
-- 组装页面直接消费的数据结构
+- 调用 mapper 组装页面直接消费的数据结构
+
+## mappers
+
+`src/mappers` 放接口响应到展示模型的转换逻辑。
+
+规则：
+
+- 可以依赖 `src/api/*` 的 response 类型
+- 可以依赖 `src/types/*` 的展示类型
+- 可以接收 `t` 和 `locale` 处理前端 i18n 与展示格式
+- 不发起请求
+- 不持有 `ref`、`reactive` 或请求状态
 
 ### 通用请求状态
 
@@ -175,14 +190,16 @@ mock-server/
 
 1. 先补 `src/api/<domain>/<domain>.types.ts`
 2. 再补 `src/api/<domain>/<domain>.ts`
-3. 然后在 `src/hooks/<domain>` 接入请求和页面状态
-4. 最后由页面消费 hook
-5. 如涉及 mock 数据，同步更新 `mock-server/src/*` 和 `mock-server/db.json`
+3. 如接口响应需要转换为展示模型，补 `src/mappers/*`
+4. 然后在 `src/hooks/<domain>` 接入请求、页面状态和 mapper
+5. 最后由页面消费 hook
+6. 如涉及 mock 数据，同步更新 `mock-server/src/*` 和 `mock-server/db.json`
 
 ## 校验基线
 
 - 页面不直接 import `@/api/shared/http.ts`
 - 页面不直接发请求
 - hook 负责页面级异步状态
+- mapper 负责 response 到 view model 的转换
 - `utils` 保持无状态纯函数
 - `npm run type-check` 通过

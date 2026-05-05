@@ -32,6 +32,7 @@ page -> hook -> api -> mock-server
 
 - 页面负责布局、交互绑定和展示
 - `src/hooks/*` 负责页面级异步状态、筛选、分页和数据组装
+- `src/mappers/*` 负责接口响应到展示模型的转换
 - `src/api/*` 负责 HTTP 边界和类型
 - `mock-server/src/*` 负责 `/api/...` 路由、聚合、筛选、排序和分页
 
@@ -41,6 +42,7 @@ page -> hook -> api -> mock-server
 
 - `src/api`
 - `src/hooks`
+- `src/mappers`
 - `src/pages`
 - `src/components`
 - `src/stores`

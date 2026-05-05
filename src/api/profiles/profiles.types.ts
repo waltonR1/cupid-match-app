@@ -22,51 +22,45 @@ export type SelfProfileSortKey = 'recentActive' | 'priorityFirst' | 'ageAsc' | '
 /** 家庭资料排序 */
 export type FamilyProfileSortKey = 'priorityFirst' | 'recentActive' | 'ageAsc' | 'ageDesc'
 
-/** 资料字段编码 */
-export type ProfileFactCode = 'city' | 'education' | 'languages' | 'residencePlan'
-
 /** 家庭模式编码 */
 export type FamilyModeCode = 'priority' | 'contact_ready' | 'context_only'
 
-/** 卡片徽章编码 */
-export type ProfileBadgeCode = IntentCode | FamilyModeCode
-
-/** 卡片底部状态编码 */
-export type ProfileFooterCode = ProfileStatusCode | 'priority' | 'contact_ready' | 'observe'
-
-/** 卡片标签编码 */
-export type ProfileTagCode =
-    | 'marital_single'
-    | 'marital_divorced'
-    | 'marital_widowed'
-    | 'accept_long_distance'
-    | 'has_children'
-    | 'no_children'
-
-/** 卡片字段响应 */
-export interface ProfileCardFactResponse {
-    code: ProfileFactCode
-    value: string
-}
-
-/** 资料卡片响应 */
-export interface ProfileCardResponse {
-    avatarUrl: string
-    displayName: string
-    gender: GenderCode
-    meta: string
-    badgeCode: ProfileBadgeCode
-    summary: string
-    facts: ProfileCardFactResponse[]
-    tags: string[]
-    tagCodes: ProfileTagCode[]
-    footerCode: ProfileFooterCode
-}
-
-/** 资料卡片列表项 */
-export interface ProfileCardResponseItem {
+/** 本人资料列表项 */
+export interface SelfProfileListItem {
     id: string
-    card: ProfileCardResponse
+    displayName: string
+    avatarUrl: string
+    gender: GenderCode
+    age: number
+    city: string
+    status: ProfileStatusCode
+    education: string
+    occupation: string
+    intentCode: IntentCode
+    summary: string
+    languages: string[]
+    tags: string[]
+}
+
+/** 家庭资料列表项 */
+export interface FamilyProfileListItem {
+    id: string
+    displayName: string
+    avatarUrl: string
+    gender: GenderCode
+    age: number
+    city: string
+    status: ProfileStatusCode
+    education: string
+    occupation: string
+    maritalStatus: MaritalStatusCode
+    hasChildren: boolean
+    acceptLongDistance: boolean
+    maritalPlan: string
+    residencePlan: string
+    tags: string[]
+    allowFamilyContact: boolean
+    familyPriority: boolean
 }
 
 /** 个人资料详情 */
@@ -220,19 +214,19 @@ export interface FamilyProfileDirectoryQuery {
 
 /** 首页精选资料响应 */
 export interface FeaturedSelfProfilesResponse {
-    items: ProfileCardResponseItem[]
+    items: SelfProfileListItem[]
 }
 
 /** 个人资料目录响应 */
 export interface SelfProfileDirectoryResponse {
-    items: ProfileCardResponseItem[]
+    items: SelfProfileListItem[]
     pagination: Pagination
     facets: SelfProfileDirectoryFacets
 }
 
 /** 家庭资料目录响应 */
 export interface FamilyProfileDirectoryResponse {
-    items: ProfileCardResponseItem[]
+    items: FamilyProfileListItem[]
     pagination: Pagination
     facets: FamilyProfileDirectoryFacets
 }

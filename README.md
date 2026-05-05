@@ -38,6 +38,7 @@ src/components  展示组件
 src/constants   常量
 src/hooks       有状态业务逻辑
 src/i18n        多语言文案与语言状态
+src/mappers     接口响应到展示模型的转换
 src/pages       页面层
 src/stores      全局状态
 src/types       共享类型
@@ -48,6 +49,7 @@ src/utils       无状态纯函数
 
 - 页面和组件不直接发 HTTP 请求
 - `hooks` 负责页面级异步状态、筛选、分页和数据组装
+- `mappers` 负责接口响应到页面或组件展示模型的转换
 - `api` 负责请求边界、DTO 和错误透传
 - `utils` 只放无状态纯函数
 - `mock-server` 提供本地 `/api/...` HTTP 接口

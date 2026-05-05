@@ -62,30 +62,42 @@ export interface ProfileWithDisplayName extends ProfileRecord {
     displayName: string
 }
 
-/** 资料卡片字段 */
-export interface ProfileCardFactDTO {
-    code: string
-    value: string
-}
-
-/** 资料卡片 */
-export interface ProfileCardDTO {
-    avatarUrl: string
-    displayName: string
-    gender: string
-    meta: string
-    badgeCode: string
-    summary: string
-    facts: ProfileCardFactDTO[]
-    tags: string[]
-    tagCodes: string[]
-    footerCode: string
-}
-
-/** 资料卡片列表项 */
-export interface ProfileCardListItemDTO {
+/** 本人资料列表项 */
+export interface SelfProfileListItemDTO {
     id: string
-    card: ProfileCardDTO
+    displayName: string
+    avatarUrl: string
+    gender: string
+    age: number
+    city: string
+    status: ProfileStatus
+    education: string
+    occupation: string
+    intentCode: string
+    summary: string
+    languages: string[]
+    tags: string[]
+}
+
+/** 家庭资料列表项 */
+export interface FamilyProfileListItemDTO {
+    id: string
+    displayName: string
+    avatarUrl: string
+    gender: string
+    age: number
+    city: string
+    status: ProfileStatus
+    education: string
+    occupation: string
+    maritalStatus: MaritalStatus
+    hasChildren: boolean
+    acceptLongDistance: boolean
+    maritalPlan: string
+    residencePlan: string
+    tags: string[]
+    allowFamilyContact: boolean
+    familyPriority: boolean
 }
 
 /** 个人资料详情 */

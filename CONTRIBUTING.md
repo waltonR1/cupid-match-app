@@ -28,16 +28,18 @@
 1. 明确需求所在页面和产品路径
 2. 补充 `src/api/<domain>/<domain>.types.ts`
 3. 补充 `src/api/<domain>/<domain>.ts`
-4. 在 `src/hooks/<domain>` 接入请求、状态和页面级数据组装
-5. 由页面消费 hook
-6. 如涉及 mock 数据，同步更新 `mock-server`
-7. 同步更新相关文档
+4. 如接口响应需要转换为展示模型，补充 `src/mappers/*`
+5. 在 `src/hooks/<domain>` 接入请求、状态和 mapper
+6. 由页面消费 hook
+7. 如涉及 mock 数据，同步更新 `mock-server`
+8. 同步更新相关文档
 
 ## Hooks 约定
 
 ### 分层边界
 
 - `src/hooks/*` 放有状态逻辑，例如 `ref`、`reactive`、`computed`、`watch`
+- `src/mappers/*` 放接口响应到展示模型的转换逻辑
 - `src/utils/*` 放无状态纯函数
 - 请求状态控制属于 hooks，不属于 utils
 
