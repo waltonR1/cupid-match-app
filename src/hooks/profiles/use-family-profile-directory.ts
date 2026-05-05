@@ -1,19 +1,19 @@
 import {computed, ref, watch, type Ref} from 'vue'
 import {
     getFamilyProfileDirectory,
-    type FamilyProfileCard,
     type FamilyProfileDirectoryFacets,
     type FamilyProfileDirectoryQuery,
     type FamilyProfileDirectoryResponse,
     type FamilyProfileSortKey,
     type FormatLocale,
 } from '@/api/profiles/profiles'
+import {toProfileCardViewModel} from '@/hooks/profiles/profile-card-presenter'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isFamilyProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
 import type {DirectoryOption, FamilyDirectoryFilters} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
-import {buildActiveDirectoryFilterChips, formatLocalizedAge} from '@/utils/profile-format'
+import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
 
 /** 默认筛选条件 */
 const DEFAULT_FILTERS: FamilyDirectoryFilters = {
@@ -57,9 +57,9 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         }
 
         return {
-            items: (response.value?.items ?? []).map(profile => ({
-                id: profile.id,
-                card: toFamilyProfileCard(profile, locale.value, t),
+            items: (response.value?.items ?? []).map(item => ({
+                id: item.id,
+                card: toProfileCardViewModel(item.card, t),
             })),
             filters: filterItems,
             activeFilters: buildActiveDirectoryFilterChips(filterItems, filters.value),
@@ -147,32 +147,6 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
 
 /** 目录筛选项结构 */
 type ProfileDirectoryFilterItem = ProfileFilterToolbarItem<keyof FamilyDirectoryFilters>
-
-/** 转换家庭资料卡片展示数据 */
-function toFamilyProfileCard(profile: FamilyProfileCard, locale: FormatLocale, t: Translate) {
-    const familyMode = resolveFamilyMode(profile)
-    const additionalTags = [
-        t(maritalStatusTagKey(profile.maritalStatus)),
-        profile.acceptLongDistance ? t('tags.longDistanceYes') : '',
-        profile.hasChildren ? t('tags.childrenYes') : t('tags.childrenNo'),
-    ].filter(Boolean)
-
-    return {
-        avatarUrl: profile.avatarUrl,
-        displayName: profile.displayName,
-        gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
-        badge: t(familyModeBadgeKey(familyMode)),
-        summary: profile.maritalPlan,
-        facts: [
-            {label: t('fields.city'), value: profile.city},
-            {label: t('fields.education'), value: profile.education},
-            {label: t('fields.residencePlan'), value: profile.residencePlan},
-        ],
-        tags: [...profile.tags, ...additionalTags].slice(0, 3),
-        footer: t(familyFooterKey(profile, familyMode)),
-    }
-}
 
 /** 构建家庭资料目录筛选项 */
 function buildFamilyDirectoryFilterItems(
@@ -317,50 +291,3 @@ function allOption(t: Translate): DirectoryOption {
     return {label: t('filters.all'), value: ''}
 }
 
-/** 解析家庭参与模式 */
-function resolveFamilyMode(profile: FamilyProfileCard) {
-    if (profile.familyPriority) return 'PRIORITY'
-    if (profile.allowFamilyContact) return 'CONTACT_READY'
-    return 'CONTEXT_ONLY'
-}
-
-/** 家庭参与模式徽章文案 key */
-function familyModeBadgeKey(mode: ReturnType<typeof resolveFamilyMode>) {
-    switch (mode) {
-        case 'PRIORITY':
-            return 'modes.priority'
-        case 'CONTACT_READY':
-            return 'modes.contactReady'
-        case 'CONTEXT_ONLY':
-        default:
-            return 'modes.contextOnly'
-    }
-}
-
-/** 家庭资料底部标签文案 key */
-function familyFooterKey(profile: FamilyProfileCard, mode: ReturnType<typeof resolveFamilyMode>) {
-    if (profile.status === 'review') return 'card.labelReview'
-
-    switch (mode) {
-        case 'PRIORITY':
-            return 'card.labelPriority'
-        case 'CONTACT_READY':
-            return 'card.labelContactReady'
-        case 'CONTEXT_ONLY':
-        default:
-            return 'card.labelObserve'
-    }
-}
-
-/** 婚姻状态标签文案 key */
-function maritalStatusTagKey(value: FamilyProfileCard['maritalStatus']) {
-    switch (value) {
-        case 'divorced':
-            return 'tags.maritalDivorced'
-        case 'widowed':
-            return 'tags.maritalWidowed'
-        case 'single':
-        default:
-            return 'tags.maritalSingle'
-    }
-}

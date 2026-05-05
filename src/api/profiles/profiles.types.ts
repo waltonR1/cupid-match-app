@@ -9,40 +9,26 @@ export type HabitCode = 'never' | 'social' | 'often'
 export type SelfProfileSortKey = 'recentActive' | 'priorityFirst' | 'ageAsc' | 'ageDesc'
 export type FamilyProfileSortKey = 'priorityFirst' | 'recentActive' | 'ageAsc' | 'ageDesc'
 
-export interface SelfProfileCard {
-  id: string
-  displayName: string
-  avatarUrl: string
-  gender: GenderCode
-  age: number
-  city: string
-  status: ProfileStatusCode
-  education: string
-  occupation: string
-  intentCode: IntentCode
-  summary: string
-  languages: string[]
-  tags: string[]
+export interface ProfileCardFactResponse {
+  labelKey: string
+  value: string
 }
 
-export interface FamilyProfileCard {
-  id: string
-  displayName: string
+export interface ProfileCardResponse {
   avatarUrl: string
+  displayName: string
   gender: GenderCode
-  age: number
-  city: string
-  status: ProfileStatusCode
-  education: string
-  occupation: string
-  maritalStatus: MaritalStatusCode
-  hasChildren: boolean
-  acceptLongDistance: boolean
-  maritalPlan: string
-  residencePlan: string
+  meta: string
+  badgeKey: string
+  summary: string
+  facts: ProfileCardFactResponse[]
   tags: string[]
-  allowFamilyContact: boolean
-  familyPriority: boolean
+  footerKey: string
+}
+
+export interface ProfileCardResponseItem {
+  id: string
+  card: ProfileCardResponse
 }
 
 export interface SelfProfileDetail {
@@ -186,17 +172,17 @@ export interface FamilyProfileDirectoryQuery {
 }
 
 export interface FeaturedSelfProfilesResponse {
-  items: SelfProfileCard[]
+  items: ProfileCardResponseItem[]
 }
 
 export interface SelfProfileDirectoryResponse {
-  items: SelfProfileCard[]
+  items: ProfileCardResponseItem[]
   pagination: Pagination
   facets: SelfProfileDirectoryFacets
 }
 
 export interface FamilyProfileDirectoryResponse {
-  items: FamilyProfileCard[]
+  items: ProfileCardResponseItem[]
   pagination: Pagination
   facets: FamilyProfileDirectoryFacets
 }

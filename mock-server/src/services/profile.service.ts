@@ -2,14 +2,13 @@ import type { ApiLocale, QueryRecord } from '../types/common.js'
 import type {
   DirectoryFacetOptionDTO,
   DirectorySort,
-  FamilyProfileCardDTO,
   FamilyProfileDetailDTO,
   FamilyProfileDirectoryFacetsDTO,
   IntentFacetDTO,
   NormalizedProfileQuery,
+  ProfileCardListItemDTO,
   ProfileRecord,
   ProfileWithDisplayName,
-  SelfProfileCardDTO,
   SelfProfileDetailDTO,
   SelfProfileDirectoryFacetsDTO,
 } from '../types/profile.js'
@@ -134,18 +133,18 @@ export function sortFamilyProfiles(items: ProfileWithDisplayName[], sort: Direct
   }
 }
 
-export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], rawPageSize: unknown): { items: SelfProfileCardDTO[] } {
+export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], rawPageSize: unknown): { items: ProfileCardListItemDTO[] } {
   const pageSize = clamp(Number.parseInt(getString(rawPageSize) || '3', 10) || 3, 1, 12)
   const source = profiles.map(withDisplayName)
   const sorted = sortSelfProfiles(source, 'recentActive')
 
   return {
-    items: paginate(sorted, 1, pageSize).map((profile) => toSelfProfileCard(locale, profile)),
+    items: paginate(sorted, 1, pageSize).map((profile) => buildSelfProfileCardItem(locale, profile)),
   }
 }
 
 export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
-  items: SelfProfileCardDTO[]
+  items: ProfileCardListItemDTO[]
   pagination: ReturnType<typeof buildPagination>
   facets: SelfProfileDirectoryFacetsDTO
 } {
@@ -155,14 +154,14 @@ export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], q
   const sorted = sortSelfProfiles(filtered, normalizedQuery.sort)
 
   return {
-    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toSelfProfileCard(locale, profile)),
+    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => buildSelfProfileCardItem(locale, profile)),
     pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
     facets: buildSelfDirectoryFacets(locale, source),
   }
 }
 
 export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
-  items: FamilyProfileCardDTO[]
+  items: ProfileCardListItemDTO[]
   pagination: ReturnType<typeof buildPagination>
   facets: FamilyProfileDirectoryFacetsDTO
 } {
@@ -172,7 +171,7 @@ export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[],
   const sorted = sortFamilyProfiles(filtered, normalizedQuery.sort)
 
   return {
-    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toFamilyProfileCard(locale, profile)),
+    items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => buildFamilyProfileCardItem(locale, profile)),
     pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
     facets: buildFamilyDirectoryFacets(locale, source),
   }
@@ -188,43 +187,52 @@ export function familyProfileDetail(locale: ApiLocale, profiles: ProfileRecord[]
   return profile ? toFamilyProfileDetail(locale, withDisplayName(profile)) : null
 }
 
-export function toSelfProfileCard(locale: ApiLocale, profile: ProfileWithDisplayName): SelfProfileCardDTO {
+export function buildSelfProfileCardItem(locale: ApiLocale, profile: ProfileWithDisplayName): ProfileCardListItemDTO {
   return {
     id: profile.id,
-    displayName: profile.displayName,
-    avatarUrl: profile.avatarUrl,
-    gender: profile.gender,
-    age: profile.age,
-    city: resolveLocalizedText(locale, profile.city),
-    status: profile.status,
-    education: resolveLocalizedText(locale, profile.education),
-    occupation: resolveLocalizedText(locale, profile.occupation),
-    intentCode: profile.intentCode,
-    summary: resolveLocalizedText(locale, profile.summary),
-    languages: profile.languages,
-    tags: resolveLocalizedTexts(locale, profile.tags),
+    card: {
+      avatarUrl: profile.avatarUrl,
+      displayName: profile.displayName,
+      gender: profile.gender,
+      meta: `${formatLocalizedAge(locale, profile.age)} / ${resolveLocalizedText(locale, profile.occupation)}`,
+      badgeKey: intentBadgeKey(profile.intentCode),
+      summary: resolveLocalizedText(locale, profile.summary),
+      facts: [
+        { labelKey: 'fields.city', value: resolveLocalizedText(locale, profile.city) },
+        { labelKey: 'fields.education', value: resolveLocalizedText(locale, profile.education) },
+        { labelKey: 'fields.languages', value: formatProfileLanguages(locale, profile.languages) },
+      ],
+      tags: resolveLocalizedTexts(locale, profile.tags).slice(0, 3),
+      footerKey: statusFooterKey(profile.status),
+    },
   }
 }
 
-export function toFamilyProfileCard(locale: ApiLocale, profile: ProfileWithDisplayName): FamilyProfileCardDTO {
+export function buildFamilyProfileCardItem(locale: ApiLocale, profile: ProfileWithDisplayName): ProfileCardListItemDTO {
+  const familyMode = resolveFamilyMode(profile)
+  const additionalTags = [
+    localizeKey(locale, maritalStatusTagKey(profile.maritalStatus)),
+    profile.acceptLongDistance ? localizeKey(locale, 'tags.longDistanceYes') : '',
+    profile.hasChildren ? localizeKey(locale, 'tags.childrenYes') : localizeKey(locale, 'tags.childrenNo'),
+  ].filter(Boolean)
+
   return {
     id: profile.id,
-    displayName: profile.displayName,
-    avatarUrl: profile.avatarUrl,
-    gender: profile.gender,
-    age: profile.age,
-    city: resolveLocalizedText(locale, profile.city),
-    status: profile.status,
-    education: resolveLocalizedText(locale, profile.education),
-    occupation: resolveLocalizedText(locale, profile.occupation),
-    maritalStatus: profile.maritalStatus,
-    hasChildren: profile.hasChildren,
-    acceptLongDistance: profile.acceptLongDistance,
-    maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
-    residencePlan: resolveLocalizedText(locale, profile.residencePlan),
-    tags: resolveLocalizedTexts(locale, profile.tags),
-    allowFamilyContact: profile.allowFamilyContact,
-    familyPriority: profile.familyPriority,
+    card: {
+      avatarUrl: profile.avatarUrl,
+      displayName: profile.displayName,
+      gender: profile.gender,
+      meta: `${formatLocalizedAge(locale, profile.age)} / ${resolveLocalizedText(locale, profile.occupation)}`,
+      badgeKey: familyModeBadgeKey(familyMode),
+      summary: resolveLocalizedText(locale, profile.maritalPlan),
+      facts: [
+        { labelKey: 'fields.city', value: resolveLocalizedText(locale, profile.city) },
+        { labelKey: 'fields.education', value: resolveLocalizedText(locale, profile.education) },
+        { labelKey: 'fields.residencePlan', value: resolveLocalizedText(locale, profile.residencePlan) },
+      ],
+      tags: [...resolveLocalizedTexts(locale, profile.tags), ...additionalTags].slice(0, 3),
+      footerKey: familyFooterKey(profile, familyMode),
+    },
   }
 }
 
@@ -344,6 +352,114 @@ function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayNa
       code: item.code,
       label: resolveLocalizedText(locale, item.label),
     }))
+}
+
+function formatLocalizedAge(locale: ApiLocale, age: number): string {
+  if (locale === 'zh') return `${age}岁`
+  if (locale === 'fr') return `${age} ans`
+  return String(age)
+}
+
+function formatProfileLanguages(locale: ApiLocale, languages: string[]): string {
+  return languages
+    .map((language) => getProfileLanguageLabel(locale, language))
+    .join(' / ')
+}
+
+function getProfileLanguageLabel(locale: ApiLocale, language: string): string {
+  const labels: Record<string, Record<ApiLocale, string>> = {
+    FR: { zh: '法语', fr: 'Francais', en: 'French' },
+    EN: { zh: '英语', fr: 'Anglais', en: 'English' },
+    ZH: { zh: '中文', fr: 'Chinois', en: 'Chinese' },
+    NL: { zh: '荷兰语', fr: 'Neerlandais', en: 'Dutch' },
+    IT: { zh: '意大利语', fr: 'Italien', en: 'Italian' },
+    DE: { zh: '德语', fr: 'Allemand', en: 'German' },
+  }
+  const key = String(language || '').trim()
+  return labels[key]?.[locale] ?? key
+}
+
+function intentBadgeKey(intentCode: string): string {
+  switch (intentCode) {
+    case 'marriage':
+      return 'card.goalMarriage'
+    case 'exclusive':
+      return 'card.goalExclusive'
+    case 'cross_border':
+      return 'card.goalCrossBorder'
+    case 'serious':
+    default:
+      return 'card.goalSerious'
+  }
+}
+
+function statusFooterKey(status: ProfileWithDisplayName['status']): string {
+  switch (status) {
+    case 'review':
+      return 'card.labelReview'
+    case 'vip':
+      return 'card.labelPriority'
+    case 'open':
+    default:
+      return 'card.labelSelected'
+  }
+}
+
+function resolveFamilyMode(profile: ProfileWithDisplayName): 'PRIORITY' | 'CONTACT_READY' | 'CONTEXT_ONLY' {
+  if (profile.familyPriority) return 'PRIORITY'
+  if (profile.allowFamilyContact) return 'CONTACT_READY'
+  return 'CONTEXT_ONLY'
+}
+
+function familyModeBadgeKey(mode: ReturnType<typeof resolveFamilyMode>): string {
+  switch (mode) {
+    case 'PRIORITY':
+      return 'modes.priority'
+    case 'CONTACT_READY':
+      return 'modes.contactReady'
+    case 'CONTEXT_ONLY':
+    default:
+      return 'modes.contextOnly'
+  }
+}
+
+function familyFooterKey(profile: ProfileWithDisplayName, mode: ReturnType<typeof resolveFamilyMode>): string {
+  if (profile.status === 'review') return 'card.labelReview'
+
+  switch (mode) {
+    case 'PRIORITY':
+      return 'card.labelPriority'
+    case 'CONTACT_READY':
+      return 'card.labelContactReady'
+    case 'CONTEXT_ONLY':
+    default:
+      return 'card.labelObserve'
+  }
+}
+
+function maritalStatusTagKey(value: string): string {
+  switch (value) {
+    case 'divorced':
+      return 'tags.maritalDivorced'
+    case 'widowed':
+      return 'tags.maritalWidowed'
+    case 'single':
+    default:
+      return 'tags.maritalSingle'
+  }
+}
+
+function localizeKey(locale: ApiLocale, key: string): string {
+  const labels: Record<string, Record<ApiLocale, string>> = {
+    'tags.maritalSingle': { zh: '未婚', fr: 'Celibataire', en: 'Single' },
+    'tags.maritalDivorced': { zh: '离异', fr: 'Divorce', en: 'Divorced' },
+    'tags.maritalWidowed': { zh: '丧偶', fr: 'Veuf/veuve', en: 'Widowed' },
+    'tags.longDistanceYes': { zh: '接受异地', fr: 'Distance acceptee', en: 'Open to long distance' },
+    'tags.childrenYes': { zh: '有子女', fr: 'Avec enfants', en: 'Has children' },
+    'tags.childrenNo': { zh: '无子女', fr: 'Sans enfants', en: 'No children' },
+  }
+
+  return labels[key]?.[locale] ?? key
 }
 
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {

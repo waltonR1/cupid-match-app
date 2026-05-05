@@ -1,6 +1,5 @@
 import {isApiStatusError, requestJson} from '@/api/shared/http'
 import type {
-    FamilyProfileCard,
     FamilyProfileDetail,
     FamilyProfileDirectoryFacets,
     FamilyProfileDirectoryQuery,
@@ -8,7 +7,9 @@ import type {
     FamilyProfileSortKey,
     FeaturedSelfProfilesResponse,
     FormatLocale,
-    SelfProfileCard,
+    ProfileCardFactResponse,
+    ProfileCardResponse,
+    ProfileCardResponseItem,
     SelfProfileDetail,
     SelfProfileDirectoryFacets,
     SelfProfileDirectoryQuery,
@@ -17,7 +18,6 @@ import type {
 } from './profiles.types'
 
 export type {
-    FamilyProfileCard,
     FamilyProfileDetail,
     FamilyProfileDirectoryFacets,
     FamilyProfileDirectoryQuery,
@@ -25,7 +25,9 @@ export type {
     FamilyProfileSortKey,
     FeaturedSelfProfilesResponse,
     FormatLocale,
-    SelfProfileCard,
+    ProfileCardFactResponse,
+    ProfileCardResponse,
+    ProfileCardResponseItem,
     SelfProfileDetail,
     SelfProfileDirectoryFacets,
     SelfProfileDirectoryQuery,

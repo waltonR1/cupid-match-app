@@ -51,40 +51,26 @@ export interface ProfileWithDisplayName extends ProfileRecord {
   displayName: string
 }
 
-export interface SelfProfileCardDTO {
-  id: string
-  displayName: string
-  avatarUrl: string
-  gender: string
-  age: number
-  city: string
-  status: ProfileStatus
-  education: string
-  occupation: string
-  intentCode: string
-  summary: string
-  languages: string[]
-  tags: string[]
+export interface ProfileCardFactDTO {
+  labelKey: string
+  value: string
 }
 
-export interface FamilyProfileCardDTO {
-  id: string
-  displayName: string
+export interface ProfileCardDTO {
   avatarUrl: string
+  displayName: string
   gender: string
-  age: number
-  city: string
-  status: ProfileStatus
-  education: string
-  occupation: string
-  maritalStatus: MaritalStatus
-  hasChildren: boolean
-  acceptLongDistance: boolean
-  maritalPlan: string
-  residencePlan: string
+  meta: string
+  badgeKey: string
+  summary: string
+  facts: ProfileCardFactDTO[]
   tags: string[]
-  allowFamilyContact: boolean
-  familyPriority: boolean
+  footerKey: string
+}
+
+export interface ProfileCardListItemDTO {
+  id: string
+  card: ProfileCardDTO
 }
 
 export interface SelfProfileDetailDTO {

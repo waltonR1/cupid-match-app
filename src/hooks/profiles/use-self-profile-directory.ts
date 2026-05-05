@@ -1,21 +1,19 @@
 import {computed, ref, watch, type Ref} from 'vue'
 import {
-    getFeaturedSelfProfiles,
     getSelfProfileDirectory,
     type FormatLocale,
-    type SelfProfileCard,
     type SelfProfileDirectoryFacets,
     type SelfProfileDirectoryQuery,
     type SelfProfileDirectoryResponse,
     type SelfProfileSortKey,
 } from '@/api/profiles/profiles'
+import {toProfileCardViewModel} from '@/hooks/profiles/profile-card-presenter'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isSelfProfileSortKey} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
-import type {ProfileCardListItem} from '@/types/profiles/card'
 import type {DirectoryOption, SelfDirectoryFilters} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
-import {buildActiveDirectoryFilterChips, formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
+import {buildActiveDirectoryFilterChips, formatProfileLanguages} from '@/utils/profile-format'
 
 /** 默认筛选条件 */
 const DEFAULT_FILTERS: SelfDirectoryFilters = {
@@ -36,36 +34,6 @@ const DEFAULT_FILTERS: SelfDirectoryFilters = {
 
 /** 默认排序方式 */
 const DEFAULT_SORT: SelfProfileSortKey = 'recentActive'
-
-/** 首页精选会员数据 */
-export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
-    const latest = useLatestRequest()
-    const items = ref<ProfileCardListItem[]>([])
-
-    /** 语言变化时重新加载数据 */
-    watch(locale, () => {
-        void load()
-    }, {immediate: true})
-
-    /** 加载首页精选会员 */
-    async function load() {
-        const response = await latest.run(() => getFeaturedSelfProfiles())
-
-        if (!response) return
-
-        items.value = response.items.map(profile => ({
-            id: profile.id,
-            card: toSelfProfileCard(profile, locale.value, t),
-        }))
-    }
-
-    return {
-        loading: latest.loading,
-        error: latest.error,
-        featuredProfiles: computed(() => items.value),
-        refresh: load,
-    }
-}
 
 /** 个人资料目录数据 */
 export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>) {
@@ -91,9 +59,9 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
         }
 
         return {
-            items: (response.value?.items ?? []).map(profile => ({
-                id: profile.id,
-                card: toSelfProfileCard(profile, locale.value, t),
+            items: (response.value?.items ?? []).map(item => ({
+                id: item.id,
+                card: toProfileCardViewModel(item.card, t),
             })),
             filters: filterItems,
             activeFilters: buildActiveDirectoryFilterChips(filterItems, filters.value),
@@ -181,25 +149,6 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
 
 /** 目录筛选项结构 */
 type ProfileDirectoryFilterItem = ProfileFilterToolbarItem<keyof SelfDirectoryFilters>
-
-/** 转换会员卡片展示数据 */
-function toSelfProfileCard(profile: SelfProfileCard, locale: FormatLocale, t: Translate) {
-    return {
-        avatarUrl: profile.avatarUrl,
-        displayName: profile.displayName,
-        gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
-        badge: t(intentBadgeKey(profile.intentCode)),
-        summary: profile.summary,
-        facts: [
-            {label: t('fields.city'), value: profile.city},
-            {label: t('fields.education'), value: profile.education},
-            {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
-        ],
-        tags: profile.tags.slice(0, 3),
-        footer: t(statusFooterKey(profile.status)),
-    }
-}
 
 /** 构建目录筛选项 */
 function buildSelfDirectoryFilterItems(
@@ -363,32 +312,4 @@ function buildSelfDirectoryFilterItems(
 /** 全部选项 */
 function allOption(t: Translate): DirectoryOption {
     return {label: t('filters.all'), value: ''}
-}
-
-/** 根据交友意向返回徽章文案 key */
-function intentBadgeKey(intentCode: SelfProfileCard['intentCode']) {
-    switch (intentCode) {
-        case 'marriage':
-            return 'card.goalMarriage'
-        case 'exclusive':
-            return 'card.goalExclusive'
-        case 'cross_border':
-            return 'card.goalCrossBorder'
-        case 'serious':
-        default:
-            return 'card.goalSerious'
-    }
-}
-
-/** 根据账号状态返回底部标签文案 key */
-function statusFooterKey(status: SelfProfileCard['status']) {
-    switch (status) {
-        case 'review':
-            return 'card.labelReview'
-        case 'vip':
-            return 'card.labelPriority'
-        case 'open':
-        default:
-            return 'card.labelSelected'
-    }
 }
