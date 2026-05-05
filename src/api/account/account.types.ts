@@ -1,11 +1,11 @@
-import type { EventDTO } from '@/api/events/events.types'
+import type { Event } from '@/api/events/events.types'
 import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type AccountRegistrationStatus = 'confirmed' | 'waitlist' | 'completed'
 
-export interface AccountDTO {
+export interface Account {
   id: string
   realName: string
   nickName: string
@@ -50,52 +50,52 @@ export interface AccountThreadProfileCard {
   familyVisible: boolean
 }
 
-export interface AccountFavoriteDTO {
+export interface AccountFavorite {
   profileId: string
   savedAt: string
   note: string
 }
 
-export interface AccountFavoriteRecordDTO {
-  favorite: AccountFavoriteDTO
+export interface AccountFavoriteRecord {
+  favorite: AccountFavorite
   profile: AccountFavoriteProfileCard
 }
 
-export interface AccountMessageThreadDTO {
+export interface AccountMessageThread {
   profileId: string
   updatedAt: string
   unread: number
   lastMessage: string
 }
 
-export interface AccountThreadRecordDTO {
-  thread: AccountMessageThreadDTO
+export interface AccountThreadRecord {
+  thread: AccountMessageThread
   profile: AccountThreadProfileCard
 }
 
-export interface AccountPrivacySettingDTO {
+export interface AccountPrivacySetting {
   id: string
   enabled: boolean
   title: string
   desc: string
 }
 
-export interface AccountUserRegistrationDTO {
+export interface AccountUserRegistration {
   eventId: string
   status: AccountRegistrationStatus
   note: string
 }
 
-export interface AccountUserEventRecordDTO {
-  registration: AccountUserRegistrationDTO
-  event: EventDTO
+export interface AccountUserEventRecord {
+  registration: AccountUserRegistration
+  event: Event
 }
 
-export interface AccountOverviewDTO {
-  account: AccountDTO
+export interface AccountOverviewResponse {
+  account: Account
   profile: AccountProfileSummary | null
-  userEvents: AccountUserEventRecordDTO[]
-  favorites: AccountFavoriteRecordDTO[]
-  threads: AccountThreadRecordDTO[]
-  privacySettings: AccountPrivacySettingDTO[]
+  userEvents: AccountUserEventRecord[]
+  favorites: AccountFavoriteRecord[]
+  threads: AccountThreadRecord[]
+  privacySettings: AccountPrivacySetting[]
 }

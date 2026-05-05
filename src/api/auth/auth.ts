@@ -1,22 +1,22 @@
 import { requestJson } from '@/api/shared/http'
-import type { AuthSessionDTO, AuthUserDTO, LoginPayload, RegisterPayload } from './auth.types'
+import type { AuthSession, AuthUser, LoginPayload, RegisterPayload } from './auth.types'
 
 export type {
-  AuthSessionDTO,
-  AuthUserDTO,
+  AuthSession,
+  AuthUser,
   LoginPayload,
   RegisterPayload,
 } from './auth.types'
 
-export function login(payload: LoginPayload): Promise<AuthSessionDTO> {
-  return requestJson<AuthSessionDTO>('/auth/login', {
+export function login(payload: LoginPayload): Promise<AuthSession> {
+  return requestJson<AuthSession>('/auth/login', {
     method: 'POST',
     data: payload,
   })
 }
 
-export function register(payload: RegisterPayload): Promise<AuthSessionDTO> {
-  return requestJson<AuthSessionDTO>('/auth/register', {
+export function register(payload: RegisterPayload): Promise<AuthSession> {
+  return requestJson<AuthSession>('/auth/register', {
     method: 'POST',
     data: payload,
   })

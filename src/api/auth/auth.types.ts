@@ -11,13 +11,13 @@ export interface RegisterPayload {
   city: string
 }
 
-export interface AuthUserDTO {
+export interface AuthUser {
   id?: string
   displayName: string
   avatarUrl?: string
 }
 
-export interface AuthSessionDTO {
+export interface AuthSession {
   token: string
-  user: AuthUserDTO
+  user: AuthUser
 }

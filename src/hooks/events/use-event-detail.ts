@@ -1,10 +1,10 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import {
   getEventDetail,
-  type EventDTO,
-  type EventDetailResponseDTO,
-  type EventRelatedProfileDTO,
-  type EventStatusDTO,
+  type Event,
+  type EventDetailResponse,
+  type EventRelatedProfile,
+  type EventStatus,
   type FormatLocale,
 } from '@/api/events/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
@@ -14,7 +14,7 @@ type Translate = (key: string) => string
 
 export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
   const latest = useLatestRequest()
-  const payload = ref<EventDetailResponseDTO | null>(null)
+  const payload = ref<EventDetailResponse | null>(null)
 
   watch([eventId, () => locale.value], () => {
     void load()
@@ -96,7 +96,7 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
   }
 }
 
-function toEventOverviewItem(event: EventDTO, locale: FormatLocale, t: Translate) {
+function toEventOverviewItem(event: Event, locale: FormatLocale, t: Translate) {
   return {
     id: event.id,
     title: event.title,
@@ -112,7 +112,7 @@ function toEventOverviewItem(event: EventDTO, locale: FormatLocale, t: Translate
   }
 }
 
-function buildEventAction(status: EventStatusDTO | undefined, t: Translate) {
+function buildEventAction(status: EventStatus | undefined, t: Translate) {
   if (status === 'waitlist') {
     return {
       text: t('actions.joinWaitlist'),
@@ -136,7 +136,7 @@ function buildEventAction(status: EventStatusDTO | undefined, t: Translate) {
   }
 }
 
-function buildRelatedReason(profile: EventRelatedProfileDTO, eventCity: string, t: Translate) {
+function buildRelatedReason(profile: EventRelatedProfile, eventCity: string, t: Translate) {
   if (profile.city === eventCity) return t('relatedReason.sameCity')
   if (profile.status === 'vip') return t('relatedReason.priority')
   if (profile.isVerified) return t('relatedReason.verified')

@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue'
-import { listEvents, type EventDTO, type FormatLocale } from '@/api/events/events'
+import { listEvents, type Event, type FormatLocale } from '@/api/events/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { formatEventDate } from '@/utils/locale-format'
 
@@ -7,7 +7,7 @@ type Translate = (key: string) => string
 
 export function useEventsDirectory(t: Translate, locale: { value: FormatLocale }) {
   const latest = useLatestRequest()
-  const items = ref<EventDTO[]>([])
+  const items = ref<Event[]>([])
 
   watch(() => locale.value, () => {
     void load()
@@ -74,7 +74,7 @@ export function useEventsDirectory(t: Translate, locale: { value: FormatLocale }
   }
 }
 
-function toEventOverviewItem(event: EventDTO, locale: FormatLocale, t: Translate) {
+function toEventOverviewItem(event: Event, locale: FormatLocale, t: Translate) {
   return {
     id: event.id,
     title: event.title,

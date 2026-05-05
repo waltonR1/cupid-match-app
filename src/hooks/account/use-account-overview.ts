@@ -1,12 +1,12 @@
 import { computed, reactive, ref, watch } from 'vue'
 import {
   getAccountOverview,
-  type AccountFavoriteRecordDTO,
-  type AccountOverviewDTO,
-  type AccountPrivacySettingDTO,
+  type AccountFavoriteRecord,
+  type AccountOverviewResponse,
+  type AccountPrivacySetting,
   type AccountProfileSummary,
-  type AccountThreadRecordDTO,
-  type AccountUserEventRecordDTO,
+  type AccountThreadRecord,
+  type AccountUserEventRecord,
 } from '@/api/account/account'
 import { useLocaleStore } from '@/stores/modules/locale'
 
@@ -16,10 +16,10 @@ export function useAccountOverview() {
 
   const account = reactive({ ...initialData.account })
   const profile = reactive(createEmptyAccountProfileSummary())
-  const userEvents = reactive<AccountUserEventRecordDTO[]>([...initialData.userEvents])
-  const favorites = reactive<AccountFavoriteRecordDTO[]>([...initialData.favorites])
-  const threads = reactive<AccountThreadRecordDTO[]>([...initialData.threads])
-  const privacySettings = reactive<AccountPrivacySettingDTO[]>([...initialData.privacySettings])
+  const userEvents = reactive<AccountUserEventRecord[]>([...initialData.userEvents])
+  const favorites = reactive<AccountFavoriteRecord[]>([...initialData.favorites])
+  const threads = reactive<AccountThreadRecord[]>([...initialData.threads])
+  const privacySettings = reactive<AccountPrivacySetting[]>([...initialData.privacySettings])
   const loading = ref(false)
   const error = ref<unknown>(null)
 
@@ -93,7 +93,7 @@ function replaceArray<T>(target: T[], value: T[]) {
   target.splice(0, target.length, ...value)
 }
 
-function createEmptyAccountOverview(): AccountOverviewDTO {
+function createEmptyAccountOverview(): AccountOverviewResponse {
   return {
     account: {
       id: '',

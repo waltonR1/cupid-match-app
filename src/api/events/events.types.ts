@@ -2,46 +2,46 @@ import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
 
-export type EventStatusDTO = 'open' | 'waitlist' | 'closed'
-export type RelatedProfileStatusDTO = 'open' | 'review' | 'vip'
+export type EventStatus = 'open' | 'waitlist' | 'closed'
+export type RelatedProfileStatus = 'open' | 'review' | 'vip'
 
-export interface EventAgendaItemDTO {
+export interface EventAgendaItem {
   time: string
   title: string
   desc: string
 }
 
-export interface EventDTO {
+export interface Event {
   id: string
   date: string
   city: string
   venue: string
-  status: EventStatusDTO
+  status: EventStatus
   title: string
   format: string
   audience: string
   summary: string
   seats: number
   registered: number
-  agenda: EventAgendaItemDTO[]
+  agenda: EventAgendaItem[]
 }
 
-export interface EventRelatedProfileDTO {
+export interface EventRelatedProfile {
   id: string
   displayName: string
   age: number
   city: string
   intent: string
   summary: string
-  status: RelatedProfileStatusDTO
+  status: RelatedProfileStatus
   isVerified: boolean
 }
 
-export interface EventsListResponseDTO {
-  items: EventDTO[]
+export interface EventsListResponse {
+  items: Event[]
 }
 
-export interface EventDetailResponseDTO {
-  event: EventDTO
-  relatedProfiles: EventRelatedProfileDTO[]
+export interface EventDetailResponse {
+  event: Event
+  relatedProfiles: EventRelatedProfile[]
 }

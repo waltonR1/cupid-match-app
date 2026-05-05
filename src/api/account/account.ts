@@ -1,32 +1,32 @@
 import { requestJson } from '@/api/shared/http'
 import type {
-  AccountDTO,
+  Account,
   AccountFavoriteProfileCard,
-  AccountFavoriteRecordDTO,
+  AccountFavoriteRecord,
   AccountMembershipLevel,
-  AccountOverviewDTO,
-  AccountPrivacySettingDTO,
+  AccountOverviewResponse,
+  AccountPrivacySetting,
   AccountProfileSummary,
   AccountThreadProfileCard,
-  AccountThreadRecordDTO,
-  AccountUserEventRecordDTO,
+  AccountThreadRecord,
+  AccountUserEventRecord,
   FormatLocale,
 } from './account.types'
 
 export type {
-  AccountDTO,
+  Account,
   AccountFavoriteProfileCard,
-  AccountFavoriteRecordDTO,
+  AccountFavoriteRecord,
   AccountMembershipLevel,
-  AccountOverviewDTO,
-  AccountPrivacySettingDTO,
+  AccountOverviewResponse,
+  AccountPrivacySetting,
   AccountProfileSummary,
   AccountThreadProfileCard,
-  AccountThreadRecordDTO,
-  AccountUserEventRecordDTO,
+  AccountThreadRecord,
+  AccountUserEventRecord,
   FormatLocale,
 } from './account.types'
 
-export function getAccountOverview(): Promise<AccountOverviewDTO> {
-  return requestJson<AccountOverviewDTO>('/account/overview')
+export function getAccountOverview(): Promise<AccountOverviewResponse> {
+  return requestJson<AccountOverviewResponse>('/account/overview')
 }
