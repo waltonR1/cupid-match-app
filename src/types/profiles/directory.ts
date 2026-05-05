@@ -1,4 +1,6 @@
 import type {ComputedRef, Ref} from 'vue'
+import type {ProfileCardListItem} from './card'
+import type {ProfileActiveFilterChip, ProfileFilterToolbarItem} from './view'
 
 /** 筛选选项 */
 export interface DirectoryOption {
@@ -96,4 +98,38 @@ export type UseSelfDirectoryResult<TProfile> = UseProfileDirectoryResult<
     SelfSortKey
 > & {
     featuredProfiles: ComputedRef<TProfile[]>
+}
+
+/** 家庭资料筛选字段 */
+export type FamilyDirectoryFilterKey = keyof FamilyDirectoryFilters
+
+/** 家庭资料筛选项 */
+export type FamilyDirectoryFilterItem = ProfileFilterToolbarItem<FamilyDirectoryFilterKey>
+
+/** 家庭资料目录页面数据 */
+export interface FamilyProfileDirectoryPageData {
+    items: ProfileCardListItem[]
+    filters: FamilyDirectoryFilterItem[]
+    activeFilters: ProfileActiveFilterChip<FamilyDirectoryFilterKey>[]
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+}
+
+/** 个人资料筛选字段 */
+export type SelfDirectoryFilterKey = keyof SelfDirectoryFilters
+
+/** 个人资料筛选项 */
+export type SelfDirectoryFilterItem = ProfileFilterToolbarItem<SelfDirectoryFilterKey>
+
+/** 个人资料目录页面数据 */
+export interface SelfProfileDirectoryPageData {
+    items: ProfileCardListItem[]
+    filters: SelfDirectoryFilterItem[]
+    activeFilters: ProfileActiveFilterChip<SelfDirectoryFilterKey>[]
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
 }

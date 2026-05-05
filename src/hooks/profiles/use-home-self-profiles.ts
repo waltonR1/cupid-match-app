@@ -2,7 +2,7 @@
 import {getFeaturedSelfProfiles, type FormatLocale} from '@/api/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
-import {toSelfProfileCardViewModel} from '@/mappers/profile-card.mapper'
+import {toSelfProfileCardViewModel} from '@/mappers/profile-card'
 import type {ProfileCardListItem} from '@/types/profiles/card'
 
 /** 首页精选会员数据 */
