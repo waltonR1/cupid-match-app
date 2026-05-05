@@ -10,13 +10,12 @@ import {
     type SelfProfileSortKey,
 } from '@/api/profiles/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
+import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isSelfProfileSortKey} from '@/constants/profiles'
+import type {Translate} from '@/i18n/types'
 import type {ProfileCardListItem} from '@/types/profiles/card'
-import type {ActiveDirectoryFilterChip, DirectoryOption, SelfDirectoryFilters} from '@/types/profiles/directory'
+import type {DirectoryOption, SelfDirectoryFilters} from '@/types/profiles/directory'
 import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
-import {formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
-
-/** 翻译函数类型 */
-type Translate = (key: string) => string
+import {buildActiveDirectoryFilterChips, formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
 
 /** 默认筛选条件 */
 const DEFAULT_FILTERS: SelfDirectoryFilters = {
@@ -37,14 +36,6 @@ const DEFAULT_FILTERS: SelfDirectoryFilters = {
 
 /** 默认排序方式 */
 const DEFAULT_SORT: SelfProfileSortKey = 'recentActive'
-
-/** 目录分页大小 */
-const PAGE_SIZE = 6
-
-/** 筛选项宽度样式 */
-const compactWidthClass = 'w-[86px] sm:w-[90px] lg:w-[94px] xl:w-[98px]'
-const regularWidthClass = 'w-[98px] sm:w-[104px] lg:w-[110px] xl:w-[116px]'
-const wideWidthClass = 'w-[114px] sm:w-[122px] lg:w-[130px] xl:w-[136px]'
 
 /** 首页精选会员数据 */
 export function useHomeSelfProfiles(t: Translate, locale: Ref<FormatLocale>) {
@@ -94,7 +85,7 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
         const filterItems = buildSelfDirectoryFilterItems(response.value?.facets ?? null, filters.value, locale.value, t)
         const pagination = response.value?.pagination ?? {
             page: 1,
-            pageSize: PAGE_SIZE,
+            pageSize: PROFILE_DIRECTORY_PAGE_SIZE,
             total: 0,
             totalPages: 1,
         }
@@ -105,7 +96,7 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
                 card: toSelfProfileCard(profile, locale.value, t),
             })),
             filters: filterItems,
-            activeFilters: buildActiveFilterChips(filterItems, filters.value),
+            activeFilters: buildActiveDirectoryFilterChips(filterItems, filters.value),
             page: pagination.page,
             pageSize: pagination.pageSize,
             total: pagination.total,
@@ -131,7 +122,7 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
     function buildQuery(): SelfProfileDirectoryQuery {
         return {
             page: page.value,
-            pageSize: PAGE_SIZE,
+            pageSize: PROFILE_DIRECTORY_PAGE_SIZE,
             sort: sortKey.value,
             ...filters.value,
         }
@@ -160,9 +151,9 @@ export function useSelfProfileDirectory(t: Translate, locale: Ref<FormatLocale>)
 
     /** 更新排序方式 */
     function updateSort(nextSortKey: string) {
-        if (!['recentActive', 'priorityFirst', 'ageAsc', 'ageDesc'].includes(nextSortKey)) return
+        if (!isSelfProfileSortKey(nextSortKey)) return
 
-        sortKey.value = nextSortKey as SelfProfileSortKey
+        sortKey.value = nextSortKey
         page.value = 1
     }
 
@@ -232,7 +223,7 @@ function buildSelfDirectoryFilterItems(
                 value: 'female'
             }],
             value: filters.gender,
-            widthClass: compactWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
             group: 'primary',
         },
         {
@@ -247,7 +238,7 @@ function buildSelfDirectoryFilterItems(
                 {label: t('filters.age40plus'), value: '40plus'},
             ],
             value: filters.ageRange,
-            widthClass: compactWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
             group: 'primary',
         },
         {
@@ -255,7 +246,7 @@ function buildSelfDirectoryFilterItems(
             label: t('filters.city'),
             options: [allOption(t), ...cities.map(item => ({label: item.label, value: item.value}))],
             value: filters.city,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'primary',
         },
         {
@@ -270,7 +261,7 @@ function buildSelfDirectoryFilterItems(
                 {label: '180cm+', value: '180plus'},
             ],
             value: filters.heightRange,
-            widthClass: compactWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
             group: 'primary',
         },
         {
@@ -281,7 +272,7 @@ function buildSelfDirectoryFilterItems(
                 value: 'bachelor'
             }, {label: t('filters.eduMaster'), value: 'master'}, {label: t('filters.eduPhD'), value: 'phd'}],
             value: filters.education,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'primary',
         },
         {
@@ -289,7 +280,7 @@ function buildSelfDirectoryFilterItems(
             label: t('filters.intent'),
             options: [allOption(t), ...intents.map(item => ({label: item.label, value: item.code}))],
             value: filters.intentCode,
-            widthClass: wideWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
             group: 'primary',
         },
         {
@@ -297,7 +288,7 @@ function buildSelfDirectoryFilterItems(
             label: t('filters.industry'),
             options: [allOption(t), ...industries.map(item => ({label: item.label, value: item.value}))],
             value: filters.industry,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
         {
@@ -305,7 +296,7 @@ function buildSelfDirectoryFilterItems(
             label: t('fields.job'),
             options: [allOption(t), ...occupations.map(item => ({label: item.label, value: item.value}))],
             value: filters.occupation,
-            widthClass: wideWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
             group: 'secondary',
         },
         {
@@ -316,7 +307,7 @@ function buildSelfDirectoryFilterItems(
                 value
             }))],
             value: filters.language,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
         {
@@ -327,7 +318,7 @@ function buildSelfDirectoryFilterItems(
                 value: 'verified'
             }, {label: t('filters.verifiedNo'), value: 'unverified'}],
             value: filters.verified,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
         {
@@ -341,7 +332,7 @@ function buildSelfDirectoryFilterItems(
                 value: 'widowed'
             }],
             value: filters.maritalStatus,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
         {
@@ -352,7 +343,7 @@ function buildSelfDirectoryFilterItems(
                 value: 'no'
             }],
             value: filters.hasChildren,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
         {
@@ -363,26 +354,10 @@ function buildSelfDirectoryFilterItems(
                 value: 'yes'
             }, {label: t('filters.longDistanceNo'), value: 'no'}],
             value: filters.acceptLongDistance,
-            widthClass: regularWidthClass,
+            widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
             group: 'secondary',
         },
     ]
-}
-
-/** 构建当前激活的筛选标签 */
-function buildActiveFilterChips(items: ProfileDirectoryFilterItem[], filters: SelfDirectoryFilters): ActiveDirectoryFilterChip<keyof SelfDirectoryFilters>[] {
-    return items
-        .map((item) => {
-            const value = filters[item.key]
-            if (!value) return undefined
-
-            return {
-                key: item.key,
-                label: item.label,
-                value: item.options.find(option => option.value === value)?.label ?? value,
-            }
-        })
-        .filter((item): item is ActiveDirectoryFilterChip<keyof SelfDirectoryFilters> => Boolean(item))
 }
 
 /** 全部选项 */
