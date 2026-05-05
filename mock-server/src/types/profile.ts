@@ -52,7 +52,7 @@ export interface ProfileWithDisplayName extends ProfileRecord {
 }
 
 export interface ProfileCardFactDTO {
-  labelKey: string
+  code: string
   value: string
 }
 
@@ -61,11 +61,12 @@ export interface ProfileCardDTO {
   displayName: string
   gender: string
   meta: string
-  badgeKey: string
+  badgeCode: string
   summary: string
   facts: ProfileCardFactDTO[]
   tags: string[]
-  footerKey: string
+  tagCodes: string[]
+  footerCode: string
 }
 
 export interface ProfileCardListItemDTO {

@@ -4,13 +4,23 @@ export type GenderCode = 'male' | 'female'
 export type ProfileStatusCode = 'open' | 'review' | 'vip'
 export type MaritalStatusCode = 'single' | 'divorced' | 'widowed'
 export type IntentCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-export type DegreeLevelCode = 'bachelor' | 'master' | 'phd'
 export type HabitCode = 'never' | 'social' | 'often'
 export type SelfProfileSortKey = 'recentActive' | 'priorityFirst' | 'ageAsc' | 'ageDesc'
 export type FamilyProfileSortKey = 'priorityFirst' | 'recentActive' | 'ageAsc' | 'ageDesc'
+export type ProfileFactCode = 'city' | 'education' | 'languages' | 'residencePlan'
+export type FamilyModeCode = 'priority' | 'contact_ready' | 'context_only'
+export type ProfileBadgeCode = IntentCode | FamilyModeCode
+export type ProfileFooterCode = ProfileStatusCode | 'priority' | 'contact_ready' | 'observe'
+export type ProfileTagCode =
+  | 'marital_single'
+  | 'marital_divorced'
+  | 'marital_widowed'
+  | 'accept_long_distance'
+  | 'has_children'
+  | 'no_children'
 
 export interface ProfileCardFactResponse {
-  labelKey: string
+  code: ProfileFactCode
   value: string
 }
 
@@ -19,11 +29,12 @@ export interface ProfileCardResponse {
   displayName: string
   gender: GenderCode
   meta: string
-  badgeKey: string
+  badgeCode: ProfileBadgeCode
   summary: string
   facts: ProfileCardFactResponse[]
   tags: string[]
-  footerKey: string
+  tagCodes: ProfileTagCode[]
+  footerCode: ProfileFooterCode
 }
 
 export interface ProfileCardResponseItem {

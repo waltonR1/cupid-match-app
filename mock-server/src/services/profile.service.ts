@@ -195,25 +195,26 @@ export function buildSelfProfileCardItem(locale: ApiLocale, profile: ProfileWith
       displayName: profile.displayName,
       gender: profile.gender,
       meta: `${formatLocalizedAge(locale, profile.age)} / ${resolveLocalizedText(locale, profile.occupation)}`,
-      badgeKey: intentBadgeKey(profile.intentCode),
+      badgeCode: profile.intentCode,
       summary: resolveLocalizedText(locale, profile.summary),
       facts: [
-        { labelKey: 'fields.city', value: resolveLocalizedText(locale, profile.city) },
-        { labelKey: 'fields.education', value: resolveLocalizedText(locale, profile.education) },
-        { labelKey: 'fields.languages', value: formatProfileLanguages(locale, profile.languages) },
+        { code: 'city', value: resolveLocalizedText(locale, profile.city) },
+        { code: 'education', value: resolveLocalizedText(locale, profile.education) },
+        { code: 'languages', value: formatProfileLanguages(locale, profile.languages) },
       ],
       tags: resolveLocalizedTexts(locale, profile.tags).slice(0, 3),
-      footerKey: statusFooterKey(profile.status),
+      tagCodes: [],
+      footerCode: profile.status,
     },
   }
 }
 
 export function buildFamilyProfileCardItem(locale: ApiLocale, profile: ProfileWithDisplayName): ProfileCardListItemDTO {
   const familyMode = resolveFamilyMode(profile)
-  const additionalTags = [
-    localizeKey(locale, maritalStatusTagKey(profile.maritalStatus)),
-    profile.acceptLongDistance ? localizeKey(locale, 'tags.longDistanceYes') : '',
-    profile.hasChildren ? localizeKey(locale, 'tags.childrenYes') : localizeKey(locale, 'tags.childrenNo'),
+  const tagCodes = [
+    maritalStatusTagCode(profile.maritalStatus),
+    profile.acceptLongDistance ? 'accept_long_distance' : '',
+    profile.hasChildren ? 'has_children' : 'no_children',
   ].filter(Boolean)
 
   return {
@@ -223,15 +224,16 @@ export function buildFamilyProfileCardItem(locale: ApiLocale, profile: ProfileWi
       displayName: profile.displayName,
       gender: profile.gender,
       meta: `${formatLocalizedAge(locale, profile.age)} / ${resolveLocalizedText(locale, profile.occupation)}`,
-      badgeKey: familyModeBadgeKey(familyMode),
+      badgeCode: familyMode,
       summary: resolveLocalizedText(locale, profile.maritalPlan),
       facts: [
-        { labelKey: 'fields.city', value: resolveLocalizedText(locale, profile.city) },
-        { labelKey: 'fields.education', value: resolveLocalizedText(locale, profile.education) },
-        { labelKey: 'fields.residencePlan', value: resolveLocalizedText(locale, profile.residencePlan) },
+        { code: 'city', value: resolveLocalizedText(locale, profile.city) },
+        { code: 'education', value: resolveLocalizedText(locale, profile.education) },
+        { code: 'residencePlan', value: resolveLocalizedText(locale, profile.residencePlan) },
       ],
-      tags: [...resolveLocalizedTexts(locale, profile.tags), ...additionalTags].slice(0, 3),
-      footerKey: familyFooterKey(profile, familyMode),
+      tags: resolveLocalizedTexts(locale, profile.tags).slice(0, 3),
+      tagCodes,
+      footerCode: resolveFamilyFooterCode(profile, familyMode),
     },
   }
 }
@@ -379,87 +381,36 @@ function getProfileLanguageLabel(locale: ApiLocale, language: string): string {
   return labels[key]?.[locale] ?? key
 }
 
-function intentBadgeKey(intentCode: string): string {
-  switch (intentCode) {
-    case 'marriage':
-      return 'card.goalMarriage'
-    case 'exclusive':
-      return 'card.goalExclusive'
-    case 'cross_border':
-      return 'card.goalCrossBorder'
-    case 'serious':
-    default:
-      return 'card.goalSerious'
-  }
+function resolveFamilyMode(profile: ProfileWithDisplayName): 'priority' | 'contact_ready' | 'context_only' {
+  if (profile.familyPriority) return 'priority'
+  if (profile.allowFamilyContact) return 'contact_ready'
+  return 'context_only'
 }
 
-function statusFooterKey(status: ProfileWithDisplayName['status']): string {
-  switch (status) {
-    case 'review':
-      return 'card.labelReview'
-    case 'vip':
-      return 'card.labelPriority'
-    case 'open':
-    default:
-      return 'card.labelSelected'
-  }
-}
-
-function resolveFamilyMode(profile: ProfileWithDisplayName): 'PRIORITY' | 'CONTACT_READY' | 'CONTEXT_ONLY' {
-  if (profile.familyPriority) return 'PRIORITY'
-  if (profile.allowFamilyContact) return 'CONTACT_READY'
-  return 'CONTEXT_ONLY'
-}
-
-function familyModeBadgeKey(mode: ReturnType<typeof resolveFamilyMode>): string {
-  switch (mode) {
-    case 'PRIORITY':
-      return 'modes.priority'
-    case 'CONTACT_READY':
-      return 'modes.contactReady'
-    case 'CONTEXT_ONLY':
-    default:
-      return 'modes.contextOnly'
-  }
-}
-
-function familyFooterKey(profile: ProfileWithDisplayName, mode: ReturnType<typeof resolveFamilyMode>): string {
-  if (profile.status === 'review') return 'card.labelReview'
+function resolveFamilyFooterCode(profile: ProfileWithDisplayName, mode: ReturnType<typeof resolveFamilyMode>): string {
+  if (profile.status === 'review') return 'review'
 
   switch (mode) {
-    case 'PRIORITY':
-      return 'card.labelPriority'
-    case 'CONTACT_READY':
-      return 'card.labelContactReady'
-    case 'CONTEXT_ONLY':
+    case 'priority':
+      return 'priority'
+    case 'contact_ready':
+      return 'contact_ready'
+    case 'context_only':
     default:
-      return 'card.labelObserve'
+      return 'observe'
   }
 }
 
-function maritalStatusTagKey(value: string): string {
+function maritalStatusTagCode(value: string): string {
   switch (value) {
     case 'divorced':
-      return 'tags.maritalDivorced'
+      return 'marital_divorced'
     case 'widowed':
-      return 'tags.maritalWidowed'
+      return 'marital_widowed'
     case 'single':
     default:
-      return 'tags.maritalSingle'
+      return 'marital_single'
   }
-}
-
-function localizeKey(locale: ApiLocale, key: string): string {
-  const labels: Record<string, Record<ApiLocale, string>> = {
-    'tags.maritalSingle': { zh: '未婚', fr: 'Celibataire', en: 'Single' },
-    'tags.maritalDivorced': { zh: '离异', fr: 'Divorce', en: 'Divorced' },
-    'tags.maritalWidowed': { zh: '丧偶', fr: 'Veuf/veuve', en: 'Widowed' },
-    'tags.longDistanceYes': { zh: '接受异地', fr: 'Distance acceptee', en: 'Open to long distance' },
-    'tags.childrenYes': { zh: '有子女', fr: 'Avec enfants', en: 'Has children' },
-    'tags.childrenNo': { zh: '无子女', fr: 'Sans enfants', en: 'No children' },
-  }
-
-  return labels[key]?.[locale] ?? key
 }
 
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {
