@@ -18,7 +18,7 @@
           :items="pageData.filters"
           :reset-text="t('filters.clear')"
           :title="t('directory.title')"
-          @reset="handleResetFilters"
+          @reset="resetFilters"
           @update:filter="handleUpdateFilter"
           @remove-filter="handleRemoveFilter"
       />
@@ -27,7 +27,7 @@
       <ProfileResultToolbar
           :sort="resultSort"
           :summary="resultSummary"
-          @update:sort-key="handleUpdateSort"
+          @update:sort-key="updateSort"
       />
 
       <!-- 列表 / 空状态 -->
@@ -47,7 +47,7 @@
             :title="t('directory.empty')"
             primary-variant="outline"
             variant="compact"
-            @primary="handleResetFilters"
+            @primary="resetFilters"
         />
       </view>
 
@@ -58,7 +58,7 @@
           :page-size="pageData.pageSize"
           :prev-text="t('pagination.prev')"
           :total="pageData.total"
-          @change="handleChangePage"
+          @change="changePage"
       />
     </view>
   </AppPageLayout>
@@ -136,20 +136,5 @@ function handleUpdateFilter(payload: { key: string, value: string }) {
 /** 移除筛选 */
 function handleRemoveFilter(key: string) {
   removeFilter(key as keyof FamilyDirectoryFilters)
-}
-
-/** 重置筛选 */
-function handleResetFilters() {
-  resetFilters()
-}
-
-/** 更新排序 */
-function handleUpdateSort(nextSortKey: string) {
-  updateSort(nextSortKey)
-}
-
-/** 切换分页 */
-function handleChangePage(nextPage: number) {
-  changePage(nextPage)
 }
 </script>

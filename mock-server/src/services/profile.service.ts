@@ -16,6 +16,7 @@ import { buildPagination, paginate } from '../utils/pagination.js'
 import { resolveLocalizedText, resolveLocalizedTexts, withDisplayName } from '../utils/localized.js'
 import { clamp, getString, toInt } from '../utils/string.js'
 
+/** 标准化资料目录查询参数 */
 export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuery {
   return {
     page: toInt(query.page, 1),
@@ -38,6 +39,7 @@ export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuer
   }
 }
 
+/** 构建个人资料筛选面板选项 */
 export function buildSelfDirectoryFacets(locale: ApiLocale, items: ProfileWithDisplayName[]): SelfProfileDirectoryFacetsDTO {
   return {
     cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
@@ -48,6 +50,7 @@ export function buildSelfDirectoryFacets(locale: ApiLocale, items: ProfileWithDi
   }
 }
 
+/** 构建家庭资料筛选面板选项 */
 export function buildFamilyDirectoryFacets(locale: ApiLocale, items: ProfileWithDisplayName[]): FamilyProfileDirectoryFacetsDTO {
   return {
     cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
@@ -57,6 +60,7 @@ export function buildFamilyDirectoryFacets(locale: ApiLocale, items: ProfileWith
   }
 }
 
+/** 判断个人资料是否匹配筛选条件 */
 export function matchesSelfDirectory(profile: ProfileWithDisplayName, query: NormalizedProfileQuery): boolean {
   return [
     !query.gender || profile.gender === query.gender,
@@ -75,6 +79,7 @@ export function matchesSelfDirectory(profile: ProfileWithDisplayName, query: Nor
   ].every(Boolean)
 }
 
+/** 判断家庭资料是否匹配筛选条件 */
 export function matchesFamilyDirectory(profile: ProfileWithDisplayName, query: NormalizedProfileQuery): boolean {
   return [
     !query.gender || profile.gender === query.gender,
@@ -91,6 +96,7 @@ export function matchesFamilyDirectory(profile: ProfileWithDisplayName, query: N
   ].every(Boolean)
 }
 
+/** 排序个人资料 */
 export function sortSelfProfiles(items: ProfileWithDisplayName[], sort: DirectorySort): ProfileWithDisplayName[] {
   const next = [...items]
   switch (sort) {
@@ -112,6 +118,7 @@ export function sortSelfProfiles(items: ProfileWithDisplayName[], sort: Director
   }
 }
 
+/** 排序家庭资料 */
 export function sortFamilyProfiles(items: ProfileWithDisplayName[], sort: DirectorySort): ProfileWithDisplayName[] {
   const next = [...items]
   switch (sort) {
@@ -133,6 +140,7 @@ export function sortFamilyProfiles(items: ProfileWithDisplayName[], sort: Direct
   }
 }
 
+/** 获取首页精选个人资料 */
 export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], rawPageSize: unknown): { items: ProfileCardListItemDTO[] } {
   const pageSize = clamp(Number.parseInt(getString(rawPageSize) || '3', 10) || 3, 1, 12)
   const source = profiles.map(withDisplayName)
@@ -143,6 +151,7 @@ export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], r
   }
 }
 
+/** 获取个人资料目录 */
 export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
   items: ProfileCardListItemDTO[]
   pagination: ReturnType<typeof buildPagination>
@@ -160,6 +169,7 @@ export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], q
   }
 }
 
+/** 获取家庭资料目录 */
 export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
   items: ProfileCardListItemDTO[]
   pagination: ReturnType<typeof buildPagination>
@@ -177,16 +187,19 @@ export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[],
   }
 }
 
+/** 获取个人资料详情 */
 export function selfProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): SelfProfileDetailDTO | null {
   const profile = profiles.find((item) => item.id === id)
   return profile ? toSelfProfileDetail(locale, withDisplayName(profile)) : null
 }
 
+/** 获取家庭资料详情 */
 export function familyProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): FamilyProfileDetailDTO | null {
   const profile = profiles.find((item) => item.id === id && item.familyVisible)
   return profile ? toFamilyProfileDetail(locale, withDisplayName(profile)) : null
 }
 
+/** 构建个人资料卡片 */
 export function buildSelfProfileCardItem(locale: ApiLocale, profile: ProfileWithDisplayName): ProfileCardListItemDTO {
   return {
     id: profile.id,
@@ -209,6 +222,7 @@ export function buildSelfProfileCardItem(locale: ApiLocale, profile: ProfileWith
   }
 }
 
+/** 构建家庭资料卡片 */
 export function buildFamilyProfileCardItem(locale: ApiLocale, profile: ProfileWithDisplayName): ProfileCardListItemDTO {
   const familyMode = resolveFamilyMode(profile)
   const tagCodes = [
@@ -238,6 +252,7 @@ export function buildFamilyProfileCardItem(locale: ApiLocale, profile: ProfileWi
   }
 }
 
+/** 转换为个人资料详情 */
 export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): SelfProfileDetailDTO {
   return {
     id: profile.id,
@@ -278,6 +293,7 @@ export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDispl
   }
 }
 
+/** 转换为家庭资料详情 */
 export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): FamilyProfileDetailDTO {
   return {
     id: profile.id,
@@ -314,6 +330,7 @@ export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDis
   }
 }
 
+/** 标准化排序字段 */
 function normalizeSort(value: string): DirectorySort {
   if (value === 'priorityFirst' || value === 'ageAsc' || value === 'ageDesc' || value === 'recentActive') {
     return value
@@ -322,6 +339,7 @@ function normalizeSort(value: string): DirectorySort {
   return 'recentActive'
 }
 
+/** 去重并生成本地化筛选项 */
 function uniqueLocalizedFacetOptions(locale: ApiLocale, items: ProfileRecord['city'][]): DirectoryFacetOptionDTO[] {
   const seen = new Set<string>()
   return items
@@ -339,6 +357,7 @@ function uniqueLocalizedFacetOptions(locale: ApiLocale, items: ProfileRecord['ci
     }))
 }
 
+/** 去重并生成意向筛选项 */
 function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayName[]): IntentFacetDTO[] {
   const seen = new Set<string>()
   return items
@@ -356,18 +375,21 @@ function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayNa
     }))
 }
 
+/** 格式化年龄文本 */
 function formatLocalizedAge(locale: ApiLocale, age: number): string {
   if (locale === 'zh') return `${age}岁`
   if (locale === 'fr') return `${age} ans`
   return String(age)
 }
 
+/** 格式化语言列表 */
 function formatProfileLanguages(locale: ApiLocale, languages: string[]): string {
   return languages
     .map((language) => getProfileLanguageLabel(locale, language))
     .join(' / ')
 }
 
+/** 获取语言显示名称 */
 function getProfileLanguageLabel(locale: ApiLocale, language: string): string {
   const labels: Record<string, Record<ApiLocale, string>> = {
     FR: { zh: '法语', fr: 'Francais', en: 'French' },
@@ -381,12 +403,14 @@ function getProfileLanguageLabel(locale: ApiLocale, language: string): string {
   return labels[key]?.[locale] ?? key
 }
 
+/** 解析家庭展示模式 */
 function resolveFamilyMode(profile: ProfileWithDisplayName): 'priority' | 'contact_ready' | 'context_only' {
   if (profile.familyPriority) return 'priority'
   if (profile.allowFamilyContact) return 'contact_ready'
   return 'context_only'
 }
 
+/** 解析家庭卡片底部状态 */
 function resolveFamilyFooterCode(profile: ProfileWithDisplayName, mode: ReturnType<typeof resolveFamilyMode>): string {
   if (profile.status === 'review') return 'review'
 
@@ -401,6 +425,7 @@ function resolveFamilyFooterCode(profile: ProfileWithDisplayName, mode: ReturnTy
   }
 }
 
+/** 解析婚姻状态标签 */
 function maritalStatusTagCode(value: string): string {
   switch (value) {
     case 'divorced':
@@ -413,19 +438,23 @@ function maritalStatusTagCode(value: string): string {
   }
 }
 
+/** 比较最近活跃时间 */
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {
   return toTimestamp(right.lastActiveAt) - toTimestamp(left.lastActiveAt)
 }
 
+/** 转换为时间戳 */
 function toTimestamp(value: string): number {
   const next = new Date(value).getTime()
   return Number.isNaN(next) ? 0 : next
 }
 
+/** 获取个人资料优先级 */
 function getSelfPriorityRank(profile: ProfileWithDisplayName): number {
   return profile.status === 'vip' ? 0 : 1
 }
 
+/** 获取家庭资料优先级 */
 function getFamilyPriorityRank(profile: ProfileWithDisplayName): number {
   if (profile.familyPriority) {
     return 0
@@ -436,6 +465,7 @@ function getFamilyPriorityRank(profile: ProfileWithDisplayName): number {
   return 2
 }
 
+/** 匹配年龄区间 */
 function matchAgeRange(age: number, range: string): boolean {
   if (!range) {
     return true
@@ -457,6 +487,7 @@ function matchAgeRange(age: number, range: string): boolean {
   }
 }
 
+/** 匹配身高区间 */
 function matchHeightRange(height: number, range: string): boolean {
   if (!range) {
     return true
@@ -478,6 +509,7 @@ function matchHeightRange(height: number, range: string): boolean {
   }
 }
 
+/** 匹配认证状态 */
 function matchVerified(isVerified: boolean, value: string): boolean {
   if (!value) {
     return true
@@ -491,6 +523,7 @@ function matchVerified(isVerified: boolean, value: string): boolean {
   return true
 }
 
+/** 匹配布尔筛选条件 */
 function matchBooleanFlag(source: boolean, value: string): boolean {
   if (!value) {
     return true
@@ -504,6 +537,7 @@ function matchBooleanFlag(source: boolean, value: string): boolean {
   return true
 }
 
+/** 匹配家庭展示模式 */
 function matchFamilyMode(profile: ProfileWithDisplayName, value: string): boolean {
   if (!value) {
     return true

@@ -1,6 +1,7 @@
 <template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
+      <!-- 返回入口 -->
       <view
         class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
         @click="handleBack"
@@ -22,10 +23,12 @@
         <text>{{ t('actions.backToFamily') }}</text>
       </view>
 
+      <!-- 详情内容 -->
       <view v-if="heroData" class="space-y-6">
         <ProfileDetailHero :data="heroData" />
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <!-- 主内容区 -->
           <view class="space-y-6">
             <ProfileDetailFactGrid
               :title="t('sections.overview')"
@@ -33,6 +36,7 @@
             />
 
             <view class="grid gap-6 lg:grid-cols-2">
+              <!-- 关系信息 -->
               <ProfileDetailFactSection
                 :title="t('sections.relationship')"
                 :items="relationshipFacts"
@@ -62,6 +66,7 @@
             </view>
           </view>
 
+          <!-- 侧边信息栏 -->
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
             <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
               <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
@@ -112,6 +117,7 @@
         </view>
       </view>
 
+      <!-- 空状态 -->
       <EmptyStatePanel
         v-else
         :title="t('sections.notFoundTitle')"
@@ -136,15 +142,20 @@ import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vu
 import { useFamilyProfileDetail } from '@/hooks/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
+/** 页面文案 */
 const { t, locale } = usePageI18n('familyDetail')
+
+/** 当前资料 ID */
 const profileId = ref('')
 
+/** 读取路由参数 */
 onLoad((query) => {
   if (query && typeof query.id === 'string') {
     profileId.value = query.id
   }
 })
 
+/** 详情页数据 */
 const {
   heroData,
   overviewFacts,
@@ -157,6 +168,7 @@ const {
   tagTexts,
 } = useFamilyProfileDetail(profileId, t, locale)
 
+/** 返回列表页 */
 function handleBack() {
   if (getCurrentPages().length > 1) {
     uni.navigateBack({ delta: 1 })
