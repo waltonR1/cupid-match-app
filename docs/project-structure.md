@@ -52,9 +52,13 @@ src/
 ```text
 src/api/
   account/
+    index.ts
   auth/
+    index.ts
   events/
+    index.ts
   profiles/
+    index.ts
   shared/
 ```
 
@@ -62,6 +66,7 @@ src/api/
 
 - `*.types.ts` 放 payload、query、response 类型
 - `*.ts` 放域请求方法
+- `index.ts` 放模块统一出口，外部优先从 `@/api/<domain>` 导入
 - `shared/http.ts` 放统一请求行为
 - `shared/config.ts` 放 API 基础配置
 

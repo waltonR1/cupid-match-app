@@ -1,4 +1,4 @@
-import type {FamilyProfileSortKey, SelfProfileSortKey} from '@/api/profiles/profiles'
+﻿import type {FamilyProfileSortKey, SelfProfileSortKey} from '@/api/profiles'
 
 /** 资料目录统一分页大小 */
 export const PROFILE_DIRECTORY_PAGE_SIZE = 6

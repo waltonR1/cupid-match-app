@@ -1,42 +1,12 @@
 import {isApiStatusError, requestJson} from '@/api/shared/http'
 import type {
     FamilyProfileDetail,
-    FamilyProfileDirectoryFacets,
     FamilyProfileDirectoryQuery,
     FamilyProfileDirectoryResponse,
-    FamilyProfileListItem,
-    FamilyProfileSortKey,
     FeaturedSelfProfilesResponse,
-    FormatLocale,
-    FamilyModeCode,
-    IntentCode,
-    ProfileStatusCode,
     SelfProfileDetail,
-    SelfProfileDirectoryFacets,
     SelfProfileDirectoryQuery,
     SelfProfileDirectoryResponse,
-    SelfProfileListItem,
-    SelfProfileSortKey,
-} from './profiles.types'
-
-export type {
-    FamilyProfileDetail,
-    FamilyProfileDirectoryFacets,
-    FamilyProfileDirectoryQuery,
-    FamilyProfileDirectoryResponse,
-    FamilyProfileListItem,
-    FamilyProfileSortKey,
-    FeaturedSelfProfilesResponse,
-    FormatLocale,
-    FamilyModeCode,
-    IntentCode,
-    ProfileStatusCode,
-    SelfProfileDetail,
-    SelfProfileDirectoryFacets,
-    SelfProfileDirectoryQuery,
-    SelfProfileDirectoryResponse,
-    SelfProfileListItem,
-    SelfProfileSortKey,
 } from './profiles.types'
 
 export function getSelfProfileDirectory(query: SelfProfileDirectoryQuery): Promise<SelfProfileDirectoryResponse> {

@@ -1,23 +1,5 @@
 import { isApiStatusError, requestJson } from '@/api/shared/http'
-import type {
-  Event,
-  EventDetailResponse,
-  EventRelatedProfile,
-  EventsListResponse,
-  EventStatus,
-  FormatLocale,
-  RelatedProfileStatus,
-} from './events.types'
-
-export type {
-  Event,
-  EventDetailResponse,
-  EventRelatedProfile,
-  EventsListResponse,
-  EventStatus,
-  FormatLocale,
-  RelatedProfileStatus,
-} from './events.types'
+import type { EventDetailResponse, EventsListResponse } from './events.types'
 
 export function listEvents(): Promise<EventsListResponse> {
   return requestJson<EventsListResponse>('/events')

@@ -1,12 +1,5 @@
 import { requestJson } from '@/api/shared/http'
-import type { AuthSession, AuthUser, LoginPayload, RegisterPayload } from './auth.types'
-
-export type {
-  AuthSession,
-  AuthUser,
-  LoginPayload,
-  RegisterPayload,
-} from './auth.types'
+import type { AuthSession, LoginPayload, RegisterPayload } from './auth.types'
 
 export function login(payload: LoginPayload): Promise<AuthSession> {
   return requestJson<AuthSession>('/auth/login', {

@@ -56,15 +56,19 @@ src/api/
   account/
     account.ts
     account.types.ts
+    index.ts
   auth/
     auth.ts
     auth.types.ts
+    index.ts
   events/
     events.ts
     events.types.ts
+    index.ts
   profiles/
     profiles.ts
     profiles.types.ts
+    index.ts
   shared/
     config.ts
     http.ts
@@ -74,6 +78,7 @@ src/api/
 
 - `*.types.ts` 放 DTO、query、payload、response 类型
 - `*.ts` 放域 API 方法
+- `index.ts` 放模块统一出口
 - `src/api/shared/http.ts` 负责统一请求、错误处理和日志
 
 ## Mock Server 事实

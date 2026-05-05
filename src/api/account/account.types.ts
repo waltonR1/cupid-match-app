@@ -1,4 +1,4 @@
-import type { Event } from '@/api/events/events.types'
+﻿import type { Event } from '@/api/events'
 import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }

@@ -1,5 +1,5 @@
-import { computed, ref, watch } from 'vue'
-import { listEvents, type Event, type FormatLocale } from '@/api/events/events'
+﻿import { computed, ref, watch } from 'vue'
+import { listEvents, type Event, type FormatLocale } from '@/api/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { HomeEventsViewModel } from '@/types/home/view'
 import { formatEventDate } from '@/utils/locale-format'

@@ -1,4 +1,4 @@
-import {computed, ref, watch, type Ref} from 'vue'
+﻿import {computed, ref, watch, type Ref} from 'vue'
 import {
     getSelfProfileDirectory,
     type FormatLocale,
@@ -6,7 +6,7 @@ import {
     type SelfProfileDirectoryQuery,
     type SelfProfileDirectoryResponse,
     type SelfProfileSortKey,
-} from '@/api/profiles/profiles'
+} from '@/api/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isSelfProfileSortKey} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'

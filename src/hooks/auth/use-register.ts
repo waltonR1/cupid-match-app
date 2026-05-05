@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { register as registerApi, type RegisterPayload } from '@/api/auth/auth'
+﻿import { ref } from 'vue'
+import { register as registerApi, type RegisterPayload } from '@/api/auth'
 
 export function useRegister() {
   const loading = ref(false)

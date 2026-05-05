@@ -1,4 +1,4 @@
-import { computed, reactive, ref, watch } from 'vue'
+﻿import { computed, reactive, ref, watch } from 'vue'
 import {
   getAccountOverview,
   type AccountFavoriteRecord,
@@ -7,7 +7,7 @@ import {
   type AccountProfileSummary,
   type AccountThreadRecord,
   type AccountUserEventRecord,
-} from '@/api/account/account'
+} from '@/api/account'
 import { useLocaleStore } from '@/stores/modules/locale'
 
 export function useAccountOverview() {

@@ -1,4 +1,4 @@
-import {computed, ref, watch, type Ref} from 'vue'
+﻿import {computed, ref, watch, type Ref} from 'vue'
 import {
     getFamilyProfileDirectory,
     type FamilyProfileDirectoryFacets,
@@ -6,7 +6,7 @@ import {
     type FamilyProfileDirectoryResponse,
     type FamilyProfileSortKey,
     type FormatLocale,
-} from '@/api/profiles/profiles'
+} from '@/api/profiles'
 import {PROFILE_DIRECTORY_PAGE_SIZE, PROFILE_FILTER_WIDTH_CLASS, isFamilyProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'

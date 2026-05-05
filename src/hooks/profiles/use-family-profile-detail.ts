@@ -1,5 +1,5 @@
-import {computed, ref, watch, type Ref} from 'vue'
-import {getFamilyProfileDetail, type FamilyProfileDetail, type FormatLocale} from '@/api/profiles/profiles'
+﻿import {computed, ref, watch, type Ref} from 'vue'
+import {getFamilyProfileDetail, type FamilyProfileDetail, type FormatLocale} from '@/api/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
 import type {ProfileDetailBadgeItem} from '@/types/profiles/detail'

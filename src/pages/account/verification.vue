@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AccountShell
     active-page="verification"
     :account-data="accountData"
@@ -125,7 +125,7 @@ import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openConnectionsPage, openMyProfilePage } from '@/utils/navigation'
 import { localizeAccountText } from '@/utils/account-format'
-import type { AccountMembershipLevel } from '@/api/account/account.types'
+import type { AccountMembershipLevel } from '@/api/account'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()

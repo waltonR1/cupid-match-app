@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AccountShell
     active-page="membership"
     :account-data="accountData"
@@ -136,7 +136,7 @@ import AppButton from '@/components/common/AppButton.vue'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { AccountMembershipLevel } from '@/api/account/account.types'
+import type { AccountMembershipLevel } from '@/api/account'
 import { formatLocalizedDate } from '@/utils/locale-format'
 import {
   openActivityPage,

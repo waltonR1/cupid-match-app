@@ -1,10 +1,10 @@
-import type {
+﻿import type {
     FamilyModeCode,
     FamilyProfileListItem,
     IntentCode,
     ProfileStatusCode,
     SelfProfileListItem,
-} from '@/api/profiles/profiles'
+} from '@/api/profiles'
 import type {Translate} from '@/i18n/types'
 import type {ProfileCardViewModel} from '@/types/profiles/card'
 import {formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'

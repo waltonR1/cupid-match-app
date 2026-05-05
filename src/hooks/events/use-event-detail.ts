@@ -1,4 +1,4 @@
-import { computed, ref, watch, type Ref } from 'vue'
+﻿import { computed, ref, watch, type Ref } from 'vue'
 import {
   getEventDetail,
   type Event,
@@ -6,7 +6,7 @@ import {
   type EventRelatedProfile,
   type EventStatus,
   type FormatLocale,
-} from '@/api/events/events'
+} from '@/api/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { formatEventDetailDate } from '@/utils/locale-format'
 
