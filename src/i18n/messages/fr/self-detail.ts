@@ -23,7 +23,7 @@ export const selfDetailMessages: AppMessageSchema = {
       highlights: 'Points forts',
       tags: 'Tags',
       notFoundTitle: 'Aucun membre trouve',
-      notFoundSubtitle: 'Le lien actuel ne correspond a aucun dossier mock disponible.',
+      notFoundSubtitle: 'Le profil membre associe a ce lien est momentanement indisponible. Veuillez revenir a la liste pour continuer.',
     },
     fields: {
       recordNumber: 'Numero dossier',

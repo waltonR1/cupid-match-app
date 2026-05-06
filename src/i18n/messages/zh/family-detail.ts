@@ -22,7 +22,7 @@ export const familyDetailMessages: AppMessageSchema = {
       highlights: '快速判断',
       tags: '补充标签',
       notFoundTitle: '没有找到这份家庭参与资料',
-      notFoundSubtitle: '当前链接没有对应的 mock 资料，请先返回家庭参与继续查看。',
+      notFoundSubtitle: '当前链接对应的家庭参与资料暂不可用，请返回家庭参与列表继续查看。',
     },
     fields: {
       recordNumber: '档案编号',

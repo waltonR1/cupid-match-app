@@ -22,7 +22,7 @@ export const familyDetailMessages: AppMessageSchema = {
       highlights: 'Quick read',
       tags: 'Supporting tags',
       notFoundTitle: 'Family-view profile not found',
-      notFoundSubtitle: 'The current link does not match any available family-side mock profile.',
+      notFoundSubtitle: 'The family-view profile for this link is currently unavailable. Please return to the family directory to continue browsing.',
     },
     fields: {
       recordNumber: 'Record number',

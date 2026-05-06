@@ -22,7 +22,7 @@ export const familyDetailMessages: AppMessageSchema = {
       highlights: 'Lecture rapide',
       tags: 'Tags complementaires',
       notFoundTitle: 'Aucun dossier famille trouve',
-      notFoundSubtitle: 'Le lien actuel ne correspond a aucun dossier mock cote famille.',
+      notFoundSubtitle: 'Le dossier cote famille associe a ce lien est momentanement indisponible. Veuillez revenir a la liste famille pour continuer.',
     },
     fields: {
       recordNumber: 'Numero dossier',

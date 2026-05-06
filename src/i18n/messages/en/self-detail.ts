@@ -23,7 +23,7 @@ export const selfDetailMessages: AppMessageSchema = {
       highlights: 'Highlights',
       tags: 'Tags',
       notFoundTitle: 'Member not found',
-      notFoundSubtitle: 'The current link does not match any available mock profile.',
+      notFoundSubtitle: 'The member profile for this link is currently unavailable. Please return to the directory to continue browsing.',
     },
     fields: {
       recordNumber: 'Record number',

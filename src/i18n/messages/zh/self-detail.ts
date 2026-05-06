@@ -23,7 +23,7 @@ export const selfDetailMessages: AppMessageSchema = {
       highlights: '重点信息',
       tags: '标签',
       notFoundTitle: '没有找到这位会员',
-      notFoundSubtitle: '当前链接对应的 mock 资料不存在，先返回资料列表继续查看。',
+      notFoundSubtitle: '当前链接对应的会员资料暂不可用，请返回资料列表继续查看。',
     },
     fields: {
       recordNumber: '档案编号',
