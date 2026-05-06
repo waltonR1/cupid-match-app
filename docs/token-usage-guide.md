@@ -16,7 +16,6 @@ shadow-*
 禁止使用：
 
 ```text
-palette-*
 next-*
 legacy token utility
 直接写颜色值，例如 #d8b67a
@@ -69,10 +68,6 @@ effect.shadow.hero
 effect.shadow.dropdown
 ```
 
-### palette
-
-`palette` 只用于 token 内部取值，不直接进入业务页面或组件，也不生成 Tailwind utility。
-
 ## Class 生成规则
 
 颜色 token 按路径生成 utility：
@@ -116,7 +111,7 @@ shadow-next-shadow-panel
 1. 优先使用 `semantic`
 2. 语义只属于某个模块或组件时使用 `component`
 3. 渐变和阴影只使用 `effect`
-4. 不确定是否应沉淀为全局语义时，先放在 `component`
+4. 不确定是否应该沉淀为全局语义时，先放在 `component`
 
 不要因为两个颜色值相同就复用同一个 token。语义优先于颜色值。
 
