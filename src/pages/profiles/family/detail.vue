@@ -25,19 +25,19 @@
 
       <!-- 详情内容 -->
       <view v-if="heroData" class="space-y-6">
-        <ProfileDetailHero :data="heroData" />
+        <FamilyProfileDetailHero :data="heroData" />
 
         <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <!-- 主内容区 -->
           <view class="space-y-6">
-            <ProfileDetailFactGrid
+            <FamilyProfileDetailFactGrid
               :title="t('sections.overview')"
               :items="overviewFacts"
             />
 
             <view class="grid gap-6 lg:grid-cols-2">
               <!-- 关系信息 -->
-              <ProfileDetailFactSection
+              <FamilyProfileDetailFactSection
                 :title="t('sections.relationship')"
                 :items="relationshipFacts"
                 surface="soft"
@@ -57,9 +57,9 @@
                     {{ maritalPlanText }}
                   </view>
                 </view>
-              </ProfileDetailFactSection>
+              </FamilyProfileDetailFactSection>
 
-              <ProfileDetailFactSection
+              <FamilyProfileDetailFactSection
                 :title="t('sections.lifestyle')"
                 :items="lifestyleFacts"
               />
@@ -77,7 +77,7 @@
               </view>
             </view>
 
-            <ProfileDetailFactSection
+            <FamilyProfileDetailFactSection
               :title="t('sections.curationFocus')"
               :items="spotlightFacts"
             />
@@ -136,9 +136,9 @@ import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import ProfileDetailFactGrid from '@/components/profiles/detail/ProfileDetailFactGrid.vue'
-import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetailFactSection.vue'
-import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
+import FamilyProfileDetailFactGrid from '@/components/profiles/detail/FamilyProfileDetailFactGrid.vue'
+import FamilyProfileDetailFactSection from '@/components/profiles/detail/FamilyProfileDetailFactSection.vue'
+import FamilyProfileDetailHero from '@/components/profiles/detail/FamilyProfileDetailHero.vue'
 import { useFamilyProfileDetail } from '@/hooks/profiles'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 
