@@ -143,6 +143,7 @@ profile 字段权限由 `mock-server/src/constants/profile-access.ts` 维护：
 
 | Rule | Description |
 | --- | --- |
+| `SELF_PROFILE_LOGIN_REQUIRED_FIELDS` | 游客查看 self detail 时，后端将这些字段值替换为 `__LOGIN_REQUIRED__`。 |
 | `SELF_PROFILE_MEMBER_ONLY_FIELDS` | 非会员查看 self detail 时，后端将这些字段值替换为 `__MEMBER_ONLY__`。 |
 | `SELF_PROFILE_CONTACT_FIELDS` | self detail 联系方式字段默认替换为 `__CONTACT_REQUIRED__`。 |
 
