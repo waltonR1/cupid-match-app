@@ -8,6 +8,7 @@
           :subtitle="t('hero.subtitle')"
           :primary-text="t('actions.home')"
           :secondary-text="t('actions.account')"
+          size="page"
           @primary="goHome"
           @secondary="openAccountPage"
       />

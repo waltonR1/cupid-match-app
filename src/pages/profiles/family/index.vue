@@ -45,8 +45,6 @@
             v-else
             :primary-text="pageData.activeFilters.length > 0 ? t('filters.clear') : ''"
             :title="t('directory.empty')"
-            primary-variant="outline"
-            variant="compact"
             @primary="resetFilters"
         />
       </view>

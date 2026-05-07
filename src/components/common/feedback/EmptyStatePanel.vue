@@ -11,7 +11,7 @@
     <!-- 标题 -->
     <view
         class="font-semibold text-semantic-text-primary"
-        :class="variant === 'compact' ? 'mt-0 text-[24px]' : 'mt-6 text-[34px]'"
+        :class="size === 'compact' ? 'mt-0 text-[24px]' : 'mt-6 text-[34px]'"
     >
       {{ title }}
     </view>
@@ -20,7 +20,7 @@
     <view
         v-if="subtitle"
         class="mx-auto text-semantic-text-muted"
-        :class="variant === 'compact' ? 'mt-3 max-w-[520px] text-[15px] leading-7' : 'mt-5 max-w-[560px] text-[17px] leading-8'"
+        :class="size === 'compact' ? 'mt-3 max-w-[520px] text-[15px] leading-7' : 'mt-5 max-w-[560px] text-[17px] leading-8'"
     >
       {{ subtitle }}
     </view>
@@ -32,20 +32,32 @@
     >
       <view
           v-if="primaryText"
-          class="inline-flex min-h-[48px] cursor-pointer items-center justify-center px-6 py-3 text-[15px] transition-all duration-200"
-          :class="primaryButtonClassName"
-          @click="$emit('primary')"
+          class="inline-flex"
       >
-        {{ primaryText }}
+        <AppButton
+            :variant="primaryButtonVariant"
+            context="section"
+            size="md"
+            rounded="none"
+            @click="$emit('primary')"
+        >
+          {{ primaryText }}
+        </AppButton>
       </view>
 
       <view
           v-if="secondaryText"
-          class="inline-flex min-h-[48px] cursor-pointer items-center justify-center px-6 py-3 text-[15px] transition-all duration-200"
-          :class="secondaryButtonClassName"
-          @click="$emit('secondary')"
+          class="inline-flex"
       >
-        {{ secondaryText }}
+        <AppButton
+            variant="secondary"
+            context="section"
+            size="md"
+            rounded="none"
+            @click="$emit('secondary')"
+        >
+          {{ secondaryText }}
+        </AppButton>
       </view>
     </view>
   </view>
@@ -53,6 +65,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue'
+import AppButton from '@/components/common/AppButton.vue'
 
 /** 空状态组件配置 */
 const props = withDefaults(defineProps<{
@@ -61,17 +74,13 @@ const props = withDefaults(defineProps<{
   code?: string
   primaryText?: string
   secondaryText?: string
-  primaryVariant?: 'solid' | 'outline'
-  secondaryVariant?: 'solid' | 'outline'
-  variant?: 'default' | 'compact'
+  size?: 'page' | 'compact'
 }>(), {
   subtitle: '',
   code: '',
   primaryText: '',
   secondaryText: '',
-  primaryVariant: 'solid',
-  secondaryVariant: 'outline',
-  variant: 'default',
+  size: 'compact',
 })
 
 /** 空状态操作事件 */
@@ -82,28 +91,15 @@ defineEmits<{
 
 /** 根据展示模式控制整体间距 */
 const variantClassName = computed(() => {
-  if (props.variant === 'compact') {
+  if (props.size === 'compact') {
     return 'px-6 py-12'
   }
 
   return 'px-10 py-14'
 })
 
-/** 主按钮样式 */
-const primaryButtonClassName = computed(() => {
-  if (props.primaryVariant === 'outline') {
-    return 'border border-semantic-border-default bg-semantic-surface-card text-semantic-text-secondary hover:-translate-y-[1px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-panel hover:text-semantic-text-primary'
-  }
-
-  return 'border border-semantic-action-primary bg-semantic-action-primary text-semantic-action-primary-contrast hover:border-semantic-action-primary-hover hover:bg-semantic-action-primary-hover'
-})
-
-/** 次按钮样式 */
-const secondaryButtonClassName = computed(() => {
-  if (props.secondaryVariant === 'solid') {
-    return 'border border-semantic-action-primary bg-semantic-action-primary text-semantic-action-primary-contrast hover:border-semantic-action-primary-hover hover:bg-semantic-action-primary-hover'
-  }
-
-  return 'border border-semantic-border-default bg-semantic-surface-card text-semantic-text-secondary hover:-translate-y-[1px] hover:border-semantic-border-card-hover hover:bg-semantic-surface-panel hover:text-semantic-text-primary'
+/** 主按钮由组件根据使用场景决定视觉层级 */
+const primaryButtonVariant = computed(() => {
+  return props.size === 'compact' ? 'secondary' : 'primary'
 })
 </script>

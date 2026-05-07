@@ -123,8 +123,6 @@
         :title="t('sections.notFoundTitle')"
         :subtitle="t('sections.notFoundSubtitle')"
         :primary-text="t('actions.backToFamily')"
-        primary-variant="outline"
-        variant="compact"
         @primary="handleBack"
       />
     </view>
