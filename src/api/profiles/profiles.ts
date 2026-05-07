@@ -21,9 +21,9 @@ export function getFamilyProfileDirectory(query: FamilyProfileDirectoryQuery): P
     return requestJson<FamilyProfileDirectoryResponse>('/profiles/family', {query})
 }
 
-export async function getSelfProfileDetail(id: string): Promise<SelfProfileDetail | null> {
+export async function getSelfProfileDetail(profileId: string): Promise<SelfProfileDetail | null> {
     try {
-        return await requestJson<SelfProfileDetail>(`/profiles/self/${id}`)
+        return await requestJson<SelfProfileDetail>(`/profiles/self/${profileId}`)
     } catch (error) {
         if (isApiStatusError(error, 404)) return null
         throw error
