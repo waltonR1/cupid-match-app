@@ -9,5 +9,5 @@
     "types": ["node"],
     "outDir": "../dist/mock-server"
   },
-  "include": ["mock-server/src/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }
