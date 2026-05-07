@@ -18,6 +18,8 @@
    设计 token 使用规则。
 7. [git-commit-convention.md](./git-commit-convention.md)
    Git 提交规范。
+8. [project-database-fields.md](./project-database-fields.md)
+   项目数据库字段规范。
 
 ## 按问题查找
 
@@ -45,6 +47,10 @@
 ### 想知道 commit 怎么写
 
 - [git-commit-convention.md](./git-commit-convention.md)
+
+### 想知道数据库字段怎么定义
+
+- [project-database-fields.md](./project-database-fields.md)
 
 ## 文档维护约定
 
