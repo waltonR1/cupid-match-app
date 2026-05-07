@@ -1,4 +1,5 @@
 import {resolveApiBaseUrl, resolveApiLoggingEnabled} from './config'
+import {useAuthStore} from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD'
@@ -34,6 +35,7 @@ export async function requestJson<T>(path: string, options: RequestOptions = {})
             data: options.data,
             header: {
                 'Content-Type': 'application/json',
+                ...buildRequestContextHeaders(),
             },
             success(response) {
                 const statusCode = response.statusCode ?? 0
@@ -219,4 +221,37 @@ function logApiFail(
     )
     console.warn('fail', payload)
     console.groupEnd()
+}
+
+function buildRequestContextHeaders(): Record<string, string> {
+    const accountId = resolveRequestAccountId()
+
+    return accountId ? {'X-Account-Id': accountId} : {}
+}
+
+function resolveRequestAccountId(): string {
+    try {
+        const authStore = useAuthStore()
+        const accountId = authStore.user?.id
+
+        if (accountId) {
+            return accountId
+        }
+    } catch {
+        // ignore pinia not ready
+    }
+
+    try {
+        const persisted = uni.getStorageSync('pinia:auth')
+        const state = typeof persisted === 'string' ? JSON.parse(persisted) : persisted
+        const accountId = state?.user?.id
+
+        if (typeof accountId === 'string') {
+            return accountId
+        }
+    } catch {
+        // ignore invalid auth cache
+    }
+
+    return ''
 }
