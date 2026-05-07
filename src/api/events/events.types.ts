@@ -31,9 +31,9 @@ export interface EventRelatedProfile {
   displayName: string
   age: number
   city: string
-  intent: string
+  datingIntentionLabel: string
   summary: string
-  status: RelatedProfileStatus
+  profileStatus: RelatedProfileStatus
   isVerified: boolean
 }
 

@@ -81,7 +81,7 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
       relatedProfileItems: payload.value.relatedProfiles.map((profile) => ({
         id: profile.id,
         displayName: profile.displayName,
-        meta: [String(profile.age), profile.city, profile.intent].join(' | '),
+        meta: [String(profile.age), profile.city, profile.datingIntentionLabel].join(' | '),
         reason: buildRelatedReason(profile, payload.value!.event.city, t),
         summary: profile.summary,
       })),
@@ -138,7 +138,7 @@ function buildEventAction(status: EventStatus | undefined, t: Translate) {
 
 function buildRelatedReason(profile: EventRelatedProfile, eventCity: string, t: Translate) {
   if (profile.city === eventCity) return t('relatedReason.sameCity')
-  if (profile.status === 'vip') return t('relatedReason.priority')
+  if (profile.profileStatus === 'vip') return t('relatedReason.priority')
   if (profile.isVerified) return t('relatedReason.verified')
   return t('relatedReason.curated')
 }
