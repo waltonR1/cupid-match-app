@@ -47,7 +47,6 @@ mock-server/
 apiPrefix = /api
 host = 127.0.0.1
 port = 52173
-defaultAccountId = u-001
 ```
 
 支持环境变量覆盖：
@@ -93,7 +92,7 @@ npm run mock:build
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview`
+- `GET /api/account/overview?accountId=...`
 - `POST /api/auth/login`
 - `POST /api/auth/register`
 
@@ -113,7 +112,7 @@ npm run mock:build
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview`
+- `GET /api/account/overview?accountId=...`
 - `POST /api/auth/login`
 
 可用 mock 登录账号：

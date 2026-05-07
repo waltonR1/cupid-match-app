@@ -8,10 +8,12 @@ import {
   type AccountThreadRecord,
   type AccountUserEventRecord,
 } from '@/api/account'
+import { useAuthStore } from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 
 export function useAccountOverview() {
   const initialData = createEmptyAccountOverview()
+  const authStore = useAuthStore()
   const localeStore = useLocaleStore()
 
   const account = reactive({ ...initialData.account })
@@ -31,6 +33,7 @@ export function useAccountOverview() {
   const familyVisibleFavorites = computed(() => favorites.filter((item) => item.profile.familyVisible))
   const privateFavorites = computed(() => favorites.filter((item) => !item.profile.familyVisible))
   const familyVisibleThreads = computed(() => threads.filter((item) => item.profile.familyVisible))
+  const currentAccountId = computed(() => authStore.user?.id ?? '')
   const verificationCount = computed(() => {
     let count = 1
 
@@ -41,16 +44,25 @@ export function useAccountOverview() {
     return count
   })
 
-  watch(() => localeStore.locale, () => {
+  watch([() => localeStore.locale, currentAccountId], () => {
     void refresh()
   }, { immediate: true })
 
   async function refresh() {
+    const accountId = currentAccountId.value
+
+    if (!accountId) {
+      resetOverview()
+      error.value = null
+      loading.value = false
+      return
+    }
+
     loading.value = true
     error.value = null
 
     try {
-      const data = await getAccountOverview()
+      const data = await getAccountOverview({ accountId })
 
       Object.assign(account, data.account)
       Object.assign(profile, createEmptyAccountProfileSummary(), data.profile ?? {})
@@ -63,6 +75,17 @@ export function useAccountOverview() {
     } finally {
       loading.value = false
     }
+  }
+
+  function resetOverview() {
+    const data = createEmptyAccountOverview()
+
+    Object.assign(account, data.account)
+    Object.assign(profile, createEmptyAccountProfileSummary())
+    replaceArray(userEvents, data.userEvents)
+    replaceArray(favorites, data.favorites)
+    replaceArray(threads, data.threads)
+    replaceArray(privacySettings, data.privacySettings)
   }
 
   return {

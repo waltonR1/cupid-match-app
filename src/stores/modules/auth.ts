@@ -24,26 +24,12 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = nextUser
   }
 
-  function loginMock() {
-    login({
-      id: 'u-001',
-      displayName: 'U-001',
-      avatarUrl: '',
-    })
-  }
 
   function logout() {
     isLoggedIn.value = false
     user.value = null
   }
 
-  function toggleLoginStatus() {
-    if (isLoggedIn.value) {
-      logout()
-    } else {
-      loginMock()
-    }
-  }
 
   return {
     isLoggedIn,
@@ -51,9 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
     displayName,
     avatarUrl,
     login,
-    loginMock,
     logout,
-    toggleLoginStatus,
   }
 }, {
   persist: {
