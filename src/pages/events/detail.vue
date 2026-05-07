@@ -40,7 +40,6 @@
       <EmptyStatePanel
         :title="t('sections.notFound')"
         :primary-text="t('actions.backToEvents')"
-        variant="compact"
         @primary="openEventsPage"
       />
     </view>
