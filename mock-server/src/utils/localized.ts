@@ -23,7 +23,7 @@ export function resolveLocalizedTexts(locale: ApiLocale, items: LocalizedText[])
 }
 
 export function resolveDisplayName(record: DisplayNameCapable): string {
-  return record.displayName ?? record.nickName ?? record.realName ?? record.id ?? 'Unknown'
+  return record.displayName ?? record.nickname ?? record.legalName ?? record.nickName ?? record.realName ?? record.id ?? 'Unknown'
 }
 
 export function withDisplayName<T extends DisplayNameCapable>(record: T): T & { displayName: string } {

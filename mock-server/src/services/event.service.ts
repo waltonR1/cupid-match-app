@@ -75,9 +75,9 @@ function mapRelatedProfile(locale: ApiLocale, profile: ProfileRecord) {
     displayName: resolveDisplayName(profile),
     age: profile.age,
     city: resolveLocalizedText(locale, profile.city),
-    intent: resolveLocalizedText(locale, profile.intent),
+    datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
     summary: resolveLocalizedText(locale, profile.summary),
-    status: profile.status,
+    profileStatus: profile.profileStatus,
     isVerified: profile.isVerified,
   }
 }
@@ -88,7 +88,7 @@ function getCityRank(profile: ProfileRecord, cityKey: string): number {
 
 function getRelatedProfilePriority(profile: ProfileRecord): number {
   let score = 0
-  if (profile.status === 'vip') {
+  if (profile.profileStatus === 'vip') {
     score += 4
   }
   if (profile.isVerified) {

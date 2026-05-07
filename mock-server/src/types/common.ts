@@ -9,6 +9,8 @@ export type ApiLocale = 'zh' | 'fr' | 'en'
 export interface DisplayNameCapable {
   id?: string
   displayName?: string
+  nickname?: string
+  legalName?: string
   nickName?: string
   realName?: string
 }

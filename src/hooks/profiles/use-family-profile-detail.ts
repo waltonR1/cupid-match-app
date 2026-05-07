@@ -1,4 +1,4 @@
-﻿import {computed, ref, watch, type Ref} from 'vue'
+import {computed, ref, watch, type Ref} from 'vue'
 import {getFamilyProfileDetail, type FamilyProfileDetail, type FormatLocale} from '@/api/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
@@ -31,7 +31,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
                 lifestyleFacts: [],
                 spotlightFacts: [],
                 intentText: '',
-                maritalPlanText: '',
+                relationshipPlanText: '',
                 highlightTexts: [],
                 tagTexts: [],
             }
@@ -59,7 +59,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
                     profile.value.city,
                     profile.value.education,
                 ].join(' / '),
-                summary: profile.value.maritalPlan,
+                summary: profile.value.relationshipPlan,
                 badges,
                 indexTitle: t('sections.archiveIndex'),
                 indexFacts: [
@@ -85,28 +85,28 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
             relationshipFacts: [
                 createProfileFact(t('fields.maritalStatus'), t(`maritalStatus.${profile.value.maritalStatus}`)),
                 createProfileFact(t('fields.children'), formatBooleanText(profile.value.hasChildren, t)),
-                createProfileFact(t('fields.wantChildren'), formatBooleanText(profile.value.wantChildren, t)),
-                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptLongDistance, t)),
+                createProfileFact(t('fields.wantChildren'), formatBooleanText(profile.value.wantsChildren, t)),
+                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptsLongDistance, t)),
                 createProfileFact(t('fields.familySupport'), familyModeText),
             ],
             lifestyleFacts: [
                 createProfileFact(t('fields.languages'), formatProfileLanguages(locale.value, profile.value.languages)),
                 createProfileFact(t('fields.exercise'), profile.value.exercise),
-                createProfileFact(t('fields.smoke'), t(`habits.${profile.value.smoke}`)),
-                createProfileFact(t('fields.drink'), t(`habits.${profile.value.drink}`)),
+                createProfileFact(t('fields.smoke'), t(`habits.${profile.value.smoking}`)),
+                createProfileFact(t('fields.drink'), t(`habits.${profile.value.drinking}`)),
             ],
             spotlightFacts: [
-                createProfileFact(t('fields.intent'), profile.value.intent),
-                createProfileFact(t('fields.maritalPlan'), profile.value.maritalPlan),
-                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptLongDistance, t)),
+                createProfileFact(t('fields.intent'), profile.value.datingIntentionLabel),
+                createProfileFact(t('fields.maritalPlan'), profile.value.relationshipPlan),
+                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptsLongDistance, t)),
                 createProfileFact(t('fields.familySupport'), familyModeText),
             ],
-            intentText: profile.value.intent,
-            maritalPlanText: profile.value.maritalPlan,
+            intentText: profile.value.datingIntentionLabel,
+            relationshipPlanText: profile.value.relationshipPlan,
             highlightTexts: [
                 profile.value.summary,
                 `${t('fields.residencePlan')}: ${profile.value.residencePlan}`,
-                `${t('fields.longDistance')}: ${formatBooleanText(profile.value.acceptLongDistance, t)}`,
+                `${t('fields.longDistance')}: ${formatBooleanText(profile.value.acceptsLongDistance, t)}`,
             ],
             tagTexts: profile.value.tags.slice(0, 3),
         }
@@ -142,7 +142,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         lifestyleFacts: computed(() => pageData.value.lifestyleFacts),
         spotlightFacts: computed(() => pageData.value.spotlightFacts),
         intentText: computed(() => pageData.value.intentText),
-        maritalPlanText: computed(() => pageData.value.maritalPlanText),
+        relationshipPlanText: computed(() => pageData.value.relationshipPlanText),
         highlightTexts: computed(() => pageData.value.highlightTexts),
         tagTexts: computed(() => pageData.value.tagTexts),
         refresh: load,

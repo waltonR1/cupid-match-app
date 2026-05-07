@@ -37,7 +37,7 @@ export function buildFamilyDirectoryFilterItems(
         buildIndustryFilter(filters, t, industries),
         buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t),
         buildChildrenFilter('hasChildren', filters.hasChildren, t),
-        buildLongDistanceFilter('acceptLongDistance', filters.acceptLongDistance, t),
+        buildLongDistanceFilter('acceptsLongDistance', filters.acceptsLongDistance, t),
     ]
 }
 
@@ -78,10 +78,10 @@ function buildIntentFilter(
     intents: FamilyProfileDirectoryFacets['intents'],
 ): FamilyDirectoryFilterItem {
     return buildDynamicFilter({
-        key: 'intentCode',
+        key: 'datingIntentionCode',
         label: t('filters.intent'),
         options: toIntentOptions(intents),
-        value: filters.intentCode,
+        value: filters.datingIntentionCode,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
         group: 'primary',
         t,

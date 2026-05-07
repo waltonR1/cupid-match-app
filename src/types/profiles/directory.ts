@@ -21,13 +21,13 @@ export interface FamilyDirectoryFilters {
     ageRange: string
     city: string
     education: string
-    intentCode: string
+    datingIntentionCode: string
     familyMode: string
     occupation: string
     industry: string
     maritalStatus: string
     hasChildren: string
-    acceptLongDistance: string
+    acceptsLongDistance: string
 }
 
 /** 个人资料筛选条件 */
@@ -37,14 +37,14 @@ export interface SelfDirectoryFilters {
     city: string
     heightRange: string
     education: string
-    intentCode: string
+    datingIntentionCode: string
     industry: string
     occupation: string
     language: string
     verified: string
     maritalStatus: string
     hasChildren: string
-    acceptLongDistance: string
+    acceptsLongDistance: string
 }
 
 /** 目录筛选项更新载荷 */

@@ -47,7 +47,7 @@ export function buildSelfDirectoryFilterItems(
         buildVerifiedFilter(filters, t),
         buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t),
         buildChildrenFilter('hasChildren', filters.hasChildren, t),
-        buildLongDistanceFilter('acceptLongDistance', filters.acceptLongDistance, t),
+        buildLongDistanceFilter('acceptsLongDistance', filters.acceptsLongDistance, t),
     ]
 }
 
@@ -88,10 +88,10 @@ function buildIntentFilter(
     intents: SelfProfileDirectoryFacets['intents'],
 ): SelfDirectoryFilterItem {
     return buildDynamicFilter({
-        key: 'intentCode',
+        key: 'datingIntentionCode',
         label: t('filters.intent'),
         options: toIntentOptions(intents),
-        value: filters.intentCode,
+        value: filters.datingIntentionCode,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
         group: 'primary',
         t,

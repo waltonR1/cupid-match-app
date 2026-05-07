@@ -11,7 +11,7 @@ export type ProfileStatusCode = 'open' | 'review' | 'vip'
 export type MaritalStatusCode = 'single' | 'divorced' | 'widowed'
 
 /** 交友意向编码 */
-export type IntentCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
+export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
 
 /** 生活习惯编码 */
 export type HabitCode = 'never' | 'social' | 'often'
@@ -33,10 +33,10 @@ export interface SelfProfileListItem {
     gender: GenderCode
     age: number
     city: string
-    status: ProfileStatusCode
+    profileStatus: ProfileStatusCode
     education: string
     occupation: string
-    intentCode: IntentCode
+    datingIntentionCode: DatingIntentionCode
     summary: string
     languages: string[]
     tags: string[]
@@ -50,13 +50,13 @@ export interface FamilyProfileListItem {
     gender: GenderCode
     age: number
     city: string
-    status: ProfileStatusCode
+    profileStatus: ProfileStatusCode
     education: string
     occupation: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
-    acceptLongDistance: boolean
-    maritalPlan: string
+    acceptsLongDistance: boolean
+    relationshipPlan: string
     residencePlan: string
     tags: string[]
     allowFamilyContact: boolean
@@ -74,7 +74,7 @@ export interface SelfProfileDetail {
     city: string
     country: string
     nationality: string
-    status: ProfileStatusCode
+    profileStatus: ProfileStatusCode
     isVerified: boolean
     lastActiveAt: string
     joinedAt: string
@@ -88,13 +88,13 @@ export interface SelfProfileDetail {
     incomeRange: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
-    wantChildren: boolean
-    acceptLongDistance: boolean
-    intent: string
-    maritalPlan: string
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionLabel: string
+    relationshipPlan: string
     languages: string[]
-    smoke: HabitCode
-    drink: HabitCode
+    smoking: HabitCode
+    drinking: HabitCode
     exercise: string
     residencePlan: string
     summary: string
@@ -124,13 +124,13 @@ export interface FamilyProfileDetail {
     incomeRange: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
-    wantChildren: boolean
-    acceptLongDistance: boolean
-    intent: string
-    maritalPlan: string
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionLabel: string
+    relationshipPlan: string
     languages: string[]
-    smoke: HabitCode
-    drink: HabitCode
+    smoking: HabitCode
+    drinking: HabitCode
     exercise: string
     residencePlan: string
     summary: string
@@ -153,7 +153,7 @@ export interface DirectoryFacetOption {
 
 /** 意向筛选项 */
 export interface IntentFacet {
-    code: IntentCode
+    code: DatingIntentionCode
     label: string
 }
 
@@ -184,14 +184,14 @@ export interface SelfProfileDirectoryQuery {
     city?: string
     heightRange?: string
     education?: string
-    intentCode?: string
+    datingIntentionCode?: string
     industry?: string
     occupation?: string
     language?: string
     verified?: string
     maritalStatus?: string
     hasChildren?: string
-    acceptLongDistance?: string
+    acceptsLongDistance?: string
 }
 
 /** 家庭资料目录查询参数 */
@@ -203,13 +203,13 @@ export interface FamilyProfileDirectoryQuery {
     ageRange?: string
     city?: string
     education?: string
-    intentCode?: string
+    datingIntentionCode?: string
     familyMode?: string
     occupation?: string
     industry?: string
     maritalStatus?: string
     hasChildren?: string
-    acceptLongDistance?: string
+    acceptsLongDistance?: string
 }
 
 /** 首页精选资料响应 */

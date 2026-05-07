@@ -18,8 +18,8 @@ export type RegisterRole = 'self' | 'parent'
 /** 原始资料记录 */
 export interface ProfileRecord {
     id: string
-    realName: string
-    nickName: string
+    legalName: string
+    nickname: string
     avatarUrl: string
     gender: string
     age: number
@@ -27,7 +27,7 @@ export interface ProfileRecord {
     city: LocalizedText
     country: LocalizedText
     nationality: LocalizedText
-    status: ProfileStatus
+    profileStatus: ProfileStatus
     isVerified: boolean
     lastActiveAt: string
     joinedAt: string
@@ -42,14 +42,14 @@ export interface ProfileRecord {
     incomeRange: LocalizedText
     maritalStatus: MaritalStatus
     hasChildren: boolean
-    wantChildren: boolean
-    acceptLongDistance: boolean
-    intentCode: string
-    intent: LocalizedText
-    maritalPlan: LocalizedText
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionCode: string
+    datingIntentionLabel: LocalizedText
+    relationshipPlan: LocalizedText
     languages: string[]
-    smoke: string
-    drink: string
+    smoking: string
+    drinking: string
     exercise: LocalizedText
     residencePlan: LocalizedText
     summary: LocalizedText
@@ -70,10 +70,10 @@ export interface SelfProfileListItemDTO {
     gender: string
     age: number
     city: string
-    status: ProfileStatus
+    profileStatus: ProfileStatus
     education: string
     occupation: string
-    intentCode: string
+    datingIntentionCode: string
     summary: string
     languages: string[]
     tags: string[]
@@ -87,13 +87,13 @@ export interface FamilyProfileListItemDTO {
     gender: string
     age: number
     city: string
-    status: ProfileStatus
+    profileStatus: ProfileStatus
     education: string
     occupation: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
-    acceptLongDistance: boolean
-    maritalPlan: string
+    acceptsLongDistance: boolean
+    relationshipPlan: string
     residencePlan: string
     tags: string[]
     allowFamilyContact: boolean
@@ -111,7 +111,7 @@ export interface SelfProfileDetailDTO {
     city: string
     country: string
     nationality: string
-    status: ProfileStatus
+    profileStatus: ProfileStatus
     isVerified: boolean
     lastActiveAt: string
     joinedAt: string
@@ -125,13 +125,13 @@ export interface SelfProfileDetailDTO {
     incomeRange: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
-    wantChildren: boolean
-    acceptLongDistance: boolean
-    intent: string
-    maritalPlan: string
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionLabel: string
+    relationshipPlan: string
     languages: string[]
-    smoke: string
-    drink: string
+    smoking: string
+    drinking: string
     exercise: string
     residencePlan: string
     summary: string
@@ -161,13 +161,13 @@ export interface FamilyProfileDetailDTO {
     incomeRange: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
-    wantChildren: boolean
-    acceptLongDistance: boolean
-    intent: string
-    maritalPlan: string
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionLabel: string
+    relationshipPlan: string
     languages: string[]
-    smoke: string
-    drink: string
+    smoking: string
+    drinking: string
     exercise: string
     residencePlan: string
     summary: string
@@ -247,14 +247,14 @@ export interface NormalizedProfileQuery {
     city: string
     heightRange: string
     education: string
-    intentCode: string
+    datingIntentionCode: string
     industry: string
     occupation: string
     language: string
     verified: string
     maritalStatus: string
     hasChildren: string
-    acceptLongDistance: string
+    acceptsLongDistance: string
     familyMode: string
 }
 

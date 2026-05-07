@@ -29,14 +29,14 @@ export const DEFAULT_SELF_DIRECTORY_FILTERS: SelfDirectoryFilters = {
     city: '',
     heightRange: '',
     education: '',
-    intentCode: '',
+    datingIntentionCode: '',
     industry: '',
     occupation: '',
     language: '',
     verified: '',
     maritalStatus: '',
     hasChildren: '',
-    acceptLongDistance: '',
+    acceptsLongDistance: '',
 }
 
 /** 默认家庭资料筛选条件 */
@@ -45,13 +45,13 @@ export const DEFAULT_FAMILY_DIRECTORY_FILTERS: FamilyDirectoryFilters = {
     ageRange: '',
     city: '',
     education: '',
-    intentCode: '',
+    datingIntentionCode: '',
     familyMode: '',
     occupation: '',
     industry: '',
     maritalStatus: '',
     hasChildren: '',
-    acceptLongDistance: '',
+    acceptsLongDistance: '',
 }
 
 /** 默认个人资料排序方式 */

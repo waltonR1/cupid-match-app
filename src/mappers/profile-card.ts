@@ -1,7 +1,7 @@
-﻿import type {
+import type {
     FamilyModeCode,
     FamilyProfileListItem,
-    IntentCode,
+    DatingIntentionCode,
     ProfileStatusCode,
     SelfProfileListItem,
 } from '@/api/profiles'
@@ -17,7 +17,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
         displayName: profile.displayName,
         gender: profile.gender,
         meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
-        badge: t(resolveIntentBadgeKey(profile.intentCode)),
+        badge: t(resolveIntentBadgeKey(profile.datingIntentionCode)),
         summary: profile.summary,
         facts: [
             {label: t('fields.city'), value: profile.city},
@@ -25,7 +25,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
             {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
         ],
         tags: profile.tags.slice(0, 3),
-        footer: t(resolveSelfFooterKey(profile.status)),
+        footer: t(resolveSelfFooterKey(profile.profileStatus)),
     }
 }
 
@@ -34,7 +34,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
     const familyMode = resolveFamilyMode(profile)
     const tagTexts = [
         t(resolveMaritalStatusTagKey(profile.maritalStatus)),
-        profile.acceptLongDistance ? t('tags.longDistanceYes') : '',
+        profile.acceptsLongDistance ? t('tags.longDistanceYes') : '',
         profile.hasChildren ? t('tags.childrenYes') : t('tags.childrenNo'),
     ].filter(Boolean)
 
@@ -44,19 +44,19 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         gender: profile.gender,
         meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
         badge: t(resolveFamilyModeBadgeKey(familyMode)),
-        summary: profile.maritalPlan,
+        summary: profile.relationshipPlan,
         facts: [
             {label: t('fields.city'), value: profile.city},
             {label: t('fields.education'), value: profile.education},
             {label: t('fields.residencePlan'), value: profile.residencePlan},
         ],
         tags: [...profile.tags, ...tagTexts].slice(0, 3),
-        footer: t(resolveFamilyFooterKey(profile.status, familyMode)),
+        footer: t(resolveFamilyFooterKey(profile.profileStatus, familyMode)),
     }
 }
 
 /** 解析意向徽章文案 */
-function resolveIntentBadgeKey(code: IntentCode): string {
+function resolveIntentBadgeKey(code: DatingIntentionCode): string {
     switch (code) {
         case 'marriage':
             return 'card.goalMarriage'
@@ -71,8 +71,8 @@ function resolveIntentBadgeKey(code: IntentCode): string {
 }
 
 /** 解析个人卡片底部文案 */
-function resolveSelfFooterKey(status: ProfileStatusCode): string {
-    switch (status) {
+function resolveSelfFooterKey(profileStatus: ProfileStatusCode): string {
+    switch (profileStatus) {
         case 'review':
             return 'card.labelReview'
         case 'vip':
@@ -104,8 +104,8 @@ function resolveFamilyModeBadgeKey(mode: FamilyModeCode): string {
 }
 
 /** 解析家庭卡片底部文案 */
-function resolveFamilyFooterKey(status: ProfileStatusCode, mode: FamilyModeCode): string {
-    if (status === 'review') return 'card.labelReview'
+function resolveFamilyFooterKey(profileStatus: ProfileStatusCode, mode: FamilyModeCode): string {
+    if (profileStatus === 'review') return 'card.labelReview'
 
     switch (mode) {
         case 'priority':

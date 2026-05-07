@@ -28,14 +28,14 @@ export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuer
         city: getString(query.city),
         heightRange: getString(query.heightRange),
         education: getString(query.education),
-        intentCode: getString(query.intentCode),
+        datingIntentionCode: getString(query.datingIntentionCode),
         industry: getString(query.industry),
         occupation: getString(query.occupation),
         language: getString(query.language),
         verified: getString(query.verified),
         maritalStatus: getString(query.maritalStatus),
         hasChildren: getString(query.hasChildren),
-        acceptLongDistance: getString(query.acceptLongDistance),
+        acceptsLongDistance: getString(query.acceptsLongDistance),
         familyMode: getString(query.familyMode),
     }
 }
@@ -69,14 +69,14 @@ export function matchesSelfDirectory(profile: ProfileWithDisplayName, query: Nor
         !query.city || profile.city.en === query.city,
         matchHeightRange(profile.height, query.heightRange),
         !query.education || profile.degreeLevel === query.education,
-        !query.intentCode || profile.intentCode === query.intentCode,
+        !query.datingIntentionCode || profile.datingIntentionCode === query.datingIntentionCode,
         !query.industry || profile.industry.en === query.industry,
         !query.occupation || profile.occupation.en === query.occupation,
         !query.language || profile.languages.includes(query.language),
         matchVerified(profile.isVerified, query.verified),
         !query.maritalStatus || profile.maritalStatus === query.maritalStatus,
         matchBooleanFlag(profile.hasChildren, query.hasChildren),
-        matchBooleanFlag(profile.acceptLongDistance, query.acceptLongDistance),
+        matchBooleanFlag(profile.acceptsLongDistance, query.acceptsLongDistance),
     ].every(Boolean)
 }
 
@@ -87,13 +87,13 @@ export function matchesFamilyDirectory(profile: ProfileWithDisplayName, query: N
         matchAgeRange(profile.age, query.ageRange),
         !query.city || profile.city.en === query.city,
         !query.education || profile.degreeLevel === query.education,
-        !query.intentCode || profile.intentCode === query.intentCode,
+        !query.datingIntentionCode || profile.datingIntentionCode === query.datingIntentionCode,
         matchFamilyMode(profile, query.familyMode),
         !query.occupation || profile.occupation.en === query.occupation,
         !query.industry || profile.industry.en === query.industry,
         !query.maritalStatus || profile.maritalStatus === query.maritalStatus,
         matchBooleanFlag(profile.hasChildren, query.hasChildren),
-        matchBooleanFlag(profile.acceptLongDistance, query.acceptLongDistance),
+        matchBooleanFlag(profile.acceptsLongDistance, query.acceptsLongDistance),
     ].every(Boolean)
 }
 
@@ -211,10 +211,10 @@ export function toSelfProfileListItem(locale: ApiLocale, profile: ProfileWithDis
         gender: profile.gender,
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
-        status: profile.status,
+        profileStatus: profile.profileStatus,
         education: resolveLocalizedText(locale, profile.education),
         occupation: resolveLocalizedText(locale, profile.occupation),
-        intentCode: profile.intentCode,
+        datingIntentionCode: profile.datingIntentionCode,
         summary: resolveLocalizedText(locale, profile.summary),
         languages: profile.languages,
         tags: resolveLocalizedTexts(locale, profile.tags),
@@ -230,13 +230,13 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         gender: profile.gender,
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
-        status: profile.status,
+        profileStatus: profile.profileStatus,
         education: resolveLocalizedText(locale, profile.education),
         occupation: resolveLocalizedText(locale, profile.occupation),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
-        acceptLongDistance: profile.acceptLongDistance,
-        maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+        acceptsLongDistance: profile.acceptsLongDistance,
+        relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         tags: resolveLocalizedTexts(locale, profile.tags),
         allowFamilyContact: profile.allowFamilyContact,
@@ -256,7 +256,7 @@ export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDispl
         city: resolveLocalizedText(locale, profile.city),
         country: resolveLocalizedText(locale, profile.country),
         nationality: resolveLocalizedText(locale, profile.nationality),
-        status: profile.status,
+        profileStatus: profile.profileStatus,
         isVerified: profile.isVerified,
         lastActiveAt: profile.lastActiveAt,
         joinedAt: profile.joinedAt,
@@ -270,13 +270,13 @@ export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDispl
         incomeRange: resolveLocalizedText(locale, profile.incomeRange),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
-        wantChildren: profile.wantChildren,
-        acceptLongDistance: profile.acceptLongDistance,
-        intent: resolveLocalizedText(locale, profile.intent),
-        maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+        wantsChildren: profile.wantsChildren,
+        acceptsLongDistance: profile.acceptsLongDistance,
+        datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
+        relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
         languages: profile.languages,
-        smoke: profile.smoke,
-        drink: profile.drink,
+        smoking: profile.smoking,
+        drinking: profile.drinking,
         exercise: resolveLocalizedText(locale, profile.exercise),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         summary: resolveLocalizedText(locale, profile.summary),
@@ -308,13 +308,13 @@ export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDis
         incomeRange: resolveLocalizedText(locale, profile.incomeRange),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
-        wantChildren: profile.wantChildren,
-        acceptLongDistance: profile.acceptLongDistance,
-        intent: resolveLocalizedText(locale, profile.intent),
-        maritalPlan: resolveLocalizedText(locale, profile.maritalPlan),
+        wantsChildren: profile.wantsChildren,
+        acceptsLongDistance: profile.acceptsLongDistance,
+        datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
+        relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
         languages: profile.languages,
-        smoke: profile.smoke,
-        drink: profile.drink,
+        smoking: profile.smoking,
+        drinking: profile.drinking,
         exercise: resolveLocalizedText(locale, profile.exercise),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         summary: resolveLocalizedText(locale, profile.summary),
@@ -353,7 +353,7 @@ function uniqueLocalizedFacetOptions(locale: ApiLocale, items: ProfileRecord['ci
 function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayName[]): IntentFacetDTO[] {
     const seen = new Set<string>()
     return items
-        .map((item) => ({code: item.intentCode, label: item.intent}))
+        .map((item) => ({code: item.datingIntentionCode, label: item.datingIntentionLabel}))
         .filter((item) => {
             if (seen.has(item.code)) {
                 return false
@@ -380,7 +380,7 @@ function toTimestamp(value: string): number {
 
 /** 获取个人资料优先级 */
 function getSelfPriorityRank(profile: ProfileWithDisplayName): number {
-    return profile.status === 'vip' ? 0 : 1
+    return profile.profileStatus === 'vip' ? 0 : 1
 }
 
 /** 获取家庭资料优先级 */

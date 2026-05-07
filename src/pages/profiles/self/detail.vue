@@ -54,7 +54,7 @@
                     {{ t('fields.maritalPlan') }}
                   </view>
                   <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
-                    {{ maritalPlanText }}
+                    {{ relationshipPlanText }}
                   </view>
                 </view>
               </ProfileDetailFactSection>
@@ -160,7 +160,7 @@ const {
   lifestyleFacts,
   spotlightFacts,
   intentText,
-  maritalPlanText,
+  relationshipPlanText,
   highlightTexts,
   tagTexts,
 } = useSelfProfileDetail(profileId, t, locale)

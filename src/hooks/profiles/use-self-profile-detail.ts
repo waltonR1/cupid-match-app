@@ -1,4 +1,4 @@
-﻿import {computed, ref, watch, type Ref} from 'vue'
+import {computed, ref, watch, type Ref} from 'vue'
 import {getSelfProfileDetail, type FormatLocale, type SelfProfileDetail} from '@/api/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
@@ -32,14 +32,14 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
                 lifestyleFacts: [],
                 spotlightFacts: [],
                 intentText: '',
-                maritalPlanText: '',
+                relationshipPlanText: '',
                 highlightTexts: [],
                 tagTexts: [],
             }
         }
 
         const recordId = profile.value.id.toUpperCase()
-        const statusText = t(`status.${profile.value.status}`)
+        const statusText = t(`status.${profile.value.profileStatus}`)
         const verificationText = profile.value.isVerified ? t('badges.verified') : t('badges.unverified')
         const visibilityText = profile.value.familyVisible ? t('visibility.familyVisible') : t('visibility.userVisible')
         const familyModeText = resolveFamilyModeText(profile.value, t)
@@ -88,14 +88,14 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
             relationshipFacts: [
                 createProfileFact(t('fields.maritalStatus'), t(`maritalStatus.${profile.value.maritalStatus}`)),
                 createProfileFact(t('fields.children'), formatBooleanText(profile.value.hasChildren, t)),
-                createProfileFact(t('fields.wantChildren'), formatBooleanText(profile.value.wantChildren, t)),
-                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptLongDistance, t)),
+                createProfileFact(t('fields.wantChildren'), formatBooleanText(profile.value.wantsChildren, t)),
+                createProfileFact(t('fields.longDistance'), formatBooleanText(profile.value.acceptsLongDistance, t)),
                 createProfileFact(t('fields.familySupport'), familyModeText),
             ],
             lifestyleFacts: [
                 createProfileFact(t('fields.languages'), formatProfileLanguages(locale.value, profile.value.languages)),
-                createProfileFact(t('fields.smoke'), t(`habits.${profile.value.smoke}`)),
-                createProfileFact(t('fields.drink'), t(`habits.${profile.value.drink}`)),
+                createProfileFact(t('fields.smoke'), t(`habits.${profile.value.smoking}`)),
+                createProfileFact(t('fields.drink'), t(`habits.${profile.value.drinking}`)),
                 createProfileFact(t('fields.exercise'), profile.value.exercise),
                 createProfileFact(t('fields.residencePlan'), profile.value.residencePlan),
             ],
@@ -105,8 +105,8 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
                 createProfileFact(t('fields.languages'), formatProfileLanguages(locale.value, profile.value.languages)),
                 createProfileFact(t('fields.residencePlan'), profile.value.residencePlan),
             ],
-            intentText: profile.value.intent,
-            maritalPlanText: profile.value.maritalPlan,
+            intentText: profile.value.datingIntentionLabel,
+            relationshipPlanText: profile.value.relationshipPlan,
             highlightTexts: profile.value.highlights,
             tagTexts: profile.value.tags,
         }
@@ -142,7 +142,7 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
         lifestyleFacts: computed(() => pageData.value.lifestyleFacts),
         spotlightFacts: computed(() => pageData.value.spotlightFacts),
         intentText: computed(() => pageData.value.intentText),
-        maritalPlanText: computed(() => pageData.value.maritalPlanText),
+        relationshipPlanText: computed(() => pageData.value.relationshipPlanText),
         highlightTexts: computed(() => pageData.value.highlightTexts),
         tagTexts: computed(() => pageData.value.tagTexts),
         refresh: load,
