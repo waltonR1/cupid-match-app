@@ -19,3 +19,15 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# AI assistant local config and cache
+.claude/
+.codex/
+.cursor/
+.continue/
+.windsurf/
+.gemini/
+.aider*
+.cline/
+.roo/
+.kilocode/
