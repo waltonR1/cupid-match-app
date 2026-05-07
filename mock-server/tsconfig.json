@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "outDir": "dist/mock-server"
+    "outDir": "../dist/mock-server"
   },
   "include": ["mock-server/src/**/*.ts"]
 }
