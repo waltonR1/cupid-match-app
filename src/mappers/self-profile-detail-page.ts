@@ -8,7 +8,6 @@ import type {
     SelfProfileDetailAccessLevel,
     SelfProfileDetailPageData,
 } from '@/types/profiles/detail'
-import {formatLocalizedDate} from '@/utils/locale-format'
 import {
     createProfileFact,
     formatBooleanText,
@@ -67,7 +66,6 @@ function buildSelfProfileDetailPageData(
                 pub(t('fields.maritalStatus'), t(`maritalStatus.${profile.maritalStatus}`)),
                 pub(t('fields.languages'), formatProfileLanguages(locale, profile.languages)),
             ],
-            lastActiveText: `${t('fields.lastActive')}: ${formatLocalizedDate(locale, profile.lastActiveAt)}`,
             hasMemberAccess: accessLevel === 'premium',
             accessLabel: buildAccessLabel(accessLevel, t),
             galleryLockedText: buildGalleryLockedText(profile, accessLevel, t),
@@ -166,7 +164,6 @@ function buildPersonalityFacts(
         access(t('fields.personalityTraits'), joinRestrictedList(profile.personalityTraits)),
         access(t('fields.hobbies'), joinRestrictedList(profile.interests)),
         access(t('fields.communicationStyle'), profile.communicationStyle),
-        access(t('fields.funFacts'), joinRestrictedList(profile.funFacts)),
     ]
 }
 

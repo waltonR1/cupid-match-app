@@ -158,7 +158,6 @@ const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
   'dealBreakers',
   'personalityTraits',
   'communicationStyle',
-  'funFacts',
   'prompts',
 ] as const
 

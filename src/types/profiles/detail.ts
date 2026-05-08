@@ -52,7 +52,6 @@ export interface ProfileDetailGalleryHeroData {
     badges: ProfileDetailBadgeItem[]
     tags: string[]
     quickFacts: ProfileDetailFactItem[]
-    lastActiveText: string
     hasMemberAccess: boolean
     accessLabel: string
     galleryLockedText: string

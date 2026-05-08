@@ -176,6 +176,7 @@ export interface SelfProfileListItemDTO {
     profileStatus: ProfileStatus
     education: string
     occupation: string
+    industry: string
     datingIntentionCode: DatingIntentionCode
     summary: string
     languages: string[]
@@ -193,6 +194,7 @@ export interface FamilyProfileListItemDTO {
     profileStatus: ProfileStatus
     education: string
     occupation: string
+    industry: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
     acceptsLongDistance: boolean
@@ -217,7 +219,6 @@ export interface SelfProfileDetailDTO {
     languages: string[]
     profileStatus: ProfileStatus
     isVerified: boolean
-    lastActiveAt: string
     education: string
     industry: Restricted<string>
     maritalStatus: MaritalStatus
@@ -245,7 +246,6 @@ export interface SelfProfileDetailDTO {
     personalityTraits: Restricted<string[]>
     interests: Restricted<string[]>
     communicationStyle: Restricted<string>
-    funFacts: Restricted<string[]>
     summary: string
     tags: string[]
     prompts: Restricted<LocalizedProfilePromptDTO[]>

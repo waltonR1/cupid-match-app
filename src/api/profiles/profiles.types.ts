@@ -98,6 +98,7 @@ export interface SelfProfileListItem {
     profileStatus: ProfileStatusCode
     education: string
     occupation: string
+    industry: string
     datingIntentionCode: DatingIntentionCode
     summary: string
     languages: string[]
@@ -115,6 +116,7 @@ export interface FamilyProfileListItem {
     profileStatus: ProfileStatusCode
     education: string
     occupation: string
+    industry: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
     acceptsLongDistance: boolean
@@ -139,7 +141,6 @@ export interface SelfProfileDetail {
     languages: string[]
     profileStatus: ProfileStatusCode
     isVerified: boolean
-    lastActiveAt: string
     education: string
     industry: RestrictedProfileField<string>
     maritalStatus: MaritalStatusCode
@@ -167,7 +168,6 @@ export interface SelfProfileDetail {
     personalityTraits: RestrictedProfileField<string[]>
     interests: RestrictedProfileField<string[]>
     communicationStyle: RestrictedProfileField<string>
-    funFacts: RestrictedProfileField<string[]>
     summary: string
     tags: string[]
     prompts: RestrictedProfileField<ProfilePrompt[]>

@@ -16,7 +16,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
         avatarUrl: profile.avatarUrl,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
+        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
         badge: t(resolveIntentBadgeKey(profile.datingIntentionCode)),
         summary: profile.summary,
         facts: [
@@ -42,7 +42,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         avatarUrl: profile.avatarUrl,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.occupation}`,
+        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
         badge: t(resolveFamilyModeBadgeKey(familyMode)),
         summary: profile.relationshipPlan,
         facts: [

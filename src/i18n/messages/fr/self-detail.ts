@@ -129,7 +129,6 @@ export const selfDetailMessages: AppMessageSchema = {
       communicationStyle: 'Style de communication',
       relocationWillingness: 'Mobilite geographique',
       relationshipValues: 'Valeurs relationnelles',
-      funFacts: 'Details memorables',
     },
     values: {
       yes: 'Oui',

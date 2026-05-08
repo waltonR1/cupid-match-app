@@ -129,7 +129,6 @@ export const selfDetailMessages: AppMessageSchema = {
       communicationStyle: '沟通方式',
       relocationWillingness: '城市与迁居',
       relationshipValues: '关系价值观',
-      funFacts: '有记忆点的小事',
     },
     values: {
       yes: '是',

@@ -37,7 +37,6 @@
             </view>
             <view class="mt-1 flex flex-wrap gap-2 text-[14px] text-semantic-text-muted">
               <text>{{ data.location }}</text>
-              <text>{{ data.lastActiveText }}</text>
             </view>
           </view>
 
