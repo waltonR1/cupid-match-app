@@ -143,11 +143,11 @@ profile 字段权限由 `mock-server/src/constants/profile-access.ts` 维护：
 
 | Rule | Description |
 | --- | --- |
-| `SELF_PROFILE_LOGIN_REQUIRED_FIELDS` | 游客查看 self detail 时，后端将这些字段值替换为 `__LOGIN_REQUIRED__`。 |
-| `SELF_PROFILE_MEMBER_ONLY_FIELDS` | 非会员查看 self detail 时，后端将这些字段值替换为 `__MEMBER_ONLY__`。 |
-| `SELF_PROFILE_CONTACT_FIELDS` | self detail 联系方式字段默认替换为 `__CONTACT_REQUIRED__`。 |
+| `SELF_PROFILE_LOGIN_REQUIRED_FIELDS` | 登录后可见字段。 |
+| `SELF_PROFILE_MEMBER_ONLY_FIELDS` | 会员可见字段。 |
+| `SELF_PROFILE_GUEST_REQUIRED_FIELDS` | 游客查看 self detail 时统一替换为 `__LOGIN_REQUIRED__` 的受限字段集合。 |
 
-前端 API 仍接收扁平对象，通过字段值是否等于特殊值决定显示锁定态、请求态或真实内容。
+游客查看受限字段时统一引导登录；免费登录用户查看会员字段时引导开通会员。`phone`、`email`、`wechat` 作为原始数据库字段暂时保留，但 self detail API 不返回私人联系方式；页面通过 Private Introduction 模块发起平台撮合请求。前端 API 仍接收扁平对象，通过字段值是否等于特殊值决定显示锁定态或真实内容。
 
 ## events
 
@@ -214,6 +214,18 @@ profile 字段权限由 `mock-server/src/constants/profile-access.ts` 维护：
 | `updatedAt` | `string` | 最近更新时间。 |
 | `unread` | `number` | 未读数。 |
 | `lastMessage` | `LocalizedText` | 最近消息摘要。 |
+
+## private_introduction_requests
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | 私人介绍请求 ID。 |
+| `accountId` | `string` | 发起账号 ID。 |
+| `profileId` | `string` | 被申请资料 ID。 |
+| `status` | `'requested' \| 'accepted' \| 'declined' \| 'cooldown'` | 私人介绍状态。 |
+| `requestedAt` | `string` | 发起时间。 |
+| `respondedAt` | `string?` | 对方响应时间。 |
+| `cooldownUntil` | `string?` | 冷静期结束时间。 |
 
 ## privacy_settings
 
