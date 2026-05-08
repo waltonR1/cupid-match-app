@@ -5,7 +5,6 @@ import type {Database} from './types/database.js'
 const defaultData: Database = {
     profiles: [],
     events: [],
-    accounts: [],
     users: [],
     auth_identities: [],
     memberships: [],
@@ -15,7 +14,6 @@ const defaultData: Database = {
     message_threads: [],
     private_introduction_requests: [],
     privacy_settings: [],
-    auth_users: [],
 }
 
 /** 数据库实例 */

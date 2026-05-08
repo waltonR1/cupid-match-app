@@ -2110,29 +2110,6 @@
       ]
     }
   ],
-  "accounts": [
-    {
-      "id": "u-001",
-      "role": "self",
-      "realName": "Lin S.",
-      "nickName": "Lin",
-      "avatarUrl": "",
-      "city": {
-        "zh": "巴黎",
-        "fr": "Paris",
-        "en": "Paris"
-      },
-      "joinedAt": "2026-01-18",
-      "profileId": "p-002",
-      "completion": 82,
-      "membership": "gold",
-      "bio": {
-        "zh": "用于演示资料、会员和活动路径的 mock 账号。",
-        "fr": "Compte mock pour demontrer profil, abonnement et activites.",
-        "en": "Mock account for demonstrating profile, membership, and event journeys."
-      }
-    }
-  ],
   "users": [
     {
       "id": "u-001",
@@ -2302,18 +2279,6 @@
         "fr": "Desactive pour garder certains champs visibles seulement plus tard.",
         "en": "Disabled so some details remain hidden until later interaction."
       }
-    }
-  ],
-  "auth_users": [
-    {
-      "id": "auth-001",
-      "userId": "u-001",
-      "role": "self",
-      "identity": "lin@example.com",
-      "email": "lin@example.com",
-      "password": "password123",
-      "displayName": "Lin",
-      "avatarUrl": ""
     }
   ]
 }

@@ -25,14 +25,14 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
             return reply.code(400).send({error: 'Invalid profile type'})
         }
 
-        const accountId = resolveUserIdHeader(request.headers['x-user-id'])
+        const userId = resolveUserIdHeader(request.headers['x-user-id'])
         const detail = getProfileAccessDebugPreview(
             resolveApiLocale(query.lang),
             getDb().data,
             profileType,
             id,
             mode,
-            accountId,
+            userId,
         )
 
         if (!detail) {

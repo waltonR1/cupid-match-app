@@ -27,21 +27,6 @@ export interface EventRecord {
     agenda: EventAgendaItem[]
 }
 
-/** 账号记录 */
-export interface AccountRecord {
-    id: string
-    role: RegisterRole
-    realName: string
-    nickName: string
-    avatarUrl: string
-    city: LocalizedText
-    joinedAt: string
-    profileId: string
-    completion: number
-    membership: MembershipLevel
-    bio: LocalizedText
-}
-
 /** 活动报名记录 */
 export interface UserRegistrationRecord {
     id: string
@@ -97,18 +82,6 @@ export interface PrivacySettingRecord {
     desc: LocalizedText
 }
 
-/** 认证用户记录 */
-export interface AuthUserRecord {
-    id: string
-    accountId: string
-    role: RegisterRole
-    identity: string
-    email: string
-    password: string
-    displayName: string
-    avatarUrl: string
-}
-
 /** 认证身份类型 */
 export type AuthType = 'email' | 'phone' | 'wechat' | 'google'
 
@@ -158,7 +131,6 @@ export interface ProfileOwnershipRecord {
 export interface Database {
     profiles: ProfileRecord[]
     events: EventRecord[]
-    accounts: AccountRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
     memberships: MembershipRecord[]
@@ -168,5 +140,4 @@ export interface Database {
     message_threads: MessageThreadRecord[]
     private_introduction_requests: PrivateIntroductionRequestRecord[]
     privacy_settings: PrivacySettingRecord[]
-    auth_users: AuthUserRecord[]
 }

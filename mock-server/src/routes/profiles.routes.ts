@@ -32,9 +32,9 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
   app.get(`/profiles/self/:id`, async (request, reply) => {
     const { id } = request.params as { id: string }
     const query = request.query as QueryRecord
-    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
+    const userId = resolveUserIdHeader(request.headers['x-user-id'])
 
-    const profile = selfProfileDetail(resolveApiLocale(query.lang), getDb().data, id, accountId)
+    const profile = selfProfileDetail(resolveApiLocale(query.lang), getDb().data, id, userId)
     if (!profile) {
       return reply.code(404).send({ error: 'Profile not found' })
     }
@@ -44,9 +44,9 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
 
   app.post(`/profiles/self/:id/private-introduction`, async (request, reply) => {
     const { id } = request.params as { id: string }
-    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
+    const userId = resolveUserIdHeader(request.headers['x-user-id'])
     const db = getDb()
-    const result = requestPrivateIntroduction(db.data, id, accountId)
+    const result = requestPrivateIntroduction(db.data, id, userId)
 
     if (result.status === 'not_found') {
       return reply.code(404).send({ error: 'Profile not found' })
@@ -67,9 +67,9 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
   app.get(`/profiles/family/:id`, async (request, reply) => {
     const { id } = request.params as { id: string }
     const query = request.query as QueryRecord
-    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
+    const userId = resolveUserIdHeader(request.headers['x-user-id'])
 
-    const profile = familyProfileDetail(resolveApiLocale(query.lang), getDb().data, id, accountId)
+    const profile = familyProfileDetail(resolveApiLocale(query.lang), getDb().data, id, userId)
     if (!profile) {
       return reply.code(404).send({ error: 'Profile not found' })
     }
@@ -79,9 +79,9 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
 
   app.post(`/profiles/family/:id/private-introduction`, async (request, reply) => {
     const { id } = request.params as { id: string }
-    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
+    const userId = resolveUserIdHeader(request.headers['x-user-id'])
     const db = getDb()
-    const result = requestPrivateIntroduction(db.data, id, accountId)
+    const result = requestPrivateIntroduction(db.data, id, userId)
 
     if (result.status === 'not_found') {
       return reply.code(404).send({ error: 'Profile not found' })
