@@ -45,7 +45,7 @@ export interface AccountRecord {
 /** 活动报名记录 */
 export interface UserRegistrationRecord {
     id: string
-    accountId: string
+    userId: string
     eventId: string
     status: string
     note: LocalizedText
@@ -54,7 +54,7 @@ export interface UserRegistrationRecord {
 /** 收藏记录 */
 export interface FavoriteProfileRecord {
     id: string
-    accountId: string
+    userId: string
     profileId: string
     savedAt: string
     note: LocalizedText
@@ -63,7 +63,7 @@ export interface FavoriteProfileRecord {
 /** 会话记录 */
 export interface MessageThreadRecord {
     id: string
-    accountId: string
+    userId: string
     profileId: string
     updatedAt: string
     unread: number
@@ -80,7 +80,7 @@ export type PrivateIntroductionStatus =
 /** 私人介绍请求记录 */
 export interface PrivateIntroductionRequestRecord {
     id: string
-    accountId: string
+    requesterUserId: string
     profileId: string
     status: PrivateIntroductionStatus
     requestedAt: string
@@ -91,7 +91,7 @@ export interface PrivateIntroductionRequestRecord {
 /** 隐私设置记录 */
 export interface PrivacySettingRecord {
     id: string
-    accountId: string
+    userId: string
     enabled: boolean
     title: LocalizedText
     desc: LocalizedText

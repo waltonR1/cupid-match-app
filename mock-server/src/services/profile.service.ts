@@ -1,5 +1,5 @@
 import type {ApiLocale, QueryRecord} from '../types/common.js'
-import type {AccountRecord, Database, PrivateIntroductionRequestRecord} from '../types/database.js'
+import type {Database, MembershipLevel, PrivateIntroductionRequestRecord} from '../types/database.js'
 import type {
     DirectoryFacetOptionDTO,
     DirectorySort,
@@ -30,6 +30,12 @@ import {buildPagination, paginate} from '../utils/pagination.js'
 import {nextId} from '../utils/id.js'
 import {resolveLocalizedText, resolveLocalizedTexts, withDisplayName} from '../utils/localized.js'
 import {clamp, getString, toInt} from '../utils/string.js'
+
+/** 用户上下文（用于权限判断） */
+export interface UserContext {
+    userId: string
+    membership: MembershipLevel
+}
 
 /** 标准化资料目录查询参数 */
 export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuery {
@@ -204,27 +210,36 @@ export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[],
     }
 }
 
-/** 获取个人资料详情 */
-export function selfProfileDetail(locale: ApiLocale, data: Database, id: string, accountId?: string): SelfProfileDetailDTO | null {
-    const profile = data.profiles.find((item) => item.id === id)
-    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+/** 根据 userId 解析用户上下文 */
+export function resolveUserContext(data: Database, userId?: string): UserContext | null {
+    if (!userId) return null
+    const user = data.users.find((item) => item.id === userId)
+    if (!user) return null
+    const membership = data.memberships.find((item) => item.userId === userId)?.tier ?? 'free'
+    return { userId: user.id, membership }
+}
 
-    if (!profile || (accountId && !account)) {
+/** 获取个人资料详情 */
+export function selfProfileDetail(locale: ApiLocale, data: Database, id: string, userId?: string): SelfProfileDetailDTO | null {
+    const profile = data.profiles.find((item) => item.id === id)
+    const userContext = userId ? resolveUserContext(data, userId) : null
+
+    if (!profile || (userId && !userContext)) {
         return null
     }
 
-    return toSelfProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
+    return toSelfProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
 }
 
 /** 申请私人介绍 */
-export function requestPrivateIntroduction(data: Database, profileId: string, accountId?: string) {
+export function requestPrivateIntroduction(data: Database, profileId: string, userId?: string) {
     const profile = data.profiles.find((item) => item.id === profileId)
-    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+    const userContext = userId ? resolveUserContext(data, userId) : null
 
     if (!profile) return {status: 'not_found' as const}
-    if (!account) return {status: 'login_required' as const}
+    if (!userContext) return {status: 'login_required' as const}
 
-    const introduction = resolvePrivateIntroduction(account, profileId, data.private_introduction_requests)
+    const introduction = resolvePrivateIntroduction(userContext, profileId, data.private_introduction_requests)
 
     if (!introduction.canRequest) {
         return {status: 'blocked' as const, introduction}
@@ -233,7 +248,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, ac
     const now = new Date().toISOString()
     data.private_introduction_requests.push({
         id: nextId('intro', data.private_introduction_requests),
-        accountId: account.id,
+        requesterUserId: userContext.userId,
         profileId,
         status: 'requested',
         requestedAt: now,
@@ -241,20 +256,20 @@ export function requestPrivateIntroduction(data: Database, profileId: string, ac
 
     return {
         status: 'created' as const,
-        introduction: resolvePrivateIntroduction(account, profileId, data.private_introduction_requests),
+        introduction: resolvePrivateIntroduction(userContext, profileId, data.private_introduction_requests),
     }
 }
 
 /** 获取家庭资料详情 */
-export function familyProfileDetail(locale: ApiLocale, data: Database, id: string, accountId?: string): FamilyProfileDetailDTO | null {
+export function familyProfileDetail(locale: ApiLocale, data: Database, id: string, userId?: string): FamilyProfileDetailDTO | null {
     const profile = data.profiles.find((item) => item.id === id && item.familyVisible)
-    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+    const userContext = userId ? resolveUserContext(data, userId) : null
 
-    if (!profile || (accountId && !account)) {
+    if (!profile || (userId && !userContext)) {
         return null
     }
 
-    return toFamilyProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
+    return toFamilyProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
 }
 
 /** 转换为个人资料列表项 */
@@ -305,7 +320,7 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
 export function toSelfProfileDetail(
     locale: ApiLocale,
     profile: ProfileWithDisplayName,
-    account: AccountRecord | null,
+    userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
 ): SelfProfileDetailDTO {
     return applySelfProfileAccess({
@@ -358,15 +373,15 @@ export function toSelfProfileDetail(
             prompt: resolveLocalizedText(locale, prompt.prompt),
             answer: resolveLocalizedText(locale, prompt.answer),
         })),
-        privateIntroduction: resolvePrivateIntroduction(account, profile.id, introductionRequests),
-    }, resolveSelfProfileAccessLevel(account))
+        privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
+    }, resolveSelfProfileAccessLevel(userContext))
 }
 
 /** 转换为家庭资料详情 */
 export function toFamilyProfileDetail(
     locale: ApiLocale,
     profile: ProfileWithDisplayName,
-    account: AccountRecord | null,
+    userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
 ): FamilyProfileDetailDTO {
     return applyFamilyProfileAccess({
@@ -417,8 +432,8 @@ export function toFamilyProfileDetail(
         communicationStyle: resolveLocalizedText(locale, profile.communicationStyle),
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
-        privateIntroduction: resolvePrivateIntroduction(account, profile.id, introductionRequests),
-    }, resolveProfileAccessLevel(account))
+        privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
+    }, resolveProfileAccessLevel(userContext))
 }
 
 /** 标准化排序字段 */
@@ -524,22 +539,22 @@ function assignRestrictedField(
     ;(detail as unknown as Record<string, unknown>)[field] = value
 }
 
-function resolveSelfProfileAccessLevel(account: AccountRecord | null): SelfProfileAccessLevel {
-    return resolveProfileAccessLevel(account)
+function resolveSelfProfileAccessLevel(userContext: UserContext | null): SelfProfileAccessLevel {
+    return resolveProfileAccessLevel(userContext)
 }
 
-function resolveProfileAccessLevel(account: AccountRecord | null): ProfileAccessLevel {
-    if (!account) return 'guest'
-    return account.membership === 'free' ? 'free' : 'member'
+function resolveProfileAccessLevel(userContext: UserContext | null): ProfileAccessLevel {
+    if (!userContext) return 'guest'
+    return userContext.membership === 'free' ? 'free' : 'member'
 }
 
 /** 计算私人介绍状态 */
 function resolvePrivateIntroduction(
-    account: AccountRecord | null,
+    userContext: UserContext | null,
     profileId: string,
     requests: PrivateIntroductionRequestRecord[],
 ): SelfProfileDetailDTO['privateIntroduction'] {
-    if (!account) {
+    if (!userContext) {
         return {
             status: 'login_required',
             membership: 'guest',
@@ -550,8 +565,8 @@ function resolvePrivateIntroduction(
         }
     }
 
-    const benefit = MEMBERSHIP_BENEFITS[account.membership]
-    const relatedRequests = requests.filter((item) => item.accountId === account.id)
+    const benefit = MEMBERSHIP_BENEFITS[userContext.membership]
+    const relatedRequests = requests.filter((item) => item.requesterUserId === userContext.userId)
     const profileRequest = latestProfileIntroductionRequest(relatedRequests, profileId)
     const quotaUsed = relatedRequests
         .filter((item) => isCurrentMonthIntroduction(item))
@@ -566,7 +581,7 @@ function resolvePrivateIntroduction(
 
         return {
             status: resolveBlockingIntroductionStatus(blockingRequest),
-            membership: account.membership,
+            membership: userContext.membership,
             quotaTotal: benefit.privateIntroductionQuota,
             quotaRemaining,
             alreadyRequested: true,
@@ -578,7 +593,7 @@ function resolvePrivateIntroduction(
     if (quotaRemaining <= 0) {
         return {
             status: 'quota_exhausted',
-            membership: account.membership,
+            membership: userContext.membership,
             quotaTotal: benefit.privateIntroductionQuota,
             quotaRemaining,
             alreadyRequested: false,
@@ -588,7 +603,7 @@ function resolvePrivateIntroduction(
 
     return {
         status: 'available',
-        membership: account.membership,
+        membership: userContext.membership,
         quotaTotal: benefit.privateIntroductionQuota,
         quotaRemaining,
         alreadyRequested: false,
@@ -658,7 +673,6 @@ function isCooldownExpired(request: PrivateIntroductionRequestRecord): boolean {
     return toTimestamp(request.cooldownUntil) <= Date.now()
 }
 
-/** 公开资料年龄段 */
 /** 比较最近活跃时间 */
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {
     return toTimestamp(right.lastActiveAt) - toTimestamp(left.lastActiveAt)

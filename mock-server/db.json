@@ -2185,7 +2185,7 @@
   "user_registrations": [
     {
       "id": "r-001",
-      "accountId": "u-001",
+      "userId": "u-001",
       "eventId": "e-001",
       "status": "confirmed",
       "note": {
@@ -2196,7 +2196,7 @@
     },
     {
       "id": "r-002",
-      "accountId": "u-001",
+      "userId": "u-001",
       "eventId": "e-002",
       "status": "waitlist",
       "note": {
@@ -2209,7 +2209,7 @@
   "favorite_profiles": [
     {
       "id": "f-001",
-      "accountId": "u-001",
+      "userId": "u-001",
       "profileId": "p-001",
       "savedAt": "2026-03-12",
       "note": {
@@ -2220,7 +2220,7 @@
     },
     {
       "id": "f-002",
-      "accountId": "u-001",
+      "userId": "u-001",
       "profileId": "p-006",
       "savedAt": "2026-03-28",
       "note": {
@@ -2233,7 +2233,7 @@
   "message_threads": [
     {
       "id": "m-001",
-      "accountId": "u-001",
+      "userId": "u-001",
       "profileId": "p-001",
       "updatedAt": "2026-04-18T19:10:00Z",
       "unread": 2,
@@ -2245,7 +2245,7 @@
     },
     {
       "id": "m-002",
-      "accountId": "u-001",
+      "userId": "u-001",
       "profileId": "p-006",
       "updatedAt": "2026-04-22T20:30:00Z",
       "unread": 1,
@@ -2260,7 +2260,7 @@
   "privacy_settings": [
     {
       "id": "privacy-contact",
-      "accountId": "u-001",
+      "userId": "u-001",
       "enabled": true,
       "title": {
         "zh": "允许顾问联系",
@@ -2275,7 +2275,7 @@
     },
     {
       "id": "privacy-family",
-      "accountId": "u-001",
+      "userId": "u-001",
       "enabled": true,
       "title": {
         "zh": "允许家长辅助了解",
@@ -2290,7 +2290,7 @@
     },
     {
       "id": "privacy-visibility",
-      "accountId": "u-001",
+      "userId": "u-001",
       "enabled": false,
       "title": {
         "zh": "公开更多资料字段",
@@ -2307,7 +2307,7 @@
   "auth_users": [
     {
       "id": "auth-001",
-      "accountId": "u-001",
+      "userId": "u-001",
       "role": "self",
       "identity": "lin@example.com",
       "email": "lin@example.com",

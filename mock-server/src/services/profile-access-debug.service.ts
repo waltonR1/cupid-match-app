@@ -1,7 +1,7 @@
 import type {ApiLocale} from '../types/common.js'
-import type {AccountRecord, Database, MembershipLevel} from '../types/database.js'
+import type {Database, MembershipLevel} from '../types/database.js'
 import type {FamilyProfileDetailDTO, SelfProfileDetailDTO} from '../types/profile.js'
-import {toFamilyProfileDetail, toSelfProfileDetail} from './profile.service.js'
+import {resolveUserContext, toFamilyProfileDetail, toSelfProfileDetail, type UserContext} from './profile.service.js'
 import {withDisplayName} from '../utils/localized.js'
 
 export type ProfileAccessDebugType = 'self' | 'family'
@@ -15,50 +15,39 @@ export function getProfileAccessDebugPreview(
     profileType: ProfileAccessDebugType,
     profileId: string,
     mode: ProfileAccessDebugMode,
-    accountId?: string,
+    userId?: string,
 ): ProfileAccessDebugDetailDTO | null {
     const profile = data.profiles.find((item) => item.id === profileId)
     if (!profile) return null
     if (profileType === 'family' && !profile.familyVisible) return null
 
-    const account = resolvePreviewAccount(data, profileId, mode, accountId)
+    const userContext = resolvePreviewUserContext(data, profileId, mode, userId)
 
     if (profileType === 'family') {
-        return toFamilyProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
+        return toFamilyProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
     }
 
-    return toSelfProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
+    return toSelfProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
 }
 
-function resolvePreviewAccount(
+function resolvePreviewUserContext(
     data: Database,
     profileId: string,
     mode: ProfileAccessDebugMode,
-    accountId?: string,
-): AccountRecord | null {
+    userId?: string,
+): UserContext | null {
     if (mode === 'guest') return null
 
     if (mode === 'backend') {
-        return accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+        return userId ? resolveUserContext(data, userId) : null
     }
 
-    return createPreviewAccount(profileId, mode === 'free' ? 'free' : 'silver')
+    return createPreviewUserContext(mode === 'free' ? 'free' : 'silver')
 }
 
-function createPreviewAccount(profileId: string, membership: MembershipLevel): AccountRecord {
-    const emptyText = {zh: '', fr: '', en: ''}
-
+function createPreviewUserContext(membership: MembershipLevel): UserContext {
     return {
-        id: `debug-${membership}`,
-        role: 'self',
-        realName: 'Debug Preview',
-        nickName: 'Debug Preview',
-        avatarUrl: '',
-        city: emptyText,
-        joinedAt: new Date(0).toISOString(),
-        profileId,
-        completion: 100,
+        userId: `debug-${membership}`,
         membership,
-        bio: emptyText,
     }
 }

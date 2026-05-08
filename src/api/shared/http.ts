@@ -224,18 +224,18 @@ function logApiFail(
 }
 
 function buildRequestContextHeaders(): Record<string, string> {
-    const accountId = resolveRequestAccountId()
+    const userId = resolveRequestUserId()
 
-    return accountId ? {'X-Account-Id': accountId} : {}
+    return userId ? {'X-User-Id': userId} : {}
 }
 
-function resolveRequestAccountId(): string {
+function resolveRequestUserId(): string {
     try {
         const authStore = useAuthStore()
-        const accountId = authStore.user?.id
+        const userId = authStore.user?.id
 
-        if (accountId) {
-            return accountId
+        if (userId) {
+            return userId
         }
     } catch {
         // ignore pinia not ready
@@ -244,10 +244,10 @@ function resolveRequestAccountId(): string {
     try {
         const persisted = uni.getStorageSync('pinia:auth')
         const state = typeof persisted === 'string' ? JSON.parse(persisted) : persisted
-        const accountId = state?.user?.id
+        const userId = state?.user?.id
 
-        if (typeof accountId === 'string') {
-            return accountId
+        if (typeof userId === 'string') {
+            return userId
         }
     } catch {
         // ignore invalid auth cache

@@ -33,7 +33,7 @@
                 {{ item.profileName }}
               </view>
               <view class="mt-2 text-[14px] leading-6 text-semantic-text-muted">
-                申请账号：{{ item.accountName }}（{{ item.accountId }}）
+                申请用户：{{ item.requesterName }}（{{ item.requesterUserId }}）
               </view>
               <view class="mt-1 text-[14px] leading-6 text-semantic-text-muted">
                 发起时间：{{ item.requestedAt }}

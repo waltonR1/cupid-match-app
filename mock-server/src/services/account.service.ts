@@ -67,7 +67,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, userId: st
   const profile = profileId ? data.profiles.find((item) => item.id === profileId) : undefined
 
   const favorites = data.favorite_profiles
-    .filter((favorite) => favorite.accountId === userId)
+    .filter((favorite) => favorite.userId === userId)
     .map((favorite) => {
       const favoriteProfile = data.profiles.find((profileItem) => profileItem.id === favorite.profileId)
       return favoriteProfile
@@ -77,7 +77,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, userId: st
     .filter(isPresent)
 
   const threads = data.message_threads
-    .filter((thread) => thread.accountId === userId)
+    .filter((thread) => thread.userId === userId)
     .map((thread) => {
       const threadProfile = data.profiles.find((profileItem) => profileItem.id === thread.profileId)
       return threadProfile
@@ -87,7 +87,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, userId: st
     .filter(isPresent)
 
   const userEvents = data.user_registrations
-    .filter((registration) => registration.accountId === userId)
+    .filter((registration) => registration.userId === userId)
     .map((registration) => {
       const event = data.events.find((item) => item.id === registration.eventId)
       return event ? { registration: toUserRegistrationOverview(locale, omitId(registration)), event: toEventDTO(locale, event) } : null
@@ -95,8 +95,8 @@ export function getAccountOverview(locale: ApiLocale, data: Database, userId: st
     .filter(isPresent)
 
   const privacySettings = data.privacy_settings
-    .filter((item) => item.accountId === userId)
-    .map((item) => toPrivacySettingOverview(locale, omitAccountId(item)))
+    .filter((item) => item.userId === userId)
+    .map((item) => toPrivacySettingOverview(locale, omitUserId(item)))
 
   return {
     account: toAccountOverview(locale, user, membership?.tier ?? 'free', profileId),
@@ -167,28 +167,28 @@ function toAccountThreadProfileCard(locale: ApiLocale, profile: ProfileWithDispl
   }
 }
 
-function toFavoriteOverview(locale: ApiLocale, favorite: Omit<FavoriteProfileRecord, 'id' | 'accountId'>) {
+function toFavoriteOverview(locale: ApiLocale, favorite: Omit<FavoriteProfileRecord, 'id' | 'userId'>) {
   return {
     ...favorite,
     note: resolveLocalizedText(locale, favorite.note),
   }
 }
 
-function toThreadOverview(locale: ApiLocale, thread: Omit<MessageThreadRecord, 'id' | 'accountId'>) {
+function toThreadOverview(locale: ApiLocale, thread: Omit<MessageThreadRecord, 'id' | 'userId'>) {
   return {
     ...thread,
     lastMessage: resolveLocalizedText(locale, thread.lastMessage),
   }
 }
 
-function toUserRegistrationOverview(locale: ApiLocale, registration: Omit<UserRegistrationRecord, 'id' | 'accountId'>) {
+function toUserRegistrationOverview(locale: ApiLocale, registration: Omit<UserRegistrationRecord, 'id' | 'userId'>) {
   return {
     ...registration,
     note: resolveLocalizedText(locale, registration.note),
   }
 }
 
-function toPrivacySettingOverview(locale: ApiLocale, setting: Omit<PrivacySettingRecord, 'accountId'>) {
+function toPrivacySettingOverview(locale: ApiLocale, setting: Omit<PrivacySettingRecord, 'userId'>) {
   return {
     ...setting,
     title: resolveLocalizedText(locale, setting.title),
@@ -217,13 +217,13 @@ function toEventDTO(locale: ApiLocale, event: Database['events'][number]) {
   }
 }
 
-function omitId<T extends { id: string; accountId: string }>(record: T): Omit<T, 'id' | 'accountId'> {
-  const { id: _id, accountId: _accountId, ...rest } = record
+function omitId<T extends { id: string; userId: string }>(record: T): Omit<T, 'id' | 'userId'> {
+  const { id: _id, userId: _userId, ...rest } = record
   return rest
 }
 
-function omitAccountId<T extends { accountId: string }>(record: T): Omit<T, 'accountId'> {
-  const { accountId: _accountId, ...rest } = record
+function omitUserId<T extends { userId: string }>(record: T): Omit<T, 'userId'> {
+  const { userId: _userId, ...rest } = record
   return rest
 }
 

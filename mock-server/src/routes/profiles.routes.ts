@@ -11,7 +11,7 @@ import {
 } from '../services/profile.service.js'
 import type { QueryRecord } from '../types/common.js'
 import { resolveApiLocale } from '../utils/localized.js'
-import { resolveAccountIdHeader } from '../utils/request.js'
+import { resolveUserIdHeader } from '../utils/request.js'
 
 export async function registerProfileRoutes(app: FastifyInstance): Promise<void> {
   app.get(`/profiles/featured`, async (request) => {
@@ -32,7 +32,7 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
   app.get(`/profiles/self/:id`, async (request, reply) => {
     const { id } = request.params as { id: string }
     const query = request.query as QueryRecord
-    const accountId = resolveAccountIdHeader(request.headers['x-account-id'])
+    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
 
     const profile = selfProfileDetail(resolveApiLocale(query.lang), getDb().data, id, accountId)
     if (!profile) {
@@ -44,7 +44,7 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
 
   app.post(`/profiles/self/:id/private-introduction`, async (request, reply) => {
     const { id } = request.params as { id: string }
-    const accountId = resolveAccountIdHeader(request.headers['x-account-id'])
+    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
     const db = getDb()
     const result = requestPrivateIntroduction(db.data, id, accountId)
 
@@ -67,7 +67,7 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
   app.get(`/profiles/family/:id`, async (request, reply) => {
     const { id } = request.params as { id: string }
     const query = request.query as QueryRecord
-    const accountId = resolveAccountIdHeader(request.headers['x-account-id'])
+    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
 
     const profile = familyProfileDetail(resolveApiLocale(query.lang), getDb().data, id, accountId)
     if (!profile) {
@@ -79,7 +79,7 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
 
   app.post(`/profiles/family/:id/private-introduction`, async (request, reply) => {
     const { id } = request.params as { id: string }
-    const accountId = resolveAccountIdHeader(request.headers['x-account-id'])
+    const accountId = resolveUserIdHeader(request.headers['x-user-id'])
     const db = getDb()
     const result = requestPrivateIntroduction(db.data, id, accountId)
 

@@ -4,8 +4,8 @@ import {PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
 
 export interface PrivateIntroductionDebugItemDTO {
     id: string
-    accountId: string
-    accountName: string
+    requesterUserId: string
+    requesterName: string
     profileId: string
     profileName: string
     status: PrivateIntroductionStatus
@@ -76,13 +76,13 @@ function toDebugItem(
     data: Database,
     request: PrivateIntroductionRequestRecord,
 ): PrivateIntroductionDebugItemDTO {
-    const account = data.accounts.find((item) => item.id === request.accountId)
+    const requester = data.users.find((item) => item.id === request.requesterUserId)
     const profile = data.profiles.find((item) => item.id === request.profileId)
 
     return {
         id: request.id,
-        accountId: request.accountId,
-        accountName: account?.nickName || account?.realName || request.accountId,
+        requesterUserId: request.requesterUserId,
+        requesterName: requester?.displayName || request.requesterUserId,
         profileId: request.profileId,
         profileName: profile?.displayName || profile?.nickname || request.profileId,
         status: request.status,

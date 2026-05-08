@@ -13,7 +13,7 @@ import {
 } from '../services/profile-access-debug.service.js'
 import type {QueryRecord} from '../types/common.js'
 import {resolveApiLocale} from '../utils/localized.js'
-import {resolveAccountIdHeader} from '../utils/request.js'
+import {resolveUserIdHeader} from '../utils/request.js'
 
 export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
     app.get('/debug/profile-access-preview/:profileType/:id', async (request, reply) => {
@@ -25,7 +25,7 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
             return reply.code(400).send({error: 'Invalid profile type'})
         }
 
-        const accountId = resolveAccountIdHeader(request.headers['x-account-id'])
+        const accountId = resolveUserIdHeader(request.headers['x-user-id'])
         const detail = getProfileAccessDebugPreview(
             resolveApiLocale(query.lang),
             getDb().data,

@@ -19,7 +19,7 @@ export async function createServer() {
     app.addHook('onRequest', async (_request, reply) => {
         reply.header('Access-Control-Allow-Origin', '*')
         reply.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS')
-        reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Account-Id')
+        reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-User-Id')
     })
 
     /** 处理预检请求 */

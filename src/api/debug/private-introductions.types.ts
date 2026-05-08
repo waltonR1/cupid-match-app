@@ -6,8 +6,8 @@ export type PrivateIntroductionDebugStatus =
 
 export interface PrivateIntroductionDebugItem {
   id: string
-  accountId: string
-  accountName: string
+  requesterUserId: string
+  requesterName: string
   profileId: string
   profileName: string
   status: PrivateIntroductionDebugStatus
