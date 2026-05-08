@@ -109,11 +109,60 @@ export interface AuthUserRecord {
     avatarUrl: string
 }
 
+/** 认证身份类型 */
+export type AuthType = 'email' | 'phone' | 'wechat' | 'google'
+
+/** 用户记录 */
+export interface UserRecord {
+    id: string
+    role: RegisterRole
+    displayName: string
+    avatarUrl: string
+    city: LocalizedText
+    createdAt: string
+    bio: LocalizedText
+    profileCompletion: number
+    language: string
+}
+
+/** 认证身份记录 */
+export interface AuthIdentityRecord {
+    id: string
+    userId: string
+    authType: AuthType
+    identity: string
+    email: string
+    password: string
+    createdAt: string
+}
+
+/** 会员记录 */
+export interface MembershipRecord {
+    id: string
+    userId: string
+    tier: MembershipLevel
+    startedAt: string
+    expiresAt?: string
+}
+
+/** 资料所有权记录 */
+export interface ProfileOwnershipRecord {
+    id: string
+    profileId: string
+    userId: string
+    role: RegisterRole
+    isPrimary: boolean
+}
+
 /** 数据库结构 */
 export interface Database {
     profiles: ProfileRecord[]
     events: EventRecord[]
     accounts: AccountRecord[]
+    users: UserRecord[]
+    auth_identities: AuthIdentityRecord[]
+    memberships: MembershipRecord[]
+    profile_ownerships: ProfileOwnershipRecord[]
     user_registrations: UserRegistrationRecord[]
     favorite_profiles: FavoriteProfileRecord[]
     message_threads: MessageThreadRecord[]

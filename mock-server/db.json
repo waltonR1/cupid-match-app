@@ -2133,6 +2133,55 @@
       }
     }
   ],
+  "users": [
+    {
+      "id": "u-001",
+      "role": "self",
+      "displayName": "Lin",
+      "avatarUrl": "",
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "createdAt": "2026-01-18",
+      "bio": {
+        "zh": "用于演示资料、会员和活动路径的 mock 账号。",
+        "fr": "Compte mock pour demontrer profil, abonnement et activites.",
+        "en": "Mock account for demonstrating profile, membership, and event journeys."
+      },
+      "profileCompletion": 82,
+      "language": "zh"
+    }
+  ],
+  "auth_identities": [
+    {
+      "id": "auth-001",
+      "userId": "u-001",
+      "authType": "email",
+      "identity": "lin@example.com",
+      "email": "lin@example.com",
+      "password": "password123",
+      "createdAt": "2026-01-18"
+    }
+  ],
+  "memberships": [
+    {
+      "id": "membership-001",
+      "userId": "u-001",
+      "tier": "gold",
+      "startedAt": "2026-01-18"
+    }
+  ],
+  "profile_ownerships": [
+    {
+      "id": "po-001",
+      "profileId": "p-002",
+      "userId": "u-001",
+      "role": "self",
+      "isPrimary": true
+    }
+  ],
   "user_registrations": [
     {
       "id": "r-001",
