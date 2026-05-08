@@ -48,13 +48,13 @@ const debugItems = [
   {
     label: 'Private Introduction',
     title: '私人介绍请求',
-    description: '查看 mock 私人介绍请求，并模拟对方接受或拒绝。',
+    description: '查看 mock 私人介绍请求，并模拟对方接受或拒绝。self 与 family 的申请都会出现在这里。',
     path: '/pages/debug/private-introductions',
   },
   {
     label: 'Access Preview',
     title: '访问层级预览',
-    description: '预览 self detail 在 Backend、Guest、Free、Member 下的字段展示差异。',
+    description: '预览 self / family detail 在 Backend、Guest、Free、Member 下的字段展示差异。',
     path: '/pages/debug/profile-access-preview',
   },
 ]

@@ -45,6 +45,20 @@ export async function requestSelfProfilePrivateIntroduction(profileId: string): 
     }
 }
 
+export async function requestFamilyProfilePrivateIntroduction(profileId: string): Promise<PrivateIntroduction> {
+    try {
+        return await requestJson<PrivateIntroduction>(`/profiles/family/${profileId}/private-introduction`, {
+            method: 'POST',
+            data: {},
+        })
+    } catch (error) {
+        if (isApiStatusError(error, 409) && error && typeof error === 'object' && 'payload' in error) {
+            return error.payload as PrivateIntroduction
+        }
+        throw error
+    }
+}
+
 export async function getFamilyProfileDetail(id: string): Promise<FamilyProfileDetail | null> {
     try {
         return await requestJson<FamilyProfileDetail>(`/profiles/family/${id}`)

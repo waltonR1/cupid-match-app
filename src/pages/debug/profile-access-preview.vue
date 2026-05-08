@@ -6,13 +6,25 @@
           Debug Tool
         </view>
         <view class="mt-2 text-[28px] font-semibold leading-tight text-semantic-text-primary">
-          Self Detail 访问层级预览
+          Profile Detail 访问层级预览
         </view>
         <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
-          本页只用于调试 guest / free / member 的展示效果。正式 self detail 页面不再依赖全局 preview store。
+          用于预览 self / family detail 在 guest、free、member 下的字段开放与页面隐藏规则。
         </view>
 
         <view class="mt-6 flex flex-wrap items-end gap-3">
+          <view class="flex flex-wrap gap-2">
+            <AppButton
+              v-for="item in profileTypes"
+              :key="item.value"
+              :variant="profileType === item.value ? 'primary' : 'secondary'"
+              size="sm"
+              @click="changeProfileType(item.value)"
+            >
+              {{ item.label }}
+            </AppButton>
+          </view>
+
           <view>
             <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Profile ID</view>
             <input
@@ -27,7 +39,7 @@
               :key="item.value"
               :variant="mode === item.value ? 'primary' : 'secondary'"
               size="sm"
-              @click="mode = item.value"
+              @click="changeMode(item.value)"
             >
               {{ item.label }}
             </AppButton>
@@ -48,7 +60,11 @@
       </view>
 
       <view v-if="heroData" class="mt-6 space-y-6">
-        <ProfileDetailHero :data="heroData" />
+        <ProfileDetailHero
+          :data="heroData"
+          :login-locked-text="pageT('sections.loginLocked')"
+          :member-locked-text="pageT('sections.memberLocked')"
+        />
 
         <view v-if="accessLevel === 'visitor'" class="grid gap-3 md:grid-cols-3">
           <view
@@ -66,37 +82,73 @@
         </view>
 
         <view class="grid gap-6 xl:grid-cols-2">
-          <ProfileDetailSection :columns="2" :items="snapshotFacts" :title="t('sections.profileSnapshot')" />
-          <ProfileDetailSection
-            v-if="showRelationshipSection"
-            :columns="2"
-            :items="relationshipFacts"
-            :title="t('sections.matchIntent')"
-          />
-          <ProfileDetailSection
-            v-if="showRegisteredSections"
-            :columns="2"
-            :items="personalityFacts"
-            :title="t('sections.aboutPersonality')"
-          />
-          <ProfileDetailSection
-            v-if="showRegisteredSections"
-            :columns="1"
-            :items="lifestyleFacts"
-            :title="t('sections.lifestyle')"
-          />
-          <ProfileDetailSection
-            v-if="showPremiumSections"
-            :columns="1"
-            :items="preferenceFacts"
-            :title="t('sections.partnerPreference')"
-          />
-          <ProfileDetailSection
-            v-if="showPremiumSections"
-            :columns="1"
-            :items="valueFacts"
-            :title="t('sections.valuesAndPlans')"
-          />
+          <ProfileDetailSection :columns="2" :items="snapshotFacts" :title="pageT('sections.profileSnapshot')" />
+
+          <template v-if="profileType === 'self'">
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="2"
+              :items="selfPageData.relationshipFacts"
+              :title="pageT('sections.matchIntent')"
+            />
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="2"
+              :items="selfPageData.personalityFacts"
+              :title="pageT('sections.aboutPersonality')"
+            />
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="1"
+              :items="selfPageData.lifestyleFacts"
+              :title="pageT('sections.lifestyle')"
+            />
+            <ProfileDetailSection
+              v-if="showPremiumSections"
+              :columns="1"
+              :items="selfPageData.preferenceFacts"
+              :title="pageT('sections.partnerPreference')"
+            />
+            <ProfileDetailSection
+              v-if="showPremiumSections"
+              :columns="1"
+              :items="selfPageData.valueFacts"
+              :title="pageT('sections.valuesAndPlans')"
+            />
+          </template>
+
+          <template v-else>
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="2"
+              :items="familyPageData.familyReviewFacts"
+              :title="pageT('sections.familyReview')"
+            />
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="2"
+              :items="familyPageData.relationshipFacts"
+              :title="pageT('sections.marriagePlan')"
+            />
+            <ProfileDetailSection
+              v-if="showRegisteredSections"
+              :columns="1"
+              :items="familyPageData.lifestyleFacts"
+              :title="pageT('sections.lifestyle')"
+            />
+            <ProfileDetailSection
+              v-if="showPremiumSections"
+              :columns="1"
+              :items="familyPageData.preferenceFacts"
+              :title="pageT('sections.partnerPreference')"
+            />
+            <ProfileDetailSection
+              v-if="showPremiumSections"
+              :columns="1"
+              :items="familyPageData.valueFacts"
+              :title="pageT('sections.familyValues')"
+            />
+          </template>
         </view>
       </view>
 
@@ -117,141 +169,106 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
 import {
-  getSelfProfileDetail,
-  PROFILE_FIELD_LOGIN_REQUIRED,
-  PROFILE_FIELD_MEMBER_ONLY,
-  type FormatLocale,
-  type SelfProfileDetail,
-} from '@/api/profiles'
+  getProfileAccessPreview,
+  type ProfileAccessPreviewMode,
+  type ProfileAccessPreviewType,
+} from '@/api/debug'
+import type {FamilyProfileDetail, FormatLocale, SelfProfileDetail} from '@/api/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {toFamilyProfileDetailPageData} from '@/mappers/family-profile-detail-page'
 import {toSelfProfileDetailPageData} from '@/mappers/self-profile-detail-page'
 
-type PreviewMode = 'backend' | 'guest' | 'free' | 'member'
-type RestrictedSelfProfileDetailField =
-  | (typeof SELF_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
-  | (typeof SELF_PROFILE_MEMBER_ONLY_FIELDS)[number]
-  | (typeof SELF_PROFILE_GUEST_REQUIRED_FIELDS)[number]
+const profileTypes: Array<{ label: string, value: ProfileAccessPreviewType }> = [
+  {label: 'Self', value: 'self'},
+  {label: 'Family', value: 'family'},
+]
 
-const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
-  'acceptsLongDistance',
-  'relationshipPlan',
-  'values',
-  'smoking',
-  'drinking',
-  'exercise',
-  'activityLevel',
-  'weekendStyle',
-  'pets',
-  'interests',
-] as const
-
-const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
-  'hasChildren',
-  'wantsChildren',
-  'residencePlan',
-  'relocationWillingness',
-  'preferredAgeMin',
-  'preferredAgeMax',
-  'locationScope',
-  'preferredEducation',
-  'familyPlan',
-  'dealBreakers',
-  'personalityTraits',
-  'communicationStyle',
-  'prompts',
-] as const
-
-const SELF_PROFILE_GUEST_REQUIRED_FIELDS = [
-  ...SELF_PROFILE_LOGIN_REQUIRED_FIELDS,
-  ...SELF_PROFILE_MEMBER_ONLY_FIELDS,
-] as const
-
-const previewModes: Array<{ label: string, value: PreviewMode }> = [
+const previewModes: Array<{ label: string, value: ProfileAccessPreviewMode }> = [
   {label: 'Backend', value: 'backend'},
   {label: 'Guest', value: 'guest'},
   {label: 'Free', value: 'free'},
   {label: 'Member', value: 'member'},
 ]
 
-const {t, locale} = usePageI18n('selfDetail')
+const selfI18n = usePageI18n('selfDetail')
+const familyI18n = usePageI18n('familyDetail')
+const profileType = ref<ProfileAccessPreviewType>('self')
 const profileIdInput = ref('p-009')
-const mode = ref<PreviewMode>('guest')
-const profile = ref<SelfProfileDetail | null>(null)
+const mode = ref<ProfileAccessPreviewMode>('guest')
+const selfProfile = ref<SelfProfileDetail | null>(null)
+const familyProfile = ref<FamilyProfileDetail | null>(null)
 const loading = ref(false)
 const showActualLayout = ref(true)
 
-const previewProfile = computed(() => applyPreview(profile.value, mode.value))
-const pageData = computed(() => toSelfProfileDetailPageData({
-  profile: previewProfile.value,
-  locale: locale.value as FormatLocale,
-  t,
+const activeLocale = computed(() => selfI18n.locale.value as FormatLocale)
+const selfPageData = computed(() => toSelfProfileDetailPageData({
+  profile: selfProfile.value,
+  locale: activeLocale.value,
+  t: selfI18n.t,
+}))
+const familyPageData = computed(() => toFamilyProfileDetailPageData({
+  profile: familyProfile.value,
+  locale: activeLocale.value,
+  t: familyI18n.t,
 }))
 
-const accessLevel = computed(() => pageData.value.accessLevel)
-const showRelationshipSection = computed(() => !showActualLayout.value || accessLevel.value !== 'visitor')
+const currentPageData = computed(() => profileType.value === 'self' ? selfPageData.value : familyPageData.value)
+const accessLevel = computed(() => currentPageData.value.accessLevel)
+const heroData = computed(() => currentPageData.value.heroData)
+const snapshotFacts = computed(() => currentPageData.value.snapshotFacts)
 const showRegisteredSections = computed(() => !showActualLayout.value || accessLevel.value !== 'visitor')
 const showPremiumSections = computed(() => !showActualLayout.value || accessLevel.value === 'premium')
 const revealSteps = computed(() => [
   {
-    title: t('sections.revealVisitorTitle'),
-    subtitle: t('sections.revealVisitorSubtitle'),
+    title: pageT('sections.revealVisitorTitle'),
+    subtitle: pageT('sections.revealVisitorSubtitle'),
   },
   {
-    title: t('sections.revealRegisteredTitle'),
-    subtitle: t('sections.revealRegisteredSubtitle'),
+    title: pageT('sections.revealRegisteredTitle'),
+    subtitle: pageT('sections.revealRegisteredSubtitle'),
   },
   {
-    title: t('sections.revealPremiumTitle'),
-    subtitle: t('sections.revealPremiumSubtitle'),
+    title: pageT('sections.revealPremiumTitle'),
+    subtitle: pageT('sections.revealPremiumSubtitle'),
   },
 ])
-const heroData = computed(() => pageData.value.heroData)
-const snapshotFacts = computed(() => pageData.value.snapshotFacts)
-const relationshipFacts = computed(() => pageData.value.relationshipFacts)
-const personalityFacts = computed(() => pageData.value.personalityFacts)
-const preferenceFacts = computed(() => pageData.value.preferenceFacts)
-const valueFacts = computed(() => pageData.value.valueFacts)
-const lifestyleFacts = computed(() => pageData.value.lifestyleFacts)
 
 onMounted(() => {
   void load()
 })
 
+function pageT(key: string) {
+  return profileType.value === 'self' ? selfI18n.t(key) : familyI18n.t(key)
+}
+
+function changeProfileType(nextType: ProfileAccessPreviewType) {
+  profileType.value = nextType
+  profileIdInput.value = nextType === 'self' ? 'p-009' : 'p-001'
+  void load()
+}
+
+function changeMode(nextMode: ProfileAccessPreviewMode) {
+  mode.value = nextMode
+  void load()
+}
+
 async function load() {
   loading.value = true
   try {
-    profile.value = await getSelfProfileDetail(profileIdInput.value)
+    const profile = await getProfileAccessPreview({
+      profileType: profileType.value,
+      profileId: profileIdInput.value,
+      mode: mode.value,
+    })
+
+    if (profileType.value === 'self') {
+      selfProfile.value = profile as SelfProfileDetail
+      return
+    }
+
+    familyProfile.value = profile as FamilyProfileDetail
   } finally {
     loading.value = false
   }
-}
-
-function applyPreview(source: SelfProfileDetail | null, nextMode: PreviewMode): SelfProfileDetail | null {
-  if (!source || nextMode === 'backend') return source
-
-  const nextProfile = {...source}
-
-  if (nextMode === 'guest') {
-    SELF_PROFILE_GUEST_REQUIRED_FIELDS.forEach((field) => {
-      assignRestrictedField(nextProfile, field, PROFILE_FIELD_LOGIN_REQUIRED)
-    })
-    return nextProfile
-  }
-
-  if (nextMode === 'free') {
-    SELF_PROFILE_MEMBER_ONLY_FIELDS.forEach((field) => {
-      assignRestrictedField(nextProfile, field, PROFILE_FIELD_MEMBER_ONLY)
-    })
-  }
-
-  return nextProfile
-}
-
-function assignRestrictedField(
-  nextProfile: SelfProfileDetail,
-  field: RestrictedSelfProfileDetailField,
-  value: typeof PROFILE_FIELD_LOGIN_REQUIRED | typeof PROFILE_FIELD_MEMBER_ONLY,
-) {
-  ;(nextProfile as unknown as Record<string, unknown>)[field] = value
 }
 </script>

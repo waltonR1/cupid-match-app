@@ -90,6 +90,8 @@ npm run mock:build
 - `GET /api/profiles/family`
 - `GET /api/profiles/self/:id`
 - `POST /api/profiles/self/:id/private-introduction`
+- `POST /api/profiles/family/:id/private-introduction`
+- `GET /api/debug/profile-access-preview/:profileType/:id`
 - `GET /api/debug/private-introductions`
 - `POST /api/debug/private-introductions/:id/accept`
 - `POST /api/debug/private-introductions/:id/decline`
@@ -114,6 +116,8 @@ npm run mock:build
 - `GET /api/profiles/family`
 - `GET /api/profiles/self/:id`
 - `POST /api/profiles/self/:id/private-introduction`
+- `POST /api/profiles/family/:id/private-introduction`
+- `GET /api/debug/profile-access-preview/:profileType/:id`
 - `GET /api/debug/private-introductions`
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
@@ -125,7 +129,7 @@ npm run mock:build
 
 - `/pages/debug/index`：调试工具总入口。
 - `/pages/debug/private-introductions`：模拟私人介绍请求的接受与拒绝。
-- `/pages/debug/profile-access-preview`：预览 self detail 在 Backend、Guest、Free、Member 下的字段展示差异。
+- `/pages/debug/profile-access-preview`：预览 self / family detail 在 Backend、Guest、Free、Member 下的字段展示差异。
 
 可用 mock 登录账号：
 

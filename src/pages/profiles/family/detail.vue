@@ -1,180 +1,342 @@
 <template>
   <AppPageLayout>
-    <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
-      <!-- 返回入口 -->
+    <view class="mx-auto max-w-[1180px] px-5 pb-20 pt-6 lg:px-8 lg:pb-24 lg:pt-8">
       <view
-        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
-        @click="handleBack"
+          class="mb-5 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
+          @click="handleBack"
       >
         <svg
-          class="h-3.5 w-3.5"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+            class="h-3.5 w-3.5"
+            fill="none"
+            viewBox="0 0 12 12"
+            xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M7.75 2.5L4.25 6L7.75 9.5"
-            stroke="currentColor"
-            stroke-width="1.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+              d="M7.75 2.5L4.25 6L7.75 9.5"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.2"
           />
         </svg>
         <text>{{ t('actions.backToFamily') }}</text>
       </view>
 
-      <!-- 详情内容 -->
       <view v-if="heroData" class="space-y-6">
-        <FamilyProfileDetailHero :data="heroData" />
+        <ProfileDetailHero
+            :data="heroData"
+            :login-locked-text="t('sections.loginLocked')"
+            :member-locked-text="t('sections.memberLocked')"
+        />
 
-        <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-          <!-- 主内容区 -->
+        <view v-if="isVisitorAccess" class="grid gap-3 md:grid-cols-3">
+          <view
+              v-for="item in revealSteps"
+              :key="item.title"
+              class="border px-5 py-4"
+              :class="revealStepClass(item.state)"
+          >
+            <view class="text-[12px] uppercase tracking-[2.4px] text-semantic-text-eyebrow">
+              {{ item.title }}
+            </view>
+            <view class="mt-2 text-[13px] leading-6 text-semantic-text-muted">
+              {{ item.subtitle }}
+            </view>
+          </view>
+        </view>
+
+        <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
           <view class="space-y-6">
-            <FamilyProfileDetailFactGrid
-              :title="t('sections.overview')"
-              :items="overviewFacts"
+            <ProfileDetailSection
+                :columns="3"
+                :items="snapshotFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.profileSnapshot')"
             />
 
-            <view class="grid gap-6 lg:grid-cols-2">
-              <!-- 关系信息 -->
-              <FamilyProfileDetailFactSection
-                :title="t('sections.relationship')"
+            <view
+                v-if="isVisitorAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.visitorGateTitle') }}
+              </view>
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
+                {{ t('sections.visitorGateSubtitle') }}
+              </view>
+              <view class="mt-5">
+                <AppButton variant="primary" size="sm" @click="openLoginPage">
+                  {{ t('actions.loginToDiscover') }}
+                </AppButton>
+              </view>
+            </view>
+
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="2"
+                :items="familyReviewFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.familyReview')"
+            />
+
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="2"
                 :items="relationshipFacts"
-                surface="soft"
-              >
-                <view class="mt-6 border border-semantic-border-divider bg-semantic-surface-card px-5 py-5">
-                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ t('fields.intent') }}
-                  </view>
-                  <view class="mt-3 text-[22px] leading-8 text-semantic-text-primary">
-                    {{ intentText }}
-                  </view>
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.marriagePlan')"
+            />
 
-                  <view class="mt-5 text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ t('fields.maritalPlan') }}
-                  </view>
-                  <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
-                    {{ relationshipPlanText }}
-                  </view>
-                </view>
-              </FamilyProfileDetailFactSection>
+            <ProfileDetailSection
+                v-if="isPremiumAccess"
+                :columns="1"
+                :items="preferenceFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.partnerPreference')"
+            />
 
-              <FamilyProfileDetailFactSection
-                :title="t('sections.lifestyle')"
-                :items="lifestyleFacts"
-              />
+            <ProfileDetailSection
+                v-if="isPremiumAccess"
+                :columns="1"
+                :items="valueFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.familyValues')"
+            />
+
+            <view
+                v-if="isRegisteredAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.premiumGateTitle') }}
+              </view>
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
+                {{ t('sections.premiumGateSubtitle') }}
+              </view>
+              <view class="mt-5">
+                <AppButton variant="primary" size="sm" @click="openMembershipPage">
+                  {{ t('actions.becomeMember') }}
+                </AppButton>
+              </view>
             </view>
           </view>
 
-          <!-- 侧边信息栏 -->
           <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.accessPolicy') }}
-              </view>
-              <view class="mt-4 text-[16px] leading-8 text-semantic-text-muted">
-                {{ t('hero.accessNote') }}
-              </view>
-            </view>
-
-            <FamilyProfileDetailFactSection
-              :title="t('sections.curationFocus')"
-              :items="spotlightFacts"
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="1"
+                :items="lifestyleFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.lifestyle')"
             />
 
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.highlights') }}
+            <view
+                v-if="familyIntroductionData && !isVisitorAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ familyIntroductionData.title }}
               </view>
-
-              <view class="mt-6 grid gap-3">
+              <view class="mt-3 text-[15px] leading-7 text-semantic-text-secondary">
+                {{ familyIntroductionData.subtitle }}
+              </view>
+              <view class="mt-6 grid gap-4">
                 <view
-                  v-for="item in highlightTexts"
-                  :key="item"
-                  class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4 text-[16px] leading-7 text-semantic-text-secondary"
+                    v-for="item in familyIntroductionData.facts"
+                    :key="item.label"
+                    class="border-b border-semantic-border-divider pb-3 last:border-b-0 last:pb-0"
                 >
-                  {{ item }}
+                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
+                    {{ item.label }}
+                  </view>
+                  <view class="mt-2 text-[16px] leading-7 text-semantic-text-secondary">
+                    {{ item.value }}
+                  </view>
                 </view>
               </view>
             </view>
 
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.tags') }}
-              </view>
+            <ProfilePrivateIntroductionPanel
+                v-if="privateIntroductionData && !isVisitorAccess"
+                :data="privateIntroductionData"
+                :text="privateIntroductionText"
+                @open-room="openMessagesPage"
+                @request="requestPrivateIntroduction"
+            />
 
-              <view class="mt-4 flex flex-wrap gap-2">
-                <view
-                  v-for="item in tagTexts"
-                  :key="item"
-                  class="rounded-full border border-semantic-border-default bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-eyebrow"
-                >
-                  {{ item }}
-                </view>
+            <view
+                v-if="isVisitorAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.conciergeNoteTitle') }}
+              </view>
+              <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
+                {{ t('sections.conciergeNoteSubtitle') }}
               </view>
             </view>
           </view>
         </view>
       </view>
 
-      <!-- 空状态 -->
       <EmptyStatePanel
-        v-else
-        :title="t('sections.notFoundTitle')"
-        :subtitle="t('sections.notFoundSubtitle')"
-        :primary-text="t('actions.backToFamily')"
-        @primary="handleBack"
+          v-else
+          :primary-text="t('actions.backToFamily')"
+          :subtitle="t('sections.notFoundSubtitle')"
+          :title="t('sections.notFoundTitle')"
+          @primary="handleBack"
       />
     </view>
   </AppPageLayout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+<script lang="ts" setup>
+import {computed, ref} from 'vue'
+import {onLoad} from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
+import AppButton from '@/components/common/AppButton.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import FamilyProfileDetailFactGrid from '@/components/profiles/detail/FamilyProfileDetailFactGrid.vue'
-import FamilyProfileDetailFactSection from '@/components/profiles/detail/FamilyProfileDetailFactSection.vue'
-import FamilyProfileDetailHero from '@/components/profiles/detail/FamilyProfileDetailHero.vue'
-import { useFamilyProfileDetail } from '@/hooks/profiles'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
+import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
+import ProfilePrivateIntroductionPanel from '@/components/profiles/detail/ProfilePrivateIntroductionPanel.vue'
+import {useFamilyProfileDetail} from '@/hooks/profiles'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import type {PrivateIntroductionPanelText} from '@/types/profiles/detail'
+import {openLoginPage, openMembershipPage, openMessagesPage} from '@/utils/navigation'
 
-/** 页面文案 */
-const { t, locale } = usePageI18n('familyDetail')
-
-/** 当前资料 ID */
+const {t, locale} = usePageI18n('familyDetail')
 const profileId = ref('')
 
-/** 读取路由参数 */
 onLoad((query) => {
   if (query && typeof query.id === 'string') {
     profileId.value = query.id
   }
 })
 
-/** 详情页数据 */
 const {
+  accessLevel,
   heroData,
-  overviewFacts,
+  snapshotFacts,
+  familyReviewFacts,
   relationshipFacts,
   lifestyleFacts,
-  spotlightFacts,
-  intentText,
-  relationshipPlanText,
-  highlightTexts,
-  tagTexts,
+  preferenceFacts,
+  valueFacts,
+  familyIntroductionData,
+  privateIntroductionData,
+  requestPrivateIntroduction,
 } = useFamilyProfileDetail(profileId, t, locale)
 
-/** 返回列表页 */
+type VisitorRevealStep = {
+  title: string
+  subtitle: string
+  state: 'active' | 'locked'
+}
+
+const isVisitorAccess = computed(() => accessLevel.value === 'visitor')
+const isRegisteredAccess = computed(() => accessLevel.value === 'registered')
+const isPremiumAccess = computed(() => accessLevel.value === 'premium')
+
+const revealSteps = computed<VisitorRevealStep[]>(() => [
+  {
+    title: t('sections.revealVisitorTitle'),
+    subtitle: t('sections.revealVisitorSubtitle'),
+    state: 'active',
+  },
+  {
+    title: t('sections.revealRegisteredTitle'),
+    subtitle: t('sections.revealRegisteredSubtitle'),
+    state: 'locked',
+  },
+  {
+    title: t('sections.revealPremiumTitle'),
+    subtitle: t('sections.revealPremiumSubtitle'),
+    state: 'locked',
+  },
+])
+
+const privateIntroductionStatusText = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'requested') return t('sections.privateIntroductionStatusRequested')
+  if (status === 'accepted') return t('sections.privateIntroductionStatusAccepted')
+  if (status === 'declined') return t('sections.privateIntroductionStatusDeclined')
+  if (status === 'cooldown') return t('sections.privateIntroductionStatusCooldown')
+  if (status === 'quota_exhausted') return t('sections.privateIntroductionStatusQuotaExhausted')
+  if (status === 'login_required') return t('sections.privateIntroductionStatusLoginRequired')
+  return t('sections.privateIntroductionStatusAvailable')
+})
+
+const privateIntroductionActionLabel = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'accepted') return t('sections.privateIntroductionAccepted')
+  if (status === 'declined' || status === 'cooldown') return t('sections.privateIntroductionCooldown')
+  if (status === 'quota_exhausted') return t('sections.privateIntroductionQuotaUsed')
+  if (status === 'requested') return t('sections.privateIntroductionRequested')
+  return t('sections.privateIntroductionUnavailable')
+})
+
+const privateIntroductionSteps = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'accepted') {
+    return [
+      t('sections.privateIntroductionAcceptedStep1'),
+      t('sections.privateIntroductionAcceptedStep2'),
+      t('sections.privateIntroductionAcceptedStep3'),
+    ]
+  }
+
+  if (status === 'declined' || status === 'cooldown') {
+    return [
+      t('sections.privateIntroductionDeclinedStep1'),
+      t('sections.privateIntroductionDeclinedStep2'),
+      t('sections.privateIntroductionDeclinedStep3'),
+    ]
+  }
+
+  return [
+    t('sections.privateIntroductionStep1'),
+    t('sections.privateIntroductionStep2'),
+    t('sections.privateIntroductionStep3'),
+  ]
+})
+
+const privateIntroductionText = computed<PrivateIntroductionPanelText>(() => ({
+  title: t('sections.privateIntroduction'),
+  subtitle: t('sections.privateIntroductionSubtitle'),
+  quota: privateIntroductionData.value
+      ? `${t('sections.privateIntroductionQuotaPrefix')}${privateIntroductionData.value.quotaRemaining}/${privateIntroductionData.value.quotaTotal}`
+      : '',
+  status: privateIntroductionStatusText.value,
+  requestButton: t('sections.privateIntroductionRequestButton'),
+  disabledButton: privateIntroductionActionLabel.value,
+  roomTitle: t('sections.privateIntroductionRoomTitle'),
+  roomSubtitle: t('sections.privateIntroductionRoomSubtitle'),
+  roomAction: t('sections.privateIntroductionRoomAction'),
+  steps: privateIntroductionSteps.value,
+}))
+
 function handleBack() {
   if (getCurrentPages().length > 1) {
-    uni.navigateBack({ delta: 1 })
+    uni.navigateBack({delta: 1})
     return
   }
 
   uni.redirectTo({
     url: '/pages/profiles/family/index',
   })
+}
+
+function revealStepClass(state: VisitorRevealStep['state']) {
+  if (state === 'active') {
+    return 'border-semantic-accent-secondary bg-semantic-surface-card shadow-panel'
+  }
+
+  return 'border-semantic-border-divider bg-semantic-surface-soft'
 }
 </script>

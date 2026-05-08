@@ -186,7 +186,7 @@ import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSect
 import ProfilePrivateIntroductionPanel from '@/components/profiles/detail/ProfilePrivateIntroductionPanel.vue'
 import {useSelfProfileDetail} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {PrivateIntroductionPanelText, ProfileDetailFactItem} from '@/types/profiles/detail'
+import type {PrivateIntroductionPanelText} from '@/types/profiles/detail'
 import {openLoginPage, openMembershipPage, openMessagesPage} from '@/utils/navigation'
 
 /** 页面文案 */
@@ -327,18 +327,6 @@ function handleBack() {
 }
 
 /** 展示字段值（处理 masked/hidden 状态） */
-function displayValue(item: ProfileDetailFactItem) {
-  if (item.access === 'masked') {
-    if (item.lockReason === 'login') return t('sections.loginLocked')
-    if (item.lockReason === 'member') return t('sections.memberLocked')
-    return item.maskText || '****'
-  }
-  if (item.access === 'hidden') {
-    return item.maskText || ''
-  }
-  return item.value
-}
-
 /** 渐进展示步骤样式 */
 function revealStepClass(state: VisitorRevealStep['state']) {
   if (state === 'active') {

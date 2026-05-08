@@ -15,6 +15,9 @@ import type {
     SelfProfileListItemDTO,
 } from '../types/profile.js'
 import {
+    FAMILY_PROFILE_GUEST_REQUIRED_FIELDS,
+    FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS,
+    FAMILY_PROFILE_MEMBER_ONLY_FIELDS,
     PROFILE_FIELD_LOGIN_REQUIRED,
     PROFILE_FIELD_MEMBER_ONLY,
     SELF_PROFILE_GUEST_REQUIRED_FIELDS,
@@ -243,9 +246,15 @@ export function requestPrivateIntroduction(data: Database, profileId: string, ac
 }
 
 /** 获取家庭资料详情 */
-export function familyProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): FamilyProfileDetailDTO | null {
-    const profile = profiles.find((item) => item.id === id && item.familyVisible)
-    return profile ? toFamilyProfileDetail(locale, withDisplayName(profile)) : null
+export function familyProfileDetail(locale: ApiLocale, data: Database, id: string, accountId?: string): FamilyProfileDetailDTO | null {
+    const profile = data.profiles.find((item) => item.id === id && item.familyVisible)
+    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+
+    if (!profile || (accountId && !account)) {
+        return null
+    }
+
+    return toFamilyProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
 }
 
 /** 转换为个人资料列表项 */
@@ -354,40 +363,62 @@ export function toSelfProfileDetail(
 }
 
 /** 转换为家庭资料详情 */
-export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): FamilyProfileDetailDTO {
-    return {
+export function toFamilyProfileDetail(
+    locale: ApiLocale,
+    profile: ProfileWithDisplayName,
+    account: AccountRecord | null,
+    introductionRequests: PrivateIntroductionRequestRecord[] = [],
+): FamilyProfileDetailDTO {
+    return applyFamilyProfileAccess({
         id: profile.id,
         displayName: profile.displayName,
         avatarUrl: profile.avatarUrl,
+        photos: profile.photos.map((photo) => ({
+            ...photo,
+            caption: resolveLocalizedText(locale, photo.caption),
+        })),
         gender: profile.gender,
         age: profile.age,
+        height: profile.height,
         city: resolveLocalizedText(locale, profile.city),
         country: resolveLocalizedText(locale, profile.country),
         nationality: resolveLocalizedText(locale, profile.nationality),
         languages: profile.languages,
+        profileStatus: profile.profileStatus,
         isVerified: profile.isVerified,
-        lastActiveAt: profile.lastActiveAt,
-        joinedAt: profile.joinedAt,
         familyVisible: profile.familyVisible,
         allowFamilyContact: profile.allowFamilyContact,
         familyPriority: profile.familyPriority,
         education: resolveLocalizedText(locale, profile.education),
-        occupation: resolveLocalizedText(locale, profile.occupation),
         industry: resolveLocalizedText(locale, profile.industry),
-        incomeRange: resolveLocalizedText(locale, profile.incomeRange),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
         wantsChildren: profile.wantsChildren,
         acceptsLongDistance: profile.acceptsLongDistance,
+        datingIntentionCode: profile.datingIntentionCode,
         datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
         relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+        relocationWillingness: resolveLocalizedText(locale, profile.relocationWillingness),
+        values: resolveLocalizedTexts(locale, profile.values),
+        preferredAgeMin: profile.preferredAgeMin,
+        preferredAgeMax: profile.preferredAgeMax,
+        locationScope: resolveLocalizedText(locale, profile.locationScope),
+        preferredEducation: resolveLocalizedText(locale, profile.preferredEducation),
+        familyPlan: resolveLocalizedText(locale, profile.familyPlan),
+        dealBreakers: resolveLocalizedTexts(locale, profile.dealBreakers),
         smoking: profile.smoking,
         drinking: profile.drinking,
         exercise: resolveLocalizedText(locale, profile.exercise),
+        activityLevel: resolveLocalizedText(locale, profile.activityLevel),
+        weekendStyle: resolveLocalizedText(locale, profile.weekendStyle),
+        pets: resolveLocalizedText(locale, profile.pets),
+        personalityTraits: resolveLocalizedTexts(locale, profile.personalityTraits),
+        communicationStyle: resolveLocalizedText(locale, profile.communicationStyle),
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
-    }
+        privateIntroduction: resolvePrivateIntroduction(account, profile.id, introductionRequests),
+    }, resolveProfileAccessLevel(account))
 }
 
 /** 标准化排序字段 */
@@ -435,7 +466,9 @@ function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayNa
         }))
 }
 
-type SelfProfileAccessLevel = 'guest' | 'free' | 'member'
+type ProfileAccessLevel = 'guest' | 'free' | 'member'
+type SelfProfileAccessLevel = ProfileAccessLevel
+type FamilyProfileAccessLevel = ProfileAccessLevel
 
 /** 按访问层级收敛个人详情字段 */
 function applySelfProfileAccess(detail: SelfProfileDetailDTO, accessLevel: SelfProfileAccessLevel): SelfProfileDetailDTO {
@@ -457,9 +490,32 @@ function applySelfProfileAccess(detail: SelfProfileDetailDTO, accessLevel: SelfP
     return next
 }
 
+/** 按访问层级收紧家庭详情字段 */
+function applyFamilyProfileAccess(detail: FamilyProfileDetailDTO, accessLevel: FamilyProfileAccessLevel): FamilyProfileDetailDTO {
+    const next = {...detail}
+
+    if (accessLevel === 'guest') {
+        FAMILY_PROFILE_GUEST_REQUIRED_FIELDS.forEach((field) => {
+            assignRestrictedField(next, field, PROFILE_FIELD_LOGIN_REQUIRED)
+        })
+        return next
+    }
+
+    if (accessLevel === 'free') {
+        FAMILY_PROFILE_MEMBER_ONLY_FIELDS.forEach((field) => {
+            assignRestrictedField(next, field, PROFILE_FIELD_MEMBER_ONLY)
+        })
+    }
+
+    return next
+}
+
 function assignRestrictedField(
-    detail: SelfProfileDetailDTO,
+    detail: SelfProfileDetailDTO | FamilyProfileDetailDTO,
     field:
+        | (typeof FAMILY_PROFILE_GUEST_REQUIRED_FIELDS)[number]
+        | (typeof FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
+        | (typeof FAMILY_PROFILE_MEMBER_ONLY_FIELDS)[number]
         | (typeof SELF_PROFILE_GUEST_REQUIRED_FIELDS)[number]
         | (typeof SELF_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
         | (typeof SELF_PROFILE_MEMBER_ONLY_FIELDS)[number],
@@ -469,6 +525,10 @@ function assignRestrictedField(
 }
 
 function resolveSelfProfileAccessLevel(account: AccountRecord | null): SelfProfileAccessLevel {
+    return resolveProfileAccessLevel(account)
+}
+
+function resolveProfileAccessLevel(account: AccountRecord | null): ProfileAccessLevel {
     if (!account) return 'guest'
     return account.membership === 'free' ? 'free' : 'member'
 }

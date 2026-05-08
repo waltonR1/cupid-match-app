@@ -215,13 +215,13 @@ export interface SelfProfileDetailDTO {
     age: Restricted<number>
     height: number
     city: string
-    country: string
-    languages: string[]
+    country: Restricted<string>
+    languages: Restricted<string[]>
     profileStatus: ProfileStatus
     isVerified: boolean
     education: string
     industry: Restricted<string>
-    maritalStatus: MaritalStatus
+    maritalStatus: Restricted<MaritalStatus>
     hasChildren: Restricted<boolean>
     wantsChildren: Restricted<boolean>
     acceptsLongDistance: Restricted<boolean>
@@ -257,34 +257,48 @@ export interface FamilyProfileDetailDTO {
     id: string
     displayName: string
     avatarUrl: string
+    photos: LocalizedProfilePhotoDTO[]
     gender: GenderCode
     age: number
+    height: number
     city: string
-    country: string
-    nationality: string
-    languages: string[]
+    country: Restricted<string>
+    nationality: Restricted<string>
+    languages: Restricted<string[]>
+    profileStatus: ProfileStatus
     isVerified: boolean
-    lastActiveAt: string
-    joinedAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
     familyPriority: boolean
     education: string
-    occupation: string
     industry: string
-    incomeRange: string
-    maritalStatus: MaritalStatus
-    hasChildren: boolean
-    wantsChildren: boolean
-    acceptsLongDistance: boolean
+    maritalStatus: Restricted<MaritalStatus>
+    hasChildren: Restricted<boolean>
+    wantsChildren: Restricted<boolean>
+    acceptsLongDistance: Restricted<boolean>
+    datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: string
-    residencePlan: string
-    smoking: HabitCode
-    drinking: HabitCode
-    exercise: string
+    relationshipPlan: Restricted<string>
+    residencePlan: Restricted<string>
+    relocationWillingness: Restricted<string>
+    values: Restricted<string[]>
+    preferredAgeMin: Restricted<number>
+    preferredAgeMax: Restricted<number>
+    locationScope: Restricted<string>
+    preferredEducation: Restricted<string>
+    familyPlan: Restricted<string>
+    dealBreakers: Restricted<string[]>
+    smoking: Restricted<HabitCode>
+    drinking: Restricted<HabitCode>
+    exercise: Restricted<string>
+    activityLevel: Restricted<string>
+    weekendStyle: Restricted<string>
+    pets: Restricted<string>
+    personalityTraits: Restricted<string[]>
+    communicationStyle: Restricted<string>
     summary: string
     tags: string[]
+    privateIntroduction: PrivateIntroductionDTO
 }
 
 /** 账号资料摘要 */

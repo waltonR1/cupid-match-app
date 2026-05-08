@@ -24,6 +24,7 @@ export interface ProfileDetailBadgeItem {
 
 /** 个人详情访问层级 */
 export type SelfProfileDetailAccessLevel = 'visitor' | 'registered' | 'premium'
+export type FamilyProfileDetailAccessLevel = 'visitor' | 'registered' | 'premium'
 
 /** 渐进展示步骤 */
 /** 详情页头部数据 */
@@ -90,5 +91,26 @@ export interface SelfProfileDetailPageData {
     preferenceFacts: ProfileDetailFactItem[]
     valueFacts: ProfileDetailFactItem[]
     lifestyleFacts: ProfileDetailFactItem[]
+    privateIntroductionData: PrivateIntroductionSectionData | null
+}
+
+export interface FamilyIntroductionSectionData {
+    mode: 'priority' | 'contact_ready' | 'context_only'
+    title: string
+    subtitle: string
+    facts: ProfileDetailFactItem[]
+}
+
+/** 瀹跺涵璇︽儏椤靛睍绀烘暟鎹?*/
+export interface FamilyProfileDetailPageData {
+    accessLevel: FamilyProfileDetailAccessLevel
+    heroData: ProfileDetailGalleryHeroData | null
+    snapshotFacts: ProfileDetailFactItem[]
+    familyReviewFacts: ProfileDetailFactItem[]
+    relationshipFacts: ProfileDetailFactItem[]
+    lifestyleFacts: ProfileDetailFactItem[]
+    preferenceFacts: ProfileDetailFactItem[]
+    valueFacts: ProfileDetailFactItem[]
+    familyIntroductionData: FamilyIntroductionSectionData | null
     privateIntroductionData: PrivateIntroductionSectionData | null
 }

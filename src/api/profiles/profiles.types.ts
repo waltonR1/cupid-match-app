@@ -137,13 +137,13 @@ export interface SelfProfileDetail {
     age: RestrictedProfileField<number>
     height: number
     city: string
-    country: string
-    languages: string[]
+    country: RestrictedProfileField<string>
+    languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
     isVerified: boolean
     education: string
     industry: RestrictedProfileField<string>
-    maritalStatus: MaritalStatusCode
+    maritalStatus: RestrictedProfileField<MaritalStatusCode>
     hasChildren: RestrictedProfileField<boolean>
     wantsChildren: RestrictedProfileField<boolean>
     acceptsLongDistance: RestrictedProfileField<boolean>
@@ -179,34 +179,48 @@ export interface FamilyProfileDetail {
     id: string
     displayName: string
     avatarUrl: string
+    photos: ProfilePhoto[]
     gender: GenderCode
     age: number
+    height: number
     city: string
-    country: string
-    nationality: string
-    languages: string[]
+    country: RestrictedProfileField<string>
+    nationality: RestrictedProfileField<string>
+    languages: RestrictedProfileField<string[]>
+    profileStatus: ProfileStatusCode
     isVerified: boolean
-    lastActiveAt: string
-    joinedAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
     familyPriority: boolean
     education: string
-    occupation: string
     industry: string
-    incomeRange: string
-    maritalStatus: MaritalStatusCode
-    hasChildren: boolean
-    wantsChildren: boolean
-    acceptsLongDistance: boolean
+    maritalStatus: RestrictedProfileField<MaritalStatusCode>
+    hasChildren: RestrictedProfileField<boolean>
+    wantsChildren: RestrictedProfileField<boolean>
+    acceptsLongDistance: RestrictedProfileField<boolean>
+    datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: string
-    residencePlan: string
-    smoking: HabitCode
-    drinking: HabitCode
-    exercise: string
+    relationshipPlan: RestrictedProfileField<string>
+    residencePlan: RestrictedProfileField<string>
+    relocationWillingness: RestrictedProfileField<string>
+    values: RestrictedProfileField<string[]>
+    preferredAgeMin: RestrictedProfileField<number>
+    preferredAgeMax: RestrictedProfileField<number>
+    locationScope: RestrictedProfileField<string>
+    preferredEducation: RestrictedProfileField<string>
+    familyPlan: RestrictedProfileField<string>
+    dealBreakers: RestrictedProfileField<string[]>
+    smoking: RestrictedProfileField<HabitCode>
+    drinking: RestrictedProfileField<HabitCode>
+    exercise: RestrictedProfileField<string>
+    activityLevel: RestrictedProfileField<string>
+    weekendStyle: RestrictedProfileField<string>
+    pets: RestrictedProfileField<string>
+    personalityTraits: RestrictedProfileField<string[]>
+    communicationStyle: RestrictedProfileField<string>
     summary: string
     tags: string[]
+    privateIntroduction: PrivateIntroduction
 }
 
 /** 分页信息 */

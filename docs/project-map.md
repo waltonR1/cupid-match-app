@@ -96,7 +96,10 @@ mock 层通过独立的 HTTP 服务提供接口：
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
 - `GET /api/profiles/self/:id`
+- `POST /api/profiles/self/:id/private-introduction`
 - `GET /api/profiles/family/:id`
+- `POST /api/profiles/family/:id/private-introduction`
+- `GET /api/debug/profile-access-preview/:profileType/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
 - `GET /api/account/overview`
