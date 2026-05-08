@@ -1,4 +1,5 @@
 import type {ApiLocale, QueryRecord} from '../types/common.js'
+import type {AccountRecord, Database, PrivateIntroductionRequestRecord} from '../types/database.js'
 import type {
     DirectoryFacetOptionDTO,
     DirectorySort,
@@ -13,7 +14,17 @@ import type {
     SelfProfileDirectoryFacetsDTO,
     SelfProfileListItemDTO,
 } from '../types/profile.js'
+import {
+    PROFILE_FIELD_LOGIN_REQUIRED,
+    PROFILE_FIELD_MEMBER_ONLY,
+    SELF_PROFILE_GUEST_REQUIRED_FIELDS,
+    SELF_PROFILE_LOGIN_REQUIRED_FIELDS,
+    SELF_PROFILE_MEMBER_ONLY_FIELDS,
+    type ProfileRestrictedFieldValue,
+} from '../constants/profile-access.js'
+import {MEMBERSHIP_BENEFITS, PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
 import {buildPagination, paginate} from '../utils/pagination.js'
+import {nextId} from '../utils/id.js'
 import {resolveLocalizedText, resolveLocalizedTexts, withDisplayName} from '../utils/localized.js'
 import {clamp, getString, toInt} from '../utils/string.js'
 
@@ -191,9 +202,44 @@ export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[],
 }
 
 /** 获取个人资料详情 */
-export function selfProfileDetail(locale: ApiLocale, profiles: ProfileRecord[], id: string): SelfProfileDetailDTO | null {
-    const profile = profiles.find((item) => item.id === id)
-    return profile ? toSelfProfileDetail(locale, withDisplayName(profile)) : null
+export function selfProfileDetail(locale: ApiLocale, data: Database, id: string, accountId?: string): SelfProfileDetailDTO | null {
+    const profile = data.profiles.find((item) => item.id === id)
+    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+
+    if (!profile || (accountId && !account)) {
+        return null
+    }
+
+    return toSelfProfileDetail(locale, withDisplayName(profile), account, data.private_introduction_requests)
+}
+
+/** 申请私人介绍 */
+export function requestPrivateIntroduction(data: Database, profileId: string, accountId?: string) {
+    const profile = data.profiles.find((item) => item.id === profileId)
+    const account = accountId ? data.accounts.find((item) => item.id === accountId) ?? null : null
+
+    if (!profile) return {status: 'not_found' as const}
+    if (!account) return {status: 'login_required' as const}
+
+    const introduction = resolvePrivateIntroduction(account, profileId, data.private_introduction_requests)
+
+    if (!introduction.canRequest) {
+        return {status: 'blocked' as const, introduction}
+    }
+
+    const now = new Date().toISOString()
+    data.private_introduction_requests.push({
+        id: nextId('intro', data.private_introduction_requests),
+        accountId: account.id,
+        profileId,
+        status: 'requested',
+        requestedAt: now,
+    })
+
+    return {
+        status: 'created' as const,
+        introduction: resolvePrivateIntroduction(account, profileId, data.private_introduction_requests),
+    }
 }
 
 /** 获取家庭资料详情 */
@@ -245,44 +291,73 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
 }
 
 /** 转换为个人资料详情 */
-export function toSelfProfileDetail(locale: ApiLocale, profile: ProfileWithDisplayName): SelfProfileDetailDTO {
-    return {
+export function toSelfProfileDetail(
+    locale: ApiLocale,
+    profile: ProfileWithDisplayName,
+    account: AccountRecord | null,
+    introductionRequests: PrivateIntroductionRequestRecord[] = [],
+): SelfProfileDetailDTO {
+    return applySelfProfileAccess({
         id: profile.id,
         displayName: profile.displayName,
         avatarUrl: profile.avatarUrl,
+        photos: profile.photos.map((photo) => ({
+            ...photo,
+            caption: resolveLocalizedText(locale, photo.caption),
+        })),
         gender: profile.gender,
         age: profile.age,
+        ageRange: formatPublicAgeRange(profile.age),
         height: profile.height,
         city: resolveLocalizedText(locale, profile.city),
         country: resolveLocalizedText(locale, profile.country),
-        nationality: resolveLocalizedText(locale, profile.nationality),
+        languages: profile.languages,
+        bodyType: resolveLocalizedText(locale, profile.bodyType),
         profileStatus: profile.profileStatus,
         isVerified: profile.isVerified,
         lastActiveAt: profile.lastActiveAt,
-        joinedAt: profile.joinedAt,
-        familyVisible: profile.familyVisible,
-        allowFamilyContact: profile.allowFamilyContact,
-        familyPriority: profile.familyPriority,
         education: resolveLocalizedText(locale, profile.education),
-        occupation: resolveLocalizedText(locale, profile.occupation),
         industry: resolveLocalizedText(locale, profile.industry),
-        employer: resolveLocalizedText(locale, profile.employer),
-        incomeRange: resolveLocalizedText(locale, profile.incomeRange),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
         wantsChildren: profile.wantsChildren,
         acceptsLongDistance: profile.acceptsLongDistance,
+        datingIntentionCode: profile.datingIntentionCode,
         datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
         relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
-        languages: profile.languages,
+        residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+        relocationWillingness: resolveLocalizedText(locale, profile.relocationWillingness),
+        values: resolveLocalizedTexts(locale, profile.values),
+        preferredAgeMin: profile.preferredAgeMin,
+        preferredAgeMax: profile.preferredAgeMax,
+        locationScope: resolveLocalizedText(locale, profile.locationScope),
+        preferredEducation: resolveLocalizedText(locale, profile.preferredEducation),
+        familyPlan: resolveLocalizedText(locale, profile.familyPlan),
+        dealBreakers: resolveLocalizedTexts(locale, profile.dealBreakers),
         smoking: profile.smoking,
         drinking: profile.drinking,
         exercise: resolveLocalizedText(locale, profile.exercise),
-        residencePlan: resolveLocalizedText(locale, profile.residencePlan),
+        activityLevel: resolveLocalizedText(locale, profile.activityLevel),
+        weekendStyle: resolveLocalizedText(locale, profile.weekendStyle),
+        pets: resolveLocalizedText(locale, profile.pets),
+        personalityTraits: resolveLocalizedTexts(locale, profile.personalityTraits),
+        interests: resolveLocalizedTexts(locale, profile.interests),
+        communicationStyle: resolveLocalizedText(locale, profile.communicationStyle),
+        funFacts: resolveLocalizedTexts(locale, profile.funFacts),
         summary: resolveLocalizedText(locale, profile.summary),
         highlights: resolveLocalizedTexts(locale, profile.highlights),
         tags: resolveLocalizedTexts(locale, profile.tags),
-    }
+        prompts: profile.prompts.map((prompt) => ({
+            ...prompt,
+            prompt: resolveLocalizedText(locale, prompt.prompt),
+            answer: resolveLocalizedText(locale, prompt.answer),
+        })),
+        compatibilityDimensions: profile.compatibilityDimensions.map((dimension) => ({
+            ...dimension,
+            label: resolveLocalizedText(locale, dimension.label),
+        })),
+        privateIntroduction: resolvePrivateIntroduction(account, profile.id, introductionRequests),
+    }, resolveSelfProfileAccessLevel(account))
 }
 
 /** 转换为家庭资料详情 */
@@ -296,6 +371,7 @@ export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDis
         city: resolveLocalizedText(locale, profile.city),
         country: resolveLocalizedText(locale, profile.country),
         nationality: resolveLocalizedText(locale, profile.nationality),
+        languages: profile.languages,
         isVerified: profile.isVerified,
         lastActiveAt: profile.lastActiveAt,
         joinedAt: profile.joinedAt,
@@ -312,11 +388,10 @@ export function toFamilyProfileDetail(locale: ApiLocale, profile: ProfileWithDis
         acceptsLongDistance: profile.acceptsLongDistance,
         datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
         relationshipPlan: resolveLocalizedText(locale, profile.relationshipPlan),
-        languages: profile.languages,
+        residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         smoking: profile.smoking,
         drinking: profile.drinking,
         exercise: resolveLocalizedText(locale, profile.exercise),
-        residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
     }
@@ -365,6 +440,176 @@ function uniqueIntentFacetOptions(locale: ApiLocale, items: ProfileWithDisplayNa
             code: item.code,
             label: resolveLocalizedText(locale, item.label),
         }))
+}
+
+type SelfProfileAccessLevel = 'guest' | 'free' | 'member'
+
+/** 按访问层级收敛个人详情字段 */
+function applySelfProfileAccess(detail: SelfProfileDetailDTO, accessLevel: SelfProfileAccessLevel): SelfProfileDetailDTO {
+    const next = {...detail}
+
+    if (accessLevel === 'guest') {
+        SELF_PROFILE_GUEST_REQUIRED_FIELDS.forEach((field) => {
+            assignRestrictedField(next, field, PROFILE_FIELD_LOGIN_REQUIRED)
+        })
+        return next
+    }
+
+    if (accessLevel === 'free') {
+        SELF_PROFILE_MEMBER_ONLY_FIELDS.forEach((field) => {
+            assignRestrictedField(next, field, PROFILE_FIELD_MEMBER_ONLY)
+        })
+    }
+
+    return next
+}
+
+function assignRestrictedField(
+    detail: SelfProfileDetailDTO,
+    field:
+        | (typeof SELF_PROFILE_GUEST_REQUIRED_FIELDS)[number]
+        | (typeof SELF_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
+        | (typeof SELF_PROFILE_MEMBER_ONLY_FIELDS)[number],
+    value: ProfileRestrictedFieldValue,
+) {
+    ;(detail as unknown as Record<string, unknown>)[field] = value
+}
+
+function resolveSelfProfileAccessLevel(account: AccountRecord | null): SelfProfileAccessLevel {
+    if (!account) return 'guest'
+    return account.membership === 'free' ? 'free' : 'member'
+}
+
+/** 计算私人介绍状态 */
+function resolvePrivateIntroduction(
+    account: AccountRecord | null,
+    profileId: string,
+    requests: PrivateIntroductionRequestRecord[],
+): SelfProfileDetailDTO['privateIntroduction'] {
+    if (!account) {
+        return {
+            status: 'login_required',
+            membership: 'guest',
+            quotaTotal: 0,
+            quotaRemaining: 0,
+            alreadyRequested: false,
+            canRequest: false,
+        }
+    }
+
+    const benefit = MEMBERSHIP_BENEFITS[account.membership]
+    const relatedRequests = requests.filter((item) => item.accountId === account.id)
+    const profileRequest = latestProfileIntroductionRequest(relatedRequests, profileId)
+    const quotaUsed = relatedRequests
+        .filter((item) => isCurrentMonthIntroduction(item))
+        .filter((item) => isQuotaConsumingIntroduction(item))
+        .length
+    const quotaRemaining = Math.max(0, benefit.privateIntroductionQuota - quotaUsed)
+
+    if (profileRequest && isBlockingProfileIntroduction(profileRequest)) {
+        const blockingRequest = profileRequest.status === 'declined'
+            ? resolveDeclinedCooldown(profileRequest)
+            : profileRequest
+
+        return {
+            status: resolveBlockingIntroductionStatus(blockingRequest),
+            membership: account.membership,
+            quotaTotal: benefit.privateIntroductionQuota,
+            quotaRemaining,
+            alreadyRequested: true,
+            canRequest: false,
+            cooldownUntil: blockingRequest.cooldownUntil,
+        }
+    }
+
+    if (quotaRemaining <= 0) {
+        return {
+            status: 'quota_exhausted',
+            membership: account.membership,
+            quotaTotal: benefit.privateIntroductionQuota,
+            quotaRemaining,
+            alreadyRequested: false,
+            canRequest: false,
+        }
+    }
+
+    return {
+        status: 'available',
+        membership: account.membership,
+        quotaTotal: benefit.privateIntroductionQuota,
+        quotaRemaining,
+        alreadyRequested: false,
+        canRequest: true,
+    }
+}
+
+/** 判断私人介绍是否占用额度 */
+function isQuotaConsumingIntroduction(request: PrivateIntroductionRequestRecord): boolean {
+    return request.status === 'requested'
+        || request.status === 'accepted'
+        || request.status === 'cooldown'
+}
+
+/** 获取当前资料最近一次私人介绍请求 */
+function latestProfileIntroductionRequest(
+    requests: PrivateIntroductionRequestRecord[],
+    profileId: string,
+): PrivateIntroductionRequestRecord | null {
+    const profileRequests = requests
+        .filter((item) => item.profileId === profileId)
+        .sort((left, right) => toTimestamp(right.requestedAt) - toTimestamp(left.requestedAt))
+
+    return profileRequests[0] ?? null
+}
+
+/** 判断请求是否属于本月额度 */
+function isCurrentMonthIntroduction(request: PrivateIntroductionRequestRecord): boolean {
+    const requestedAt = new Date(request.requestedAt)
+    const now = new Date()
+
+    return requestedAt.getUTCFullYear() === now.getUTCFullYear()
+        && requestedAt.getUTCMonth() === now.getUTCMonth()
+}
+
+/** 判断资料请求是否阻止再次申请 */
+function isBlockingProfileIntroduction(request: PrivateIntroductionRequestRecord): boolean {
+    if (request.status === 'requested' || request.status === 'accepted') return true
+    if (request.status === 'cooldown') return !isCooldownExpired(request)
+    if (request.status === 'declined') return !isCooldownExpired(resolveDeclinedCooldown(request))
+
+    return false
+}
+
+/** 解析阻塞状态 */
+function resolveBlockingIntroductionStatus(request: PrivateIntroductionRequestRecord): SelfProfileDetailDTO['privateIntroduction']['status'] {
+    if (request.status === 'declined') return 'cooldown'
+    return request.status
+}
+
+/** 为拒绝状态补齐 90 天冷静期 */
+function resolveDeclinedCooldown(request: PrivateIntroductionRequestRecord): PrivateIntroductionRequestRecord {
+    if (request.cooldownUntil) return request
+
+    const baseDate = request.respondedAt ?? request.requestedAt
+    const cooldownUntil = new Date(toTimestamp(baseDate) + PRIVATE_INTRODUCTION_COOLDOWN_DAYS * 24 * 60 * 60 * 1000).toISOString()
+
+    return {
+        ...request,
+        cooldownUntil,
+    }
+}
+
+/** 判断冷静期是否结束 */
+function isCooldownExpired(request: PrivateIntroductionRequestRecord): boolean {
+    if (!request.cooldownUntil) return false
+    return toTimestamp(request.cooldownUntil) <= Date.now()
+}
+
+/** 公开资料年龄段 */
+function formatPublicAgeRange(age: number): string {
+    const minAge = Math.max(18, age - 1)
+    const maxAge = age + 2
+    return `${minAge}-${maxAge}`
 }
 
 /** 比较最近活跃时间 */

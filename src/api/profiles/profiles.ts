@@ -7,6 +7,7 @@ import type {
     SelfProfileDetail,
     SelfProfileDirectoryQuery,
     SelfProfileDirectoryResponse,
+    PrivateIntroduction,
 } from './profiles.types'
 
 export function getSelfProfileDirectory(query: SelfProfileDirectoryQuery): Promise<SelfProfileDirectoryResponse> {
@@ -26,6 +27,20 @@ export async function getSelfProfileDetail(profileId: string): Promise<SelfProfi
         return await requestJson<SelfProfileDetail>(`/profiles/self/${profileId}`)
     } catch (error) {
         if (isApiStatusError(error, 404)) return null
+        throw error
+    }
+}
+
+export async function requestSelfProfilePrivateIntroduction(profileId: string): Promise<PrivateIntroduction> {
+    try {
+        return await requestJson<PrivateIntroduction>(`/profiles/self/${profileId}/private-introduction`, {
+            method: 'POST',
+            data: {},
+        })
+    } catch (error) {
+        if (isApiStatusError(error, 409) && error && typeof error === 'object' && 'payload' in error) {
+            return error.payload as PrivateIntroduction
+        }
         throw error
     }
 }
