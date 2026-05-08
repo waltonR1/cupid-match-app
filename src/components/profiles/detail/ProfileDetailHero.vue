@@ -3,19 +3,19 @@
     <view class="grid lg:grid-cols-[360px_minmax(0,1fr)]">
       <view class="relative min-h-[360px] bg-gradient-profile-hero">
         <image
-          v-if="primaryPhoto"
-          :src="primaryPhoto"
-          mode="aspectFill"
-          class="absolute inset-0 h-full w-full cursor-pointer"
-          @click="openPreview(primaryPhoto)"
+            v-if="primaryPhoto"
+            :src="primaryPhoto"
+            class="absolute inset-0 h-full w-full cursor-pointer"
+            mode="aspectFill"
+            @click="openPreview(primaryPhoto)"
         />
-        <view class="absolute inset-0 bg-component-hero-overlay-background-soft" />
+        <view class="absolute inset-0 bg-component-hero-overlay-background-soft"/>
         <view class="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
           <view
-            v-for="badge in data.badges"
-            :key="badge.label"
-            :class="badgeClassName(badge.tone)"
-            class="border px-3 py-1.5 text-[12px]"
+              v-for="badge in data.badges"
+              :key="badge.label"
+              :class="badgeClassName(badge.tone)"
+              class="border px-3 py-1.5 text-[12px]"
           >
             {{ badge.label }}
           </view>
@@ -29,7 +29,7 @@
               <view class="text-[36px] font-semibold leading-tight text-semantic-text-primary lg:text-[44px]">
                 {{ data.displayName }}
               </view>
-              <AppGenderBadge :gender="data.gender" size="md" />
+              <AppGenderBadge :gender="data.gender" size="md"/>
             </view>
 
             <view class="mt-2 text-[17px] leading-7 text-semantic-text-secondary">
@@ -42,8 +42,8 @@
           </view>
 
           <view
-            class="border px-3 py-2 text-[12px] tracking-[1px]"
-            :class="data.hasMemberAccess ? 'border-semantic-accent-secondary text-semantic-text-eyebrow' : 'border-semantic-border-default text-semantic-text-muted'"
+              :class="data.hasMemberAccess ? 'border-semantic-accent-secondary text-semantic-text-eyebrow' : 'border-semantic-border-default text-semantic-text-muted'"
+              class="border px-3 py-2 text-[12px] tracking-[1px]"
           >
             {{ data.accessLabel }}
           </view>
@@ -55,9 +55,9 @@
 
         <view class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <view
-            v-for="item in data.quickFacts"
-            :key="item.label"
-            class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4"
+              v-for="item in data.quickFacts"
+              :key="item.label"
+              class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4"
           >
             <view class="text-[12px] text-semantic-text-muted">{{ item.label }}</view>
             <view class="mt-2 text-[16px] leading-7 text-semantic-text-primary">{{ displayValue(item) }}</view>
@@ -66,9 +66,9 @@
 
         <view class="mt-6 flex flex-wrap gap-2">
           <view
-            v-for="item in data.tags"
-            :key="item"
-            class="rounded-full border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
+              v-for="item in data.tags"
+              :key="item"
+              class="rounded-full border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
           >
             {{ item }}
           </view>
@@ -76,16 +76,16 @@
 
         <view v-if="secondaryPhotos.length || data.galleryLockedText" class="mt-6 grid grid-cols-3 gap-2">
           <image
-            v-for="photo in secondaryPhotos"
-            :key="photo"
-            :src="photo"
-            mode="aspectFill"
-            class="h-[86px] w-full cursor-pointer border border-semantic-border-divider bg-semantic-surface-soft"
-            @click="openPreview(photo)"
+              v-for="photo in secondaryPhotos"
+              :key="photo"
+              :src="photo"
+              class="h-[86px] w-full cursor-pointer border border-semantic-border-divider bg-semantic-surface-soft"
+              mode="aspectFill"
+              @click="openPreview(photo)"
           />
           <view
-            v-if="data.galleryLockedText"
-            class="flex h-[86px] items-center justify-center border border-semantic-border-divider bg-semantic-surface-soft px-3 text-center text-[12px] leading-5 text-semantic-text-muted"
+              v-if="data.galleryLockedText"
+              class="flex h-[86px] items-center justify-center border border-semantic-border-divider bg-semantic-surface-soft px-3 text-center text-[12px] leading-5 text-semantic-text-muted"
           >
             {{ data.galleryLockedText }}
           </view>
@@ -94,29 +94,27 @@
     </view>
 
     <view
-      v-if="previewPhoto"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-component-hero-overlay-background px-5 py-8"
-      @click="closePreview"
+        v-if="previewPhoto"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
+        @click="closePreview"
     >
-      <view class="relative max-h-full w-full max-w-[980px]" @click.stop>
-        <image
+      <image
           :src="previewPhoto"
+          class="h-full w-full"
           mode="aspectFit"
-          class="max-h-[86vh] w-full bg-semantic-surface-card"
-        />
-        <button
-          class="absolute right-3 top-3 flex h-10 w-10 items-center justify-center border border-semantic-border-default bg-semantic-surface-card text-[22px] leading-none text-semantic-text-primary"
-          type="button"
-          @click="closePreview"
-        >
-          ×
-        </button>
+          @click.stop
+      />
+      <view
+          class="fixed right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center text-[28px] leading-none text-white/30 transition-opacity duration-200 hover:text-white/60"
+          @click.stop="closePreview"
+      >
+        ×
       </view>
     </view>
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed, ref} from 'vue'
 import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
 import type {ProfileDetailBadgeItem, ProfileDetailGalleryHeroData} from '@/types/profiles/detail'
