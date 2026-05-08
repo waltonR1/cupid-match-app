@@ -172,13 +172,13 @@ const { t: globalT } = useLocaleBridge()
 const accountData = useAccountOverview()
 const { profile } = accountData
 const pageData = computed(() => {
-  const membership = membershipLabel(accountData.account.membership)
+  const membership = membershipLabel(accountData.user.membership)
 
   return {
-    bio: localizeAccountText(locale.value, accountData.account.bio),
+    bio: localizeAccountText(locale.value, accountData.user.bio),
     membershipLabel: membership,
     summaryItems: [
-      { label: t('topSummary.metrics.completion'), value: `${accountData.account.completion}%` },
+      { label: t('topSummary.metrics.completion'), value: `${accountData.user.completion}%` },
       { label: t('common.currentTier'), value: membership },
       { label: t('common.visibility'), value: profile.familyVisible ? t('common.familyVisible') : t('common.privateOnly') },
     ],

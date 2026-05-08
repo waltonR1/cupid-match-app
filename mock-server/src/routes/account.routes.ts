@@ -8,13 +8,13 @@ import { resolveApiLocale } from '../utils/localized.js'
 export async function registerAccountRoutes(app: FastifyInstance): Promise<void> {
   app.get(`/account/overview`, async (request, reply) => {
     const query = (request.query ?? {}) as Record<string, unknown>
-    const accountId = getString(query.accountId)
+    const userId = getString(query.userId)
 
-    if (!accountId) {
-      return reply.code(400).send({ error: 'accountId is required' })
+    if (!userId) {
+      return reply.code(400).send({ error: 'userId is required' })
     }
 
-    const overview = getAccountOverview(resolveApiLocale(query.lang), getDb().data, accountId)
+    const overview = getAccountOverview(resolveApiLocale(query.lang), getDb().data, userId)
 
     if (!overview) {
       return reply.code(404).send({ error: 'Account not found' })

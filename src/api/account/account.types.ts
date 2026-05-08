@@ -6,10 +6,10 @@ export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type AccountRegistrationStatus = 'confirmed' | 'waitlist' | 'completed'
 
 export interface AccountOverviewQuery {
-  accountId: string
+  userId: string
 }
 
-export interface Account {
+export interface UserOverview {
   id: string
   realName: string
   nickName: string
@@ -21,6 +21,7 @@ export interface Account {
   completion: number
   membership: AccountMembershipLevel
   bio: string
+  role: string
 }
 
 export interface AccountProfileSummary {
@@ -96,7 +97,7 @@ export interface AccountUserEventRecord {
 }
 
 export interface AccountOverviewResponse {
-  account: Account
+  user: UserOverview
   profile: AccountProfileSummary | null
   userEvents: AccountUserEventRecord[]
   favorites: AccountFavoriteRecord[]

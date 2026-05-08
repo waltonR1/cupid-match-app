@@ -2,7 +2,7 @@
   <AppPageLayout>
     <view class="mx-auto max-w-[1280px] px-5 py-6 sm:px-8 lg:py-8">
       <AccountTopSummary
-        :account-name="accountData.profile.displayName || accountData.account.displayName"
+        :account-name="accountData.profile.displayName || accountData.user.displayName"
         :summary-items="topSummaryItems"
       />
 
@@ -48,7 +48,7 @@ const { t: globalT } = useLocaleBridge()
 const topSummaryItems = computed(() => [
   {
     key: 'completion',
-    value: `${accountData.account.completion}%`,
+    value: `${accountData.user.completion}%`,
   },
   {
     key: 'verification',
@@ -56,7 +56,7 @@ const topSummaryItems = computed(() => [
   },
   {
     key: 'membership',
-    value: globalT(`membership.${accountData.account.membership}.title`),
+    value: globalT(`membership.${accountData.user.membership}.title`),
   },
   {
     key: 'activity',

@@ -1,4 +1,4 @@
-﻿import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import {
   getAccountOverview,
   type AccountFavoriteRecord,
@@ -7,6 +7,7 @@ import {
   type AccountProfileSummary,
   type AccountThreadRecord,
   type AccountUserEventRecord,
+  type UserOverview,
 } from '@/api/account'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
@@ -16,7 +17,7 @@ export function useAccountOverview() {
   const authStore = useAuthStore()
   const localeStore = useLocaleStore()
 
-  const account = reactive({ ...initialData.account })
+  const user = reactive<UserOverview>({ ...initialData.user })
   const profile = reactive(createEmptyAccountProfileSummary())
   const userEvents = reactive<AccountUserEventRecord[]>([...initialData.userEvents])
   const favorites = reactive<AccountFavoriteRecord[]>([...initialData.favorites])
@@ -33,25 +34,25 @@ export function useAccountOverview() {
   const familyVisibleFavorites = computed(() => favorites.filter((item) => item.profile.familyVisible))
   const privateFavorites = computed(() => favorites.filter((item) => !item.profile.familyVisible))
   const familyVisibleThreads = computed(() => threads.filter((item) => item.profile.familyVisible))
-  const currentAccountId = computed(() => authStore.user?.id ?? '')
+  const currentUserId = computed(() => authStore.user?.id ?? '')
   const verificationCount = computed(() => {
     let count = 1
 
     if (profile.familyVisible) count += 1
     if (familyAssistSetting.value?.enabled) count += 1
-    if (account.membership !== 'free') count += 1
+    if (user.membership !== 'free') count += 1
 
     return count
   })
 
-  watch([() => localeStore.locale, currentAccountId], () => {
+  watch([() => localeStore.locale, currentUserId], () => {
     void refresh()
   }, { immediate: true })
 
   async function refresh() {
-    const accountId = currentAccountId.value
+    const userId = currentUserId.value
 
-    if (!accountId) {
+    if (!userId) {
       resetOverview()
       error.value = null
       loading.value = false
@@ -62,9 +63,9 @@ export function useAccountOverview() {
     error.value = null
 
     try {
-      const data = await getAccountOverview({ accountId })
+      const data = await getAccountOverview({ userId })
 
-      Object.assign(account, data.account)
+      Object.assign(user, data.user)
       Object.assign(profile, createEmptyAccountProfileSummary(), data.profile ?? {})
       replaceArray(userEvents, data.userEvents)
       replaceArray(favorites, data.favorites)
@@ -80,7 +81,7 @@ export function useAccountOverview() {
   function resetOverview() {
     const data = createEmptyAccountOverview()
 
-    Object.assign(account, data.account)
+    Object.assign(user, data.user)
     Object.assign(profile, createEmptyAccountProfileSummary())
     replaceArray(userEvents, data.userEvents)
     replaceArray(favorites, data.favorites)
@@ -91,7 +92,7 @@ export function useAccountOverview() {
   return {
     loading,
     error,
-    account,
+    user,
     profile,
     userEvents,
     favorites,
@@ -118,7 +119,7 @@ function replaceArray<T>(target: T[], value: T[]) {
 
 function createEmptyAccountOverview(): AccountOverviewResponse {
   return {
-    account: {
+    user: {
       id: '',
       realName: '',
       nickName: '',
@@ -130,6 +131,7 @@ function createEmptyAccountOverview(): AccountOverviewResponse {
       completion: 0,
       membership: 'free',
       bio: '',
+      role: '',
     },
     profile: null,
     userEvents: [],

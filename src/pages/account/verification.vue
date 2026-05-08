@@ -137,7 +137,7 @@ const pageData = computed(() => {
     { label: t('verification.items.marital'), done: Boolean(accountData.profile.maritalStatus) },
     { label: t('verification.items.career'), done: Boolean(accountData.profile.occupation) },
     { label: t('verification.items.video'), done: false },
-    { label: t('verification.items.assets'), done: accountData.account.membership !== 'free' },
+    { label: t('verification.items.assets'), done: accountData.user.membership !== 'free' },
   ]
   const verifiedCount = verificationItems.filter(item => item.done).length
 
@@ -145,7 +145,7 @@ const pageData = computed(() => {
     verificationItems,
     overviewItems: [
       { label: t('verification.summary.progress'), value: `${verifiedCount}/${verificationItems.length}` },
-      { label: t('common.currentTier'), value: membershipLabel(accountData.account.membership) },
+      { label: t('common.currentTier'), value: membershipLabel(accountData.user.membership) },
       { label: t('common.familyVisible'), value: accountData.profile.familyVisible ? t('common.enabled') : t('common.disabled') },
     ],
     controlRows: [

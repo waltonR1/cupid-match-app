@@ -48,7 +48,7 @@ interface UserEventOverview {
 }
 
 export function getAccountOverview(locale: ApiLocale, data: Database, userId: string): {
-  account: AccountOverviewDTO
+  user: AccountOverviewDTO
   profile: AccountProfileSummaryDTO | null
   userEvents: UserEventOverview[]
   favorites: FavoriteOverview[]
@@ -99,7 +99,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, userId: st
     .map((item) => toPrivacySettingOverview(locale, omitUserId(item)))
 
   return {
-    account: toAccountOverview(locale, user, membership?.tier ?? 'free', profileId),
+    user: toAccountOverview(locale, user, membership?.tier ?? 'free', profileId),
     profile: profile ? toAccountProfileSummary(locale, withDisplayName(profile)) : null,
     userEvents,
     favorites,

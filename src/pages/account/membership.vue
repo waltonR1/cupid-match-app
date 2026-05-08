@@ -86,7 +86,7 @@
             </view>
 
             <view
-              v-if="plan.key === accountData.account.membership"
+              v-if="plan.key === accountData.user.membership"
               class="rounded-full border border-component-account-badge-status-border bg-component-account-badge-status-background px-3 py-1 text-[11px] uppercase tracking-[2px] text-component-account-badge-status-text"
             >
               {{ t('common.enabled') }}
@@ -115,10 +115,10 @@
           <view class="mt-6">
             <MembershipPlanButton
               :tier="plan.key"
-              :disabled="plan.key === accountData.account.membership"
+              :disabled="plan.key === accountData.user.membership"
               @click="openRegisterPage"
             >
-              {{ plan.key === accountData.account.membership ? t('common.enabled') : t('common.upgrade') }}
+              {{ plan.key === accountData.user.membership ? t('common.enabled') : t('common.upgrade') }}
             </MembershipPlanButton>
           </view>
         </view>
@@ -151,11 +151,11 @@ const { t: globalT } = useLocaleBridge()
 const { t: membershipT } = usePageI18n('membership')
 const accountData = useAccountOverview()
 const pageData = computed(() => ({
-  membershipLabel: membershipLabel(accountData.account.membership),
+  membershipLabel: membershipLabel(accountData.user.membership),
   currentItems: [
-    { label: t('common.currentTier'), value: membershipLabel(accountData.account.membership) },
-    { label: t('topSummary.metrics.completion'), value: `${accountData.account.completion}%` },
-    { label: t('common.joinedAt'), value: formatLocalizedDate(locale.value, accountData.account.joinedAt) },
+    { label: t('common.currentTier'), value: membershipLabel(accountData.user.membership) },
+    { label: t('topSummary.metrics.completion'), value: `${accountData.user.completion}%` },
+    { label: t('common.joinedAt'), value: formatLocalizedDate(locale.value, accountData.user.joinedAt) },
   ],
   planCards: [
     {
