@@ -6,7 +6,8 @@
           v-if="primaryPhoto"
           :src="primaryPhoto"
           mode="aspectFill"
-          class="absolute inset-0 h-full w-full"
+          class="absolute inset-0 h-full w-full cursor-pointer"
+          @click="openPreview(primaryPhoto)"
         />
         <view class="absolute inset-0 bg-component-hero-overlay-background-soft" />
         <view class="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
@@ -79,7 +80,8 @@
             :key="photo"
             :src="photo"
             mode="aspectFill"
-            class="h-[86px] w-full border border-semantic-border-divider bg-semantic-surface-soft"
+            class="h-[86px] w-full cursor-pointer border border-semantic-border-divider bg-semantic-surface-soft"
+            @click="openPreview(photo)"
           />
           <view
             v-if="data.galleryLockedText"
@@ -90,11 +92,32 @@
         </view>
       </view>
     </view>
+
+    <view
+      v-if="previewPhoto"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-component-hero-overlay-background px-5 py-8"
+      @click="closePreview"
+    >
+      <view class="relative max-h-full w-full max-w-[980px]" @click.stop>
+        <image
+          :src="previewPhoto"
+          mode="aspectFit"
+          class="max-h-[86vh] w-full bg-semantic-surface-card"
+        />
+        <button
+          class="absolute right-3 top-3 flex h-10 w-10 items-center justify-center border border-semantic-border-default bg-semantic-surface-card text-[22px] leading-none text-semantic-text-primary"
+          type="button"
+          @click="closePreview"
+        >
+          ×
+        </button>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
 import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
 import type {ProfileDetailBadgeItem, ProfileDetailGalleryHeroData} from '@/types/profiles/detail'
 
@@ -106,6 +129,17 @@ const props = defineProps<{
 
 const primaryPhoto = computed(() => props.data.photos[0] || props.data.avatarUrl)
 const secondaryPhotos = computed(() => props.data.photos.slice(1, 4))
+const previewPhoto = ref('')
+
+/** 打开图片预览 */
+function openPreview(photo: string) {
+  previewPhoto.value = photo
+}
+
+/** 关闭图片预览 */
+function closePreview() {
+  previewPhoto.value = ''
+}
 
 /** 徽章样式 */
 function badgeClassName(tone?: ProfileDetailBadgeItem['tone']) {
