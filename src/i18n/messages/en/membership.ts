@@ -47,9 +47,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 499',
       title: 'Silver VIP',
       period: 'Valid for one year',
-      f1: '12 introduction quotas',
+      f1: '5 private introduction quotas per month',
       f2: '12 offline events',
-      f3: '10 contact views per day',
+      f3: 'Private channels open after platform confirmation',
     },
     gold: {
       badge: 'Gold VIP',
@@ -57,9 +57,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 770',
       title: 'Gold VIP',
       period: 'Valid for six months',
-      f1: '20 introduction quotas',
+      f1: '15 private introduction quotas per month',
       f2: '20 offline events',
-      f3: '20 contact views per day',
+      f3: 'Private channels open after platform confirmation',
     },
     diamond: {
       badge: 'Diamond VIP',
@@ -67,15 +67,15 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 1155',
       title: 'Diamond VIP',
       period: 'Valid for one year',
-      f1: '24 introduction quotas',
+      f1: '30 private introduction quotas per month',
       f2: '24 offline events',
-      f3: '30 contact views per day',
+      f3: 'Priority advisor follow-up for introductions',
     },
     rules: {
       eyebrow: 'Rules & Upgrade',
       title: 'Rules',
       titleAccent: 'and Upgrade',
-      description: 'All VIP members are identity-verified. An introduction counts only when both sides agree to exchange contact details.',
+      description: 'All VIP members are identity-verified. A private introduction quota is reserved when the request is submitted; if the other side declines, it no longer consumes this month’s quota.',
       secondaryDescription: 'Upgrades should be confirmed with an advisor before payment. Respect, consent, and boundaries always come first.',
       tag1: {
         title: 'Verification',
@@ -83,7 +83,7 @@ export const membershipMessages: AppMessageSchema = {
       },
       tag2: {
         title: 'Mutual consent',
-        desc: 'Declines do not consume quota',
+        desc: 'Declines do not consume this month’s quota',
       },
       tag3: {
         title: 'Advisor confirmation',

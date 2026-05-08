@@ -47,9 +47,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 499',
       title: 'VIP Argent',
       period: 'Valable un an',
-      f1: '12 mises en relation',
+      f1: '5 introductions privees par mois',
       f2: '12 evenements hors ligne',
-      f3: '10 consultations de contact par jour',
+      f3: 'Canaux prives ouverts apres confirmation plateforme',
     },
     gold: {
       badge: 'Gold VIP',
@@ -57,9 +57,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 770',
       title: 'VIP Or',
       period: 'Valable six mois',
-      f1: '20 mises en relation',
+      f1: '15 introductions privees par mois',
       f2: '20 evenements hors ligne',
-      f3: '20 consultations de contact par jour',
+      f3: 'Canaux prives ouverts apres confirmation plateforme',
     },
     diamond: {
       badge: 'Diamond VIP',
@@ -67,15 +67,15 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ RMB 1155',
       title: 'VIP Diamant',
       period: 'Valable un an',
-      f1: '24 mises en relation',
+      f1: '30 introductions privees par mois',
       f2: '24 evenements hors ligne',
-      f3: '30 consultations de contact par jour',
+      f3: 'Suivi conseiller prioritaire pour les introductions',
     },
     rules: {
       eyebrow: 'Rules & Upgrade',
       title: 'Regles',
       titleAccent: 'et evolution',
-      description: 'Tous les membres VIP sont verifies. Une mise en relation n est comptabilisee que si les deux parties acceptent l echange de coordonnees.',
+      description: 'Tous les membres VIP sont verifies. Un quota d introduction privee est reserve au moment de la demande ; en cas de refus, il ne consomme plus le quota du mois.',
       secondaryDescription: 'Avant paiement, l evolution doit etre confirmee avec un conseiller. Le respect, le consentement et les limites restent prioritaires.',
       tag1: {
         title: 'Verification',
@@ -83,7 +83,7 @@ export const membershipMessages: AppMessageSchema = {
       },
       tag2: {
         title: 'Consentement mutuel',
-        desc: 'Un refus ne consomme pas le quota',
+        desc: 'Un refus ne consomme pas le quota du mois',
       },
       tag3: {
         title: 'Validation conseiller',

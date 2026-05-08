@@ -47,9 +47,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ ¥499',
       title: '白银会员',
       period: '一年有效',
-      f1: '12 个牵线名额',
+      f1: '每月 5 次私人介绍名额',
       f2: '12 次线下活动',
-      f3: '每日 10 次联系方式查看',
+      f3: '平台确认后开放私人沟通渠道',
     },
     gold: {
       badge: 'Gold VIP',
@@ -57,9 +57,9 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ ¥770',
       title: '黄金会员',
       period: '半年有效',
-      f1: '20 个牵线名额',
+      f1: '每月 15 次私人介绍名额',
       f2: '20 次线下活动',
-      f3: '每日 20 次联系方式查看',
+      f3: '平台确认后开放私人沟通渠道',
     },
     diamond: {
       badge: 'Diamond VIP',
@@ -67,15 +67,15 @@ export const membershipMessages: AppMessageSchema = {
       priceNote: '/ ¥1155',
       title: '钻石会员',
       period: '一年有效',
-      f1: '24 个牵线名额',
+      f1: '每月 30 次私人介绍名额',
       f2: '24 次线下活动',
-      f3: '每日 30 次联系方式查看',
+      f3: '顾问优先跟进私人介绍',
     },
     rules: {
       eyebrow: 'Rules & Upgrade',
       title: '规则说明',
       titleAccent: '与升级方式',
-      description: '所有 VIP 会员均需完成实名验证。牵线名额只在双方同意交换联系方式时计入，若对方拒绝则不扣减。',
+      description: '所有 VIP 会员均需完成实名验证。私人介绍名额在发起申请时预留；若对方拒绝，平台不再占用本月名额。',
       secondaryDescription: '升级前会先与顾问确认服务承接方式，再完成支付。平台始终坚持尊重、同意与边界优先。',
       tag1: {
         title: '实名验证',
@@ -83,7 +83,7 @@ export const membershipMessages: AppMessageSchema = {
       },
       tag2: {
         title: '双向同意',
-        desc: '拒绝不计入牵线名额',
+        desc: '拒绝不占用本月名额',
       },
       tag3: {
         title: '顾问确认',
