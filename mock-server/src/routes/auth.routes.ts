@@ -6,7 +6,7 @@ import { login, register } from '../services/auth.service.js'
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   app.post(`/auth/login`, async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>
-    const session = login(getDb().data.auth_users, body)
+    const session = login(getDb().data, body)
 
     if (!session) {
       return reply.code(401).send({ error: 'Invalid credentials' })

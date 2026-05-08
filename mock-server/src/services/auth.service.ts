@@ -1,5 +1,5 @@
 import type { DbInstance } from '../db.js'
-import type { AccountRecord, AuthUserRecord, Database } from '../types/database.js'
+import type { AuthIdentityRecord, Database, MembershipRecord, UserRecord } from '../types/database.js'
 import type { RegisterRole } from '../types/profile.js'
 import { nextId } from '../utils/id.js'
 import { localized } from '../utils/localized.js'
@@ -24,16 +24,19 @@ export interface ServiceErrorResult {
   body: { error: string }
 }
 
-export function login(authUsers: AuthUserRecord[], body: Record<string, unknown>): AuthSession | null {
+export function login(data: Database, body: Record<string, unknown>): AuthSession | null {
   const identity = getString(body.identity)
   const password = getString(body.password)
-  const authUser = authUsers.find((item) => item.identity === identity || item.email === identity)
+  const authIdentity = data.auth_identities.find((item) => item.identity === identity || item.email === identity)
 
-  if (!authUser || authUser.password !== password) {
+  if (!authIdentity || authIdentity.password !== password) {
     return null
   }
 
-  return buildSession(authUser)
+  const user = data.users.find((item) => item.id === authIdentity.userId)
+  if (!user) return null
+
+  return buildSession(authIdentity, user)
 }
 
 export async function register(
@@ -53,7 +56,7 @@ export async function register(
     }
   }
 
-  const duplicate = db.data.auth_users.find((item) => item.email === email || item.identity === email)
+  const duplicate = db.data.auth_identities.find((item) => item.email === email || item.identity === email)
   if (duplicate) {
     return {
       statusCode: 409,
@@ -61,52 +64,59 @@ export async function register(
     }
   }
 
-  const accountId = nextId('u', db.data.accounts)
-  const authId = nextId('auth', db.data.auth_users)
+  const userId = nextId('u', db.data.users)
   const cityName = city || 'Paris'
+  const now = new Date().toISOString().slice(0, 10)
 
-  const newAccount: AccountRecord = {
-    id: accountId,
+  const newUser: UserRecord = {
+    id: userId,
     role,
-    realName: nickName,
-    nickName,
+    displayName: nickName,
     avatarUrl: '',
     city: localized(cityName, cityName, cityName),
-    joinedAt: new Date().toISOString().slice(0, 10),
-    profileId: '',
-    completion: 0,
-    membership: 'free',
+    createdAt: now,
     bio: localized('新注册用户。', 'Nouvel utilisateur inscrit.', 'Newly registered user.'),
+    profileCompletion: 0,
+    language: 'zh',
   }
 
-  const newAuthUser: AuthUserRecord = {
+  const authId = nextId('auth', db.data.auth_identities)
+  const newAuthIdentity: AuthIdentityRecord = {
     id: authId,
-    accountId,
-    role,
+    userId,
+    authType: 'email',
     identity: email,
     email,
     password,
-    displayName: nickName,
-    avatarUrl: '',
+    createdAt: now,
   }
 
-  db.data.accounts.push(newAccount)
-  db.data.auth_users.push(newAuthUser)
+  const membershipId = nextId('membership', db.data.memberships)
+  const newMembership: MembershipRecord = {
+    id: membershipId,
+    userId,
+    tier: 'free',
+    startedAt: now,
+  }
+
+  db.data.users.push(newUser)
+  db.data.auth_identities.push(newAuthIdentity)
+  db.data.memberships.push(newMembership)
   await db.write()
 
   return {
     statusCode: 201,
-    body: buildSession(newAuthUser),
+    body: buildSession(newAuthIdentity, newUser),
   }
 }
 
-function buildSession(authUser: AuthUserRecord): AuthSession {
+function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
   return {
-    token: `mock-token-${authUser.id}`,
+    token: `mock-token-${authIdentity.id}`,
     user: {
-      id: authUser.accountId,
-      displayName: authUser.displayName,
-      avatarUrl: authUser.avatarUrl || '',
+      id: user.id,
+      displayName: user.displayName,
+      avatarUrl: user.avatarUrl || '',
     },
   }
 }
