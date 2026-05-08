@@ -307,12 +307,10 @@ export function toSelfProfileDetail(
         })),
         gender: profile.gender,
         age: profile.age,
-        ageRange: formatPublicAgeRange(profile.age),
         height: profile.height,
         city: resolveLocalizedText(locale, profile.city),
         country: resolveLocalizedText(locale, profile.country),
         languages: profile.languages,
-        bodyType: resolveLocalizedText(locale, profile.bodyType),
         profileStatus: profile.profileStatus,
         isVerified: profile.isVerified,
         lastActiveAt: profile.lastActiveAt,
@@ -345,16 +343,11 @@ export function toSelfProfileDetail(
         communicationStyle: resolveLocalizedText(locale, profile.communicationStyle),
         funFacts: resolveLocalizedTexts(locale, profile.funFacts),
         summary: resolveLocalizedText(locale, profile.summary),
-        highlights: resolveLocalizedTexts(locale, profile.highlights),
         tags: resolveLocalizedTexts(locale, profile.tags),
         prompts: profile.prompts.map((prompt) => ({
             ...prompt,
             prompt: resolveLocalizedText(locale, prompt.prompt),
             answer: resolveLocalizedText(locale, prompt.answer),
-        })),
-        compatibilityDimensions: profile.compatibilityDimensions.map((dimension) => ({
-            ...dimension,
-            label: resolveLocalizedText(locale, dimension.label),
         })),
         privateIntroduction: resolvePrivateIntroduction(account, profile.id, introductionRequests),
     }, resolveSelfProfileAccessLevel(account))
@@ -606,12 +599,6 @@ function isCooldownExpired(request: PrivateIntroductionRequestRecord): boolean {
 }
 
 /** 公开资料年龄段 */
-function formatPublicAgeRange(age: number): string {
-    const minAge = Math.max(18, age - 1)
-    const maxAge = age + 2
-    return `${minAge}-${maxAge}`
-}
-
 /** 比较最近活跃时间 */
 function compareRecentActive(left: ProfileWithDisplayName, right: ProfileWithDisplayName): number {
     return toTimestamp(right.lastActiveAt) - toTimestamp(left.lastActiveAt)

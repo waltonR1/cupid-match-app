@@ -1,147 +1,196 @@
 <template>
   <AppPageLayout>
-    <view class="mx-auto max-w-[1240px] px-6 pb-20 pt-8 lg:px-8 lg:pb-24 lg:pt-10">
+    <view class="mx-auto max-w-[1180px] px-5 pb-20 pt-6 lg:px-8 lg:pb-24 lg:pt-8">
       <!-- 返回入口 -->
       <view
-        class="mb-6 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
-        @click="handleBack"
+          class="mb-5 inline-flex cursor-pointer items-center gap-2 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] text-semantic-text-muted transition-colors duration-200 hover:text-semantic-text-link"
+          @click="handleBack"
       >
         <svg
-          class="h-3.5 w-3.5"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+            class="h-3.5 w-3.5"
+            fill="none"
+            viewBox="0 0 12 12"
+            xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M7.75 2.5L4.25 6L7.75 9.5"
-            stroke="currentColor"
-            stroke-width="1.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+              d="M7.75 2.5L4.25 6L7.75 9.5"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.2"
           />
         </svg>
         <text>{{ t('actions.backToSelf') }}</text>
       </view>
 
-      <!-- 详情内容 -->
       <view v-if="heroData" class="space-y-6">
-        <ProfileDetailHero :data="heroData" />
+        <ProfileDetailHero
+            :data="heroData"
+            :login-locked-text="t('sections.loginLocked')"
+            :member-locked-text="t('sections.memberLocked')"
+        />
 
-        <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-          <!-- 主内容区 -->
-          <view class="space-y-6">
-            <ProfileDetailFactGrid
-              :title="t('sections.overview')"
-              :items="overviewFacts"
-            />
-
-            <view class="grid gap-6 lg:grid-cols-2">
-              <!-- 关系信息 -->
-              <ProfileDetailFactSection
-                :title="t('sections.relationship')"
-                :items="relationshipFacts"
-                surface="soft"
-              >
-                <view class="mt-6 border border-semantic-border-divider bg-semantic-surface-card px-5 py-5">
-                  <view class="text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ t('fields.intent') }}
-                  </view>
-                  <view class="mt-3 text-[22px] leading-8 text-semantic-text-primary">
-                    {{ intentText }}
-                  </view>
-
-                  <view class="mt-5 text-[12px] tracking-[1px] text-semantic-text-muted">
-                    {{ t('fields.maritalPlan') }}
-                  </view>
-                  <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
-                    {{ relationshipPlanText }}
-                  </view>
-                </view>
-              </ProfileDetailFactSection>
-
-              <ProfileDetailFactSection
-                :title="t('sections.lifestyle')"
-                :items="lifestyleFacts"
-              />
+        <view v-if="isVisitorAccess" class="grid gap-3 md:grid-cols-3">
+          <view
+              v-for="item in revealSteps"
+              :key="item.title"
+              class="border px-5 py-4"
+              :class="revealStepClass(item.state)"
+          >
+            <view class="text-[12px] uppercase tracking-[2.4px] text-semantic-text-eyebrow">
+              {{ item.title }}
+            </view>
+            <view class="mt-2 text-[13px] leading-6 text-semantic-text-muted">
+              {{ item.subtitle }}
             </view>
           </view>
+        </view>
 
-          <!-- 侧边信息栏 -->
-          <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <view class="border border-semantic-border-default bg-semantic-surface-soft px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.accessPolicy') }}
-              </view>
-              <view class="mt-4 text-[16px] leading-8 text-semantic-text-muted">
-                {{ t('hero.accessNote') }}
-              </view>
-            </view>
-
-            <ProfileDetailFactSection
-              :title="t('sections.curationFocus')"
-              :items="spotlightFacts"
+        <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+          <!-- 左列 -->
+          <view class="space-y-6">
+            <ProfileDetailSection
+                :columns="3"
+                :items="snapshotFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.profileSnapshot')"
             />
 
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.highlights') }}
+            <view
+                v-if="isVisitorAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.visitorGateTitle') }}
               </view>
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
+                {{ t('sections.visitorGateSubtitle') }}
+              </view>
+              <view class="mt-5">
+                <AppButton variant="primary" size="sm" @click="openLoginPage">
+                  {{ t('actions.loginToDiscover') }}
+                </AppButton>
+              </view>
+            </view>
 
-              <view class="mt-6 grid gap-3">
-                <view
-                  v-for="item in highlightTexts"
-                  :key="item"
-                  class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4 text-[16px] leading-7 text-semantic-text-secondary"
-                >
-                  {{ item }}
-                </view>
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="2"
+                :items="relationshipFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.matchIntent')"
+            />
+
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="2"
+                :items="personalityFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.aboutPersonality')"
+            />
+
+            <ProfileDetailSection
+                v-if="isPremiumAccess"
+                :columns="1"
+                :items="preferenceFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.partnerPreference')"
+            />
+
+            <ProfileDetailSection
+                v-if="isPremiumAccess"
+                :columns="1"
+                :items="valueFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.valuesAndPlans')"
+            />
+
+            <view
+                v-if="isRegisteredAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.premiumGateTitle') }}
+              </view>
+              <view class="mt-3 text-[16px] leading-8 text-semantic-text-secondary">
+                {{ t('sections.premiumGateSubtitle') }}
+              </view>
+              <view class="mt-5">
+                <AppButton variant="primary" size="sm" @click="openMembershipPage">
+                  {{ t('actions.becomeMember') }}
+                </AppButton>
               </view>
             </view>
 
-            <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-eyebrow">
-                {{ t('sections.tags') }}
-              </view>
+          </view>
 
-              <view class="mt-4 flex flex-wrap gap-2">
-                <view
-                  v-for="item in tagTexts"
-                  :key="item"
-                  class="rounded-full border border-semantic-border-default bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-eyebrow"
-                >
-                  {{ item }}
-                </view>
+          <!-- 右列 Sticky Sidebar -->
+          <view class="space-y-6 xl:sticky xl:top-28 xl:self-start">
+            <ProfileDetailSection
+                v-if="!isVisitorAccess"
+                :columns="1"
+                :items="lifestyleFacts"
+                :login-locked-text="t('sections.loginLocked')"
+                :member-locked-text="t('sections.memberLocked')"
+                :title="t('sections.lifestyle')"
+            />
+
+            <view
+                v-if="isVisitorAccess"
+                class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel"
+            >
+              <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
+                {{ t('sections.conciergeNoteTitle') }}
+              </view>
+              <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
+                {{ t('sections.conciergeNoteSubtitle') }}
               </view>
             </view>
+
+            <ProfilePrivateIntroductionPanel
+                v-if="privateIntroductionData && !isVisitorAccess"
+                :data="privateIntroductionData"
+                :text="privateIntroductionText"
+                @open-room="openMessagesPage"
+                @request="requestPrivateIntroduction"
+            />
           </view>
         </view>
       </view>
 
       <!-- 空状态 -->
       <EmptyStatePanel
-        v-else
-        :title="t('sections.notFoundTitle')"
-        :subtitle="t('sections.notFoundSubtitle')"
-        :primary-text="t('actions.backToSelf')"
-        @primary="handleBack"
+          v-else
+          :primary-text="t('actions.backToSelf')"
+          :subtitle="t('sections.notFoundSubtitle')"
+          :title="t('sections.notFoundTitle')"
+          @primary="handleBack"
       />
     </view>
   </AppPageLayout>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+<script lang="ts" setup>
+import {computed, ref} from 'vue'
+import {onLoad} from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
+import AppButton from '@/components/common/AppButton.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import ProfileDetailFactGrid from '@/components/profiles/detail/ProfileDetailFactGrid.vue'
-import ProfileDetailFactSection from '@/components/profiles/detail/ProfileDetailFactSection.vue'
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
-import { useSelfProfileDetail } from '@/hooks/profiles'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
+import ProfilePrivateIntroductionPanel from '@/components/profiles/detail/ProfilePrivateIntroductionPanel.vue'
+import {useSelfProfileDetail} from '@/hooks/profiles'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import type {PrivateIntroductionPanelText, ProfileDetailFactItem} from '@/types/profiles/detail'
+import {openLoginPage, openMembershipPage, openMessagesPage} from '@/utils/navigation'
 
 /** 页面文案 */
-const { t, locale } = usePageI18n('selfDetail')
+const {t, locale} = usePageI18n('selfDetail')
 /** 当前资料 ID */
 const profileId = ref('')
 
@@ -154,26 +203,148 @@ onLoad((query) => {
 
 /** 详情页数据 */
 const {
+  accessLevel,
   heroData,
-  overviewFacts,
+  snapshotFacts,
   relationshipFacts,
+  personalityFacts,
+  preferenceFacts,
+  valueFacts,
   lifestyleFacts,
-  spotlightFacts,
-  intentText,
-  relationshipPlanText,
-  highlightTexts,
-  tagTexts,
+  privateIntroductionData,
+  requestPrivateIntroduction,
 } = useSelfProfileDetail(profileId, t, locale)
+
+type VisitorRevealStep = {
+  title: string
+  subtitle: string
+  state: 'active' | 'locked'
+}
+
+/** 是否为游客访问 */
+const isVisitorAccess = computed(() => accessLevel.value === 'visitor')
+
+/** 游客态资料开放提示 */
+const revealSteps = computed<VisitorRevealStep[]>(() => [
+  {
+    title: t('sections.revealVisitorTitle'),
+    subtitle: t('sections.revealVisitorSubtitle'),
+    state: 'active',
+  },
+  {
+    title: t('sections.revealRegisteredTitle'),
+    subtitle: t('sections.revealRegisteredSubtitle'),
+    state: 'locked',
+  },
+  {
+    title: t('sections.revealPremiumTitle'),
+    subtitle: t('sections.revealPremiumSubtitle'),
+    state: 'locked',
+  },
+])
+
+/** 是否为注册未会员访问 */
+const isRegisteredAccess = computed(() => accessLevel.value === 'registered')
+
+/** 是否为会员访问 */
+const isPremiumAccess = computed(() => accessLevel.value === 'premium')
+
+/** 私人介绍额度文案 */
+/** 私人介绍当前状态文案 */
+const privateIntroductionStatusText = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'requested') return t('sections.privateIntroductionStatusRequested')
+  if (status === 'accepted') return t('sections.privateIntroductionStatusAccepted')
+  if (status === 'declined') return t('sections.privateIntroductionStatusDeclined')
+  if (status === 'cooldown') return t('sections.privateIntroductionStatusCooldown')
+  if (status === 'quota_exhausted') return t('sections.privateIntroductionStatusQuotaExhausted')
+  if (status === 'login_required') return t('sections.privateIntroductionStatusLoginRequired')
+  return t('sections.privateIntroductionStatusAvailable')
+})
+
+/** 私人介绍不可操作按钮文案 */
+const privateIntroductionActionLabel = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'accepted') return t('sections.privateIntroductionAccepted')
+  if (status === 'declined' || status === 'cooldown') return t('sections.privateIntroductionCooldown')
+  if (status === 'quota_exhausted') return t('sections.privateIntroductionQuotaUsed')
+  if (status === 'requested') return t('sections.privateIntroductionRequested')
+  return t('sections.privateIntroductionUnavailable')
+})
+
+/** 私人介绍流程文案 */
+const privateIntroductionSteps = computed(() => {
+  const status = privateIntroductionData.value?.status
+  if (status === 'accepted') {
+    return [
+      t('sections.privateIntroductionAcceptedStep1'),
+      t('sections.privateIntroductionAcceptedStep2'),
+      t('sections.privateIntroductionAcceptedStep3'),
+    ]
+  }
+
+  if (status === 'declined' || status === 'cooldown') {
+    return [
+      t('sections.privateIntroductionDeclinedStep1'),
+      t('sections.privateIntroductionDeclinedStep2'),
+      t('sections.privateIntroductionDeclinedStep3'),
+    ]
+  }
+
+  return [
+    t('sections.privateIntroductionStep1'),
+    t('sections.privateIntroductionStep2'),
+    t('sections.privateIntroductionStep3'),
+  ]
+})
+
+/** 私人介绍面板文案 */
+const privateIntroductionText = computed<PrivateIntroductionPanelText>(() => ({
+  title: t('sections.privateIntroduction'),
+  subtitle: t('sections.privateIntroductionSubtitle'),
+  quota: privateIntroductionData.value
+      ? `${t('sections.privateIntroductionQuotaPrefix')}${privateIntroductionData.value.quotaRemaining}/${privateIntroductionData.value.quotaTotal}`
+      : '',
+  status: privateIntroductionStatusText.value,
+  requestButton: t('sections.privateIntroductionRequestButton'),
+  disabledButton: privateIntroductionActionLabel.value,
+  roomTitle: t('sections.privateIntroductionRoomTitle'),
+  roomSubtitle: t('sections.privateIntroductionRoomSubtitle'),
+  roomAction: t('sections.privateIntroductionRoomAction'),
+  steps: privateIntroductionSteps.value,
+}))
 
 /** 返回列表页 */
 function handleBack() {
   if (getCurrentPages().length > 1) {
-    uni.navigateBack({ delta: 1 })
+    uni.navigateBack({delta: 1})
     return
   }
 
   uni.redirectTo({
     url: '/pages/profiles/self/index',
   })
+}
+
+/** 展示字段值（处理 masked/hidden 状态） */
+function displayValue(item: ProfileDetailFactItem) {
+  if (item.access === 'masked') {
+    if (item.lockReason === 'login') return t('sections.loginLocked')
+    if (item.lockReason === 'member') return t('sections.memberLocked')
+    return item.maskText || '****'
+  }
+  if (item.access === 'hidden') {
+    return item.maskText || ''
+  }
+  return item.value
+}
+
+/** 渐进展示步骤样式 */
+function revealStepClass(state: VisitorRevealStep['state']) {
+  if (state === 'active') {
+    return 'border-semantic-accent-secondary bg-semantic-surface-card shadow-panel'
+  }
+
+  return 'border-semantic-border-divider bg-semantic-surface-soft'
 }
 </script>

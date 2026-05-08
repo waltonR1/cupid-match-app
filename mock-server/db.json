@@ -4,13 +4,72 @@
       "id": "p-001",
       "legalName": "Aline M.",
       "nickname": "Aline",
+      "displayName": "Aline",
       "avatarUrl": "",
+      "photos": [
+        {
+          "id": "p-001-photo-1",
+          "url": "https://picsum.photos/seed/p-001-1/900/1200",
+          "caption": {
+            "zh": "主照片",
+            "fr": "Photo principale",
+            "en": "Primary photo"
+          },
+          "isPrimary": true
+        },
+        {
+          "id": "p-001-photo-2",
+          "url": "https://picsum.photos/seed/p-001-2/900/1200",
+          "caption": {
+            "zh": "生活照片 2",
+            "fr": "Photo de vie 2",
+            "en": "Lifestyle photo 2"
+          },
+          "isPrimary": false
+        },
+        {
+          "id": "p-001-photo-3",
+          "url": "https://picsum.photos/seed/p-001-3/900/1200",
+          "caption": {
+            "zh": "生活照片 3",
+            "fr": "Photo de vie 3",
+            "en": "Lifestyle photo 3"
+          },
+          "isPrimary": false
+        }
+      ],
       "gender": "female",
+      "pronouns": "she/her",
+      "sexuality": "straight",
+      "interestedIn": [
+        "male"
+      ],
       "age": 31,
       "height": 168,
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francaise", "en": "French" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "country": {
+        "zh": "法国",
+        "fr": "France",
+        "en": "France"
+      },
+      "nationality": {
+        "zh": "法国",
+        "fr": "Francaise",
+        "en": "French"
+      },
+      "hometown": {
+        "zh": "里昂",
+        "fr": "Lyon",
+        "en": "Lyon"
+      },
+      "languages": [
+        "FR",
+        "EN"
+      ],
       "profileStatus": "open",
       "isVerified": true,
       "lastActiveAt": "2026-04-20T18:30:00Z",
@@ -19,45 +78,387 @@
       "allowFamilyContact": false,
       "familyPriority": false,
       "degreeLevel": "master",
-      "education": { "zh": "硕士", "fr": "Master", "en": "Master" },
-      "occupation": { "zh": "品牌策略", "fr": "Strategie de marque", "en": "Brand strategist" },
-      "industry": { "zh": "奢侈品", "fr": "Luxe", "en": "Luxury" },
-      "employer": { "zh": "独立顾问", "fr": "Consultante independante", "en": "Independent consultant" },
-      "incomeRange": { "zh": "年收入 8-12 万欧", "fr": "80-120k EUR/an", "en": "EUR 80k-120k annual" },
+      "education": {
+        "zh": "硕士",
+        "fr": "Master",
+        "en": "Master"
+      },
+      "occupation": {
+        "zh": "品牌策略",
+        "fr": "Strategie de marque",
+        "en": "Brand strategist"
+      },
+      "industry": {
+        "zh": "奢侈品",
+        "fr": "Luxe",
+        "en": "Luxury"
+      },
+      "employer": {
+        "zh": "独立顾问",
+        "fr": "Consultante independante",
+        "en": "Independent consultant"
+      },
+      "incomeRange": {
+        "zh": "年收入 8-12 万欧",
+        "fr": "80-120k EUR/an",
+        "en": "EUR 80k-120k annual"
+      },
       "maritalStatus": "single",
       "hasChildren": false,
       "wantsChildren": true,
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "datingIntentionLabel": { "zh": "认真发展", "fr": "Relation serieuse", "en": "Serious relationship" },
-      "relationshipPlan": { "zh": "一年内确认节奏", "fr": "Clarifier le rythme sous un an", "en": "Clarify long-term pace within a year" },
-      "languages": ["FR", "EN"],
+      "datingIntentionLabel": {
+        "zh": "认真发展",
+        "fr": "Relation serieuse",
+        "en": "Serious relationship"
+      },
+      "relationshipPlan": {
+        "zh": "一年内确认节奏",
+        "fr": "Clarifier le rythme sous un an",
+        "en": "Clarify long-term pace within a year"
+      },
+      "residencePlan": {
+        "zh": "优先巴黎，也接受欧洲双城",
+        "fr": "Paris en priorite, ouverte a une double ville en Europe",
+        "en": "Prefers Paris, open to a two-city setup in Europe"
+      },
+      "relocationWillingness": {
+        "zh": "接受跨城磨合，重视双方节奏可持续",
+        "fr": "Ouvert a une phase interville si le rythme reste durable",
+        "en": "Open to cross-city adjustment if the rhythm is sustainable"
+      },
+      "values": [
+        {
+          "zh": "坦诚沟通",
+          "fr": "Communication sincere",
+          "en": "Honest communication"
+        },
+        {
+          "zh": "共同成长",
+          "fr": "Grandir ensemble",
+          "en": "Growing together"
+        }
+      ],
+      "preferredAgeMin": 28,
+      "preferredAgeMax": 40,
+      "locationScope": {
+        "zh": "以巴黎为主，接受成熟的跨城安排",
+        "fr": "Paris comme base, ouvert a une organisation interville mature",
+        "en": "Paris-based, open to a mature cross-city setup"
+      },
+      "preferredEducation": {
+        "zh": "本科及以上，更看重学习能力和沟通方式",
+        "fr": "Licence ou plus, avec attention a la curiosite et a la communication",
+        "en": "Bachelor or above, with more weight on curiosity and communication style"
+      },
+      "familyPlan": {
+        "zh": "希望在稳定关系中自然讨论婚育节奏",
+        "fr": "Souhaite discuter du rythme familial dans une relation stable",
+        "en": "Wants to discuss family plans naturally within a stable relationship"
+      },
+      "dealBreakers": [
+        {
+          "zh": "长期失联",
+          "fr": "Absence prolongee de communication",
+          "en": "Long periods without communication"
+        },
+        {
+          "zh": "关系目标不清晰",
+          "fr": "Objectif relationnel flou",
+          "en": "Unclear relationship goals"
+        }
+      ],
       "smoking": "never",
       "drinking": "social",
-      "exercise": { "zh": "每周瑜伽和步行", "fr": "Yoga et marche chaque semaine", "en": "Weekly yoga and walking" },
-      "residencePlan": { "zh": "优先巴黎，也接受欧洲双城", "fr": "Paris en priorite, ouverte a une double ville en Europe", "en": "Prefers Paris, open to a two-city setup in Europe" },
-      "summary": { "zh": "重视表达、节奏和跨文化理解。", "fr": "Attentive a la communication, au rythme et a la comprehension interculturelle.", "en": "Values communication, pacing, and intercultural understanding." },
+      "exercise": {
+        "zh": "每周瑜伽和步行",
+        "fr": "Yoga et marche chaque semaine",
+        "en": "Weekly yoga and walking"
+      },
+      "activityLevel": {
+        "zh": "规律运动",
+        "fr": "Activite reguliere",
+        "en": "Regularly active"
+      },
+      "weekendStyle": {
+        "zh": "喜欢有计划但不过度排满的周末",
+        "fr": "Aime les week-ends organises sans etre surcharges",
+        "en": "Likes planned but not overpacked weekends"
+      },
+      "pets": {
+        "zh": "喜欢猫，暂时没有养宠物",
+        "fr": "Aime les chats, pas d animal pour le moment",
+        "en": "Likes cats, no pet for now"
+      },
+      "religion": {
+        "zh": "开放但不强制",
+        "fr": "Ouverte, non pratiquante",
+        "en": "Open, not practicing"
+      },
+      "politicalViews": {
+        "zh": "温和开放",
+        "fr": "Moderee et ouverte",
+        "en": "Moderate and open"
+      },
+      "personalityTraits": [
+        {
+          "zh": "表达清晰",
+          "fr": "Communication claire",
+          "en": "Clear communicator"
+        },
+        {
+          "zh": "审美稳定",
+          "fr": "Sens esthetique stable",
+          "en": "Consistent taste"
+        },
+        {
+          "zh": "重视边界",
+          "fr": "Respecte les limites",
+          "en": "Values boundaries"
+        }
+      ],
+      "interests": [
+        {
+          "zh": "展览",
+          "fr": "Expositions",
+          "en": "Exhibitions"
+        },
+        {
+          "zh": "城市散步",
+          "fr": "Balades urbaines",
+          "en": "City walks"
+        },
+        {
+          "zh": "法式烹饪",
+          "fr": "Cuisine francaise",
+          "en": "French cooking"
+        }
+      ],
+      "communicationStyle": {
+        "zh": "偏好直接、及时、尊重边界的沟通",
+        "fr": "Prefere une communication directe, reguliere et respectueuse",
+        "en": "Prefers direct, timely, respectful communication"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "summary": {
+        "zh": "重视表达、节奏和跨文化理解。",
+        "fr": "Attentive a la communication, au rythme et a la comprehension interculturelle.",
+        "en": "Values communication, pacing, and intercultural understanding."
+      },
       "highlights": [
-        { "zh": "可在法英双语环境稳定交流", "fr": "A l aise en environnement bilingue francais-anglais", "en": "Comfortable in bilingual French-English settings" },
-        { "zh": "偏好线下真实互动后再推进", "fr": "Prefere avancer apres une interaction reelle", "en": "Prefers to move forward after real in-person interaction" }
+        {
+          "zh": "可在法英双语环境稳定交流",
+          "fr": "A l aise en environnement bilingue francais-anglais",
+          "en": "Comfortable in bilingual French-English settings"
+        },
+        {
+          "zh": "偏好线下真实互动后再推进",
+          "fr": "Prefere avancer apres une interaction reelle",
+          "en": "Prefers to move forward after real in-person interaction"
+        }
       ],
       "tags": [
-        { "zh": "文化活动", "fr": "Activites culturelles", "en": "Cultural activities" },
-        { "zh": "城市生活", "fr": "Vie urbaine", "en": "City life" },
-        { "zh": "稳定节奏", "fr": "Rythme stable", "en": "Steady pace" }
-      ]
+        {
+          "zh": "文化活动",
+          "fr": "Activites culturelles",
+          "en": "Cultural activities"
+        },
+        {
+          "zh": "城市生活",
+          "fr": "Vie urbaine",
+          "en": "City life"
+        },
+        {
+          "zh": "稳定节奏",
+          "fr": "Rythme stable",
+          "en": "Steady pace"
+        }
+      ],
+      "conversationStarters": [
+        {
+          "zh": "可以从巴黎的生活节奏聊起",
+          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
+          "en": "Ask about life rhythm in Paris"
+        },
+        {
+          "zh": "问问最近一次让 TA 印象深刻的周末",
+          "fr": "Demandez-lui son dernier week-end marquant",
+          "en": "Ask about a recent memorable weekend"
+        },
+        {
+          "zh": "聊聊对稳定关系的具体期待",
+          "fr": "Parlez de ses attentes concretes pour une relation stable",
+          "en": "Ask about concrete expectations for a stable relationship"
+        }
+      ],
+      "dateIdeas": [
+        {
+          "zh": "安静咖啡馆初见",
+          "fr": "Premier cafe au calme",
+          "en": "A quiet cafe first meeting"
+        },
+        {
+          "zh": "周末城市散步",
+          "fr": "Balade urbaine le week-end",
+          "en": "A weekend city walk"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "p-001-prompt-1",
+          "promptCode": "perfect_sunday",
+          "prompt": {
+            "zh": "理想周日",
+            "fr": "Dimanche ideal",
+            "en": "Perfect Sunday"
+          },
+          "answer": {
+            "zh": "上午看展，下午在河边散步，晚上认真做一顿饭。",
+            "fr": "Expo le matin, balade au bord de l eau l apres-midi, vrai diner le soir.",
+            "en": "A morning exhibition, a riverside walk, and a real dinner at home."
+          }
+        },
+        {
+          "id": "p-001-prompt-2",
+          "promptCode": "green_flag",
+          "prompt": {
+            "zh": "让我加分的一点",
+            "fr": "Un vrai green flag",
+            "en": "A green flag for me"
+          },
+          "answer": {
+            "zh": "表达清楚，也愿意把复杂问题讲温柔。",
+            "fr": "Exprimer clairement les choses, avec douceur meme quand c est complexe.",
+            "en": "Clear communication, especially when the topic is delicate."
+          }
+        }
+      ],
+      "compatibilityDimensions": [
+        {
+          "code": "communication",
+          "label": {
+            "zh": "沟通方式",
+            "fr": "Communication",
+            "en": "Communication"
+          },
+          "score": 82
+        },
+        {
+          "code": "lifestyle",
+          "label": {
+            "zh": "生活节奏",
+            "fr": "Rythme de vie",
+            "en": "Lifestyle pace"
+          },
+          "score": 78
+        },
+        {
+          "code": "long_term",
+          "label": {
+            "zh": "长期规划",
+            "fr": "Projection long terme",
+            "en": "Long-term planning"
+          },
+          "score": 85
+        }
+      ],
+      "livingSituation": {
+        "zh": "独居",
+        "fr": "Seule",
+        "en": "Lives alone"
+      },
+      "zodiac": {
+        "zh": "天蝎座",
+        "fr": "Scorpion",
+        "en": "Scorpio"
+      },
+      "phone": "+33 6 12 34 56 78",
+      "email": "aline.m@example.com",
+      "wechat": ""
     },
     {
       "id": "p-002",
       "legalName": "Lin S.",
       "nickname": "Lin",
+      "displayName": "Lin",
       "avatarUrl": "",
+      "photos": [
+        {
+          "id": "p-002-photo-1",
+          "url": "https://picsum.photos/seed/p-002-1/900/1200",
+          "caption": {
+            "zh": "主照片",
+            "fr": "Photo principale",
+            "en": "Primary photo"
+          },
+          "isPrimary": true
+        },
+        {
+          "id": "p-002-photo-2",
+          "url": "https://picsum.photos/seed/p-002-2/900/1200",
+          "caption": {
+            "zh": "生活照片 2",
+            "fr": "Photo de vie 2",
+            "en": "Lifestyle photo 2"
+          },
+          "isPrimary": false
+        },
+        {
+          "id": "p-002-photo-3",
+          "url": "https://picsum.photos/seed/p-002-3/900/1200",
+          "caption": {
+            "zh": "生活照片 3",
+            "fr": "Photo de vie 3",
+            "en": "Lifestyle photo 3"
+          },
+          "isPrimary": false
+        }
+      ],
       "gender": "male",
+      "pronouns": "he/him",
+      "sexuality": "straight",
+      "interestedIn": [
+        "female"
+      ],
       "age": 34,
       "height": 178,
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "中国", "fr": "Chinoise", "en": "Chinese" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "country": {
+        "zh": "法国",
+        "fr": "France",
+        "en": "France"
+      },
+      "nationality": {
+        "zh": "中国",
+        "fr": "Chinoise",
+        "en": "Chinese"
+      },
+      "hometown": {
+        "zh": "上海",
+        "fr": "Shanghai",
+        "en": "Shanghai"
+      },
+      "languages": [
+        "ZH",
+        "FR",
+        "EN"
+      ],
       "profileStatus": "vip",
       "isVerified": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
@@ -66,90 +467,386 @@
       "allowFamilyContact": true,
       "familyPriority": false,
       "degreeLevel": "master",
-      "education": { "zh": "硕士", "fr": "Master", "en": "Master" },
-      "occupation": { "zh": "产品负责人", "fr": "Responsable produit", "en": "Product lead" },
-      "industry": { "zh": "科技", "fr": "Tech", "en": "Technology" },
-      "employer": { "zh": "科技公司", "fr": "Entreprise tech", "en": "Tech company" },
-      "incomeRange": { "zh": "年收入 10-15 万欧", "fr": "100-150k EUR/an", "en": "EUR 100k-150k annual" },
+      "education": {
+        "zh": "硕士",
+        "fr": "Master",
+        "en": "Master"
+      },
+      "occupation": {
+        "zh": "产品负责人",
+        "fr": "Responsable produit",
+        "en": "Product lead"
+      },
+      "industry": {
+        "zh": "科技",
+        "fr": "Tech",
+        "en": "Technology"
+      },
+      "employer": {
+        "zh": "科技公司",
+        "fr": "Entreprise tech",
+        "en": "Tech company"
+      },
+      "incomeRange": {
+        "zh": "年收入 10-15 万欧",
+        "fr": "100-150k EUR/an",
+        "en": "EUR 100k-150k annual"
+      },
       "maritalStatus": "single",
       "hasChildren": false,
       "wantsChildren": true,
       "acceptsLongDistance": true,
       "datingIntentionCode": "marriage",
-      "datingIntentionLabel": { "zh": "婚姻导向", "fr": "Intention mariage", "en": "Marriage-oriented" },
-      "relationshipPlan": { "zh": "明确方向后稳步推进", "fr": "Avancer de facon stable une fois l orientation clarifiee", "en": "Move steadily once long-term direction is clear" },
-      "languages": ["ZH", "FR", "EN"],
+      "datingIntentionLabel": {
+        "zh": "婚姻导向",
+        "fr": "Intention mariage",
+        "en": "Marriage-oriented"
+      },
+      "relationshipPlan": {
+        "zh": "明确方向后稳步推进",
+        "fr": "Avancer de facon stable une fois l orientation clarifiee",
+        "en": "Move steadily once long-term direction is clear"
+      },
+      "residencePlan": {
+        "zh": "巴黎长期发展",
+        "fr": "Projet long terme a Paris",
+        "en": "Long-term plan in Paris"
+      },
+      "relocationWillingness": {
+        "zh": "接受跨城磨合，重视双方节奏可持续",
+        "fr": "Ouvert a une phase interville si le rythme reste durable",
+        "en": "Open to cross-city adjustment if the rhythm is sustainable"
+      },
+      "values": [
+        {
+          "zh": "长期承诺",
+          "fr": "Engagement durable",
+          "en": "Long-term commitment"
+        },
+        {
+          "zh": "现实协作",
+          "fr": "Cooperation concrete",
+          "en": "Practical partnership"
+        }
+      ],
+      "preferredAgeMin": 28,
+      "preferredAgeMax": 40,
+      "locationScope": {
+        "zh": "以巴黎为主，接受成熟的跨城安排",
+        "fr": "Paris comme base, ouvert a une organisation interville mature",
+        "en": "Paris-based, open to a mature cross-city setup"
+      },
+      "preferredEducation": {
+        "zh": "本科及以上，更看重学习能力和沟通方式",
+        "fr": "Licence ou plus, avec attention a la curiosite et a la communication",
+        "en": "Bachelor or above, with more weight on curiosity and communication style"
+      },
+      "familyPlan": {
+        "zh": "希望在稳定关系中自然讨论婚育节奏",
+        "fr": "Souhaite discuter du rythme familial dans une relation stable",
+        "en": "Wants to discuss family plans naturally within a stable relationship"
+      },
+      "dealBreakers": [
+        {
+          "zh": "长期失联",
+          "fr": "Absence prolongee de communication",
+          "en": "Long periods without communication"
+        },
+        {
+          "zh": "关系目标不清晰",
+          "fr": "Objectif relationnel flou",
+          "en": "Unclear relationship goals"
+        }
+      ],
       "smoking": "never",
       "drinking": "social",
-      "exercise": { "zh": "跑步和力量训练", "fr": "Course et renforcement", "en": "Running and strength training" },
-      "residencePlan": { "zh": "巴黎长期发展", "fr": "Projet long terme a Paris", "en": "Long-term plan in Paris" },
-      "summary": { "zh": "重视长期关系中的稳定、透明和行动力。", "fr": "Cherche de la stabilite, de la clarte et de l action dans une relation durable.", "en": "Values stability, clarity, and follow-through in a long-term relationship." },
+      "exercise": {
+        "zh": "跑步和力量训练",
+        "fr": "Course et renforcement",
+        "en": "Running and strength training"
+      },
+      "activityLevel": {
+        "zh": "中高强度运动",
+        "fr": "Activite moderee a soutenue",
+        "en": "Moderate to high activity"
+      },
+      "weekendStyle": {
+        "zh": "喜欢有计划但不过度排满的周末",
+        "fr": "Aime les week-ends organises sans etre surcharges",
+        "en": "Likes planned but not overpacked weekends"
+      },
+      "pets": {
+        "zh": "喜欢狗，接受未来一起养",
+        "fr": "Aime les chiens, ouvert a en adopter plus tard",
+        "en": "Likes dogs and is open to having one later"
+      },
+      "religion": {
+        "zh": "无宗教信仰",
+        "fr": "Sans religion",
+        "en": "Non-religious"
+      },
+      "politicalViews": {
+        "zh": "务实温和",
+        "fr": "Pragmatique et modere",
+        "en": "Pragmatic and moderate"
+      },
+      "personalityTraits": [
+        {
+          "zh": "目标清晰",
+          "fr": "Objectifs clairs",
+          "en": "Clear goals"
+        },
+        {
+          "zh": "执行力强",
+          "fr": "Fort sens de l execution",
+          "en": "Strong follow-through"
+        },
+        {
+          "zh": "情绪稳定",
+          "fr": "Stable emotionnellement",
+          "en": "Emotionally steady"
+        }
+      ],
+      "interests": [
+        {
+          "zh": "骑行",
+          "fr": "Velo",
+          "en": "Cycling"
+        },
+        {
+          "zh": "产品播客",
+          "fr": "Podcasts produit",
+          "en": "Product podcasts"
+        },
+        {
+          "zh": "周末做饭",
+          "fr": "Cuisine le week-end",
+          "en": "Weekend cooking"
+        }
+      ],
+      "communicationStyle": {
+        "zh": "偏好直接、及时、尊重边界的沟通",
+        "fr": "Prefere une communication directe, reguliere et respectueuse",
+        "en": "Prefers direct, timely, respectful communication"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "summary": {
+        "zh": "重视长期关系中的稳定、透明和行动力。",
+        "fr": "Cherche de la stabilite, de la clarte et de l action dans une relation durable.",
+        "en": "Values stability, clarity, and follow-through in a long-term relationship."
+      },
       "highlights": [
-        { "zh": "适应法中双文化沟通", "fr": "A l aise entre cultures francaise et chinoise", "en": "Comfortable across French and Chinese cultural contexts" },
-        { "zh": "愿意在真实节奏里推进关系", "fr": "Souhaite faire avancer la relation dans un rythme reel", "en": "Wants to move a relationship forward at a real-life pace" }
+        {
+          "zh": "适应法中双文化沟通",
+          "fr": "A l aise entre cultures francaise et chinoise",
+          "en": "Comfortable across French and Chinese cultural contexts"
+        },
+        {
+          "zh": "愿意在真实节奏里推进关系",
+          "fr": "Souhaite faire avancer la relation dans un rythme reel",
+          "en": "Wants to move a relationship forward at a real-life pace"
+        }
       ],
       "tags": [
-        { "zh": "长期关系", "fr": "Long terme", "en": "Long-term" },
-        { "zh": "顾问协同", "fr": "Coordination conseiller", "en": "Advisor-supported" },
-        { "zh": "跨文化", "fr": "Interculturel", "en": "Cross-cultural" }
-      ]
-    },
-    {
-      "id": "p-005",
-      "legalName": "Claire D.",
-      "nickname": "Claire",
-      "avatarUrl": "",
-      "gender": "female",
-      "age": 29,
-      "height": 165,
-      "city": { "zh": "布鲁塞尔", "fr": "Bruxelles", "en": "Brussels" },
-      "country": { "zh": "比利时", "fr": "Belgique", "en": "Belgium" },
-      "nationality": { "zh": "比利时", "fr": "Belge", "en": "Belgian" },
-      "profileStatus": "open",
-      "isVerified": false,
-      "lastActiveAt": "2026-04-18T12:00:00Z",
-      "joinedAt": "2026-02-06",
-      "familyVisible": false,
-      "allowFamilyContact": false,
-      "familyPriority": false,
-      "degreeLevel": "bachelor",
-      "education": { "zh": "本科", "fr": "Licence", "en": "Bachelor" },
-      "occupation": { "zh": "策展助理", "fr": "Assistante de curation", "en": "Curatorial assistant" },
-      "industry": { "zh": "艺术文化", "fr": "Arts et culture", "en": "Arts and culture" },
-      "employer": { "zh": "文化机构", "fr": "Institution culturelle", "en": "Cultural institution" },
-      "incomeRange": { "zh": "年收入 4-6 万欧", "fr": "40-60k EUR/an", "en": "EUR 40k-60k annual" },
-      "maritalStatus": "single",
-      "hasChildren": false,
-      "wantsChildren": true,
-      "acceptsLongDistance": false,
-      "datingIntentionCode": "serious",
-      "datingIntentionLabel": { "zh": "认真发展", "fr": "Relation serieuse", "en": "Serious relationship" },
-      "relationshipPlan": { "zh": "先看价值观和生活感", "fr": "D abord verifier les valeurs et le mode de vie", "en": "Start by testing values and everyday compatibility" },
-      "languages": ["FR", "EN", "NL"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "博物馆步行和普拉提", "fr": "Marche musee et pilates", "en": "Museum walks and pilates" },
-      "residencePlan": { "zh": "布鲁塞尔为主", "fr": "Principalement Bruxelles", "en": "Primarily Brussels" },
-      "summary": { "zh": "喜欢通过文化活动建立真实连接。", "fr": "Prefere creer du lien reel via des activites culturelles.", "en": "Prefers building real connection through cultural activities." },
-      "highlights": [
-        { "zh": "更适合轻量线下活动起步", "fr": "A l aise dans des formats de rencontre plus legers", "en": "A good fit for lighter in-person formats" }
+        {
+          "zh": "长期关系",
+          "fr": "Long terme",
+          "en": "Long-term"
+        },
+        {
+          "zh": "顾问协同",
+          "fr": "Coordination conseiller",
+          "en": "Advisor-supported"
+        },
+        {
+          "zh": "跨文化",
+          "fr": "Interculturel",
+          "en": "Cross-cultural"
+        }
       ],
-      "tags": [
-        { "zh": "文化散步", "fr": "Balade culturelle", "en": "Culture walk" },
-        { "zh": "轻量节奏", "fr": "Rythme leger", "en": "Light pace" }
-      ]
+      "conversationStarters": [
+        {
+          "zh": "可以从巴黎的生活节奏聊起",
+          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
+          "en": "Ask about life rhythm in Paris"
+        },
+        {
+          "zh": "问问最近一次让 TA 印象深刻的周末",
+          "fr": "Demandez-lui son dernier week-end marquant",
+          "en": "Ask about a recent memorable weekend"
+        },
+        {
+          "zh": "聊聊对稳定关系的具体期待",
+          "fr": "Parlez de ses attentes concretes pour une relation stable",
+          "en": "Ask about concrete expectations for a stable relationship"
+        }
+      ],
+      "dateIdeas": [
+        {
+          "zh": "安静咖啡馆初见",
+          "fr": "Premier cafe au calme",
+          "en": "A quiet cafe first meeting"
+        },
+        {
+          "zh": "周末城市散步",
+          "fr": "Balade urbaine le week-end",
+          "en": "A weekend city walk"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "p-002-prompt-1",
+          "promptCode": "dating_goal",
+          "prompt": {
+            "zh": "我认真对待关系的方式",
+            "fr": "Ma facon de prendre la relation au serieux",
+            "en": "How I take relationships seriously"
+          },
+          "answer": {
+            "zh": "先把节奏、边界和长期计划说清楚，再稳定推进。",
+            "fr": "Clarifier le rythme, les limites et le long terme avant d avancer.",
+            "en": "Clarify pace, boundaries, and long-term plans before moving steadily."
+          }
+        },
+        {
+          "id": "p-002-prompt-2",
+          "promptCode": "weekend_plan",
+          "prompt": {
+            "zh": "周末通常会做什么",
+            "fr": "Mon week-end type",
+            "en": "My usual weekend"
+          },
+          "answer": {
+            "zh": "骑行、做饭、整理下周计划，偶尔短途旅行。",
+            "fr": "Velo, cuisine, preparation de la semaine, parfois une escapade.",
+            "en": "Cycling, cooking, planning the week, sometimes a short trip."
+          }
+        }
+      ],
+      "compatibilityDimensions": [
+        {
+          "code": "communication",
+          "label": {
+            "zh": "沟通方式",
+            "fr": "Communication",
+            "en": "Communication"
+          },
+          "score": 85
+        },
+        {
+          "code": "lifestyle",
+          "label": {
+            "zh": "生活节奏",
+            "fr": "Rythme de vie",
+            "en": "Lifestyle pace"
+          },
+          "score": 81
+        },
+        {
+          "code": "long_term",
+          "label": {
+            "zh": "长期规划",
+            "fr": "Projection long terme",
+            "en": "Long-term planning"
+          },
+          "score": 88
+        }
+      ],
+      "livingSituation": {
+        "zh": "与宠物同住",
+        "fr": "Avec animaux",
+        "en": "With pets"
+      },
+      "zodiac": {
+        "zh": "处女座",
+        "fr": "Vierge",
+        "en": "Virgo"
+      },
+      "phone": "+33 6 98 76 54 32",
+      "email": "loic.d@example.com",
+      "wechat": "loic_dubois"
     },
     {
       "id": "p-006",
       "legalName": "Sophie L.",
       "nickname": "Sophie",
+      "displayName": "Sophie",
       "avatarUrl": "",
+      "photos": [
+        {
+          "id": "p-006-photo-1",
+          "url": "https://picsum.photos/seed/p-006-1/900/1200",
+          "caption": {
+            "zh": "主照片",
+            "fr": "Photo principale",
+            "en": "Primary photo"
+          },
+          "isPrimary": true
+        },
+        {
+          "id": "p-006-photo-2",
+          "url": "https://picsum.photos/seed/p-006-2/900/1200",
+          "caption": {
+            "zh": "生活照片 2",
+            "fr": "Photo de vie 2",
+            "en": "Lifestyle photo 2"
+          },
+          "isPrimary": false
+        },
+        {
+          "id": "p-006-photo-3",
+          "url": "https://picsum.photos/seed/p-006-3/900/1200",
+          "caption": {
+            "zh": "生活照片 3",
+            "fr": "Photo de vie 3",
+            "en": "Lifestyle photo 3"
+          },
+          "isPrimary": false
+        }
+      ],
       "gender": "female",
+      "pronouns": "she/her",
+      "sexuality": "straight",
+      "interestedIn": [
+        "male"
+      ],
       "age": 36,
       "height": 170,
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francaise", "en": "French" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "country": {
+        "zh": "法国",
+        "fr": "France",
+        "en": "France"
+      },
+      "nationality": {
+        "zh": "法国",
+        "fr": "Francaise",
+        "en": "French"
+      },
+      "hometown": {
+        "zh": "杭州",
+        "fr": "Hangzhou",
+        "en": "Hangzhou"
+      },
+      "languages": [
+        "FR",
+        "EN"
+      ],
       "profileStatus": "review",
       "isVerified": true,
       "lastActiveAt": "2026-04-21T20:30:00Z",
@@ -158,231 +855,382 @@
       "allowFamilyContact": true,
       "familyPriority": true,
       "degreeLevel": "phd",
-      "education": { "zh": "博士", "fr": "Doctorat", "en": "PhD" },
-      "occupation": { "zh": "公共政策研究员", "fr": "Chercheuse en politiques publiques", "en": "Public policy researcher" },
-      "industry": { "zh": "公共事务", "fr": "Affaires publiques", "en": "Public affairs" },
-      "employer": { "zh": "研究机构", "fr": "Institut de recherche", "en": "Research institute" },
-      "incomeRange": { "zh": "年收入 7-10 万欧", "fr": "70-100k EUR/an", "en": "EUR 70k-100k annual" },
+      "education": {
+        "zh": "博士",
+        "fr": "Doctorat",
+        "en": "PhD"
+      },
+      "occupation": {
+        "zh": "公共政策研究员",
+        "fr": "Chercheuse en politiques publiques",
+        "en": "Public policy researcher"
+      },
+      "industry": {
+        "zh": "公共事务",
+        "fr": "Affaires publiques",
+        "en": "Public affairs"
+      },
+      "employer": {
+        "zh": "研究机构",
+        "fr": "Institut de recherche",
+        "en": "Research institute"
+      },
+      "incomeRange": {
+        "zh": "年收入 7-10 万欧",
+        "fr": "70-100k EUR/an",
+        "en": "EUR 70k-100k annual"
+      },
       "maritalStatus": "divorced",
       "hasChildren": true,
       "wantsChildren": false,
       "acceptsLongDistance": true,
       "datingIntentionCode": "exclusive",
-      "datingIntentionLabel": { "zh": "排他交往", "fr": "Relation exclusive", "en": "Exclusive dating" },
-      "relationshipPlan": { "zh": "先确认家庭节奏与城市安排", "fr": "Verifier d abord le rythme familial et la logistique des villes", "en": "First confirm family rhythm and city logistics" },
-      "languages": ["FR", "EN"],
+      "datingIntentionLabel": {
+        "zh": "排他交往",
+        "fr": "Relation exclusive",
+        "en": "Exclusive dating"
+      },
+      "relationshipPlan": {
+        "zh": "先确认家庭节奏与城市安排",
+        "fr": "Verifier d abord le rythme familial et la logistique des villes",
+        "en": "First confirm family rhythm and city logistics"
+      },
+      "residencePlan": {
+        "zh": "巴黎为主，也可双城",
+        "fr": "Paris prioritaire, possible double ville",
+        "en": "Paris first, open to a two-city setup"
+      },
+      "relocationWillingness": {
+        "zh": "接受跨城磨合，重视双方节奏可持续",
+        "fr": "Ouvert a une phase interville si le rythme reste durable",
+        "en": "Open to cross-city adjustment if the rhythm is sustainable"
+      },
+      "values": [
+        {
+          "zh": "尊重边界",
+          "fr": "Respect des limites",
+          "en": "Respecting boundaries"
+        },
+        {
+          "zh": "稳定沟通",
+          "fr": "Communication stable",
+          "en": "Steady communication"
+        }
+      ],
+      "preferredAgeMin": 28,
+      "preferredAgeMax": 40,
+      "locationScope": {
+        "zh": "以巴黎为主，接受成熟的跨城安排",
+        "fr": "Paris comme base, ouvert a une organisation interville mature",
+        "en": "Paris-based, open to a mature cross-city setup"
+      },
+      "preferredEducation": {
+        "zh": "本科及以上，更看重学习能力和沟通方式",
+        "fr": "Licence ou plus, avec attention a la curiosite et a la communication",
+        "en": "Bachelor or above, with more weight on curiosity and communication style"
+      },
+      "familyPlan": {
+        "zh": "希望在稳定关系中自然讨论婚育节奏",
+        "fr": "Souhaite discuter du rythme familial dans une relation stable",
+        "en": "Wants to discuss family plans naturally within a stable relationship"
+      },
+      "dealBreakers": [
+        {
+          "zh": "长期失联",
+          "fr": "Absence prolongee de communication",
+          "en": "Long periods without communication"
+        },
+        {
+          "zh": "关系目标不清晰",
+          "fr": "Objectif relationnel flou",
+          "en": "Unclear relationship goals"
+        }
+      ],
       "smoking": "never",
       "drinking": "social",
-      "exercise": { "zh": "步行和网球", "fr": "Marche et tennis", "en": "Walking and tennis" },
-      "residencePlan": { "zh": "巴黎为主，也可双城", "fr": "Paris prioritaire, possible double ville", "en": "Paris first, open to a two-city setup" },
-      "summary": { "zh": "希望在成熟、清晰和尊重边界的前提下推进关系。", "fr": "Souhaite avancer dans un cadre mature, clair et respectueux des limites.", "en": "Wants to move forward in a mature, clear, and boundary-respecting way." },
+      "exercise": {
+        "zh": "步行和网球",
+        "fr": "Marche et tennis",
+        "en": "Walking and tennis"
+      },
+      "activityLevel": {
+        "zh": "轻运动",
+        "fr": "Activite douce",
+        "en": "Light activity"
+      },
+      "weekendStyle": {
+        "zh": "喜欢有计划但不过度排满的周末",
+        "fr": "Aime les week-ends organises sans etre surcharges",
+        "en": "Likes planned but not overpacked weekends"
+      },
+      "pets": {
+        "zh": "不排斥宠物，重视家里整洁",
+        "fr": "Ouverte aux animaux, tient a un interieur soigne",
+        "en": "Open to pets, values a tidy home"
+      },
+      "religion": {
+        "zh": "尊重不同信仰",
+        "fr": "Respecte les croyances differentes",
+        "en": "Respects different beliefs"
+      },
+      "politicalViews": {
+        "zh": "关注教育与公共议题",
+        "fr": "Attentive a l education et aux sujets publics",
+        "en": "Cares about education and public issues"
+      },
+      "personalityTraits": [
+        {
+          "zh": "温和直接",
+          "fr": "Douce et directe",
+          "en": "Warm and direct"
+        },
+        {
+          "zh": "生活有秩序",
+          "fr": "Vie bien organisee",
+          "en": "Well organized"
+        },
+        {
+          "zh": "重视真实相处",
+          "fr": "Valorise l authenticite",
+          "en": "Values authenticity"
+        }
+      ],
+      "interests": [
+        {
+          "zh": "阅读",
+          "fr": "Lecture",
+          "en": "Reading"
+        },
+        {
+          "zh": "散步",
+          "fr": "Balades",
+          "en": "Walks"
+        },
+        {
+          "zh": "周末探店",
+          "fr": "Decouvertes le week-end",
+          "en": "Weekend discoveries"
+        }
+      ],
+      "communicationStyle": {
+        "zh": "偏好直接、及时、尊重边界的沟通",
+        "fr": "Prefere une communication directe, reguliere et respectueuse",
+        "en": "Prefers direct, timely, respectful communication"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "summary": {
+        "zh": "希望在成熟、清晰和尊重边界的前提下推进关系。",
+        "fr": "Souhaite avancer dans un cadre mature, clair et respectueux des limites.",
+        "en": "Wants to move forward in a mature, clear, and boundary-respecting way."
+      },
       "highlights": [
-        { "zh": "适合顾问协同和家庭有限辅助场景", "fr": "Compatible avec un cadre conseiller et un appui familial limite", "en": "A fit for advisor-supported and limited family-assisted flow" }
+        {
+          "zh": "适合顾问协同和家庭有限辅助场景",
+          "fr": "Compatible avec un cadre conseiller et un appui familial limite",
+          "en": "A fit for advisor-supported and limited family-assisted flow"
+        }
       ],
       "tags": [
-        { "zh": "家庭节奏", "fr": "Rythme familial", "en": "Family rhythm" },
-        { "zh": "双城安排", "fr": "Deux villes", "en": "Two-city setup" },
-        { "zh": "成熟沟通", "fr": "Communication mature", "en": "Mature communication" }
-      ]
-    },
-    {
-      "id": "p-003",
-      "legalName": "Theo R.",
-      "nickname": "Theo",
-      "avatarUrl": "",
-      "gender": "male",
-      "age": 32,
-      "height": 176,
-      "city": { "zh": "里昂", "fr": "Lyon", "en": "Lyon" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francais", "en": "French" },
-      "profileStatus": "open",
-      "isVerified": true,
-      "lastActiveAt": "2026-04-23T08:40:00Z",
-      "joinedAt": "2026-02-11",
-      "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": false,
-      "degreeLevel": "master",
-      "education": { "zh": "硕士", "fr": "Master", "en": "Master" },
-      "occupation": { "zh": "数据科学家", "fr": "Data scientist", "en": "Data scientist" },
-      "industry": { "zh": "科技", "fr": "Tech", "en": "Technology" },
-      "employer": { "zh": "AI 创业公司", "fr": "Startup IA", "en": "AI startup" },
-      "incomeRange": { "zh": "年收入 7-11 万欧", "fr": "70-110k EUR/an", "en": "EUR 70k-110k annual" },
-      "maritalStatus": "single",
-      "hasChildren": false,
-      "wantsChildren": true,
-      "acceptsLongDistance": true,
-      "datingIntentionCode": "serious",
-      "datingIntentionLabel": { "zh": "认真发展", "fr": "Relation serieuse", "en": "Serious relationship" },
-      "relationshipPlan": { "zh": "先建立稳定节奏，再讨论长期安排", "fr": "Construire un rythme stable puis discuter du long terme", "en": "Build a stable rhythm first, then discuss long-term plans" },
-      "languages": ["FR", "EN"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "跑步和羽毛球", "fr": "Course et badminton", "en": "Running and badminton" },
-      "residencePlan": { "zh": "里昂优先，也接受巴黎双城", "fr": "Lyon en priorite, ouvert a un schema Lyon-Paris", "en": "Lyon first, open to a Lyon-Paris setup" },
-      "summary": { "zh": "偏好真实接触后的稳步推进，不追求快节奏匹配。", "fr": "Prefere avancer apres des rencontres reelles, sans rythme precipite.", "en": "Prefers steady progress after real meetings, not fast-paced matching." },
-      "highlights": [
-        { "zh": "沟通直接，重视时间投入的确定性", "fr": "Communication directe avec attention a la fiabilite", "en": "Direct communicator who values reliability" },
-        { "zh": "愿意在跨城市条件下协同安排", "fr": "Ouvert a coordonner un rythme entre deux villes", "en": "Open to coordinating a two-city rhythm" }
+        {
+          "zh": "家庭节奏",
+          "fr": "Rythme familial",
+          "en": "Family rhythm"
+        },
+        {
+          "zh": "双城安排",
+          "fr": "Deux villes",
+          "en": "Two-city setup"
+        },
+        {
+          "zh": "成熟沟通",
+          "fr": "Communication mature",
+          "en": "Mature communication"
+        }
       ],
-      "tags": [
-        { "zh": "理性沟通", "fr": "Communication claire", "en": "Clear communication" },
-        { "zh": "长期节奏", "fr": "Rythme long terme", "en": "Long-term pace" },
-        { "zh": "线下优先", "fr": "Priorite au reel", "en": "In-person first" }
-      ]
-    },
-    {
-      "id": "p-004",
-      "legalName": "Camille V.",
-      "nickname": "Camille",
-      "avatarUrl": "",
-      "gender": "female",
-      "age": 30,
-      "height": 167,
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francaise", "en": "French" },
-      "profileStatus": "vip",
-      "isVerified": true,
-      "lastActiveAt": "2026-04-24T19:20:00Z",
-      "joinedAt": "2026-02-20",
-      "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": true,
-      "degreeLevel": "bachelor",
-      "education": { "zh": "本科", "fr": "Licence", "en": "Bachelor" },
-      "occupation": { "zh": "室内建筑师", "fr": "Architecte d interieur", "en": "Interior architect" },
-      "industry": { "zh": "设计", "fr": "Design", "en": "Design" },
-      "employer": { "zh": "设计工作室", "fr": "Atelier de design", "en": "Design studio" },
-      "incomeRange": { "zh": "年收入 9-13 万欧", "fr": "90-130k EUR/an", "en": "EUR 90k-130k annual" },
-      "maritalStatus": "single",
-      "hasChildren": false,
-      "wantsChildren": true,
-      "acceptsLongDistance": true,
-      "datingIntentionCode": "marriage",
-      "datingIntentionLabel": { "zh": "婚姻导向", "fr": "Intention mariage", "en": "Marriage-oriented" },
-      "relationshipPlan": { "zh": "希望在一年内确认长期关系方向", "fr": "Souhaite confirmer l orientation relationnelle sous un an", "en": "Wants to confirm long-term direction within a year" },
-      "languages": ["FR", "EN", "ZH"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "普拉提和周末徒步", "fr": "Pilates et randonnee le week-end", "en": "Pilates and weekend hiking" },
-      "residencePlan": { "zh": "巴黎长期居住，可接受短期跨城", "fr": "Vie long terme a Paris, ouverte a des allers-retours ponctuels", "en": "Long-term in Paris, open to occasional cross-city arrangements" },
-      "summary": { "zh": "看重审美一致、生活习惯和责任感。", "fr": "Attachee a l harmonie du mode de vie et au sens des responsabilites.", "en": "Values aligned lifestyle, aesthetics, and responsibility." },
-      "highlights": [
-        { "zh": "资料完整，家庭协作意愿明确", "fr": "Profil complet avec cadre familial clair", "en": "Complete profile with clear family-collaboration stance" },
-        { "zh": "时间安排稳定，能配合线下节奏", "fr": "Disponibilite stable pour des rencontres reelles", "en": "Stable schedule for in-person rhythm" }
+      "conversationStarters": [
+        {
+          "zh": "可以从巴黎的生活节奏聊起",
+          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
+          "en": "Ask about life rhythm in Paris"
+        },
+        {
+          "zh": "问问最近一次让 TA 印象深刻的周末",
+          "fr": "Demandez-lui son dernier week-end marquant",
+          "en": "Ask about a recent memorable weekend"
+        },
+        {
+          "zh": "聊聊对稳定关系的具体期待",
+          "fr": "Parlez de ses attentes concretes pour une relation stable",
+          "en": "Ask about concrete expectations for a stable relationship"
+        }
       ],
-      "tags": [
-        { "zh": "婚姻导向", "fr": "Orientation mariage", "en": "Marriage-oriented" },
-        { "zh": "家庭协作", "fr": "Coordination familiale", "en": "Family coordination" },
-        { "zh": "城市生活", "fr": "Vie urbaine", "en": "City life" }
-      ]
-    },
-    {
-      "id": "p-007",
-      "legalName": "Nicolas B.",
-      "nickname": "Nico",
-      "avatarUrl": "",
-      "gender": "male",
-      "age": 38,
-      "height": 182,
-      "city": { "zh": "布鲁塞尔", "fr": "Bruxelles", "en": "Brussels" },
-      "country": { "zh": "比利时", "fr": "Belgique", "en": "Belgium" },
-      "nationality": { "zh": "比利时", "fr": "Belge", "en": "Belgian" },
-      "profileStatus": "review",
-      "isVerified": false,
-      "lastActiveAt": "2026-04-17T11:25:00Z",
-      "joinedAt": "2026-01-30",
-      "familyVisible": true,
-      "allowFamilyContact": false,
-      "familyPriority": false,
-      "degreeLevel": "phd",
-      "education": { "zh": "博士", "fr": "Doctorat", "en": "PhD" },
-      "occupation": { "zh": "法律顾问", "fr": "Conseiller juridique", "en": "Legal consultant" },
-      "industry": { "zh": "合规", "fr": "Conformite", "en": "Compliance" },
-      "employer": { "zh": "咨询公司", "fr": "Cabinet de conseil", "en": "Consulting firm" },
-      "incomeRange": { "zh": "年收入 8.5-12 万欧", "fr": "85-120k EUR/an", "en": "EUR 85k-120k annual" },
-      "maritalStatus": "divorced",
-      "hasChildren": true,
-      "wantsChildren": false,
-      "acceptsLongDistance": false,
-      "datingIntentionCode": "exclusive",
-      "datingIntentionLabel": { "zh": "排他交往", "fr": "Relation exclusive", "en": "Exclusive dating" },
-      "relationshipPlan": { "zh": "先明确家庭边界，再讨论后续推进", "fr": "Clarifier d abord les limites familiales avant la suite", "en": "Clarify family boundaries first, then discuss next steps" },
-      "languages": ["FR", "EN", "NL"],
-      "smoking": "social",
-      "drinking": "often",
-      "exercise": { "zh": "游泳和骑行", "fr": "Natation et velo", "en": "Swimming and cycling" },
-      "residencePlan": { "zh": "布鲁塞尔为主，不考虑长期异地", "fr": "Bruxelles en base, pas de projet longue distance", "en": "Brussels-based, not considering long-distance plans" },
-      "summary": { "zh": "更适合边界清晰、节奏稳健的关系推进。", "fr": "Plus a l aise avec un cadre clair et un rythme maitrise.", "en": "Best in a clear-boundary, steady-paced relationship flow." },
-      "highlights": [
-        { "zh": "愿意在前期把关键条件讲清楚", "fr": "Prefere clarifier les points importants des le debut", "en": "Prefers to clarify critical points early" },
-        { "zh": "重视家庭角色边界和实际执行", "fr": "Accorde de l importance aux limites et a l execution", "en": "Values family-role boundaries and execution" }
+      "dateIdeas": [
+        {
+          "zh": "安静咖啡馆初见",
+          "fr": "Premier cafe au calme",
+          "en": "A quiet cafe first meeting"
+        },
+        {
+          "zh": "周末城市散步",
+          "fr": "Balade urbaine le week-end",
+          "en": "A weekend city walk"
+        }
       ],
-      "tags": [
-        { "zh": "边界清晰", "fr": "Cadre clair", "en": "Clear boundaries" },
-        { "zh": "务实推进", "fr": "Progression pragmatique", "en": "Pragmatic progression" },
-        { "zh": "布鲁塞尔", "fr": "Bruxelles", "en": "Brussels" }
-      ]
-    },
-    {
-      "id": "p-008",
-      "legalName": "Elise T.",
-      "nickname": "Elise",
-      "avatarUrl": "",
-      "gender": "female",
-      "age": 27,
-      "height": 163,
-      "city": { "zh": "里昂", "fr": "Lyon", "en": "Lyon" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francaise", "en": "French" },
-      "profileStatus": "open",
-      "isVerified": false,
-      "lastActiveAt": "2026-04-19T16:10:00Z",
-      "joinedAt": "2026-03-10",
-      "familyVisible": false,
-      "allowFamilyContact": false,
-      "familyPriority": false,
-      "degreeLevel": "bachelor",
-      "education": { "zh": "本科", "fr": "Licence", "en": "Bachelor" },
-      "occupation": { "zh": "市场协调", "fr": "Coordinatrice marketing", "en": "Marketing coordinator" },
-      "industry": { "zh": "消费品", "fr": "Biens de consommation", "en": "Consumer goods" },
-      "employer": { "zh": "初创工作室", "fr": "Studio startup", "en": "Startup studio" },
-      "incomeRange": { "zh": "年收入 4.5-6.5 万欧", "fr": "45-65k EUR/an", "en": "EUR 45k-65k annual" },
-      "maritalStatus": "single",
-      "hasChildren": false,
-      "wantsChildren": true,
-      "acceptsLongDistance": true,
-      "datingIntentionCode": "serious",
-      "datingIntentionLabel": { "zh": "认真发展", "fr": "Relation serieuse", "en": "Serious relationship" },
-      "relationshipPlan": { "zh": "先从稳定互动开始，再看是否升级关系", "fr": "Commencer par une interaction stable puis evaluer la suite", "en": "Start with stable interaction, then evaluate progression" },
-      "languages": ["FR", "EN"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "舞蹈和瑜伽", "fr": "Danse et yoga", "en": "Dance and yoga" },
-      "residencePlan": { "zh": "里昂为主，未来可向巴黎流动", "fr": "Base a Lyon, potentiellement mobile vers Paris", "en": "Lyon-based, potentially mobile toward Paris" },
-      "summary": { "zh": "偏好轻压力、可持续的认识过程。", "fr": "Prefere un processus de rencontre sans pression et durable.", "en": "Prefers a low-pressure and sustainable getting-to-know process." },
-      "highlights": [
-        { "zh": "适合从活动和线下交流切入", "fr": "A l aise avec un demarrage via activites en presentiel", "en": "A good fit for starting through events and in-person exchange" }
+      "prompts": [
+        {
+          "id": "p-006-prompt-1",
+          "promptCode": "family_values",
+          "prompt": {
+            "zh": "我理解的家庭",
+            "fr": "Ma vision de la famille",
+            "en": "My view of family"
+          },
+          "answer": {
+            "zh": "互相照顾，也互相留出空间。",
+            "fr": "Prendre soin l un de l autre tout en gardant de l espace.",
+            "en": "Care for each other while leaving room to breathe."
+          }
+        },
+        {
+          "id": "p-006-prompt-2",
+          "promptCode": "conversation",
+          "prompt": {
+            "zh": "适合开启的话题",
+            "fr": "Un bon sujet pour commencer",
+            "en": "A good conversation starter"
+          },
+          "answer": {
+            "zh": "聊聊教育、城市生活，或者最近读到的一本书。",
+            "fr": "Parler education, vie urbaine ou d un livre recent.",
+            "en": "Education, city life, or a recent book."
+          }
+        }
       ],
-      "tags": [
-        { "zh": "轻量节奏", "fr": "Rythme leger", "en": "Light pace" },
-        { "zh": "活动友好", "fr": "Format activite", "en": "Event-friendly" },
-        { "zh": "里昂生活", "fr": "Vie a Lyon", "en": "Lyon living" }
-      ]
+      "compatibilityDimensions": [
+        {
+          "code": "communication",
+          "label": {
+            "zh": "沟通方式",
+            "fr": "Communication",
+            "en": "Communication"
+          },
+          "score": 88
+        },
+        {
+          "code": "lifestyle",
+          "label": {
+            "zh": "生活节奏",
+            "fr": "Rythme de vie",
+            "en": "Lifestyle pace"
+          },
+          "score": 84
+        },
+        {
+          "code": "long_term",
+          "label": {
+            "zh": "长期规划",
+            "fr": "Projection long terme",
+            "en": "Long-term planning"
+          },
+          "score": 91
+        }
+      ],
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "zodiac": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "phone": "",
+      "email": "",
+      "wechat": ""
     },
     {
       "id": "p-009",
       "legalName": "Martin K.",
       "nickname": "Martin",
+      "displayName": "Martin",
       "avatarUrl": "",
+      "photos": [
+        {
+          "id": "p-009-photo-1",
+          "url": "https://picsum.photos/seed/p-009-1/900/1200",
+          "caption": {
+            "zh": "主照片",
+            "fr": "Photo principale",
+            "en": "Primary photo"
+          },
+          "isPrimary": true
+        },
+        {
+          "id": "p-009-photo-2",
+          "url": "https://picsum.photos/seed/p-009-2/900/1200",
+          "caption": {
+            "zh": "生活照片 2",
+            "fr": "Photo de vie 2",
+            "en": "Lifestyle photo 2"
+          },
+          "isPrimary": false
+        },
+        {
+          "id": "p-009-photo-3",
+          "url": "https://picsum.photos/seed/p-009-3/900/1200",
+          "caption": {
+            "zh": "生活照片 3",
+            "fr": "Photo de vie 3",
+            "en": "Lifestyle photo 3"
+          },
+          "isPrimary": false
+        }
+      ],
       "gender": "male",
+      "pronouns": "he/him",
+      "sexuality": "straight",
+      "interestedIn": [
+        "female"
+      ],
       "age": 35,
       "height": 174,
-      "city": { "zh": "日内瓦", "fr": "Geneve", "en": "Geneva" },
-      "country": { "zh": "瑞士", "fr": "Suisse", "en": "Switzerland" },
-      "nationality": { "zh": "瑞士", "fr": "Suisse", "en": "Swiss" },
+      "city": {
+        "zh": "日内瓦",
+        "fr": "Geneve",
+        "en": "Geneva"
+      },
+      "country": {
+        "zh": "瑞士",
+        "fr": "Suisse",
+        "en": "Switzerland"
+      },
+      "nationality": {
+        "zh": "瑞士",
+        "fr": "Suisse",
+        "en": "Swiss"
+      },
+      "hometown": {
+        "zh": "日内瓦",
+        "fr": "Geneve",
+        "en": "Geneva"
+      },
+      "languages": [
+        "FR",
+        "EN",
+        "DE"
+      ],
       "profileStatus": "vip",
       "isVerified": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
@@ -391,45 +1239,387 @@
       "allowFamilyContact": true,
       "familyPriority": false,
       "degreeLevel": "master",
-      "education": { "zh": "硕士", "fr": "Master", "en": "Master" },
-      "occupation": { "zh": "投融资经理", "fr": "Manager financement", "en": "Finance manager" },
-      "industry": { "zh": "金融", "fr": "Finance", "en": "Finance" },
-      "employer": { "zh": "私人银行", "fr": "Banque privee", "en": "Private bank" },
-      "incomeRange": { "zh": "年收入 12-18 万欧", "fr": "120-180k EUR/an", "en": "EUR 120k-180k annual" },
+      "education": {
+        "zh": "硕士",
+        "fr": "Master",
+        "en": "Master"
+      },
+      "occupation": {
+        "zh": "投融资经理",
+        "fr": "Manager financement",
+        "en": "Finance manager"
+      },
+      "industry": {
+        "zh": "金融",
+        "fr": "Finance",
+        "en": "Finance"
+      },
+      "employer": {
+        "zh": "私人银行",
+        "fr": "Banque privee",
+        "en": "Private bank"
+      },
+      "incomeRange": {
+        "zh": "年收入 12-18 万欧",
+        "fr": "120-180k EUR/an",
+        "en": "EUR 120k-180k annual"
+      },
       "maritalStatus": "single",
       "hasChildren": false,
       "wantsChildren": true,
       "acceptsLongDistance": true,
       "datingIntentionCode": "cross_border",
-      "datingIntentionLabel": { "zh": "跨境发展", "fr": "Relation transfrontaliere", "en": "Cross-border relationship" },
-      "relationshipPlan": { "zh": "接受跨境安排，优先确定共同城市策略", "fr": "Ouvert au transfrontalier avec strategie de ville commune", "en": "Open to cross-border setup with a shared city strategy" },
-      "languages": ["FR", "EN", "DE"],
+      "datingIntentionLabel": {
+        "zh": "跨境发展",
+        "fr": "Relation transfrontaliere",
+        "en": "Cross-border relationship"
+      },
+      "relationshipPlan": {
+        "zh": "接受跨境安排，优先确定共同城市策略",
+        "fr": "Ouvert au transfrontalier avec strategie de ville commune",
+        "en": "Open to cross-border setup with a shared city strategy"
+      },
+      "residencePlan": {
+        "zh": "日内瓦为主，接受巴黎双城",
+        "fr": "Geneve en base, possible schema Geneve-Paris",
+        "en": "Geneva-based, open to Geneva-Paris setup"
+      },
+      "relocationWillingness": {
+        "zh": "接受跨城磨合，重视双方节奏可持续",
+        "fr": "Ouvert a une phase interville si le rythme reste durable",
+        "en": "Open to cross-city adjustment if the rhythm is sustainable"
+      },
+      "values": [
+        {
+          "zh": "共同规划",
+          "fr": "Planification commune",
+          "en": "Shared planning"
+        },
+        {
+          "zh": "稳定执行",
+          "fr": "Regularite dans l action",
+          "en": "Consistent follow-through"
+        }
+      ],
+      "preferredAgeMin": 28,
+      "preferredAgeMax": 40,
+      "locationScope": {
+        "zh": "以日内瓦为主，接受成熟的跨城安排",
+        "fr": "Geneve comme base, ouvert a une organisation interville mature",
+        "en": "Geneva-based, open to a mature cross-city setup"
+      },
+      "preferredEducation": {
+        "zh": "本科及以上，更看重学习能力和沟通方式",
+        "fr": "Licence ou plus, avec attention a la curiosite et a la communication",
+        "en": "Bachelor or above, with more weight on curiosity and communication style"
+      },
+      "familyPlan": {
+        "zh": "希望在稳定关系中自然讨论婚育节奏",
+        "fr": "Souhaite discuter du rythme familial dans une relation stable",
+        "en": "Wants to discuss family plans naturally within a stable relationship"
+      },
+      "dealBreakers": [
+        {
+          "zh": "长期失联",
+          "fr": "Absence prolongee de communication",
+          "en": "Long periods without communication"
+        },
+        {
+          "zh": "关系目标不清晰",
+          "fr": "Objectif relationnel flou",
+          "en": "Unclear relationship goals"
+        }
+      ],
       "smoking": "never",
       "drinking": "social",
-      "exercise": { "zh": "滑雪和徒步", "fr": "Ski et randonnee", "en": "Skiing and hiking" },
-      "residencePlan": { "zh": "日内瓦为主，接受巴黎双城", "fr": "Geneve en base, possible schema Geneve-Paris", "en": "Geneva-based, open to Geneva-Paris setup" },
-      "summary": { "zh": "重视跨城市协同能力和长期执行力。", "fr": "Valorise la coordination entre villes et la capacite d execution.", "en": "Values cross-city coordination and long-term execution." },
+      "exercise": {
+        "zh": "滑雪和徒步",
+        "fr": "Ski et randonnee",
+        "en": "Skiing and hiking"
+      },
+      "activityLevel": {
+        "zh": "高强度户外",
+        "fr": "Tres actif en exterieur",
+        "en": "Highly active outdoors"
+      },
+      "weekendStyle": {
+        "zh": "喜欢有计划但不过度排满的周末",
+        "fr": "Aime les week-ends organises sans etre surcharges",
+        "en": "Likes planned but not overpacked weekends"
+      },
+      "pets": {
+        "zh": "喜欢狗，常去户外",
+        "fr": "Aime les chiens et les sorties dehors",
+        "en": "Likes dogs and being outdoors"
+      },
+      "religion": {
+        "zh": "文化上开放",
+        "fr": "Ouvert culturellement",
+        "en": "Culturally open"
+      },
+      "politicalViews": {
+        "zh": "重视公共责任",
+        "fr": "Attache a la responsabilite civique",
+        "en": "Values civic responsibility"
+      },
+      "personalityTraits": [
+        {
+          "zh": "时间观念强",
+          "fr": "Tres ponctuel",
+          "en": "Very punctual"
+        },
+        {
+          "zh": "跨文化适应力好",
+          "fr": "Aisance interculturelle",
+          "en": "Cross-cultural ease"
+        },
+        {
+          "zh": "重视承诺",
+          "fr": "Attache aux engagements",
+          "en": "Commitment-minded"
+        }
+      ],
+      "interests": [
+        {
+          "zh": "滑雪",
+          "fr": "Ski",
+          "en": "Skiing"
+        },
+        {
+          "zh": "徒步",
+          "fr": "Randonnee",
+          "en": "Hiking"
+        },
+        {
+          "zh": "城市短途旅行",
+          "fr": "Escapades urbaines",
+          "en": "City breaks"
+        }
+      ],
+      "communicationStyle": {
+        "zh": "偏好直接、及时、尊重边界的沟通",
+        "fr": "Prefere une communication directe, reguliere et respectueuse",
+        "en": "Prefers direct, timely, respectful communication"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "summary": {
+        "zh": "重视跨城市协同能力和长期执行力。",
+        "fr": "Valorise la coordination entre villes et la capacite d execution.",
+        "en": "Values cross-city coordination and long-term execution."
+      },
       "highlights": [
-        { "zh": "跨境节奏成熟，时间管理稳定", "fr": "Habitude des rythmes transfrontaliers", "en": "Experienced with cross-border rhythms" },
-        { "zh": "对线下见面节点响应快", "fr": "Reagit rapidement aux opportunites de rencontre reelle", "en": "Responsive to in-person meeting opportunities" }
+        {
+          "zh": "跨境节奏成熟，时间管理稳定",
+          "fr": "Habitude des rythmes transfrontaliers",
+          "en": "Experienced with cross-border rhythms"
+        },
+        {
+          "zh": "对线下见面节点响应快",
+          "fr": "Reagit rapidement aux opportunites de rencontre reelle",
+          "en": "Responsive to in-person meeting opportunities"
+        }
       ],
       "tags": [
-        { "zh": "跨境节奏", "fr": "Transfrontalier", "en": "Cross-border" },
-        { "zh": "高匹配意愿", "fr": "Intention elevee", "en": "High matching intent" },
-        { "zh": "执行力", "fr": "Execution", "en": "Execution" }
-      ]
+        {
+          "zh": "跨境节奏",
+          "fr": "Transfrontalier",
+          "en": "Cross-border"
+        },
+        {
+          "zh": "高匹配意愿",
+          "fr": "Intention elevee",
+          "en": "High matching intent"
+        },
+        {
+          "zh": "执行力",
+          "fr": "Execution",
+          "en": "Execution"
+        }
+      ],
+      "conversationStarters": [
+        {
+          "zh": "可以从日内瓦的生活节奏聊起",
+          "fr": "Vous pouvez commencer par son rythme de vie a Geneve",
+          "en": "Ask about life rhythm in Geneva"
+        },
+        {
+          "zh": "问问最近一次让 TA 印象深刻的周末",
+          "fr": "Demandez-lui son dernier week-end marquant",
+          "en": "Ask about a recent memorable weekend"
+        },
+        {
+          "zh": "聊聊对稳定关系的具体期待",
+          "fr": "Parlez de ses attentes concretes pour une relation stable",
+          "en": "Ask about concrete expectations for a stable relationship"
+        }
+      ],
+      "dateIdeas": [
+        {
+          "zh": "安静咖啡馆初见",
+          "fr": "Premier cafe au calme",
+          "en": "A quiet cafe first meeting"
+        },
+        {
+          "zh": "周末城市散步",
+          "fr": "Balade urbaine le week-end",
+          "en": "A weekend city walk"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "p-009-prompt-1",
+          "promptCode": "cross_border_life",
+          "prompt": {
+            "zh": "跨境生活里重要的事",
+            "fr": "Ce qui compte dans une vie transfrontaliere",
+            "en": "What matters in cross-border life"
+          },
+          "answer": {
+            "zh": "时间观念、承诺感，以及愿意提前沟通安排。",
+            "fr": "Ponctualite, engagement et organisation communiquee a l avance.",
+            "en": "Punctuality, commitment, and planning ahead together."
+          }
+        },
+        {
+          "id": "p-009-prompt-2",
+          "promptCode": "first_date",
+          "prompt": {
+            "zh": "第一次见面我会选",
+            "fr": "Pour une premiere rencontre",
+            "en": "For a first date"
+          },
+          "answer": {
+            "zh": "安静咖啡馆，之后沿湖或城市街区走一段。",
+            "fr": "Un cafe calme puis une marche au bord du lac ou en ville.",
+            "en": "A quiet cafe followed by a walk by the lake or through the city."
+          }
+        }
+      ],
+      "compatibilityDimensions": [
+        {
+          "code": "communication",
+          "label": {
+            "zh": "沟通方式",
+            "fr": "Communication",
+            "en": "Communication"
+          },
+          "score": 91
+        },
+        {
+          "code": "lifestyle",
+          "label": {
+            "zh": "生活节奏",
+            "fr": "Rythme de vie",
+            "en": "Lifestyle pace"
+          },
+          "score": 87
+        },
+        {
+          "code": "long_term",
+          "label": {
+            "zh": "长期规划",
+            "fr": "Projection long terme",
+            "en": "Long-term planning"
+          },
+          "score": 94
+        }
+      ],
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "zodiac": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "phone": "",
+      "email": "",
+      "wechat": ""
     },
     {
       "id": "p-010",
       "legalName": "Iris N.",
       "nickname": "Iris",
+      "displayName": "Iris",
       "avatarUrl": "",
+      "photos": [
+        {
+          "id": "p-010-photo-1",
+          "url": "https://picsum.photos/seed/p-010-1/900/1200",
+          "caption": {
+            "zh": "主照片",
+            "fr": "Photo principale",
+            "en": "Primary photo"
+          },
+          "isPrimary": true
+        },
+        {
+          "id": "p-010-photo-2",
+          "url": "https://picsum.photos/seed/p-010-2/900/1200",
+          "caption": {
+            "zh": "生活照片 2",
+            "fr": "Photo de vie 2",
+            "en": "Lifestyle photo 2"
+          },
+          "isPrimary": false
+        },
+        {
+          "id": "p-010-photo-3",
+          "url": "https://picsum.photos/seed/p-010-3/900/1200",
+          "caption": {
+            "zh": "生活照片 3",
+            "fr": "Photo de vie 3",
+            "en": "Lifestyle photo 3"
+          },
+          "isPrimary": false
+        }
+      ],
       "gender": "female",
+      "pronouns": "she/her",
+      "sexuality": "straight",
+      "interestedIn": [
+        "male"
+      ],
       "age": 33,
       "height": 171,
-      "city": { "zh": "阿姆斯特丹", "fr": "Amsterdam", "en": "Amsterdam" },
-      "country": { "zh": "荷兰", "fr": "Pays-Bas", "en": "Netherlands" },
-      "nationality": { "zh": "荷兰", "fr": "Neerlandaise", "en": "Dutch" },
+      "city": {
+        "zh": "阿姆斯特丹",
+        "fr": "Amsterdam",
+        "en": "Amsterdam"
+      },
+      "country": {
+        "zh": "荷兰",
+        "fr": "Pays-Bas",
+        "en": "Netherlands"
+      },
+      "nationality": {
+        "zh": "荷兰",
+        "fr": "Neerlandaise",
+        "en": "Dutch"
+      },
+      "hometown": {
+        "zh": "苏州",
+        "fr": "Suzhou",
+        "en": "Suzhou"
+      },
+      "languages": [
+        "EN",
+        "NL",
+        "FR"
+      ],
       "profileStatus": "open",
       "isVerified": true,
       "lastActiveAt": "2026-04-21T10:45:00Z",
@@ -438,192 +1628,484 @@
       "allowFamilyContact": true,
       "familyPriority": false,
       "degreeLevel": "master",
-      "education": { "zh": "硕士", "fr": "Master", "en": "Master" },
-      "occupation": { "zh": "用户研究员", "fr": "Chercheuse UX", "en": "UX researcher" },
-      "industry": { "zh": "数字产品", "fr": "Produit numerique", "en": "Digital product" },
-      "employer": { "zh": "SaaS 平台", "fr": "Plateforme SaaS", "en": "SaaS platform" },
-      "incomeRange": { "zh": "年收入 7.5-11 万欧", "fr": "75-110k EUR/an", "en": "EUR 75k-110k annual" },
+      "education": {
+        "zh": "硕士",
+        "fr": "Master",
+        "en": "Master"
+      },
+      "occupation": {
+        "zh": "用户研究员",
+        "fr": "Chercheuse UX",
+        "en": "UX researcher"
+      },
+      "industry": {
+        "zh": "数字产品",
+        "fr": "Produit numerique",
+        "en": "Digital product"
+      },
+      "employer": {
+        "zh": "SaaS 平台",
+        "fr": "Plateforme SaaS",
+        "en": "SaaS platform"
+      },
+      "incomeRange": {
+        "zh": "年收入 7.5-11 万欧",
+        "fr": "75-110k EUR/an",
+        "en": "EUR 75k-110k annual"
+      },
       "maritalStatus": "divorced",
       "hasChildren": false,
       "wantsChildren": true,
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "datingIntentionLabel": { "zh": "认真发展", "fr": "Relation serieuse", "en": "Serious relationship" },
-      "relationshipPlan": { "zh": "先建立共同生活节奏，再推进长期关系", "fr": "Installer un rythme de vie commun avant de projeter le long terme", "en": "Build daily-life rhythm first, then advance long-term plans" },
-      "languages": ["EN", "NL", "FR"],
+      "datingIntentionLabel": {
+        "zh": "认真发展",
+        "fr": "Relation serieuse",
+        "en": "Serious relationship"
+      },
+      "relationshipPlan": {
+        "zh": "先建立共同生活节奏，再推进长期关系",
+        "fr": "Installer un rythme de vie commun avant de projeter le long terme",
+        "en": "Build daily-life rhythm first, then advance long-term plans"
+      },
+      "residencePlan": {
+        "zh": "阿姆斯特丹为主，接受巴黎/布鲁塞尔协同",
+        "fr": "Base Amsterdam, ouverte a Paris ou Bruxelles",
+        "en": "Amsterdam-based, open to Paris/Brussels coordination"
+      },
+      "relocationWillingness": {
+        "zh": "接受跨城磨合，重视双方节奏可持续",
+        "fr": "Ouvert a une phase interville si le rythme reste durable",
+        "en": "Open to cross-city adjustment if the rhythm is sustainable"
+      },
+      "values": [
+        {
+          "zh": "尊重边界",
+          "fr": "Respect des limites",
+          "en": "Respecting boundaries"
+        },
+        {
+          "zh": "稳定沟通",
+          "fr": "Communication stable",
+          "en": "Steady communication"
+        }
+      ],
+      "preferredAgeMin": 28,
+      "preferredAgeMax": 40,
+      "locationScope": {
+        "zh": "以阿姆斯特丹为主，接受成熟的跨城安排",
+        "fr": "Amsterdam comme base, ouvert a une organisation interville mature",
+        "en": "Amsterdam-based, open to a mature cross-city setup"
+      },
+      "preferredEducation": {
+        "zh": "本科及以上，更看重学习能力和沟通方式",
+        "fr": "Licence ou plus, avec attention a la curiosite et a la communication",
+        "en": "Bachelor or above, with more weight on curiosity and communication style"
+      },
+      "familyPlan": {
+        "zh": "希望在稳定关系中自然讨论婚育节奏",
+        "fr": "Souhaite discuter du rythme familial dans une relation stable",
+        "en": "Wants to discuss family plans naturally within a stable relationship"
+      },
+      "dealBreakers": [
+        {
+          "zh": "长期失联",
+          "fr": "Absence prolongee de communication",
+          "en": "Long periods without communication"
+        },
+        {
+          "zh": "关系目标不清晰",
+          "fr": "Objectif relationnel flou",
+          "en": "Unclear relationship goals"
+        }
+      ],
       "smoking": "never",
       "drinking": "social",
-      "exercise": { "zh": "划船和慢跑", "fr": "Rameur et jogging", "en": "Rowing and jogging" },
-      "residencePlan": { "zh": "阿姆斯特丹为主，接受巴黎/布鲁塞尔协同", "fr": "Base Amsterdam, ouverte a Paris ou Bruxelles", "en": "Amsterdam-based, open to Paris/Brussels coordination" },
-      "summary": { "zh": "重视生活一致性与沟通质量。", "fr": "Attachee a la coherence de vie et a la qualite de communication.", "en": "Values lifestyle consistency and communication quality." },
+      "exercise": {
+        "zh": "划船和慢跑",
+        "fr": "Rameur et jogging",
+        "en": "Rowing and jogging"
+      },
+      "activityLevel": {
+        "zh": "规律轻运动",
+        "fr": "Activite douce et reguliere",
+        "en": "Regular light activity"
+      },
+      "weekendStyle": {
+        "zh": "喜欢有计划但不过度排满的周末",
+        "fr": "Aime les week-ends organises sans etre surcharges",
+        "en": "Likes planned but not overpacked weekends"
+      },
+      "pets": {
+        "zh": "喜欢猫狗，但需要提前规划",
+        "fr": "Aime chats et chiens, avec organisation",
+        "en": "Likes cats and dogs with planning"
+      },
+      "religion": {
+        "zh": "无宗教信仰，尊重传统",
+        "fr": "Sans religion, respecte les traditions",
+        "en": "Non-religious, respects traditions"
+      },
+      "politicalViews": {
+        "zh": "温和务实",
+        "fr": "Moderee et pragmatique",
+        "en": "Moderate and pragmatic"
+      },
+      "personalityTraits": [
+        {
+          "zh": "温和直接",
+          "fr": "Douce et directe",
+          "en": "Warm and direct"
+        },
+        {
+          "zh": "生活有秩序",
+          "fr": "Vie bien organisee",
+          "en": "Well organized"
+        },
+        {
+          "zh": "重视真实相处",
+          "fr": "Valorise l authenticite",
+          "en": "Values authenticity"
+        }
+      ],
+      "interests": [
+        {
+          "zh": "阅读",
+          "fr": "Lecture",
+          "en": "Reading"
+        },
+        {
+          "zh": "散步",
+          "fr": "Balades",
+          "en": "Walks"
+        },
+        {
+          "zh": "周末探店",
+          "fr": "Decouvertes le week-end",
+          "en": "Weekend discoveries"
+        }
+      ],
+      "communicationStyle": {
+        "zh": "偏好直接、及时、尊重边界的沟通",
+        "fr": "Prefere une communication directe, reguliere et respectueuse",
+        "en": "Prefers direct, timely, respectful communication"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "summary": {
+        "zh": "重视生活一致性与沟通质量。",
+        "fr": "Attachee a la coherence de vie et a la qualite de communication.",
+        "en": "Values lifestyle consistency and communication quality."
+      },
       "highlights": [
-        { "zh": "跨国工作背景，适应多文化场景", "fr": "Experience internationale et contexte multiculturel", "en": "International background, comfortable in multicultural settings" },
-        { "zh": "可稳定参与线下活动节点", "fr": "Disponibilite reguliere pour les rencontres en presentiel", "en": "Consistently available for in-person event nodes" }
+        {
+          "zh": "跨国工作背景，适应多文化场景",
+          "fr": "Experience internationale et contexte multiculturel",
+          "en": "International background, comfortable in multicultural settings"
+        },
+        {
+          "zh": "可稳定参与线下活动节点",
+          "fr": "Disponibilite reguliere pour les rencontres en presentiel",
+          "en": "Consistently available for in-person event nodes"
+        }
       ],
       "tags": [
-        { "zh": "跨文化", "fr": "Interculturel", "en": "Cross-cultural" },
-        { "zh": "沟通质量", "fr": "Qualite echange", "en": "Communication quality" },
-        { "zh": "生活一致", "fr": "Cohérence de vie", "en": "Lifestyle alignment" }
-      ]
-    },
-    {
-      "id": "p-011",
-      "legalName": "Julien P.",
-      "nickname": "Julien",
-      "avatarUrl": "",
-      "gender": "male",
-      "age": 41,
-      "height": 179,
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "country": { "zh": "法国", "fr": "France", "en": "France" },
-      "nationality": { "zh": "法国", "fr": "Francais", "en": "French" },
-      "profileStatus": "review",
-      "isVerified": true,
-      "lastActiveAt": "2026-04-16T21:05:00Z",
-      "joinedAt": "2026-01-08",
-      "familyVisible": true,
-      "allowFamilyContact": false,
-      "familyPriority": false,
-      "degreeLevel": "phd",
-      "education": { "zh": "博士", "fr": "Doctorat", "en": "PhD" },
-      "occupation": { "zh": "医疗咨询顾问", "fr": "Consultant sante", "en": "Healthcare consultant" },
-      "industry": { "zh": "医疗健康", "fr": "Sante", "en": "Healthcare" },
-      "employer": { "zh": "私立医疗网络", "fr": "Reseau de cliniques privees", "en": "Private clinic network" },
-      "incomeRange": { "zh": "年收入 9.5-14 万欧", "fr": "95-140k EUR/an", "en": "EUR 95k-140k annual" },
-      "maritalStatus": "divorced",
-      "hasChildren": true,
-      "wantsChildren": false,
-      "acceptsLongDistance": true,
-      "datingIntentionCode": "marriage",
-      "datingIntentionLabel": { "zh": "婚姻导向", "fr": "Intention mariage", "en": "Marriage-oriented" },
-      "relationshipPlan": { "zh": "在现实节奏中重新建立稳定关系", "fr": "Reconstruire une relation stable dans un rythme realiste", "en": "Rebuild a stable relationship in a realistic pace" },
-      "languages": ["FR", "EN"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "徒步和轻量力量训练", "fr": "Randonnee et renforcement leger", "en": "Hiking and light strength work" },
-      "residencePlan": { "zh": "巴黎长期，周末可跨城", "fr": "Paris long terme, mobilite ponctuelle le week-end", "en": "Long-term in Paris, occasional weekend cross-city travel" },
-      "summary": { "zh": "希望在成熟、坦诚和有执行力的关系中继续前进。", "fr": "Souhaite avancer dans une relation mature, transparente et engagee.", "en": "Wants to move forward in a mature, transparent, and committed relationship." },
-      "highlights": [
-        { "zh": "对家庭角色与时间投入边界清晰", "fr": "Vision claire des limites familiales et du temps investi", "en": "Clear on family-role and time-investment boundaries" },
-        { "zh": "适合稳步推进的长期关系路径", "fr": "Compatible avec une progression stable", "en": "A fit for steady long-term progression" }
+        {
+          "zh": "跨文化",
+          "fr": "Interculturel",
+          "en": "Cross-cultural"
+        },
+        {
+          "zh": "沟通质量",
+          "fr": "Qualite echange",
+          "en": "Communication quality"
+        },
+        {
+          "zh": "生活一致",
+          "fr": "Cohérence de vie",
+          "en": "Lifestyle alignment"
+        }
       ],
-      "tags": [
-        { "zh": "成熟关系", "fr": "Relation mature", "en": "Mature relationship" },
-        { "zh": "稳步推进", "fr": "Progression stable", "en": "Steady progression" },
-        { "zh": "婚姻导向", "fr": "Orientation mariage", "en": "Marriage-oriented" }
-      ]
-    },
-    {
-      "id": "p-012",
-      "legalName": "Mia G.",
-      "nickname": "Mia",
-      "avatarUrl": "",
-      "gender": "female",
-      "age": 28,
-      "height": 166,
-      "city": { "zh": "日内瓦", "fr": "Geneve", "en": "Geneva" },
-      "country": { "zh": "瑞士", "fr": "Suisse", "en": "Switzerland" },
-      "nationality": { "zh": "意大利", "fr": "Italienne", "en": "Italian" },
-      "profileStatus": "open",
-      "isVerified": false,
-      "lastActiveAt": "2026-04-15T14:35:00Z",
-      "joinedAt": "2026-03-18",
-      "familyVisible": true,
-      "allowFamilyContact": false,
-      "familyPriority": false,
-      "degreeLevel": "bachelor",
-      "education": { "zh": "本科", "fr": "Licence", "en": "Bachelor" },
-      "occupation": { "zh": "活动制作人", "fr": "Productrice d evenements", "en": "Event producer" },
-      "industry": { "zh": "文化活动", "fr": "Evenementiel culturel", "en": "Cultural events" },
-      "employer": { "zh": "独立工作室", "fr": "Studio independant", "en": "Independent studio" },
-      "incomeRange": { "zh": "年收入 5-7 万欧", "fr": "50-70k EUR/an", "en": "EUR 50k-70k annual" },
-      "maritalStatus": "single",
-      "hasChildren": false,
-      "wantsChildren": true,
-      "acceptsLongDistance": true,
-      "datingIntentionCode": "cross_border",
-      "datingIntentionLabel": { "zh": "跨境发展", "fr": "Relation transfrontaliere", "en": "Cross-border relationship" },
-      "relationshipPlan": { "zh": "先通过线下活动建立信任，再确定长期路径", "fr": "Construire la confiance via des rencontres reelles puis definir la suite", "en": "Build trust through in-person events, then define long-term path" },
-      "languages": ["FR", "EN", "IT"],
-      "smoking": "never",
-      "drinking": "social",
-      "exercise": { "zh": "普拉提和散步", "fr": "Pilates et marche", "en": "Pilates and walking" },
-      "residencePlan": { "zh": "日内瓦优先，接受法国周边双城安排", "fr": "Geneve en priorite, ouverte a un schema avec villes voisines", "en": "Geneva first, open to a nearby two-city setup" },
-      "summary": { "zh": "偏好先建立真实信任，再推进关系决策。", "fr": "Prefere etablir la confiance reelle avant toute decision relationnelle.", "en": "Prefers to build real trust before major relationship decisions." },
-      "highlights": [
-        { "zh": "活动组织背景，擅长面对面协作", "fr": "Background evenementiel, a l aise en coordination presentielle", "en": "Event background, strong in face-to-face coordination" },
-        { "zh": "对跨境生活节奏有现实预期", "fr": "Vision realiste des rythmes de vie transfrontaliers", "en": "Realistic expectations for cross-border lifestyle rhythms" }
+      "conversationStarters": [
+        {
+          "zh": "可以从阿姆斯特丹的生活节奏聊起",
+          "fr": "Vous pouvez commencer par son rythme de vie a Amsterdam",
+          "en": "Ask about life rhythm in Amsterdam"
+        },
+        {
+          "zh": "问问最近一次让 TA 印象深刻的周末",
+          "fr": "Demandez-lui son dernier week-end marquant",
+          "en": "Ask about a recent memorable weekend"
+        },
+        {
+          "zh": "聊聊对稳定关系的具体期待",
+          "fr": "Parlez de ses attentes concretes pour une relation stable",
+          "en": "Ask about concrete expectations for a stable relationship"
+        }
       ],
-      "tags": [
-        { "zh": "跨境生活", "fr": "Vie transfrontaliere", "en": "Cross-border life" },
-        { "zh": "活动型", "fr": "Profil activite", "en": "Event-oriented" },
-        { "zh": "信任优先", "fr": "Confiance d abord", "en": "Trust first" }
-      ]
+      "dateIdeas": [
+        {
+          "zh": "安静咖啡馆初见",
+          "fr": "Premier cafe au calme",
+          "en": "A quiet cafe first meeting"
+        },
+        {
+          "zh": "周末城市散步",
+          "fr": "Balade urbaine le week-end",
+          "en": "A weekend city walk"
+        }
+      ],
+      "prompts": [
+        {
+          "id": "p-010-prompt-1",
+          "promptCode": "home_rhythm",
+          "prompt": {
+            "zh": "理想的家里节奏",
+            "fr": "Le rythme ideal a la maison",
+            "en": "Ideal home rhythm"
+          },
+          "answer": {
+            "zh": "平日各自专注，周末一起做饭、见朋友或短途散心。",
+            "fr": "Independance en semaine, cuisine, amis ou escapade le week-end.",
+            "en": "Focused weekdays, shared cooking, friends, or short trips on weekends."
+          }
+        },
+        {
+          "id": "p-010-prompt-2",
+          "promptCode": "green_flag",
+          "prompt": {
+            "zh": "我会欣赏的人",
+            "fr": "Ce que j apprecie chez quelqu un",
+            "en": "Someone I appreciate"
+          },
+          "answer": {
+            "zh": "稳定、讲信用，也能照顾到双方家庭的感受。",
+            "fr": "Stable, fiable, attentif aux deux familles.",
+            "en": "Stable, reliable, and thoughtful about both families."
+          }
+        }
+      ],
+      "compatibilityDimensions": [
+        {
+          "code": "communication",
+          "label": {
+            "zh": "沟通方式",
+            "fr": "Communication",
+            "en": "Communication"
+          },
+          "score": 94
+        },
+        {
+          "code": "lifestyle",
+          "label": {
+            "zh": "生活节奏",
+            "fr": "Rythme de vie",
+            "en": "Lifestyle pace"
+          },
+          "score": 90
+        },
+        {
+          "code": "long_term",
+          "label": {
+            "zh": "长期规划",
+            "fr": "Projection long terme",
+            "en": "Long-term planning"
+          },
+          "score": 97
+        }
+      ],
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "zodiac": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "phone": "",
+      "email": "",
+      "wechat": ""
     }
   ],
   "events": [
     {
       "id": "e-001",
       "date": "2026-05-12",
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "venue": { "zh": "左岸私享沙龙", "fr": "Salon prive rive gauche", "en": "Left Bank private salon" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "venue": {
+        "zh": "左岸私享沙龙",
+        "fr": "Salon prive rive gauche",
+        "en": "Left Bank private salon"
+      },
       "status": "open",
-      "title": { "zh": "春季双语沙龙", "fr": "Salon bilingue du printemps", "en": "Spring bilingual salon" },
-      "format": { "zh": "12人主题沙龙", "fr": "Salon thematique, 12 personnes", "en": "12-person themed salon" },
-      "audience": { "zh": "适合 27-35 岁、希望稳定发展的会员", "fr": "Pour 27-35 ans avec intention relationnelle stable", "en": "For members aged 27-35 seeking stable development" },
-      "summary": { "zh": "围绕跨文化关系、工作节奏和城市生活展开小组交流。", "fr": "Echanges en petits groupes autour des relations interculturelles et du rythme de vie.", "en": "Small-group conversations around intercultural dating and lifestyle pace." },
+      "title": {
+        "zh": "春季双语沙龙",
+        "fr": "Salon bilingue du printemps",
+        "en": "Spring bilingual salon"
+      },
+      "format": {
+        "zh": "12人主题沙龙",
+        "fr": "Salon thematique, 12 personnes",
+        "en": "12-person themed salon"
+      },
+      "audience": {
+        "zh": "适合 27-35 岁、希望稳定发展的会员",
+        "fr": "Pour 27-35 ans avec intention relationnelle stable",
+        "en": "For members aged 27-35 seeking stable development"
+      },
+      "summary": {
+        "zh": "围绕跨文化关系、工作节奏和城市生活展开小组交流。",
+        "fr": "Echanges en petits groupes autour des relations interculturelles et du rythme de vie.",
+        "en": "Small-group conversations around intercultural dating and lifestyle pace."
+      },
       "seats": 12,
       "registered": 8,
       "agenda": [
         {
           "time": "18:30 - 19:00",
-          "title": { "zh": "签到与顾问说明", "fr": "Accueil et cadrage conseiller", "en": "Check-in and advisor framing" },
-          "desc": { "zh": "确认到场信息并说明当晚节奏。", "fr": "Verification des arrivees et du rythme de la soiree.", "en": "Arrival verification and evening pacing overview." }
+          "title": {
+            "zh": "签到与顾问说明",
+            "fr": "Accueil et cadrage conseiller",
+            "en": "Check-in and advisor framing"
+          },
+          "desc": {
+            "zh": "确认到场信息并说明当晚节奏。",
+            "fr": "Verification des arrivees et du rythme de la soiree.",
+            "en": "Arrival verification and evening pacing overview."
+          }
         },
         {
           "time": "19:00 - 19:45",
-          "title": { "zh": "主题小组交流", "fr": "Echanges thematiques", "en": "Themed small-group exchange" },
-          "desc": { "zh": "围绕关系、工作和城市生活展开交流。", "fr": "Echanges autour des relations, du travail et de la vie urbaine.", "en": "Conversation around relationships, work, and city life." }
+          "title": {
+            "zh": "主题小组交流",
+            "fr": "Echanges thematiques",
+            "en": "Themed small-group exchange"
+          },
+          "desc": {
+            "zh": "围绕关系、工作和城市生活展开交流。",
+            "fr": "Echanges autour des relations, du travail et de la vie urbaine.",
+            "en": "Conversation around relationships, work, and city life."
+          }
         }
       ]
     },
     {
       "id": "e-002",
       "date": "2026-05-20",
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
-      "venue": { "zh": "玛黑区私宴空间", "fr": "Table privee au Marais", "en": "Private dinner in Le Marais" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
+      "venue": {
+        "zh": "玛黑区私宴空间",
+        "fr": "Table privee au Marais",
+        "en": "Private dinner in Le Marais"
+      },
       "status": "waitlist",
-      "title": { "zh": "左岸晚餐局", "fr": "Diner rive gauche", "en": "Left Bank dinner gathering" },
-      "format": { "zh": "8人精选晚餐", "fr": "Diner selectif, 8 personnes", "en": "8-person curated dinner" },
-      "audience": { "zh": "主要面向已完成资料审核的会员", "fr": "Principalement membres verifies", "en": "Mainly for profile-verified members" },
-      "summary": { "zh": "适合把线上兴趣转化为线下确认。", "fr": "Format intime pour valider une affinite observee en ligne.", "en": "An intimate format to validate affinity first seen online." },
+      "title": {
+        "zh": "左岸晚餐局",
+        "fr": "Diner rive gauche",
+        "en": "Left Bank dinner gathering"
+      },
+      "format": {
+        "zh": "8人精选晚餐",
+        "fr": "Diner selectif, 8 personnes",
+        "en": "8-person curated dinner"
+      },
+      "audience": {
+        "zh": "主要面向已完成资料审核的会员",
+        "fr": "Principalement membres verifies",
+        "en": "Mainly for profile-verified members"
+      },
+      "summary": {
+        "zh": "适合把线上兴趣转化为线下确认。",
+        "fr": "Format intime pour valider une affinite observee en ligne.",
+        "en": "An intimate format to validate affinity first seen online."
+      },
       "seats": 8,
       "registered": 8,
       "agenda": [
         {
           "time": "19:00 - 19:30",
-          "title": { "zh": "入场与座位安排", "fr": "Accueil et placement", "en": "Arrival and seating" },
-          "desc": { "zh": "顾问说明晚餐节奏与边界。", "fr": "Rappel du cadre et du rythme du diner.", "en": "Advisor briefing on boundaries and dinner pacing." }
+          "title": {
+            "zh": "入场与座位安排",
+            "fr": "Accueil et placement",
+            "en": "Arrival and seating"
+          },
+          "desc": {
+            "zh": "顾问说明晚餐节奏与边界。",
+            "fr": "Rappel du cadre et du rythme du diner.",
+            "en": "Advisor briefing on boundaries and dinner pacing."
+          }
         }
       ]
     },
     {
       "id": "e-003",
       "date": "2026-05-28",
-      "city": { "zh": "布鲁塞尔", "fr": "Bruxelles", "en": "Brussels" },
-      "venue": { "zh": "欧洲区文化空间", "fr": "Espace culturel du quartier europeen", "en": "European Quarter cultural venue" },
+      "city": {
+        "zh": "布鲁塞尔",
+        "fr": "Bruxelles",
+        "en": "Brussels"
+      },
+      "venue": {
+        "zh": "欧洲区文化空间",
+        "fr": "Espace culturel du quartier europeen",
+        "en": "European Quarter cultural venue"
+      },
       "status": "open",
-      "title": { "zh": "文化散步与咖啡交流", "fr": "Parcours culturel et cafe", "en": "Culture walk and coffee exchange" },
-      "format": { "zh": "城市散步 + 交流", "fr": "Balade urbaine + echanges", "en": "City walk plus discussion" },
-      "audience": { "zh": "适合首次参加平台活动的新会员", "fr": "Ideal pour une premiere participation", "en": "Good for first-time participants" },
-      "summary": { "zh": "以更轻松的方式开启第一次真实见面。", "fr": "Un format leger pour transformer le premier contact en rencontre reelle.", "en": "A lighter format for turning first contact into a real meeting." },
+      "title": {
+        "zh": "文化散步与咖啡交流",
+        "fr": "Parcours culturel et cafe",
+        "en": "Culture walk and coffee exchange"
+      },
+      "format": {
+        "zh": "城市散步 + 交流",
+        "fr": "Balade urbaine + echanges",
+        "en": "City walk plus discussion"
+      },
+      "audience": {
+        "zh": "适合首次参加平台活动的新会员",
+        "fr": "Ideal pour une premiere participation",
+        "en": "Good for first-time participants"
+      },
+      "summary": {
+        "zh": "以更轻松的方式开启第一次真实见面。",
+        "fr": "Un format leger pour transformer le premier contact en rencontre reelle.",
+        "en": "A lighter format for turning first contact into a real meeting."
+      },
       "seats": 16,
       "registered": 11,
       "agenda": [
         {
           "time": "14:30 - 15:00",
-          "title": { "zh": "集合与路线说明", "fr": "Rassemblement et briefing", "en": "Meet-up and route briefing" },
-          "desc": { "zh": "顾问说明路线和交流节奏。", "fr": "Rappel du parcours et du rythme d echange.", "en": "Overview of the route and interaction rhythm." }
+          "title": {
+            "zh": "集合与路线说明",
+            "fr": "Rassemblement et briefing",
+            "en": "Meet-up and route briefing"
+          },
+          "desc": {
+            "zh": "顾问说明路线和交流节奏。",
+            "fr": "Rappel du parcours et du rythme d echange.",
+            "en": "Overview of the route and interaction rhythm."
+          }
         }
       ]
     }
@@ -635,12 +2117,20 @@
       "realName": "Lin S.",
       "nickName": "Lin",
       "avatarUrl": "",
-      "city": { "zh": "巴黎", "fr": "Paris", "en": "Paris" },
+      "city": {
+        "zh": "巴黎",
+        "fr": "Paris",
+        "en": "Paris"
+      },
       "joinedAt": "2026-01-18",
       "profileId": "p-002",
       "completion": 82,
       "membership": "gold",
-      "bio": { "zh": "用于演示资料、会员和活动路径的 mock 账号。", "fr": "Compte mock pour demontrer profil, abonnement et activites.", "en": "Mock account for demonstrating profile, membership, and event journeys." }
+      "bio": {
+        "zh": "用于演示资料、会员和活动路径的 mock 账号。",
+        "fr": "Compte mock pour demontrer profil, abonnement et activites.",
+        "en": "Mock account for demonstrating profile, membership, and event journeys."
+      }
     }
   ],
   "user_registrations": [
@@ -649,14 +2139,22 @@
       "accountId": "u-001",
       "eventId": "e-001",
       "status": "confirmed",
-      "note": { "zh": "已确认席位，可在活动前查看详情与注意事项。", "fr": "Place confirmee avec acces au detail avant la date.", "en": "Seat confirmed with access to event detail before the date." }
+      "note": {
+        "zh": "已确认席位，可在活动前查看详情与注意事项。",
+        "fr": "Place confirmee avec acces au detail avant la date.",
+        "en": "Seat confirmed with access to event detail before the date."
+      }
     },
     {
       "id": "r-002",
       "accountId": "u-001",
       "eventId": "e-002",
       "status": "waitlist",
-      "note": { "zh": "当前处于候补序列。", "fr": "Actuellement en liste d attente.", "en": "Currently on the waitlist." }
+      "note": {
+        "zh": "当前处于候补序列。",
+        "fr": "Actuellement en liste d attente.",
+        "en": "Currently on the waitlist."
+      }
     }
   ],
   "favorite_profiles": [
@@ -665,14 +2163,22 @@
       "accountId": "u-001",
       "profileId": "p-001",
       "savedAt": "2026-03-12",
-      "note": { "zh": "资料完成度高，适合继续了解。", "fr": "Profil complet, a revoir de plus pres.", "en": "High profile completeness and worth reviewing further." }
+      "note": {
+        "zh": "资料完成度高，适合继续了解。",
+        "fr": "Profil complet, a revoir de plus pres.",
+        "en": "High profile completeness and worth reviewing further."
+      }
     },
     {
       "id": "f-002",
       "accountId": "u-001",
       "profileId": "p-006",
       "savedAt": "2026-03-28",
-      "note": { "zh": "适合进一步讨论家庭节奏与双城安排。", "fr": "A explorer autour du rythme familial et de la double ville.", "en": "Worth exploring around family rhythm and two-city logistics." }
+      "note": {
+        "zh": "适合进一步讨论家庭节奏与双城安排。",
+        "fr": "A explorer autour du rythme familial et de la double ville.",
+        "en": "Worth exploring around family rhythm and two-city logistics."
+      }
     }
   ],
   "message_threads": [
@@ -682,7 +2188,11 @@
       "profileId": "p-001",
       "updatedAt": "2026-04-18T19:10:00Z",
       "unread": 2,
-      "lastMessage": { "zh": "最近巴黎的双语沙龙你会参加吗？", "fr": "Participeras-tu au prochain salon bilingue de Paris ?", "en": "Will you be joining the upcoming bilingual salon in Paris?" }
+      "lastMessage": {
+        "zh": "最近巴黎的双语沙龙你会参加吗？",
+        "fr": "Participeras-tu au prochain salon bilingue de Paris ?",
+        "en": "Will you be joining the upcoming bilingual salon in Paris?"
+      }
     },
     {
       "id": "m-002",
@@ -690,30 +2200,59 @@
       "profileId": "p-006",
       "updatedAt": "2026-04-22T20:30:00Z",
       "unread": 1,
-      "lastMessage": { "zh": "如果节奏合适，也可以讨论巴黎和布鲁塞尔之间的安排。", "fr": "Si le rythme convient, on peut aussi parler d un equilibre Paris-Bruxelles.", "en": "If the pace fits, we can also talk about a Paris-Brussels setup." }
+      "lastMessage": {
+        "zh": "如果节奏合适，也可以讨论巴黎和布鲁塞尔之间的安排。",
+        "fr": "Si le rythme convient, on peut aussi parler d un equilibre Paris-Bruxelles.",
+        "en": "If the pace fits, we can also talk about a Paris-Brussels setup."
+      }
     }
   ],
+  "private_introduction_requests": [],
   "privacy_settings": [
     {
       "id": "privacy-contact",
       "accountId": "u-001",
       "enabled": true,
-      "title": { "zh": "允许顾问联系", "fr": "Autoriser le contact conseiller", "en": "Allow advisor contact" },
-      "desc": { "zh": "顾问可在活动、会员升级或资料审核阶段主动联系你。", "fr": "La conseillere peut te contacter pour le suivi des evenements, du profil ou de l abonnement.", "en": "Advisors may proactively contact you for events, profile review, or membership follow-up." }
+      "title": {
+        "zh": "允许顾问联系",
+        "fr": "Autoriser le contact conseiller",
+        "en": "Allow advisor contact"
+      },
+      "desc": {
+        "zh": "顾问可在活动、会员升级或资料审核阶段主动联系你。",
+        "fr": "La conseillere peut te contacter pour le suivi des evenements, du profil ou de l abonnement.",
+        "en": "Advisors may proactively contact you for events, profile review, or membership follow-up."
+      }
     },
     {
       "id": "privacy-family",
       "accountId": "u-001",
       "enabled": true,
-      "title": { "zh": "允许家长辅助了解", "fr": "Autoriser un appui familial limite", "en": "Allow limited family-assisted context" },
-      "desc": { "zh": "在你的授权下，家长可查看有限背景说明。", "fr": "Avec ton accord, la famille peut voir un contexte limite.", "en": "With your permission, family may review limited background context." }
+      "title": {
+        "zh": "允许家长辅助了解",
+        "fr": "Autoriser un appui familial limite",
+        "en": "Allow limited family-assisted context"
+      },
+      "desc": {
+        "zh": "在你的授权下，家长可查看有限背景说明。",
+        "fr": "Avec ton accord, la famille peut voir un contexte limite.",
+        "en": "With your permission, family may review limited background context."
+      }
     },
     {
       "id": "privacy-visibility",
       "accountId": "u-001",
       "enabled": false,
-      "title": { "zh": "公开更多资料字段", "fr": "Rendre plus de champs visibles", "en": "Expose more profile fields" },
-      "desc": { "zh": "当前关闭，部分细节需在进一步互动后开放。", "fr": "Desactive pour garder certains champs visibles seulement plus tard.", "en": "Disabled so some details remain hidden until later interaction." }
+      "title": {
+        "zh": "公开更多资料字段",
+        "fr": "Rendre plus de champs visibles",
+        "en": "Expose more profile fields"
+      },
+      "desc": {
+        "zh": "当前关闭，部分细节需在进一步互动后开放。",
+        "fr": "Desactive pour garder certains champs visibles seulement plus tard.",
+        "en": "Disabled so some details remain hidden until later interaction."
+      }
     }
   ],
   "auth_users": [

@@ -57,7 +57,6 @@
 | `nationality` | `LocalizedText` | 国籍。 |
 | `hometown` | `LocalizedText` | 家乡。 |
 | `languages` | `string[]` | 语言 code。 |
-| `bodyType` | `LocalizedText` | 体型。 |
 | `livingSituation` | `LocalizedText` | 居住状态。 |
 | `zodiac` | `LocalizedText` | 星座。 |
 

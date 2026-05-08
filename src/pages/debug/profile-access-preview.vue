@@ -48,9 +48,9 @@
       </view>
 
       <view v-if="heroData" class="mt-6 space-y-6">
-        <SelfProfileDetailHero :data="heroData" />
+        <ProfileDetailHero :data="heroData" />
 
-        <view class="grid gap-3 md:grid-cols-3">
+        <view v-if="accessLevel === 'visitor'" class="grid gap-3 md:grid-cols-3">
           <view
             v-for="item in revealSteps"
             :key="item.title"
@@ -66,42 +66,36 @@
         </view>
 
         <view class="grid gap-6 xl:grid-cols-2">
-          <SelfProfileDetailSection :columns="2" :items="snapshotFacts" :title="t('sections.profileSnapshot')" />
-          <SelfProfileDetailSection
+          <ProfileDetailSection :columns="2" :items="snapshotFacts" :title="t('sections.profileSnapshot')" />
+          <ProfileDetailSection
             v-if="showRelationshipSection"
             :columns="2"
             :items="relationshipFacts"
             :title="t('sections.matchIntent')"
           />
-          <SelfProfileDetailSection
+          <ProfileDetailSection
             v-if="showRegisteredSections"
             :columns="2"
             :items="personalityFacts"
             :title="t('sections.aboutPersonality')"
           />
-          <SelfProfileDetailSection
+          <ProfileDetailSection
             v-if="showRegisteredSections"
             :columns="1"
             :items="lifestyleFacts"
             :title="t('sections.lifestyle')"
           />
-          <SelfProfileDetailSection
+          <ProfileDetailSection
             v-if="showPremiumSections"
             :columns="1"
             :items="preferenceFacts"
             :title="t('sections.partnerPreference')"
           />
-          <SelfProfileDetailSection
+          <ProfileDetailSection
             v-if="showPremiumSections"
             :columns="1"
             :items="valueFacts"
             :title="t('sections.valuesAndPlans')"
-          />
-          <SelfProfileDetailSection
-            v-if="showPremiumSections"
-            :columns="1"
-            :items="careerFacts"
-            :title="t('sections.careerAndCompatibility')"
           />
         </view>
       </view>
@@ -120,8 +114,8 @@
 import {computed, onMounted, ref} from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import SelfProfileDetailHero from '@/components/profiles/detail/SelfProfileDetailHero.vue'
-import SelfProfileDetailSection from '@/components/profiles/detail/SelfProfileDetailSection.vue'
+import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
+import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
 import {
   getSelfProfileDetail,
   PROFILE_FIELD_LOGIN_REQUIRED,
@@ -139,9 +133,8 @@ type RestrictedSelfProfileDetailField =
   | (typeof SELF_PROFILE_GUEST_REQUIRED_FIELDS)[number]
 
 const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
-  'age',
-  'bodyType',
   'acceptsLongDistance',
+  'relationshipPlan',
   'values',
   'smoking',
   'drinking',
@@ -149,10 +142,7 @@ const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
   'activityLevel',
   'weekendStyle',
   'pets',
-  'personalityTraits',
   'interests',
-  'communicationStyle',
-  'funFacts',
 ] as const
 
 const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
@@ -166,9 +156,10 @@ const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
   'preferredEducation',
   'familyPlan',
   'dealBreakers',
-  'highlights',
+  'personalityTraits',
+  'communicationStyle',
+  'funFacts',
   'prompts',
-  'compatibilityDimensions',
 ] as const
 
 const SELF_PROFILE_GUEST_REQUIRED_FIELDS = [
@@ -201,7 +192,20 @@ const accessLevel = computed(() => pageData.value.accessLevel)
 const showRelationshipSection = computed(() => !showActualLayout.value || accessLevel.value !== 'visitor')
 const showRegisteredSections = computed(() => !showActualLayout.value || accessLevel.value !== 'visitor')
 const showPremiumSections = computed(() => !showActualLayout.value || accessLevel.value === 'premium')
-const revealSteps = computed(() => pageData.value.revealSteps)
+const revealSteps = computed(() => [
+  {
+    title: t('sections.revealVisitorTitle'),
+    subtitle: t('sections.revealVisitorSubtitle'),
+  },
+  {
+    title: t('sections.revealRegisteredTitle'),
+    subtitle: t('sections.revealRegisteredSubtitle'),
+  },
+  {
+    title: t('sections.revealPremiumTitle'),
+    subtitle: t('sections.revealPremiumSubtitle'),
+  },
+])
 const heroData = computed(() => pageData.value.heroData)
 const snapshotFacts = computed(() => pageData.value.snapshotFacts)
 const relationshipFacts = computed(() => pageData.value.relationshipFacts)
@@ -209,7 +213,6 @@ const personalityFacts = computed(() => pageData.value.personalityFacts)
 const preferenceFacts = computed(() => pageData.value.preferenceFacts)
 const valueFacts = computed(() => pageData.value.valueFacts)
 const lifestyleFacts = computed(() => pageData.value.lifestyleFacts)
-const careerFacts = computed(() => pageData.value.careerFacts)
 
 onMounted(() => {
   void load()

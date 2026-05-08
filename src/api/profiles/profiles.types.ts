@@ -133,12 +133,10 @@ export interface SelfProfileDetail {
     photos: ProfilePhoto[]
     gender: GenderCode
     age: RestrictedProfileField<number>
-    ageRange: string
     height: number
     city: string
     country: string
     languages: string[]
-    bodyType: RestrictedProfileField<string>
     profileStatus: ProfileStatusCode
     isVerified: boolean
     lastActiveAt: string
@@ -150,7 +148,7 @@ export interface SelfProfileDetail {
     acceptsLongDistance: RestrictedProfileField<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: string
+    relationshipPlan: RestrictedProfileField<string>
     residencePlan: RestrictedProfileField<string>
     relocationWillingness: RestrictedProfileField<string>
     values: RestrictedProfileField<string[]>
@@ -171,10 +169,8 @@ export interface SelfProfileDetail {
     communicationStyle: RestrictedProfileField<string>
     funFacts: RestrictedProfileField<string[]>
     summary: string
-    highlights: RestrictedProfileField<string[]>
     tags: string[]
     prompts: RestrictedProfileField<ProfilePrompt[]>
-    compatibilityDimensions: RestrictedProfileField<CompatibilityDimension[]>
     privateIntroduction: PrivateIntroduction
 }
 

@@ -68,7 +68,6 @@ export interface ProfileRecord {
     nationality: LocalizedText
     hometown: LocalizedText
     languages: string[]
-    bodyType: LocalizedText
     livingSituation: LocalizedText
     zodiac: LocalizedText
     profileStatus: ProfileStatus
@@ -212,12 +211,10 @@ export interface SelfProfileDetailDTO {
     photos: LocalizedProfilePhotoDTO[]
     gender: GenderCode
     age: Restricted<number>
-    ageRange: string
     height: number
     city: string
     country: string
     languages: string[]
-    bodyType: Restricted<string>
     profileStatus: ProfileStatus
     isVerified: boolean
     lastActiveAt: string
@@ -229,7 +226,7 @@ export interface SelfProfileDetailDTO {
     acceptsLongDistance: Restricted<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: string
+    relationshipPlan: Restricted<string>
     residencePlan: Restricted<string>
     relocationWillingness: Restricted<string>
     values: Restricted<string[]>
@@ -250,10 +247,8 @@ export interface SelfProfileDetailDTO {
     communicationStyle: Restricted<string>
     funFacts: Restricted<string[]>
     summary: string
-    highlights: Restricted<string[]>
     tags: string[]
     prompts: Restricted<LocalizedProfilePromptDTO[]>
-    compatibilityDimensions: Restricted<CompatibilityDimensionDTO[]>
     privateIntroduction: PrivateIntroductionDTO
 }
 

@@ -6,9 +6,8 @@ export type ProfileRestrictedFieldValue =
     | typeof PROFILE_FIELD_LOGIN_REQUIRED
 
 export const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
-    'bodyType',
-    'age',
     'acceptsLongDistance',
+    'relationshipPlan',
     'values',
     'smoking',
     'drinking',
@@ -16,10 +15,7 @@ export const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
     'activityLevel',
     'weekendStyle',
     'pets',
-    'personalityTraits',
     'interests',
-    'communicationStyle',
-    'funFacts',
 ] as const
 
 export const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
@@ -33,9 +29,10 @@ export const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
     'preferredEducation',
     'familyPlan',
     'dealBreakers',
-    'highlights',
+    'personalityTraits',
+    'communicationStyle',
+    'funFacts',
     'prompts',
-    'compatibilityDimensions',
 ] as const
 
 export const SELF_PROFILE_GUEST_REQUIRED_FIELDS = [
