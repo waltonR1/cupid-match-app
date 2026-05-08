@@ -9,6 +9,7 @@ const defaultData: Database = {
     user_registrations: [],
     favorite_profiles: [],
     message_threads: [],
+    private_introduction_requests: [],
     privacy_settings: [],
     auth_users: [],
 }
@@ -27,6 +28,7 @@ let db: DbInstance | null = null
 export async function initDb(): Promise<void> {
     const {JSONFilePreset} = await import('lowdb/node')
     db = await JSONFilePreset<Database>(config.dbPath, defaultData)
+    db.data.private_introduction_requests ??= []
 }
 
 /** 获取数据库实例 */

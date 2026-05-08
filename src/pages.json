@@ -134,6 +134,27 @@
       }
     },
     {
+      "path": "pages/debug/private-introductions",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "私人介绍调试"
+      }
+    },
+    {
+      "path": "pages/debug/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "调试工具"
+      }
+    },
+    {
+      "path": "pages/debug/profile-access-preview",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "访问层级预览"
+      }
+    },
+    {
       "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",

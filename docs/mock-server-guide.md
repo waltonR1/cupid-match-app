@@ -89,6 +89,10 @@ npm run mock:build
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
 - `GET /api/profiles/self/:id`
+- `POST /api/profiles/self/:id/private-introduction`
+- `GET /api/debug/private-introductions`
+- `POST /api/debug/private-introductions/:id/accept`
+- `POST /api/debug/private-introductions/:id/decline`
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
@@ -101,7 +105,7 @@ npm run mock:build
 - `profiles` 目录接口支持筛选、排序、分页和 facets
 - `events/:id` 返回 `event + relatedProfiles`
 - `account/overview` 是聚合接口
-- `auth/register` 会写回 `mock-server/db.json`
+- `auth/register` 和私人介绍申请会写回 `mock-server/db.json`
 
 ## 最小回归范围
 
@@ -109,11 +113,19 @@ npm run mock:build
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`
 - `GET /api/profiles/self/:id`
+- `POST /api/profiles/self/:id/private-introduction`
+- `GET /api/debug/private-introductions`
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
 - `GET /api/account/overview?accountId=...`
 - `POST /api/auth/login`
+
+## 调试页面
+
+- `/pages/debug/index`：调试工具总入口。
+- `/pages/debug/private-introductions`：模拟私人介绍请求的接受与拒绝。
+- `/pages/debug/profile-access-preview`：预览 self detail 在 Backend、Guest、Free、Member 下的字段展示差异。
 
 可用 mock 登录账号：
 

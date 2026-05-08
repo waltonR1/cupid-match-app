@@ -1,6 +1,9 @@
 import type {LocalizedText} from './common.js'
 import type {ProfileRecord, RegisterRole} from './profile.js'
 
+/** 会员等级 */
+export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
+
 /** 活动日程项 */
 export interface EventAgendaItem {
     time: string
@@ -35,7 +38,7 @@ export interface AccountRecord {
     joinedAt: string
     profileId: string
     completion: number
-    membership: string
+    membership: MembershipLevel
     bio: LocalizedText
 }
 
@@ -67,6 +70,24 @@ export interface MessageThreadRecord {
     lastMessage: LocalizedText
 }
 
+/** 私人介绍请求状态 */
+export type PrivateIntroductionStatus =
+    | 'requested'
+    | 'accepted'
+    | 'declined'
+    | 'cooldown'
+
+/** 私人介绍请求记录 */
+export interface PrivateIntroductionRequestRecord {
+    id: string
+    accountId: string
+    profileId: string
+    status: PrivateIntroductionStatus
+    requestedAt: string
+    respondedAt?: string
+    cooldownUntil?: string
+}
+
 /** 隐私设置记录 */
 export interface PrivacySettingRecord {
     id: string
@@ -96,6 +117,7 @@ export interface Database {
     user_registrations: UserRegistrationRecord[]
     favorite_profiles: FavoriteProfileRecord[]
     message_threads: MessageThreadRecord[]
+    private_introduction_requests: PrivateIntroductionRequestRecord[]
     privacy_settings: PrivacySettingRecord[]
     auth_users: AuthUserRecord[]
 }
