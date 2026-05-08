@@ -1,8 +1,8 @@
 import type { ApiLocale } from '../types/common.js'
 import type {
-  AccountRecord,
   Database,
   FavoriteProfileRecord,
+  MembershipLevel,
   MessageThreadRecord,
   PrivacySettingRecord,
   UserRegistrationRecord,
@@ -15,8 +15,22 @@ import type {
 } from '../types/profile.js'
 import { resolveLocalizedText, resolveLocalizedTexts, withDisplayName } from '../utils/localized.js'
 
-type AccountWithDisplayName = AccountRecord & { displayName: string }
 type ProfileWithDisplayName = ProfileRecord & { displayName: string }
+
+interface AccountOverviewDTO {
+  id: string
+  realName: string
+  nickName: string
+  avatarUrl: string
+  displayName: string
+  city: string
+  joinedAt: string
+  profileId: string
+  completion: number
+  membership: MembershipLevel
+  bio: string
+  role: string
+}
 
 interface FavoriteOverview {
   favorite: ReturnType<typeof toFavoriteOverview>
@@ -33,23 +47,27 @@ interface UserEventOverview {
   event: ReturnType<typeof toEventDTO>
 }
 
-export function getAccountOverview(locale: ApiLocale, data: Database, accountId: string): {
-  account: ReturnType<typeof toAccountOverview>
+export function getAccountOverview(locale: ApiLocale, data: Database, userId: string): {
+  account: AccountOverviewDTO
   profile: AccountProfileSummaryDTO | null
   userEvents: UserEventOverview[]
   favorites: FavoriteOverview[]
   threads: ThreadOverview[]
   privacySettings: Array<ReturnType<typeof toPrivacySettingOverview>>
 } | null {
-  const account = data.accounts.find((item) => item.id === accountId)
-  if (!account) {
+  const user = data.users.find((item) => item.id === userId)
+  if (!user) {
     return null
   }
 
-  const profile = data.profiles.find((item) => item.id === account.profileId)
+  const membership = data.memberships.find((item) => item.userId === userId)
+  const primaryOwnership = data.profile_ownerships.find((item) => item.userId === userId && item.isPrimary)
+  const profileId = primaryOwnership?.profileId ?? ''
+
+  const profile = profileId ? data.profiles.find((item) => item.id === profileId) : undefined
 
   const favorites = data.favorite_profiles
-    .filter((favorite) => favorite.accountId === accountId)
+    .filter((favorite) => favorite.accountId === userId)
     .map((favorite) => {
       const favoriteProfile = data.profiles.find((profileItem) => profileItem.id === favorite.profileId)
       return favoriteProfile
@@ -59,7 +77,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, accountId:
     .filter(isPresent)
 
   const threads = data.message_threads
-    .filter((thread) => thread.accountId === accountId)
+    .filter((thread) => thread.accountId === userId)
     .map((thread) => {
       const threadProfile = data.profiles.find((profileItem) => profileItem.id === thread.profileId)
       return threadProfile
@@ -69,7 +87,7 @@ export function getAccountOverview(locale: ApiLocale, data: Database, accountId:
     .filter(isPresent)
 
   const userEvents = data.user_registrations
-    .filter((registration) => registration.accountId === accountId)
+    .filter((registration) => registration.accountId === userId)
     .map((registration) => {
       const event = data.events.find((item) => item.id === registration.eventId)
       return event ? { registration: toUserRegistrationOverview(locale, omitId(registration)), event: toEventDTO(locale, event) } : null
@@ -77,11 +95,11 @@ export function getAccountOverview(locale: ApiLocale, data: Database, accountId:
     .filter(isPresent)
 
   const privacySettings = data.privacy_settings
-    .filter((item) => item.accountId === accountId)
+    .filter((item) => item.accountId === userId)
     .map((item) => toPrivacySettingOverview(locale, omitAccountId(item)))
 
   return {
-    account: toAccountOverview(locale, withDisplayName(account)),
+    account: toAccountOverview(locale, user, membership?.tier ?? 'free', profileId),
     profile: profile ? toAccountProfileSummary(locale, withDisplayName(profile)) : null,
     userEvents,
     favorites,
@@ -90,11 +108,25 @@ export function getAccountOverview(locale: ApiLocale, data: Database, accountId:
   }
 }
 
-function toAccountOverview(locale: ApiLocale, account: AccountWithDisplayName) {
+function toAccountOverview(
+  locale: ApiLocale,
+  user: Database['users'][number],
+  tier: MembershipLevel,
+  profileId: string,
+): AccountOverviewDTO {
   return {
-    ...account,
-    city: resolveLocalizedText(locale, account.city),
-    bio: resolveLocalizedText(locale, account.bio),
+    id: user.id,
+    realName: user.displayName,
+    nickName: user.displayName,
+    avatarUrl: user.avatarUrl,
+    displayName: user.displayName,
+    city: resolveLocalizedText(locale, user.city),
+    joinedAt: user.createdAt,
+    profileId,
+    completion: user.profileCompletion,
+    membership: tier,
+    bio: resolveLocalizedText(locale, user.bio),
+    role: user.role,
   }
 }
 
