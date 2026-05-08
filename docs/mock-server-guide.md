@@ -98,7 +98,7 @@ npm run mock:build
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview?accountId=...`
+- `GET /api/account/overview`
 - `POST /api/auth/login`
 - `POST /api/auth/register`
 
@@ -122,7 +122,7 @@ npm run mock:build
 - `GET /api/profiles/family/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview?accountId=...`
+- `GET /api/account/overview`
 - `POST /api/auth/login`
 
 ## 调试页面

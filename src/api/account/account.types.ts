@@ -5,10 +5,6 @@ export type { FormatLocale }
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type AccountRegistrationStatus = 'confirmed' | 'waitlist' | 'completed'
 
-export interface AccountOverviewQuery {
-  userId: string
-}
-
 export interface UserOverview {
   id: string
   realName: string

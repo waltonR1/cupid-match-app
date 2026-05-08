@@ -63,7 +63,7 @@ export function useAccountOverview() {
     error.value = null
 
     try {
-      const data = await getAccountOverview({ userId })
+      const data = await getAccountOverview()
 
       Object.assign(user, data.user)
       Object.assign(profile, createEmptyAccountProfileSummary(), data.profile ?? {})
