@@ -31,7 +31,6 @@ export function buildSelfDirectoryFilterItems(
     const cities = facets?.cities ?? []
     const intents = facets?.intents ?? []
     const industries = facets?.industries ?? []
-    const occupations = facets?.occupations ?? []
     const languages = facets?.languages ?? []
 
     return [
@@ -42,7 +41,6 @@ export function buildSelfDirectoryFilterItems(
         buildEducationFilter('education', filters.education, t),
         buildIntentFilter(filters, t, intents),
         buildIndustryFilter(filters, t, industries),
-        buildOccupationFilter(filters, t, occupations),
         buildLanguageFilter(filters, locale, t, languages),
         buildVerifiedFilter(filters, t),
         buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t),
@@ -110,23 +108,6 @@ function buildIndustryFilter(
         options: toDirectoryOptions(industries),
         value: filters.industry,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
-        group: 'secondary',
-        t,
-    })
-}
-
-/** 构建职业筛选项 */
-function buildOccupationFilter(
-    filters: SelfDirectoryFilters,
-    t: Translate,
-    occupations: SelfProfileDirectoryFacets['occupations'],
-): SelfDirectoryFilterItem {
-    return buildDynamicFilter({
-        key: 'occupation',
-        label: t('fields.job'),
-        options: toDirectoryOptions(occupations),
-        value: filters.occupation,
-        widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
         group: 'secondary',
         t,
     })

@@ -175,7 +175,6 @@ export interface SelfProfileListItemDTO {
     city: string
     profileStatus: ProfileStatus
     education: string
-    occupation: string
     industry: string
     datingIntentionCode: DatingIntentionCode
     summary: string
@@ -193,7 +192,6 @@ export interface FamilyProfileListItemDTO {
     city: string
     profileStatus: ProfileStatus
     education: string
-    occupation: string
     industry: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
@@ -352,7 +350,6 @@ export interface SelfProfileDirectoryFacetsDTO {
     cities: DirectoryFacetOptionDTO[]
     intents: IntentFacetDTO[]
     industries: DirectoryFacetOptionDTO[]
-    occupations: DirectoryFacetOptionDTO[]
     languages: string[]
 }
 
@@ -361,7 +358,6 @@ export interface FamilyProfileDirectoryFacetsDTO {
     cities: DirectoryFacetOptionDTO[]
     intents: IntentFacetDTO[]
     industries: DirectoryFacetOptionDTO[]
-    occupations: DirectoryFacetOptionDTO[]
 }
 
 /** 标准化资料查询参数 */
@@ -376,7 +372,6 @@ export interface NormalizedProfileQuery {
     education: string
     datingIntentionCode: string
     industry: string
-    occupation: string
     language: string
     verified: string
     maritalStatus: string
@@ -396,6 +391,5 @@ export interface DirectoryFacets {
     cities: LocalizedText[]
     intents: DirectoryIntentFacet[]
     industries: LocalizedText[]
-    occupations: LocalizedText[]
     languages?: string[]
 }

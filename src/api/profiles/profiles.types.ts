@@ -97,7 +97,6 @@ export interface SelfProfileListItem {
     city: string
     profileStatus: ProfileStatusCode
     education: string
-    occupation: string
     industry: string
     datingIntentionCode: DatingIntentionCode
     summary: string
@@ -115,7 +114,6 @@ export interface FamilyProfileListItem {
     city: string
     profileStatus: ProfileStatusCode
     education: string
-    occupation: string
     industry: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
@@ -248,7 +246,6 @@ export interface SelfProfileDirectoryFacets {
     cities: DirectoryFacetOption[]
     intents: IntentFacet[]
     industries: DirectoryFacetOption[]
-    occupations: DirectoryFacetOption[]
     languages: string[]
 }
 
@@ -257,7 +254,6 @@ export interface FamilyProfileDirectoryFacets {
     cities: DirectoryFacetOption[]
     intents: IntentFacet[]
     industries: DirectoryFacetOption[]
-    occupations: DirectoryFacetOption[]
 }
 
 /** 本人资料目录查询参数 */
@@ -272,7 +268,6 @@ export interface SelfProfileDirectoryQuery {
     education?: string
     datingIntentionCode?: string
     industry?: string
-    occupation?: string
     language?: string
     verified?: string
     maritalStatus?: string
@@ -291,7 +286,6 @@ export interface FamilyProfileDirectoryQuery {
     education?: string
     datingIntentionCode?: string
     familyMode?: string
-    occupation?: string
     industry?: string
     maritalStatus?: string
     hasChildren?: string

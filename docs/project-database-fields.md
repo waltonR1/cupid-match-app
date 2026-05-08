@@ -100,7 +100,7 @@
 |---------------|-----------------|-----------------------------------|
 | `degreeLevel` | `DegreeLevel`   | 学历等级 code，用于筛选。                   |
 | `education`   | `LocalizedText` | 学历展示文本。                           |
-| `occupation`  | `LocalizedText` | 精确职业/职位。目录仍使用，detail API 已收紧为不返回。 |
+| `occupation`  | `LocalizedText` | 精确职业/职位。当前 profile directory 与 detail API 均不返回；account 摘要仍可用于资料管理展示。 |
 | `industry`    | `LocalizedText` | 行业/职业方向。detail 使用该字段替代精确职位。       |
 | `employer`    | `LocalizedText` | 雇主或职业身份。当前 detail API 不返回。        |
 | `incomeRange` | `LocalizedText` | 收入区间。当前 detail API 不返回。           |

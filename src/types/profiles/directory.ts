@@ -23,7 +23,6 @@ export interface FamilyDirectoryFilters {
     education: string
     datingIntentionCode: string
     familyMode: string
-    occupation: string
     industry: string
     maritalStatus: string
     hasChildren: string
@@ -39,7 +38,6 @@ export interface SelfDirectoryFilters {
     education: string
     datingIntentionCode: string
     industry: string
-    occupation: string
     language: string
     verified: string
     maritalStatus: string

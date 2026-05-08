@@ -50,7 +50,6 @@ export function normalizeProfileQuery(query: QueryRecord): NormalizedProfileQuer
         education: getString(query.education),
         datingIntentionCode: getString(query.datingIntentionCode),
         industry: getString(query.industry),
-        occupation: getString(query.occupation),
         language: getString(query.language),
         verified: getString(query.verified),
         maritalStatus: getString(query.maritalStatus),
@@ -66,7 +65,6 @@ export function buildSelfDirectoryFacets(locale: ApiLocale, items: ProfileWithDi
         cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
         intents: uniqueIntentFacetOptions(locale, items),
         industries: uniqueLocalizedFacetOptions(locale, items.map((item) => item.industry)),
-        occupations: uniqueLocalizedFacetOptions(locale, items.map((item) => item.occupation)),
         languages: Array.from(new Set(items.flatMap((item) => item.languages))).sort((left, right) => left.localeCompare(right)),
     }
 }
@@ -77,7 +75,6 @@ export function buildFamilyDirectoryFacets(locale: ApiLocale, items: ProfileWith
         cities: uniqueLocalizedFacetOptions(locale, items.map((item) => item.city)),
         intents: uniqueIntentFacetOptions(locale, items),
         industries: uniqueLocalizedFacetOptions(locale, items.map((item) => item.industry)),
-        occupations: uniqueLocalizedFacetOptions(locale, items.map((item) => item.occupation)),
     }
 }
 
@@ -91,7 +88,6 @@ export function matchesSelfDirectory(profile: ProfileWithDisplayName, query: Nor
         !query.education || profile.degreeLevel === query.education,
         !query.datingIntentionCode || profile.datingIntentionCode === query.datingIntentionCode,
         !query.industry || profile.industry.en === query.industry,
-        !query.occupation || profile.occupation.en === query.occupation,
         !query.language || profile.languages.includes(query.language),
         matchVerified(profile.isVerified, query.verified),
         !query.maritalStatus || profile.maritalStatus === query.maritalStatus,
@@ -109,7 +105,6 @@ export function matchesFamilyDirectory(profile: ProfileWithDisplayName, query: N
         !query.education || profile.degreeLevel === query.education,
         !query.datingIntentionCode || profile.datingIntentionCode === query.datingIntentionCode,
         matchFamilyMode(profile, query.familyMode),
-        !query.occupation || profile.occupation.en === query.occupation,
         !query.industry || profile.industry.en === query.industry,
         !query.maritalStatus || profile.maritalStatus === query.maritalStatus,
         matchBooleanFlag(profile.hasChildren, query.hasChildren),
@@ -283,7 +278,6 @@ export function toSelfProfileListItem(locale: ApiLocale, profile: ProfileWithDis
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
         education: resolveLocalizedText(locale, profile.education),
-        occupation: resolveLocalizedText(locale, profile.occupation),
         industry: resolveLocalizedText(locale, profile.industry),
         datingIntentionCode: profile.datingIntentionCode,
         summary: resolveLocalizedText(locale, profile.summary),
@@ -303,7 +297,6 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
         education: resolveLocalizedText(locale, profile.education),
-        occupation: resolveLocalizedText(locale, profile.occupation),
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,

@@ -23,7 +23,6 @@ export function buildFamilyDirectoryFilterItems(
 ): FamilyDirectoryFilterItem[] {
     const cities = facets?.cities ?? []
     const intents = facets?.intents ?? []
-    const occupations = facets?.occupations ?? []
     const industries = facets?.industries ?? []
 
     return [
@@ -33,7 +32,6 @@ export function buildFamilyDirectoryFilterItems(
         buildCityFilter(filters, t, cities),
         buildEducationFilter('education', filters.education, t),
         buildIntentFilter(filters, t, intents),
-        buildOccupationFilter(filters, t, occupations),
         buildIndustryFilter(filters, t, industries),
         buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t),
         buildChildrenFilter('hasChildren', filters.hasChildren, t),
@@ -84,23 +82,6 @@ function buildIntentFilter(
         value: filters.datingIntentionCode,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
         group: 'primary',
-        t,
-    })
-}
-
-/** 构建职业筛选项 */
-function buildOccupationFilter(
-    filters: FamilyDirectoryFilters,
-    t: Translate,
-    occupations: FamilyProfileDirectoryFacets['occupations'],
-): FamilyDirectoryFilterItem {
-    return buildDynamicFilter({
-        key: 'occupation',
-        label: t('filters.occupation'),
-        options: toDirectoryOptions(occupations),
-        value: filters.occupation,
-        widthClass: PROFILE_FILTER_WIDTH_CLASS.wide,
-        group: 'secondary',
         t,
     })
 }
