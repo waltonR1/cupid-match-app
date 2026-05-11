@@ -82,7 +82,7 @@ function toDebugItem(
     return {
         id: request.id,
         requesterUserId: request.requesterUserId,
-        requesterName: requester?.displayName || request.requesterUserId,
+        requesterName: requester?.accountName || request.requesterUserId,
         profileId: request.profileId,
         profileName: profile?.displayName || profile?.nickname || request.profileId,
         status: request.status,

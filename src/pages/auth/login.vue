@@ -5,8 +5,8 @@
       <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
-        <view class="grid gap-12 lg:min-h-[620px] lg:grid-cols-[1.04fr_0.96fr] lg:items-start">
-          <view class="max-w-[700px]">
+        <view class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <view class="max-w-[500px]">
             <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
               <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
               <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
@@ -14,80 +14,76 @@
               </text>
             </view>
 
-            <view class="max-w-[640px] text-[52px] font-semibold leading-[1.02] text-semantic-text-inverse lg:text-[86px]">
+            <view class="text-[44px] font-semibold leading-[1.06] text-semantic-text-inverse lg:text-[64px]">
               {{ labels.title }}
             </view>
 
-            <view class="mt-10 max-w-[620px] text-[19px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
+            <view class="mt-6 max-w-[580px] text-[17px] leading-8 text-semantic-text-hero-body">
               {{ labels.subtitle }}
             </view>
 
-            <view class="mt-12 grid gap-4 sm:grid-cols-2">
+            <view class="mt-10 grid gap-3 sm:grid-cols-2">
               <view
                 v-for="item in accessCards.slice(0, 2)"
                 :key="item.title"
-                class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-6 py-5 backdrop-blur"
+                class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4 backdrop-blur"
               >
-                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
-                  {{ item.kicker }}
-                </view>
-                <view class="mt-4 text-[22px] font-medium text-semantic-text-inverse">
+                <view class="text-[20px] font-medium text-semantic-text-inverse">
                   {{ item.title }}
                 </view>
-                <view class="mt-3 text-[15px] leading-7 text-semantic-text-hero-body">
+                <view class="mt-2 text-[14px] leading-6 text-semantic-text-hero-secondary">
                   {{ item.desc }}
                 </view>
               </view>
             </view>
           </view>
 
-          <view class="relative lg:ml-auto lg:w-full lg:max-w-[500px]">
+          <view class="relative lg:max-w-[520px]">
             <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-semantic-border-hero bg-component-auth-overlay-background-soft" />
 
-            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 shadow-hero backdrop-blur lg:px-9 lg:py-9">
-              <view>
-                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
-                  {{ labels.formTitle }}
-                </view>
-                <view class="mt-4 text-[32px] leading-[1.25] text-semantic-text-inverse">
-                  {{ labels.panelTitle }}
-                </view>
+            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-7 py-7 text-semantic-text-inverse shadow-hero backdrop-blur">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
+                {{ labels.formTitle }}
+              </view>
+              <view class="mt-2 text-[26px] leading-[1.3] text-semantic-text-inverse">
+                {{ labels.panelTitle }}
               </view>
 
-              <view class="mt-4 text-[15px] leading-7 text-semantic-text-hero-body">
+              <view class="mt-2 text-[14px] leading-6 text-semantic-text-hero-body">
                 {{ labels.panelHint }}
               </view>
 
-              <view class="mt-8 grid gap-5">
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.identity }}
-                  </view>
+              <view class="mt-5 grid gap-3">
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
                   <input
-                    v-model="identity"
-                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.identity"
+                    v-model="identifier"
+                    class="h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.identifier"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
 
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.password }}
-                  </view>
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
                   <input
                     v-model="password"
                     password="false"
-                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    class="h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                     :placeholder="formPlaceholders.password"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
+
+                <view
+                  v-if="loginError"
+                  class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3 text-[14px] leading-6 text-semantic-text-hero-body"
+                >
+                  {{ loginError }}
+                </view>
               </view>
 
-              <view class="mt-8 grid gap-4">
+              <view class="mt-6 grid gap-3">
                 <AppButton
-                  width="full"
+                  width="cta"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
                   @click="handleSubmit"
@@ -98,7 +94,7 @@
                 <AppButton
                   variant="secondary"
                   context="hero"
-                  width="full"
+                  width="cta"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
                   @click="openRegisterPage"
@@ -107,9 +103,9 @@
                 </AppButton>
               </view>
 
-              <label class="mt-6 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+              <label class="mt-5 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
                 <checkbox :checked="agreed" @click="toggleAgreement" />
-                <view class="text-[14px] leading-7 text-semantic-text-hero-body">
+                <view class="text-[13px] leading-7 text-semantic-text-hero-body">
                   <text>{{ agreement.prefix }}</text>
                   <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
                     {{ agreement.terms }}
@@ -121,35 +117,6 @@
                   <text>{{ agreement.suffix }}</text>
                 </view>
               </label>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="bg-semantic-page-subtle">
-      <view class="mx-auto max-w-[1280px] px-8 py-20">
-        <view class="mb-10 inline-flex items-center gap-4">
-          <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
-          <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
-            {{ labels.accessTitle }}
-          </text>
-        </view>
-
-        <view class="grid gap-6 lg:grid-cols-3">
-          <view
-            v-for="item in accessCards"
-            :key="item.title"
-            class="border border-semantic-border-default bg-component-editorial-card-background px-7 py-7 shadow-panel transition-all duration-300 hover:-translate-y-[2px] hover:border-component-editorial-card-border-hover hover:bg-component-editorial-card-background-hover"
-          >
-            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
-              {{ item.kicker }}
-            </view>
-            <view class="mt-4 text-[26px] font-semibold text-semantic-text-primary">
-              {{ item.title }}
-            </view>
-            <view class="mt-4 text-[16px] leading-8 text-semantic-text-secondary">
-              {{ item.desc }}
             </view>
           </view>
         </view>
@@ -213,14 +180,16 @@ import AppButton from "@/components/common/AppButton.vue";
 import { computed, ref } from 'vue'
 import { useLogin } from '@/hooks/auth'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openRegisterPage } from '@/utils/navigation'
-
-const SELF_ROUTE = '/pages/profiles/self/index'
+import { useAppI18n } from '@/i18n/composables/use-app-i18n'
+import { validateIdentifier, validatePassword } from '@/utils/validate'
+import { openRegisterPage, redirectToAuthLanding } from '@/utils/navigation'
 
 const { t } = usePageI18n('login')
+const { t: tApp } = useAppI18n()
 const loginAction = useLogin()
-const identity = ref('')
+const identifier = ref('')
 const password = ref('')
+const loginError = ref('')
 const agreed = ref(false)
 const agreementDialog = ref<'terms' | 'privacy' | null>(null)
 const showConsentConfirm = ref(false)
@@ -234,7 +203,6 @@ const labels = computed(() => ({
   panelHint: t('hero.panelHint'),
   submit: t('hero.submit'),
   secondary: t('hero.secondary'),
-  accessTitle: t('hero.accessTitle'),
 }))
 
 const agreement = computed(() => ({
@@ -253,22 +221,15 @@ const consentConfirm = computed(() => ({
   reject: t('hero.consentConfirm.reject'),
 }))
 
-const formLabels = computed(() => ({
-  identity: t('form.identity.label'),
-  password: t('form.password.label'),
-}))
-
-const formPlaceholders = computed(() => ({
-  identity: t('form.identity.placeholder'),
-  password: t('form.password.placeholder'),
-}))
-
 const accessCards = computed(() => [
-  { kicker: '01', title: t('access.account.title'), desc: t('access.account.desc') },
-  { kicker: '02', title: t('access.favorites.title'), desc: t('access.favorites.desc') },
-  { kicker: '03', title: t('access.events.title'), desc: t('access.events.desc') },
+  { title: t('access.account.title'), desc: t('access.account.desc') },
+  { title: t('access.favorites.title'), desc: t('access.favorites.desc') },
 ])
 
+const formPlaceholders = computed(() => ({
+  identifier: t('form.identifier.placeholder'),
+  password: t('form.password.placeholder'),
+}))
 
 async function handleSubmit() {
   if (!agreed.value) {
@@ -276,14 +237,24 @@ async function handleSubmit() {
     return
   }
 
-  await loginAction.login({
-    identity: identity.value,
-    password: password.value,
-  })
+  loginError.value = ''
 
-  uni.redirectTo({
-    url: SELF_ROUTE,
-  })
+  const idErr = validateIdentifier(identifier.value)
+  if (idErr) { loginError.value = tApp(idErr); return }
+
+  const pwErr = validatePassword(password.value)
+  if (pwErr) { loginError.value = tApp(pwErr); return }
+
+  try {
+    const session = await loginAction.login({
+      identifier: identifier.value,
+      password: password.value,
+    })
+
+    redirectToAuthLanding(session.user)
+  } catch {
+    loginError.value = t('form.error.invalid')
+  }
 }
 
 function toggleAgreement() {
@@ -308,4 +279,3 @@ function acceptAgreementAndLogin() {
   void handleSubmit()
 }
 </script>
-

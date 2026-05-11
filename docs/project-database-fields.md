@@ -47,7 +47,11 @@
 | `DatingIntentionCode`       | `'serious' \| 'marriage' \| 'exclusive' \| 'cross_border'`   |
 | `HabitCode`                 | `'never' \| 'social' \| 'often'`                             |
 | `DirectorySort`             | `'recentActive' \| 'priorityFirst' \| 'ageAsc' \| 'ageDesc'` |
-| `RegisterRole`              | `'self' \| 'parent'`                                         |
+| `RegisterRole`              | `'self' \| 'parent'`（仅用于 `profile_ownerships.role`）         |
+| `OnboardingPath`            | `'self' \| 'family'`                                         |
+| `OnboardingStep`            | `'create_profile' \| 'review_profile' \| 'browse'`           |
+| `UserStatus`                | `'active' \| 'paused' \| 'banned'`                           |
+| `AuthProvider`              | `'email' \| 'phone' \| 'wechat'`                             |
 | `MembershipLevel`           | `'free' \| 'silver' \| 'gold' \| 'diamond'`                  |
 | `PrivateIntroductionStatus` | `'requested' \| 'accepted' \| 'declined' \| 'cooldown'`      |
 
@@ -317,26 +321,27 @@ Detail API 返回扁平结构，并在返回前应用字段权限。
 | Field              | Type            | Description |
 |--------------------|-----------------|-------------|
 | `id`               | `string`        | 用户 ID。      |
-| `role`             | `RegisterRole`  | 注册角色。       |
-| `displayName`      | `string`        | 展示名。        |
+| `accountName`      | `string`        | 账户名称。       |
 | `avatarUrl`        | `string`        | 头像 URL。     |
 | `city`             | `LocalizedText` | 当前城市。       |
+| `preferredLocale`  | `string`        | 语言偏好。       |
+| `status`           | `UserStatus`    | 账户状态。       |
+| `onboardingPath`   | `OnboardingPath`| 注册路径。       |
+| `onboardingStep`   | `OnboardingStep`| 注册步骤。       |
 | `createdAt`        | `string`        | 创建时间。       |
-| `bio`              | `LocalizedText` | 账号简介。       |
-| `profileCompletion`| `number`        | 资料完成度。      |
-| `language`         | `string`        | 语言偏好。       |
+| `updatedAt`        | `string`        | 最近更新时间。     |
 
 ## auth_identities
 
-| Field      | Type       | Description |
-|------------|------------|-------------|
-| `id`       | `string`   | 认证身份 ID。    |
-| `userId`   | `string`   | 用户 ID。      |
-| `authType` | `AuthType` | 认证方式。       |
-| `identity` | `string`   | 登录标识。       |
-| `email`    | `string`   | 邮箱。         |
-| `password` | `string`   | mock 密码。     |
-| `createdAt`| `string`   | 创建时间。       |
+| Field        | Type          | Description |
+|--------------|---------------|-------------|
+| `id`         | `string`      | 认证身份 ID。    |
+| `userId`     | `string`      | 用户 ID。      |
+| `provider`   | `AuthProvider`| 认证提供方。      |
+| `identifier` | `string`      | 登录标识。       |
+| `password`   | `string`      | mock 密码。     |
+| `verifiedAt` | `string?`     | 认证验证时间。     |
+| `createdAt`  | `string`      | 创建时间。       |
 
 ## memberships
 

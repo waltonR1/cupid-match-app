@@ -28,7 +28,6 @@ interface AccountOverviewDTO {
   profileId: string
   completion: number
   membership: MembershipLevel
-  bio: string
   role: string
 }
 
@@ -116,17 +115,16 @@ function toAccountOverview(
 ): AccountOverviewDTO {
   return {
     id: user.id,
-    realName: user.displayName,
-    nickName: user.displayName,
+    realName: user.accountName,
+    nickName: user.accountName,
     avatarUrl: user.avatarUrl,
-    displayName: user.displayName,
+    displayName: user.accountName,
     city: resolveLocalizedText(locale, user.city),
     joinedAt: user.createdAt,
     profileId,
-    completion: user.profileCompletion,
+    completion: 0,
     membership: tier,
-    bio: resolveLocalizedText(locale, user.bio),
-    role: user.role,
+    role: user.onboardingPath,
   }
 }
 

@@ -5,10 +5,10 @@ export const registerMessages: AppMessageSchema = {
     eyebrow: 'Registration',
     title: 'Create your account and begin your matchmaking path',
     subtitle: 'Finish the core account signup first, then continue into the member or parent flow that fits your identity. You can complete the broader profile and follow-up steps after registration.',
-    selectedRole: 'Selected identity',
+    selectedPath: 'Selected identity',
     formTitle: 'Account Setup',
     panelTitle: 'Create your account',
-    panelHint: 'Use your main email or WeChat, set your password, and add the minimum details needed to open the account and continue into the right identity path.',
+    panelHint: 'Use your email or phone number, set a password, and fill in the essentials to create your account.',
     submit: 'Create account',
     processTitle: 'How signup works',
     agreementPrefix: 'I have read and agree to the',
@@ -18,14 +18,14 @@ export const registerMessages: AppMessageSchema = {
     agreementSuffix: '. After registration, the platform may use my account information for necessary service contact and will control profile visibility according to my identity path and privacy settings.',
     formFootnote: 'After registration, you can continue completing your profile, adjust visibility settings, and add more detailed relationship information inside the account.',
   },
-  roles: {
+  paths: {
     self: {
       badge: 'Member path',
       title: 'Register for myself',
       desc: 'Best for members who want to build their own profile, define relationship preferences directly, and move into matching and advisor guidance themselves.',
       note: 'This path emphasizes personal profile quality, preference clarity, advisor support, and communication led directly by the member.',
     },
-    parent: {
+    family: {
       badge: 'Family path',
       title: 'Register as a parent',
       desc: 'Best for parents who want to understand the process first, review candidates from a family perspective, and join the early communication flow.',
@@ -33,25 +33,30 @@ export const registerMessages: AppMessageSchema = {
     },
   },
   form: {
-    email: { label: 'Email or WeChat', placeholder: 'Enter your main email or WeChat' },
-    password: { label: 'Password', placeholder: 'Set your login password' },
-    confirmPassword: { label: 'Confirm password', placeholder: 'Enter the password again' },
-    nickName: { label: 'Account nickname', placeholder: 'Enter a nickname for your account' },
-    city: { label: 'City', placeholder: 'Example: Paris / Lyon / Brussels' },
+    accountName: { label: 'Your name', placeholder: 'Your name' },
+    identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
+    city: { label: 'City', placeholder: 'Paris' },
+    preferredLocale: {
+      label: 'Preferred language',
+      options: { zh: '中文', fr: 'Francais', en: 'English' },
+    },
+    password: { label: 'Password', placeholder: 'Set password' },
+    confirmPassword: { label: 'Confirm password', placeholder: 'Enter password again' },
+    error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', agreement: 'Please accept the platform terms and privacy notice before creating your account.' },
   },
   process: {
     step1: {
       title: 'Create the account',
       desc: {
-        self: 'Start by setting your email or WeChat and your password to open the member account.',
-        parent: 'Start by setting your email or WeChat and your password to open the family-side account.',
+        self: 'Set your login method and password to open the member account.',
+        parent: 'Set your login method and password to open the family-side account.',
       },
     },
     step2: {
       title: 'Add the basics',
       desc: {
-        self: 'Add your account nickname and city first, then continue into the broader personal profile afterwards.',
-        parent: 'Add the parent-side nickname and city first, then continue into the broader family setup afterwards.',
+        self: 'Add your account name and city first, then continue into the member path.',
+        parent: 'Add the parent-side account name and city first, then continue into the family path.',
       },
     },
     step3: {

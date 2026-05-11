@@ -130,7 +130,6 @@ function createEmptyAccountOverview(): AccountOverviewResponse {
       profileId: '',
       completion: 0,
       membership: 'free',
-      bio: '',
       role: '',
     },
     profile: null,

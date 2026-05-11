@@ -133,7 +133,7 @@ npm run mock:build
 
 可用 mock 登录账号：
 
-- `identity: lin@example.com`
+- `identifier: lin@example.com`
 - `password: password123`
 
 ## 与静态托管的关系

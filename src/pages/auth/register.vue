@@ -5,8 +5,8 @@
       <view class="pointer-events-none absolute right-20 top-28 h-[200px] w-[200px] rounded-full border border-semantic-border-hero-ornament" />
 
       <view class="mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
-        <view class="grid gap-12 lg:min-h-[680px] lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
-          <view class="max-w-[740px]">
+        <view class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <view class="max-w-[500px]">
             <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-2 backdrop-blur">
               <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
               <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-hero-eyebrow">
@@ -14,153 +14,145 @@
               </text>
             </view>
 
-            <view class="max-w-[700px] text-[52px] font-semibold leading-[1.04] text-semantic-text-inverse lg:text-[84px]">
+            <view class="text-[44px] font-semibold leading-[1.06] text-semantic-text-inverse lg:text-[64px]">
               {{ labels.title }}
             </view>
 
-            <view class="mt-8 max-w-[680px] text-[18px] leading-8 text-semantic-text-hero-body lg:text-[20px]">
+            <view class="mt-6 max-w-[580px] text-[17px] leading-8 text-semantic-text-hero-body">
               {{ labels.subtitle }}
             </view>
 
-            <view class="mt-12 grid gap-4 sm:grid-cols-2">
+            <view class="mt-10 grid gap-3 sm:grid-cols-2">
               <view
-                v-for="option in roleOptions"
+                v-for="option in pathOptions"
                 :key="option.value"
-                class="cursor-pointer border px-6 py-6 backdrop-blur transition-all duration-300 hover:-translate-y-[2px]"
-                :class="option.value === role
-                  ? 'border-component-auth-selection-border bg-component-auth-selection-background shadow-panel'
+                class="cursor-pointer border px-5 py-4 backdrop-blur transition-all duration-300"
+                :class="option.value === path
+                  ? 'border-component-auth-selection-border bg-component-auth-selection-background'
                   : 'border-semantic-border-hero bg-component-auth-overlay-background-soft hover:border-component-auth-selection-hover-border'"
-                @click="selectRole(option.value)"
+                @click="selectPath(option.value)"
               >
-                <view class="flex items-start justify-between gap-4">
-                  <view>
-                    <view
-                      class="text-[12px] uppercase tracking-[4px]"
-                      :class="option.value === role ? 'text-semantic-text-hero-label' : 'text-semantic-text-hero-secondary'"
-                    >
-                      {{ option.badge }}
-                    </view>
-                    <view class="mt-4 text-[24px] font-semibold text-semantic-text-inverse">
-                      {{ option.title }}
-                    </view>
-                  </view>
-
-                  <view
-                    class="mt-1 h-3.5 w-3.5 rounded-full border"
-                    :class="option.value === role
-                      ? 'border-component-auth-selection-indicator bg-component-auth-selection-indicator shadow-panel'
-                      : 'border-semantic-border-hero bg-transparent'"
-                  />
+                <view class="text-[12px] uppercase tracking-[4px]" :class="option.value === path ? 'text-semantic-text-hero-label' : 'text-semantic-text-hero-secondary'">
+                  {{ option.badge }}
                 </view>
-
-                <view class="mt-4 text-[15px] leading-7" :class="option.value === role ? 'text-semantic-text-hero-body' : 'text-semantic-text-hero-secondary'">
+                <view class="mt-2 text-[18px] font-semibold text-semantic-text-inverse">
+                  {{ option.title }}
+                </view>
+                <view class="mt-2 text-[14px] leading-6 text-semantic-text-hero-secondary">
                   {{ option.desc }}
                 </view>
               </view>
             </view>
-
-            <view class="mt-6 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-6 py-6 backdrop-blur">
-              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
-                {{ labels.selectedRole }}
-              </view>
-              <view class="mt-4 text-[28px] font-semibold text-semantic-text-inverse">
-                {{ activeRoleLabel }}
-              </view>
-              <view class="mt-3 text-[16px] leading-8 text-semantic-text-hero-body">
-                {{ activeRoleNote }}
-              </view>
-            </view>
           </view>
 
-          <view class="relative lg:ml-auto lg:w-full lg:max-w-[520px]">
+          <view class="relative lg:max-w-[520px]">
             <view class="pointer-events-none absolute inset-0 translate-x-4 translate-y-4 border border-semantic-border-hero bg-component-auth-overlay-background-soft" />
 
-            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 text-semantic-text-inverse shadow-hero backdrop-blur">
-              <view>
-                <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
-                  {{ labels.formTitle }}
-                </view>
-                <view class="mt-4 text-[30px] leading-[1.3] text-semantic-text-inverse">
-                  {{ labels.panelTitle }}
-                </view>
+            <view class="relative border border-semantic-border-hero bg-semantic-surface-hero-panel px-7 py-7 text-semantic-text-inverse shadow-hero backdrop-blur">
+              <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
+                {{ labels.formTitle }}
+              </view>
+              <view class="mt-2 text-[26px] leading-[1.3] text-semantic-text-inverse">
+                {{ labels.panelTitle }}
               </view>
 
-              <view class="mt-4 text-[15px] leading-7 text-semantic-text-hero-body">
+              <view class="mt-2 text-[14px] leading-6 text-semantic-text-hero-body">
                 {{ labels.panelHint }}
               </view>
 
-              <view class="mt-8 grid gap-5">
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.nickName }}
+              <view class="mt-5 grid gap-3">
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.accountName }}
                   </view>
                   <input
-                    v-model="nickName"
-                    class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.nickName"
+                    v-model="accountName"
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.accountName"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
 
-                <view class="grid gap-5 md:grid-cols-2">
-                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                      {{ formLabels.email }}
-                    </view>
-                    <input
-                      v-model="email"
-                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                      :placeholder="formPlaceholders.email"
-                      placeholder-class="text-semantic-text-hero-secondary"
-                    >
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.identifier }}
                   </view>
-
-                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                      {{ formLabels.city }}
-                    </view>
-                    <input
-                      v-model="city"
-                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                      :placeholder="formPlaceholders.city"
-                      placeholder-class="text-semantic-text-hero-secondary"
-                    >
-                  </view>
-
+                  <input
+                    v-model="identifier"
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.identifier"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
                 </view>
 
-                <view class="grid gap-5 md:grid-cols-2">
-                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                      {{ formLabels.password }}
-                    </view>
-                    <input
-                      v-model="password"
-                      password
-                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                      :placeholder="formPlaceholders.password"
-                      placeholder-class="text-semantic-text-hero-secondary"
-                    >
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.city }}
                   </view>
+                  <input
+                    v-model="city"
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.city"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
 
-                  <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
-                    <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-                      {{ formLabels.confirmPassword }}
-                    </view>
-                    <input
-                      v-model="confirmPassword"
-                      password
-                      class="mt-3 h-12 w-full border-b border-semantic-border-hero bg-transparent px-0 text-[16px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                      :placeholder="formPlaceholders.confirmPassword"
-                      placeholder-class="text-semantic-text-hero-secondary"
-                    >
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.preferredLocale }}
                   </view>
+                  <view class="mt-3 grid grid-cols-3 gap-2">
+                    <button
+                      v-for="option in preferredLocaleOptions"
+                      :key="option.value"
+                      class="h-10 border text-[13px] transition-colors"
+                      :class="option.value === preferredLocale
+                        ? 'border-component-auth-selection-border bg-component-auth-selection-background text-semantic-text-inverse'
+                        : 'border-semantic-border-hero bg-transparent text-semantic-text-hero-secondary'"
+                      @click="preferredLocale = option.value"
+                    >
+                      {{ option.label }}
+                    </button>
+                  </view>
+                </view>
+
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.password }}
+                  </view>
+                  <input
+                    v-model="password"
+                    password
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.password"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
+
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.confirmPassword }}
+                  </view>
+                  <input
+                    v-model="confirmPassword"
+                    password
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.confirmPassword"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
+
+                <view
+                  v-if="registerError"
+                  class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3 text-[14px] leading-6 text-semantic-text-hero-body"
+                >
+                  {{ registerError }}
                 </view>
               </view>
 
-              <label class="mt-6 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4">
+              <label class="mt-5 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
                 <checkbox :checked="agreed" @click="toggleAgreement" />
-                <view class="text-[14px] leading-7 text-semantic-text-hero-body">
+                <view class="text-[13px] leading-7 text-semantic-text-hero-body">
                   <text>{{ agreement.prefix }}</text>
                   <text class="text-semantic-text-link underline" @click.stop="openAgreementDialog('terms')">
                     {{ agreement.terms }}
@@ -173,7 +165,7 @@
                 </view>
               </label>
 
-              <view class="mt-8 grid gap-4">
+              <view class="mt-6 grid gap-3">
                 <AppButton
                   width="cta"
                   size="lg"
@@ -194,39 +186,6 @@
                   {{ loginText }}
                 </AppButton>
               </view>
-
-              <view class="mt-6 text-[14px] leading-7 text-semantic-text-hero-secondary">
-                {{ labels.formFootnote }}
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <view class="bg-semantic-page-subtle">
-      <view class="mx-auto max-w-[1280px] px-8 py-20">
-        <view class="mb-10 inline-flex items-center gap-4">
-          <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
-          <text class="text-[12px] uppercase tracking-[6px] text-semantic-text-eyebrow">
-            {{ labels.processTitle }}
-          </text>
-        </view>
-
-        <view class="grid gap-6 lg:grid-cols-3">
-          <view
-            v-for="(step, index) in processSteps"
-            :key="step.title"
-            class="border border-semantic-border-default bg-semantic-surface-panel px-7 py-7 shadow-panel"
-          >
-            <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">
-              {{ String(index + 1).padStart(2, '0') }}
-            </view>
-            <view class="mt-4 text-[24px] font-semibold leading-[1.35] text-semantic-text-primary">
-              {{ step.title }}
-            </view>
-            <view class="mt-4 text-[15px] leading-8 text-semantic-text-secondary">
-              {{ step.desc }}
             </view>
           </view>
         </view>
@@ -249,20 +208,27 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { useRegister } from '@/hooks/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openLoginPage } from '@/utils/navigation'
+import type { AppLocale } from '@/i18n/types'
+import { useAuthStore } from '@/stores/modules/auth'
+import { validateAccountName, validateCity, validateIdentifier, validatePassword } from '@/utils/validate'
+import { openLoginPage, redirectToAuthLanding } from '@/utils/navigation'
 
-type RegisterRole = 'self' | 'parent'
+type OnboardingPath = 'self' | 'family'
+type AuthProvider = 'email' | 'phone'
 type AgreementDialogType = 'terms' | 'privacy' | null
 
-const { t } = usePageI18n('register')
+const { t, locale } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
+const authStore = useAuthStore()
 const registerAction = useRegister()
-const role = ref<RegisterRole>('self')
-const email = ref('')
+const path = ref<OnboardingPath>('self')
+const accountName = ref('')
+const identifier = ref('')
+const city = ref('')
+const preferredLocale = ref<AppLocale>(locale.value)
 const password = ref('')
 const confirmPassword = ref('')
-const nickName = ref('')
-const city = ref('')
+const registerError = ref('')
 const agreed = ref(false)
 const agreementDialog = ref<AgreementDialogType>(null)
 
@@ -270,13 +236,10 @@ const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
   title: t('hero.title'),
   subtitle: t('hero.subtitle'),
-  selectedRole: t('hero.selectedRole'),
   formTitle: t('hero.formTitle'),
   panelTitle: t('hero.panelTitle'),
   panelHint: t('hero.panelHint'),
   submit: t('hero.submit'),
-  processTitle: t('hero.processTitle'),
-  formFootnote: t('hero.formFootnote'),
 }))
 
 const loginText = computed(() => tApp('common.nav.login'))
@@ -288,74 +251,86 @@ const agreement = computed(() => ({
   suffix: t('hero.agreementSuffix'),
 }))
 
-const roleOptions = computed(() => [
-  {
-    value: 'self' as const,
-    badge: t('roles.self.badge'),
-    title: t('roles.self.title'),
-    desc: t('roles.self.desc'),
-    note: t('roles.self.note'),
-  },
-  {
-    value: 'parent' as const,
-    badge: t('roles.parent.badge'),
-    title: t('roles.parent.title'),
-    desc: t('roles.parent.desc'),
-    note: t('roles.parent.note'),
-  },
+const pathOptions = computed(() => [
+  { value: 'self' as const, badge: t('paths.self.badge'), title: t('paths.self.title'), desc: t('paths.self.desc') },
+  { value: 'family' as const, badge: t('paths.family.badge'), title: t('paths.family.title'), desc: t('paths.family.desc') },
 ])
 
-const activeRoleLabel = computed(() => t(`roles.${role.value}.title`))
-const activeRoleNote = computed(() => t(`roles.${role.value}.note`))
+const preferredLocaleOptions = computed(() => [
+  { value: 'zh' as const, label: t('form.preferredLocale.options.zh') },
+  { value: 'fr' as const, label: t('form.preferredLocale.options.fr') },
+  { value: 'en' as const, label: t('form.preferredLocale.options.en') },
+])
 
 const formLabels = computed(() => ({
-  email: t('form.email.label'),
+  accountName: t('form.accountName.label'),
+  identifier: t('form.identifier.label'),
+  city: t('form.city.label'),
+  preferredLocale: t('form.preferredLocale.label'),
   password: t('form.password.label'),
   confirmPassword: t('form.confirmPassword.label'),
-  nickName: t('form.nickName.label'),
-  city: t('form.city.label'),
 }))
 
 const formPlaceholders = computed(() => ({
-  email: t('form.email.placeholder'),
+  accountName: t('form.accountName.placeholder'),
+  identifier: t('form.identifier.placeholder'),
+  city: t('form.city.placeholder'),
   password: t('form.password.placeholder'),
   confirmPassword: t('form.confirmPassword.placeholder'),
-  nickName: t('form.nickName.placeholder'),
-  city: t('form.city.placeholder'),
 }))
 
-const processSteps = computed(() => [
-  {
-    title: t('process.step1.title'),
-    desc: t(`process.step1.desc.${role.value}`),
-  },
-  {
-    title: t('process.step2.title'),
-    desc: t(`process.step2.desc.${role.value}`),
-  },
-  {
-    title: t('process.step3.title'),
-    desc: t(`process.step3.desc.${role.value}`),
-  },
-])
-
-function selectRole(nextRole: RegisterRole) {
-  role.value = nextRole
+function selectPath(nextPath: OnboardingPath) {
+  path.value = nextPath
 }
 
 async function handleSubmit() {
-  await registerAction.register({
-    role: role.value,
-    email: email.value,
-    password: password.value,
-    nickName: nickName.value,
-    city: city.value,
-  })
+  registerError.value = ''
 
-  uni.showToast({
-    title: labels.value.submit,
-    icon: 'none',
-  })
+  if (!agreed.value) {
+    registerError.value = t('form.error.agreement')
+    return
+  }
+
+  const nameErr = validateAccountName(accountName.value)
+  if (nameErr) { registerError.value = tApp(nameErr); return }
+
+  const idErr = validateIdentifier(identifier.value)
+  if (idErr) { registerError.value = tApp(idErr); return }
+
+  const cityErr = validateCity(city.value)
+  if (cityErr) { registerError.value = tApp(cityErr); return }
+
+  const pwErr = validatePassword(password.value)
+  if (pwErr) { registerError.value = tApp(pwErr); return }
+
+  if (password.value !== confirmPassword.value) {
+    registerError.value = t('form.error.mismatch')
+    return
+  }
+
+  try {
+    const session = await registerAction.register({
+      path: path.value,
+      provider: inferAuthProvider(identifier.value),
+      identifier: identifier.value.trim(),
+      password: password.value,
+      accountName: accountName.value.trim(),
+      city: city.value.trim(),
+      preferredLocale: preferredLocale.value,
+    })
+
+    if (session) {
+      authStore.login(session.user)
+      redirectToAuthLanding(session.user)
+    }
+
+    uni.showToast({
+      title: labels.value.submit,
+      icon: 'none',
+    })
+  } catch {
+    registerError.value = t('form.error.duplicate')
+  }
 }
 
 function toggleAgreement() {
@@ -370,5 +345,8 @@ function closeAgreementDialog() {
   agreementDialog.value = null
 }
 
-</script>
+function inferAuthProvider(value: string): AuthProvider {
+  return value.includes('@') ? 'email' : 'phone'
+}
 
+</script>

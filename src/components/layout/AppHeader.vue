@@ -72,9 +72,9 @@
               <view
                 class="flex h-8 w-8 items-center justify-center rounded-full border border-semantic-border-default bg-semantic-surface-panel text-[12px] text-semantic-text-primary"
               >
-                {{ auth.displayName?.charAt(0) || 'U' }}
+                {{ auth.accountName?.charAt(0) || 'U' }}
               </view>
-              <text>{{ auth.displayName }}</text>
+              <text>{{ auth.accountName }}</text>
               <text class="text-[10px] text-semantic-text-subtle">v</text>
             </view>
 

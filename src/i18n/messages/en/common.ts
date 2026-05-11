@@ -33,4 +33,10 @@ export const commonMessages: AppMessageSchema = {
       wechat: 'WeChat: RencontreParis',
       location: 'Paris · France',
     },
+    validate: {
+      name: { empty: 'Please enter your name', length: 'Name must be 1–30 characters' },
+      city: { empty: 'Please enter your city', tooLong: 'City must be 60 characters or fewer' },
+      password: { empty: 'Please enter a password', tooShort: 'Password must be at least 8 characters', needLetter: 'Password must include at least one letter', needDigit: 'Password must include at least one digit' },
+      identifier: { empty: 'Please enter your email or phone', invalid: 'Please enter a valid email or phone number' },
+    },
   }

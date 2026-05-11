@@ -82,30 +82,40 @@ export interface PrivacySettingRecord {
     desc: LocalizedText
 }
 
-/** 认证身份类型 */
-export type AuthType = 'email' | 'phone' | 'wechat' | 'google'
+/** 认证身份提供方 */
+export type AuthProvider = 'email' | 'phone' | 'wechat'
+
+/** 用户状态 */
+export type UserStatus = 'active' | 'paused' | 'banned'
+
+/** 注册路径 */
+export type OnboardingPath = 'self' | 'family'
+
+/** 注册步骤 */
+export type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
 
 /** 用户记录 */
 export interface UserRecord {
     id: string
-    role: RegisterRole
-    displayName: string
+    accountName: string
     avatarUrl: string
     city: LocalizedText
+    preferredLocale: 'zh' | 'fr' | 'en'
+    status: UserStatus
+    onboardingPath: OnboardingPath
+    onboardingStep: OnboardingStep
     createdAt: string
-    bio: LocalizedText
-    profileCompletion: number
-    language: string
+    updatedAt: string
 }
 
 /** 认证身份记录 */
 export interface AuthIdentityRecord {
     id: string
     userId: string
-    authType: AuthType
-    identity: string
-    email: string
+    provider: AuthProvider
+    identifier: string
     password: string
+    verifiedAt?: string
     createdAt: string
 }
 

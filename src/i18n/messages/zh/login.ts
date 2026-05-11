@@ -28,8 +28,9 @@ export const loginMessages: AppMessageSchema = {
       autoRouteDesc: '系统会根据账号资料直接进入本人或家长视图，不需要在登录阶段重复选择。',
     },
     form: {
-      identity: { label: '邮箱或微信', placeholder: '请输入你的常用联系方式' },
-      password: { label: '密码', placeholder: '请输入你的账号密码' },
+      identifier: { label: '邮箱或手机号', placeholder: '邮箱或手机号' },
+      password: { label: '密码', placeholder: '密码' },
+      error: { invalid: '账号或密码错误，请重试' },
     },
     access: {
       account: { title: '账户总览', desc: '查看资料完善进度、顾问跟进节奏与当前状态。' },

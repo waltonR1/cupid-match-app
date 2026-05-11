@@ -1,16 +1,19 @@
 import type { DbInstance } from '../db.js'
-import type { AuthIdentityRecord, Database, MembershipRecord, UserRecord } from '../types/database.js'
-import type { RegisterRole } from '../types/profile.js'
+import type { AuthIdentityRecord, Database, MembershipRecord, OnboardingPath, UserRecord } from '../types/database.js'
 import { nextId } from '../utils/id.js'
 import { localized } from '../utils/localized.js'
 import { getString } from '../utils/string.js'
+
+const PASSWORD_MIN = 8
 
 export interface AuthSession {
   token: string
   user: {
     id: string
-    displayName: string
+    accountName: string
     avatarUrl: string
+    onboardingPath: OnboardingPath
+    onboardingStep: 'create_profile' | 'review_profile' | 'browse'
   }
 }
 
@@ -25,9 +28,9 @@ export interface ServiceErrorResult {
 }
 
 export function login(data: Database, body: Record<string, unknown>): AuthSession | null {
-  const identity = getString(body.identity)
+  const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
-  const authIdentity = data.auth_identities.find((item) => item.identity === identity || item.email === identity)
+  const authIdentity = data.auth_identities.find((item) => item.identifier === identifier)
 
   if (!authIdentity || authIdentity.password !== password) {
     return null
@@ -43,20 +46,43 @@ export async function register(
   db: DbInstance,
   body: Record<string, unknown>,
 ): Promise<RegisterResult | ServiceErrorResult> {
-  const role = getString(body.role)
-  const email = getString(body.email)
+  const path = getString(body.path)
+  const provider = getString(body.provider)
+  const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
-  const nickName = getString(body.nickName)
+  const accountName = getString(body.accountName)
   const city = getString(body.city)
+  const preferredLocale = getString(body.preferredLocale)
 
-  if (!isRegisterRole(role) || !email || !password || !nickName) {
+  if (!isOnboardingPath(path) || !isAuthProvider(provider) || !identifier || !password || !accountName || !city || !isPreferredLocale(preferredLocale)) {
     return {
       statusCode: 400,
       body: { error: 'Missing required registration fields' },
     }
   }
 
-  const duplicate = db.data.auth_identities.find((item) => item.email === email || item.identity === email)
+  if (!isValidIdentifierForProvider(provider, identifier)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid identifier format' },
+    }
+  }
+
+  if (!isValidPassword(password)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Password must be at least 8 characters with letters and digits' },
+    }
+  }
+
+  if (accountName.trim().length === 0 || accountName.trim().length > 30) {
+    return {
+      statusCode: 400,
+      body: { error: 'Account name must be 1-30 characters' },
+    }
+  }
+
+  const duplicate = db.data.auth_identities.find((item) => item.identifier === identifier)
   if (duplicate) {
     return {
       statusCode: 409,
@@ -65,28 +91,28 @@ export async function register(
   }
 
   const userId = nextId('u', db.data.users)
-  const cityName = city || 'Paris'
-  const now = new Date().toISOString().slice(0, 10)
+  const cityName = city.trim()
+  const now = new Date().toISOString()
 
   const newUser: UserRecord = {
     id: userId,
-    role,
-    displayName: nickName,
+    accountName: accountName.trim(),
     avatarUrl: '',
     city: localized(cityName, cityName, cityName),
+    preferredLocale,
+    status: 'active',
+    onboardingPath: path as OnboardingPath,
+    onboardingStep: 'create_profile',
     createdAt: now,
-    bio: localized('新注册用户。', 'Nouvel utilisateur inscrit.', 'Newly registered user.'),
-    profileCompletion: 0,
-    language: 'zh',
+    updatedAt: now,
   }
 
   const authId = nextId('auth', db.data.auth_identities)
   const newAuthIdentity: AuthIdentityRecord = {
     id: authId,
     userId,
-    authType: 'email',
-    identity: email,
-    email,
+    provider: provider as AuthIdentityRecord['provider'],
+    identifier,
     password,
     createdAt: now,
   }
@@ -96,7 +122,7 @@ export async function register(
     id: membershipId,
     userId,
     tier: 'free',
-    startedAt: now,
+    startedAt: now.slice(0, 10),
   }
 
   db.data.users.push(newUser)
@@ -115,12 +141,47 @@ function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthS
     token: `mock-token-${authIdentity.id}`,
     user: {
       id: user.id,
-      displayName: user.displayName,
+      accountName: user.accountName,
       avatarUrl: user.avatarUrl || '',
+      onboardingPath: user.onboardingPath,
+      onboardingStep: user.onboardingStep,
     },
   }
 }
 
-function isRegisterRole(value: string): value is RegisterRole {
-  return value === 'self' || value === 'parent'
+function isOnboardingPath(value: string): value is OnboardingPath {
+  return value === 'self' || value === 'family'
+}
+
+function isAuthProvider(value: string): value is AuthIdentityRecord['provider'] {
+  return value === 'email' || value === 'phone' || value === 'wechat'
+}
+
+function isValidIdentifierForProvider(provider: AuthIdentityRecord['provider'], value: string): boolean {
+  if (provider === 'wechat') {
+    return value.trim().length > 0
+  }
+
+  if (provider === 'email') {
+    return isEmailIdentifier(value)
+  }
+
+  return isPhoneIdentifier(value)
+}
+
+function isEmailIdentifier(value: string): boolean {
+  const trimmed = value.trim()
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
+}
+
+function isPhoneIdentifier(value: string): boolean {
+  return /^\+?[1-9]\d{6,14}$/.test(value.trim().replace(/[\s-]/g, ''))
+}
+
+function isValidPassword(value: string): boolean {
+  return value.length >= PASSWORD_MIN && /[a-zA-Z]/.test(value) && /[0-9]/.test(value)
+}
+
+function isPreferredLocale(value: string): value is 'zh' | 'fr' | 'en' {
+  return value === 'zh' || value === 'fr' || value === 'en'
 }

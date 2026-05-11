@@ -16,7 +16,6 @@
             <AccountSectionHeader
               :label="t('profile.eyebrow')"
               :title="t('profile.sections.summary')"
-              :description="pageData.bio"
             />
 
             <view class="rounded-full border border-component-account-badge-meta-border bg-component-account-badge-meta-background px-4 py-2 text-[12px] font-medium text-component-account-badge-meta-text">
@@ -175,7 +174,6 @@ const pageData = computed(() => {
   const membership = membershipLabel(accountData.user.membership)
 
   return {
-    bio: localizeAccountText(locale.value, accountData.user.bio),
     membershipLabel: membership,
     summaryItems: [
       { label: t('topSummary.metrics.completion'), value: `${accountData.user.completion}%` },

@@ -16,7 +16,6 @@ export interface UserOverview {
   profileId: string
   completion: number
   membership: AccountMembershipLevel
-  bio: string
   role: string
 }
 

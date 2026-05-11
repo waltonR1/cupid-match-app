@@ -1,20 +1,24 @@
 export interface LoginPayload {
-  identity: string
+  identifier: string
   password: string
 }
 
 export interface RegisterPayload {
-  role: 'self' | 'parent'
-  email: string
+  path: 'self' | 'family'
+  provider: 'email' | 'phone' | 'wechat'
+  identifier: string
   password: string
-  nickName: string
+  accountName: string
   city: string
+  preferredLocale: 'zh' | 'fr' | 'en'
 }
 
 export interface AuthUser {
-  id?: string
-  displayName: string
-  avatarUrl?: string
+  id: string
+  accountName: string
+  avatarUrl: string
+  onboardingPath: 'self' | 'family'
+  onboardingStep: 'create_profile' | 'review_profile' | 'browse'
 }
 
 export interface AuthSession {

@@ -32,4 +32,10 @@ export const commonMessages: AppMessageSchema = {
       wechat: '微信: RencontreParis',
       location: '巴黎 · 法国',
     },
+    validate: {
+      name: { empty: '请输入名字', length: '名字需在 1-30 个字符之间' },
+      city: { empty: '请输入所在城市', tooLong: '城市名称需在 60 个字符以内' },
+      password: { empty: '请输入密码', tooShort: '密码至少 8 个字符', needLetter: '密码需包含至少一个字母', needDigit: '密码需包含至少一个数字' },
+      identifier: { empty: '请输入邮箱或手机号', invalid: '请输入有效的邮箱或手机号' },
+    },
   }

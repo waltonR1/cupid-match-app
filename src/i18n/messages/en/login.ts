@@ -28,8 +28,9 @@ export const loginMessages: AppMessageSchema = {
       autoRouteDesc: 'The system reads your account context and opens the matching member or parent path directly.',
     },
     form: {
-      identity: { label: 'Email or WeChat', placeholder: 'Enter your usual contact info' },
-      password: { label: 'Password', placeholder: 'Enter your account password' },
+      identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
+      password: { label: 'Password', placeholder: 'Password' },
+      error: { invalid: 'Invalid account or password. Please try again.' },
     },
     access: {
       account: { title: 'Account overview', desc: 'Review profile completion, advisor follow-up, and current journey status.' },

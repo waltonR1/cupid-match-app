@@ -28,8 +28,9 @@ export const loginMessages: AppMessageSchema = {
       autoRouteDesc: 'Le systeme lit le contexte du compte et envoie directement vers le parcours membre ou parent.',
     },
     form: {
-      identity: { label: 'Email ou WeChat', placeholder: 'Entrez votre contact habituel' },
-      password: { label: 'Mot de passe', placeholder: 'Entrez le mot de passe du compte' },
+      identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
+      password: { label: 'Mot de passe', placeholder: 'Mot de passe' },
+      error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.' },
     },
     access: {
       account: { title: 'Vue compte', desc: 'Suivre l avancement du profil, le rythme conseiller et le statut courant.' },

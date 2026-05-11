@@ -2113,31 +2113,27 @@
   "users": [
     {
       "id": "u-001",
-      "role": "self",
-      "displayName": "Lin",
+      "accountName": "Lin",
       "avatarUrl": "",
       "city": {
         "zh": "巴黎",
         "fr": "Paris",
         "en": "Paris"
       },
+      "preferredLocale": "zh",
+      "status": "active",
+      "onboardingPath": "self",
+      "onboardingStep": "browse",
       "createdAt": "2026-01-18",
-      "bio": {
-        "zh": "用于演示资料、会员和活动路径的 mock 账号。",
-        "fr": "Compte mock pour demontrer profil, abonnement et activites.",
-        "en": "Mock account for demonstrating profile, membership, and event journeys."
-      },
-      "profileCompletion": 82,
-      "language": "zh"
+      "updatedAt": "2026-01-18"
     }
   ],
   "auth_identities": [
     {
       "id": "auth-001",
       "userId": "u-001",
-      "authType": "email",
-      "identity": "lin@example.com",
-      "email": "lin@example.com",
+      "provider": "email",
+      "identifier": "lin@example.com",
       "password": "password123",
       "createdAt": "2026-01-18"
     }

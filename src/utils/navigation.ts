@@ -1,5 +1,10 @@
 import type { NavItem } from '@/constants/nav'
 
+interface AuthLandingUser {
+  onboardingPath: 'self' | 'family'
+  onboardingStep: 'create_profile' | 'review_profile' | 'browse'
+}
+
 export function navigateByNavKey(key: string, navList: NavItem[]) {
   const target = navList.find(item => item.key === key)
   if (!target?.path) return
@@ -25,6 +30,20 @@ export function openHomePage() {
 
 export function openRegisterPage() {
   openPage('/pages/auth/register')
+}
+
+export function redirectToAuthLanding(user: AuthLandingUser) {
+  uni.redirectTo({
+    url: getAuthLandingRoute(user),
+  })
+}
+
+function getAuthLandingRoute(user: AuthLandingUser) {
+  if (user.onboardingPath === 'family') {
+    return '/pages/profiles/family/index'
+  }
+
+  return '/pages/profiles/self/index'
 }
 
 export function openSelfDirectoryPage() {
