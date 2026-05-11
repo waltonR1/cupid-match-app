@@ -69,11 +69,14 @@
 
 <script setup lang="ts">
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {ContactCaseItem} from '@/types/contact/view'
 
 /** Contact Cases 组件参数 */
 defineProps<{
-  cards: ContactCaseItem[]
+  cards: {
+    icon: string
+    title: string
+    desc: string
+  }[]
 }>()
 
 /** Contact 页面命名空间文案 */

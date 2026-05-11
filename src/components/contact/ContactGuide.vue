@@ -89,11 +89,13 @@
 
 <script setup lang="ts">
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {ContactGuideTag} from '@/types/contact/view'
 
 /** Contact Guide 组件参数 */
 defineProps<{
-  tags: ContactGuideTag[]
+  tags: {
+    title: string
+    desc: string
+  }[]
 }>()
 
 /** Contact 页面命名空间文案 */

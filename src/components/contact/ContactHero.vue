@@ -74,11 +74,15 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {ContactCardItem} from '@/types/contact/view'
 
 /** Contact Hero 组件参数 */
 defineProps<{
-  cards: ContactCardItem[]
+  cards: {
+    icon: string
+    title: string
+    desc: string
+    value: string
+  }[]
   email: string
 }>()
 

@@ -56,11 +56,15 @@
 
 <script setup lang="ts">
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import type {ContactCardItem} from '@/types/contact/view'
 
 /** Contact Info 组件参数 */
 defineProps<{
-  cards: ContactCardItem[]
+  cards: {
+    icon: string
+    title: string
+    desc: string
+    value: string
+  }[]
   email: string
 }>()
 
