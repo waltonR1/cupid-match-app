@@ -15,11 +15,15 @@
 ## Global Rules
 
 - 数据链路保持 `page -> hook -> api -> mock-server`。
+- 当前 `mock-server` 用于验证 DTO、业务状态、数据链路和前端消费稳定性，不代表生产级后端安全实现。
+- 当前 `X-User-Id` 只允许作为 mock request context。
+- 本 contract 的目标是让前端消费稳定，并为未来 Java 后端复刻领域模型。
 - 页面只消费 API DTO / ViewModel，不直接依赖数据库 Record。
 - `mock-server/db.json` 按最终数据库集合建模，不再为了 mock 便利嵌套 `photos / prompts / agenda`。
 - Database Record、API DTO、Frontend ViewModel 必须分层。
 - 主表只保存稳定事实；展示名、年龄、头像、文案 label、权限结果、报名人数等可派生字段由后端 mapper / service 输出到 DTO。
 - 后端负责权限与字段 masking，前端只根据 DTO 的 `access / privacy / visibility` 结果展示。
+- security / transaction / infra 可以保持 prototype 级别；DTO boundary、source of truth、visibility / masking、ownership 等领域规则不能简化。
 - account 不允许反向决定 profile schema。
 
 ## Source of Truth Matrix
@@ -896,4 +900,3 @@ Before generating or changing code for any chain:
 6. Keep page code on hooks and DTOs only.
 7. Reject any implementation that adds removed fields back to `users`, `profiles`, or `events`.
 8. Update `docs/project-database-fields.md` after implementation changes current schema.
-

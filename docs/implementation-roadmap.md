@@ -27,6 +27,24 @@ Phase 6: 完成 profile / event / account / private introduction 联动
 page -> hook -> api -> mock-server
 ```
 
+## Mock Server Positioning
+
+当前 `mock-server` 是 Node.js + TypeScript 写的 high-fidelity business mock / 领域模型验证层，用于验证前端数据链路、API DTO 边界、source of truth、ownership、visibility、onboarding、entitlement、registration 等业务规则，并支撑前端页面完整闭环。
+
+它不是 production backend。未来正式后端将由 Java 实现；当前 `mock-server` 的输出应成为 Java 后端复刻领域模型和接口 contract 的参考。
+
+当前执行优先级：
+
+1. 前端页面闭环。
+2. API DTO 稳定。
+3. mock 数据链路跑通。
+4. 权限 / 可见性结果由 `mock-server` 统一给出。
+5. 为 Java 后端保留清晰 contract。
+
+当前阶段不要把 JWT / refresh token、真实权限安全体系、真实数据库事务、Redis / MQ、审计系统、上传存储、部署 / monitoring、migration、限流、完整 security hardening 做成重点。
+
+但 domain boundary、DTO boundary、source of truth、ownership、visibility / masking、onboarding state、entitlement / quota 语义、event registration source of truth 必须认真实现。
+
 ## 全局约束
 
 - 不引入新依赖，除非有明确必要。
