@@ -1,417 +1,749 @@
-# 项目数据库字段规范
+# 项目数据库字段（当前实现）
 
-本文记录 `mock-server/db.json` 的当前字段结构。`db.json` 用扁平字段模拟未来结构化数据库，不保存前端页面分组，也不保存字段权限配置。
+本文记录当前 `mock-server` 和 `mock-server/db.json` 的实际字段状态。它是当前实现快照，不是最终目标结构。
 
-约定：
+最终目标结构以这些文件为准：
 
-- `LocalizedText` 表示多语言文本：`{ zh: string, fr: string, en: string }`。
-- `profiles` 是资料主表，当前保留部分历史字段，后续数据库精简时再统一删除。
-- 字段可见性不写入 `profiles`。详情接口返回前，由 `mock-server/src/constants/profile-access.ts` 根据登录态和会员等级替换受限字段值。
-- 私人联系方式 `phone`、`email`、`wechat` 仍是原始数据库字段，但 detail API 不直接返回；页面通过 Private Introduction
-  流程申请平台撮合。
+- `docs/final-database-schema.md`
+- `docs/final-api-contract.md`
+- `docs/final-page-fields.md`
+- `docs/final-data-flow-contract.md`
+- `docs/implementation-roadmap.md`
+
+本文件最近核对时间：2026-05-13。
+
+## 核对来源
+
+- `mock-server/src/types/database.ts`
+- `mock-server/src/types/profile.ts`
+- `mock-server/src/constants/profile-access.ts`
+- `mock-server/src/services/profile.service.ts`
+- `src/api/profiles/profiles.types.ts`
+- `mock-server/db.json`
+
+读取 `mock-server/db.json` 时需要按 UTF-8 解析，否则 PowerShell 默认编码可能把中文内容显示成乱码。
 
 ## 顶层集合
 
-| Collection                      | Type                                 | Description |
-|---------------------------------|--------------------------------------|-------------|
-| `profiles`                      | `ProfileRecord[]`                    | 相亲资料主表。     |
-| `events`                        | `EventRecord[]`                      | 活动资料。       |
-| `users`                         | `UserRecord[]`                       | 平台用户主体。     |
-| `auth_identities`               | `AuthIdentityRecord[]`               | 认证身份。       |
-| `memberships`                   | `MembershipRecord[]`                 | 会员权益与额度。    |
-| `profile_ownerships`            | `ProfileOwnershipRecord[]`           | 用户与资料的关系。   |
-| `user_registrations`            | `UserRegistrationRecord[]`           | 活动报名关系。     |
-| `favorite_profiles`             | `FavoriteProfileRecord[]`            | 收藏关系。       |
-| `message_threads`               | `MessageThreadRecord[]`              | 会话摘要。       |
-| `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。     |
-| `privacy_settings`              | `PrivacySettingRecord[]`             | 隐私设置。       |
+| Collection                      | Type                                 | 当前职责                                                   | 最终计划                                                           |
+|---------------------------------|--------------------------------------|--------------------------------------------------------|----------------------------------------------------------------|
+| `profiles`                      | `ProfileRecord[]`                    | 相亲资料主表，目前同时承载展示字段、敏感字段、照片、问答和部分后台字段。                   | 收紧为结构化 profile 主表，照片、问答、联系方式、审核、内部资料拆出。                        |
+| `events`                        | `EventRecord[]`                      | 活动资料，目前嵌套 `agenda`，并直接保存 `seats` / `registered`。       | 增加活动字段，拆出 `event_agenda_items`，报名改为 `event_registrations`。     |
+| `users`                         | `UserRecord[]`                       | 登录用户主体，目前仍包含 `city`、`onboardingPath`、`onboardingStep`。 | 只保留账号身份字段；onboarding 拆到 `user_onboarding_states`。              |
+| `auth_identities`               | `AuthIdentityRecord[]`               | 登录身份，目前保存 `password`。                                  | 使用 `passwordHash`，支持多 provider。                                |
+| `memberships`                   | `MembershipRecord[]`                 | 当前用户会员等级。                                              | 拆为 plan、membership、entitlement、balance。                        |
+| `profile_ownerships`            | `ProfileOwnershipRecord[]`           | 用户与 profile 的拥有关系。                                     | 扩展 role、relationship、permission 和时间字段。                         |
+| `user_registrations`            | `UserRegistrationRecord[]`           | 当前活动报名关系。                                              | 改名并迁移为 `event_registrations`。                                  |
+| `favorite_profiles`             | `FavoriteProfileRecord[]`            | 收藏关系。                                                  | 保留关系表，字段改为 `createdAt` / `updatedAt`。                          |
+| `message_threads`               | `MessageThreadRecord[]`              | 旧会话摘要。                                                 | 后续由 private introduction room / messages 替代或暂停。                |
+| `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。                                                | 扩展 requesterProfile、targetProfile、quota、advisor 和时间字段。         |
+| `privacy_settings`              | `PrivacySettingRecord[]`             | 当前隐私设置，仍保存页面文案。                                        | 改为 `user_preferences` 或 profile visibility code/value，不保存页面文案。 |
 
 ## 通用类型
 
-### LocalizedText
+```ts
+interface LocalizedText {
+    zh: string
+    fr: string
+    en: string
+}
+```
 
-| Field | Type     | Description |
-|-------|----------|-------------|
-| `zh`  | `string` | 中文内容。       |
-| `fr`  | `string` | 法文内容。       |
-| `en`  | `string` | 英文内容。       |
+当前 enum：
 
-### Enum
+```ts
+type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
+type AuthProvider = 'email' | 'phone' | 'wechat'
+type UserStatus = 'active' | 'paused' | 'banned'
+type OnboardingPath = 'self' | 'family'
+type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
+type RegisterRole = 'self' | 'parent'
+type ProfileStatus = 'open' | 'vip' | 'review'
+type GenderCode = 'male' | 'female'
+type DegreeLevel = 'bachelor' | 'master' | 'phd'
+type MaritalStatus = 'single' | 'divorced' | 'widowed'
+type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
+type HabitCode = 'never' | 'social' | 'often'
+type PrivateIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cooldown'
+```
 
-| Type                        | Values                                                       |
-|-----------------------------|--------------------------------------------------------------|
-| `GenderCode`                | `'male' \| 'female'`                                         |
-| `ProfileStatus`             | `'open' \| 'vip' \| 'review'`                                |
-| `DegreeLevel`               | `'bachelor' \| 'master' \| 'phd'`                            |
-| `MaritalStatus`             | `'single' \| 'divorced' \| 'widowed'`                        |
-| `DatingIntentionCode`       | `'serious' \| 'marriage' \| 'exclusive' \| 'cross_border'`   |
-| `HabitCode`                 | `'never' \| 'social' \| 'often'`                             |
-| `DirectorySort`             | `'recentActive' \| 'priorityFirst' \| 'ageAsc' \| 'ageDesc'` |
-| `RegisterRole`              | `'self' \| 'parent'`（仅用于 `profile_ownerships.role`）         |
-| `OnboardingPath`            | `'self' \| 'family'`                                         |
-| `OnboardingStep`            | `'create_profile' \| 'review_profile' \| 'browse'`           |
-| `UserStatus`                | `'active' \| 'paused' \| 'banned'`                           |
-| `AuthProvider`              | `'email' \| 'phone' \| 'wechat'`                             |
-| `MembershipLevel`           | `'free' \| 'silver' \| 'gold' \| 'diamond'`                  |
-| `PrivateIntroductionStatus` | `'requested' \| 'accepted' \| 'declined' \| 'cooldown'`      |
+## Account / Auth 当前字段
 
-## profiles
+### users
 
-`profiles` 使用 `ProfileRecord`。当前字段如下。
+```ts
+interface UserRecord {
+    id: string
+    accountName: string
+    avatarUrl: string
+    city: LocalizedText
+    preferredLocale: 'zh' | 'fr' | 'en'
+    status: UserStatus
+    onboardingPath: OnboardingPath
+    onboardingStep: OnboardingStep
+    createdAt: string
+    updatedAt: string
+}
+```
 
-### 身份与基础资料
+当前问题：
 
-| Field                | Type            | Description                      |
-|----------------------|-----------------|----------------------------------|
-| `id`                 | `string`        | 资料 ID。                           |
-| `legalName`          | `string`        | 真实姓名。                            |
-| `nickname`           | `string`        | 昵称。                              |
-| `displayName`        | `string`        | 当前 mock 数据中的展示名。后续可改为后端由姓名/昵称生成。 |
-| `avatarUrl`          | `string`        | 头像 URL。                          |
-| `photos[].id`        | `string`        | 照片 ID。                           |
-| `photos[].url`       | `string`        | 照片 URL。                          |
-| `photos[].caption`   | `LocalizedText` | 照片说明。                            |
-| `photos[].isPrimary` | `boolean`       | 是否主图。                            |
-| `gender`             | `GenderCode`    | 性别。                              |
-| `pronouns`           | `string`        | 代词。当前详情链路不展示。                    |
-| `sexuality`          | `string`        | 性取向。当前详情链路不展示。                   |
-| `interestedIn`       | `GenderCode[]`  | 感兴趣对象。当前详情链路不展示。                 |
-| `age`                | `number`        | 年龄。                              |
-| `height`             | `number`        | 身高，单位 cm。                        |
-| `city`               | `LocalizedText` | 当前城市。                            |
-| `country`            | `LocalizedText` | 当前国家。                            |
-| `nationality`        | `LocalizedText` | 国籍。                              |
-| `hometown`           | `LocalizedText` | 家乡。当前详情链路不展示。                    |
-| `languages`          | `string[]`      | 语言 code。                         |
-| `livingSituation`    | `LocalizedText` | 居住状态。当前详情链路不展示。                  |
-| `zodiac`             | `LocalizedText` | 星座。当前详情链路不展示。                    |
+- `city` 不应长期留在 `users`，应进入 profile、event 或 user preference。
+- `onboardingPath` / `onboardingStep` 不应长期留在 `users`，应拆到 `user_onboarding_states`。
+- `avatarUrl` 当前可用于账号头像；profile 的头像不应从 `users` 读取。
 
-### 状态与 family 入口
+### auth_identities
 
-| Field                | Type            | Description                    |
-|----------------------|-----------------|--------------------------------|
-| `profileStatus`      | `ProfileStatus` | 资料状态。                          |
-| `isVerified`         | `boolean`       | 是否认证。                          |
-| `lastActiveAt`       | `string`        | 最近活跃时间。目录排序仍使用，detail API 不返回。 |
-| `joinedAt`           | `string`        | 加入时间。当前 detail API 不返回。        |
-| `familyVisible`      | `boolean`       | 是否对 family 入口可见。               |
-| `allowFamilyContact` | `boolean`       | 是否允许家庭协助沟通。                    |
-| `familyPriority`     | `boolean`       | 是否家庭优先展示。                      |
+```ts
+interface AuthIdentityRecord {
+    id: string
+    userId: string
+    provider: AuthProvider
+    identifier: string
+    password: string
+    verifiedAt?: string
+    createdAt: string
+}
+```
 
-### 学历与职业
+当前问题：
 
-| Field         | Type            | Description                       |
-|---------------|-----------------|-----------------------------------|
-| `degreeLevel` | `DegreeLevel`   | 学历等级 code，用于筛选。                   |
-| `education`   | `LocalizedText` | 学历展示文本。                           |
-| `occupation`  | `LocalizedText` | 精确职业/职位。当前 profile directory 与 detail API 均不返回；account 摘要仍可用于资料管理展示。 |
-| `industry`    | `LocalizedText` | 行业/职业方向。detail 使用该字段替代精确职位。       |
-| `employer`    | `LocalizedText` | 雇主或职业身份。当前 detail API 不返回。        |
-| `incomeRange` | `LocalizedText` | 收入区间。当前 detail API 不返回。           |
+- 当前仍使用 `password`，最终计划应使用 `passwordHash`。
+- 当前 provider 没有 `google`，最终 schema 预留 `google`。
 
-### 婚恋与择偶
+### memberships
 
-| Field                   | Type                  | Description  |
-|-------------------------|-----------------------|--------------|
-| `maritalStatus`         | `MaritalStatus`       | 婚姻状态。        |
-| `hasChildren`           | `boolean`             | 是否已有子女。      |
-| `wantsChildren`         | `boolean`             | 家庭计划倾向。      |
-| `acceptsLongDistance`   | `boolean`             | 是否接受跨城/异地安排。 |
-| `datingIntentionCode`   | `DatingIntentionCode` | 关系目标 code。   |
-| `datingIntentionLabel`  | `LocalizedText`       | 关系目标展示文本。    |
-| `relationshipPlan`      | `LocalizedText`       | 关系推进规划。      |
-| `residencePlan`         | `LocalizedText`       | 定居计划。        |
-| `relocationWillingness` | `LocalizedText`       | 城市与迁居意愿。     |
-| `values`                | `LocalizedText[]`     | 关系价值观。       |
-| `preferredAgeMin`       | `number`              | 期望最小年龄。      |
-| `preferredAgeMax`       | `number`              | 期望最大年龄。      |
-| `locationScope`         | `LocalizedText`       | 期望城市或距离范围。   |
-| `preferredEducation`    | `LocalizedText`       | 期望学历。        |
-| `familyPlan`            | `LocalizedText`       | 家庭计划偏好。      |
-| `dealBreakers`          | `LocalizedText[]`     | 重要边界。        |
+```ts
+interface MembershipRecord {
+    id: string
+    userId: string
+    tier: MembershipLevel
+    startedAt: string
+    expiresAt?: string
+}
+```
 
-### 生活方式、性格与内容
+当前问题：
 
-| Field                             | Type              | Description                            |
-|-----------------------------------|-------------------|----------------------------------------|
-| `smoking`                         | `HabitCode`       | 吸烟习惯。                                  |
-| `drinking`                        | `HabitCode`       | 饮酒习惯。                                  |
-| `exercise`                        | `LocalizedText`   | 运动习惯。                                  |
-| `activityLevel`                   | `LocalizedText`   | 活动程度。                                  |
-| `weekendStyle`                    | `LocalizedText`   | 周末节奏。                                  |
-| `pets`                            | `LocalizedText`   | 宠物态度。                                  |
-| `religion`                        | `LocalizedText`   | 信仰。当前 detail API 不返回。                  |
-| `politicalViews`                  | `LocalizedText`   | 公共议题态度。当前 detail API 不返回。              |
-| `personalityTraits`               | `LocalizedText[]` | 性格关键词。                                 |
-| `interests`                       | `LocalizedText[]` | 兴趣爱好。self detail 使用，family detail 不返回。 |
-| `communicationStyle`              | `LocalizedText`   | 沟通方式。                                  |
-| `funFacts`                        | `LocalizedText[]` | 有记忆点的小事。当前 detail API 不返回。             |
-| `summary`                         | `LocalizedText`   | 简介。                                    |
-| `highlights`                      | `LocalizedText[]` | 资料亮点。当前 detail API 不返回。                |
-| `tags`                            | `LocalizedText[]` | 标签。                                    |
-| `conversationStarters`            | `LocalizedText[]` | 对话建议。当前 detail API 不返回。                |
-| `dateIdeas`                       | `LocalizedText[]` | 初次见面建议。当前 detail API 不返回。              |
-| `prompts[].id`                    | `string`          | prompt ID。                             |
-| `prompts[].promptCode`            | `string`          | prompt code。                           |
-| `prompts[].prompt`                | `LocalizedText`   | prompt 问题。                             |
-| `prompts[].answer`                | `LocalizedText`   | 用户回答。                                  |
-| `compatibilityDimensions[].code`  | `string`          | 兼容维度 code。当前 detail API 不返回。           |
-| `compatibilityDimensions[].label` | `LocalizedText`   | 兼容维度名称。当前 detail API 不返回。              |
-| `compatibilityDimensions[].score` | `number`          | mock 兼容分数。当前 detail API 不返回。           |
-| `phone`                           | `string`          | 私人手机号。detail API 不返回。                  |
-| `email`                           | `string`          | 私人邮箱。detail API 不返回。                   |
-| `wechat`                          | `string`          | 私人微信。detail API 不返回。                   |
+- 当前只有用户会员等级，没有套餐、权益、额度余额表。
+- 私人介绍额度目前由服务层根据 tier 推导，不是独立 entitlement source of truth。
 
-## Detail API 字段说明
+### profile_ownerships
 
-Detail API 返回扁平结构，并在返回前应用字段权限。
+```ts
+interface ProfileOwnershipRecord {
+    id: string
+    profileId: string
+    userId: string
+    role: RegisterRole
+    isPrimary: boolean
+}
+```
+
+当前问题：
+
+- 当前 role 只有 `self` / `parent`。
+- 最终需要支持 `guardian` / `advisor`、`relationshipToProfile`、`permission`、`createdAt`、`updatedAt`。
+
+## Profile 当前数据库字段
+
+### profiles
+
+当前 `ProfileRecord` 是一个过大的主表：
+
+```ts
+interface ProfileRecord {
+    id: string
+    legalName: string
+    nickname: string
+    displayName: string
+    avatarUrl: string
+    photos: ProfilePhotoRecord[]
+    gender: GenderCode
+    pronouns: string
+    sexuality: string
+    interestedIn: GenderCode[]
+    age: number
+    height: number
+    city: LocalizedText
+    country: LocalizedText
+    nationality: LocalizedText
+    hometown: LocalizedText
+    languages: string[]
+    livingSituation: LocalizedText
+    zodiac: LocalizedText
+    profileStatus: ProfileStatus
+    isVerified: boolean
+    lastActiveAt: string
+    joinedAt: string
+    familyVisible: boolean
+    allowFamilyContact: boolean
+    familyPriority: boolean
+    degreeLevel: DegreeLevel
+    education: LocalizedText
+    occupation: LocalizedText
+    industry: LocalizedText
+    employer: LocalizedText
+    incomeRange: LocalizedText
+    maritalStatus: MaritalStatus
+    hasChildren: boolean
+    wantsChildren: boolean
+    acceptsLongDistance: boolean
+    datingIntentionCode: DatingIntentionCode
+    datingIntentionLabel: LocalizedText
+    relationshipPlan: LocalizedText
+    residencePlan: LocalizedText
+    relocationWillingness: LocalizedText
+    values: LocalizedText[]
+    preferredAgeMin: number
+    preferredAgeMax: number
+    locationScope: LocalizedText
+    preferredEducation: LocalizedText
+    familyPlan: LocalizedText
+    dealBreakers: LocalizedText[]
+    smoking: HabitCode
+    drinking: HabitCode
+    exercise: LocalizedText
+    activityLevel: LocalizedText
+    weekendStyle: LocalizedText
+    pets: LocalizedText
+    religion: LocalizedText
+    politicalViews: LocalizedText
+    personalityTraits: LocalizedText[]
+    interests: LocalizedText[]
+    communicationStyle: LocalizedText
+    funFacts: LocalizedText[]
+    summary: LocalizedText
+    highlights: LocalizedText[]
+    tags: LocalizedText[]
+    conversationStarters: LocalizedText[]
+    dateIdeas: LocalizedText[]
+    prompts: ProfilePromptRecord[]
+    compatibilityDimensions: CompatibilityDimensionRecord[]
+    phone: string
+    email: string
+    wechat: string
+}
+```
+
+当前字段分组：
+
+| 分组    | 当前字段                                                                                                                                                                                          | 备注                                                                              |
+|-------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| 身份与展示 | `legalName`, `nickname`, `displayName`, `avatarUrl`, `gender`, `age`, `height`                                                                                                                | `displayName`、`avatarUrl`、`age` 最终应由后端派生；`legalName` 进入 verification。           |
+| 照片    | `photos[]`                                                                                                                                                                                    | 当前嵌套在 profile；最终拆为 `profile_photos`。                                            |
+| 社交身份  | `pronouns`, `sexuality`, `interestedIn`                                                                                                                                                       | 与当前高端中介式产品定位不匹配，计划移除。                                                           |
+| 地理与语言 | `city`, `country`, `nationality`, `hometown`, `languages`, `livingSituation`, `zodiac`                                                                                                        | `city`、`country`、`nationality`、`languages` 保留；其余倾向移除。                           |
+| 状态    | `profileStatus`, `isVerified`, `lastActiveAt`, `joinedAt`                                                                                                                                     | `joinedAt` 最终改为 `createdAt`；验证状态后续进入 verification。                              |
+| 家庭视图  | `familyVisible`, `allowFamilyContact`, `familyPriority`                                                                                                                                       | 当前 family 链路仍使用。                                                                |
+| 教育职业  | `degreeLevel`, `education`, `occupation`, `industry`, `employer`, `incomeRange`                                                                                                               | `occupation` 改为 `careerDirection` 或移除；`employer` / `incomeRange` 进入 internal。   |
+| 关系意向  | `maritalStatus`, `hasChildren`, `wantsChildren`, `acceptsLongDistance`, `datingIntentionCode`, `datingIntentionLabel`, `relationshipPlan`, `residencePlan`, `relocationWillingness`, `values` | `wantsChildren` 最终改为 `childrenPlan`；`datingIntentionLabel` 由 code 派生。           |
+| 择偶偏好  | `preferredAgeMin`, `preferredAgeMax`, `locationScope`, `preferredEducation`, `familyPlan`, `dealBreakers`                                                                                     | 当前 detail 仍使用。                                                                  |
+| 生活方式  | `smoking`, `drinking`, `exercise`, `activityLevel`, `weekendStyle`, `pets`                                                                                                                    | 当前 detail 仍使用。                                                                  |
+| 敏感背景  | `religion`, `politicalViews`                                                                                                                                                                  | 当前 API 不返回，最终迁移到 internal 或问卷。                                                  |
+| 内容表达  | `personalityTraits`, `interests`, `communicationStyle`, `funFacts`, `summary`, `highlights`, `tags`, `conversationStarters`, `dateIdeas`, `prompts`                                           | `conversationStarters` / `dateIdeas` 已从 detail 链路移除；`prompts` 当前仍在 self detail。 |
+| 匹配判断  | `compatibilityDimensions`                                                                                                                                                                     | 当前 API 类型仍存在，但主 detail DTO 不返回；最终不使用百分比分数。                                      |
+| 联系方式  | `phone`, `email`, `wechat`                                                                                                                                                                    | 当前 detail 不直接返回；最终拆为 `profile_contact_methods`。                                 |
+
+### photos[]
+
+当前嵌套结构：
+
+```ts
+interface ProfilePhotoRecord {
+    id: string
+    url: string
+    caption: LocalizedText
+    isPrimary: boolean
+}
+```
+
+最终计划：
+
+- 拆为顶层集合 `profile_photos`。
+- 增加 `profileId`、`sortOrder`、`status`、`createdAt`、`updatedAt`。
+- `avatarUrl` 由主图派生，不再保存到 `profiles.avatarUrl`。
+
+### prompts[]
+
+当前嵌套结构：
+
+```ts
+interface ProfilePromptRecord {
+    id: string
+    promptCode: string
+    prompt: LocalizedText
+    answer: LocalizedText
+}
+```
+
+当前链路：
+
+- `mock-server/src/services/profile.service.ts` 在 `toSelfProfileDetail()` 中把 `profile.prompts` 本地化后返回。
+- `SelfProfileDetailDTO.prompts` 是 `Restricted<LocalizedProfilePromptDTO[]>`。
+- `FAMILY_PROFILE_MEMBER_ONLY_FIELDS` 没有 `prompts`。
+- `FamilyProfileDetailDTO` 当前不返回 `prompts`。
+- 前端 `src/api/profiles/profiles.types.ts` 仍声明 `ProfilePrompt` 和 `SelfProfileDetail.prompts`。
+
+最终计划：
+
+- `prompts` 不再嵌套在 `profiles` 主表。
+- 拆为顶层集合 `profile_prompts`。
+- 增加 `profileId`、`sortOrder`、`status`、`createdAt`、`updatedAt`。
+- 写入走独立 API；按当前 self/family 路由边界，self prompt 使用 `/api/profiles/self/:id/prompts` 这类 self 入口，不挂到泛化 detail 接口。
+- 如果 family detail 不展示 prompts，最终 API 文档应明确 self/family detail 的字段差异，避免一个泛化 `ProfileDetailDTO` 暗示
+  family 也必然返回 prompts。
+
+### compatibilityDimensions[]
+
+当前嵌套结构：
+
+```ts
+interface CompatibilityDimensionRecord {
+    code: string
+    label: LocalizedText
+    score: number
+}
+```
+
+当前状态：
+
+- `ProfileRecord` 和前端 API 类型仍有 compatibility 类型。
+- 当前 self/family detail DTO 不返回 `compatibilityDimensions`。
+- 页面重构后不再展示百分比匹配分数。
+
+最终计划：
+
+- 从 profile 主表移除。
+- 若后续恢复，应改为定性标签或顾问判断，不使用百分比分数作为前台展示核心。
+
+## Profile 当前 API DTO
+
+### SelfProfileListItemDTO
+
+```ts
+interface SelfProfileListItemDTO {
+    id: string
+    displayName: string
+    avatarUrl: string
+    gender: GenderCode
+    age: number
+    city: string
+    profileStatus: ProfileStatus
+    education: string
+    industry: string
+    datingIntentionCode: DatingIntentionCode
+    summary: string
+    languages: string[]
+    tags: string[]
+}
+```
+
+### FamilyProfileListItemDTO
+
+```ts
+interface FamilyProfileListItemDTO {
+    id: string
+    displayName: string
+    avatarUrl: string
+    gender: GenderCode
+    age: number
+    city: string
+    profileStatus: ProfileStatus
+    education: string
+    industry: string
+    maritalStatus: MaritalStatus
+    hasChildren: boolean
+    acceptsLongDistance: boolean
+    relationshipPlan: string
+    residencePlan: string
+    tags: string[]
+    allowFamilyContact: boolean
+    familyPriority: boolean
+}
+```
 
 ### SelfProfileDetailDTO
 
-| Field                   | Type                                      |
-|-------------------------|-------------------------------------------|
-| `id`                    | `string`                                  |
-| `displayName`           | `string`                                  |
-| `avatarUrl`             | `string`                                  |
-| `photos`                | `LocalizedProfilePhotoDTO[]`              |
-| `gender`                | `GenderCode`                              |
-| `age`                   | `Restricted<number>`                      |
-| `height`                | `number`                                  |
-| `city`                  | `string`                                  |
-| `country`               | `Restricted<string>`                      |
-| `languages`             | `Restricted<string[]>`                    |
-| `profileStatus`         | `ProfileStatus`                           |
-| `isVerified`            | `boolean`                                 |
-| `education`             | `string`                                  |
-| `industry`              | `Restricted<string>`                      |
-| `maritalStatus`         | `Restricted<MaritalStatus>`               |
-| `hasChildren`           | `Restricted<boolean>`                     |
-| `wantsChildren`         | `Restricted<boolean>`                     |
-| `acceptsLongDistance`   | `Restricted<boolean>`                     |
-| `datingIntentionCode`   | `DatingIntentionCode`                     |
-| `datingIntentionLabel`  | `string`                                  |
-| `relationshipPlan`      | `Restricted<string>`                      |
-| `residencePlan`         | `Restricted<string>`                      |
-| `relocationWillingness` | `Restricted<string>`                      |
-| `values`                | `Restricted<string[]>`                    |
-| `preferredAgeMin`       | `Restricted<number>`                      |
-| `preferredAgeMax`       | `Restricted<number>`                      |
-| `locationScope`         | `Restricted<string>`                      |
-| `preferredEducation`    | `Restricted<string>`                      |
-| `familyPlan`            | `Restricted<string>`                      |
-| `dealBreakers`          | `Restricted<string[]>`                    |
-| `smoking`               | `Restricted<HabitCode>`                   |
-| `drinking`              | `Restricted<HabitCode>`                   |
-| `exercise`              | `Restricted<string>`                      |
-| `activityLevel`         | `Restricted<string>`                      |
-| `weekendStyle`          | `Restricted<string>`                      |
-| `pets`                  | `Restricted<string>`                      |
-| `personalityTraits`     | `Restricted<string[]>`                    |
-| `interests`             | `Restricted<string[]>`                    |
-| `communicationStyle`    | `Restricted<string>`                      |
-| `summary`               | `string`                                  |
-| `tags`                  | `string[]`                                |
-| `prompts`               | `Restricted<LocalizedProfilePromptDTO[]>` |
-| `privateIntroduction`   | `PrivateIntroductionDTO`                  |
+当前 self detail 返回扁平字段，并通过特殊值做权限遮罩：
+
+```ts
+type Restricted<T> = T | '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__'
+
+interface SelfProfileDetailDTO {
+    id: string
+    displayName: string
+    avatarUrl: string
+    photos: LocalizedProfilePhotoDTO[]
+    gender: GenderCode
+    age: Restricted<number>
+    height: number
+    city: string
+    country: Restricted<string>
+    languages: Restricted<string[]>
+    profileStatus: ProfileStatus
+    isVerified: boolean
+    education: string
+    industry: Restricted<string>
+    maritalStatus: Restricted<MaritalStatus>
+    hasChildren: Restricted<boolean>
+    wantsChildren: Restricted<boolean>
+    acceptsLongDistance: Restricted<boolean>
+    datingIntentionCode: DatingIntentionCode
+    datingIntentionLabel: string
+    relationshipPlan: Restricted<string>
+    residencePlan: Restricted<string>
+    relocationWillingness: Restricted<string>
+    values: Restricted<string[]>
+    preferredAgeMin: Restricted<number>
+    preferredAgeMax: Restricted<number>
+    locationScope: Restricted<string>
+    preferredEducation: Restricted<string>
+    familyPlan: Restricted<string>
+    dealBreakers: Restricted<string[]>
+    smoking: Restricted<HabitCode>
+    drinking: Restricted<HabitCode>
+    exercise: Restricted<string>
+    activityLevel: Restricted<string>
+    weekendStyle: Restricted<string>
+    pets: Restricted<string>
+    personalityTraits: Restricted<string[]>
+    interests: Restricted<string[]>
+    communicationStyle: Restricted<string>
+    summary: string
+    tags: string[]
+    prompts: Restricted<LocalizedProfilePromptDTO[]>
+    privateIntroduction: PrivateIntroductionDTO
+}
+```
 
 ### FamilyProfileDetailDTO
 
-| Field                   | Type                         |
-|-------------------------|------------------------------|
-| `id`                    | `string`                     |
-| `displayName`           | `string`                     |
-| `avatarUrl`             | `string`                     |
-| `photos`                | `LocalizedProfilePhotoDTO[]` |
-| `gender`                | `GenderCode`                 |
-| `age`                   | `number`                     |
-| `height`                | `number`                     |
-| `city`                  | `string`                     |
-| `country`               | `Restricted<string>`         |
-| `nationality`           | `Restricted<string>`         |
-| `languages`             | `Restricted<string[]>`       |
-| `profileStatus`         | `ProfileStatus`              |
-| `isVerified`            | `boolean`                    |
-| `familyVisible`         | `boolean`                    |
-| `allowFamilyContact`    | `boolean`                    |
-| `familyPriority`        | `boolean`                    |
-| `education`             | `string`                     |
-| `industry`              | `string`                     |
-| `maritalStatus`         | `Restricted<MaritalStatus>`  |
-| `hasChildren`           | `Restricted<boolean>`        |
-| `wantsChildren`         | `Restricted<boolean>`        |
-| `acceptsLongDistance`   | `Restricted<boolean>`        |
-| `datingIntentionCode`   | `DatingIntentionCode`        |
-| `datingIntentionLabel`  | `string`                     |
-| `relationshipPlan`      | `Restricted<string>`         |
-| `residencePlan`         | `Restricted<string>`         |
-| `relocationWillingness` | `Restricted<string>`         |
-| `values`                | `Restricted<string[]>`       |
-| `preferredAgeMin`       | `Restricted<number>`         |
-| `preferredAgeMax`       | `Restricted<number>`         |
-| `locationScope`         | `Restricted<string>`         |
-| `preferredEducation`    | `Restricted<string>`         |
-| `familyPlan`            | `Restricted<string>`         |
-| `dealBreakers`          | `Restricted<string[]>`       |
-| `smoking`               | `Restricted<HabitCode>`      |
-| `drinking`              | `Restricted<HabitCode>`      |
-| `exercise`              | `Restricted<string>`         |
-| `activityLevel`         | `Restricted<string>`         |
-| `weekendStyle`          | `Restricted<string>`         |
-| `pets`                  | `Restricted<string>`         |
-| `personalityTraits`     | `Restricted<string[]>`       |
-| `communicationStyle`    | `Restricted<string>`         |
-| `summary`               | `string`                     |
-| `tags`                  | `string[]`                   |
-| `privateIntroduction`   | `PrivateIntroductionDTO`     |
+Family detail 当前不返回 `prompts`，但返回 family 相关控制字段：
 
-## 可见性规则
+```ts
+interface FamilyProfileDetailDTO {
+    id: string
+    displayName: string
+    avatarUrl: string
+    photos: LocalizedProfilePhotoDTO[]
+    gender: GenderCode
+    age: number
+    height: number
+    city: string
+    country: Restricted<string>
+    nationality: Restricted<string>
+    languages: Restricted<string[]>
+    profileStatus: ProfileStatus
+    isVerified: boolean
+    familyVisible: boolean
+    allowFamilyContact: boolean
+    familyPriority: boolean
+    education: string
+    industry: string
+    maritalStatus: Restricted<MaritalStatus>
+    hasChildren: Restricted<boolean>
+    wantsChildren: Restricted<boolean>
+    acceptsLongDistance: Restricted<boolean>
+    datingIntentionCode: DatingIntentionCode
+    datingIntentionLabel: string
+    relationshipPlan: Restricted<string>
+    residencePlan: Restricted<string>
+    relocationWillingness: Restricted<string>
+    values: Restricted<string[]>
+    preferredAgeMin: Restricted<number>
+    preferredAgeMax: Restricted<number>
+    locationScope: Restricted<string>
+    preferredEducation: Restricted<string>
+    familyPlan: Restricted<string>
+    dealBreakers: Restricted<string[]>
+    smoking: Restricted<HabitCode>
+    drinking: Restricted<HabitCode>
+    exercise: Restricted<string>
+    activityLevel: Restricted<string>
+    weekendStyle: Restricted<string>
+    pets: Restricted<string>
+    personalityTraits: Restricted<string[]>
+    communicationStyle: Restricted<string>
+    summary: string
+    tags: string[]
+    privateIntroduction: PrivateIntroductionDTO
+}
+```
 
-受限字段值使用：
+## Profile 当前权限字段
 
-| Value                | Meaning |
-|----------------------|---------|
-| `__LOGIN_REQUIRED__` | 登录后可见。  |
-| `__MEMBER_ONLY__`    | 会员可见。   |
+当前字段遮罩由 `mock-server/src/constants/profile-access.ts` 控制。
 
-### self detail
+### Self detail
 
-| Rule                                 | Fields                                                                                                                                                                                                                                    |
-|--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SELF_PROFILE_LOGIN_REQUIRED_FIELDS` | `country`, `languages`, `maritalStatus`, `acceptsLongDistance`, `relationshipPlan`, `values`, `smoking`, `drinking`, `exercise`, `activityLevel`, `weekendStyle`, `pets`, `interests`                                                     |
-| `SELF_PROFILE_MEMBER_ONLY_FIELDS`    | `hasChildren`, `wantsChildren`, `residencePlan`, `relocationWillingness`, `preferredAgeMin`, `preferredAgeMax`, `locationScope`, `preferredEducation`, `familyPlan`, `dealBreakers`, `personalityTraits`, `communicationStyle`, `prompts` |
-| `SELF_PROFILE_GUEST_REQUIRED_FIELDS` | login-required 与 member-only 字段合集，访客统一返回 `__LOGIN_REQUIRED__`。                                                                                                                                                                            |
+登录后可见、游客遮罩：
 
-### family detail
+```ts
+const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
+    'country',
+    'languages',
+    'maritalStatus',
+    'acceptsLongDistance',
+    'relationshipPlan',
+    'values',
+    'smoking',
+    'drinking',
+    'exercise',
+    'activityLevel',
+    'weekendStyle',
+    'pets',
+    'interests',
+]
+```
 
-| Rule                                   | Fields                                                                                                                                                                                                                                   |
-|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS` | `country`, `nationality`, `languages`, `maritalStatus`, `relationshipPlan`, `acceptsLongDistance`, `smoking`, `drinking`, `exercise`, `activityLevel`, `weekendStyle`, `pets`                                                            |
-| `FAMILY_PROFILE_MEMBER_ONLY_FIELDS`    | `hasChildren`, `wantsChildren`, `residencePlan`, `relocationWillingness`, `values`, `preferredAgeMin`, `preferredAgeMax`, `locationScope`, `preferredEducation`, `familyPlan`, `dealBreakers`, `personalityTraits`, `communicationStyle` |
-| `FAMILY_PROFILE_GUEST_REQUIRED_FIELDS` | login-required 与 member-only 字段合集，访客统一返回 `__LOGIN_REQUIRED__`。                                                                                                                                                                           |
+会员可见、免费用户遮罩：
 
-说明：
+```ts
+const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
+    'hasChildren',
+    'wantsChildren',
+    'residencePlan',
+    'relocationWillingness',
+    'preferredAgeMin',
+    'preferredAgeMax',
+    'locationScope',
+    'preferredEducation',
+    'familyPlan',
+    'dealBreakers',
+    'personalityTraits',
+    'communicationStyle',
+    'prompts',
+]
+```
 
-- 同名字段在 self/family 中尽量保持同一访问层级；差异主要体现在页面信息架构，而不是字段权限互相冲突。
-- `free` 会员等级表示已登录但非付费会员：可看登录后字段，会员字段返回 `__MEMBER_ONLY__`。
-- `silver`、`gold`、`diamond` 都视为 member，可看 member-only 字段。
-- debug 预览接口 `GET /api/debug/profile-access-preview/:profileType/:id?mode=backend|guest|free|member`
-  由后端按同一套常量生成结果，前端不复制权限常量。
+### Family detail
 
-## events
+登录后可见、游客遮罩：
 
-| Field            | Type            | Description |
-|------------------|-----------------|-------------|
-| `id`             | `string`        | 活动 ID。      |
-| `date`           | `string`        | 活动日期。       |
-| `city`           | `LocalizedText` | 活动城市。       |
-| `venue`          | `LocalizedText` | 活动地点。       |
-| `status`         | `string`        | 活动状态。       |
-| `title`          | `LocalizedText` | 活动标题。       |
-| `format`         | `LocalizedText` | 活动形式。       |
-| `audience`       | `LocalizedText` | 适合人群。       |
-| `summary`        | `LocalizedText` | 活动简介。       |
-| `seats`          | `number`        | 总席位。        |
-| `registered`     | `number`        | 已报名人数。      |
-| `agenda[].time`  | `string`        | 议程时间段。      |
-| `agenda[].title` | `LocalizedText` | 议程标题。       |
-| `agenda[].desc`  | `LocalizedText` | 议程说明。       |
+```ts
+const FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS = [
+    'country',
+    'nationality',
+    'languages',
+    'maritalStatus',
+    'relationshipPlan',
+    'acceptsLongDistance',
+    'smoking',
+    'drinking',
+    'exercise',
+    'activityLevel',
+    'weekendStyle',
+    'pets',
+]
+```
 
-## users
+会员可见、免费用户遮罩：
 
-| Field              | Type            | Description |
-|--------------------|-----------------|-------------|
-| `id`               | `string`        | 用户 ID。      |
-| `accountName`      | `string`        | 账户名称。       |
-| `avatarUrl`        | `string`        | 头像 URL。     |
-| `city`             | `LocalizedText` | 当前城市。       |
-| `preferredLocale`  | `string`        | 语言偏好。       |
-| `status`           | `UserStatus`    | 账户状态。       |
-| `onboardingPath`   | `OnboardingPath`| 注册路径。       |
-| `onboardingStep`   | `OnboardingStep`| 注册步骤。       |
-| `createdAt`        | `string`        | 创建时间。       |
-| `updatedAt`        | `string`        | 最近更新时间。     |
+```ts
+const FAMILY_PROFILE_MEMBER_ONLY_FIELDS = [
+    'hasChildren',
+    'wantsChildren',
+    'residencePlan',
+    'relocationWillingness',
+    'values',
+    'preferredAgeMin',
+    'preferredAgeMax',
+    'locationScope',
+    'preferredEducation',
+    'familyPlan',
+    'dealBreakers',
+    'personalityTraits',
+    'communicationStyle',
+]
+```
 
-## auth_identities
+当前注意点：
 
-| Field        | Type          | Description |
-|--------------|---------------|-------------|
-| `id`         | `string`      | 认证身份 ID。    |
-| `userId`     | `string`      | 用户 ID。      |
-| `provider`   | `AuthProvider`| 认证提供方。      |
-| `identifier` | `string`      | 登录标识。       |
-| `password`   | `string`      | mock 密码。     |
-| `verifiedAt` | `string?`     | 认证验证时间。     |
-| `createdAt`  | `string`      | 创建时间。       |
+- 权限结果当前通过字段值替换为 `__LOGIN_REQUIRED__` 或 `__MEMBER_ONLY__` 表达。
+- 当前还没有独立的 `access` / `lockedFields` DTO。
+- 当前还没有 `profile_visibility_settings` 集合。
 
-## memberships
+## Event 当前字段
 
-| Field       | Type              | Description |
-|-------------|-------------------|-------------|
-| `id`        | `string`          | 会员记录 ID。    |
-| `userId`    | `string`          | 用户 ID。      |
-| `tier`      | `MembershipLevel` | 会员等级。       |
-| `startedAt` | `string`          | 开始时间。       |
-| `expiresAt` | `string?`         | 过期时间。       |
+### events
 
-## profile_ownerships
+```ts
+interface EventRecord {
+    id: string
+    date: string
+    city: LocalizedText
+    venue: LocalizedText
+    status: string
+    title: LocalizedText
+    format: LocalizedText
+    audience: LocalizedText
+    summary: LocalizedText
+    seats: number
+    registered: number
+    agenda: EventAgendaItem[]
+}
+```
 
-| Field       | Type           | Description |
-|-------------|----------------|-------------|
-| `id`        | `string`       | 所有权记录 ID。   |
-| `profileId` | `string`       | 资料 ID。      |
-| `userId`    | `string`       | 用户 ID。      |
-| `role`      | `RegisterRole` | 管理角色。       |
-| `isPrimary` | `boolean`      | 是否主所有权。     |
+### agenda[]
 
-## user_registrations
+```ts
+interface EventAgendaItem {
+    time: string
+    title: LocalizedText
+    desc: LocalizedText
+}
+```
 
-| Field       | Type            | Description |
-|-------------|-----------------|-------------|
-| `id`        | `string`        | 报名记录 ID。    |
-| `userId`    | `string`        | 用户 ID。      |
-| `eventId`   | `string`        | 活动 ID。      |
-| `status`    | `string`        | 报名状态。       |
-| `note`      | `LocalizedText` | 报名备注。       |
+当前问题：
 
-## favorite_profiles
+- `agenda` 仍嵌套在 `events`。
+- `registered` 仍直接存在 event 主表。
+- 还没有 `slug`、`visibility`、`address`、`addressVisibility`、`startTime`、`endTime`、`relationshipFocus`、`languageCodes`、
+  `capacity`、`advisorNote`、`coverImageUrl`。
 
-| Field       | Type            | Description |
-|-------------|-----------------|-------------|
-| `id`        | `string`        | 收藏记录 ID。    |
-| `userId`    | `string`        | 用户 ID。      |
-| `profileId` | `string`        | 资料 ID。      |
-| `savedAt`   | `string`        | 收藏时间。       |
-| `note`      | `LocalizedText` | 收藏备注。       |
+## 关系集合当前字段
 
-## message_threads
+### user_registrations
 
-| Field         | Type            | Description |
-|---------------|-----------------|-------------|
-| `id`          | `string`        | 会话摘要 ID。    |
-| `userId`      | `string`        | 用户 ID。      |
-| `profileId`   | `string`        | 资料 ID。      |
-| `updatedAt`   | `string`        | 最近更新时间。     |
-| `unread`      | `number`        | 未读数。        |
-| `lastMessage` | `LocalizedText` | 最近消息摘要。     |
+```ts
+interface UserRegistrationRecord {
+    id: string
+    userId: string
+    eventId: string
+    status: string
+    note: LocalizedText
+}
+```
 
-## private_introduction_requests
+最终计划：改为 `event_registrations`，并增加 `requestedAt`、`confirmedAt`、`cancelledAt`、`createdAt`、`updatedAt`。
 
-| Field             | Type                        | Description |
-|-------------------|-----------------------------|-------------|
-| `id`              | `string`                    | 私人介绍申请 ID。  |
-| `requesterUserId` | `string`                    | 发起用户 ID。    |
-| `profileId`       | `string`                    | 被申请资料 ID。   |
-| `status`          | `PrivateIntroductionStatus` | 申请状态。       |
-| `requestedAt`     | `string`                    | 发起时间。       |
-| `respondedAt`     | `string?`                   | 对方响应时间。     |
-| `cooldownUntil`   | `string?`                   | 冷静期结束时间。    |
+### favorite_profiles
 
-## privacy_settings
+```ts
+interface FavoriteProfileRecord {
+    id: string
+    userId: string
+    profileId: string
+    savedAt: string
+    note: LocalizedText
+}
+```
 
-| Field       | Type            | Description |
-|-------------|-----------------|-------------|
-| `id`        | `string`        | 隐私设置 ID。    |
-| `userId`    | `string`        | 用户 ID。      |
-| `enabled`   | `boolean`       | 是否开启。       |
-| `title`     | `LocalizedText` | 设置标题。       |
-| `desc`      | `LocalizedText` | 设置说明。       |
+最终计划：保留收藏关系，但统一时间字段为 `createdAt` / `updatedAt`。
+
+### message_threads
+
+```ts
+interface MessageThreadRecord {
+    id: string
+    userId: string
+    profileId: string
+    updatedAt: string
+    unread: number
+    lastMessage: LocalizedText
+}
+```
+
+最终计划：如果要保留沟通能力，应进入 private introduction room / message 模型，不再让 `message_threads` 作为最终 source of
+truth。
+
+### private_introduction_requests
+
+```ts
+interface PrivateIntroductionRequestRecord {
+    id: string
+    requesterUserId: string
+    profileId: string
+    status: PrivateIntroductionStatus
+    requestedAt: string
+    respondedAt?: string
+    cooldownUntil?: string
+}
+```
+
+当前问题：
+
+- 当前字段名是 `profileId`，最终计划应改成 `targetProfileId`。
+- 当前没有 `requesterProfileId`、`message`、`entitlementBalanceId`、`advisorId`、`createdAt`、`updatedAt`。
+
+### privacy_settings
+
+```ts
+interface PrivacySettingRecord {
+    id: string
+    userId: string
+    enabled: boolean
+    title: LocalizedText
+    desc: LocalizedText
+}
+```
+
+当前问题：
+
+- 当前在数据库保存页面文案 `title` / `desc`。
+- 最终应改为 code/value，不保存页面文案。
+
+## Profile 字段与修改计划专项核对
+
+### 当前已经符合方向的点
+
+- Profile detail API 到前端基本是扁平结构，没有把页面 section 分组返回给前端。
+- 后端不返回前端 i18n key；返回 code 或已本地化文案。
+- `phone` / `email` / `wechat` 当前没有直接出现在 self/family detail DTO。
+- `conversationStarters` / `dateIdeas` 已经不在 self/family detail DTO。
+- 权限相关信息当前由 mock-server 统一替换为特殊值，前端不自行决定原始字段是否可见。
+
+### 当前仍未收敛的字段
+
+| 当前字段                                      | 当前位置                            | 问题                                 | 计划                                                         |
+|-------------------------------------------|---------------------------------|------------------------------------|------------------------------------------------------------|
+| `displayName`                             | `profiles`, DTO                 | 数据库仍保存展示名。                         | 从 DB 移除，由后端根据 profile id 派生 DTO。                           |
+| `avatarUrl`                               | `profiles`, DTO                 | 数据库仍保存头像，同时又有 `photos`。            | 从 DB 移除，由 `profile_photos.isPrimary` 派生。                   |
+| `age`                                     | `profiles`, DTO                 | 年龄会随时间失真。                          | 改为 `birthYear` 或 verification 生日派生。                        |
+| `legalName`                               | `profiles`                      | 敏感实名不应在 profile 主表。                | 迁移到 `profile_verifications`。                               |
+| `nickname`                                | `profiles`                      | 与展示名边界不清。                          | 删除，或改为需审核的 `publicAlias`。                                  |
+| `datingIntentionLabel`                    | `profiles`, DTO                 | label 是派生值，不应入库。                   | 只保存 `datingIntentionCode`，DTO 派生本地化 label。                 |
+| `wantsChildren`                           | `profiles`, DTO                 | boolean 太窄，不能表达开放、未决定、不想要。         | 改为 `childrenPlan` enum。                                    |
+| `maritalStatus: single`                   | enum / DB / DTO                 | 与最终语义不一致。                          | 改为 `never_married`。                                        |
+| `occupation`                              | `profiles`, account summary     | 精确职位不适合作为公开字段。                     | 删除或改为 `careerDirection`。                                   |
+| `employer` / `incomeRange`                | `profiles`                      | 敏感职业/收入信息。                         | 迁移到 `profile_internal_records`。                            |
+| `religion` / `politicalViews`             | `profiles`                      | 不在当前前台主链路，且敏感。                     | 迁移到 internal 或问卷，不进前台 DTO。                                 |
+| `pronouns` / `sexuality` / `interestedIn` | `profiles`                      | 更像开放社交 App 字段。                     | 从当前产品主链路移除。                                                |
+| `hometown` / `livingSituation` / `zodiac` | `profiles`                      | 当前页面价值低，增加 dossier 感。              | 移除或移到后台问卷。                                                 |
+| `funFacts` / `highlights`                 | `profiles`                      | 当前 detail 不消费，语义与 tags/summary 重叠。 | 移除或重新定义 narrative source。                                  |
+| `conversationStarters` / `dateIdeas`      | `profiles`                      | 已从页面移除但 DB 仍保留。                    | 清理出主表。                                                     |
+| `compatibilityDimensions`                 | `profiles`, API type            | 百分比匹配不符合当前产品定位。                    | 移除；如保留，改为定性顾问判断。                                           |
+| `photos`                                  | `profiles` nested               | 嵌套结构不贴近结构化数据库。                     | 拆为 `profile_photos`。                                       |
+| `prompts`                                 | `profiles` nested / self detail | 嵌套结构与最终写入、排序、状态管理冲突。               | 拆为 `profile_prompts`；明确 self/family 是否都消费。                 |
+| `phone` / `email` / `wechat`              | `profiles`                      | 联系方式不应在 profile 主表。                | 拆为 `profile_contact_methods`，仅 private introduction 成功后开放。 |
+| `joinedAt`                                | `profiles`                      | 与通用时间字段重复。                         | 改为 `createdAt` / `updatedAt`。                              |
+
+### prompts 当前最需要修正的文档点
+
+当前实现和最终计划之间的差异很明确：
+
+- 当前数据库：`profiles[].prompts[]` 嵌套保存。
+- 当前 self detail API：返回 `prompts`，并作为会员字段遮罩。
+- 当前 family detail API：不返回 `prompts`。
+- 最终数据库：应为独立 `profile_prompts` 集合。
+- 最终 API：如果继续使用泛化 `ProfileDetailDTO`，会暗示 self/family 都返回 `prompts`；这和当前 family 产品链路不一致。
+
+建议收敛方式：
+
+1. 数据库最终形态坚持 `profile_prompts` 独立集合。
+2. API 文档不要用一个完全泛化的 detail DTO 掩盖 self/family 差异。
+3. 可以定义 `ProfileDetailBaseDTO`，再拆 `SelfProfileDetailDTO` 和 `FamilyProfileDetailDTO`。
+4. `SelfProfileDetailDTO` 可以包含 `prompts`。
+5. `FamilyProfileDetailDTO` 只有在产品确认家长视角也需要问答时才加入 `prompts`，否则保持不返回。
+6. 前端页面字段文档只记录页面实际消费的 ViewModel，不把 DB 的 `prompts` 嵌套结构带到页面。
+
+## 下一步清理优先级
+
+建议按照 `docs/implementation-roadmap.md` 继续：
+
+1. 先冻结 / 收敛 account，避免 account 继续依赖 profile 旧字段。
+2. 再清理 profile 主表，先处理 `displayName`、`avatarUrl`、`age`、`datingIntentionLabel`、`wantsChildren`、`occupation`、
+   `photos`、`prompts`。
+3. 同步 mock-server service mapper、前端 API type、hook mapper 和页面字段。
+4. 最后再清理 DB 中已不被页面和 API 消费的旧字段。
