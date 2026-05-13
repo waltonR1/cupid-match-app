@@ -10,6 +10,7 @@ export const registerMessages: AppMessageSchema = {
     panelTitle: 'Ouvrir votre compte',
     panelHint: 'Utilisez votre email ou telephone, definissez un mot de passe et choisissez le parcours a commencer.',
     submit: 'Creer mon compte',
+    loading: 'Creation du compte...',
     processTitle: 'Fonctionnement',
     agreementPrefix: 'J ai lu et j accepte les',
     agreementTerms: 'Conditions de la plateforme',
@@ -37,7 +38,7 @@ export const registerMessages: AppMessageSchema = {
     identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
     password: { label: 'Mot de passe', placeholder: 'Definir le mot de passe' },
     confirmPassword: { label: 'Confirmation', placeholder: 'Saisissez a nouveau le mot de passe' },
-    error: { duplicate: 'Ce compte existe deja. Veuillez vous connecter.', mismatch: 'Les mots de passe ne correspondent pas', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de creer votre compte.' },
+    error: { duplicate: 'Ce compte existe deja. Veuillez vous connecter.', mismatch: 'Les mots de passe ne correspondent pas', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de creer votre compte.', server: 'Inscription temporairement indisponible. Veuillez reessayer plus tard.' },
   },
   process: {
     step1: {

@@ -10,6 +10,7 @@ export const registerMessages: AppMessageSchema = {
     panelTitle: 'Create your account',
     panelHint: 'Use your email or phone number, set a password, and choose the path you want to start with.',
     submit: 'Create account',
+    loading: 'Creating account...',
     processTitle: 'How signup works',
     agreementPrefix: 'I have read and agree to the',
     agreementTerms: 'Platform Terms',
@@ -37,7 +38,7 @@ export const registerMessages: AppMessageSchema = {
     identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
     password: { label: 'Password', placeholder: 'Set password' },
     confirmPassword: { label: 'Confirm password', placeholder: 'Enter password again' },
-    error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', agreement: 'Please accept the platform terms and privacy notice before creating your account.' },
+    error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', agreement: 'Please accept the platform terms and privacy notice before creating your account.', server: 'Registration is temporarily unavailable. Please try again later.' },
   },
   process: {
     step1: {

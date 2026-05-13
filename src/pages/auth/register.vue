@@ -67,6 +67,7 @@
                   </view>
                   <input
                     v-model="accountName"
+                    autocomplete="name"
                     class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                     :placeholder="formPlaceholders.accountName"
                     placeholder-class="text-semantic-text-hero-secondary"
@@ -79,41 +80,30 @@
                   </view>
                   <input
                     v-model="identifier"
+                    autocomplete="email"
                     class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                     :placeholder="formPlaceholders.identifier"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
 
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
-                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.password }}
-                  </view>
-                  <input
-                    v-model="password"
-                    password
-                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.password"
-                    placeholder-class="text-semantic-text-hero-secondary"
-                  >
-                </view>
+                <AuthPasswordField
+                  v-model="password"
+                  :label="formLabels.password"
+                  :placeholder="formPlaceholders.password"
+                  autocomplete="new-password"
+                />
 
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
-                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.confirmPassword }}
-                  </view>
-                  <input
-                    v-model="confirmPassword"
-                    password
-                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.confirmPassword"
-                    placeholder-class="text-semantic-text-hero-secondary"
-                  >
-                </view>
+                <AuthPasswordField
+                  v-model="confirmPassword"
+                  :label="formLabels.confirmPassword"
+                  :placeholder="formPlaceholders.confirmPassword"
+                  autocomplete="new-password"
+                />
 
                 <view
                   v-if="registerError"
-                  class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3 text-[14px] leading-6 text-semantic-text-hero-body"
+                  class="px-1 text-[14px] font-medium leading-6 text-semantic-state-danger"
                 >
                   {{ registerError }}
                 </view>
@@ -139,9 +129,10 @@
                   width="cta"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
+                  :disabled="submitting"
                   @click="handleSubmit"
                 >
-                  {{ labels.submit }}
+                  {{ submitting ? labels.loading : labels.submit }}
                 </AppButton>
 
                 <AppButton
@@ -150,6 +141,7 @@
                   width="cta"
                   size="lg"
                   class="[margin-left:0] [margin-right:0]"
+                  :disabled="submitting"
                   @click="openLoginPage"
                 >
                   {{ loginText }}
@@ -170,11 +162,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
+import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import { useRegister } from '@/hooks/auth'
+import { isDuplicateRegistrationError, useRegister } from '@/hooks/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { validateAccountName, validateIdentifier, validatePassword } from '@/utils/validate'
@@ -204,6 +197,7 @@ const labels = computed(() => ({
   panelTitle: t('hero.panelTitle'),
   panelHint: t('hero.panelHint'),
   submit: t('hero.submit'),
+  loading: t('hero.loading'),
 }))
 
 const loginText = computed(() => tApp('common.nav.login'))
@@ -234,17 +228,18 @@ const formPlaceholders = computed(() => ({
   confirmPassword: t('form.confirmPassword.placeholder'),
 }))
 
+const submitting = computed(() => registerAction.loading.value)
+
+watch([accountName, identifier, password, confirmPassword], () => {
+  registerError.value = ''
+})
+
 function selectPath(nextPath: OnboardingPath) {
   path.value = nextPath
 }
 
 async function handleSubmit() {
   registerError.value = ''
-
-  if (!agreed.value) {
-    registerError.value = t('form.error.agreement')
-    return
-  }
 
   const nameErr = validateAccountName(accountName.value)
   if (nameErr) { registerError.value = tApp(nameErr); return }
@@ -260,31 +255,34 @@ async function handleSubmit() {
     return
   }
 
-  try {
-    const session = await registerAction.register({
-      path: path.value,
-      provider: inferAuthProvider(identifier.value),
-      identifier: identifier.value.trim(),
-      password: password.value,
-      accountName: accountName.value.trim(),
-      preferredLocale: locale.value,
-    })
+  if (!agreed.value) {
+    registerError.value = t('form.error.agreement')
+    return
+  }
 
-    if (session) {
-      redirectToAuthLanding(session)
-    }
+  const session = await registerAction.register({
+    path: path.value,
+    provider: inferAuthProvider(identifier.value),
+    identifier: identifier.value.trim(),
+    password: password.value,
+    accountName: accountName.value.trim(),
+    preferredLocale: locale.value,
+  })
 
-    uni.showToast({
-      title: labels.value.submit,
-      icon: 'none',
-    })
-  } catch {
-    registerError.value = t('form.error.duplicate')
+  if (session) {
+    redirectToAuthLanding(session)
+  } else {
+    registerError.value = isDuplicateRegistrationError(registerAction.error.value)
+      ? t('form.error.duplicate')
+      : t('form.error.server')
   }
 }
 
 function toggleAgreement() {
   agreed.value = !agreed.value
+  if (agreed.value) {
+    registerError.value = ''
+  }
 }
 
 function openAgreementDialog(kind: Exclude<AgreementDialogType, null>) {
@@ -296,7 +294,7 @@ function closeAgreementDialog() {
 }
 
 function inferAuthProvider(value: string): AuthProvider {
-  return value.includes('@') ? 'email' : 'phone'
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()) ? 'email' : 'phone'
 }
 
 </script>

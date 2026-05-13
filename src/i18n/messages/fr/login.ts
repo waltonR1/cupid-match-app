@@ -9,6 +9,7 @@ export const loginMessages: AppMessageSchema = {
       panelTitle: 'Bon retour',
       panelHint: 'Entrez les informations du compte pour retrouver votre progression, vos favoris et vos evenements.',
       submit: 'Connexion',
+      loading: 'Connexion...',
       secondary: 'Pas encore de compte ? S inscrire',
       accessTitle: 'Disponible apres connexion',
       agreementPrefix: 'En continuant, vous acceptez les',
@@ -16,13 +17,6 @@ export const loginMessages: AppMessageSchema = {
       agreementConnector: ' et la ',
       agreementPrivacy: 'Politique de confidentialite',
       agreementSuffix: '. En continuant, vous reconnaissez les regles de la plateforme, la logique de visibilite du compte et les limites de prise de contact.',
-      consentConfirm: {
-        kicker: 'Confirmation',
-        title: 'Veuillez accepter les conditions avant de continuer',
-        desc: 'Avant de poursuivre, vous devez confirmer que vous avez lu les conditions de la plateforme et la politique de confidentialite. En acceptant, la case sera cochee automatiquement et la connexion continuera.',
-        accept: 'Accepter et continuer',
-        reject: 'Refuser',
-      },
       autoRouteTitle: 'Orientation auto',
       autoRouteHeading: 'La connexion ouvre le bon parcours automatiquement',
       autoRouteDesc: 'Le systeme lit le contexte du compte et envoie directement vers le parcours membre ou parent.',
@@ -30,11 +24,10 @@ export const loginMessages: AppMessageSchema = {
     form: {
       identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
       password: { label: 'Mot de passe', placeholder: 'Mot de passe' },
-      error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.' },
+      error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de vous connecter.' },
     },
     access: {
       account: { title: 'Vue compte', desc: 'Suivre l avancement du profil, le rythme conseiller et le statut courant.' },
       favorites: { title: 'Favoris et echanges', desc: 'Retrouver les profils suivis, les favoris et les pistes de communication.' },
-      events: { title: 'Evenements et agenda', desc: 'Voir les inscriptions, les confirmations et les prochaines rencontres.' },
     },
   }

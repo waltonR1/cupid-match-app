@@ -24,7 +24,7 @@
 
             <view class="mt-10 grid gap-3 sm:grid-cols-2">
               <view
-                v-for="item in accessCards.slice(0, 2)"
+                v-for="item in accessCards"
                 :key="item.title"
                 class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-5 py-4 backdrop-blur"
               >
@@ -55,52 +55,31 @@
 
               <view class="mt-5 grid gap-3">
                 <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                    {{ formLabels.identifier }}
+                  </view>
                   <input
                     v-model="identifier"
-                    class="h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    autocomplete="username"
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
                     :placeholder="formPlaceholders.identifier"
                     placeholder-class="text-semantic-text-hero-secondary"
                   >
                 </view>
 
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
-                  <input
-                    v-model="password"
-                    password="false"
-                    class="h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.password"
-                    placeholder-class="text-semantic-text-hero-secondary"
-                  >
-                </view>
+                <AuthPasswordField
+                  v-model="password"
+                  :label="formLabels.password"
+                  :placeholder="formPlaceholders.password"
+                  autocomplete="current-password"
+                />
 
                 <view
                   v-if="loginError"
-                  class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3 text-[14px] leading-6 text-semantic-text-hero-body"
+                  class="px-1 text-[14px] font-medium leading-6 text-semantic-state-danger"
                 >
                   {{ loginError }}
                 </view>
-              </view>
-
-              <view class="mt-6 grid gap-3">
-                <AppButton
-                  width="cta"
-                  size="lg"
-                  class="[margin-left:0] [margin-right:0]"
-                  @click="handleSubmit"
-                >
-                  {{ labels.submit }}
-                </AppButton>
-
-                <AppButton
-                  variant="secondary"
-                  context="hero"
-                  width="cta"
-                  size="lg"
-                  class="[margin-left:0] [margin-right:0]"
-                  @click="openRegisterPage"
-                >
-                  {{ labels.secondary }}
-                </AppButton>
               </view>
 
               <label class="mt-5 flex items-start gap-3 border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
@@ -117,6 +96,30 @@
                   <text>{{ agreement.suffix }}</text>
                 </view>
               </label>
+
+              <view class="mt-6 grid gap-3">
+                <AppButton
+                  width="cta"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  :disabled="submitting"
+                  @click="handleSubmit"
+                >
+                  {{ submitting ? labels.loading : labels.submit }}
+                </AppButton>
+
+                <AppButton
+                  variant="secondary"
+                  context="hero"
+                  width="cta"
+                  size="lg"
+                  class="[margin-left:0] [margin-right:0]"
+                  :disabled="submitting"
+                  @click="openRegisterPage"
+                >
+                  {{ labels.secondary }}
+                </AppButton>
+              </view>
             </view>
           </view>
         </view>
@@ -128,56 +131,15 @@
       :kind="agreementDialog || 'terms'"
       @close="closeAgreementDialog"
     />
-
-    <view
-      v-if="showConsentConfirm"
-      class="fixed inset-0 z-[71] flex items-center justify-center bg-[#07131fcc] px-6 py-10"
-      @click="closeConsentConfirm"
-    >
-      <view
-        class="w-full max-w-[520px] border border-semantic-border-hero bg-semantic-surface-hero-panel px-7 py-7 text-semantic-text-inverse shadow-hero"
-        @click.stop
-      >
-        <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-hero-label">
-          {{ consentConfirm.kicker }}
-        </view>
-        <view class="mt-4 text-[28px] font-semibold leading-[1.3] text-semantic-text-inverse">
-          {{ consentConfirm.title }}
-        </view>
-        <view class="mt-4 text-[15px] leading-8 text-semantic-text-hero-body">
-          {{ consentConfirm.desc }}
-        </view>
-
-        <view class="mt-8 grid gap-4 sm:grid-cols-2">
-          <AppButton
-            variant="secondary"
-            context="hero"
-            width="full"
-            size="lg"
-            class="[margin-left:0] [margin-right:0]"
-            @click="closeConsentConfirm"
-          >
-            {{ consentConfirm.reject }}
-          </AppButton>
-
-          <AppButton
-            width="full"
-            size="lg"
-            class="[margin-left:0] [margin-right:0]"
-            @click="acceptAgreementAndLogin"
-          >
-            {{ consentConfirm.accept }}
-          </AppButton>
-        </view>
-      </view>
-    </view>
   </AppPageLayout>
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import AppButton from "@/components/common/AppButton.vue";
-import { computed, ref } from 'vue'
+import AppButton from '@/components/common/AppButton.vue'
+import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
 import { useLogin } from '@/hooks/auth'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
@@ -192,7 +154,6 @@ const password = ref('')
 const loginError = ref('')
 const agreed = ref(false)
 const agreementDialog = ref<'terms' | 'privacy' | null>(null)
-const showConsentConfirm = ref(false)
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -202,6 +163,7 @@ const labels = computed(() => ({
   panelTitle: t('hero.panelTitle'),
   panelHint: t('hero.panelHint'),
   submit: t('hero.submit'),
+  loading: t('hero.loading'),
   secondary: t('hero.secondary'),
 }))
 
@@ -213,30 +175,28 @@ const agreement = computed(() => ({
   suffix: t('hero.agreementSuffix'),
 }))
 
-const consentConfirm = computed(() => ({
-  kicker: t('hero.consentConfirm.kicker'),
-  title: t('hero.consentConfirm.title'),
-  desc: t('hero.consentConfirm.desc'),
-  accept: t('hero.consentConfirm.accept'),
-  reject: t('hero.consentConfirm.reject'),
-}))
-
 const accessCards = computed(() => [
   { title: t('access.account.title'), desc: t('access.account.desc') },
   { title: t('access.favorites.title'), desc: t('access.favorites.desc') },
 ])
+
+const formLabels = computed(() => ({
+  identifier: t('form.identifier.label'),
+  password: t('form.password.label'),
+}))
 
 const formPlaceholders = computed(() => ({
   identifier: t('form.identifier.placeholder'),
   password: t('form.password.placeholder'),
 }))
 
-async function handleSubmit() {
-  if (!agreed.value) {
-    showConsentConfirm.value = true
-    return
-  }
+const submitting = computed(() => loginAction.loading.value)
 
+watch([identifier, password], () => {
+  loginError.value = ''
+})
+
+async function handleSubmit() {
   loginError.value = ''
 
   const idErr = validateIdentifier(identifier.value)
@@ -245,20 +205,29 @@ async function handleSubmit() {
   const pwErr = validatePassword(password.value)
   if (pwErr) { loginError.value = tApp(pwErr); return }
 
-  try {
-    const session = await loginAction.login({
-      identifier: identifier.value,
-      password: password.value,
-    })
-
-    redirectToAuthLanding(session)
-  } catch {
-    loginError.value = t('form.error.invalid')
+  if (!agreed.value) {
+    loginError.value = t('form.error.agreement')
+    return
   }
+
+  const session = await loginAction.login({
+    identifier: identifier.value.trim(),
+    password: password.value,
+  })
+
+  if (!session) {
+    loginError.value = t('form.error.invalid')
+    return
+  }
+
+  redirectToAuthLanding(session)
 }
 
 function toggleAgreement() {
   agreed.value = !agreed.value
+  if (agreed.value) {
+    loginError.value = ''
+  }
 }
 
 function openAgreementDialog(kind: 'terms' | 'privacy') {
@@ -267,15 +236,5 @@ function openAgreementDialog(kind: 'terms' | 'privacy') {
 
 function closeAgreementDialog() {
   agreementDialog.value = null
-}
-
-function closeConsentConfirm() {
-  showConsentConfirm.value = false
-}
-
-function acceptAgreementAndLogin() {
-  agreed.value = true
-  showConsentConfirm.value = false
-  void handleSubmit()
 }
 </script>

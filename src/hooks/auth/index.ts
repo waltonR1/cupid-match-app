@@ -1,2 +1,2 @@
 export { useLogin } from './use-login'
-export { useRegister } from './use-register'
+export { isDuplicateRegistrationError, useRegister } from './use-register'

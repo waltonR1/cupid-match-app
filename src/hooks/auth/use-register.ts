@@ -1,35 +1,31 @@
-import { ref } from 'vue'
-import {register as registerApi, type RegisterPayload} from '@/api/auth'
-import {useAuthStore} from '@/stores/modules/auth'
-import {useLocaleStore} from '@/stores/modules/locale'
+import { isApiStatusError } from '@/api/shared/http'
+import { register as registerApi, type RegisterPayload } from '@/api/auth'
+import { useAuthStore } from '@/stores/modules/auth'
+import { useLocaleStore } from '@/stores/modules/locale'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 
 /** 注册业务 Hook */
 export function useRegister() {
   const auth = useAuthStore()
   const locale = useLocaleStore()
-  const loading = ref(false)
-  const error = ref<unknown>(null)
+  const latest = useLatestRequest()
 
   async function register(payload: RegisterPayload) {
-    loading.value = true
-    error.value = null
+    const session = await latest.run(() => registerApi(payload))
+    if (!session) return undefined
 
-    try {
-      const session = await registerApi(payload)
-      auth.login(session)
-      locale.setLocale(session.user.preferredLocale)
-      return session
-    } catch (requestError) {
-      error.value = requestError
-      throw requestError
-    } finally {
-      loading.value = false
-    }
+    auth.login(session)
+    locale.setLocale(session.user.preferredLocale)
+    return session
   }
 
   return {
-    loading,
-    error,
+    loading: latest.loading,
+    error: latest.error,
     register,
   }
+}
+
+export function isDuplicateRegistrationError(error: unknown) {
+  return isApiStatusError(error, 409)
 }
