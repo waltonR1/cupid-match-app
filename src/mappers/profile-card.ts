@@ -125,7 +125,7 @@ function resolveMaritalStatusTagKey(status: FamilyProfileListItem['maritalStatus
             return 'tags.maritalDivorced'
         case 'widowed':
             return 'tags.maritalWidowed'
-        case 'single':
+        case 'never_married':
         default:
             return 'tags.maritalSingle'
     }

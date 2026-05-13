@@ -1,5 +1,14 @@
 import type {LocalizedText} from './common.js'
-import type {ProfileRecord, RegisterRole} from './profile.js'
+import type {
+    ProfileContactMethodRecord,
+    ProfileInternalRecord,
+    ProfilePhotoRecord,
+    ProfilePromptRecord,
+    ProfileRecord,
+    ProfileVerificationRecord,
+    ProfileVisibilitySettingRecord,
+    RegisterRole,
+} from './profile.js'
 
 /** 会员等级 */
 export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
@@ -140,6 +149,12 @@ export interface ProfileOwnershipRecord {
 /** 数据库结构 */
 export interface Database {
     profiles: ProfileRecord[]
+    profile_photos: ProfilePhotoRecord[]
+    profile_prompts: ProfilePromptRecord[]
+    profile_internal_records: ProfileInternalRecord[]
+    profile_verifications: ProfileVerificationRecord[]
+    profile_contact_methods: ProfileContactMethodRecord[]
+    profile_visibility_settings: ProfileVisibilitySettingRecord[]
     events: EventRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]

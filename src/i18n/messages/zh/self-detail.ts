@@ -110,7 +110,7 @@ export const selfDetailMessages: AppMessageSchema = {
       maritalPlan: '关系规划',
       maritalStatus: '婚姻状态',
       children: '子女情况',
-      wantChildren: '是否想要孩子',
+      childrenPlan: '家庭计划倾向',
       longDistance: '是否接受异地',
       visibility: '家庭可见范围',
       familySupport: '家庭参与方式',
@@ -144,9 +144,14 @@ export const selfDetailMessages: AppMessageSchema = {
       vip: '优先资料',
     },
     maritalStatus: {
-      single: '未婚',
+      never_married: '未婚',
       divorced: '离异',
       widowed: '丧偶',
+    },
+    childrenPlan: {
+      wants: '希望有孩子',
+      open_to_discuss: '愿意沟通',
+      does_not_want: '不计划要孩子',
     },
     habits: {
       never: '从不',

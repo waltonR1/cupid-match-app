@@ -12,7 +12,7 @@ export async function registerEventRoutes(app: FastifyInstance): Promise<void> {
 
   app.get(`/events/:id`, async (request, reply) => {
     const { id } = request.params as { id: string }
-    const detail = eventDetail(resolveApiLocale((request.query as QueryRecord).lang), getDb().data.events, getDb().data.profiles, id)
+    const detail = eventDetail(resolveApiLocale((request.query as QueryRecord).lang), getDb().data, id)
     if (!detail) {
       return reply.code(404).send({ error: 'Event not found' })
     }

@@ -8,7 +8,10 @@ export type GenderCode = 'male' | 'female'
 export type ProfileStatusCode = 'open' | 'review' | 'vip'
 
 /** 婚姻状态编码 */
-export type MaritalStatusCode = 'single' | 'divorced' | 'widowed'
+export type MaritalStatusCode = 'never_married' | 'divorced' | 'widowed'
+
+/** 家庭计划倾向 */
+export type ChildrenPlanCode = 'wants' | 'open_to_discuss' | 'does_not_want'
 
 /** 交友意向编码 */
 export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
@@ -69,12 +72,6 @@ export interface ProfilePrompt {
     answer: string
 }
 
-/** 匹配维度 */
-export interface CompatibilityDimension {
-    code: string
-    label: string
-    score: number
-}
 
 /** 私人介绍状态 */
 export interface PrivateIntroduction {
@@ -143,7 +140,7 @@ export interface SelfProfileDetail {
     industry: RestrictedProfileField<string>
     maritalStatus: RestrictedProfileField<MaritalStatusCode>
     hasChildren: RestrictedProfileField<boolean>
-    wantsChildren: RestrictedProfileField<boolean>
+    childrenPlan: RestrictedProfileField<ChildrenPlanCode>
     acceptsLongDistance: RestrictedProfileField<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
@@ -194,7 +191,7 @@ export interface FamilyProfileDetail {
     industry: string
     maritalStatus: RestrictedProfileField<MaritalStatusCode>
     hasChildren: RestrictedProfileField<boolean>
-    wantsChildren: RestrictedProfileField<boolean>
+    childrenPlan: RestrictedProfileField<ChildrenPlanCode>
     acceptsLongDistance: RestrictedProfileField<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string

@@ -9,6 +9,7 @@ import type {
     IntentFacetDTO,
     NormalizedProfileQuery,
     ProfileRecord,
+    ProfileVisibilitySettingRecord,
     ProfileWithDisplayName,
     SelfProfileDetailDTO,
     SelfProfileDirectoryFacetsDTO,
@@ -28,7 +29,14 @@ import {
 import {MEMBERSHIP_BENEFITS, PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
 import {buildPagination, paginate} from '../utils/pagination.js'
 import {nextId} from '../utils/id.js'
-import {resolveLocalizedText, resolveLocalizedTexts, withDisplayName} from '../utils/localized.js'
+import {resolveLocalizedText, resolveLocalizedTexts} from '../utils/localized.js'
+import {
+    deriveDatingIntentionLabel,
+    deriveProfileAge,
+    deriveProfileAvatarUrl,
+    deriveProfileDisplayName,
+    deriveProfileVerified,
+} from '../utils/profile-derived.js'
 import {clamp, getString, toInt} from '../utils/string.js'
 
 /** 用户上下文（用于权限判断） */
@@ -157,11 +165,11 @@ export function sortFamilyProfiles(items: ProfileWithDisplayName[], sort: Direct
 }
 
 /** 获取首页精选个人资料 */
-export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], rawPageSize: unknown): {
+export function featuredProfiles(locale: ApiLocale, data: Database, rawPageSize: unknown): {
     items: SelfProfileListItemDTO[]
 } {
     const pageSize = clamp(Number.parseInt(getString(rawPageSize) || '3', 10) || 3, 1, 12)
-    const source = profiles.map(withDisplayName)
+    const source = buildProfileViews(data, data.profiles)
     const sorted = sortSelfProfiles(source, 'recentActive')
 
     return {
@@ -170,13 +178,13 @@ export function featuredProfiles(locale: ApiLocale, profiles: ProfileRecord[], r
 }
 
 /** 获取个人资料目录 */
-export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
+export function listSelfProfiles(locale: ApiLocale, data: Database, query: QueryRecord): {
     items: SelfProfileListItemDTO[]
     pagination: ReturnType<typeof buildPagination>
     facets: SelfProfileDirectoryFacetsDTO
 } {
     const normalizedQuery = normalizeProfileQuery(query)
-    const source = profiles.map(withDisplayName)
+    const source = buildProfileViews(data, data.profiles)
     const filtered = source.filter((profile) => matchesSelfDirectory(profile, normalizedQuery))
     const sorted = sortSelfProfiles(filtered, normalizedQuery.sort)
 
@@ -188,13 +196,13 @@ export function listSelfProfiles(locale: ApiLocale, profiles: ProfileRecord[], q
 }
 
 /** 获取家庭资料目录 */
-export function listFamilyProfiles(locale: ApiLocale, profiles: ProfileRecord[], query: QueryRecord): {
+export function listFamilyProfiles(locale: ApiLocale, data: Database, query: QueryRecord): {
     items: FamilyProfileListItemDTO[]
     pagination: ReturnType<typeof buildPagination>
     facets: FamilyProfileDirectoryFacetsDTO
 } {
     const normalizedQuery = normalizeProfileQuery(query)
-    const source = profiles.filter((profile) => profile.familyVisible).map(withDisplayName)
+    const source = buildProfileViews(data, data.profiles.filter((profile) => profile.familyVisible))
     const filtered = source.filter((profile) => matchesFamilyDirectory(profile, normalizedQuery))
     const sorted = sortFamilyProfiles(filtered, normalizedQuery.sort)
 
@@ -214,6 +222,36 @@ export function resolveUserContext(data: Database, userId?: string): UserContext
     return { userId: user.id, membership }
 }
 
+/** 组装资料 DTO 所需的派生字段 */
+export function buildProfileView(data: Database, profile: ProfileRecord): ProfileWithDisplayName {
+    const photos = data.profile_photos
+        .filter((item) => item.profileId === profile.id && item.status !== 'hidden')
+        .sort((left, right) => left.sortOrder - right.sortOrder)
+    const prompts = data.profile_prompts
+        .filter((item) => item.profileId === profile.id && item.status === 'active')
+        .sort((left, right) => left.sortOrder - right.sortOrder)
+    const verifications = data.profile_verifications.filter((item) => item.profileId === profile.id)
+
+    return {
+        ...profile,
+        displayName: deriveProfileDisplayName(profile.id),
+        avatarUrl: deriveProfileAvatarUrl(photos),
+        photos,
+        prompts,
+        age: deriveProfileAge(profile),
+        isVerified: deriveProfileVerified(verifications),
+        datingIntentionLabel: deriveDatingIntentionLabel(profile.datingIntentionCode),
+    }
+}
+
+function buildProfileViews(data: Database, profiles: ProfileRecord[]): ProfileWithDisplayName[] {
+    return profiles.map((profile) => buildProfileView(data, profile))
+}
+
+function resolveProfileVisibilitySettings(data: Database, profileId: string): ProfileVisibilitySettingRecord[] {
+    return data.profile_visibility_settings.filter((item) => item.profileId === profileId)
+}
+
 /** 获取个人资料详情 */
 export function selfProfileDetail(locale: ApiLocale, data: Database, id: string, userId?: string): SelfProfileDetailDTO | null {
     const profile = data.profiles.find((item) => item.id === id)
@@ -223,7 +261,13 @@ export function selfProfileDetail(locale: ApiLocale, data: Database, id: string,
         return null
     }
 
-    return toSelfProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
+    return toSelfProfileDetail(
+        locale,
+        buildProfileView(data, profile),
+        userContext,
+        data.private_introduction_requests,
+        resolveProfileVisibilitySettings(data, profile.id),
+    )
 }
 
 /** 申请私人介绍 */
@@ -264,7 +308,13 @@ export function familyProfileDetail(locale: ApiLocale, data: Database, id: strin
         return null
     }
 
-    return toFamilyProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
+    return toFamilyProfileDetail(
+        locale,
+        buildProfileView(data, profile),
+        userContext,
+        data.private_introduction_requests,
+        resolveProfileVisibilitySettings(data, profile.id),
+    )
 }
 
 /** 转换为个人资料列表项 */
@@ -315,6 +365,7 @@ export function toSelfProfileDetail(
     profile: ProfileWithDisplayName,
     userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
+    visibilitySettings: ProfileVisibilitySettingRecord[] = [],
 ): SelfProfileDetailDTO {
     return applySelfProfileAccess({
         id: profile.id,
@@ -336,7 +387,7 @@ export function toSelfProfileDetail(
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
-        wantsChildren: profile.wantsChildren,
+        childrenPlan: profile.childrenPlan,
         acceptsLongDistance: profile.acceptsLongDistance,
         datingIntentionCode: profile.datingIntentionCode,
         datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
@@ -367,7 +418,7 @@ export function toSelfProfileDetail(
             answer: resolveLocalizedText(locale, prompt.answer),
         })),
         privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
-    }, resolveSelfProfileAccessLevel(userContext))
+    }, resolveSelfProfileAccessLevel(userContext), visibilitySettings)
 }
 
 /** 转换为家庭资料详情 */
@@ -376,6 +427,7 @@ export function toFamilyProfileDetail(
     profile: ProfileWithDisplayName,
     userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
+    visibilitySettings: ProfileVisibilitySettingRecord[] = [],
 ): FamilyProfileDetailDTO {
     return applyFamilyProfileAccess({
         id: profile.id,
@@ -401,7 +453,7 @@ export function toFamilyProfileDetail(
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
         hasChildren: profile.hasChildren,
-        wantsChildren: profile.wantsChildren,
+        childrenPlan: profile.childrenPlan,
         acceptsLongDistance: profile.acceptsLongDistance,
         datingIntentionCode: profile.datingIntentionCode,
         datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
@@ -426,7 +478,7 @@ export function toFamilyProfileDetail(
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
         privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
-    }, resolveProfileAccessLevel(userContext))
+    }, resolveProfileAccessLevel(userContext), visibilitySettings)
 }
 
 /** 标准化排序字段 */
@@ -479,57 +531,95 @@ type SelfProfileAccessLevel = ProfileAccessLevel
 type FamilyProfileAccessLevel = ProfileAccessLevel
 
 /** 按访问层级收敛个人详情字段 */
-function applySelfProfileAccess(detail: SelfProfileDetailDTO, accessLevel: SelfProfileAccessLevel): SelfProfileDetailDTO {
+function applySelfProfileAccess(
+    detail: SelfProfileDetailDTO,
+    accessLevel: SelfProfileAccessLevel,
+    visibilitySettings: ProfileVisibilitySettingRecord[],
+): SelfProfileDetailDTO {
     const next = {...detail}
+    const configuredFields = new Set(visibilitySettings.map((item) => item.fieldCode))
 
     if (accessLevel === 'guest') {
         SELF_PROFILE_GUEST_REQUIRED_FIELDS.forEach((field) => {
+            if (configuredFields.has(field)) return
             assignRestrictedField(next, field, PROFILE_FIELD_LOGIN_REQUIRED)
         })
+        applyProfileVisibilitySettings(next, accessLevel, visibilitySettings)
         return next
     }
 
     if (accessLevel === 'free') {
         SELF_PROFILE_MEMBER_ONLY_FIELDS.forEach((field) => {
+            if (configuredFields.has(field)) return
             assignRestrictedField(next, field, PROFILE_FIELD_MEMBER_ONLY)
         })
     }
 
+    applyProfileVisibilitySettings(next, accessLevel, visibilitySettings)
     return next
 }
 
 /** 按访问层级收紧家庭详情字段 */
-function applyFamilyProfileAccess(detail: FamilyProfileDetailDTO, accessLevel: FamilyProfileAccessLevel): FamilyProfileDetailDTO {
+function applyFamilyProfileAccess(
+    detail: FamilyProfileDetailDTO,
+    accessLevel: FamilyProfileAccessLevel,
+    visibilitySettings: ProfileVisibilitySettingRecord[],
+): FamilyProfileDetailDTO {
     const next = {...detail}
+    const configuredFields = new Set(visibilitySettings.map((item) => item.fieldCode))
 
     if (accessLevel === 'guest') {
         FAMILY_PROFILE_GUEST_REQUIRED_FIELDS.forEach((field) => {
+            if (configuredFields.has(field)) return
             assignRestrictedField(next, field, PROFILE_FIELD_LOGIN_REQUIRED)
         })
+        applyProfileVisibilitySettings(next, accessLevel, visibilitySettings)
         return next
     }
 
     if (accessLevel === 'free') {
         FAMILY_PROFILE_MEMBER_ONLY_FIELDS.forEach((field) => {
+            if (configuredFields.has(field)) return
             assignRestrictedField(next, field, PROFILE_FIELD_MEMBER_ONLY)
         })
     }
 
+    applyProfileVisibilitySettings(next, accessLevel, visibilitySettings)
     return next
 }
 
 function assignRestrictedField(
     detail: SelfProfileDetailDTO | FamilyProfileDetailDTO,
-    field:
-        | (typeof FAMILY_PROFILE_GUEST_REQUIRED_FIELDS)[number]
-        | (typeof FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
-        | (typeof FAMILY_PROFILE_MEMBER_ONLY_FIELDS)[number]
-        | (typeof SELF_PROFILE_GUEST_REQUIRED_FIELDS)[number]
-        | (typeof SELF_PROFILE_LOGIN_REQUIRED_FIELDS)[number]
-        | (typeof SELF_PROFILE_MEMBER_ONLY_FIELDS)[number],
+    field: string,
     value: ProfileRestrictedFieldValue,
 ) {
     ;(detail as unknown as Record<string, unknown>)[field] = value
+}
+
+function applyProfileVisibilitySettings(
+    detail: SelfProfileDetailDTO | FamilyProfileDetailDTO,
+    accessLevel: ProfileAccessLevel,
+    visibilitySettings: ProfileVisibilitySettingRecord[],
+) {
+    visibilitySettings.forEach((setting) => {
+        const restrictedValue = resolveVisibilityRestrictedValue(accessLevel, setting.visibility)
+        if (!restrictedValue) return
+        assignRestrictedField(detail, setting.fieldCode, restrictedValue)
+    })
+}
+
+function resolveVisibilityRestrictedValue(
+    accessLevel: ProfileAccessLevel,
+    visibility: ProfileVisibilitySettingRecord['visibility'],
+): ProfileRestrictedFieldValue | null {
+    if (visibility === 'public') return null
+    if (visibility === 'registered') {
+        return accessLevel === 'guest' ? PROFILE_FIELD_LOGIN_REQUIRED : null
+    }
+    if (visibility === 'member') {
+        return accessLevel === 'guest' ? PROFILE_FIELD_LOGIN_REQUIRED : accessLevel === 'free' ? PROFILE_FIELD_MEMBER_ONLY : null
+    }
+    return accessLevel === 'guest' ? PROFILE_FIELD_LOGIN_REQUIRED : PROFILE_FIELD_MEMBER_ONLY
 }
 
 function resolveSelfProfileAccessLevel(userContext: UserContext | null): SelfProfileAccessLevel {

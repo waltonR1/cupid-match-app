@@ -3,7 +3,7 @@ import type {ProfileRestrictedFieldValue} from '../constants/profile-access.js'
 import type {MembershipLevel, PrivateIntroductionStatus} from './database.js'
 
 /** 资料状态 */
-export type ProfileStatus = 'open' | 'vip' | 'review'
+export type ProfileStatus = 'open' | 'vip' | 'review' | 'draft' | 'paused' | 'hidden'
 
 /** 性别编码 */
 export type GenderCode = 'male' | 'female'
@@ -12,7 +12,10 @@ export type GenderCode = 'male' | 'female'
 export type DegreeLevel = 'bachelor' | 'master' | 'phd'
 
 /** 婚姻状态 */
-export type MaritalStatus = 'single' | 'divorced' | 'widowed'
+export type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
+
+/** 家庭计划倾向 */
+export type ChildrenPlan = 'wants' | 'open_to_discuss' | 'does_not_want'
 
 /** 交友意向 */
 export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
@@ -29,66 +32,103 @@ export type RegisterRole = 'self' | 'parent'
 /** 资料照片 */
 export interface ProfilePhotoRecord {
     id: string
+    profileId: string
     url: string
     caption: LocalizedText
     isPrimary: boolean
+    sortOrder: number
+    status: 'approved' | 'review' | 'hidden'
+    createdAt: string
+    updatedAt: string
 }
 
 /** 问答题 */
 export interface ProfilePromptRecord {
     id: string
+    profileId: string
     promptCode: string
     prompt: LocalizedText
     answer: LocalizedText
+    sortOrder: number
+    status: 'active' | 'hidden'
+    createdAt: string
+    updatedAt: string
 }
 
-/** 匹配维度 */
-export interface CompatibilityDimensionRecord {
-    code: string
-    label: LocalizedText
-    score: number
+/** 后台内部资料 */
+export interface ProfileInternalRecord {
+    id: string
+    profileId: string
+    employer?: LocalizedText
+    incomeRange?: LocalizedText
+    religion?: LocalizedText
+    politicalViews?: LocalizedText
+    hometown?: LocalizedText
+    livingSituation?: LocalizedText
+    funFacts?: LocalizedText[]
+    notes?: LocalizedText
+    createdAt: string
+    updatedAt: string
+}
+
+/** 资料认证记录 */
+export interface ProfileVerificationRecord {
+    id: string
+    profileId: string
+    legalName?: string
+    dateOfBirth?: string
+    identityStatus: 'pending' | 'verified' | 'rejected'
+    educationStatus: 'pending' | 'verified' | 'rejected'
+    advisorStatus: 'pending' | 'verified' | 'rejected'
+    createdAt: string
+    updatedAt: string
+}
+
+/** 受控联系方式 */
+export interface ProfileContactMethodRecord {
+    id: string
+    profileId: string
+    type: 'phone' | 'email' | 'wechat'
+    value: string
+    visibleAfterIntroduction: boolean
+    createdAt: string
+    updatedAt: string
+}
+
+/** 资料字段可见性设置 */
+export interface ProfileVisibilitySettingRecord {
+    id: string
+    profileId: string
+    fieldCode: string
+    visibility: 'public' | 'registered' | 'member' | 'private'
+    createdAt: string
+    updatedAt: string
 }
 
 /** 原始资料记录 */
 export interface ProfileRecord {
     id: string
-    legalName: string
-    nickname: string
-    displayName: string
-    avatarUrl: string
-    photos: ProfilePhotoRecord[]
     gender: GenderCode
-    pronouns: string
-    sexuality: string
-    interestedIn: GenderCode[]
-    age: number
+    birthYear: number
     height: number
     city: LocalizedText
     country: LocalizedText
     nationality: LocalizedText
-    hometown: LocalizedText
     languages: string[]
-    livingSituation: LocalizedText
-    zodiac: LocalizedText
     profileStatus: ProfileStatus
-    isVerified: boolean
     lastActiveAt: string
-    joinedAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
     familyPriority: boolean
     degreeLevel: DegreeLevel
     education: LocalizedText
-    occupation: LocalizedText
     industry: LocalizedText
-    employer: LocalizedText
-    incomeRange: LocalizedText
+    careerDirection?: LocalizedText
     maritalStatus: MaritalStatus
     hasChildren: boolean
-    wantsChildren: boolean
+    childrenPlan: ChildrenPlan
     acceptsLongDistance: boolean
     datingIntentionCode: DatingIntentionCode
-    datingIntentionLabel: LocalizedText
     relationshipPlan: LocalizedText
     residencePlan: LocalizedText
     relocationWillingness: LocalizedText
@@ -105,27 +145,24 @@ export interface ProfileRecord {
     activityLevel: LocalizedText
     weekendStyle: LocalizedText
     pets: LocalizedText
-    religion: LocalizedText
-    politicalViews: LocalizedText
     personalityTraits: LocalizedText[]
     interests: LocalizedText[]
     communicationStyle: LocalizedText
-    funFacts: LocalizedText[]
     summary: LocalizedText
-    highlights: LocalizedText[]
     tags: LocalizedText[]
-    conversationStarters: LocalizedText[]
-    dateIdeas: LocalizedText[]
-    prompts: ProfilePromptRecord[]
-    compatibilityDimensions: CompatibilityDimensionRecord[]
-    phone: string
-    email: string
-    wechat: string
+    createdAt: string
+    updatedAt: string
 }
 
 /** 带展示名称的资料记录 */
 export interface ProfileWithDisplayName extends ProfileRecord {
     displayName: string
+    avatarUrl: string
+    photos: ProfilePhotoRecord[]
+    prompts: ProfilePromptRecord[]
+    age: number
+    isVerified: boolean
+    datingIntentionLabel: LocalizedText
 }
 
 /** 本地化照片 DTO */
@@ -144,12 +181,6 @@ export interface LocalizedProfilePromptDTO {
     answer: string
 }
 
-/** 匹配维度 DTO */
-export interface CompatibilityDimensionDTO {
-    code: string
-    label: string
-    score: number
-}
 
 /** 私人介绍状态 */
 export interface PrivateIntroductionDTO {
@@ -221,7 +252,7 @@ export interface SelfProfileDetailDTO {
     industry: Restricted<string>
     maritalStatus: Restricted<MaritalStatus>
     hasChildren: Restricted<boolean>
-    wantsChildren: Restricted<boolean>
+    childrenPlan: Restricted<ChildrenPlan>
     acceptsLongDistance: Restricted<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
@@ -272,7 +303,7 @@ export interface FamilyProfileDetailDTO {
     industry: string
     maritalStatus: Restricted<MaritalStatus>
     hasChildren: Restricted<boolean>
-    wantsChildren: Restricted<boolean>
+    childrenPlan: Restricted<ChildrenPlan>
     acceptsLongDistance: Restricted<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string

@@ -98,7 +98,7 @@ export const PROFILE_EDUCATION_FILTER_OPTIONS = [
 
 /** 婚姻状态筛选选项 */
 export const PROFILE_MARITAL_STATUS_FILTER_OPTIONS = [
-    {labelKey: 'filters.maritalSingle', value: 'single'},
+    {labelKey: 'filters.maritalSingle', value: 'never_married'},
     {labelKey: 'filters.maritalDivorced', value: 'divorced'},
     {labelKey: 'filters.maritalWidowed', value: 'widowed'},
 ] as const satisfies readonly ProfileFilterOptionDefinition[]

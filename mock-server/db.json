@@ -2,49 +2,8 @@
   "profiles": [
     {
       "id": "p-001",
-      "legalName": "Aline M.",
-      "nickname": "Aline",
-      "displayName": "Aline",
-      "avatarUrl": "",
-      "photos": [
-        {
-          "id": "p-001-photo-1",
-          "url": "https://picsum.photos/seed/p-001-1/900/1200",
-          "caption": {
-            "zh": "主照片",
-            "fr": "Photo principale",
-            "en": "Primary photo"
-          },
-          "isPrimary": true
-        },
-        {
-          "id": "p-001-photo-2",
-          "url": "https://picsum.photos/seed/p-001-2/900/1200",
-          "caption": {
-            "zh": "生活照片 2",
-            "fr": "Photo de vie 2",
-            "en": "Lifestyle photo 2"
-          },
-          "isPrimary": false
-        },
-        {
-          "id": "p-001-photo-3",
-          "url": "https://picsum.photos/seed/p-001-3/900/1200",
-          "caption": {
-            "zh": "生活照片 3",
-            "fr": "Photo de vie 3",
-            "en": "Lifestyle photo 3"
-          },
-          "isPrimary": false
-        }
-      ],
       "gender": "female",
-      "pronouns": "she/her",
-      "sexuality": "straight",
-      "interestedIn": [
-        "male"
-      ],
-      "age": 31,
+      "birthYear": 1995,
       "height": 168,
       "city": {
         "zh": "巴黎",
@@ -61,19 +20,12 @@
         "fr": "Francaise",
         "en": "French"
       },
-      "hometown": {
-        "zh": "里昂",
-        "fr": "Lyon",
-        "en": "Lyon"
-      },
       "languages": [
         "FR",
         "EN"
       ],
       "profileStatus": "open",
-      "isVerified": true,
       "lastActiveAt": "2026-04-20T18:30:00Z",
-      "joinedAt": "2026-01-12",
       "familyVisible": false,
       "allowFamilyContact": false,
       "familyPriority": false,
@@ -83,36 +35,21 @@
         "fr": "Master",
         "en": "Master"
       },
-      "occupation": {
-        "zh": "品牌策略",
-        "fr": "Strategie de marque",
-        "en": "Brand strategist"
-      },
       "industry": {
         "zh": "奢侈品",
         "fr": "Luxe",
         "en": "Luxury"
       },
-      "employer": {
-        "zh": "独立顾问",
-        "fr": "Consultante independante",
-        "en": "Independent consultant"
+      "careerDirection": {
+        "zh": "品牌策略",
+        "fr": "Strategie de marque",
+        "en": "Brand strategist"
       },
-      "incomeRange": {
-        "zh": "年收入 8-12 万欧",
-        "fr": "80-120k EUR/an",
-        "en": "EUR 80k-120k annual"
-      },
-      "maritalStatus": "single",
+      "maritalStatus": "never_married",
       "hasChildren": false,
-      "wantsChildren": true,
+      "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "datingIntentionLabel": {
-        "zh": "认真发展",
-        "fr": "Relation serieuse",
-        "en": "Serious relationship"
-      },
       "relationshipPlan": {
         "zh": "一年内确认节奏",
         "fr": "Clarifier le rythme sous un an",
@@ -191,16 +128,6 @@
         "fr": "Aime les chats, pas d animal pour le moment",
         "en": "Likes cats, no pet for now"
       },
-      "religion": {
-        "zh": "开放但不强制",
-        "fr": "Ouverte, non pratiquante",
-        "en": "Open, not practicing"
-      },
-      "politicalViews": {
-        "zh": "温和开放",
-        "fr": "Moderee et ouverte",
-        "en": "Moderate and open"
-      },
       "personalityTraits": [
         {
           "zh": "表达清晰",
@@ -240,35 +167,11 @@
         "fr": "Prefere une communication directe, reguliere et respectueuse",
         "en": "Prefers direct, timely, respectful communication"
       },
-      "funFacts": [
-        {
-          "zh": "喜欢把约会安排得自然但有细节。",
-          "fr": "Aime les rendez-vous simples mais soignes.",
-          "en": "Likes dates that feel natural but thoughtful."
-        },
-        {
-          "zh": "对跨文化生活保持好奇。",
-          "fr": "Reste curieux de la vie interculturelle.",
-          "en": "Curious about intercultural life."
-        }
-      ],
       "summary": {
         "zh": "重视表达、节奏和跨文化理解。",
         "fr": "Attentive a la communication, au rythme et a la comprehension interculturelle.",
         "en": "Values communication, pacing, and intercultural understanding."
       },
-      "highlights": [
-        {
-          "zh": "可在法英双语环境稳定交流",
-          "fr": "A l aise en environnement bilingue francais-anglais",
-          "en": "Comfortable in bilingual French-English settings"
-        },
-        {
-          "zh": "偏好线下真实互动后再推进",
-          "fr": "Prefere avancer apres une interaction reelle",
-          "en": "Prefers to move forward after real in-person interaction"
-        }
-      ],
       "tags": [
         {
           "zh": "文化活动",
@@ -286,153 +189,13 @@
           "en": "Steady pace"
         }
       ],
-      "conversationStarters": [
-        {
-          "zh": "可以从巴黎的生活节奏聊起",
-          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
-          "en": "Ask about life rhythm in Paris"
-        },
-        {
-          "zh": "问问最近一次让 TA 印象深刻的周末",
-          "fr": "Demandez-lui son dernier week-end marquant",
-          "en": "Ask about a recent memorable weekend"
-        },
-        {
-          "zh": "聊聊对稳定关系的具体期待",
-          "fr": "Parlez de ses attentes concretes pour une relation stable",
-          "en": "Ask about concrete expectations for a stable relationship"
-        }
-      ],
-      "dateIdeas": [
-        {
-          "zh": "安静咖啡馆初见",
-          "fr": "Premier cafe au calme",
-          "en": "A quiet cafe first meeting"
-        },
-        {
-          "zh": "周末城市散步",
-          "fr": "Balade urbaine le week-end",
-          "en": "A weekend city walk"
-        }
-      ],
-      "prompts": [
-        {
-          "id": "p-001-prompt-1",
-          "promptCode": "perfect_sunday",
-          "prompt": {
-            "zh": "理想周日",
-            "fr": "Dimanche ideal",
-            "en": "Perfect Sunday"
-          },
-          "answer": {
-            "zh": "上午看展，下午在河边散步，晚上认真做一顿饭。",
-            "fr": "Expo le matin, balade au bord de l eau l apres-midi, vrai diner le soir.",
-            "en": "A morning exhibition, a riverside walk, and a real dinner at home."
-          }
-        },
-        {
-          "id": "p-001-prompt-2",
-          "promptCode": "green_flag",
-          "prompt": {
-            "zh": "让我加分的一点",
-            "fr": "Un vrai green flag",
-            "en": "A green flag for me"
-          },
-          "answer": {
-            "zh": "表达清楚，也愿意把复杂问题讲温柔。",
-            "fr": "Exprimer clairement les choses, avec douceur meme quand c est complexe.",
-            "en": "Clear communication, especially when the topic is delicate."
-          }
-        }
-      ],
-      "compatibilityDimensions": [
-        {
-          "code": "communication",
-          "label": {
-            "zh": "沟通方式",
-            "fr": "Communication",
-            "en": "Communication"
-          },
-          "score": 82
-        },
-        {
-          "code": "lifestyle",
-          "label": {
-            "zh": "生活节奏",
-            "fr": "Rythme de vie",
-            "en": "Lifestyle pace"
-          },
-          "score": 78
-        },
-        {
-          "code": "long_term",
-          "label": {
-            "zh": "长期规划",
-            "fr": "Projection long terme",
-            "en": "Long-term planning"
-          },
-          "score": 85
-        }
-      ],
-      "livingSituation": {
-        "zh": "独居",
-        "fr": "Seule",
-        "en": "Lives alone"
-      },
-      "zodiac": {
-        "zh": "天蝎座",
-        "fr": "Scorpion",
-        "en": "Scorpio"
-      },
-      "phone": "+33 6 12 34 56 78",
-      "email": "aline.m@example.com",
-      "wechat": ""
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
     },
     {
       "id": "p-002",
-      "legalName": "Lin S.",
-      "nickname": "Lin",
-      "displayName": "Lin",
-      "avatarUrl": "",
-      "photos": [
-        {
-          "id": "p-002-photo-1",
-          "url": "https://picsum.photos/seed/p-002-1/900/1200",
-          "caption": {
-            "zh": "主照片",
-            "fr": "Photo principale",
-            "en": "Primary photo"
-          },
-          "isPrimary": true
-        },
-        {
-          "id": "p-002-photo-2",
-          "url": "https://picsum.photos/seed/p-002-2/900/1200",
-          "caption": {
-            "zh": "生活照片 2",
-            "fr": "Photo de vie 2",
-            "en": "Lifestyle photo 2"
-          },
-          "isPrimary": false
-        },
-        {
-          "id": "p-002-photo-3",
-          "url": "https://picsum.photos/seed/p-002-3/900/1200",
-          "caption": {
-            "zh": "生活照片 3",
-            "fr": "Photo de vie 3",
-            "en": "Lifestyle photo 3"
-          },
-          "isPrimary": false
-        }
-      ],
       "gender": "male",
-      "pronouns": "he/him",
-      "sexuality": "straight",
-      "interestedIn": [
-        "female"
-      ],
-      "age": 34,
+      "birthYear": 1992,
       "height": 178,
       "city": {
         "zh": "巴黎",
@@ -449,20 +212,13 @@
         "fr": "Chinoise",
         "en": "Chinese"
       },
-      "hometown": {
-        "zh": "上海",
-        "fr": "Shanghai",
-        "en": "Shanghai"
-      },
       "languages": [
         "ZH",
         "FR",
         "EN"
       ],
       "profileStatus": "vip",
-      "isVerified": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
-      "joinedAt": "2026-01-18",
       "familyVisible": true,
       "allowFamilyContact": true,
       "familyPriority": false,
@@ -472,36 +228,21 @@
         "fr": "Master",
         "en": "Master"
       },
-      "occupation": {
-        "zh": "产品负责人",
-        "fr": "Responsable produit",
-        "en": "Product lead"
-      },
       "industry": {
         "zh": "科技",
         "fr": "Tech",
         "en": "Technology"
       },
-      "employer": {
-        "zh": "科技公司",
-        "fr": "Entreprise tech",
-        "en": "Tech company"
+      "careerDirection": {
+        "zh": "产品负责人",
+        "fr": "Responsable produit",
+        "en": "Product lead"
       },
-      "incomeRange": {
-        "zh": "年收入 10-15 万欧",
-        "fr": "100-150k EUR/an",
-        "en": "EUR 100k-150k annual"
-      },
-      "maritalStatus": "single",
+      "maritalStatus": "never_married",
       "hasChildren": false,
-      "wantsChildren": true,
+      "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "marriage",
-      "datingIntentionLabel": {
-        "zh": "婚姻导向",
-        "fr": "Intention mariage",
-        "en": "Marriage-oriented"
-      },
       "relationshipPlan": {
         "zh": "明确方向后稳步推进",
         "fr": "Avancer de facon stable une fois l orientation clarifiee",
@@ -580,16 +321,6 @@
         "fr": "Aime les chiens, ouvert a en adopter plus tard",
         "en": "Likes dogs and is open to having one later"
       },
-      "religion": {
-        "zh": "无宗教信仰",
-        "fr": "Sans religion",
-        "en": "Non-religious"
-      },
-      "politicalViews": {
-        "zh": "务实温和",
-        "fr": "Pragmatique et modere",
-        "en": "Pragmatic and moderate"
-      },
       "personalityTraits": [
         {
           "zh": "目标清晰",
@@ -629,35 +360,11 @@
         "fr": "Prefere une communication directe, reguliere et respectueuse",
         "en": "Prefers direct, timely, respectful communication"
       },
-      "funFacts": [
-        {
-          "zh": "喜欢把约会安排得自然但有细节。",
-          "fr": "Aime les rendez-vous simples mais soignes.",
-          "en": "Likes dates that feel natural but thoughtful."
-        },
-        {
-          "zh": "对跨文化生活保持好奇。",
-          "fr": "Reste curieux de la vie interculturelle.",
-          "en": "Curious about intercultural life."
-        }
-      ],
       "summary": {
         "zh": "重视长期关系中的稳定、透明和行动力。",
         "fr": "Cherche de la stabilite, de la clarte et de l action dans une relation durable.",
         "en": "Values stability, clarity, and follow-through in a long-term relationship."
       },
-      "highlights": [
-        {
-          "zh": "适应法中双文化沟通",
-          "fr": "A l aise entre cultures francaise et chinoise",
-          "en": "Comfortable across French and Chinese cultural contexts"
-        },
-        {
-          "zh": "愿意在真实节奏里推进关系",
-          "fr": "Souhaite faire avancer la relation dans un rythme reel",
-          "en": "Wants to move a relationship forward at a real-life pace"
-        }
-      ],
       "tags": [
         {
           "zh": "长期关系",
@@ -675,153 +382,13 @@
           "en": "Cross-cultural"
         }
       ],
-      "conversationStarters": [
-        {
-          "zh": "可以从巴黎的生活节奏聊起",
-          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
-          "en": "Ask about life rhythm in Paris"
-        },
-        {
-          "zh": "问问最近一次让 TA 印象深刻的周末",
-          "fr": "Demandez-lui son dernier week-end marquant",
-          "en": "Ask about a recent memorable weekend"
-        },
-        {
-          "zh": "聊聊对稳定关系的具体期待",
-          "fr": "Parlez de ses attentes concretes pour une relation stable",
-          "en": "Ask about concrete expectations for a stable relationship"
-        }
-      ],
-      "dateIdeas": [
-        {
-          "zh": "安静咖啡馆初见",
-          "fr": "Premier cafe au calme",
-          "en": "A quiet cafe first meeting"
-        },
-        {
-          "zh": "周末城市散步",
-          "fr": "Balade urbaine le week-end",
-          "en": "A weekend city walk"
-        }
-      ],
-      "prompts": [
-        {
-          "id": "p-002-prompt-1",
-          "promptCode": "dating_goal",
-          "prompt": {
-            "zh": "我认真对待关系的方式",
-            "fr": "Ma facon de prendre la relation au serieux",
-            "en": "How I take relationships seriously"
-          },
-          "answer": {
-            "zh": "先把节奏、边界和长期计划说清楚，再稳定推进。",
-            "fr": "Clarifier le rythme, les limites et le long terme avant d avancer.",
-            "en": "Clarify pace, boundaries, and long-term plans before moving steadily."
-          }
-        },
-        {
-          "id": "p-002-prompt-2",
-          "promptCode": "weekend_plan",
-          "prompt": {
-            "zh": "周末通常会做什么",
-            "fr": "Mon week-end type",
-            "en": "My usual weekend"
-          },
-          "answer": {
-            "zh": "骑行、做饭、整理下周计划，偶尔短途旅行。",
-            "fr": "Velo, cuisine, preparation de la semaine, parfois une escapade.",
-            "en": "Cycling, cooking, planning the week, sometimes a short trip."
-          }
-        }
-      ],
-      "compatibilityDimensions": [
-        {
-          "code": "communication",
-          "label": {
-            "zh": "沟通方式",
-            "fr": "Communication",
-            "en": "Communication"
-          },
-          "score": 85
-        },
-        {
-          "code": "lifestyle",
-          "label": {
-            "zh": "生活节奏",
-            "fr": "Rythme de vie",
-            "en": "Lifestyle pace"
-          },
-          "score": 81
-        },
-        {
-          "code": "long_term",
-          "label": {
-            "zh": "长期规划",
-            "fr": "Projection long terme",
-            "en": "Long-term planning"
-          },
-          "score": 88
-        }
-      ],
-      "livingSituation": {
-        "zh": "与宠物同住",
-        "fr": "Avec animaux",
-        "en": "With pets"
-      },
-      "zodiac": {
-        "zh": "处女座",
-        "fr": "Vierge",
-        "en": "Virgo"
-      },
-      "phone": "+33 6 98 76 54 32",
-      "email": "loic.d@example.com",
-      "wechat": "loic_dubois"
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
     },
     {
       "id": "p-006",
-      "legalName": "Sophie L.",
-      "nickname": "Sophie",
-      "displayName": "Sophie",
-      "avatarUrl": "",
-      "photos": [
-        {
-          "id": "p-006-photo-1",
-          "url": "https://picsum.photos/seed/p-006-1/900/1200",
-          "caption": {
-            "zh": "主照片",
-            "fr": "Photo principale",
-            "en": "Primary photo"
-          },
-          "isPrimary": true
-        },
-        {
-          "id": "p-006-photo-2",
-          "url": "https://picsum.photos/seed/p-006-2/900/1200",
-          "caption": {
-            "zh": "生活照片 2",
-            "fr": "Photo de vie 2",
-            "en": "Lifestyle photo 2"
-          },
-          "isPrimary": false
-        },
-        {
-          "id": "p-006-photo-3",
-          "url": "https://picsum.photos/seed/p-006-3/900/1200",
-          "caption": {
-            "zh": "生活照片 3",
-            "fr": "Photo de vie 3",
-            "en": "Lifestyle photo 3"
-          },
-          "isPrimary": false
-        }
-      ],
       "gender": "female",
-      "pronouns": "she/her",
-      "sexuality": "straight",
-      "interestedIn": [
-        "male"
-      ],
-      "age": 36,
+      "birthYear": 1990,
       "height": 170,
       "city": {
         "zh": "巴黎",
@@ -838,19 +405,12 @@
         "fr": "Francaise",
         "en": "French"
       },
-      "hometown": {
-        "zh": "杭州",
-        "fr": "Hangzhou",
-        "en": "Hangzhou"
-      },
       "languages": [
         "FR",
         "EN"
       ],
       "profileStatus": "review",
-      "isVerified": true,
       "lastActiveAt": "2026-04-21T20:30:00Z",
-      "joinedAt": "2026-03-01",
       "familyVisible": true,
       "allowFamilyContact": true,
       "familyPriority": true,
@@ -860,36 +420,21 @@
         "fr": "Doctorat",
         "en": "PhD"
       },
-      "occupation": {
-        "zh": "公共政策研究员",
-        "fr": "Chercheuse en politiques publiques",
-        "en": "Public policy researcher"
-      },
       "industry": {
         "zh": "公共事务",
         "fr": "Affaires publiques",
         "en": "Public affairs"
       },
-      "employer": {
-        "zh": "研究机构",
-        "fr": "Institut de recherche",
-        "en": "Research institute"
-      },
-      "incomeRange": {
-        "zh": "年收入 7-10 万欧",
-        "fr": "70-100k EUR/an",
-        "en": "EUR 70k-100k annual"
+      "careerDirection": {
+        "zh": "公共政策研究员",
+        "fr": "Chercheuse en politiques publiques",
+        "en": "Public policy researcher"
       },
       "maritalStatus": "divorced",
       "hasChildren": true,
-      "wantsChildren": false,
+      "childrenPlan": "does_not_want",
       "acceptsLongDistance": true,
       "datingIntentionCode": "exclusive",
-      "datingIntentionLabel": {
-        "zh": "排他交往",
-        "fr": "Relation exclusive",
-        "en": "Exclusive dating"
-      },
       "relationshipPlan": {
         "zh": "先确认家庭节奏与城市安排",
         "fr": "Verifier d abord le rythme familial et la logistique des villes",
@@ -968,16 +513,6 @@
         "fr": "Ouverte aux animaux, tient a un interieur soigne",
         "en": "Open to pets, values a tidy home"
       },
-      "religion": {
-        "zh": "尊重不同信仰",
-        "fr": "Respecte les croyances differentes",
-        "en": "Respects different beliefs"
-      },
-      "politicalViews": {
-        "zh": "关注教育与公共议题",
-        "fr": "Attentive a l education et aux sujets publics",
-        "en": "Cares about education and public issues"
-      },
       "personalityTraits": [
         {
           "zh": "温和直接",
@@ -1017,30 +552,11 @@
         "fr": "Prefere une communication directe, reguliere et respectueuse",
         "en": "Prefers direct, timely, respectful communication"
       },
-      "funFacts": [
-        {
-          "zh": "喜欢把约会安排得自然但有细节。",
-          "fr": "Aime les rendez-vous simples mais soignes.",
-          "en": "Likes dates that feel natural but thoughtful."
-        },
-        {
-          "zh": "对跨文化生活保持好奇。",
-          "fr": "Reste curieux de la vie interculturelle.",
-          "en": "Curious about intercultural life."
-        }
-      ],
       "summary": {
         "zh": "希望在成熟、清晰和尊重边界的前提下推进关系。",
         "fr": "Souhaite avancer dans un cadre mature, clair et respectueux des limites.",
         "en": "Wants to move forward in a mature, clear, and boundary-respecting way."
       },
-      "highlights": [
-        {
-          "zh": "适合顾问协同和家庭有限辅助场景",
-          "fr": "Compatible avec un cadre conseiller et un appui familial limite",
-          "en": "A fit for advisor-supported and limited family-assisted flow"
-        }
-      ],
       "tags": [
         {
           "zh": "家庭节奏",
@@ -1058,153 +574,13 @@
           "en": "Mature communication"
         }
       ],
-      "conversationStarters": [
-        {
-          "zh": "可以从巴黎的生活节奏聊起",
-          "fr": "Vous pouvez commencer par son rythme de vie a Paris",
-          "en": "Ask about life rhythm in Paris"
-        },
-        {
-          "zh": "问问最近一次让 TA 印象深刻的周末",
-          "fr": "Demandez-lui son dernier week-end marquant",
-          "en": "Ask about a recent memorable weekend"
-        },
-        {
-          "zh": "聊聊对稳定关系的具体期待",
-          "fr": "Parlez de ses attentes concretes pour une relation stable",
-          "en": "Ask about concrete expectations for a stable relationship"
-        }
-      ],
-      "dateIdeas": [
-        {
-          "zh": "安静咖啡馆初见",
-          "fr": "Premier cafe au calme",
-          "en": "A quiet cafe first meeting"
-        },
-        {
-          "zh": "周末城市散步",
-          "fr": "Balade urbaine le week-end",
-          "en": "A weekend city walk"
-        }
-      ],
-      "prompts": [
-        {
-          "id": "p-006-prompt-1",
-          "promptCode": "family_values",
-          "prompt": {
-            "zh": "我理解的家庭",
-            "fr": "Ma vision de la famille",
-            "en": "My view of family"
-          },
-          "answer": {
-            "zh": "互相照顾，也互相留出空间。",
-            "fr": "Prendre soin l un de l autre tout en gardant de l espace.",
-            "en": "Care for each other while leaving room to breathe."
-          }
-        },
-        {
-          "id": "p-006-prompt-2",
-          "promptCode": "conversation",
-          "prompt": {
-            "zh": "适合开启的话题",
-            "fr": "Un bon sujet pour commencer",
-            "en": "A good conversation starter"
-          },
-          "answer": {
-            "zh": "聊聊教育、城市生活，或者最近读到的一本书。",
-            "fr": "Parler education, vie urbaine ou d un livre recent.",
-            "en": "Education, city life, or a recent book."
-          }
-        }
-      ],
-      "compatibilityDimensions": [
-        {
-          "code": "communication",
-          "label": {
-            "zh": "沟通方式",
-            "fr": "Communication",
-            "en": "Communication"
-          },
-          "score": 88
-        },
-        {
-          "code": "lifestyle",
-          "label": {
-            "zh": "生活节奏",
-            "fr": "Rythme de vie",
-            "en": "Lifestyle pace"
-          },
-          "score": 84
-        },
-        {
-          "code": "long_term",
-          "label": {
-            "zh": "长期规划",
-            "fr": "Projection long terme",
-            "en": "Long-term planning"
-          },
-          "score": 91
-        }
-      ],
-      "livingSituation": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "zodiac": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "phone": "",
-      "email": "",
-      "wechat": ""
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
     },
     {
       "id": "p-009",
-      "legalName": "Martin K.",
-      "nickname": "Martin",
-      "displayName": "Martin",
-      "avatarUrl": "",
-      "photos": [
-        {
-          "id": "p-009-photo-1",
-          "url": "https://picsum.photos/seed/p-009-1/900/1200",
-          "caption": {
-            "zh": "主照片",
-            "fr": "Photo principale",
-            "en": "Primary photo"
-          },
-          "isPrimary": true
-        },
-        {
-          "id": "p-009-photo-2",
-          "url": "https://picsum.photos/seed/p-009-2/900/1200",
-          "caption": {
-            "zh": "生活照片 2",
-            "fr": "Photo de vie 2",
-            "en": "Lifestyle photo 2"
-          },
-          "isPrimary": false
-        },
-        {
-          "id": "p-009-photo-3",
-          "url": "https://picsum.photos/seed/p-009-3/900/1200",
-          "caption": {
-            "zh": "生活照片 3",
-            "fr": "Photo de vie 3",
-            "en": "Lifestyle photo 3"
-          },
-          "isPrimary": false
-        }
-      ],
       "gender": "male",
-      "pronouns": "he/him",
-      "sexuality": "straight",
-      "interestedIn": [
-        "female"
-      ],
-      "age": 35,
+      "birthYear": 1991,
       "height": 174,
       "city": {
         "zh": "日内瓦",
@@ -1221,20 +597,13 @@
         "fr": "Suisse",
         "en": "Swiss"
       },
-      "hometown": {
-        "zh": "日内瓦",
-        "fr": "Geneve",
-        "en": "Geneva"
-      },
       "languages": [
         "FR",
         "EN",
         "DE"
       ],
       "profileStatus": "vip",
-      "isVerified": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
-      "joinedAt": "2026-02-02",
       "familyVisible": true,
       "allowFamilyContact": true,
       "familyPriority": false,
@@ -1244,36 +613,21 @@
         "fr": "Master",
         "en": "Master"
       },
-      "occupation": {
-        "zh": "投融资经理",
-        "fr": "Manager financement",
-        "en": "Finance manager"
-      },
       "industry": {
         "zh": "金融",
         "fr": "Finance",
         "en": "Finance"
       },
-      "employer": {
-        "zh": "私人银行",
-        "fr": "Banque privee",
-        "en": "Private bank"
+      "careerDirection": {
+        "zh": "投融资经理",
+        "fr": "Manager financement",
+        "en": "Finance manager"
       },
-      "incomeRange": {
-        "zh": "年收入 12-18 万欧",
-        "fr": "120-180k EUR/an",
-        "en": "EUR 120k-180k annual"
-      },
-      "maritalStatus": "single",
+      "maritalStatus": "never_married",
       "hasChildren": false,
-      "wantsChildren": true,
+      "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "cross_border",
-      "datingIntentionLabel": {
-        "zh": "跨境发展",
-        "fr": "Relation transfrontaliere",
-        "en": "Cross-border relationship"
-      },
       "relationshipPlan": {
         "zh": "接受跨境安排，优先确定共同城市策略",
         "fr": "Ouvert au transfrontalier avec strategie de ville commune",
@@ -1352,16 +706,6 @@
         "fr": "Aime les chiens et les sorties dehors",
         "en": "Likes dogs and being outdoors"
       },
-      "religion": {
-        "zh": "文化上开放",
-        "fr": "Ouvert culturellement",
-        "en": "Culturally open"
-      },
-      "politicalViews": {
-        "zh": "重视公共责任",
-        "fr": "Attache a la responsabilite civique",
-        "en": "Values civic responsibility"
-      },
       "personalityTraits": [
         {
           "zh": "时间观念强",
@@ -1401,35 +745,11 @@
         "fr": "Prefere une communication directe, reguliere et respectueuse",
         "en": "Prefers direct, timely, respectful communication"
       },
-      "funFacts": [
-        {
-          "zh": "喜欢把约会安排得自然但有细节。",
-          "fr": "Aime les rendez-vous simples mais soignes.",
-          "en": "Likes dates that feel natural but thoughtful."
-        },
-        {
-          "zh": "对跨文化生活保持好奇。",
-          "fr": "Reste curieux de la vie interculturelle.",
-          "en": "Curious about intercultural life."
-        }
-      ],
       "summary": {
         "zh": "重视跨城市协同能力和长期执行力。",
         "fr": "Valorise la coordination entre villes et la capacite d execution.",
         "en": "Values cross-city coordination and long-term execution."
       },
-      "highlights": [
-        {
-          "zh": "跨境节奏成熟，时间管理稳定",
-          "fr": "Habitude des rythmes transfrontaliers",
-          "en": "Experienced with cross-border rhythms"
-        },
-        {
-          "zh": "对线下见面节点响应快",
-          "fr": "Reagit rapidement aux opportunites de rencontre reelle",
-          "en": "Responsive to in-person meeting opportunities"
-        }
-      ],
       "tags": [
         {
           "zh": "跨境节奏",
@@ -1447,153 +767,13 @@
           "en": "Execution"
         }
       ],
-      "conversationStarters": [
-        {
-          "zh": "可以从日内瓦的生活节奏聊起",
-          "fr": "Vous pouvez commencer par son rythme de vie a Geneve",
-          "en": "Ask about life rhythm in Geneva"
-        },
-        {
-          "zh": "问问最近一次让 TA 印象深刻的周末",
-          "fr": "Demandez-lui son dernier week-end marquant",
-          "en": "Ask about a recent memorable weekend"
-        },
-        {
-          "zh": "聊聊对稳定关系的具体期待",
-          "fr": "Parlez de ses attentes concretes pour une relation stable",
-          "en": "Ask about concrete expectations for a stable relationship"
-        }
-      ],
-      "dateIdeas": [
-        {
-          "zh": "安静咖啡馆初见",
-          "fr": "Premier cafe au calme",
-          "en": "A quiet cafe first meeting"
-        },
-        {
-          "zh": "周末城市散步",
-          "fr": "Balade urbaine le week-end",
-          "en": "A weekend city walk"
-        }
-      ],
-      "prompts": [
-        {
-          "id": "p-009-prompt-1",
-          "promptCode": "cross_border_life",
-          "prompt": {
-            "zh": "跨境生活里重要的事",
-            "fr": "Ce qui compte dans une vie transfrontaliere",
-            "en": "What matters in cross-border life"
-          },
-          "answer": {
-            "zh": "时间观念、承诺感，以及愿意提前沟通安排。",
-            "fr": "Ponctualite, engagement et organisation communiquee a l avance.",
-            "en": "Punctuality, commitment, and planning ahead together."
-          }
-        },
-        {
-          "id": "p-009-prompt-2",
-          "promptCode": "first_date",
-          "prompt": {
-            "zh": "第一次见面我会选",
-            "fr": "Pour une premiere rencontre",
-            "en": "For a first date"
-          },
-          "answer": {
-            "zh": "安静咖啡馆，之后沿湖或城市街区走一段。",
-            "fr": "Un cafe calme puis une marche au bord du lac ou en ville.",
-            "en": "A quiet cafe followed by a walk by the lake or through the city."
-          }
-        }
-      ],
-      "compatibilityDimensions": [
-        {
-          "code": "communication",
-          "label": {
-            "zh": "沟通方式",
-            "fr": "Communication",
-            "en": "Communication"
-          },
-          "score": 91
-        },
-        {
-          "code": "lifestyle",
-          "label": {
-            "zh": "生活节奏",
-            "fr": "Rythme de vie",
-            "en": "Lifestyle pace"
-          },
-          "score": 87
-        },
-        {
-          "code": "long_term",
-          "label": {
-            "zh": "长期规划",
-            "fr": "Projection long terme",
-            "en": "Long-term planning"
-          },
-          "score": 94
-        }
-      ],
-      "livingSituation": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "zodiac": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "phone": "",
-      "email": "",
-      "wechat": ""
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
     },
     {
       "id": "p-010",
-      "legalName": "Iris N.",
-      "nickname": "Iris",
-      "displayName": "Iris",
-      "avatarUrl": "",
-      "photos": [
-        {
-          "id": "p-010-photo-1",
-          "url": "https://picsum.photos/seed/p-010-1/900/1200",
-          "caption": {
-            "zh": "主照片",
-            "fr": "Photo principale",
-            "en": "Primary photo"
-          },
-          "isPrimary": true
-        },
-        {
-          "id": "p-010-photo-2",
-          "url": "https://picsum.photos/seed/p-010-2/900/1200",
-          "caption": {
-            "zh": "生活照片 2",
-            "fr": "Photo de vie 2",
-            "en": "Lifestyle photo 2"
-          },
-          "isPrimary": false
-        },
-        {
-          "id": "p-010-photo-3",
-          "url": "https://picsum.photos/seed/p-010-3/900/1200",
-          "caption": {
-            "zh": "生活照片 3",
-            "fr": "Photo de vie 3",
-            "en": "Lifestyle photo 3"
-          },
-          "isPrimary": false
-        }
-      ],
       "gender": "female",
-      "pronouns": "she/her",
-      "sexuality": "straight",
-      "interestedIn": [
-        "male"
-      ],
-      "age": 33,
+      "birthYear": 1993,
       "height": 171,
       "city": {
         "zh": "阿姆斯特丹",
@@ -1610,20 +790,13 @@
         "fr": "Neerlandaise",
         "en": "Dutch"
       },
-      "hometown": {
-        "zh": "苏州",
-        "fr": "Suzhou",
-        "en": "Suzhou"
-      },
       "languages": [
         "EN",
         "NL",
         "FR"
       ],
       "profileStatus": "open",
-      "isVerified": true,
       "lastActiveAt": "2026-04-21T10:45:00Z",
-      "joinedAt": "2026-02-14",
       "familyVisible": true,
       "allowFamilyContact": true,
       "familyPriority": false,
@@ -1633,36 +806,21 @@
         "fr": "Master",
         "en": "Master"
       },
-      "occupation": {
-        "zh": "用户研究员",
-        "fr": "Chercheuse UX",
-        "en": "UX researcher"
-      },
       "industry": {
         "zh": "数字产品",
         "fr": "Produit numerique",
         "en": "Digital product"
       },
-      "employer": {
-        "zh": "SaaS 平台",
-        "fr": "Plateforme SaaS",
-        "en": "SaaS platform"
-      },
-      "incomeRange": {
-        "zh": "年收入 7.5-11 万欧",
-        "fr": "75-110k EUR/an",
-        "en": "EUR 75k-110k annual"
+      "careerDirection": {
+        "zh": "用户研究员",
+        "fr": "Chercheuse UX",
+        "en": "UX researcher"
       },
       "maritalStatus": "divorced",
       "hasChildren": false,
-      "wantsChildren": true,
+      "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "datingIntentionLabel": {
-        "zh": "认真发展",
-        "fr": "Relation serieuse",
-        "en": "Serious relationship"
-      },
       "relationshipPlan": {
         "zh": "先建立共同生活节奏，再推进长期关系",
         "fr": "Installer un rythme de vie commun avant de projeter le long terme",
@@ -1741,16 +899,6 @@
         "fr": "Aime chats et chiens, avec organisation",
         "en": "Likes cats and dogs with planning"
       },
-      "religion": {
-        "zh": "无宗教信仰，尊重传统",
-        "fr": "Sans religion, respecte les traditions",
-        "en": "Non-religious, respects traditions"
-      },
-      "politicalViews": {
-        "zh": "温和务实",
-        "fr": "Moderee et pragmatique",
-        "en": "Moderate and pragmatic"
-      },
       "personalityTraits": [
         {
           "zh": "温和直接",
@@ -1790,35 +938,11 @@
         "fr": "Prefere une communication directe, reguliere et respectueuse",
         "en": "Prefers direct, timely, respectful communication"
       },
-      "funFacts": [
-        {
-          "zh": "喜欢把约会安排得自然但有细节。",
-          "fr": "Aime les rendez-vous simples mais soignes.",
-          "en": "Likes dates that feel natural but thoughtful."
-        },
-        {
-          "zh": "对跨文化生活保持好奇。",
-          "fr": "Reste curieux de la vie interculturelle.",
-          "en": "Curious about intercultural life."
-        }
-      ],
       "summary": {
         "zh": "重视生活一致性与沟通质量。",
         "fr": "Attachee a la coherence de vie et a la qualite de communication.",
         "en": "Values lifestyle consistency and communication quality."
       },
-      "highlights": [
-        {
-          "zh": "跨国工作背景，适应多文化场景",
-          "fr": "Experience internationale et contexte multiculturel",
-          "en": "International background, comfortable in multicultural settings"
-        },
-        {
-          "zh": "可稳定参与线下活动节点",
-          "fr": "Disponibilite reguliere pour les rencontres en presentiel",
-          "en": "Consistently available for in-person event nodes"
-        }
-      ],
       "tags": [
         {
           "zh": "跨文化",
@@ -1836,107 +960,8 @@
           "en": "Lifestyle alignment"
         }
       ],
-      "conversationStarters": [
-        {
-          "zh": "可以从阿姆斯特丹的生活节奏聊起",
-          "fr": "Vous pouvez commencer par son rythme de vie a Amsterdam",
-          "en": "Ask about life rhythm in Amsterdam"
-        },
-        {
-          "zh": "问问最近一次让 TA 印象深刻的周末",
-          "fr": "Demandez-lui son dernier week-end marquant",
-          "en": "Ask about a recent memorable weekend"
-        },
-        {
-          "zh": "聊聊对稳定关系的具体期待",
-          "fr": "Parlez de ses attentes concretes pour une relation stable",
-          "en": "Ask about concrete expectations for a stable relationship"
-        }
-      ],
-      "dateIdeas": [
-        {
-          "zh": "安静咖啡馆初见",
-          "fr": "Premier cafe au calme",
-          "en": "A quiet cafe first meeting"
-        },
-        {
-          "zh": "周末城市散步",
-          "fr": "Balade urbaine le week-end",
-          "en": "A weekend city walk"
-        }
-      ],
-      "prompts": [
-        {
-          "id": "p-010-prompt-1",
-          "promptCode": "home_rhythm",
-          "prompt": {
-            "zh": "理想的家里节奏",
-            "fr": "Le rythme ideal a la maison",
-            "en": "Ideal home rhythm"
-          },
-          "answer": {
-            "zh": "平日各自专注，周末一起做饭、见朋友或短途散心。",
-            "fr": "Independance en semaine, cuisine, amis ou escapade le week-end.",
-            "en": "Focused weekdays, shared cooking, friends, or short trips on weekends."
-          }
-        },
-        {
-          "id": "p-010-prompt-2",
-          "promptCode": "green_flag",
-          "prompt": {
-            "zh": "我会欣赏的人",
-            "fr": "Ce que j apprecie chez quelqu un",
-            "en": "Someone I appreciate"
-          },
-          "answer": {
-            "zh": "稳定、讲信用，也能照顾到双方家庭的感受。",
-            "fr": "Stable, fiable, attentif aux deux familles.",
-            "en": "Stable, reliable, and thoughtful about both families."
-          }
-        }
-      ],
-      "compatibilityDimensions": [
-        {
-          "code": "communication",
-          "label": {
-            "zh": "沟通方式",
-            "fr": "Communication",
-            "en": "Communication"
-          },
-          "score": 94
-        },
-        {
-          "code": "lifestyle",
-          "label": {
-            "zh": "生活节奏",
-            "fr": "Rythme de vie",
-            "en": "Lifestyle pace"
-          },
-          "score": 90
-        },
-        {
-          "code": "long_term",
-          "label": {
-            "zh": "长期规划",
-            "fr": "Projection long terme",
-            "en": "Long-term planning"
-          },
-          "score": 97
-        }
-      ],
-      "livingSituation": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "zodiac": {
-        "zh": "",
-        "fr": "",
-        "en": ""
-      },
-      "phone": "",
-      "email": "",
-      "wechat": ""
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
     }
   ],
   "events": [
@@ -2276,5 +1301,766 @@
         "en": "Disabled so some details remain hidden until later interaction."
       }
     }
-  ]
+  ],
+  "profile_photos": [
+    {
+      "id": "p-001-photo-1",
+      "profileId": "p-001",
+      "url": "https://picsum.photos/seed/p-001-1/900/1200",
+      "caption": {
+        "zh": "主照片",
+        "fr": "Photo principale",
+        "en": "Primary photo"
+      },
+      "isPrimary": true,
+      "sortOrder": 1,
+      "status": "approved",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "p-001-photo-2",
+      "profileId": "p-001",
+      "url": "https://picsum.photos/seed/p-001-2/900/1200",
+      "caption": {
+        "zh": "生活照片 2",
+        "fr": "Photo de vie 2",
+        "en": "Lifestyle photo 2"
+      },
+      "isPrimary": false,
+      "sortOrder": 2,
+      "status": "approved",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "p-001-photo-3",
+      "profileId": "p-001",
+      "url": "https://picsum.photos/seed/p-001-3/900/1200",
+      "caption": {
+        "zh": "生活照片 3",
+        "fr": "Photo de vie 3",
+        "en": "Lifestyle photo 3"
+      },
+      "isPrimary": false,
+      "sortOrder": 3,
+      "status": "approved",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "p-002-photo-1",
+      "profileId": "p-002",
+      "url": "https://picsum.photos/seed/p-002-1/900/1200",
+      "caption": {
+        "zh": "主照片",
+        "fr": "Photo principale",
+        "en": "Primary photo"
+      },
+      "isPrimary": true,
+      "sortOrder": 1,
+      "status": "approved",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "p-002-photo-2",
+      "profileId": "p-002",
+      "url": "https://picsum.photos/seed/p-002-2/900/1200",
+      "caption": {
+        "zh": "生活照片 2",
+        "fr": "Photo de vie 2",
+        "en": "Lifestyle photo 2"
+      },
+      "isPrimary": false,
+      "sortOrder": 2,
+      "status": "approved",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "p-002-photo-3",
+      "profileId": "p-002",
+      "url": "https://picsum.photos/seed/p-002-3/900/1200",
+      "caption": {
+        "zh": "生活照片 3",
+        "fr": "Photo de vie 3",
+        "en": "Lifestyle photo 3"
+      },
+      "isPrimary": false,
+      "sortOrder": 3,
+      "status": "approved",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "p-006-photo-1",
+      "profileId": "p-006",
+      "url": "https://picsum.photos/seed/p-006-1/900/1200",
+      "caption": {
+        "zh": "主照片",
+        "fr": "Photo principale",
+        "en": "Primary photo"
+      },
+      "isPrimary": true,
+      "sortOrder": 1,
+      "status": "approved",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "p-006-photo-2",
+      "profileId": "p-006",
+      "url": "https://picsum.photos/seed/p-006-2/900/1200",
+      "caption": {
+        "zh": "生活照片 2",
+        "fr": "Photo de vie 2",
+        "en": "Lifestyle photo 2"
+      },
+      "isPrimary": false,
+      "sortOrder": 2,
+      "status": "approved",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "p-006-photo-3",
+      "profileId": "p-006",
+      "url": "https://picsum.photos/seed/p-006-3/900/1200",
+      "caption": {
+        "zh": "生活照片 3",
+        "fr": "Photo de vie 3",
+        "en": "Lifestyle photo 3"
+      },
+      "isPrimary": false,
+      "sortOrder": 3,
+      "status": "approved",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "p-009-photo-1",
+      "profileId": "p-009",
+      "url": "https://picsum.photos/seed/p-009-1/900/1200",
+      "caption": {
+        "zh": "主照片",
+        "fr": "Photo principale",
+        "en": "Primary photo"
+      },
+      "isPrimary": true,
+      "sortOrder": 1,
+      "status": "approved",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "p-009-photo-2",
+      "profileId": "p-009",
+      "url": "https://picsum.photos/seed/p-009-2/900/1200",
+      "caption": {
+        "zh": "生活照片 2",
+        "fr": "Photo de vie 2",
+        "en": "Lifestyle photo 2"
+      },
+      "isPrimary": false,
+      "sortOrder": 2,
+      "status": "approved",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "p-009-photo-3",
+      "profileId": "p-009",
+      "url": "https://picsum.photos/seed/p-009-3/900/1200",
+      "caption": {
+        "zh": "生活照片 3",
+        "fr": "Photo de vie 3",
+        "en": "Lifestyle photo 3"
+      },
+      "isPrimary": false,
+      "sortOrder": 3,
+      "status": "approved",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "p-010-photo-1",
+      "profileId": "p-010",
+      "url": "https://picsum.photos/seed/p-010-1/900/1200",
+      "caption": {
+        "zh": "主照片",
+        "fr": "Photo principale",
+        "en": "Primary photo"
+      },
+      "isPrimary": true,
+      "sortOrder": 1,
+      "status": "approved",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    },
+    {
+      "id": "p-010-photo-2",
+      "profileId": "p-010",
+      "url": "https://picsum.photos/seed/p-010-2/900/1200",
+      "caption": {
+        "zh": "生活照片 2",
+        "fr": "Photo de vie 2",
+        "en": "Lifestyle photo 2"
+      },
+      "isPrimary": false,
+      "sortOrder": 2,
+      "status": "approved",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    },
+    {
+      "id": "p-010-photo-3",
+      "profileId": "p-010",
+      "url": "https://picsum.photos/seed/p-010-3/900/1200",
+      "caption": {
+        "zh": "生活照片 3",
+        "fr": "Photo de vie 3",
+        "en": "Lifestyle photo 3"
+      },
+      "isPrimary": false,
+      "sortOrder": 3,
+      "status": "approved",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    }
+  ],
+  "profile_prompts": [
+    {
+      "id": "p-001-prompt-1",
+      "profileId": "p-001",
+      "promptCode": "perfect_sunday",
+      "prompt": {
+        "zh": "理想周日",
+        "fr": "Dimanche ideal",
+        "en": "Perfect Sunday"
+      },
+      "answer": {
+        "zh": "上午看展，下午在河边散步，晚上认真做一顿饭。",
+        "fr": "Expo le matin, balade au bord de l eau l apres-midi, vrai diner le soir.",
+        "en": "A morning exhibition, a riverside walk, and a real dinner at home."
+      },
+      "sortOrder": 1,
+      "status": "active",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "p-001-prompt-2",
+      "profileId": "p-001",
+      "promptCode": "green_flag",
+      "prompt": {
+        "zh": "让我加分的一点",
+        "fr": "Un vrai green flag",
+        "en": "A green flag for me"
+      },
+      "answer": {
+        "zh": "表达清楚，也愿意把复杂问题讲温柔。",
+        "fr": "Exprimer clairement les choses, avec douceur meme quand c est complexe.",
+        "en": "Clear communication, especially when the topic is delicate."
+      },
+      "sortOrder": 2,
+      "status": "active",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "p-002-prompt-1",
+      "profileId": "p-002",
+      "promptCode": "dating_goal",
+      "prompt": {
+        "zh": "我认真对待关系的方式",
+        "fr": "Ma facon de prendre la relation au serieux",
+        "en": "How I take relationships seriously"
+      },
+      "answer": {
+        "zh": "先把节奏、边界和长期计划说清楚，再稳定推进。",
+        "fr": "Clarifier le rythme, les limites et le long terme avant d avancer.",
+        "en": "Clarify pace, boundaries, and long-term plans before moving steadily."
+      },
+      "sortOrder": 1,
+      "status": "active",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "p-002-prompt-2",
+      "profileId": "p-002",
+      "promptCode": "weekend_plan",
+      "prompt": {
+        "zh": "周末通常会做什么",
+        "fr": "Mon week-end type",
+        "en": "My usual weekend"
+      },
+      "answer": {
+        "zh": "骑行、做饭、整理下周计划，偶尔短途旅行。",
+        "fr": "Velo, cuisine, preparation de la semaine, parfois une escapade.",
+        "en": "Cycling, cooking, planning the week, sometimes a short trip."
+      },
+      "sortOrder": 2,
+      "status": "active",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "p-006-prompt-1",
+      "profileId": "p-006",
+      "promptCode": "family_values",
+      "prompt": {
+        "zh": "我理解的家庭",
+        "fr": "Ma vision de la famille",
+        "en": "My view of family"
+      },
+      "answer": {
+        "zh": "互相照顾，也互相留出空间。",
+        "fr": "Prendre soin l un de l autre tout en gardant de l espace.",
+        "en": "Care for each other while leaving room to breathe."
+      },
+      "sortOrder": 1,
+      "status": "active",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "p-006-prompt-2",
+      "profileId": "p-006",
+      "promptCode": "conversation",
+      "prompt": {
+        "zh": "适合开启的话题",
+        "fr": "Un bon sujet pour commencer",
+        "en": "A good conversation starter"
+      },
+      "answer": {
+        "zh": "聊聊教育、城市生活，或者最近读到的一本书。",
+        "fr": "Parler education, vie urbaine ou d un livre recent.",
+        "en": "Education, city life, or a recent book."
+      },
+      "sortOrder": 2,
+      "status": "active",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "p-009-prompt-1",
+      "profileId": "p-009",
+      "promptCode": "cross_border_life",
+      "prompt": {
+        "zh": "跨境生活里重要的事",
+        "fr": "Ce qui compte dans une vie transfrontaliere",
+        "en": "What matters in cross-border life"
+      },
+      "answer": {
+        "zh": "时间观念、承诺感，以及愿意提前沟通安排。",
+        "fr": "Ponctualite, engagement et organisation communiquee a l avance.",
+        "en": "Punctuality, commitment, and planning ahead together."
+      },
+      "sortOrder": 1,
+      "status": "active",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "p-009-prompt-2",
+      "profileId": "p-009",
+      "promptCode": "first_date",
+      "prompt": {
+        "zh": "第一次见面我会选",
+        "fr": "Pour une premiere rencontre",
+        "en": "For a first date"
+      },
+      "answer": {
+        "zh": "安静咖啡馆，之后沿湖或城市街区走一段。",
+        "fr": "Un cafe calme puis une marche au bord du lac ou en ville.",
+        "en": "A quiet cafe followed by a walk by the lake or through the city."
+      },
+      "sortOrder": 2,
+      "status": "active",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "p-010-prompt-1",
+      "profileId": "p-010",
+      "promptCode": "home_rhythm",
+      "prompt": {
+        "zh": "理想的家里节奏",
+        "fr": "Le rythme ideal a la maison",
+        "en": "Ideal home rhythm"
+      },
+      "answer": {
+        "zh": "平日各自专注，周末一起做饭、见朋友或短途散心。",
+        "fr": "Independance en semaine, cuisine, amis ou escapade le week-end.",
+        "en": "Focused weekdays, shared cooking, friends, or short trips on weekends."
+      },
+      "sortOrder": 1,
+      "status": "active",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    },
+    {
+      "id": "p-010-prompt-2",
+      "profileId": "p-010",
+      "promptCode": "green_flag",
+      "prompt": {
+        "zh": "我会欣赏的人",
+        "fr": "Ce que j apprecie chez quelqu un",
+        "en": "Someone I appreciate"
+      },
+      "answer": {
+        "zh": "稳定、讲信用，也能照顾到双方家庭的感受。",
+        "fr": "Stable, fiable, attentif aux deux familles.",
+        "en": "Stable, reliable, and thoughtful about both families."
+      },
+      "sortOrder": 2,
+      "status": "active",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    }
+  ],
+  "profile_internal_records": [
+    {
+      "id": "internal-p-001",
+      "profileId": "p-001",
+      "employer": {
+        "zh": "独立顾问",
+        "fr": "Consultante independante",
+        "en": "Independent consultant"
+      },
+      "incomeRange": {
+        "zh": "年收入 8-12 万欧",
+        "fr": "80-120k EUR/an",
+        "en": "EUR 80k-120k annual"
+      },
+      "religion": {
+        "zh": "开放但不强制",
+        "fr": "Ouverte, non pratiquante",
+        "en": "Open, not practicing"
+      },
+      "politicalViews": {
+        "zh": "温和开放",
+        "fr": "Moderee et ouverte",
+        "en": "Moderate and open"
+      },
+      "hometown": {
+        "zh": "里昂",
+        "fr": "Lyon",
+        "en": "Lyon"
+      },
+      "livingSituation": {
+        "zh": "独居",
+        "fr": "Seule",
+        "en": "Lives alone"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "internal-p-002",
+      "profileId": "p-002",
+      "employer": {
+        "zh": "科技公司",
+        "fr": "Entreprise tech",
+        "en": "Tech company"
+      },
+      "incomeRange": {
+        "zh": "年收入 10-15 万欧",
+        "fr": "100-150k EUR/an",
+        "en": "EUR 100k-150k annual"
+      },
+      "religion": {
+        "zh": "无宗教信仰",
+        "fr": "Sans religion",
+        "en": "Non-religious"
+      },
+      "politicalViews": {
+        "zh": "务实温和",
+        "fr": "Pragmatique et modere",
+        "en": "Pragmatic and moderate"
+      },
+      "hometown": {
+        "zh": "上海",
+        "fr": "Shanghai",
+        "en": "Shanghai"
+      },
+      "livingSituation": {
+        "zh": "与宠物同住",
+        "fr": "Avec animaux",
+        "en": "With pets"
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "internal-p-006",
+      "profileId": "p-006",
+      "employer": {
+        "zh": "研究机构",
+        "fr": "Institut de recherche",
+        "en": "Research institute"
+      },
+      "incomeRange": {
+        "zh": "年收入 7-10 万欧",
+        "fr": "70-100k EUR/an",
+        "en": "EUR 70k-100k annual"
+      },
+      "religion": {
+        "zh": "尊重不同信仰",
+        "fr": "Respecte les croyances differentes",
+        "en": "Respects different beliefs"
+      },
+      "politicalViews": {
+        "zh": "关注教育与公共议题",
+        "fr": "Attentive a l education et aux sujets publics",
+        "en": "Cares about education and public issues"
+      },
+      "hometown": {
+        "zh": "杭州",
+        "fr": "Hangzhou",
+        "en": "Hangzhou"
+      },
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "internal-p-009",
+      "profileId": "p-009",
+      "employer": {
+        "zh": "私人银行",
+        "fr": "Banque privee",
+        "en": "Private bank"
+      },
+      "incomeRange": {
+        "zh": "年收入 12-18 万欧",
+        "fr": "120-180k EUR/an",
+        "en": "EUR 120k-180k annual"
+      },
+      "religion": {
+        "zh": "文化上开放",
+        "fr": "Ouvert culturellement",
+        "en": "Culturally open"
+      },
+      "politicalViews": {
+        "zh": "重视公共责任",
+        "fr": "Attache a la responsabilite civique",
+        "en": "Values civic responsibility"
+      },
+      "hometown": {
+        "zh": "日内瓦",
+        "fr": "Geneve",
+        "en": "Geneva"
+      },
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "internal-p-010",
+      "profileId": "p-010",
+      "employer": {
+        "zh": "SaaS 平台",
+        "fr": "Plateforme SaaS",
+        "en": "SaaS platform"
+      },
+      "incomeRange": {
+        "zh": "年收入 7.5-11 万欧",
+        "fr": "75-110k EUR/an",
+        "en": "EUR 75k-110k annual"
+      },
+      "religion": {
+        "zh": "无宗教信仰，尊重传统",
+        "fr": "Sans religion, respecte les traditions",
+        "en": "Non-religious, respects traditions"
+      },
+      "politicalViews": {
+        "zh": "温和务实",
+        "fr": "Moderee et pragmatique",
+        "en": "Moderate and pragmatic"
+      },
+      "hometown": {
+        "zh": "苏州",
+        "fr": "Suzhou",
+        "en": "Suzhou"
+      },
+      "livingSituation": {
+        "zh": "",
+        "fr": "",
+        "en": ""
+      },
+      "funFacts": [
+        {
+          "zh": "喜欢把约会安排得自然但有细节。",
+          "fr": "Aime les rendez-vous simples mais soignes.",
+          "en": "Likes dates that feel natural but thoughtful."
+        },
+        {
+          "zh": "对跨文化生活保持好奇。",
+          "fr": "Reste curieux de la vie interculturelle.",
+          "en": "Curious about intercultural life."
+        }
+      ],
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    }
+  ],
+  "profile_verifications": [
+    {
+      "id": "verification-p-001",
+      "profileId": "p-001",
+      "legalName": "Aline M.",
+      "identityStatus": "verified",
+      "educationStatus": "verified",
+      "advisorStatus": "verified",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "verification-p-002",
+      "profileId": "p-002",
+      "legalName": "Lin S.",
+      "identityStatus": "verified",
+      "educationStatus": "verified",
+      "advisorStatus": "verified",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "verification-p-006",
+      "profileId": "p-006",
+      "legalName": "Sophie L.",
+      "identityStatus": "verified",
+      "educationStatus": "verified",
+      "advisorStatus": "verified",
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "verification-p-009",
+      "profileId": "p-009",
+      "legalName": "Martin K.",
+      "identityStatus": "verified",
+      "educationStatus": "verified",
+      "advisorStatus": "verified",
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "verification-p-010",
+      "profileId": "p-010",
+      "legalName": "Iris N.",
+      "identityStatus": "verified",
+      "educationStatus": "verified",
+      "advisorStatus": "verified",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    }
+  ],
+  "profile_contact_methods": [
+    {
+      "id": "contact-p-001-phone",
+      "profileId": "p-001",
+      "type": "phone",
+      "value": "+33 6 12 34 56 78",
+      "visibleAfterIntroduction": true,
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "contact-p-001-email",
+      "profileId": "p-001",
+      "type": "email",
+      "value": "aline.m@example.com",
+      "visibleAfterIntroduction": true,
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "contact-p-002-phone",
+      "profileId": "p-002",
+      "type": "phone",
+      "value": "+33 6 98 76 54 32",
+      "visibleAfterIntroduction": true,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "contact-p-002-email",
+      "profileId": "p-002",
+      "type": "email",
+      "value": "loic.d@example.com",
+      "visibleAfterIntroduction": true,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    },
+    {
+      "id": "contact-p-002-wechat",
+      "profileId": "p-002",
+      "type": "wechat",
+      "value": "loic_dubois",
+      "visibleAfterIntroduction": true,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z"
+    }
+  ],
+  "profile_visibility_settings": []
 }

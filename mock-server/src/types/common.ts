@@ -8,16 +8,6 @@ export interface LocalizedText {
 /** API 语言 */
 export type ApiLocale = 'zh' | 'fr' | 'en'
 
-/** 可展示名称对象 */
-export interface DisplayNameCapable {
-    id?: string
-    displayName?: string
-    nickname?: string
-    legalName?: string
-    nickName?: string
-    realName?: string
-}
-
 /** 分页信息 */
 export interface Pagination {
     page: number

@@ -199,7 +199,7 @@ function buildValueFacts(profile: FamilyProfileDetail, access: FactBuilder, t: T
         access(t('fields.personalityTraits'), joinRestrictedList(profile.personalityTraits)),
         access(t('fields.communicationStyle'), profile.communicationStyle),
         access(t('fields.children'), formatRestrictedBoolean(profile.hasChildren, t)),
-        access(t('fields.wantChildren'), formatRestrictedBoolean(profile.wantsChildren, t)),
+        access(t('fields.childrenPlan'), formatRestrictedChildrenPlan(profile.childrenPlan, t)),
     ]
 }
 
@@ -275,6 +275,11 @@ function formatRestrictedHabit(value: RestrictedProfileField<string>, t: Transla
 /** 格式化受限婚姻状态 */
 function formatRestrictedMaritalStatus(value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
     return isRestrictedValue(value) ? value : t(`maritalStatus.${value}`)
+}
+
+/** 格式化受限家庭计划 */
+function formatRestrictedChildrenPlan(value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
+    return isRestrictedValue(value) ? value : t(`childrenPlan.${value}`)
 }
 
 /** 格式化受限语言 */

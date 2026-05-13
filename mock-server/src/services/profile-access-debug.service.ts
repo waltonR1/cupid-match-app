@@ -1,8 +1,7 @@
 import type {ApiLocale} from '../types/common.js'
 import type {Database, MembershipLevel} from '../types/database.js'
 import type {FamilyProfileDetailDTO, SelfProfileDetailDTO} from '../types/profile.js'
-import {resolveUserContext, toFamilyProfileDetail, toSelfProfileDetail, type UserContext} from './profile.service.js'
-import {withDisplayName} from '../utils/localized.js'
+import {buildProfileView, resolveUserContext, toFamilyProfileDetail, toSelfProfileDetail, type UserContext} from './profile.service.js'
 
 export type ProfileAccessDebugType = 'self' | 'family'
 export type ProfileAccessDebugMode = 'backend' | 'guest' | 'free' | 'member'
@@ -22,12 +21,14 @@ export function getProfileAccessDebugPreview(
     if (profileType === 'family' && !profile.familyVisible) return null
 
     const userContext = resolvePreviewUserContext(data, profileId, mode, userId)
+    const profileView = buildProfileView(data, profile)
+    const visibilitySettings = data.profile_visibility_settings.filter((item) => item.profileId === profile.id)
 
     if (profileType === 'family') {
-        return toFamilyProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
+        return toFamilyProfileDetail(locale, profileView, userContext, data.private_introduction_requests, visibilitySettings)
     }
 
-    return toSelfProfileDetail(locale, withDisplayName(profile), userContext, data.private_introduction_requests)
+    return toSelfProfileDetail(locale, profileView, userContext, data.private_introduction_requests, visibilitySettings)
 }
 
 function resolvePreviewUserContext(

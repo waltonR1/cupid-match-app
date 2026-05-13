@@ -23,7 +23,7 @@ export const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
 
 export const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
     'hasChildren',
-    'wantsChildren',
+    'childrenPlan',
     'residencePlan',
     'relocationWillingness',
     'preferredAgeMin',
@@ -59,7 +59,7 @@ export const FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS = [
 
 export const FAMILY_PROFILE_MEMBER_ONLY_FIELDS = [
     'hasChildren',
-    'wantsChildren',
+    'childrenPlan',
     'residencePlan',
     'relocationWillingness',
     'values',

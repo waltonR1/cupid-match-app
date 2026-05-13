@@ -1,7 +1,7 @@
 import type { ApiLocale } from '../types/common.js'
-import type { EventRecord } from '../types/database.js'
-import type { ProfileRecord } from '../types/profile.js'
-import { resolveDisplayName, resolveLocalizedText } from '../utils/localized.js'
+import type { Database, EventRecord } from '../types/database.js'
+import { resolveLocalizedText } from '../utils/localized.js'
+import { buildProfileView } from './profile.service.js'
 
 export function listEvents(locale: ApiLocale, events: EventRecord[]): { items: Array<ReturnType<typeof toEventDTO>> } {
   return {
@@ -13,24 +13,23 @@ export function listEvents(locale: ApiLocale, events: EventRecord[]): { items: A
 
 export function eventDetail(
   locale: ApiLocale,
-  events: EventRecord[],
-  profiles: ProfileRecord[],
+  data: Database,
   id: string,
 ): { event: ReturnType<typeof toEventDTO>; relatedProfiles: Array<ReturnType<typeof mapRelatedProfile>> } | null {
-  const event = events.find((item) => item.id === id)
+  const event = data.events.find((item) => item.id === id)
   if (!event) {
     return null
   }
 
   return {
     event: toEventDTO(locale, event),
-    relatedProfiles: buildRelatedProfiles(locale, profiles, event.city.en),
+    relatedProfiles: buildRelatedProfiles(locale, data, event.city.en),
   }
 }
 
-export function buildRelatedProfiles(locale: ApiLocale, profiles: ProfileRecord[], cityKey: string): Array<ReturnType<typeof mapRelatedProfile>> {
-  return profiles
-    .map((profile, index) => ({ profile, index }))
+export function buildRelatedProfiles(locale: ApiLocale, data: Database, cityKey: string): Array<ReturnType<typeof mapRelatedProfile>> {
+  return data.profiles
+    .map((profile, index) => ({ profile: buildProfileView(data, profile), index }))
     .sort((left, right) => {
       const cityRankDiff = getCityRank(right.profile, cityKey) - getCityRank(left.profile, cityKey)
       if (cityRankDiff !== 0) {
@@ -69,10 +68,10 @@ function toEventDTO(locale: ApiLocale, event: EventRecord) {
   }
 }
 
-function mapRelatedProfile(locale: ApiLocale, profile: ProfileRecord) {
+function mapRelatedProfile(locale: ApiLocale, profile: ReturnType<typeof buildProfileView>) {
   return {
     id: profile.id,
-    displayName: resolveDisplayName(profile),
+    displayName: profile.displayName,
     age: profile.age,
     city: resolveLocalizedText(locale, profile.city),
     datingIntentionLabel: resolveLocalizedText(locale, profile.datingIntentionLabel),
@@ -82,11 +81,11 @@ function mapRelatedProfile(locale: ApiLocale, profile: ProfileRecord) {
   }
 }
 
-function getCityRank(profile: ProfileRecord, cityKey: string): number {
+function getCityRank(profile: ReturnType<typeof buildProfileView>, cityKey: string): number {
   return profile.city.en === cityKey ? 1 : 0
 }
 
-function getRelatedProfilePriority(profile: ProfileRecord): number {
+function getRelatedProfilePriority(profile: ReturnType<typeof buildProfileView>): number {
   let score = 0
   if (profile.profileStatus === 'vip') {
     score += 4

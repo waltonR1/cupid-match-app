@@ -93,7 +93,7 @@ export const familyDetailMessages: AppMessageSchema = {
     maritalPlan: 'Relationship plan',
     maritalStatus: 'Marital status',
     children: 'Children',
-    wantChildren: 'Family plan tendency',
+    childrenPlan: 'Family plan tendency',
     longDistance: 'Cross-city arrangement',
     visibility: 'Family visibility',
     familySupport: 'Family coordination mode',
@@ -122,9 +122,14 @@ export const familyDetailMessages: AppMessageSchema = {
     vip: 'Priority profile',
   },
   maritalStatus: {
-    single: 'Single',
+    never_married: 'Never married',
     divorced: 'Divorced',
     widowed: 'Widowed',
+  },
+  childrenPlan: {
+    wants: 'Would like children',
+    open_to_discuss: 'Open to discuss',
+    does_not_want: 'Does not plan to have children',
   },
   habits: {
     never: 'Never',

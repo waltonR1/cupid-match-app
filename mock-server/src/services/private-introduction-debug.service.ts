@@ -1,6 +1,7 @@
 import type {ApiLocale} from '../types/common.js'
 import type {Database, PrivateIntroductionRequestRecord, PrivateIntroductionStatus} from '../types/database.js'
 import {PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
+import {deriveProfileDisplayName} from '../utils/profile-derived.js'
 
 export interface PrivateIntroductionDebugItemDTO {
     id: string
@@ -84,7 +85,7 @@ function toDebugItem(
         requesterUserId: request.requesterUserId,
         requesterName: requester?.accountName || request.requesterUserId,
         profileId: request.profileId,
-        profileName: profile?.displayName || profile?.nickname || request.profileId,
+        profileName: profile ? deriveProfileDisplayName(profile.id) : request.profileId,
         status: request.status,
         requestedAt: request.requestedAt,
         respondedAt: request.respondedAt,

@@ -110,7 +110,7 @@ export const selfDetailMessages: AppMessageSchema = {
       maritalPlan: 'Projection relationnelle',
       maritalStatus: 'Situation familiale',
       children: 'Enfants',
-      wantChildren: 'Souhaite des enfants',
+      childrenPlan: 'Projet familial',
       longDistance: 'Ouvert a distance',
       visibility: 'Visibilite famille',
       familySupport: 'Mode de participation famille',
@@ -144,9 +144,14 @@ export const selfDetailMessages: AppMessageSchema = {
       vip: 'Dossier prioritaire',
     },
     maritalStatus: {
-      single: 'Celibataire',
+      never_married: 'Celibataire',
       divorced: 'Divorce',
       widowed: 'Veuf / veuve',
+    },
+    childrenPlan: {
+      wants: 'Souhaite des enfants',
+      open_to_discuss: 'Ouvert a la discussion',
+      does_not_want: 'Ne prevoit pas d enfants',
     },
     habits: {
       never: 'Jamais',

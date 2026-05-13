@@ -16,17 +16,17 @@ import { resolveUserIdHeader } from '../utils/request.js'
 export async function registerProfileRoutes(app: FastifyInstance): Promise<void> {
   app.get(`/profiles/featured`, async (request) => {
     const query = request.query as QueryRecord
-    return featuredProfiles(resolveApiLocale(query.lang), getDb().data.profiles, query.pageSize)
+    return featuredProfiles(resolveApiLocale(query.lang), getDb().data, query.pageSize)
   })
 
   app.get(`/profiles/self`, async (request) => {
     const query = request.query as QueryRecord
-    return listSelfProfiles(resolveApiLocale(query.lang), getDb().data.profiles, query)
+    return listSelfProfiles(resolveApiLocale(query.lang), getDb().data, query)
   })
 
   app.get(`/profiles/family`, async (request) => {
     const query = request.query as QueryRecord
-    return listFamilyProfiles(resolveApiLocale(query.lang), getDb().data.profiles, query)
+    return listFamilyProfiles(resolveApiLocale(query.lang), getDb().data, query)
   })
 
   app.get(`/profiles/self/:id`, async (request, reply) => {
