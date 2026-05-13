@@ -7,6 +7,8 @@
 配套文档：
 
 - `docs/final-database-schema.md`：最终数据库形态。
+- `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
+- `docs/final-page-fields.md`：最终页面 ViewModel 字段。
 - `docs/implementation-roadmap.md`：分阶段执行顺序。
 - `docs/project-database-fields.md`：当前实现状态。
 
@@ -21,8 +23,9 @@
 - 页面只消费 API DTO / ViewModel，不直接依赖数据库 Record。
 - `mock-server/db.json` 按最终数据库集合建模，不再为了 mock 便利嵌套 `photos / prompts / agenda`。
 - Database Record、API DTO、Frontend ViewModel 必须分层。
+- API DTO 的业务字段尽量保持扁平；页面所需的 section / group / card 结构由前端 mapper 组装。`access`、`favorite`、`privateIntroduction` 这类独立状态对象可以保留，因为它们表达领域状态，不是页面分组。
 - 主表只保存稳定事实；展示名、年龄、头像、文案 label、权限结果、报名人数等可派生字段由后端 mapper / service 输出到 DTO。
-- 后端负责权限与字段 masking，前端只根据 DTO 的 `access / privacy / visibility` 结果展示。
+- 后端负责权限与字段 masking，前端只根据 DTO 的 `access` 结果和受限字段特殊值展示。
 - security / transaction / infra 可以保持 prototype 级别；DTO boundary、source of truth、visibility / masking、ownership 等领域规则不能简化。
 - account 不允许反向决定 profile schema。
 
@@ -36,7 +39,7 @@
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
 | profile 问答 | `profile_prompts` | `prompts[]` | `profiles.prompts` |
 | profile 可见性 | `profile_visibility_settings` plus default constants | `access`, masked field values | frontend hardcoded member checks |
-| 联系方式 | `profile_contact_methods` | `contactAccess` | phone/email/wechat in detail DTO |
+| 联系方式 | `profile_contact_methods` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
 | 后台资料 | `profile_internal_records`, `profile_verifications` | advisor/admin DTO only | public profile DTO |
 | 活动主体 | `events` | localized event DTO | nested agenda |
 | 活动流程 | `event_agenda_items` | `agendaItems[]` | `events.agenda` |
@@ -106,6 +109,12 @@ interface RegisterPayload {
 }
 ```
 
+说明：
+
+- 当前注册表单只开放 `email` 和 `phone`。
+- 注册页不展示 `preferredLocale` 手动选择器；前端读取当前页面 locale 后自动填充 `RegisterPayload.preferredLocale`。
+- `wechat`、`google` 是 `auth_identities` 的最终预留登录方式，后续通过绑定身份或第三方登录链路接入，不进入当前注册 payload。
+
 DTO:
 
 ```ts
@@ -115,6 +124,7 @@ interface AuthSession {
     id: string
     accountName: string
     avatarUrl: string
+    preferredLocale: 'zh' | 'fr' | 'en'
   }
   onboarding: {
     path: 'self' | 'family'
@@ -150,6 +160,7 @@ login page
 Rules:
 
 - Login returns account identity and onboarding state.
+- Login returns `user.preferredLocale`; frontend syncs locale store from it after successful login.
 - Login does not fetch profile detail by default.
 - `X-User-Id` is mock request context only.
 - Future Authorization token behavior must be explicit; do not half-use token in some calls.
@@ -161,12 +172,12 @@ Flow:
 ```text
 profile directory page
 -> use profile directory hook
--> GET /api/profiles
+-> GET /api/profiles/self or GET /api/profiles/family
 -> profiles query
 -> profile_photos primary lookup
 -> profile_visibility_settings/default access policy
 -> backend mapper
--> ProfileDirectoryItemDTO[]
+-> SelfProfileDirectoryItemDTO[] / FamilyProfileDirectoryItemDTO[]
 -> frontend ViewModel
 ```
 
@@ -179,28 +190,23 @@ profiles:
   birthYear
   height
   city
-  country
-  nationality
   languages
   profileStatus
   lastActiveAt
   familyVisible
+  allowFamilyContact
   familyPriority
   degreeLevel
   education
   industry
-  careerDirection
   maritalStatus
   hasChildren
-  wantsChildren
+  childrenPlan
   acceptsLongDistance
   datingIntentionCode
   relationshipPlan
   residencePlan
-  values
-  preferredAgeMin
-  preferredAgeMax
-  locationScope
+  summary
   tags
   createdAt
   updatedAt
@@ -215,23 +221,34 @@ profile_photos:
 DTO fields:
 
 ```ts
-interface ProfileDirectoryItemDTO {
+interface ProfileDirectoryBaseItemDTO {
   id: string
   displayName: string
   avatarUrl: string
+  gender: 'male' | 'female'
   age: number
   city: string
-  country: string
-  height: number
+  profileStatus: 'open' | 'review' | 'vip'
   education: string
   industry: string
-  careerDirection?: string
   datingIntentionCode: string
   datingIntentionLabel: string
+  summary: string
   tags: string[]
-  familyVisible: boolean
+}
+
+interface SelfProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
+  languages: string[]
+}
+
+interface FamilyProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
+  maritalStatus: 'never_married' | 'divorced' | 'widowed'
+  hasChildren: boolean
+  acceptsLongDistance: boolean
+  relationshipPlan: string
+  residencePlan: string
+  allowFamilyContact: boolean
   familyPriority: boolean
-  access: ProfileAccessDTO
 }
 ```
 
@@ -253,7 +270,7 @@ Filters:
 Forbidden:
 
 - Do not return `ProfileRecord` directly.
-- Do not read `profiles.displayName`, `profiles.avatarUrl`, `profiles.age`, `profiles.datingIntentionLabel`, `profiles.occupation`.
+- Do not read `profiles.displayName`, `profiles.avatarUrl`, `profiles.age`, `profiles.datingIntentionLabel`, `profiles.occupation`, `profiles.wantsChildren`.
 - Do not expose phone, email, wechat.
 
 ## Profile Detail Chain
@@ -263,16 +280,16 @@ Flow:
 ```text
 profile detail page
 -> use profile detail hook
--> GET /api/profiles/:id
+-> GET /api/profiles/self/:id or GET /api/profiles/family/:id
 -> viewer context from auth request
 -> profiles lookup
 -> profile_photos lookup
--> profile_prompts lookup
+-> profile_prompts lookup for self detail
 -> profile_visibility_settings/default access policy
 -> favorite_profiles lookup for viewer
 -> private introduction state lookup for viewer
 -> backend mapper/masking
--> ProfileDetailDTO
+-> SelfProfileDetailDTO | FamilyProfileDetailDTO
 -> frontend ViewModel
 ```
 
@@ -292,38 +309,69 @@ user_memberships / user_entitlement_balances
 DTO fields:
 
 ```ts
-interface ProfileDetailDTO {
+interface ProfileDetailBaseDTO {
   id: string
   displayName: string
   avatarUrl: string
-  age: number
-  gallery: ProfilePhotoDTO[]
-  prompts: ProfilePromptDTO[]
-  basics: ProfileBasicsDTO
-  relationship: ProfileRelationshipDTO
-  lifestyle: ProfileLifestyleDTO
-  preferences: ProfilePreferencesDTO
-  family: ProfileFamilyDTO
-  access: ProfileAccessDTO
-  privacy: ProfilePrivacyDTO
-  favorite: FavoriteStateDTO
-  introduction: IntroductionStateDTO
-  contactAccess: ContactAccessDTO
-}
-```
-
-Profile relationship DTO:
-
-```ts
-interface ProfileRelationshipDTO {
+  photos: RestrictedProfileField<ProfilePhotoDTO[]>
+  gender: 'male' | 'female'
+  age: RestrictedProfileField<number>
+  height: number
+  city: string
+  country: RestrictedProfileField<string>
+  nationality: RestrictedProfileField<string>
+  languages: RestrictedProfileField<string[]>
+  profileStatus: 'open' | 'review' | 'vip'
+  isVerified: boolean
+  degreeLevel: 'bachelor' | 'master' | 'phd'
+  education: string
+  industry: RestrictedProfileField<string>
+  careerDirection?: RestrictedProfileField<string>
+  maritalStatus: RestrictedProfileField<'never_married' | 'divorced' | 'widowed'>
+  hasChildren: RestrictedProfileField<boolean>
+  childrenPlan: RestrictedProfileField<'wants' | 'open_to_discuss' | 'does_not_want'>
+  acceptsLongDistance: RestrictedProfileField<boolean>
   datingIntentionCode: string
   datingIntentionLabel: string
-  relationshipPlan: string
-  residencePlan: string
-  relocationWillingness: string
-  values: string[]
+  relationshipPlan: RestrictedProfileField<string>
+  residencePlan: RestrictedProfileField<string>
+  relocationWillingness: RestrictedProfileField<string>
+  values: RestrictedProfileField<string[]>
+  preferredAgeMin: RestrictedProfileField<number>
+  preferredAgeMax: RestrictedProfileField<number>
+  locationScope: RestrictedProfileField<string>
+  preferredEducation: RestrictedProfileField<string>
+  familyPlan: RestrictedProfileField<string>
+  dealBreakers: RestrictedProfileField<string[]>
+  smoking: RestrictedProfileField<'never' | 'social' | 'often'>
+  drinking: RestrictedProfileField<'never' | 'social' | 'often'>
+  exercise: RestrictedProfileField<string>
+  activityLevel: RestrictedProfileField<string>
+  weekendStyle: RestrictedProfileField<string>
+  pets: RestrictedProfileField<string>
+  personalityTraits: RestrictedProfileField<string[]>
+  interests: RestrictedProfileField<string[]>
+  communicationStyle: RestrictedProfileField<string>
+  summary: string
+  tags: string[]
+  familyVisible: boolean
+  allowFamilyContact: boolean
+  familyPriority: boolean
+  access: ProfileAccessDTO
+  favorite?: FavoriteStateDTO
+  privateIntroduction: ProfilePrivateIntroductionDTO
 }
+
+interface SelfProfileDetailDTO extends ProfileDetailBaseDTO {
+  prompts: RestrictedProfileField<ProfilePromptDTO[]>
+}
+
+interface FamilyProfileDetailDTO extends ProfileDetailBaseDTO {}
 ```
+
+前端可在 `src/mappers` 中把这些扁平字段组装为 `basics`、`relationship`、`lifestyle`、`preferences`、`family` 等页面 section；后端 DTO 不以页面分组作为字段结构来源。
+
+`profile_prompts` 是独立集合；当前最终 contract 只要求 self detail 返回 `prompts`，family detail 不默认返回该字段。
 
 Visibility input:
 
@@ -338,21 +386,79 @@ profile_visibility_settings:
 Visibility output:
 
 ```ts
+type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTRODUCTION_REQUIRED__' | '__HIDDEN__'
+type RestrictedProfileField<T> = T | ProfileFieldLockCode
+type ProfileFieldCode =
+  | 'photos'
+  | 'country'
+  | 'nationality'
+  | 'languages'
+  | 'industry'
+  | 'careerDirection'
+  | 'maritalStatus'
+  | 'hasChildren'
+  | 'childrenPlan'
+  | 'acceptsLongDistance'
+  | 'relationshipPlan'
+  | 'residencePlan'
+  | 'relocationWillingness'
+  | 'values'
+  | 'preferredAgeMin'
+  | 'preferredAgeMax'
+  | 'locationScope'
+  | 'preferredEducation'
+  | 'familyPlan'
+  | 'dealBreakers'
+  | 'smoking'
+  | 'drinking'
+  | 'exercise'
+  | 'activityLevel'
+  | 'weekendStyle'
+  | 'pets'
+  | 'personalityTraits'
+  | 'interests'
+  | 'communicationStyle'
+  | 'prompts'
+  | 'contactMethods'
+
 interface ProfileAccessDTO {
   viewerRole: 'guest' | 'free_user' | 'member' | 'owner' | 'advisor'
+  accessLevel: 'visitor' | 'registered' | 'premium' | 'owner' | 'advisor'
   canViewFullProfile: boolean
   canViewFamilySection: boolean
   canRequestIntroduction: boolean
+  lockedFields: ProfileFieldLockDTO[]
   hiddenFields: string[]
-  memberOnlyFields: string[]
-  introducedOnlyFields: string[]
+  lockedByAdvisorFields: string[]
+}
+
+interface ProfileFieldLockDTO {
+  fieldCode: ProfileFieldCode
+  reason: 'login' | 'member' | 'introduction' | 'advisor' | 'hidden'
+}
+
+interface FavoriteStateDTO {
+  isFavorite: boolean
+  favoriteId?: string
+}
+
+interface ProfilePrivateIntroductionDTO {
+  status: 'available' | 'login_required' | 'membership_required' | 'quota_exhausted' | 'requested' | 'accepted' | 'declined' | 'expired' | 'cooldown'
+  requestId?: string
+  membership: 'guest' | 'free' | 'silver' | 'gold' | 'diamond'
+  quotaTotal: number
+  quotaRemaining: number
+  alreadyRequested: boolean
+  canRequest: boolean
+  expiresAt?: string
+  cooldownUntil?: string
 }
 ```
 
 Rules:
 
 - Backend decides field visibility.
-- Frontend renders locked / hidden states from DTO only.
+- Backend masks restricted fields with `ProfileFieldLockCode`; frontend renders locked / hidden states from DTO only.
 - If no `profile_visibility_settings` exists, backend uses default constants.
 - Owner/advisor can see fields according to ownership and advisor rules, not page assumptions.
 
@@ -406,9 +512,17 @@ Flow:
 profile create/edit page
 -> profile api
 -> profiles write
--> profile_photos/profile_prompts/contact/internal/verification writes where applicable
+-> profile_photos/profile_prompts writes through separate endpoints where applicable
 -> profile_ownerships created or updated
 ```
+
+Profile create/update writes only the profile main table fields. Photos and prompts use separate profile photo / prompt endpoints and write `profile_photos` / `profile_prompts`; contact, internal, and verification records never travel through `ProfileCreatePayload`.
+
+Localized write rule:
+
+- `ProfileCreatePayload` and `ProfileUpdatePayload` accept plain strings from the current form locale.
+- Backend writes each localized field to the request locale slot, for example `lang=zh` writes `{ zh: value, fr: '', en: '' }`.
+- Empty locale slots are completed later by advisor/admin review or translation tooling; frontend must not synthesize missing translations.
 
 Profile main table writes:
 
@@ -431,7 +545,7 @@ industry
 careerDirection
 maritalStatus
 hasChildren
-wantsChildren
+childrenPlan
 acceptsLongDistance
 datingIntentionCode
 relationshipPlan
@@ -489,12 +603,24 @@ profiles.nickname unless redefined as reviewed publicAlias
 profiles.avatarUrl
 profiles.age
 profiles.occupation
+profiles.wantsChildren
 profiles.datingIntentionLabel
 profiles.phone
 profiles.email
 profiles.wechat
 profiles.photos
 profiles.prompts
+profiles.pronouns
+profiles.sexuality
+profiles.interestedIn
+profiles.hometown
+profiles.livingSituation
+profiles.zodiac
+profiles.funFacts
+profiles.highlights
+profiles.conversationStarters
+profiles.dateIdeas
+profiles.compatibilityDimensions
 ```
 
 ## Event Directory Chain
@@ -533,7 +659,6 @@ events:
   capacity
   registeredCountCache
   waitlistCountCache
-  memberOnly
   coverImageUrl
 
 event_registrations:
@@ -571,6 +696,8 @@ Rules:
 - `event_registrations` is source of truth for registered/waitlist counts.
 - `registeredCountCache` and `waitlistCountCache` may be used only as rebuildable cache.
 - Directory DTO can expose counts, but EventRecord counts are not authoritative.
+- `memberOnly` in DTO is derived from `events.visibility === 'member'`; do not persist a second boolean source of truth on EventRecord.
+- Directory DTO exposes `venue` only; exact `address` is detail-only and requires backend viewer checks.
 - No nested `agenda` in event directory records.
 
 ## Event Detail / Registration Chain
@@ -597,6 +724,9 @@ interface EventDetailDTO {
   summary: string
   city: string
   venue: string
+  address?: string
+  addressVisible: boolean
+  addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
   date: string
   startTime: string
   endTime: string
@@ -614,6 +744,15 @@ interface EventDetailDTO {
   registration: EventRegistrationStateDTO
 }
 ```
+
+Address rules:
+
+- `venue` is the public place label.
+- `events.address` is the exact address and is only returned from detail/account contexts after backend checks `events.addressVisibility`.
+- `registered_only` requires a logged-in viewer.
+- `confirmed_attendee_only` requires a confirmed event registration.
+- `confirmed_attendee_only` maps to `addressLockReason = 'confirmation_required'` when the viewer is logged in but not confirmed.
+- Frontend renders the returned `addressVisible` / `addressLockReason`; it must not infer or reconstruct the exact address.
 
 Registration flow:
 
@@ -646,12 +785,16 @@ Final flow:
 account page
 -> account dashboard api
 -> users
+-> user_onboarding_states
 -> profile_ownerships
+-> membership_plans
 -> user_memberships
+-> membership_entitlements
 -> user_entitlement_balances
 -> favorite_profiles
 -> event_registrations
 -> private_introduction_requests
+-> advisor_follow_ups
 -> AccountDashboardDTO
 ```
 
@@ -660,13 +803,45 @@ Account DTO:
 ```ts
 interface AccountDashboardDTO {
   user: AccountUserDTO
+  onboarding: AuthOnboardingDTO
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO
-  entitlements: AccountEntitlementDTO[]
+  entitlements: AccountEntitlementBalanceDTO[]
   favorites: FavoriteProfileSummaryDTO[]
   events: AccountEventRegistrationDTO[]
   introductions: AccountIntroductionSummaryDTO[]
+  advisorFollowUps: AdvisorFollowUpDTO[]
 }
+```
+
+Split account endpoint flows:
+
+```text
+GET /api/account/me
+-> users
+-> user_onboarding_states
+-> AccountMeDTO
+
+GET /api/account/preferences
+-> user_preferences
+-> AccountPreferenceDTO[]
+
+GET /api/account/verifications
+-> profile_ownerships
+-> profile_verifications
+-> derived profile identity
+-> AccountVerificationSummaryDTO[]
+
+GET /api/account/safety
+-> user_preferences
+-> profile_visibility_settings
+-> AccountSafetyDTO
+
+GET /api/account/private-introduction-rooms
+-> private_introduction_rooms
+-> private_introduction_room_messages latest summary
+-> derived target profile identity
+-> AccountPrivateIntroductionRoomDTO[]
 ```
 
 Rules:
@@ -674,6 +849,8 @@ Rules:
 - Account user identity comes from `users`.
 - Managed profiles come from `profile_ownerships`.
 - Membership comes from membership collections.
+- Preferences come from `user_preferences`, not legacy `privacy_settings.title/desc`.
+- Account safety reads `profile_visibility_settings` as code/value configuration and does not store page copy.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.
 
@@ -702,6 +879,7 @@ favorite_profiles:
   userId
   profileId
   createdAt
+  updatedAt
 ```
 
 Rules:
@@ -730,7 +908,10 @@ Database:
 membership_plans:
   tier
   name
-  monthlyPrivateIntroductionQuota
+  description
+  priceCents
+  currency
+  billingPeriod
   conciergePriority
   isActive
 
@@ -744,8 +925,9 @@ user_memberships:
 
 membership_entitlements:
   planId
-  entitlementCode
-  entitlementValue
+  code
+  quota
+  period
 
 user_entitlement_balances:
   userId
@@ -762,6 +944,7 @@ Rules:
 - User tier is not stored directly on `users`.
 - Quota is not derived ad hoc from a string tier in page code.
 - Private introduction permission reads entitlement result from backend DTO.
+- `profile_detail_access` means paid viewer access to additional restricted profile detail fields. It does not control a user's own profile exposure or ranking; those remain under `profile_visibility_settings` and advisor policy.
 
 ## Private Introduction Chain
 
@@ -769,14 +952,31 @@ Flow:
 
 ```text
 profile detail CTA
--> POST /api/private-introductions
+-> POST /api/profiles/self/:id/private-introduction or POST /api/profiles/family/:id/private-introduction
 -> viewer context
 -> profile ownership check
 -> membership entitlement check
 -> contact visibility remains closed
 -> private_introduction_requests write
 -> entitlement balance update if needed
--> IntroductionStateDTO
+-> ProfilePrivateIntroductionDTO / PrivateIntroductionDTO
+```
+
+Room flow:
+
+```text
+accepted private introduction
+-> create or open private_introduction_rooms
+-> GET /api/private-introduction-rooms/:id?before=&limit=
+-> viewer room membership check
+-> private_introduction_room_messages cursor page
+-> PrivateIntroductionRoomDetailDTO
+
+POST /api/private-introduction-rooms/:id/messages
+-> viewer room membership check
+-> room status and moderation checks
+-> private_introduction_room_messages write
+-> PrivateIntroductionRoomMessageDTO
 ```
 
 Database:
@@ -785,19 +985,28 @@ Database:
 private_introduction_requests:
   id
   requesterUserId
-  requesterProfileId
+  requesterProfileId?
   targetProfileId
   status
-  message
+  message?
+  requestedAt
+  expiresAt?
+  respondedAt?
+  cooldownUntil?
+  entitlementBalanceId?
+  advisorId?
   createdAt
   updatedAt
 
 private_introduction_rooms:
   id
   requestId
+  requesterUserId
+  targetProfileId
   status
   openedAt
   closedAt
+  advisorId?
   createdAt
   updatedAt
 
@@ -808,14 +1017,21 @@ private_introduction_room_messages:
   senderUserId
   body
   createdAt
+  updatedAt
 ```
 
 Rules:
 
 - Profile detail never returns contact values just because a request exists.
-- Contact values can only be exposed through a controlled introduction/contact access flow.
+- Contact values can only be exposed through a controlled private introduction / room flow.
 - Users cannot request introduction to their own managed profile.
 - Quota and membership checks happen on backend.
+- Private introduction keeps the current self/family split: `POST /api/profiles/self/:id/private-introduction` and `POST /api/profiles/family/:id/private-introduction`.
+- `:id` is the target profile id; profile detail pages do not repeat `targetProfileId` in request body.
+- `cooldown` is derived from `status = 'declined'` plus `cooldownUntil`; do not use `cooldown` as a persisted request status.
+- `expired` is derived from `status = 'requested'` plus `expiresAt < now`; do not use `expired` as a persisted request status.
+- `quota_exhausted` is a DTO state returned by the create action when entitlement balance is insufficient; it is not persisted as request status.
+- Room messages use cursor pagination. Do not return the full message history by default.
 
 ## Field Migration Summary
 
@@ -882,9 +1098,8 @@ registeredCount
 waitlistCount
 remainingSeats
 favorite state
-profile access/privacy state
-contact access state
-introduction state
+profile access state
+private introduction state
 membership entitlement state
 ```
 

@@ -2,6 +2,13 @@
 
 本文描述项目最终目标数据库形态。`mock-server/db.json` 后续应按本文逐步收敛；当前实现状态仍以 `docs/project-database-fields.md` 为准。
 
+配套文档：
+
+- `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
+- `docs/final-page-fields.md`：最终页面 ViewModel 字段。
+- `docs/final-data-flow-contract.md`：最终数据流动和 source of truth。
+- `docs/implementation-roadmap.md`：分阶段执行顺序。
+
 本文描述最终领域数据库形态，不代表当前 Node.js + TypeScript `mock-server` 已具备生产级安全、事务、审计、部署等能力。当前 `mock-server` 只用于验证未来 Java 后端可复刻的数据边界和领域模型；数据结构应贴近最终 Java 后端目标，实现能力可保持 prototype 级别。
 
 设计参照成熟婚恋平台、会员制服务、CRM 和顾问撮合系统的常见边界：
@@ -71,13 +78,49 @@ type OnboardingPath = 'self' | 'family'
 type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
 type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
 type DegreeLevel = 'bachelor' | 'master' | 'phd'
-type MaritalStatus = 'single' | 'divorced' | 'widowed'
+type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
+type ChildrenPlan = 'wants' | 'open_to_discuss' | 'does_not_want'
 type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
 type HabitCode = 'never' | 'social' | 'often'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileFieldVisibility = 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+type ProfileFieldCode =
+  | 'photos'
+  | 'country'
+  | 'nationality'
+  | 'languages'
+  | 'industry'
+  | 'careerDirection'
+  | 'maritalStatus'
+  | 'hasChildren'
+  | 'childrenPlan'
+  | 'acceptsLongDistance'
+  | 'relationshipPlan'
+  | 'residencePlan'
+  | 'relocationWillingness'
+  | 'values'
+  | 'preferredAgeMin'
+  | 'preferredAgeMax'
+  | 'locationScope'
+  | 'preferredEducation'
+  | 'familyPlan'
+  | 'dealBreakers'
+  | 'smoking'
+  | 'drinking'
+  | 'exercise'
+  | 'activityLevel'
+  | 'weekendStyle'
+  | 'pets'
+  | 'personalityTraits'
+  | 'interests'
+  | 'communicationStyle'
+  | 'prompts'
+  | 'contactMethods'
 ```
+
+`MaritalStatus` 是前台公开婚史状态，只表达当前可公开匹配语义。若顾问需要记录“已婚分居但未完成法律离婚”等敏感情况，不进入公开 enum，放入 `profile_internal_records` 或 `profile_verifications` 的顾问审核备注中处理。
 
 ## Account and Auth
 
@@ -104,6 +147,7 @@ interface UserRecord {
 - 不保存 `membership tier`。
 - 不保存 `city`。城市应进入 profile、event 或 user preference。
 - 不保存 `displayName`。账户显示使用 `accountName`。
+- `accountName` 允许重名，不作为登录唯一键；登录唯一性由 `auth_identities(provider, identifier)` 保证。
 
 ### auth_identities
 
@@ -164,10 +208,11 @@ interface UserPreferenceRecord {
 
 ```text
 preferred_city
-preferred_language
 advisor_contact_enabled
 family_assist_enabled
 ```
+
+本节 code 只是示例。完整 `user_preferences.code` 列表在 Phase 5 account 重写时按最终账户页面需求补齐。默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。
 
 ## Profiles
 
@@ -199,7 +244,7 @@ interface ProfileRecord {
 
   maritalStatus: MaritalStatus
   hasChildren: boolean
-  wantsChildren: boolean
+  childrenPlan: ChildrenPlan
   acceptsLongDistance: boolean
   datingIntentionCode: DatingIntentionCode
   relationshipPlan: LocalizedText
@@ -240,6 +285,7 @@ avatarUrl
 legalName
 nickname
 age
+wantsChildren
 phone
 email
 wechat
@@ -259,6 +305,8 @@ highlights
 conversationStarters
 dateIdeas
 compatibilityDimensions
+photos
+prompts
 joinedAt
 ```
 
@@ -390,7 +438,7 @@ profile 字段可见性配置。此集合先在 profile 链路预留，用于 de
 interface ProfileVisibilitySettingRecord {
   id: string
   profileId: string
-  fieldCode: string
+  fieldCode: ProfileFieldCode
   visibility: ProfileFieldVisibility
   lockedByAdvisor: boolean
   reason?: string
@@ -406,16 +454,32 @@ country
 nationality
 languages
 industry
+careerDirection
 maritalStatus
 hasChildren
-wantsChildren
+childrenPlan
+acceptsLongDistance
 relationshipPlan
 residencePlan
 relocationWillingness
 values
+preferredAgeMin
+preferredAgeMax
+locationScope
+preferredEducation
 familyPlan
 dealBreakers
+smoking
+drinking
+exercise
+activityLevel
+weekendStyle
+pets
+personalityTraits
+interests
+communicationStyle
 prompts
+photos
 contactMethods
 ```
 
@@ -424,6 +488,7 @@ contactMethods
 - 默认可见性仍可由代码常量提供，避免每个 profile 都必须写完整配置。
 - 一旦存在 `profile_visibility_settings` 记录，detail API 应优先使用记录值。
 - `contactMethods` 只代表联系方式开放策略，不直接暴露联系方式值。
+- `profile_detail_access` entitlement 只影响 viewer 查看他人 profile detail 的字段开放层级，不影响自己 profile 的曝光排序或公开范围；自己资料曝光仍由 `profile_visibility_settings`、顾问审核和页面策略控制。
 
 ## Membership
 
@@ -451,7 +516,7 @@ interface MembershipPlanRecord {
 interface MembershipEntitlementRecord {
   id: string
   planId: string
-  code: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_visibility'
+  code: EntitlementCode
   quota: number
   period: 'none' | 'monthly' | 'quarterly' | 'yearly'
   createdAt: string
@@ -481,7 +546,7 @@ interface UserMembershipRecord {
 interface UserEntitlementBalanceRecord {
   id: string
   userId: string
-  entitlementCode: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_visibility'
+  entitlementCode: EntitlementCode
   period: string
   quotaTotal: number
   quotaUsed: number
@@ -506,7 +571,8 @@ interface EventRecord {
   summary: LocalizedText
   city: LocalizedText
   venue: LocalizedText
-  addressVisibility: 'public' | 'registered_only'
+  address?: LocalizedText
+  addressVisibility: 'registered_only' | 'confirmed_attendee_only'
   date: string
   startTime: string
   endTime: string
@@ -517,13 +583,14 @@ interface EventRecord {
   capacity: number
   registeredCountCache?: number
   waitlistCountCache?: number
-  memberOnly: boolean
   advisorNote: LocalizedText
   coverImageUrl: string
   createdAt: string
   updatedAt: string
 }
 ```
+
+`venue` 是公开地点名称，`address` 是精确地址。精确地址不公开进入列表链路，由后端按 `addressVisibility` 和 viewer 状态决定是否在 detail/account DTO 中返回。
 
 `event_registrations` 是报名人数的真实来源。`registeredCountCache` / `waitlistCountCache` 只允许作为可重建缓存；事件 DTO 可以继续返回 `registeredCount` / `waitlistCount`，但必须由 registration 明细或缓存计算得出。
 
@@ -568,8 +635,6 @@ interface FavoriteProfileRecord {
   id: string
   userId: string
   profileId: string
-  savedAt: string
-  note?: LocalizedText
   createdAt: string
   updatedAt: string
 }
@@ -581,9 +646,12 @@ interface FavoriteProfileRecord {
 interface PrivateIntroductionRequestRecord {
   id: string
   requesterUserId: string
+  requesterProfileId?: string
   targetProfileId: string
-  status: 'requested' | 'accepted' | 'declined' | 'cooldown' | 'cancelled'
+  status: 'requested' | 'accepted' | 'declined' | 'cancelled'
+  message?: string
   requestedAt: string
+  expiresAt?: string
   respondedAt?: string
   cooldownUntil?: string
   entitlementBalanceId?: string
@@ -663,7 +731,8 @@ interface ProfilePublicIdentityDTO {
 
 规则：
 
-- `displayName` 由 `profile.id` 生成，例如 `CM-${numericId}` 或稳定匿名码。
+- `displayName` 由 `profile.id` 生成稳定匿名码。
+- 推荐算法：`CM-${stableHash(profile.id).slice(0, 6).toUpperCase()}`。如果未来后端需要连续编号，可单独引入不可变 `displayCode`，但不使用真实姓名、昵称或账户名生成。
 - 生成逻辑在后端 service / mapper。
 - 不使用 `legalName`、`nickname`、`accountName` 生成前台展示名。
 - `avatarUrl` 由 `profile_photos.isPrimary` 派生。

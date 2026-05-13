@@ -8,7 +8,7 @@
 
 因此新的策略是：先让 account 从核心数据链路中退场，保留登录态和占位壳；再按最终态清理 profile 字段；之后修 auth、events；最后按最终模型重写 account / membership / entitlement。
 
-后续以本文作为执行顺序入口，以 `docs/final-database-schema.md` 作为最终数据库形态入口，以 `docs/final-data-flow-contract.md` 作为链路和 DTO 边界约束入口。
+后续以本文作为执行顺序入口，以 `docs/final-database-schema.md` 作为最终数据库形态入口，以 `docs/final-api-contract.md` 作为最终 API 接口入口，以 `docs/final-page-fields.md` 作为最终页面字段入口，以 `docs/final-data-flow-contract.md` 作为链路边界约束入口。
 
 推荐执行顺序：
 
@@ -52,6 +52,8 @@ page -> hook -> api -> mock-server
 - API 到前端尽量保持扁平结构。
 - 后端不返回 i18n key，后端只返回 code 或本地化后的文案。
 - 数据库 `mock-server/db.json` 用扁平结构模拟未来结构化数据库，不在 profile 内部做页面分组。
+- API endpoint 和 DTO 字段以 `docs/final-api-contract.md` 为准。
+- 页面 ViewModel 字段以 `docs/final-page-fields.md` 为准。
 - 文档描述目标状态和当前差距，不写临时过程日志。
 - account 字段、profile 字段、membership 字段不要互相代偿。
 - 不为了 account 临时展示保留 profile 旧字段。
@@ -187,16 +189,28 @@ account 页面先统一成稳定占位：
 
 ### 第一批删除或迁移
 
-这些字段当前已经不在主要 API / 页面链路中展示，或不符合当前产品定位。
+这些字段当前已经不在主要 API / 页面链路中展示，或不符合当前产品定位。执行时按三类处理，避免误删顾问仍可能需要的信息。
+
+确认删除，不做替代：
 
 ```text
 pronouns
 sexuality
 interestedIn
-hometown
-livingSituation
 zodiac
-funFacts
+```
+
+迁移给后台或顾问使用：
+
+```text
+hometown -> profile_internal_records
+livingSituation -> profile_internal_records
+funFacts -> profile_internal_records 或 advisor note
+```
+
+暂存或重新定义，后续如恢复必须换新模型：
+
+```text
 conversationStarters
 dateIdeas
 compatibilityDimensions
@@ -205,8 +219,9 @@ compatibilityDimensions
 理由：
 
 - `pronouns / sexuality / interestedIn` 更接近社交约会 App，不符合当前高端中介式资料表达。
-- `hometown / livingSituation / zodiac` 信息价值低，容易把 detail 拉回 dossier。
-- `conversationStarters / dateIdeas` 已从 self detail 链路移除。
+- `zodiac` 信息价值低，容易把 detail 拉回 dossier。
+- `hometown / livingSituation / funFacts` 如果顾问仍需要，可作为后台判断或破冰素材，不进入公开 profile DTO。
+- `conversationStarters / dateIdeas` 已从 self detail 链路移除，未来若恢复应由顾问流程重新定义。
 - `compatibilityDimensions` 不应使用百分比分数，若未来恢复，应改为定性判断模型。
 
 以下字段不再留在 `profiles` 主表，但可以迁移给后台或顾问使用：
@@ -268,7 +283,7 @@ joinedAt
 
 建议：
 
-- `displayName` 从数据库移除，由后端根据 profile id 生成，例如 `CM-000123` 或本地化规则生成的匿名展示名。
+- `displayName` 从数据库移除，由后端根据 profile id 生成，例如 `CM-${stableHash(profile.id).slice(0, 6).toUpperCase()}` 或本地化规则生成的匿名展示名；不依赖自增数字、真实姓名、昵称或账户名。
 - `nickname` 需要单独评估。若是用户自定义公开称呼，可迁移为 `publicAlias`；若只是旧 displayName 的重复字段，应删除。
 - `legalName` 不留在 `profiles` 主表，迁移到 `profile_verifications` 或后台审核资料。
 - `avatarUrl` 由 `photos[].isPrimary` 派生；若当前组件还需要头像字段，可先由 mapper 派生，不保留数据库字段。
@@ -303,9 +318,9 @@ interface ProfileRecord {
   education: LocalizedText
   industry: LocalizedText
   careerDirection?: LocalizedText
-  maritalStatus: 'single' | 'divorced' | 'widowed'
+  maritalStatus: 'never_married' | 'divorced' | 'widowed'
   hasChildren: boolean
-  wantsChildren: boolean
+  childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
   acceptsLongDistance: boolean
   datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
   relationshipPlan: LocalizedText
@@ -374,7 +389,7 @@ interface ProfilePromptRecord {
 interface ProfileVisibilitySettingRecord {
   id: string
   profileId: string
-  fieldCode: string
+  fieldCode: ProfileFieldCode
   visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
   lockedByAdvisor: boolean
   reason?: string
@@ -481,7 +496,7 @@ interface ProfileVerificationRecord {
 
 ### 基线对比
 
-Phase 3 的 auth 基线提交：
+Phase 3 的 auth 基线参考：
 
 ```text
 38de9b60e69afa5f5dc959e6a816a81f1d082110
@@ -497,15 +512,7 @@ refactor(auth): align login register onboarding flow
 - 前端 `authStore.user.id` 可被 `requestJson` 转为 `X-User-Id`。
 - 登录 / 注册后按 onboarding path 跳转 self 或 family directory。
 
-当前 HEAD 相比该提交的 auth 相关变化：
-
-- `src/hooks/auth/use-login.ts`、`src/hooks/auth/use-register.ts` 增加注释和错误状态说明。
-- `src/stores/modules/auth.ts` 增加注释，持久化仍只保存 `isLoggedIn` 和 `user`。
-- `src/stores/plugins/persisted-state.ts` 和 `src/pinia-persist.d.ts` 完善持久化类型。
-- `src/utils/navigation.ts`、`src/utils/validate.ts` 增加注释和校验说明。
-- mock-server 的 auth schema、routes、service、db 没有继续实质变化。
-
-因此，当前需要审视的是 `38de9b6` 后留下的模型问题，而不是把 auth 当作完成态。
+因此，当前需要审视的是第一轮 auth 改造后留下的模型问题，而不是把 auth 当作完成态。
 
 ### 当前问题
 
@@ -538,11 +545,11 @@ refactor(auth): align login register onboarding flow
    - email 或 phone
    - password
    - accountName
-   - preferredLocale
+   - preferredLocale 由当前页面语言自动写入，不在注册表单中手动选择
 
 3. 创建默认会员状态
-   - free membership
-   - 后续 Phase 5 再拆 membership plan / entitlement / balance
+   - 写入 active free `user_memberships`
+   - Phase 5 再完整拆出 membership plan / entitlement / balance
 
 4. 建立 onboarding 状态
    - path = self 或 family
@@ -597,6 +604,7 @@ interface UserOnboardingStateRecord {
 
 - `onboardingPath`、`onboardingStep` 不再写入 `users`，由 `user_onboarding_states` 表达。
 - 注册阶段不写入 `city`。
+- 注册阶段写入 `preferredLocale`，但该值来自当前前端 locale，不作为注册页手动字段。
 - 不新增 `role`。
 - 不新增 `profileCompletion`。
 - 不在 `users` 中保存会员 tier。
@@ -608,7 +616,7 @@ interface UserOnboardingStateRecord {
 interface AuthIdentityRecord {
   id: string
   userId: string
-  provider: 'email' | 'phone' | 'wechat'
+  provider: 'email' | 'phone' | 'wechat' | 'google'
   identifier: string
   passwordHash?: string
   verifiedAt?: string
@@ -646,13 +654,15 @@ payload：
 ```ts
 interface RegisterPayload {
   path: 'self' | 'family'
-  provider: 'email' | 'phone' | 'wechat'
+  provider: 'email' | 'phone'
   identifier: string
   password: string
   accountName: string
   preferredLocale: 'zh' | 'fr' | 'en'
 }
 ```
+
+说明：`wechat`、`google` 是 `auth_identities` 的最终预留登录方式，当前注册表单只开放 email / phone；第三方登录或绑定身份后续单独设计。`preferredLocale` 不作为注册页手动字段，前端从当前页面语言自动填充。
 
 response：
 
@@ -663,6 +673,7 @@ interface AuthSession {
     id: string
     accountName: string
     avatarUrl: string
+    preferredLocale: 'zh' | 'fr' | 'en'
   }
   onboarding: {
     path: 'self' | 'family'
@@ -715,6 +726,7 @@ interface LoginPayload {
 
 - 注册仍不创建 profile，也不写 profile 字段。
 - 新用户注册后写入账户主体、认证身份、onboarding 状态、默认会员状态。
+- 默认会员状态在 Phase 3 至少写入 active free `user_memberships`；quota 和 entitlement 余额在 Phase 5 完整落地。
 - `users` 不出现 `role`、`profileCompletion`、会员 tier、profile 展示字段。
 - `users` 不出现 `city`、`onboardingPath`、`onboardingStep`。
 - `self / family / parent` 不作为永久 user 身份。
@@ -723,6 +735,7 @@ interface LoginPayload {
 - 若继续使用 `X-User-Id`，必须限定为 mock request context。
 - 登录后 `authStore.user.id` 正常存在，HTTP 自动带 `X-User-Id`。
 - 登录 / 注册返回的 onboarding 信息来自 `user_onboarding_states`，不来自 `users`。
+- 登录 / 注册返回 `user.preferredLocale`，前端据此同步 locale store。
 - `AuthSession.token` 的使用策略明确：要么进入 store 并作为未来 Authorization 预留，要么文档标注当前 token 仅为 mock 占位。
 - 未登录访问 detail 仍走 guest 权限。
 - 已登录 free 用户访问 detail 能走 free 权限。
@@ -761,7 +774,8 @@ interface EventRecord {
   summary: LocalizedText
   city: LocalizedText
   venue: LocalizedText
-  addressVisibility: 'public' | 'registered_only'
+  address?: LocalizedText
+  addressVisibility: 'registered_only' | 'confirmed_attendee_only'
   date: string
   startTime: string
   endTime: string
@@ -772,7 +786,6 @@ interface EventRecord {
   capacity: number
   registeredCountCache?: number
   waitlistCountCache?: number
-  memberOnly: boolean
   advisorNote: LocalizedText
   coverImageUrl: string
   createdAt: string
@@ -832,7 +845,7 @@ interface EventDirectoryQuery {
   pageSize: number
   city?: string
   status?: string
-  memberOnly?: string
+  visibility?: 'public' | 'registered' | 'member'
   month?: string
 }
 ```
@@ -862,6 +875,9 @@ interface EventDetail {
   summary: string
   city: string
   venue: string
+  address?: string
+  addressVisible: boolean
+  addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
   date: string
   startTime: string
   endTime: string
@@ -904,11 +920,13 @@ events index：
 
 - 顶部展示 curated events 语气。
 - 筛选：城市、月份、开放状态、会员专属。
-- 列表卡片展示 title、date/time、city/venue、format、audience、remaining seats / waitlist、memberOnly badge。
+- 列表卡片展示 title、date/time、city/venue、format、audience、remaining seats / waitlist、memberOnly badge；`memberOnly` 由 `visibility === 'member'` 派生，不作为 event 主表的第二个事实字段。
+- 列表不展示精确地址。
 
 event detail：
 
 - 活动基本信息。
+- `venue` 可直接展示，精确 `address` 只展示 detail API 返回的可见值；未登录或未满足报名规则时展示锁定提示。
 - 顾问说明。
 - 适合人群。
 - 活动流程。
@@ -1029,6 +1047,20 @@ interface AuthIdentityRecord {
   passwordHash?: string
   verifiedAt?: string
   createdAt: string
+  updatedAt: string
+}
+```
+
+`user_preferences`：
+
+```ts
+interface UserPreferenceRecord {
+  id: string
+  userId: string
+  code: string
+  value: string | boolean | number | string[]
+  createdAt: string
+  updatedAt: string
 }
 ```
 
@@ -1044,6 +1076,7 @@ interface ProfileOwnershipRecord {
   permission: 'owner' | 'manager' | 'viewer'
   isPrimary: boolean
   createdAt: string
+  updatedAt: string
 }
 ```
 
@@ -1054,9 +1087,28 @@ interface MembershipPlanRecord {
   id: string
   tier: 'free' | 'silver' | 'gold' | 'diamond'
   name: LocalizedText
-  monthlyPrivateIntroductionQuota: number
+  description: LocalizedText
+  priceCents?: number
+  currency?: 'EUR' | 'USD' | 'CNY'
+  billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
   conciergePriority: boolean
   isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+```
+
+`membership_entitlements`：
+
+```ts
+interface MembershipEntitlementRecord {
+  id: string
+  planId: string
+  code: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+  quota: number
+  period: 'none' | 'monthly' | 'quarterly' | 'yearly'
+  createdAt: string
+  updatedAt: string
 }
 ```
 
@@ -1071,6 +1123,8 @@ interface UserMembershipRecord {
   status: 'active' | 'expired' | 'cancelled' | 'paused'
   startedAt: string
   expiresAt?: string
+  createdAt: string
+  updatedAt: string
 }
 ```
 
@@ -1080,12 +1134,34 @@ interface UserMembershipRecord {
 interface UserEntitlementBalanceRecord {
   id: string
   userId: string
-  entitlementCode: 'private_introduction'
+  entitlementCode: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
   period: string
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
   resetAt: string
+  createdAt: string
+  updatedAt: string
+}
+```
+
+`advisor_follow_ups`：
+
+```ts
+interface AdvisorFollowUpRecord {
+  id: string
+  advisorId: string
+  userId?: string
+  profileId?: string
+  requestId?: string
+  eventId?: string
+  status: 'open' | 'done' | 'snoozed'
+  priority: 'low' | 'normal' | 'high'
+  note: LocalizedText
+  dueAt?: string
+  completedAt?: string
+  createdAt: string
+  updatedAt: string
 }
 ```
 
@@ -1111,7 +1187,10 @@ GET /api/account/profiles
 GET /api/account/favorites
 GET /api/account/events
 GET /api/account/private-introductions
+GET /api/account/private-introduction-rooms
 GET /api/account/preferences
+GET /api/account/verifications
+GET /api/account/safety
 ```
 
 如果仍需聚合接口，可以作为页面优化层：
@@ -1121,6 +1200,28 @@ GET /api/account/dashboard
 ```
 
 但 dashboard 不应成为数据库结构的来源。
+
+Contract 对齐要求：
+
+| Endpoint / Page | Source of truth | API DTO | PageData / ViewModel |
+| --- | --- | --- | --- |
+| `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
+| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles`, `event_registrations`, `private_introduction_requests`, `advisor_follow_ups` | `AccountDashboardDTO` | `AccountDashboardPageData` |
+| `GET /api/account/profiles` | `profile_ownerships`, derived profile identity | `ManagedProfileSummaryDTO[]` | `ManagedProfileSummaryViewModel[]` |
+| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]` | `AccountMembershipPageData` |
+| `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountConnectionsPageData` |
+| `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountActivityPageData` |
+| `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountConnectionsPageData` |
+| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountMessagesPageData` |
+| `GET /api/account/preferences` | `user_preferences` | `AccountPreferenceDTO[]` | `AccountSafetyPageData` |
+| `GET /api/account/verifications` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountVerificationSummaryDTO[]` | `AccountVerificationPageData` |
+| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings` | `AccountSafetyDTO` | `AccountSafetyPageData` |
+
+补充规则：
+
+- `profile_detail_access` entitlement 表示付费 viewer 查看他人 profile detail 的字段开放层级，不表示提升自己 profile 曝光。
+- `favorite_profiles` 只保存收藏关系和时间戳；当前阶段不做私密备注，避免为 `note` 增加额外写接口。
+- `AccountPrivateIntroductionRoomDTO` 不返回 `unreadCount`，直到引入 read receipt source of truth；前端如需提示可先使用本地派生状态。
 
 ### 前端修改范围
 
@@ -1215,15 +1316,17 @@ POST /api/debug/private-introductions/:id/accept
 POST /api/debug/private-introductions/:id/decline
 ```
 
+说明：当前 profile API 已按 self/family 拆分，私人介绍申请也沿用 detail 所在入口；`:id` 就是 target profile id，不在 body 里重复传 `targetProfileId`。
+
 后续 room：
 
 ```text
 GET /api/account/private-introduction-rooms
-GET /api/private-introduction-rooms/:id
+GET /api/private-introduction-rooms/:id?before=&limit=
 POST /api/private-introduction-rooms/:id/messages
 ```
 
-room messages 可用于顾问代发说明、系统通知和受控沟通记录；即使不开放自由聊天，也保留该集合的最终形态。
+room messages 使用 cursor 分页，可用于顾问代发说明、系统通知和受控沟通记录；即使不开放自由聊天，也保留该集合的最终形态。
 
 ### 验收标准
 
