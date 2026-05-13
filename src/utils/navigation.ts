@@ -2,8 +2,10 @@ import type { NavItem } from '@/constants/nav'
 
 /** 登录后用于判断落地页的用户状态 */
 interface AuthLandingUser {
-  onboardingPath: 'self' | 'family'
-  onboardingStep: 'create_profile' | 'review_profile' | 'browse'
+  onboarding: {
+    path: 'self' | 'family'
+    step: 'create_profile' | 'review_profile' | 'browse'
+  }
 }
 
 /** 根据导航 key 在导航列表中查找目标页面并跳转 */
@@ -51,7 +53,7 @@ export function redirectToAuthLanding(user: AuthLandingUser) {
 /** 根据用户 onboarding 类型获取登录后的落地页 */
 function getAuthLandingRoute(user: AuthLandingUser) {
   // 家长用户进入家长资料目录
-  if (user.onboardingPath === 'family') {
+  if (user.onboarding.path === 'family') {
     return '/pages/profiles/family/index'
   }
 

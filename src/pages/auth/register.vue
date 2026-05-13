@@ -87,37 +87,6 @@
 
                 <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
                   <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.city }}
-                  </view>
-                  <input
-                    v-model="city"
-                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
-                    :placeholder="formPlaceholders.city"
-                    placeholder-class="text-semantic-text-hero-secondary"
-                  >
-                </view>
-
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
-                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
-                    {{ formLabels.preferredLocale }}
-                  </view>
-                  <view class="mt-3 grid grid-cols-3 gap-2">
-                    <button
-                      v-for="option in preferredLocaleOptions"
-                      :key="option.value"
-                      class="h-10 border text-[13px] transition-colors"
-                      :class="option.value === preferredLocale
-                        ? 'border-component-auth-selection-border bg-component-auth-selection-background text-semantic-text-inverse'
-                        : 'border-semantic-border-hero bg-transparent text-semantic-text-hero-secondary'"
-                      @click="preferredLocale = option.value"
-                    >
-                      {{ option.label }}
-                    </button>
-                  </view>
-                </view>
-
-                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
-                  <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
                     {{ formLabels.password }}
                   </view>
                   <input
@@ -208,9 +177,7 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { useRegister } from '@/hooks/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import type { AppLocale } from '@/i18n/types'
-import { useAuthStore } from '@/stores/modules/auth'
-import { validateAccountName, validateCity, validateIdentifier, validatePassword } from '@/utils/validate'
+import { validateAccountName, validateIdentifier, validatePassword } from '@/utils/validate'
 import { openLoginPage, redirectToAuthLanding } from '@/utils/navigation'
 
 type OnboardingPath = 'self' | 'family'
@@ -219,13 +186,10 @@ type AgreementDialogType = 'terms' | 'privacy' | null
 
 const { t, locale } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
-const authStore = useAuthStore()
 const registerAction = useRegister()
 const path = ref<OnboardingPath>('self')
 const accountName = ref('')
 const identifier = ref('')
-const city = ref('')
-const preferredLocale = ref<AppLocale>(locale.value)
 const password = ref('')
 const confirmPassword = ref('')
 const registerError = ref('')
@@ -256,17 +220,9 @@ const pathOptions = computed(() => [
   { value: 'family' as const, badge: t('paths.family.badge'), title: t('paths.family.title'), desc: t('paths.family.desc') },
 ])
 
-const preferredLocaleOptions = computed(() => [
-  { value: 'zh' as const, label: t('form.preferredLocale.options.zh') },
-  { value: 'fr' as const, label: t('form.preferredLocale.options.fr') },
-  { value: 'en' as const, label: t('form.preferredLocale.options.en') },
-])
-
 const formLabels = computed(() => ({
   accountName: t('form.accountName.label'),
   identifier: t('form.identifier.label'),
-  city: t('form.city.label'),
-  preferredLocale: t('form.preferredLocale.label'),
   password: t('form.password.label'),
   confirmPassword: t('form.confirmPassword.label'),
 }))
@@ -274,7 +230,6 @@ const formLabels = computed(() => ({
 const formPlaceholders = computed(() => ({
   accountName: t('form.accountName.placeholder'),
   identifier: t('form.identifier.placeholder'),
-  city: t('form.city.placeholder'),
   password: t('form.password.placeholder'),
   confirmPassword: t('form.confirmPassword.placeholder'),
 }))
@@ -297,9 +252,6 @@ async function handleSubmit() {
   const idErr = validateIdentifier(identifier.value)
   if (idErr) { registerError.value = tApp(idErr); return }
 
-  const cityErr = validateCity(city.value)
-  if (cityErr) { registerError.value = tApp(cityErr); return }
-
   const pwErr = validatePassword(password.value)
   if (pwErr) { registerError.value = tApp(pwErr); return }
 
@@ -315,13 +267,11 @@ async function handleSubmit() {
       identifier: identifier.value.trim(),
       password: password.value,
       accountName: accountName.value.trim(),
-      city: city.value.trim(),
-      preferredLocale: preferredLocale.value,
+      preferredLocale: locale.value,
     })
 
     if (session) {
-      authStore.login(session.user)
-      redirectToAuthLanding(session.user)
+      redirectToAuthLanding(session)
     }
 
     uni.showToast({

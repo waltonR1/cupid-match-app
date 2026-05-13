@@ -12,17 +12,6 @@
 
 最近核对时间：2026-05-13。
 
-## 核对来源
-
-- `mock-server/src/types/database.ts`
-- `mock-server/src/types/profile.ts`
-- `mock-server/src/constants/profile-access.ts`
-- `mock-server/src/services/profile.service.ts`
-- `src/api/profiles/profiles.types.ts`
-- `mock-server/db.json`
-
-读取 `mock-server/db.json` 时需要按 UTF-8 解析，否则 PowerShell 默认编码可能把中文内容显示成乱码。
-
 ## 顶层集合
 
 | Collection | Type | 当前职责 | 后续计划 |
@@ -34,35 +23,157 @@
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、顾问审核等认证资料。 | detail 的 `isVerified` 由该集合派生。 |
 | `profile_contact_methods` | `ProfileContactMethodRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
 | `profile_visibility_settings` | `ProfileVisibilitySettingRecord[]` | profile 字段可见性配置；detail 链路会优先读取该集合，空集合时使用默认常量表。 | 后续与 account safety / membership 权限联动。 |
-| `events` | `EventRecord[]` | 活动资料，当前仍嵌套 `agenda`。 | 后续拆出 `event_agenda_items` 并完善 events 链路。 |
-| `users` | `UserRecord[]` | 当前登录用户主体。 | Phase 5 会重写 account / auth 用户模型。 |
-| `auth_identities` | `AuthIdentityRecord[]` | 登录身份。 | 后续改 `passwordHash`，补齐多 provider。 |
-| `memberships` | `MembershipRecord[]` | 当前用户会员等级。 | 后续拆为 plan、entitlement、balance。 |
-| `profile_ownerships` | `ProfileOwnershipRecord[]` | user 与 profile 的拥有关系。 | 后续扩展 guardian / advisor / permission。 |
-| `user_registrations` | `UserRegistrationRecord[]` | 当前活动报名关系。 | 后续改名并迁移到 events 最终链路。 |
+| `events` | `EventRecord[]` | 活动资料，当前仍嵌套 `agenda`。 | Phase 4 拆出 `event_agenda_items` 并完善 events 链路。 |
+| `users` | `UserRecord[]` | 登录账户主体，只保存账户身份、头像、默认语言和状态。 | Phase 5 与 account 页面重写继续扩展 preferences。 |
+| `auth_identities` | `AuthIdentityRecord[]` | 登录身份，使用 `provider + identifier + passwordHash`。 | 后续接入真实哈希和第三方 provider。 |
+| `user_onboarding_states` | `UserOnboardingStateRecord[]` | 注册入口路径和 onboarding 进度。 | 后续 profile 创建链路更新 `profileId` / `completedAt`。 |
+| `user_memberships` | `UserMembershipRecord[]` | 当前用户会员等级与状态。 | Phase 5 拆为 plan、entitlement、balance。 |
+| `profile_ownerships` | `ProfileOwnershipRecord[]` | user 与 profile 的拥有关系。 | 后续扩展多 profile 管理和 advisor 权限。 |
+| `user_registrations` | `UserRegistrationRecord[]` | 当前活动报名关系。 | Phase 4 改名并迁移到 events 最终链路。 |
 | `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 后续统一时间字段。 |
 | `message_threads` | `MessageThreadRecord[]` | 旧会话摘要。 | 后续被 private introduction room / messages 替代。 |
 | `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。 | 后续补齐 room、messages、quota source of truth。 |
 | `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences / profile visibility。 |
 
-## 当前 enum
+## Auth / Account 当前字段
+
+### users
 
 ```ts
-type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
-type AuthProvider = 'email' | 'phone' | 'wechat'
-type UserStatus = 'active' | 'paused' | 'banned'
-type OnboardingPath = 'self' | 'family'
-type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
-type RegisterRole = 'self' | 'parent'
-type ProfileStatus = 'open' | 'vip' | 'review' | 'draft' | 'paused' | 'hidden'
-type GenderCode = 'male' | 'female'
-type DegreeLevel = 'bachelor' | 'master' | 'phd'
-type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
-type ChildrenPlan = 'wants' | 'open_to_discuss' | 'does_not_want'
-type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-type HabitCode = 'never' | 'social' | 'often'
-type PrivateIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cooldown'
+interface UserRecord {
+    id: string
+    accountName: string
+    avatarUrl: string
+    preferredLocale: 'zh' | 'fr' | 'en'
+    status: 'active' | 'paused' | 'banned'
+    createdAt: string
+    updatedAt: string
+}
 ```
+
+`users` 不保存：
+
+- `city`
+- `onboardingPath`
+- `onboardingStep`
+- role / profileCompletion / membership tier
+- profile display 字段
+
+### auth_identities
+
+```ts
+interface AuthIdentityRecord {
+    id: string
+    userId: string
+    provider: 'email' | 'phone' | 'wechat' | 'google'
+    identifier: string
+    passwordHash?: string
+    verifiedAt?: string
+    createdAt: string
+    updatedAt: string
+}
+```
+
+当前 mock 使用 `mock-sha256:<base64>` 形式的伪 hash。它只用于本地 mock，不是正式密码哈希方案。
+
+### user_onboarding_states
+
+```ts
+interface UserOnboardingStateRecord {
+    id: string
+    userId: string
+    path: 'self' | 'family'
+    step: 'create_profile' | 'review_profile' | 'browse'
+    profileId?: string
+    completedAt?: string
+    createdAt: string
+    updatedAt: string
+}
+```
+
+登录 / 注册返回的 onboarding 信息来自该集合，不来自 `users`。
+
+### user_memberships
+
+```ts
+interface UserMembershipRecord {
+    id: string
+    userId: string
+    tier: 'free' | 'silver' | 'gold' | 'diamond'
+    status: 'active' | 'expired' | 'cancelled'
+    startedAt: string
+    expiresAt?: string
+    createdAt: string
+    updatedAt: string
+}
+```
+
+profile detail 的访问层级和 account shell 当前从 active `user_memberships` 推导。
+
+### profile_ownerships
+
+```ts
+interface ProfileOwnershipRecord {
+    id: string
+    profileId: string
+    userId: string
+    role: 'self' | 'parent' | 'guardian' | 'advisor'
+    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    permission: 'owner' | 'manager' | 'viewer'
+    isPrimary: boolean
+    createdAt: string
+    updatedAt: string
+}
+```
+
+## Auth API 当前形态
+
+### POST /api/auth/register
+
+```ts
+interface RegisterPayload {
+    path: 'self' | 'family'
+    provider: 'email' | 'phone'
+    identifier: string
+    password: string
+    accountName: string
+    preferredLocale: 'zh' | 'fr' | 'en'
+}
+```
+
+注册只创建账户、登录身份、onboarding 状态和默认 active free 会员状态，不创建 profile，也不写 profile 字段。`preferredLocale` 由前端当前页面语言自动传入，注册页不提供手动语言选择。
+
+### POST /api/auth/login
+
+```ts
+interface LoginPayload {
+    identifier: string
+    password: string
+}
+```
+
+登录通过 `auth_identities.identifier + passwordHash` 查找用户。
+
+### AuthSession
+
+```ts
+interface AuthSession {
+    token: string
+    user: {
+        id: string
+        accountName: string
+        avatarUrl: string
+        preferredLocale: 'zh' | 'fr' | 'en'
+    }
+    onboarding: {
+        path: 'self' | 'family'
+        step: 'create_profile' | 'review_profile' | 'browse'
+        profileId?: string
+    }
+}
+```
+
+前端会持久化 `token`，但当前请求鉴权仍使用 mock request context：`X-User-Id`。`token` 是为后续 Authorization 预留的 mock placeholder。
 
 ## Profile 主链路
 
@@ -120,100 +231,6 @@ interface ProfileRecord {
 }
 ```
 
-### profile_photos
-
-```ts
-interface ProfilePhotoRecord {
-    id: string
-    profileId: string
-    url: string
-    caption: LocalizedText
-    isPrimary: boolean
-    sortOrder: number
-    status: 'approved' | 'review' | 'hidden'
-    createdAt: string
-    updatedAt: string
-}
-```
-
-### profile_prompts
-
-```ts
-interface ProfilePromptRecord {
-    id: string
-    profileId: string
-    promptCode: string
-    prompt: LocalizedText
-    answer: LocalizedText
-    sortOrder: number
-    status: 'active' | 'hidden'
-    createdAt: string
-    updatedAt: string
-}
-```
-
-### profile_internal_records
-
-```ts
-interface ProfileInternalRecord {
-    id: string
-    profileId: string
-    employer?: LocalizedText
-    incomeRange?: LocalizedText
-    religion?: LocalizedText
-    politicalViews?: LocalizedText
-    hometown?: LocalizedText
-    livingSituation?: LocalizedText
-    funFacts?: LocalizedText[]
-    notes?: LocalizedText
-    createdAt: string
-    updatedAt: string
-}
-```
-
-### profile_verifications
-
-```ts
-interface ProfileVerificationRecord {
-    id: string
-    profileId: string
-    legalName?: string
-    dateOfBirth?: string
-    identityStatus: 'pending' | 'verified' | 'rejected'
-    educationStatus: 'pending' | 'verified' | 'rejected'
-    advisorStatus: 'pending' | 'verified' | 'rejected'
-    createdAt: string
-    updatedAt: string
-}
-```
-
-### profile_contact_methods
-
-```ts
-interface ProfileContactMethodRecord {
-    id: string
-    profileId: string
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
-    createdAt: string
-    updatedAt: string
-}
-```
-
-### profile_visibility_settings
-
-```ts
-interface ProfileVisibilitySettingRecord {
-    id: string
-    profileId: string
-    fieldCode: string
-    visibility: 'public' | 'registered' | 'member' | 'private'
-    createdAt: string
-    updatedAt: string
-}
-```
-
 ## Profile 派生字段
 
 这些字段可以出现在 API DTO，但不保存在 `profiles` 主表：
@@ -228,51 +245,9 @@ interface ProfileVisibilitySettingRecord {
 | `photos` | `profile_photos` 按 `sortOrder` 返回。 |
 | `prompts` | `profile_prompts` 按 `sortOrder` 返回，当前只用于 self detail。 |
 
-## Profile 权限控制
-
-当前 detail API 仍通过 `mock-server/src/constants/profile-access.ts` 的常量表进行字段遮罩：
-
-- guest 看到 `__LOGIN_REQUIRED__`
-- free 看到 `__MEMBER_ONLY__`
-- member 看到真实值
-
-当前权限字段已经从 `wantsChildren` 改为 `childrenPlan`。`profile_visibility_settings` 为空时沿用默认常量表；一旦存在同 profile 的字段配置，detail API 会优先按配置遮罩字段。
-
-## 已从 profiles 主表移出的字段
-
-| 旧字段 | 当前位置 |
-| --- | --- |
-| `displayName` | 后端派生 DTO。 |
-| `avatarUrl` | `profile_photos.isPrimary` 派生 DTO。 |
-| `age` | `birthYear` 派生 DTO。 |
-| `datingIntentionLabel` | `datingIntentionCode` 派生 DTO。 |
-| `photos` | `profile_photos`。 |
-| `prompts` | `profile_prompts`。 |
-| `legalName` | `profile_verifications`。 |
-| `phone` / `email` / `wechat` | `profile_contact_methods`。 |
-| `employer` / `incomeRange` | `profile_internal_records`。 |
-| `religion` / `politicalViews` | `profile_internal_records`。 |
-| `hometown` / `livingSituation` / `funFacts` | `profile_internal_records`。 |
-| `pronouns` / `sexuality` / `interestedIn` / `zodiac` | 已从当前 mock 数据移除。 |
-| `conversationStarters` / `dateIdeas` / `compatibilityDimensions` | 已从当前 mock 数据移除。 |
-| `joinedAt` | 改为 `createdAt`。 |
-| `wantsChildren` | 改为 `childrenPlan`。 |
-
-## 当前 API 形态提醒
-
-- self 和 family API 仍是分开的：
-  - `GET /api/profiles/self`
-  - `GET /api/profiles/self/:id`
-  - `POST /api/profiles/self/:id/private-introduction`
-  - `GET /api/profiles/family`
-  - `GET /api/profiles/family/:id`
-  - `POST /api/profiles/family/:id/private-introduction`
-- 前端 API DTO 仍允许 `displayName`、`avatarUrl`、`age`、`photos`、`datingIntentionLabel`，这些都是后端聚合后的前端展示字段。
-- `FamilyProfileDetailDTO` 当前不返回 `prompts`；`SelfProfileDetailDTO` 返回 `prompts` 并受会员权限控制。
-
 ## 仍待后续阶段处理
 
-- account / auth 仍是 Phase 1 冻结后的临时结构，后续按 `implementation-roadmap.md` Phase 5 重写。
-- events 仍使用嵌套 `agenda`，后续按 events 最终字段链路拆分。
+- events 仍使用嵌套 `agenda` 和 `user_registrations`，Phase 4 处理。
 - `profile_visibility_settings` 已接入 detail 链路，但 account safety 页面还未提供写入入口。
 - private introduction 还未拆出 room / messages / read receipts。
+- account 页面仍是 Phase 1 冻结后的壳，Phase 5 重写。

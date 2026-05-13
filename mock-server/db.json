@@ -1140,15 +1140,8 @@
       "id": "u-001",
       "accountName": "Lin",
       "avatarUrl": "",
-      "city": {
-        "zh": "巴黎",
-        "fr": "Paris",
-        "en": "Paris"
-      },
       "preferredLocale": "zh",
       "status": "active",
-      "onboardingPath": "self",
-      "onboardingStep": "browse",
       "createdAt": "2026-01-18",
       "updatedAt": "2026-01-18"
     }
@@ -1159,16 +1152,9 @@
       "userId": "u-001",
       "provider": "email",
       "identifier": "lin@example.com",
-      "password": "password123",
-      "createdAt": "2026-01-18"
-    }
-  ],
-  "memberships": [
-    {
-      "id": "membership-001",
-      "userId": "u-001",
-      "tier": "gold",
-      "startedAt": "2026-01-18"
+      "createdAt": "2026-01-18",
+      "passwordHash": "mock-sha256:cGFzc3dvcmQxMjM=",
+      "updatedAt": "2026-01-18"
     }
   ],
   "profile_ownerships": [
@@ -1177,7 +1163,11 @@
       "profileId": "p-002",
       "userId": "u-001",
       "role": "self",
-      "isPrimary": true
+      "isPrimary": true,
+      "permission": "owner",
+      "relationshipToProfile": "self",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
     }
   ],
   "user_registrations": [
@@ -2062,5 +2052,26 @@
       "updatedAt": "2026-04-22T09:00:00Z"
     }
   ],
-  "profile_visibility_settings": []
+  "profile_visibility_settings": [],
+  "user_onboarding_states": [
+    {
+      "id": "onboarding-u-001",
+      "userId": "u-001",
+      "path": "self",
+      "step": "browse",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    }
+  ],
+  "user_memberships": [
+    {
+      "id": "user-membership-001",
+      "userId": "u-001",
+      "tier": "gold",
+      "status": "active",
+      "startedAt": "2026-01-18",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    }
+  ]
 }

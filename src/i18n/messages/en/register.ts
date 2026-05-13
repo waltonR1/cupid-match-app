@@ -8,7 +8,7 @@ export const registerMessages: AppMessageSchema = {
     selectedPath: 'Selected identity',
     formTitle: 'Account Setup',
     panelTitle: 'Create your account',
-    panelHint: 'Use your email or phone number, set a password, and fill in the essentials to create your account.',
+    panelHint: 'Use your email or phone number, set a password, and choose the path you want to start with.',
     submit: 'Create account',
     processTitle: 'How signup works',
     agreementPrefix: 'I have read and agree to the',
@@ -35,11 +35,6 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: 'Your name', placeholder: 'Your name' },
     identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
-    city: { label: 'City', placeholder: 'Paris' },
-    preferredLocale: {
-      label: 'Preferred language',
-      options: { zh: '中文', fr: 'Francais', en: 'English' },
-    },
     password: { label: 'Password', placeholder: 'Set password' },
     confirmPassword: { label: 'Confirm password', placeholder: 'Enter password again' },
     error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', agreement: 'Please accept the platform terms and privacy notice before creating your account.' },
@@ -53,10 +48,10 @@ export const registerMessages: AppMessageSchema = {
       },
     },
     step2: {
-      title: 'Add the basics',
+      title: 'Save onboarding intent',
       desc: {
-        self: 'Add your account name and city first, then continue into the member path.',
-        parent: 'Add the parent-side account name and city first, then continue into the family path.',
+        self: 'The platform records that you want to continue through the member path.',
+        parent: 'The platform records that you want to continue through the family path.',
       },
     },
     step3: {

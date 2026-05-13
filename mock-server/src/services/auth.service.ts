@@ -1,10 +1,26 @@
-import type { DbInstance } from '../db.js'
-import type { AuthIdentityRecord, Database, MembershipRecord, OnboardingPath, UserRecord } from '../types/database.js'
-import { nextId } from '../utils/id.js'
-import { localized } from '../utils/localized.js'
-import { getString } from '../utils/string.js'
+import type {DbInstance} from '../db.js'
+import type {
+  AuthIdentityRecord,
+  Database,
+  OnboardingPath,
+  OnboardingStep,
+  UserMembershipRecord,
+  UserOnboardingStateRecord,
+  UserRecord,
+} from '../types/database.js'
+import {nextId} from '../utils/id.js'
+import {getString} from '../utils/string.js'
 
 const PASSWORD_MIN = 8
+
+type PreferredLocale = 'zh' | 'fr' | 'en'
+type RegisterProvider = 'email' | 'phone'
+
+export interface AuthOnboardingState {
+  path: OnboardingPath
+  step: OnboardingStep
+  profileId?: string
+}
 
 export interface AuthSession {
   token: string
@@ -12,9 +28,9 @@ export interface AuthSession {
     id: string
     accountName: string
     avatarUrl: string
-    onboardingPath: OnboardingPath
-    onboardingStep: 'create_profile' | 'review_profile' | 'browse'
+    preferredLocale: PreferredLocale
   }
+  onboarding: AuthOnboardingState
 }
 
 export interface RegisterResult {
@@ -32,14 +48,14 @@ export function login(data: Database, body: Record<string, unknown>): AuthSessio
   const password = getString(body.password)
   const authIdentity = data.auth_identities.find((item) => item.identifier === identifier)
 
-  if (!authIdentity || authIdentity.password !== password) {
+  if (!authIdentity || !isPasswordMatch(authIdentity, password)) {
     return null
   }
 
   const user = data.users.find((item) => item.id === authIdentity.userId)
   if (!user) return null
 
-  return buildSession(authIdentity, user)
+  return buildSession(data, authIdentity, user)
 }
 
 export async function register(
@@ -51,10 +67,9 @@ export async function register(
   const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
   const accountName = getString(body.accountName)
-  const city = getString(body.city)
   const preferredLocale = getString(body.preferredLocale)
 
-  if (!isOnboardingPath(path) || !isAuthProvider(provider) || !identifier || !password || !accountName || !city || !isPreferredLocale(preferredLocale)) {
+  if (!isOnboardingPath(path) || !isRegisterProvider(provider) || !identifier || !password || !accountName || !isPreferredLocale(preferredLocale)) {
     return {
       statusCode: 400,
       body: { error: 'Missing required registration fields' },
@@ -82,7 +97,7 @@ export async function register(
     }
   }
 
-  const duplicate = db.data.auth_identities.find((item) => item.identifier === identifier)
+  const duplicate = db.data.auth_identities.find((item) => item.provider === provider && item.identifier === identifier)
   if (duplicate) {
     return {
       statusCode: 409,
@@ -91,18 +106,14 @@ export async function register(
   }
 
   const userId = nextId('u', db.data.users)
-  const cityName = city.trim()
   const now = new Date().toISOString()
 
   const newUser: UserRecord = {
     id: userId,
     accountName: accountName.trim(),
     avatarUrl: '',
-    city: localized(cityName, cityName, cityName),
     preferredLocale,
     status: 'active',
-    onboardingPath: path as OnboardingPath,
-    onboardingStep: 'create_profile',
     createdAt: now,
     updatedAt: now,
   }
@@ -111,62 +122,85 @@ export async function register(
   const newAuthIdentity: AuthIdentityRecord = {
     id: authId,
     userId,
-    provider: provider as AuthIdentityRecord['provider'],
+    provider,
     identifier,
-    password,
+    passwordHash: mockHashPassword(password),
     createdAt: now,
+    updatedAt: now,
   }
 
-  const membershipId = nextId('membership', db.data.memberships)
-  const newMembership: MembershipRecord = {
-    id: membershipId,
+  const onboarding: UserOnboardingStateRecord = {
+    id: nextId('onboarding', db.data.user_onboarding_states),
+    userId,
+    path,
+    step: 'create_profile',
+    createdAt: now,
+    updatedAt: now,
+  }
+
+  const membership: UserMembershipRecord = {
+    id: nextId('user-membership', db.data.user_memberships),
     userId,
     tier: 'free',
+    status: 'active',
     startedAt: now.slice(0, 10),
+    createdAt: now,
+    updatedAt: now,
   }
 
   db.data.users.push(newUser)
   db.data.auth_identities.push(newAuthIdentity)
-  db.data.memberships.push(newMembership)
+  db.data.user_onboarding_states.push(onboarding)
+  db.data.user_memberships.push(membership)
   await db.write()
 
   return {
     statusCode: 201,
-    body: buildSession(newAuthIdentity, newUser),
+    body: buildSession(db.data, newAuthIdentity, newUser),
   }
 }
 
-function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
+function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
   return {
     token: `mock-token-${authIdentity.id}`,
     user: {
       id: user.id,
       accountName: user.accountName,
       avatarUrl: user.avatarUrl || '',
-      onboardingPath: user.onboardingPath,
-      onboardingStep: user.onboardingStep,
+      preferredLocale: user.preferredLocale,
     },
+    onboarding: resolveOnboarding(data, user.id),
   }
+}
+
+function resolveOnboarding(data: Database, userId: string): AuthOnboardingState {
+  const state = data.user_onboarding_states.find((item) => item.userId === userId)
+
+  return {
+    path: state?.path ?? 'self',
+    step: state?.step ?? 'create_profile',
+    profileId: state?.profileId,
+  }
+}
+
+function mockHashPassword(password: string): string {
+  return `mock-sha256:${Buffer.from(password, 'utf8').toString('base64')}`
+}
+
+function isPasswordMatch(authIdentity: AuthIdentityRecord, password: string): boolean {
+  return authIdentity.passwordHash === mockHashPassword(password)
 }
 
 function isOnboardingPath(value: string): value is OnboardingPath {
   return value === 'self' || value === 'family'
 }
 
-function isAuthProvider(value: string): value is AuthIdentityRecord['provider'] {
-  return value === 'email' || value === 'phone' || value === 'wechat'
+function isRegisterProvider(value: string): value is RegisterProvider {
+  return value === 'email' || value === 'phone'
 }
 
-function isValidIdentifierForProvider(provider: AuthIdentityRecord['provider'], value: string): boolean {
-  if (provider === 'wechat') {
-    return value.trim().length > 0
-  }
-
-  if (provider === 'email') {
-    return isEmailIdentifier(value)
-  }
-
-  return isPhoneIdentifier(value)
+function isValidIdentifierForProvider(provider: RegisterProvider, value: string): boolean {
+  return provider === 'email' ? isEmailIdentifier(value) : isPhoneIdentifier(value)
 }
 
 function isEmailIdentifier(value: string): boolean {
@@ -182,6 +216,6 @@ function isValidPassword(value: string): boolean {
   return value.length >= PASSWORD_MIN && /[a-zA-Z]/.test(value) && /[0-9]/.test(value)
 }
 
-function isPreferredLocale(value: string): value is 'zh' | 'fr' | 'en' {
+function isPreferredLocale(value: string): value is PreferredLocale {
   return value === 'zh' || value === 'fr' || value === 'en'
 }

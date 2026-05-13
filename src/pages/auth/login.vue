@@ -251,7 +251,7 @@ async function handleSubmit() {
       password: password.value,
     })
 
-    redirectToAuthLanding(session.user)
+    redirectToAuthLanding(session)
   } catch {
     loginError.value = t('form.error.invalid')
   }

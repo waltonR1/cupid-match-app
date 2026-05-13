@@ -92,7 +92,7 @@ export interface PrivacySettingRecord {
 }
 
 /** 认证身份提供方 */
-export type AuthProvider = 'email' | 'phone' | 'wechat'
+export type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 
 /** 用户状态 */
 export type UserStatus = 'active' | 'paused' | 'banned'
@@ -108,11 +108,8 @@ export interface UserRecord {
     id: string
     accountName: string
     avatarUrl: string
-    city: LocalizedText
     preferredLocale: 'zh' | 'fr' | 'en'
     status: UserStatus
-    onboardingPath: OnboardingPath
-    onboardingStep: OnboardingStep
     createdAt: string
     updatedAt: string
 }
@@ -123,18 +120,34 @@ export interface AuthIdentityRecord {
     userId: string
     provider: AuthProvider
     identifier: string
-    password: string
+    passwordHash?: string
     verifiedAt?: string
     createdAt: string
+    updatedAt: string
 }
 
 /** 会员记录 */
-export interface MembershipRecord {
+export interface UserOnboardingStateRecord {
+    id: string
+    userId: string
+    path: OnboardingPath
+    step: OnboardingStep
+    profileId?: string
+    completedAt?: string
+    createdAt: string
+    updatedAt: string
+}
+
+/** 鐢ㄦ埛浼氬憳璁板綍 */
+export interface UserMembershipRecord {
     id: string
     userId: string
     tier: MembershipLevel
+    status: 'active' | 'expired' | 'cancelled'
     startedAt: string
     expiresAt?: string
+    createdAt: string
+    updatedAt: string
 }
 
 /** 资料所有权记录 */
@@ -142,8 +155,12 @@ export interface ProfileOwnershipRecord {
     id: string
     profileId: string
     userId: string
-    role: RegisterRole
+    role: RegisterRole | 'guardian' | 'advisor'
+    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    permission: 'owner' | 'manager' | 'viewer'
     isPrimary: boolean
+    createdAt: string
+    updatedAt: string
 }
 
 /** 数据库结构 */
@@ -158,7 +175,8 @@ export interface Database {
     events: EventRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
-    memberships: MembershipRecord[]
+    user_onboarding_states: UserOnboardingStateRecord[]
+    user_memberships: UserMembershipRecord[]
     profile_ownerships: ProfileOwnershipRecord[]
     user_registrations: UserRegistrationRecord[]
     favorite_profiles: FavoriteProfileRecord[]

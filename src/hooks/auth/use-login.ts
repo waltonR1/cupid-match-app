@@ -1,6 +1,7 @@
 ﻿import { ref } from 'vue'
 import {login as loginApi, type LoginPayload} from '@/api/auth'
 import { useAuthStore } from '@/stores/modules/auth'
+import {useLocaleStore} from '@/stores/modules/locale'
 
 /**
  * 登录业务 Hook
@@ -14,6 +15,7 @@ import { useAuthStore } from '@/stores/modules/auth'
 export function useLogin() {
   /** 认证 Store */
   const auth = useAuthStore()
+  const locale = useLocaleStore()
 
   /** 登录加载状态 */
   const loading = ref(false)
@@ -33,8 +35,8 @@ export function useLogin() {
       // 调用登录接口
       const session = await loginApi(payload)
 
-      // 写入用户状态
-      auth.login(session.user)
+      auth.login(session)
+      locale.setLocale(session.user.preferredLocale)
 
       return session
     } catch (requestError) {

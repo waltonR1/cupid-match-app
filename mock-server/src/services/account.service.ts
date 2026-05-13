@@ -16,7 +16,7 @@ export function getAccountOverview(data: Database, userId: string): AccountOverv
   const user = data.users.find((item) => item.id === userId)
   if (!user) return null
 
-  const membership = data.memberships.find((item) => item.userId === userId)
+  const membership = data.user_memberships.find((item) => item.userId === userId && item.status === 'active')
 
   return {
     user: {

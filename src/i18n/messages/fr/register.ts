@@ -8,7 +8,7 @@ export const registerMessages: AppMessageSchema = {
     selectedPath: 'Identite selectionnee',
     formTitle: 'Creation du compte',
     panelTitle: 'Ouvrir votre compte',
-    panelHint: 'Utilisez votre email ou telephone, definissez un mot de passe et remplissez les informations essentielles pour creer votre compte.',
+    panelHint: 'Utilisez votre email ou telephone, definissez un mot de passe et choisissez le parcours a commencer.',
     submit: 'Creer mon compte',
     processTitle: 'Fonctionnement',
     agreementPrefix: 'J ai lu et j accepte les',
@@ -35,11 +35,6 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: 'Votre nom', placeholder: 'Votre nom' },
     identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
-    city: { label: 'Ville', placeholder: 'Paris' },
-    preferredLocale: {
-      label: 'Langue preferee',
-      options: { zh: '中文', fr: 'Francais', en: 'English' },
-    },
     password: { label: 'Mot de passe', placeholder: 'Definir le mot de passe' },
     confirmPassword: { label: 'Confirmation', placeholder: 'Saisissez a nouveau le mot de passe' },
     error: { duplicate: 'Ce compte existe deja. Veuillez vous connecter.', mismatch: 'Les mots de passe ne correspondent pas', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de creer votre compte.' },
@@ -53,10 +48,10 @@ export const registerMessages: AppMessageSchema = {
       },
     },
     step2: {
-      title: 'Ajouter les bases',
+      title: 'Enregistrer l intention',
       desc: {
-        self: 'Ajoutez d abord le nom du compte et votre ville, puis continuez dans le parcours membre.',
-        parent: 'Ajoutez d abord le nom du compte cote parent et la ville, puis continuez dans le parcours famille.',
+        self: 'La plateforme enregistre que vous souhaitez poursuivre le parcours membre.',
+        parent: 'La plateforme enregistre que vous souhaitez poursuivre le parcours famille.',
       },
     },
     step3: {

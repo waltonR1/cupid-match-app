@@ -1,69 +1,45 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import type {AuthOnboarding, AuthSession, AuthUser} from '@/api/auth'
 
-/** 当前登录用户信息 */
-export interface UserInfo {
-  /** 用户 ID */
-  id: string
-
-  /** 账号名称 */
-  accountName: string
-
-  /** 头像地址 */
-  avatarUrl: string
-
-  /** 新用户引导类型 */
-  onboardingPath: 'self' | 'family'
-
-  /** 新用户引导进度 */
-  onboardingStep: 'create_profile' | 'review_profile' | 'browse'
-}
+export type UserInfo = AuthUser
 
 /** 认证状态 Store */
 export const useAuthStore = defineStore('auth', () => {
-  /** 是否已登录 */
   const isLoggedIn = ref(false)
-
-  /** 当前用户信息 */
+  const token = ref('')
   const user = ref<UserInfo | null>(null)
+  const onboarding = ref<AuthOnboarding | null>(null)
 
-  /** 当前账号名称 */
-  const accountName = computed(() => {
-    return user.value?.accountName || ''
-  })
+  const accountName = computed(() => user.value?.accountName || '')
+  const avatarUrl = computed(() => user.value?.avatarUrl || '')
+  const preferredLocale = computed(() => user.value?.preferredLocale ?? 'zh')
 
-  /** 当前用户头像 */
-  const avatarUrl = computed(() => {
-    return user.value?.avatarUrl || ''
-  })
+  const onboardingPath = computed(() => onboarding.value?.path ?? 'self')
+  const onboardingStep = computed(() => onboarding.value?.step ?? 'create_profile')
 
-  /** 当前用户引导类型 */
-  const onboardingPath = computed(() => {
-    return user.value?.onboardingPath ?? 'self'
-  })
-
-  /** 当前用户引导进度 */
-  const onboardingStep = computed(() => {
-    return user.value?.onboardingStep ?? 'create_profile'
-  })
-
-  /** 登录并写入用户信息 */
-  function login(nextUser: UserInfo) {
+  function login(session: AuthSession) {
     isLoggedIn.value = true
-    user.value = nextUser
+    token.value = session.token
+    user.value = session.user
+    onboarding.value = session.onboarding
   }
 
-  /** 退出登录并清空用户信息 */
   function logout() {
     isLoggedIn.value = false
+    token.value = ''
     user.value = null
+    onboarding.value = null
   }
 
   return {
     isLoggedIn,
+    token,
     user,
+    onboarding,
     accountName,
     avatarUrl,
+    preferredLocale,
     onboardingPath,
     onboardingStep,
     login,
@@ -71,7 +47,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 }, {
   persist: {
-    // 仅持久化登录状态和用户信息
-    paths: ['isLoggedIn', 'user'],
+    paths: ['isLoggedIn', 'token', 'user', 'onboarding'],
   },
 })

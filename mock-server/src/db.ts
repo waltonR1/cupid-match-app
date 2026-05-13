@@ -13,7 +13,8 @@ const defaultData: Database = {
     events: [],
     users: [],
     auth_identities: [],
-    memberships: [],
+    user_onboarding_states: [],
+    user_memberships: [],
     profile_ownerships: [],
     user_registrations: [],
     favorite_profiles: [],
@@ -43,6 +44,8 @@ export async function initDb(): Promise<void> {
     db.data.profile_verifications ??= []
     db.data.profile_contact_methods ??= []
     db.data.profile_visibility_settings ??= []
+    db.data.user_onboarding_states ??= []
+    db.data.user_memberships ??= []
 }
 
 /** 获取数据库实例 */

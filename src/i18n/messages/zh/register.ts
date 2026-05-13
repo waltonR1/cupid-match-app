@@ -35,11 +35,6 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: '你的名字', placeholder: '你的名字' },
     identifier: { label: '邮箱或手机号', placeholder: '邮箱或手机号' },
-    city: { label: '所在城市', placeholder: '巴黎' },
-    preferredLocale: {
-      label: '偏好语言',
-      options: { zh: '中文', fr: 'Francais', en: 'English' },
-    },
     password: { label: '密码', placeholder: '设置密码' },
     confirmPassword: { label: '确认密码', placeholder: '再次输入密码' },
     error: { duplicate: '该账号已存在，请直接登录', mismatch: '两次输入的密码不一致', agreement: '请先同意平台服务条款和隐私说明。' },
