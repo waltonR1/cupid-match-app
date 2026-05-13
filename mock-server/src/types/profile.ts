@@ -299,40 +299,6 @@ export interface FamilyProfileDetailDTO {
     privateIntroduction: PrivateIntroductionDTO
 }
 
-/** 账号资料摘要 */
-export interface AccountProfileSummaryDTO {
-    id: string
-    displayName: string
-    city: string
-    education: string
-    occupation: string
-    maritalStatus: MaritalStatus
-    languages: string[]
-    familyVisible: boolean
-    summary: string
-    highlights: string[]
-    tags: string[]
-}
-
-/** 收藏资料卡片 */
-export interface AccountFavoriteProfileCardDTO {
-    id: string
-    displayName: string
-    age: number
-    city: string
-    familyVisible: boolean
-    tags: string[]
-}
-
-/** 会话资料卡片 */
-export interface AccountThreadProfileCardDTO {
-    id: string
-    displayName: string
-    age: number
-    city: string
-    familyVisible: boolean
-}
-
 /** 目录筛选选项 */
 export interface DirectoryFacetOptionDTO {
     value: string

@@ -11,12 +11,19 @@ export const accountCenterMessages: AppMessageSchema = {
   },
   topSummary: {
     title: 'Centre du compte',
-    subtitle: 'Gardez profil, confiance, connexions et services dans un seul espace operationnel.',
+    guestName: 'Compte non connecte',
+    subtitle: 'Le centre du compte est reconstruit autour du nouveau modele profil, abonnement et introduction mediee. Pour l instant il garde seulement l etat du compte et la navigation.',
     metrics: {
-      completion: 'Completion',
-      verification: 'Verifie',
+      status: 'Statut',
+      workspace: 'Module compte',
       membership: 'Abonnement',
       activity: 'Activites',
+    },
+    status: {
+      signedIn: 'Connecte',
+      guest: 'Non connecte',
+      rebuilding: 'Reconstruction',
+      paused: 'En pause',
     },
     actions: {
       profile: 'Modifier le profil',
@@ -24,6 +31,16 @@ export const accountCenterMessages: AppMessageSchema = {
       connections: 'Voir les connexions',
       membership: 'Voir les services',
     },
+  },
+  placeholder: {
+    title: 'Centre du compte en reconstruction',
+    profile: 'La page profil garde seulement la coque du compte. Elle sera reconnectee via ownership profil et le nouveau modele de champs.',
+    membership: 'L abonnement reviendra apres la reconstruction des plans, droits et quotas.',
+    activity: 'Les activites seront reconnectees quand les inscriptions evenement deviendront la source de verite.',
+    connections: 'Favoris et introductions privees seront reconnectes via le nouveau flux account connections.',
+    messages: 'Les messages passeront aux rooms d introduction privee et suivis conseiller, plus aux anciens resumes de conversation.',
+    safety: 'Confidentialite et securite seront reconstruites depuis user preferences et profile visibility settings.',
+    verification: 'La verification sera reconstruite depuis profile verifications et les revues conseiller.',
   },
   common: {
     open: 'Ouvrir',

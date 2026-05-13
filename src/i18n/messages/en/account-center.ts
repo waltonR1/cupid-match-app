@@ -11,12 +11,19 @@ export const accountCenterMessages: AppMessageSchema = {
   },
   topSummary: {
     title: 'Account center',
-    subtitle: 'Keep profile quality, trust, connections, and service access in one operational workspace.',
+    guestName: 'Signed-out account',
+    subtitle: 'The account center is being rebuilt around the new profile, membership, and mediated-introduction model. For now it keeps only account state and navigation.',
     metrics: {
-      completion: 'Completion',
-      verification: 'Verified',
+      status: 'Status',
+      workspace: 'Account module',
       membership: 'Membership',
       activity: 'Activities',
+    },
+    status: {
+      signedIn: 'Signed in',
+      guest: 'Signed out',
+      rebuilding: 'Rebuilding',
+      paused: 'Paused',
     },
     actions: {
       profile: 'Edit profile',
@@ -24,6 +31,16 @@ export const accountCenterMessages: AppMessageSchema = {
       connections: 'Open connections',
       membership: 'View services',
     },
+  },
+  placeholder: {
+    title: 'Account center rebuilding',
+    profile: 'The profile page currently keeps only the account shell. It will reconnect through profile ownership and the new field model.',
+    membership: 'Membership will reopen after membership plans, entitlements, and quota balances are rebuilt.',
+    activity: 'Activity will reconnect after event registrations become the source of truth.',
+    connections: 'Favorites and private introduction states will reconnect through the new account connections flow.',
+    messages: 'Messages will move to private introduction rooms and advisor follow-ups instead of legacy thread summaries.',
+    safety: 'Privacy and safety will be rebuilt from user preferences and profile visibility settings.',
+    verification: 'Verification will be rebuilt from profile verifications and advisor review records.',
   },
   common: {
     open: 'Open',

@@ -1,58 +1,24 @@
 import { computed, reactive, ref, watch } from 'vue'
-import {
-  getAccountOverview,
-  type AccountFavoriteRecord,
-  type AccountOverviewResponse,
-  type AccountPrivacySetting,
-  type AccountProfileSummary,
-  type AccountThreadRecord,
-  type AccountUserEventRecord,
-  type UserOverview,
-} from '@/api/account'
-import { useAuthStore } from '@/stores/modules/auth'
+import { getAccountOverview, type AccountShellUser } from '@/api/account'
+import { useAuthStore, type UserInfo } from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 
 export function useAccountOverview() {
-  const initialData = createEmptyAccountOverview()
   const authStore = useAuthStore()
   const localeStore = useLocaleStore()
-
-  const user = reactive<UserOverview>({ ...initialData.user })
-  const profile = reactive(createEmptyAccountProfileSummary())
-  const userEvents = reactive<AccountUserEventRecord[]>([...initialData.userEvents])
-  const favorites = reactive<AccountFavoriteRecord[]>([...initialData.favorites])
-  const threads = reactive<AccountThreadRecord[]>([...initialData.threads])
-  const privacySettings = reactive<AccountPrivacySetting[]>([...initialData.privacySettings])
+  const user = reactive<AccountShellUser>(createEmptyAccountUser())
   const loading = ref(false)
   const error = ref<unknown>(null)
 
-  const latestEvent = computed(() => userEvents[0] ?? null)
-  const unreadCount = computed(() => threads.reduce((sum, item) => sum + item.thread.unread, 0))
-  const familyAssistSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-family'))
-  const advisorContactSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-contact'))
-  const visibleFieldsSetting = computed(() => privacySettings.find((item) => item.id === 'privacy-visibility'))
-  const familyVisibleFavorites = computed(() => favorites.filter((item) => item.profile.familyVisible))
-  const privateFavorites = computed(() => favorites.filter((item) => !item.profile.familyVisible))
-  const familyVisibleThreads = computed(() => threads.filter((item) => item.profile.familyVisible))
   const currentUserId = computed(() => authStore.user?.id ?? '')
-  const verificationCount = computed(() => {
-    let count = 1
-
-    if (profile.familyVisible) count += 1
-    if (familyAssistSetting.value?.enabled) count += 1
-    if (user.membership !== 'free') count += 1
-
-    return count
-  })
+  const isSignedIn = computed(() => Boolean(currentUserId.value))
 
   watch([() => localeStore.locale, currentUserId], () => {
     void refresh()
   }, { immediate: true })
 
   async function refresh() {
-    const userId = currentUserId.value
-
-    if (!userId) {
+    if (!currentUserId.value) {
       resetOverview()
       error.value = null
       loading.value = false
@@ -64,94 +30,48 @@ export function useAccountOverview() {
 
     try {
       const data = await getAccountOverview()
-
       Object.assign(user, data.user)
-      Object.assign(profile, createEmptyAccountProfileSummary(), data.profile ?? {})
-      replaceArray(userEvents, data.userEvents)
-      replaceArray(favorites, data.favorites)
-      replaceArray(threads, data.threads)
-      replaceArray(privacySettings, data.privacySettings)
     } catch (requestError) {
       error.value = requestError
+      Object.assign(user, createAuthFallbackUser(authStore.user))
     } finally {
       loading.value = false
     }
   }
 
   function resetOverview() {
-    const data = createEmptyAccountOverview()
-
-    Object.assign(user, data.user)
-    Object.assign(profile, createEmptyAccountProfileSummary())
-    replaceArray(userEvents, data.userEvents)
-    replaceArray(favorites, data.favorites)
-    replaceArray(threads, data.threads)
-    replaceArray(privacySettings, data.privacySettings)
+    Object.assign(user, createEmptyAccountUser())
   }
 
   return {
     loading,
     error,
     user,
-    profile,
-    userEvents,
-    favorites,
-    threads,
-    privacySettings,
-    latestEvent,
-    unreadCount,
-    familyAssistSetting,
-    advisorContactSetting,
-    visibleFieldsSetting,
-    familyVisibleFavorites,
-    privateFavorites,
-    familyVisibleThreads,
-    verificationCount,
+    isSignedIn,
     refresh,
   }
 }
 
 export type AccountOverviewContext = ReturnType<typeof useAccountOverview>
 
-function replaceArray<T>(target: T[], value: T[]) {
-  target.splice(0, target.length, ...value)
-}
-
-function createEmptyAccountOverview(): AccountOverviewResponse {
+function createEmptyAccountUser(): AccountShellUser {
   return {
-    user: {
-      id: '',
-      realName: '',
-      nickName: '',
-      avatarUrl: '',
-      displayName: '',
-      city: '',
-      joinedAt: '',
-      profileId: '',
-      completion: 0,
-      membership: 'free',
-      role: '',
-    },
-    profile: null,
-    userEvents: [],
-    favorites: [],
-    threads: [],
-    privacySettings: [],
+    id: '',
+    accountName: '',
+    avatarUrl: '',
+    joinedAt: '',
+    membership: 'free',
   }
 }
 
-function createEmptyAccountProfileSummary(): AccountProfileSummary {
+function createAuthFallbackUser(user: UserInfo | null): AccountShellUser {
+  if (!user) return createEmptyAccountUser()
+
   return {
-    id: '',
-    displayName: '',
-    city: '',
-    education: '',
-    occupation: '',
-    maritalStatus: 'single',
-    languages: [],
-    familyVisible: false,
-    summary: '',
-    highlights: [],
-    tags: [],
+    id: user.id,
+    accountName: user.accountName,
+    avatarUrl: user.avatarUrl,
+    joinedAt: '',
+    membership: 'free',
   }
 }
