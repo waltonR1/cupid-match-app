@@ -17,6 +17,7 @@ Phase 1: 冻结 account，移除它对 profile 旧字段的依赖
 Phase 2: 清理 profile 主表旧字段，直接对齐最终 profile schema
 Phase 3: 修正当前 auth / registration / onboarding 模型
 Phase 4: 完成 events 页面与 API 字段链路
+Phase 4.5: 升级 agreement / legal documents 链路
 Phase 5: 按最终态重写 account / membership / entitlement
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
@@ -946,6 +947,129 @@ event detail：
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。
 
+## Phase 4.5：升级 agreement / legal documents 链路
+
+### 目标
+
+在 account 重写前，先把平台服务条款和隐私说明从前端 i18n 正文中迁出，建立独立 legal documents API，并让登录 / 注册成功自动记录用户当前确认的协议版本。
+
+本阶段不重写 account，不做协议版本拦截页，不让前端传协议版本。产品语义固定为：
+
+> 成功登录或成功注册本身即表示用户接受当前 active 服务条款与隐私说明。
+
+正常 UI 仍必须勾选同意后才允许提交登录 / 注册；若有人绕过前端直接调用 API，只要认证成功，也视为接受当前 active 协议。
+
+### 数据库目标
+
+新增集合：
+
+```text
+legal_documents
+user_agreement_acceptances
+```
+
+`legal_documents`：
+
+```ts
+interface LegalDocumentRecord {
+  id: string
+  type: 'terms' | 'privacy'
+  version: string
+  locale: 'zh' | 'fr' | 'en'
+  title: string
+  sections: Array<{
+    title: string
+    body: string
+    sortOrder: number
+  }>
+  status: 'draft' | 'active' | 'archived'
+  effectiveAt: string
+  createdAt: string
+  updatedAt: string
+}
+```
+
+`user_agreement_acceptances`：
+
+```ts
+interface UserAgreementAcceptanceRecord {
+  id: string
+  userId: string
+  documentType: 'terms' | 'privacy'
+  documentVersion: string
+  locale: 'zh' | 'fr' | 'en'
+  acceptedAt: string
+  createdAt: string
+}
+```
+
+规则：
+
+- `legal_documents` 每个 `type + locale` 只能有一个 active 文档。
+- `user_agreement_acceptances` 每个 `userId + documentType` 只保留最新确认版本。
+- 成功登录 / 注册后，后端读取当前 locale 下 active `terms` 和 `privacy`，upsert 用户确认记录；版本不变则跳过。
+- `sections` 是协议正文结构；前端按字段渲染标题和正文，不解析 Markdown。
+
+### API 目标
+
+```text
+GET /api/legal/documents/:type
+```
+
+`type` 为 `terms` 或 `privacy`，`lang` 仍走现有 query 规则。
+
+```ts
+interface LegalDocumentDTO {
+  type: 'terms' | 'privacy'
+  version: string
+  locale: 'zh' | 'fr' | 'en'
+  title: string
+  sections: Array<{
+    title: string
+    body: string
+  }>
+  effectiveAt: string
+}
+```
+
+不新增：
+
+- `POST /api/legal/acceptances`
+- `RegisterPayload.agreementAcceptances`
+- `LoginPayload.agreementAccepted`
+- `AuthSession.legal.requiresAgreementUpdate`
+
+### 前端修改范围
+
+- `src/api/legal/*`（新增）
+- `src/components/common/AgreementDialog.vue`
+- `src/pages/auth/login.vue`
+- `src/pages/auth/register.vue`
+- `src/hooks/auth/*`
+- `src/i18n/messages/*/agreements.ts`
+- `mock-server/src/services/legal.service.ts`（新增）
+- `mock-server/src/services/auth.service.ts`
+- `mock-server/src/routes/legal.routes.ts`（新增）
+- `mock-server/src/types/database.ts`
+- `mock-server/db.json`
+
+### 页面规则
+
+- 登录 / 注册页继续用 checkbox 控制提交；未勾选不调用登录 / 注册 API。
+- `AgreementDialog` 打开时按需调用 `GET /api/legal/documents/:type`，不预加载。
+- `agreements.ts` 只保留弹窗标题、关闭按钮、加载态、错误态等 UI 文案，不存正式协议正文。
+- 若 legal API 暂时失败，弹窗显示错误态；不影响未打开弹窗时的页面首屏。
+
+### 验收标准
+
+- `legal_documents` 和 `user_agreement_acceptances` 已加入 mock db 和类型。
+- 登录 / 注册成功后，mock 后端会 upsert 当前 active `terms` / `privacy` 确认记录。
+- `AgreementDialog` 正文来自 legal API，不再从 i18n 拼三段协议正文。
+- 前端不传协议版本，也不处理协议更新拦截。
+- `npm run type-check` 通过。
+- `npm run mock:build` 通过。
+- `npm run build:h5` 通过。
+
 ## Phase 5：按最终态重写 account / membership / entitlement
 
 ### 目标
@@ -1216,13 +1340,14 @@ Contract 对齐要求：
 | `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountMessagesPageData` |
 | `GET /api/account/preferences` | `user_preferences` | `AccountPreferenceDTO[]` | `AccountSafetyPageData` |
 | `GET /api/account/verifications` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountVerificationSummaryDTO[]` | `AccountVerificationPageData` |
-| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings` | `AccountSafetyDTO` | `AccountSafetyPageData` |
+| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings`, `user_agreement_acceptances`, `legal_documents` | `AccountSafetyDTO` | `AccountSafetyPageData` |
 
 补充规则：
 
 - `profile_detail_access` entitlement 表示付费 viewer 查看他人 profile detail 的字段开放层级，不表示提升自己 profile 曝光。
 - `favorite_profiles` 只保存收藏关系和时间戳；当前阶段不做私密备注，避免为 `note` 增加额外写接口。
 - `AccountPrivateIntroductionRoomDTO` 不返回 `unreadCount`，直到引入 read receipt source of truth；前端如需提示可先使用本地派生状态。
+- account safety 仅读取 Phase 4.5 已完成的 `user_agreement_acceptances` / `legal_documents`，不重新实现 agreement 写入链路。
 
 ### 前端修改范围
 
@@ -1256,6 +1381,7 @@ account 应拆成稳定模块：
 - profile ownership 支持一个用户管理多个 profile。
 - privacy/preferences 不在 DB 保存页面文案。
 - account dashboard 不把页面 view model 当成数据库模型。
+- account safety 页可展示 Phase 4.5 已写入的协议确认版本摘要。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。
@@ -1370,6 +1496,14 @@ refactor(mock-server): tighten account identity fields
 refactor(events): expand event api fields
 refactor(events): rebuild event directory view
 feat(events): add event registration flow
+```
+
+### Phase 4.5
+
+```text
+feat(legal): add agreement documents api
+refactor(auth): record agreement acceptance on auth success
+refactor(common): load agreement dialog content from api
 ```
 
 ### Phase 5

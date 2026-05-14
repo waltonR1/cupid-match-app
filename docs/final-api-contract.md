@@ -28,6 +28,7 @@ type LocaleCode = 'zh' | 'fr' | 'en'
 type RegisterProvider = 'email' | 'phone'
 type OnboardingPath = 'self' | 'family'
 type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
+type LegalDocumentType = 'terms' | 'privacy'
 type ViewerRole = 'guest' | 'free_user' | 'member' | 'owner' | 'advisor'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type IntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired'
@@ -87,6 +88,7 @@ interface ApiErrorDTO {
 | --- | --- | --- | --- |
 | Auth | `POST` | `/api/auth/register` | 创建账户和 onboarding 状态。 |
 | Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
+| Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
 | Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |
 | Profiles | `GET` | `/api/profiles/family` | family 资料目录。 |
 | Profiles | `GET` | `/api/profiles/self/:id` | self 资料详情。 |
@@ -164,6 +166,7 @@ interface AuthOnboardingDTO {
 
 - 注册 payload 不包含 `city`。
 - 注册不创建 profile。
+- 成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（upsert by userId + documentType），版本不变则跳过。
 - 注册页不展示 `preferredLocale` 手动选择器；前端用当前页面 locale 自动填充 `RegisterPayload.preferredLocale`。
 - 登录和注册都返回 `AuthUserDTO.preferredLocale`；前端登录成功后用它同步 locale store，确保跨设备登录时使用账户默认语言。
 - 当前注册只开放 `email`、`phone`；`wechat`、`google` 是最终 `auth_identities` 预留 provider。
@@ -179,6 +182,38 @@ interface LoginPayload {
 ```
 
 返回 `AuthSessionDTO`。
+
+## Legal API
+
+### Get Legal Document
+
+```text
+GET /api/legal/documents/:type?lang=zh
+```
+
+`:type` 为 `terms` 或 `privacy`。
+
+```ts
+interface LegalDocumentDTO {
+  type: LegalDocumentType
+  version: string
+  locale: LocaleCode
+  title: string
+  sections: LegalDocumentSectionDTO[]
+  effectiveAt: string
+}
+
+interface LegalDocumentSectionDTO {
+  title: string
+  body: string
+}
+```
+
+规则：
+
+- 返回当前 locale 下 active 的指定类型文档。
+- 前端 `AgreementDialog` 打开时按需调用，不预加载。
+- `sections` 为协议正文结构；前端按字段渲染标题和正文，不解析 Markdown。
 
 ## Profiles API
 

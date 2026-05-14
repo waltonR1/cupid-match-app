@@ -35,6 +35,8 @@
 | --- | --- | --- | --- |
 | 登录账户 | `users`, `auth_identities` | `AuthSession.user.accountName` | `profiles`, `profile_ownerships.role` |
 | 注册后引导 | `user_onboarding_states` | `AuthSession.onboarding` | `users.onboardingPath`, `users.onboardingStep` |
+| 协议文本 | `legal_documents` | `LegalDocumentDTO` | frontend i18n only |
+| 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
 | profile 问答 | `profile_prompts` | `prompts[]` | `profiles.prompts` |
@@ -59,7 +61,7 @@ register page
 -> use auth hook / auth api
 -> POST /api/auth/register
 -> mock-server auth service
--> users + auth_identities + user_onboarding_states + default membership records
+-> users + auth_identities + user_onboarding_states + default membership records + user_agreement_acceptances
 -> AuthSession DTO
 -> auth store
 ```
@@ -94,6 +96,15 @@ user_onboarding_states:
   profileId
   createdAt
   updatedAt
+
+user_agreement_acceptances:
+  id
+  userId
+  documentType
+  documentVersion
+  locale
+  acceptedAt
+  createdAt
 ```
 
 Register payload:
@@ -113,6 +124,7 @@ interface RegisterPayload {
 
 - 当前注册表单只开放 `email` 和 `phone`。
 - 注册页不展示 `preferredLocale` 手动选择器；前端读取当前页面 locale 后自动填充 `RegisterPayload.preferredLocale`。
+- 成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（upsert by userId + documentType），版本不变则跳过。
 - `wechat`、`google` 是 `auth_identities` 的最终预留登录方式，后续通过绑定身份或第三方登录链路接入，不进入当前注册 payload。
 
 DTO:
@@ -153,6 +165,7 @@ login page
 -> auth_identities lookup
 -> users lookup
 -> user_onboarding_states lookup
+-> user_agreement_acceptances upsert (backend only)
 -> AuthSession DTO
 -> auth store
 ```
@@ -161,9 +174,28 @@ Rules:
 
 - Login returns account identity and onboarding state.
 - Login returns `user.preferredLocale`; frontend syncs locale store from it after successful login.
-- Login does not fetch profile detail by default.
+- Login 成功即表示用户接受当前 active 服务条款与隐私说明；后端自动 upsert `user_agreement_acceptances`（版本不变则跳过），前端无须传版本。
 - `X-User-Id` is mock request context only.
 - Future Authorization token behavior must be explicit; do not half-use token in some calls.
+
+### Legal Document Fetch
+
+Flow:
+
+```text
+agreement dialog
+-> GET /api/legal/documents/:type?lang=
+-> legal_documents active record by type + locale
+-> LegalDocumentDTO
+-> frontend renders sections in AgreementDialog
+```
+
+Rules:
+
+- `legal_documents` is the source of truth for official agreement text and version.
+- i18n only provides button labels and helper copy, not the official legal document body.
+- Agreement content is returned as structured sections; frontend renders fields directly and does not parse Markdown.
+- `AgreementDialog` 打开时按需调用此 API，不预加载。
 
 ## Profile Directory Chain
 
@@ -841,6 +873,8 @@ GET /api/account/verifications
 
 GET /api/account/safety
 -> user_preferences
+-> user_agreement_acceptances
+-> legal_documents
 -> profile_visibility_settings
 -> AccountSafetyDTO
 
@@ -857,6 +891,7 @@ Rules:
 - Managed profiles come from `profile_ownerships`.
 - Membership comes from membership collections.
 - Preferences come from `user_preferences`, not legacy `privacy_settings.title/desc`.
+- Agreement summaries come from latest `user_agreement_acceptances` joined with `legal_documents`.
 - Account safety reads `profile_visibility_settings` as code/value configuration and does not store page copy.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.

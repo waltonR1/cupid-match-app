@@ -27,6 +27,8 @@ interface FinalDatabase {
   auth_identities: AuthIdentityRecord[]
   user_onboarding_states: UserOnboardingStateRecord[]
   user_preferences: UserPreferenceRecord[]
+  legal_documents: LegalDocumentRecord[]
+  user_agreement_acceptances: UserAgreementAcceptanceRecord[]
 
   profiles: ProfileRecord[]
   profile_photos: ProfilePhotoRecord[]
@@ -76,6 +78,8 @@ type UserStatus = 'active' | 'paused' | 'banned'
 type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 type OnboardingPath = 'self' | 'family'
 type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
+type LegalDocumentType = 'terms' | 'privacy'
+type LegalDocumentStatus = 'draft' | 'active' | 'archived'
 type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
 type DegreeLevel = 'bachelor' | 'master' | 'phd'
 type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
@@ -213,6 +217,59 @@ family_assist_enabled
 ```
 
 本节 code 只是示例。完整 `user_preferences.code` 列表在 Phase 5 account 重写时按最终账户页面需求补齐。默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。
+
+### legal_documents
+
+协议文档版本。平台服务条款和隐私说明不只存在于前端 i18n；最终应由后端按类型、版本和语言返回当前生效文档。
+
+```ts
+interface LegalDocumentRecord {
+  id: string
+  type: LegalDocumentType
+  version: string
+  locale: LocaleCode
+  title: string
+  sections: LegalDocumentSection[]
+  status: LegalDocumentStatus
+  effectiveAt: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface LegalDocumentSection {
+  title: string
+  body: string
+  sortOrder: number
+}
+```
+
+规则：
+
+- 同一 `type + locale` 只能有一个 `active` 文档。
+- `version` 是面向确认记录的稳定版本号，不使用页面发布时间临时派生。
+- `sections` 是该语言完整正文结构；前端按 `sortOrder` 渲染标题和正文，不解析 Markdown。
+
+### user_agreement_acceptances
+
+用户当前已确认的协议版本。成功注册或成功登录本身即表示用户接受当前 active 服务条款与隐私说明，后端据此自动写入或更新确认记录。
+
+```ts
+interface UserAgreementAcceptanceRecord {
+  id: string
+  userId: string
+  documentType: LegalDocumentType
+  documentVersion: string
+  locale: LocaleCode
+  acceptedAt: string
+  createdAt: string
+}
+```
+
+规则：
+
+- 每个用户对每个 `documentType` 最多保留一条最新确认记录（upsert by userId + documentType）。
+- 成功注册 / 成功登录后，后端读取当前 active 文档版本；若版本相同则跳过写入，版本不同则更新为最新版本和时间戳。
+- 前端不需要传版本号，不需要处理协议更新拦截；正常 UI 仍必须勾选同意后才允许提交登录 / 注册。
 
 ## Profiles
 
@@ -746,6 +803,9 @@ interface ProfilePublicIdentityDTO {
 
 ```text
 auth_identities: unique(provider, identifier)
+legal_documents: unique(type, locale, version)
+legal_documents: unique_active(type, locale) where status = 'active'
+user_agreement_acceptances: unique(userId, documentType)
 user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)
 profile_contact_methods: unique(profileId, type, value)

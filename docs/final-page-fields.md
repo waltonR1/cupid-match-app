@@ -144,6 +144,37 @@ interface RegisterPageFields {
 
 注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；用户后续可在 account preferences 中修改账户默认语言。
 
+`agreed` 勾选后才允许提交。成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（版本不变则跳过）。
+
+### Agreement Dialog
+
+```ts
+interface AgreementDocumentViewModel {
+  type: 'terms' | 'privacy'
+  version: string
+  title: string
+  sections: AgreementDocumentSectionViewModel[]
+  effectiveDateText: string
+}
+
+interface AgreementDocumentSectionViewModel {
+  title: string
+  body: string
+}
+
+interface AgreementDialogViewModel {
+  open: boolean
+  document: AgreementDocumentViewModel | null
+  closeAction: PageActionViewModel
+}
+```
+
+规则：
+
+- `AgreementDialog` 打开时调 `GET /api/legal/documents/:type?lang=` 按需拉取正文，不做预加载。
+- `AgreementDocumentViewModel.sections` 来自 legal API，前端按字段渲染 section 标题和正文，不解析 Markdown。
+- i18n 只提供按钮和标题辅助文案，不存正式协议正文。
+
 ## Profile Directory Pages
 
 Self directory 和 family directory 可以使用同一套目录 ViewModel，通过页面参数或 hook 配置区分展示语气。
@@ -621,6 +652,7 @@ interface ProfileVerificationSummaryViewModel {
 interface AccountSafetyPageData {
   preferences: AccountPreferenceViewModel[]
   profileVisibility: ProfileVisibilitySettingViewModel[]
+  agreements: AccountAgreementSummaryViewModel[]
 }
 
 interface AccountPreferenceViewModel {
@@ -636,6 +668,13 @@ interface ProfileVisibilitySettingViewModel {
   label: string
   visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
   lockedByAdvisor: boolean
+}
+
+interface AccountAgreementSummaryViewModel {
+  type: 'terms' | 'privacy'
+  title: string
+  version: string
+  acceptedAtText: string
 }
 ```
 
