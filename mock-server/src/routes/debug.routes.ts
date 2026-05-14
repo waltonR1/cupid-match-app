@@ -7,6 +7,12 @@ import {
     listPrivateIntroductionDebugRequests,
 } from '../services/private-introduction-debug.service.js'
 import {
+    listEventRegistrationDebugItems,
+    reviewEventRegistrationDebugItem,
+    type EventRegistrationReviewStatus,
+} from '../services/event-registration-debug.service.js'
+import {cancelEventRegistration, eventDetail, registerForEvent} from '../services/event.service.js'
+import {
     getProfileAccessDebugPreview,
     type ProfileAccessDebugMode,
     type ProfileAccessDebugType,
@@ -40,6 +46,65 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
         }
 
         return detail
+    })
+
+    app.get('/debug/events-preview/:id', async (request, reply) => {
+        const {id} = request.params as { id: string }
+        const query = request.query as QueryRecord
+        const userId = resolveEventDebugUserId(resolveEventDebugMode(query.mode))
+        const detail = eventDetail(resolveApiLocale(query.lang), getDb().data, id, userId)
+
+        if (!detail) {
+            return reply.code(404).send({error: 'Event not found'})
+        }
+
+        return detail
+    })
+
+    app.post('/debug/events-preview/:id/register', async (request, reply) => {
+        const {id} = request.params as { id: string }
+        const query = request.query as QueryRecord
+        const userId = resolveEventDebugUserId(resolveEventDebugMode(query.mode))
+        const db = getDb()
+        const result = registerForEvent(db.data, id, userId)
+
+        if (result.status === 'not_found') {
+            return reply.code(404).send({error: 'Event not found'})
+        }
+
+        if (result.status === 'login_required') {
+            return reply.code(401).send(result.payload)
+        }
+
+        if (result.status === 'blocked') {
+            return reply.code(409).send(result.payload)
+        }
+
+        await db.write()
+        return result.payload
+    })
+
+    app.post('/debug/events-preview/:id/cancel', async (request, reply) => {
+        const {id} = request.params as { id: string }
+        const query = request.query as QueryRecord
+        const userId = resolveEventDebugUserId(resolveEventDebugMode(query.mode))
+        const db = getDb()
+        const result = cancelEventRegistration(db.data, id, userId)
+
+        if (result.status === 'not_found') {
+            return reply.code(404).send({error: 'Event not found'})
+        }
+
+        if (result.status === 'login_required') {
+            return reply.code(401).send(result.payload)
+        }
+
+        if (result.status === 'blocked') {
+            return reply.code(409).send(result.payload)
+        }
+
+        await db.write()
+        return result.payload
     })
 
     app.get('/debug/private-introductions', async (request) => {
@@ -82,6 +147,34 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
         await db.write()
         return result.item
     })
+
+    app.get('/debug/event-registrations', async (request) => {
+        const query = request.query as QueryRecord
+        return listEventRegistrationDebugItems(resolveApiLocale(query.lang), getDb().data)
+    })
+
+    app.post('/debug/event-registrations/:id/review/:status', async (request, reply) => {
+        const {id, status} = request.params as { id: string, status: string }
+        const query = request.query as QueryRecord
+
+        if (!isEventReviewStatus(status)) {
+            return reply.code(400).send({error: 'Invalid review status'})
+        }
+
+        const db = getDb()
+        const result = reviewEventRegistrationDebugItem(resolveApiLocale(query.lang), db.data, id, status)
+
+        if (result.status === 'not_found') {
+            return reply.code(404).send({error: 'Event registration not found'})
+        }
+
+        if (result.status === 'invalid_status') {
+            return reply.code(409).send(result.item)
+        }
+
+        await db.write()
+        return result.item
+    })
 }
 
 function isProfileAccessDebugType(value: string): value is ProfileAccessDebugType {
@@ -94,4 +187,24 @@ function resolvePreviewMode(value: unknown): ProfileAccessDebugMode {
     }
 
     return 'backend'
+}
+
+type EventDebugMode = 'guest' | 'free' | 'member'
+
+function resolveEventDebugMode(value: unknown): EventDebugMode {
+    if (value === 'guest' || value === 'free' || value === 'member') {
+        return value
+    }
+
+    return 'guest'
+}
+
+function resolveEventDebugUserId(mode: EventDebugMode) {
+    if (mode === 'member') return 'u-001'
+    if (mode === 'free') return 'u-debug-free'
+    return ''
+}
+
+function isEventReviewStatus(value: string): value is EventRegistrationReviewStatus {
+    return value === 'confirmed' || value === 'declined' || value === 'waitlist'
 }

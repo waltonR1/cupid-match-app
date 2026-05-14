@@ -47,11 +47,6 @@ export const homeMessages: AppMessageSchema = {
         titleAccent: '先看资料',
         subtitle: '先通过结构清楚的资料了解对方，再决定是否值得继续推进。',
         cta: '查看全部资料',
-        fields: {
-            city: '所在城市',
-            education: '教育背景',
-            languages: '语言能力',
-        },
     },
     family: {
         eyebrow: '家庭参与',

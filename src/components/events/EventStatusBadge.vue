@@ -10,10 +10,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventStatus } from '@/types/events/view'
+import type { EventCardStatus } from '@/types/events/card'
 
 const props = defineProps<{
-  status: EventStatus
+  status: EventCardStatus
   label: string
 }>()
 
@@ -22,7 +22,7 @@ const badgeClassName = computed(() => {
     return 'rounded-full border-semantic-state-event-open-border bg-semantic-state-event-open-background text-semantic-state-event-open-text shadow-panel tracking-[1.5px]'
   }
 
-  if (props.status === 'waitlist') {
+  if (props.status === 'waitlist' || props.status === 'member') {
     return 'rounded-full border-semantic-state-event-waitlist-border bg-semantic-state-event-waitlist-background text-semantic-state-event-waitlist-text shadow-panel tracking-[1.5px]'
   }
 
@@ -34,11 +34,11 @@ const dotClassName = computed(() => {
     return 'h-1.5 w-1.5 rounded-full bg-semantic-state-event-open-dot'
   }
 
-  if (props.status === 'waitlist') {
+  if (props.status === 'waitlist' || props.status === 'member') {
     return 'h-1.5 w-1.5 rounded-full bg-semantic-state-event-waitlist-dot'
   }
 
-  if (props.status === 'closed') {
+  if (props.status === 'closed' || props.status === 'completed') {
     return 'h-[5px] w-[5px] rounded-[1px] bg-semantic-state-event-closed-dot'
   }
 

@@ -1,49 +1,87 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const eventDetailMessages: AppMessageSchema = {
-    hero: {
-      eyebrow: 'Event detail',
+  hero: {
+    eyebrow: 'Event detail',
+  },
+  fields: {
+    status: 'Status',
+    date: 'Date',
+    city: 'City',
+    venue: 'Venue',
+    address: 'Exact address',
+    format: 'Format',
+    audience: 'Audience',
+    seats: 'Seats',
+    focus: 'Relationship focus',
+    languages: 'Languages',
+    advisorNote: 'Advisor note',
+  },
+  actions: {
+    register: 'Request a seat',
+    cancel: 'Cancel request',
+    loading: 'Processing',
+    login: 'Log in to request',
+    membership: 'View membership',
+    backToEvents: 'Back to events',
+  },
+  address: {
+    locked: 'The exact address opens at the appropriate stage.',
+    login_required: 'Log in to view the exact address.',
+    registration_required: 'Register for the event to view the exact address.',
+    confirmation_required: 'The exact address opens after participation is confirmed.',
+  },
+  seats: {
+    remaining: '{count} seats left',
+    waitlist: '{count} on waitlist',
+  },
+  registration: {
+    guest: {
+      title: 'Log in before requesting a seat',
+      desc: 'Event participation requires an account so the platform can review profile fit and pacing.',
     },
-    fields: {
-      status: 'Status',
-      date: 'Date',
-      city: 'City',
-      venue: 'Venue',
-      format: 'Format',
-      audience: 'Audience',
-      seats: 'Seats',
+    available: {
+      title: 'Currently available',
+      desc: 'After submission, an advisor reviews seat availability, profile readiness, and event fit.',
     },
-    actions: {
-      register: 'Submit interest',
-      joinWaitlist: 'Join waitlist',
-      full: 'Currently full',
-      registerHint: 'After submission, an advisor reviews availability and overall profile fit before confirming the seat.',
-      waitlistHint: 'This event is on waitlist. Suitable profiles are still reviewed and prioritized if a seat opens.',
-      fullHint: 'This edition is full. It is better to return to the list and review the next suitable session.',
-      backToEvents: 'Back to events',
+    requested: {
+      title: 'Request pending',
+      desc: 'Your request has been submitted. An advisor will confirm seat availability and fit before the next step.',
     },
-    sections: {
-      agenda: 'Agenda',
-      notes: 'Registration notes',
-      relatedProfiles: 'Related members',
-      relatedEmpty: 'No related member profiles are currently available.',
-      notFound: 'No event information is currently available.',
+    confirmed: {
+      title: 'Seat confirmed',
+      desc: 'Your participation is confirmed. Further guidance can be shared before the event.',
     },
-    rules: {
-      step1: { title: 'Manual review after submission', desc: 'Seats are not confirmed automatically. An advisor checks availability and overall fit first.' },
-      step2: { title: 'Waitlist still moves forward', desc: 'If the room is full, strong profiles stay in sequence and are contacted first if space opens.' },
-      step3: { title: 'Pre-event guidance follows', desc: 'Once confirmed, the attendee receives pacing, arrival, and evening guidance ahead of the event.' },
-      step4: { title: 'A no is still useful guidance', desc: 'If the format is not the right fit now, the user will be directed to a more suitable upcoming session.' },
+    declined: {
+      title: 'Not confirmed this time',
+      desc: 'A seat is not confirmed for this event. The platform will continue matching you with better-fit sessions.',
     },
-    relatedReason: {
-      sameCity: 'Same city',
-      priority: 'Priority profile',
-      verified: 'Well-prepared profile',
-      curated: 'Format match',
+    waitlist: {
+      title: 'On waitlist',
+      desc: 'If a seat opens or a new session is arranged, suitable waitlisted members are contacted first.',
     },
-    status: {
-      open: 'Open',
-      waitlist: 'Waitlist',
-      closed: 'Full',
+    cancelled: {
+      title: 'Request cancelled',
+      desc: 'You can request again and the platform will reassess current availability and fit.',
     },
-  }
+    closed: {
+      title: 'Not open for requests',
+      desc: 'This event is not accepting new requests. Return to the list for other sessions.',
+    },
+    member_required: {
+      title: 'Member-only event',
+      desc: 'This event is open to members. Review membership access before requesting a seat.',
+    },
+  },
+  sections: {
+    agenda: 'Agenda',
+    notes: 'Event notes',
+    notFound: 'No event information is currently available.',
+  },
+  status: {
+    open: 'Open',
+    waitlist: 'Waitlist',
+    closed: 'Closed',
+    member: 'Members only',
+  },
+}

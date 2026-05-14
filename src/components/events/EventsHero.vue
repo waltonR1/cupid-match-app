@@ -43,10 +43,11 @@
 
           <view class="mt-8 grid gap-4 text-[15px] leading-7 text-semantic-text-hero-secondary transition-colors duration-300 group-hover:text-semantic-text-inverse">
             <view>{{ fields.date }} {{ nextEvent.date }}</view>
+            <view>{{ nextEvent.time }}</view>
             <view>{{ fields.city }} {{ nextEvent.city }}</view>
             <view>{{ fields.venue }} {{ nextEvent.venue }}</view>
             <view>{{ fields.format }} {{ nextEvent.format }}</view>
-            <view>{{ fields.seats }} {{ nextEvent.seats }}</view>
+            <view>{{ nextEvent.remainingSeatsText }}</view>
           </view>
 
           <view class="mt-8 flex items-end justify-between gap-6">
@@ -83,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events/view'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events/card'
 import EventStatusBadge from './EventStatusBadge.vue'
 
 defineProps<{

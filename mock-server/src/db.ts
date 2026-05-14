@@ -11,12 +11,13 @@ const defaultData: Database = {
     profile_contact_methods: [],
     profile_visibility_settings: [],
     events: [],
+    event_agenda_items: [],
+    event_registrations: [],
     users: [],
     auth_identities: [],
     user_onboarding_states: [],
     user_memberships: [],
     profile_ownerships: [],
-    user_registrations: [],
     favorite_profiles: [],
     message_threads: [],
     private_introduction_requests: [],
@@ -44,6 +45,8 @@ export async function initDb(): Promise<void> {
     db.data.profile_verifications ??= []
     db.data.profile_contact_methods ??= []
     db.data.profile_visibility_settings ??= []
+    db.data.event_agenda_items ??= []
+    db.data.event_registrations ??= []
     db.data.user_onboarding_states ??= []
     db.data.user_memberships ??= []
 }

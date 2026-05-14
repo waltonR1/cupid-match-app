@@ -47,11 +47,6 @@ export const homeMessages: AppMessageSchema = {
         titleAccent: 'voir les profils',
         subtitle: 'Comprendre la structure des fiches avant de decider si un echange merite de continuer.',
         cta: 'Voir tous les profils',
-        fields: {
-            city: 'Ville',
-            education: 'Formation',
-            languages: 'Langues',
-        },
     },
     family: {
         eyebrow: 'Participation familiale',

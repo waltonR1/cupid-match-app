@@ -52,6 +52,18 @@ const debugItems = [
     path: '/pages/debug/private-introductions',
   },
   {
+    label: 'Events',
+    title: '活动状态调试',
+    description: '预览 guest / free / member 的活动详情、地址开放、申请和取消状态。',
+    path: '/pages/debug/events',
+  },
+  {
+    label: 'Event Review',
+    title: '活动申请审核',
+    description: '查看 mock 活动申请，并模拟平台确认席位、转入候补或拒绝。',
+    path: '/pages/debug/event-registrations',
+  },
+  {
     label: 'Access Preview',
     title: '访问层级预览',
     description: '预览 self / family detail 在 Backend、Guest、Free、Member 下的字段展示差异。',

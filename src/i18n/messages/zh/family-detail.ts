@@ -3,7 +3,6 @@ import type { AppMessageSchema } from '@/i18n/types'
 export const familyDetailMessages: AppMessageSchema = {
   hero: {
     eyebrow: '家庭协作档案',
-    accessNote: '本页用于家长先建立基本判断，再由平台控制节奏推进介绍。',
   },
   actions: {
     backToFamily: '返回家庭筛选',

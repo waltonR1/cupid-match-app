@@ -13,36 +13,68 @@ import type {
 /** 会员等级 */
 export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 
-/** 活动日程项 */
-export interface EventAgendaItem {
-    time: string
-    title: LocalizedText
-    desc: LocalizedText
-}
+/** 活动状态 */
+export type EventStatus = 'draft' | 'open' | 'waitlist' | 'closed' | 'completed'
+
+/** 活动可见性 */
+export type EventVisibility = 'public' | 'registered' | 'member'
+
+/** 活动精确地址可见性 */
+export type EventAddressVisibility = 'registered_only' | 'confirmed_attendee_only'
 
 /** 活动记录 */
 export interface EventRecord {
     id: string
-    date: string
+    slug: string
+    status: EventStatus
+    visibility: EventVisibility
+    title: LocalizedText
+    summary: LocalizedText
     city: LocalizedText
     venue: LocalizedText
-    status: string
-    title: LocalizedText
+    address?: LocalizedText
+    addressVisibility: EventAddressVisibility
+    date: string
+    startTime: string
+    endTime: string
     format: LocalizedText
     audience: LocalizedText
-    summary: LocalizedText
-    seats: number
-    registered: number
-    agenda: EventAgendaItem[]
+    relationshipFocus: LocalizedText[]
+    languageCodes: string[]
+    capacity: number
+    registeredCountCache?: number
+    waitlistCountCache?: number
+    advisorNote: LocalizedText
+    coverImageUrl: string
+    createdAt: string
+    updatedAt: string
 }
 
 /** 活动报名记录 */
-export interface UserRegistrationRecord {
+export interface EventAgendaItemRecord {
+    id: string
+    eventId: string
+    time: string
+    title: LocalizedText
+    desc: LocalizedText
+    sortOrder: number
+    createdAt: string
+    updatedAt: string
+}
+
+/** 活动报名记录 */
+export interface EventRegistrationRecord {
     id: string
     userId: string
     eventId: string
-    status: string
-    note: LocalizedText
+    status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
+    requestedAt: string
+    confirmedAt?: string
+    declinedAt?: string
+    cancelledAt?: string
+    note?: LocalizedText
+    createdAt: string
+    updatedAt: string
 }
 
 /** 收藏记录 */
@@ -138,7 +170,7 @@ export interface UserOnboardingStateRecord {
     updatedAt: string
 }
 
-/** 鐢ㄦ埛浼氬憳璁板綍 */
+/** 用户会员记录 */
 export interface UserMembershipRecord {
     id: string
     userId: string
@@ -173,12 +205,13 @@ export interface Database {
     profile_contact_methods: ProfileContactMethodRecord[]
     profile_visibility_settings: ProfileVisibilitySettingRecord[]
     events: EventRecord[]
+    event_agenda_items: EventAgendaItemRecord[]
+    event_registrations: EventRegistrationRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
     user_onboarding_states: UserOnboardingStateRecord[]
     user_memberships: UserMembershipRecord[]
     profile_ownerships: ProfileOwnershipRecord[]
-    user_registrations: UserRegistrationRecord[]
     favorite_profiles: FavoriteProfileRecord[]
     message_threads: MessageThreadRecord[]
     private_introduction_requests: PrivateIntroductionRequestRecord[]

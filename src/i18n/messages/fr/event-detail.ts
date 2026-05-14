@@ -1,49 +1,87 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const eventDetailMessages: AppMessageSchema = {
-    hero: {
-      eyebrow: 'Detail evenement',
+  hero: {
+    eyebrow: 'Detail evenement',
+  },
+  fields: {
+    status: 'Statut',
+    date: 'Date',
+    city: 'Ville',
+    venue: 'Lieu',
+    address: 'Adresse exacte',
+    format: 'Format',
+    audience: 'Public',
+    seats: 'Places',
+    focus: 'Theme relationnel',
+    languages: 'Langues',
+    advisorNote: 'Note conseil',
+  },
+  actions: {
+    register: 'Demander une place',
+    cancel: 'Annuler la demande',
+    loading: 'Traitement',
+    login: 'Se connecter',
+    membership: 'Voir les abonnements',
+    backToEvents: 'Retour aux evenements',
+  },
+  address: {
+    locked: 'L adresse exacte sera ouverte au bon moment.',
+    login_required: 'Connectez-vous pour voir l adresse exacte.',
+    registration_required: 'Demandez une place pour voir l adresse exacte.',
+    confirmation_required: 'L adresse exacte s ouvre apres confirmation.',
+  },
+  seats: {
+    remaining: '{count} places restantes',
+    waitlist: '{count} en attente',
+  },
+  registration: {
+    guest: {
+      title: 'Connexion requise',
+      desc: 'La participation demande un compte afin que la plateforme puisse verifier le profil et le rythme.',
     },
-    fields: {
-      status: 'Statut',
-      date: 'Date',
-      city: 'Ville',
-      venue: 'Lieu',
-      format: 'Format',
-      audience: 'Public',
-      seats: 'Places',
+    available: {
+      title: 'Demande possible',
+      desc: 'Apres la demande, une conseillere verifie les places, le dossier et la coherence avec le format.',
     },
-    actions: {
-      register: 'Envoyer une demande',
-      joinWaitlist: 'Rejoindre la liste d attente',
-      full: 'Complet',
-      registerHint: 'Apres la demande, une conseillere confirme selon les places et la coherence du dossier.',
-      waitlistHint: 'Le profil entre en attente et reste prioritaire si une place se libere ou si une nouvelle edition ouvre.',
-      fullHint: 'Cette edition est complete. Il vaut mieux revenir a la liste pour consulter une autre session.',
-      backToEvents: 'Retour aux evenements',
+    requested: {
+      title: 'Demande en attente',
+      desc: 'Votre demande est envoyee. Une conseillere confirmera la place et la coherence avant la suite.',
     },
-    sections: {
-      agenda: 'Deroule',
-      notes: 'Modalites inscription',
-      relatedProfiles: 'Profils lies',
-      relatedEmpty: 'Aucun profil lie n est disponible pour le moment.',
-      notFound: 'Aucune information evenement n a ete trouvee.',
+    confirmed: {
+      title: 'Place confirmee',
+      desc: 'Votre participation est confirmee. Des indications complementaires pourront suivre avant l evenement.',
     },
-    rules: {
-      step1: { title: 'Validation humaine apres demande', desc: 'La participation est confirmee par une conseillere selon les places et la coherence du profil.' },
-      step2: { title: 'La liste d attente reste suivie', desc: 'Si les places sont prises, les dossiers adaptes restent prioritaires en cas de desistement ou de nouvelle session.' },
-      step3: { title: 'Rappel avant l evenement', desc: 'Une fois la place confirmee, le participant recoit les indications de rythme, d arrivee et de preparation.' },
-      step4: { title: 'Un refus reste explicite', desc: 'Si le format ne correspond pas au bon moment, une autre session plus pertinente sera recommandee.' },
+    declined: {
+      title: 'Non confirme cette fois',
+      desc: 'La place n est pas confirmee pour cet evenement. La plateforme continuera a proposer des sessions plus adaptees.',
     },
-    relatedReason: {
-      sameCity: 'Meme ville',
-      priority: 'Profil prioritaire',
-      verified: 'Dossier solide',
-      curated: 'Bon format',
+    waitlist: {
+      title: 'En attente',
+      desc: 'Si une place se libere ou si une nouvelle session ouvre, les profils adaptes sont contactes en priorite.',
     },
-    status: {
-      open: 'Ouvert',
-      waitlist: 'Attente',
-      closed: 'Complet',
+    cancelled: {
+      title: 'Demande annulee',
+      desc: 'Vous pouvez refaire une demande, la plateforme reverra les places et la coherence du profil.',
     },
-  }
+    closed: {
+      title: 'Demandes fermees',
+      desc: 'Cet evenement ne prend plus de nouvelles demandes. Consultez une autre session.',
+    },
+    member_required: {
+      title: 'Reserve aux membres',
+      desc: 'Cet evenement est ouvert aux membres. Consultez les acces avant de demander une place.',
+    },
+  },
+  sections: {
+    agenda: 'Deroule',
+    notes: 'Notes evenement',
+    notFound: 'Aucune information evenement n est disponible.',
+  },
+  status: {
+    open: 'Ouvert',
+    waitlist: 'Attente',
+    closed: 'Ferme',
+    member: 'Membres',
+  },
+}

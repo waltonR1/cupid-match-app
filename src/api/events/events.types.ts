@@ -2,46 +2,102 @@ import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
 
-export type EventStatus = 'open' | 'waitlist' | 'closed'
-export type RelatedProfileStatus = 'open' | 'review' | 'vip'
+export type EventStatus = 'open' | 'waitlist' | 'closed' | 'completed'
+export type EventVisibility = 'public' | 'registered' | 'member'
+export type EventRegistrationStatus =
+  | 'guest'
+  | 'available'
+  | 'requested'
+  | 'confirmed'
+  | 'declined'
+  | 'waitlist'
+  | 'cancelled'
+  | 'closed'
+  | 'member_required'
 
-export interface EventAgendaItem {
-  time: string
-  title: string
-  desc: string
+export interface Pagination {
+  page: number
+  pageSize: number
+  total: number
+  totalPages: number
 }
 
-export interface Event {
+export interface EventDirectoryQuery {
+  page?: number
+  pageSize?: number
+  city?: string
+  status?: string
+  visibility?: EventVisibility
+  month?: string
+}
+
+export interface EventDirectoryItem {
   id: string
-  date: string
-  city: string
-  venue: string
+  slug: string
   status: EventStatus
   title: string
+  summary: string
+  city: string
+  venue: string
+  date: string
+  startTime: string
+  endTime: string
   format: string
   audience: string
-  summary: string
-  seats: number
-  registered: number
-  agenda: EventAgendaItem[]
+  relationshipFocus: string[]
+  capacity: number
+  registeredCount: number
+  waitlistCount: number
+  remainingSeats: number
+  memberOnly: boolean
+  coverImageUrl: string
 }
 
-export interface EventRelatedProfile {
-  id: string
-  displayName: string
-  age: number
-  city: string
-  datingIntentionLabel: string
-  summary: string
-  profileStatus: RelatedProfileStatus
-  isVerified: boolean
+export interface EventFacetOption {
+  value: string
+  label: string
+  count: number
+}
+
+export interface EventDirectoryFacets {
+  city: EventFacetOption[]
+  status: EventFacetOption[]
+  visibility: EventFacetOption[]
+  month: EventFacetOption[]
 }
 
 export interface EventsListResponse {
-  items: Event[]
+  items: EventDirectoryItem[]
+  pagination: Pagination
+  facets: EventDirectoryFacets
 }
 
-export interface EventDetailResponse {
-  event: Event
-  relatedProfiles: EventRelatedProfile[]
+export interface EventAgendaItem {
+  id: string
+  time: string
+  title: string
+  desc: string
+  sortOrder: number
+}
+
+export interface EventRegistrationState {
+  status: EventRegistrationStatus
+  registrationId?: string
+}
+
+export interface EventDetail extends EventDirectoryItem {
+  address?: string
+  addressVisible: boolean
+  addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
+  languageCodes: string[]
+  advisorNote: string
+  agendaItems: EventAgendaItem[]
+  registration: EventRegistrationState
+}
+
+export interface EventRegistrationResponse {
+  registration: EventRegistrationState
+  registeredCount: number
+  waitlistCount: number
+  remainingSeats: number
 }

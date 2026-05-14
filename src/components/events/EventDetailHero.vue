@@ -7,7 +7,7 @@
     </view>
 
     <view class="relative mx-auto max-w-[1280px] px-8 pb-20 pt-10 lg:pb-24 lg:pt-12">
-      <view class="grid gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
+      <view class="grid gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
         <view class="max-w-[700px]">
           <view class="mb-8 inline-flex items-center gap-4 rounded-full border border-semantic-border-hero bg-semantic-surface-hero-soft px-5 py-2 backdrop-blur">
             <view class="h-[1px] w-12 bg-semantic-border-eyebrow" />
@@ -23,6 +23,12 @@
           <view class="mt-8 max-w-[640px] text-[18px] leading-8 text-semantic-text-hero-body lg:text-[19px]">
             {{ event.summary }}
           </view>
+
+          <image
+            class="mt-10 h-[240px] w-full border border-semantic-border-hero object-cover shadow-panel lg:h-[300px]"
+            :src="event.coverImageUrl"
+            mode="aspectFill"
+          />
         </view>
 
         <view class="relative overflow-hidden border border-semantic-border-hero bg-semantic-surface-hero-panel px-8 py-8 shadow-hero backdrop-blur">
@@ -43,22 +49,26 @@
               <view class="text-[15px] uppercase tracking-[2.5px] text-semantic-text-hero-label">
                 {{ item.label }}
               </view>
-              <view class="mt-3 text-[19px] leading-9 text-semantic-text-hero-body">
+              <view
+                class="mt-3 text-[19px] leading-9"
+                :class="item.locked ? 'border border-dashed border-semantic-border-hero bg-semantic-surface-hero-soft px-4 py-3 text-semantic-text-inverse-muted' : 'text-semantic-text-hero-body'"
+              >
                 {{ item.value }}
               </view>
             </view>
           </view>
 
           <view
+            v-if="registration.action"
             class="inline-flex items-center justify-center mt-8 w-full px-6 py-4 text-[16px] font-medium transition-all duration-200"
             :class="[buttonClassName, isDisabled ? 'cursor-not-allowed' : 'cursor-pointer']"
             @click="handleActionClick"
           >
-            {{ action.text }}
+            {{ registration.action.label }}
           </view>
 
           <view class="mt-4 text-[15px] leading-8 text-semantic-text-inverse-muted">
-            {{ action.hint }}
+            {{ registration.description }}
           </view>
         </view>
       </view>
@@ -68,51 +78,63 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { EventDetailFieldLabels, EventOverviewItem } from '@/types/events/view'
+import type { EventFieldLabels } from '@/types/events/card'
+import type { EventDetailHeroViewModel, EventRegistrationViewModel } from '@/types/events/detail'
 import EventStatusBadge from './EventStatusBadge.vue'
-
-interface EventDetailAction {
-  text: string
-  hint: string
-  disabled: boolean
-}
 
 const props = defineProps<{
   eyebrow: string
-  fields: EventDetailFieldLabels
-  event: EventOverviewItem
-  action: EventDetailAction
+  fields: EventFieldLabels
+  event: EventDetailHeroViewModel
+  registration: EventRegistrationViewModel
 }>()
 
 const emit = defineEmits<{
-  (e: 'register'): void
+  (e: 'action', key: string): void
 }>()
 
 const detailItems = computed(() => [
   { label: props.fields.date, value: props.event.date, full: false },
+  { label: props.fields.seats, value: props.event.remainingSeatsText, full: false },
   { label: props.fields.city, value: props.event.city, full: false },
   { label: props.fields.venue, value: props.event.venue, full: false },
+  {
+    label: props.fields.address,
+    value: props.event.addressText ?? props.event.addressLockHint ?? '',
+    full: true,
+    locked: props.event.addressLocked,
+  },
   { label: props.fields.format, value: props.event.format, full: false },
+  { label: props.fields.languages, value: props.event.languageText, full: false },
   { label: props.fields.audience, value: props.event.audience, full: true },
-  { label: props.fields.seats, value: props.event.seats, full: false },
 ])
 
-const isDisabled = computed(() => props.action.disabled)
+const isDisabled = computed(() => props.registration.action?.disabled !== false)
 
 const buttonClassName = computed(() => {
-  if (props.event.status === 'waitlist') {
+  const key = props.registration.action?.key
+
+  if (props.registration.action?.disabled) {
+    return 'border border-semantic-action-disabled-border bg-semantic-action-disabled text-semantic-action-disabled-contrast'
+  }
+
+  if (key === 'cancel') {
+    return 'border border-semantic-border-hero bg-semantic-surface-hero-soft text-semantic-text-hero-body hover:-translate-y-[1px] hover:border-component-hero-secondary-action-emphasis hover:bg-component-hero-secondary-action-background-hover hover:text-component-hero-secondary-action-emphasis hover:shadow-panel'
+  }
+
+  if (key === 'membership') {
     return 'border border-semantic-action-waitlist bg-semantic-action-waitlist text-semantic-action-waitlist-contrast hover:-translate-y-[1px] hover:border-semantic-action-waitlist-hover hover:bg-semantic-action-waitlist-hover hover:shadow-panel'
   }
 
-  if (props.event.status === 'closed') {
-    return 'border border-semantic-action-disabled-border bg-semantic-action-disabled text-semantic-action-disabled-contrast'
+  if (key === 'login') {
+    return 'border border-component-hero-secondary-action-border bg-component-hero-secondary-action-background text-semantic-text-secondary hover:-translate-y-[1px] hover:border-component-hero-secondary-action-emphasis hover:bg-component-hero-secondary-action-background-hover hover:text-component-hero-secondary-action-emphasis hover:shadow-panel'
   }
 
   return 'border border-semantic-action-primary bg-semantic-action-primary text-semantic-action-primary-contrast hover:-translate-y-[1px] hover:border-semantic-action-primary-hover hover:bg-semantic-action-primary-hover hover:shadow-panel'
 })
 
 function handleActionClick() {
-  if (props.action.disabled) return
-  emit('register')
+  if (!props.registration.action || props.registration.action.disabled) return
+  emit('action', props.registration.action.key)
 }
 </script>

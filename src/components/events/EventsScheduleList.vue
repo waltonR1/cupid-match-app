@@ -28,6 +28,7 @@
 
           <view>
             <view class="text-[12px] uppercase tracking-[4px] text-semantic-text-card-label">{{ event.date }}</view>
+            <view class="mt-2 text-[14px] text-semantic-text-subtle">{{ event.time }}</view>
             <view class="mt-3 text-[16px] text-semantic-text-subtle">{{ event.city }}</view>
           </view>
 
@@ -38,7 +39,8 @@
 
           <view class="flex flex-col items-start gap-3 md:items-end">
             <EventStatusBadge :status="event.status" :label="event.statusLabel" />
-            <view class="text-[14px] text-semantic-text-subtle">{{ event.seats }}</view>
+            <view class="text-[14px] text-semantic-text-subtle">{{ event.remainingSeatsText }}</view>
+            <view v-if="event.waitlistText" class="text-[13px] text-semantic-text-subtle">{{ event.waitlistText }}</view>
           </view>
         </view>
       </view>
@@ -48,7 +50,7 @@
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventOverviewItem } from '@/types/events/view'
+import type { EventOverviewItem } from '@/types/events/card'
 
 defineProps<{
   eyebrow: string

@@ -1,12 +1,12 @@
 <template>
   <AppPageLayout>
-    <view v-if="pageData.eventCard" class="pb-20">
+    <view v-if="pageData.hero && pageData.registration" class="pb-20">
       <EventDetailHero
         :eyebrow="t('hero.eyebrow')"
-        :fields="pageData.detailFieldLabels"
-        :event="pageData.eventCard"
-        :action="pageData.eventAction"
-        @register="openRegisterPage"
+        :fields="pageData.fieldLabels"
+        :event="pageData.hero"
+        :registration="pageData.registration"
+        @action="handleRegistrationAction"
       />
 
       <view class="mx-auto max-w-[1280px] px-8 py-24">
@@ -14,7 +14,7 @@
             <EventDetailAgenda
               :eyebrow="t('sections.agenda')"
               :title="t('sections.agenda')"
-              :items="pageData.agenda"
+              :items="pageData.agendaItems"
             />
 
           <view class="grid gap-6">
@@ -22,14 +22,6 @@
               :eyebrow="t('sections.notes')"
               :title="t('sections.notes')"
               :items="pageData.noteItems"
-            />
-
-            <EventDetailRelatedProfiles
-              :eyebrow="t('sections.relatedProfiles')"
-              :title="t('sections.relatedProfiles')"
-              :empty-text="t('sections.relatedEmpty')"
-              :profiles="pageData.relatedProfileItems"
-              @open="openSelfDetail"
             />
           </view>
         </view>
@@ -54,18 +46,36 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import EventDetailAgenda from '@/components/events/EventDetailAgenda.vue'
 import EventDetailHero from '@/components/events/EventDetailHero.vue'
 import EventDetailNotes from '@/components/events/EventDetailNotes.vue'
-import EventDetailRelatedProfiles from '@/components/events/EventDetailRelatedProfiles.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useEventDetail } from '@/hooks/events'
-import { openEventsPage, openRegisterPage, openSelfDetail } from '@/utils/navigation'
+import { openEventsPage, openLoginPage, openMembershipPage } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('eventDetail')
 const eventId = ref('')
-const { pageData } = useEventDetail(eventId, t, locale)
+const { pageData, register, cancelRegistration } = useEventDetail(eventId, t, locale)
 
 onLoad((query) => {
   if (query && typeof query.id === 'string') {
     eventId.value = query.id
   }
 })
+
+function handleRegistrationAction(key: string) {
+  switch (key) {
+    case 'login':
+      openLoginPage()
+      return
+    case 'membership':
+      openMembershipPage()
+      return
+    case 'cancel':
+      void cancelRegistration()
+      return
+    case 'register':
+      void register()
+      return
+    default:
+      return
+  }
+}
 </script>

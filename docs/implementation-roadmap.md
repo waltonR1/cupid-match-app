@@ -817,9 +817,10 @@ interface EventRegistrationRecord {
   id: string
   userId: string
   eventId: string
-  status: 'confirmed' | 'waitlist' | 'cancelled' | 'attended'
+  status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
   requestedAt: string
   confirmedAt?: string
+  declinedAt?: string
   cancelledAt?: string
   note?: LocalizedText
   createdAt: string
@@ -939,7 +940,7 @@ event detail：
 - `events` 不嵌套 `agenda`，活动流程来自 `event_agenda_items`。
 - 活动报名写入 `event_registrations`，不继续使用 `user_registrations`。
 - event detail 能根据登录状态返回报名状态。
-- 已登录用户可以报名或进入 waitlist。
+- 已登录用户先提交活动申请，写入 `requested`；平台确认后再进入 `confirmed` 或 `waitlist`，不合适则进入 `declined`。
 - Phase 5 重写 account 后可读取用户报名记录。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。

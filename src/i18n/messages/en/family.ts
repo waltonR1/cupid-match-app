@@ -12,12 +12,6 @@ export const familyMessages: AppMessageSchema = {
       },
     },
 
-    stats: {
-      visibleProfiles: 'Visible dossiers',
-      priorityProfiles: 'Priority review',
-      contactReady: 'Contact-ready',
-    },
-
     toolbar: {
       sortLabel: 'Sort',
     },
@@ -54,7 +48,6 @@ export const familyMessages: AppMessageSchema = {
       modeContextOnly: 'Context only',
       modeContactReady: 'Contact-ready',
       modePriority: 'Priority review',
-      occupation: 'Occupation',
       industry: 'Industry',
       maritalStatus: 'Marital status',
       maritalSingle: 'Single',
@@ -79,7 +72,6 @@ export const familyMessages: AppMessageSchema = {
       city: 'City',
       education: 'Education',
       residencePlan: 'Residence plan',
-      job: 'Occupation',
     },
 
     modes: {
@@ -95,7 +87,6 @@ export const familyMessages: AppMessageSchema = {
       childrenYes: 'Has children',
       childrenNo: 'No children',
       longDistanceYes: 'Open to long-distance',
-      longDistanceNo: 'Prefers same city',
     },
 
     card: {

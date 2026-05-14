@@ -12,12 +12,6 @@ export const familyMessages: AppMessageSchema = {
       },
     },
 
-    stats: {
-      visibleProfiles: '授权资料',
-      priorityProfiles: '优先评估',
-      contactReady: '可辅助沟通',
-    },
-
     toolbar: {
       sortLabel: '排序',
     },
@@ -54,7 +48,6 @@ export const familyMessages: AppMessageSchema = {
       modeContextOnly: '仅背景可见',
       modeContactReady: '可辅助沟通',
       modePriority: '优先家长评估',
-      occupation: '职业',
       industry: '行业',
       maritalStatus: '婚姻状态',
       maritalSingle: '未婚',
@@ -79,7 +72,6 @@ export const familyMessages: AppMessageSchema = {
       city: '城市',
       education: '学历',
       residencePlan: '定居计划',
-      job: '职业',
     },
 
     modes: {
@@ -95,7 +87,6 @@ export const familyMessages: AppMessageSchema = {
       childrenYes: '有孩子',
       childrenNo: '无孩子',
       longDistanceYes: '接受异地',
-      longDistanceNo: '更偏同城',
     },
 
     card: {

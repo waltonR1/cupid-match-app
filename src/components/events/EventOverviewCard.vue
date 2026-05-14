@@ -26,14 +26,15 @@
     </view>
 
     <view class="mt-6 border-t border-semantic-border-soft pt-5 text-[14px] text-semantic-text-subtle">
-      {{ fields.seats }} {{ event.seats }}
+      {{ event.remainingSeatsText }}
+      <text v-if="event.waitlistText"> / {{ event.waitlistText }}</text>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import EventStatusBadge from './EventStatusBadge.vue'
-import type { EventFieldLabels, EventOverviewItem } from '@/types/events/view'
+import type { EventFieldLabels, EventOverviewItem } from '@/types/events/card'
 
 defineProps<{
   event: EventOverviewItem

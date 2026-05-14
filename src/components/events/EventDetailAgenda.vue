@@ -12,7 +12,7 @@
         <view class="text-[13px] uppercase tracking-[4px] text-semantic-text-card-label">{{ item.time }}</view>
         <view>
           <view class="text-[22px] font-medium text-semantic-text-primary">{{ item.title }}</view>
-          <view class="mt-2 text-[15px] leading-7 text-semantic-text-muted">{{ item.desc }}</view>
+          <view class="mt-2 text-[15px] leading-7 text-semantic-text-muted">{{ item.description }}</view>
         </view>
       </view>
     </view>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { EventAgendaItem } from '@/types/events/view'
+import type { EventAgendaItem } from '@/types/events/detail'
 
 defineProps<{
   eyebrow: string

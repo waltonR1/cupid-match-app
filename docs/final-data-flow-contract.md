@@ -672,6 +672,7 @@ DTO fields:
 interface EventDirectoryItemDTO {
   id: string
   slug: string
+  status: 'open' | 'waitlist' | 'closed' | 'completed'
   title: string
   summary: string
   city: string
@@ -696,6 +697,7 @@ Rules:
 - `event_registrations` is source of truth for registered/waitlist counts.
 - `registeredCountCache` and `waitlistCountCache` may be used only as rebuildable cache.
 - Directory DTO can expose counts, but EventRecord counts are not authoritative.
+- Directory card status is derived from `events.status`, not from remaining seats.
 - `memberOnly` in DTO is derived from `events.visibility === 'member'`; do not persist a second boolean source of truth on EventRecord.
 - Directory DTO exposes `venue` only; exact `address` is detail-only and requires backend viewer checks.
 - No nested `agenda` in event directory records.
@@ -760,7 +762,12 @@ Registration flow:
 POST /api/events/:id/register
 -> viewer context
 -> event capacity and membership check
--> create/update event_registrations
+-> create/update event_registrations.status = requested
+-> return EventRegistrationStateDTO + derived counts
+
+Event review / admin action
+-> advisor context
+-> update event_registrations.status = confirmed / waitlist / declined
 -> return EventRegistrationStateDTO + derived counts
 
 POST /api/events/:id/cancel

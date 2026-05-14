@@ -47,11 +47,6 @@ export const homeMessages: AppMessageSchema = {
         titleAccent: 'Read the Profile',
         subtitle: 'Understand the structure first, then decide whether a connection deserves to move forward.',
         cta: 'View All Profiles',
-        fields: {
-            city: 'City',
-            education: 'Education',
-            languages: 'Languages',
-        },
     },
     family: {
         eyebrow: 'Family Participation',

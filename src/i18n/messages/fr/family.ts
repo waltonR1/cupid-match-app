@@ -12,12 +12,6 @@ export const familyMessages: AppMessageSchema = {
       },
     },
 
-    stats: {
-      visibleProfiles: 'Dossiers visibles',
-      priorityProfiles: 'Priorite famille',
-      contactReady: 'Pret pour echange',
-    },
-
     toolbar: {
       sortLabel: 'Tri',
     },
@@ -54,7 +48,6 @@ export const familyMessages: AppMessageSchema = {
       modeContextOnly: 'Contexte seulement',
       modeContactReady: 'Pret pour echange famille',
       modePriority: 'Priorite famille',
-      occupation: 'Metier',
       industry: 'Secteur',
       maritalStatus: 'Statut marital',
       maritalSingle: 'Celibataire',
@@ -79,7 +72,6 @@ export const familyMessages: AppMessageSchema = {
       city: 'Ville',
       education: 'Formation',
       residencePlan: 'Projet de vie',
-      job: 'Metier',
     },
 
     modes: {
@@ -95,7 +87,6 @@ export const familyMessages: AppMessageSchema = {
       childrenYes: 'Avec enfants',
       childrenNo: 'Sans enfant',
       longDistanceYes: 'Ouvert a distance',
-      longDistanceNo: 'Plutot meme ville',
     },
 
     card: {

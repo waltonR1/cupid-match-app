@@ -628,6 +628,7 @@ interface EventDirectoryResponseDTO {
 interface EventDirectoryItemDTO {
   id: string
   slug: string
+  status: 'open' | 'waitlist' | 'closed' | 'completed'
   title: string
   summary: string
   city: string
@@ -684,7 +685,7 @@ interface EventAgendaItemDTO {
 }
 
 interface EventRegistrationStateDTO {
-  status: 'guest' | 'available' | 'confirmed' | 'waitlist' | 'cancelled' | 'closed' | 'member_required'
+  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'closed' | 'member_required'
   registrationId?: string
 }
 ```
@@ -810,7 +811,7 @@ interface AccountEventRegistrationDTO {
   date: string
   startTime: string
   endTime: string
-  status: 'confirmed' | 'waitlist' | 'cancelled' | 'attended'
+  status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 }
 
 interface AccountIntroductionSummaryDTO {

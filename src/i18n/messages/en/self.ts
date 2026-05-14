@@ -72,7 +72,6 @@ export const selfMessages: AppMessageSchema = {
     fields: {
       city: 'City',
       education: 'Education',
-      job: 'Occupation',
       languages: 'Languages',
     },
 

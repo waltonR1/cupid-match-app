@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import EventOverviewCard from '@/components/events/EventOverviewCard.vue'
-import type {HomeEventsViewModel} from '@/types/home/view'
+import type {EventPreviewSectionViewModel} from '@/types/events/card'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openEventDetail, openEventsPage} from '@/utils/navigation'
 
@@ -61,7 +61,7 @@ defineOptions({
 
 /** 首页活动预览数据 */
 const props = defineProps<{
-  viewModel: HomeEventsViewModel
+  viewModel: EventPreviewSectionViewModel
 }>()
 
 /** 首页命名空间文案 */

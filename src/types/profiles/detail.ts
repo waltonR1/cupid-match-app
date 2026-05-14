@@ -101,7 +101,7 @@ export interface FamilyIntroductionSectionData {
     facts: ProfileDetailFactItem[]
 }
 
-/** 瀹跺涵璇︽儏椤靛睍绀烘暟鎹?*/
+/** 家庭详情页展示数据 */
 export interface FamilyProfileDetailPageData {
     accessLevel: FamilyProfileDetailAccessLevel
     heroData: ProfileDetailGalleryHeroData | null

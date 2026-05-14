@@ -307,6 +307,7 @@ interface EventCardViewModel {
   remainingSeatsText: string
   waitlistText?: string
   memberOnly: boolean
+  status: 'open' | 'waitlist' | 'closed' | 'completed' | 'member'
   statusBadge: string
 }
 
@@ -322,7 +323,6 @@ interface EventDetailPageData {
   facts: DisplayFieldViewModel[]
   agendaItems: EventAgendaItemViewModel[]
   registration: EventRegistrationViewModel
-  relatedProfiles: ProfileCardViewModel[]
 }
 
 interface EventDetailHeroViewModel {
@@ -350,7 +350,7 @@ interface EventAgendaItemViewModel {
 }
 
 interface EventRegistrationViewModel {
-  status: 'guest' | 'available' | 'confirmed' | 'waitlist' | 'cancelled' | 'closed' | 'member_required'
+  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'closed' | 'member_required'
   title: string
   description: string
   action?: PageActionViewModel
@@ -505,7 +505,7 @@ interface AccountEventRegistrationViewModel {
   addressText?: string
   dateText: string
   timeText: string
-  status: 'confirmed' | 'waitlist' | 'cancelled' | 'attended'
+  status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
   action?: PageActionViewModel
 }
 ```

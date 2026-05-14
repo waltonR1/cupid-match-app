@@ -967,7 +967,19 @@
   "events": [
     {
       "id": "e-001",
-      "date": "2026-05-12",
+      "slug": "event-001",
+      "status": "open",
+      "visibility": "registered",
+      "title": {
+        "zh": "春季双语沙龙",
+        "fr": "Salon bilingue du printemps",
+        "en": "Spring bilingual salon"
+      },
+      "summary": {
+        "zh": "围绕跨文化关系、工作节奏和城市生活展开小组交流。",
+        "fr": "Echanges en petits groupes autour des relations interculturelles et du rythme de vie.",
+        "en": "Small-group conversations around intercultural dating and lifestyle pace."
+      },
       "city": {
         "zh": "巴黎",
         "fr": "Paris",
@@ -978,12 +990,15 @@
         "fr": "Salon prive rive gauche",
         "en": "Left Bank private salon"
       },
-      "status": "open",
-      "title": {
-        "zh": "春季双语沙龙",
-        "fr": "Salon bilingue du printemps",
-        "en": "Spring bilingual salon"
+      "address": {
+        "zh": "巴黎第六区圣日耳曼大道 128 号",
+        "fr": "128 boulevard Saint-Germain, 75006 Paris",
+        "en": "128 Boulevard Saint-Germain, 75006 Paris"
       },
+      "addressVisibility": "registered_only",
+      "date": "2026-05-12",
+      "startTime": "18:30",
+      "endTime": "21:00",
       "format": {
         "zh": "12人主题沙龙",
         "fr": "Salon thematique, 12 personnes",
@@ -994,45 +1009,50 @@
         "fr": "Pour 27-35 ans avec intention relationnelle stable",
         "en": "For members aged 27-35 seeking stable development"
       },
-      "summary": {
-        "zh": "围绕跨文化关系、工作节奏和城市生活展开小组交流。",
-        "fr": "Echanges en petits groupes autour des relations interculturelles et du rythme de vie.",
-        "en": "Small-group conversations around intercultural dating and lifestyle pace."
-      },
-      "seats": 12,
-      "registered": 8,
-      "agenda": [
+      "relationshipFocus": [
         {
-          "time": "18:30 - 19:00",
-          "title": {
-            "zh": "签到与顾问说明",
-            "fr": "Accueil et cadrage conseiller",
-            "en": "Check-in and advisor framing"
-          },
-          "desc": {
-            "zh": "确认到场信息并说明当晚节奏。",
-            "fr": "Verification des arrivees et du rythme de la soiree.",
-            "en": "Arrival verification and evening pacing overview."
-          }
+          "zh": "跨文化关系",
+          "fr": "Relations interculturelles",
+          "en": "Intercultural relationship"
         },
         {
-          "time": "19:00 - 19:45",
-          "title": {
-            "zh": "主题小组交流",
-            "fr": "Echanges thematiques",
-            "en": "Themed small-group exchange"
-          },
-          "desc": {
-            "zh": "围绕关系、工作和城市生活展开交流。",
-            "fr": "Echanges autour des relations, du travail et de la vie urbaine.",
-            "en": "Conversation around relationships, work, and city life."
-          }
+          "zh": "稳定发展",
+          "fr": "Relation stable",
+          "en": "Stable development"
         }
-      ]
+      ],
+      "languageCodes": [
+        "zh",
+        "fr",
+        "en"
+      ],
+      "capacity": 12,
+      "registeredCountCache": 1,
+      "waitlistCountCache": 0,
+      "advisorNote": {
+        "zh": "顾问会在报名后确认资料完整度与参与节奏。",
+        "fr": "Une conseillere confirme le dossier et le rythme apres la demande.",
+        "en": "An advisor reviews profile readiness and pacing after submission."
+      },
+      "coverImageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
     },
     {
       "id": "e-002",
-      "date": "2026-05-20",
+      "slug": "event-002",
+      "status": "waitlist",
+      "visibility": "member",
+      "title": {
+        "zh": "左岸晚餐局",
+        "fr": "Diner rive gauche",
+        "en": "Left Bank dinner gathering"
+      },
+      "summary": {
+        "zh": "适合把线上兴趣转化为线下确认。",
+        "fr": "Format intime pour valider une affinite observee en ligne.",
+        "en": "An intimate format to validate affinity first seen online."
+      },
       "city": {
         "zh": "巴黎",
         "fr": "Paris",
@@ -1043,12 +1063,15 @@
         "fr": "Table privee au Marais",
         "en": "Private dinner in Le Marais"
       },
-      "status": "waitlist",
-      "title": {
-        "zh": "左岸晚餐局",
-        "fr": "Diner rive gauche",
-        "en": "Left Bank dinner gathering"
+      "address": {
+        "zh": "巴黎玛黑区维埃耶杜唐普勒街 42 号",
+        "fr": "42 rue Vieille-du-Temple, 75004 Paris",
+        "en": "42 Rue Vieille-du-Temple, 75004 Paris"
       },
+      "addressVisibility": "confirmed_attendee_only",
+      "date": "2026-05-20",
+      "startTime": "19:00",
+      "endTime": "22:00",
       "format": {
         "zh": "8人精选晚餐",
         "fr": "Diner selectif, 8 personnes",
@@ -1059,32 +1082,50 @@
         "fr": "Principalement membres verifies",
         "en": "Mainly for profile-verified members"
       },
-      "summary": {
-        "zh": "适合把线上兴趣转化为线下确认。",
-        "fr": "Format intime pour valider une affinite observee en ligne.",
-        "en": "An intimate format to validate affinity first seen online."
-      },
-      "seats": 8,
-      "registered": 8,
-      "agenda": [
+      "relationshipFocus": [
         {
-          "time": "19:00 - 19:30",
-          "title": {
-            "zh": "入场与座位安排",
-            "fr": "Accueil et placement",
-            "en": "Arrival and seating"
-          },
-          "desc": {
-            "zh": "顾问说明晚餐节奏与边界。",
-            "fr": "Rappel du cadre et du rythme du diner.",
-            "en": "Advisor briefing on boundaries and dinner pacing."
-          }
+          "zh": "线下确认",
+          "fr": "Validation hors ligne",
+          "en": "Offline confirmation"
+        },
+        {
+          "zh": "高质量晚餐局",
+          "fr": "Diner selectif",
+          "en": "Curated dinner"
         }
-      ]
+      ],
+      "languageCodes": [
+        "zh",
+        "fr",
+        "en"
+      ],
+      "capacity": 8,
+      "registeredCountCache": 8,
+      "waitlistCountCache": 1,
+      "advisorNote": {
+        "zh": "本场优先邀请已完成资料审核并适合晚餐节奏的会员。",
+        "fr": "Priorite aux membres verifies et adaptes au format diner.",
+        "en": "Priority is given to verified members suited to the dinner format."
+      },
+      "coverImageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
     },
     {
       "id": "e-003",
-      "date": "2026-05-28",
+      "slug": "event-003",
+      "status": "open",
+      "visibility": "registered",
+      "title": {
+        "zh": "文化散步与咖啡交流",
+        "fr": "Parcours culturel et cafe",
+        "en": "Culture walk and coffee exchange"
+      },
+      "summary": {
+        "zh": "以更轻松的方式开启第一次真实见面。",
+        "fr": "Un format leger pour transformer le premier contact en rencontre reelle.",
+        "en": "A lighter format for turning first contact into a real meeting."
+      },
       "city": {
         "zh": "布鲁塞尔",
         "fr": "Bruxelles",
@@ -1095,12 +1136,15 @@
         "fr": "Espace culturel du quartier europeen",
         "en": "European Quarter cultural venue"
       },
-      "status": "open",
-      "title": {
-        "zh": "文化散步与咖啡交流",
-        "fr": "Parcours culturel et cafe",
-        "en": "Culture walk and coffee exchange"
+      "address": {
+        "zh": "布鲁塞尔欧洲区舒曼广场 6 号",
+        "fr": "6 rond-point Schuman, 1040 Bruxelles",
+        "en": "6 Schuman Roundabout, 1040 Brussels"
       },
+      "addressVisibility": "registered_only",
+      "date": "2026-05-28",
+      "startTime": "14:30",
+      "endTime": "17:00",
       "format": {
         "zh": "城市散步 + 交流",
         "fr": "Balade urbaine + echanges",
@@ -1111,28 +1155,33 @@
         "fr": "Ideal pour une premiere participation",
         "en": "Good for first-time participants"
       },
-      "summary": {
-        "zh": "以更轻松的方式开启第一次真实见面。",
-        "fr": "Un format leger pour transformer le premier contact en rencontre reelle.",
-        "en": "A lighter format for turning first contact into a real meeting."
-      },
-      "seats": 16,
-      "registered": 11,
-      "agenda": [
+      "relationshipFocus": [
         {
-          "time": "14:30 - 15:00",
-          "title": {
-            "zh": "集合与路线说明",
-            "fr": "Rassemblement et briefing",
-            "en": "Meet-up and route briefing"
-          },
-          "desc": {
-            "zh": "顾问说明路线和交流节奏。",
-            "fr": "Rappel du parcours et du rythme d echange.",
-            "en": "Overview of the route and interaction rhythm."
-          }
+          "zh": "首次见面",
+          "fr": "Premiere rencontre",
+          "en": "First meeting"
+        },
+        {
+          "zh": "轻量交流",
+          "fr": "Echange leger",
+          "en": "Light conversation"
         }
-      ]
+      ],
+      "languageCodes": [
+        "fr",
+        "en"
+      ],
+      "capacity": 16,
+      "registeredCountCache": 11,
+      "waitlistCountCache": 0,
+      "advisorNote": {
+        "zh": "适合第一次参加平台活动的会员，顾问会协助控制交流边界。",
+        "fr": "Format adapte a une premiere participation, avec cadrage conseiller.",
+        "en": "Good for first participation, with advisor-guided boundaries."
+      },
+      "coverImageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
     }
   ],
   "users": [
@@ -1168,30 +1217,6 @@
       "relationshipToProfile": "self",
       "createdAt": "2026-01-01T00:00:00.000Z",
       "updatedAt": "2026-01-01T00:00:00.000Z"
-    }
-  ],
-  "user_registrations": [
-    {
-      "id": "r-001",
-      "userId": "u-001",
-      "eventId": "e-001",
-      "status": "confirmed",
-      "note": {
-        "zh": "已确认席位，可在活动前查看详情与注意事项。",
-        "fr": "Place confirmee avec acces au detail avant la date.",
-        "en": "Seat confirmed with access to event detail before the date."
-      }
-    },
-    {
-      "id": "r-002",
-      "userId": "u-001",
-      "eventId": "e-002",
-      "status": "waitlist",
-      "note": {
-        "zh": "当前处于候补序列。",
-        "fr": "Actuellement en liste d attente.",
-        "en": "Currently on the waitlist."
-      }
     }
   ],
   "favorite_profiles": [
@@ -2072,6 +2097,135 @@
       "startedAt": "2026-01-18",
       "createdAt": "2026-01-18",
       "updatedAt": "2026-01-18"
+    }
+  ],
+  "event_agenda_items": [
+    {
+      "id": "agenda-e-001-1",
+      "eventId": "e-001",
+      "time": "18:30 - 19:00",
+      "title": {
+        "zh": "签到与顾问说明",
+        "fr": "Accueil et cadrage conseiller",
+        "en": "Check-in and advisor framing"
+      },
+      "desc": {
+        "zh": "确认到场信息并说明当晚节奏。",
+        "fr": "Verification des arrivees et du rythme de la soiree.",
+        "en": "Arrival verification and evening pacing overview."
+      },
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
+    },
+    {
+      "id": "agenda-e-001-2",
+      "eventId": "e-001",
+      "time": "19:00 - 19:45",
+      "title": {
+        "zh": "主题小组交流",
+        "fr": "Echanges thematiques",
+        "en": "Themed small-group exchange"
+      },
+      "desc": {
+        "zh": "围绕关系、工作和城市生活展开交流。",
+        "fr": "Echanges autour des relations, du travail et de la vie urbaine.",
+        "en": "Conversation around relationships, work, and city life."
+      },
+      "sortOrder": 2,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
+    },
+    {
+      "id": "agenda-e-002-1",
+      "eventId": "e-002",
+      "time": "19:00 - 19:30",
+      "title": {
+        "zh": "入场与座位安排",
+        "fr": "Accueil et placement",
+        "en": "Arrival and seating"
+      },
+      "desc": {
+        "zh": "顾问说明晚餐节奏与边界。",
+        "fr": "Rappel du cadre et du rythme du diner.",
+        "en": "Advisor briefing on boundaries and dinner pacing."
+      },
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
+    },
+    {
+      "id": "agenda-e-003-1",
+      "eventId": "e-003",
+      "time": "14:30 - 15:00",
+      "title": {
+        "zh": "集合与路线说明",
+        "fr": "Rassemblement et briefing",
+        "en": "Meet-up and route briefing"
+      },
+      "desc": {
+        "zh": "顾问说明路线和交流节奏。",
+        "fr": "Rappel du parcours et du rythme d echange.",
+        "en": "Overview of the route and interaction rhythm."
+      },
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z"
+    }
+  ],
+  "event_registrations": [
+    {
+      "id": "er-001",
+      "userId": "u-001",
+      "eventId": "e-001",
+      "status": "cancelled",
+      "requestedAt": "2026-05-01T09:00:00Z",
+      "confirmedAt": "2026-05-14T01:01:44.771Z",
+      "note": {
+        "zh": "已确认席位，可在活动前查看详情与注意事项。",
+        "fr": "Place confirmee avec acces au detail avant la date.",
+        "en": "Seat confirmed with access to event detail before the date."
+      },
+      "createdAt": "2026-05-01T09:00:00Z",
+      "updatedAt": "2026-05-14T01:01:46.899Z",
+      "cancelledAt": "2026-05-14T01:01:46.899Z"
+    },
+    {
+      "id": "er-002",
+      "userId": "u-001",
+      "eventId": "e-002",
+      "status": "cancelled",
+      "requestedAt": "2026-05-01T09:00:00Z",
+      "note": {
+        "zh": "当前处于候补序列。",
+        "fr": "Actuellement en liste d attente.",
+        "en": "Currently on the waitlist."
+      },
+      "createdAt": "2026-05-01T09:00:00Z",
+      "updatedAt": "2026-05-14T00:37:05.072Z",
+      "cancelledAt": "2026-05-14T00:37:05.072Z"
+    },
+    {
+      "id": "er-003",
+      "userId": "u-001",
+      "eventId": "e-003",
+      "status": "cancelled",
+      "requestedAt": "2026-05-14T00:37:19.703Z",
+      "createdAt": "2026-05-14T00:37:19.703Z",
+      "updatedAt": "2026-05-14T00:37:26.248Z",
+      "confirmedAt": "2026-05-14T00:37:25.560Z",
+      "cancelledAt": "2026-05-14T00:37:26.248Z"
+    },
+    {
+      "id": "er-004",
+      "userId": "u-debug-free",
+      "eventId": "e-001",
+      "status": "cancelled",
+      "requestedAt": "2026-05-14T10:19:39.027Z",
+      "createdAt": "2026-05-14T10:19:39.027Z",
+      "updatedAt": "2026-05-14T10:19:40.139Z",
+      "confirmedAt": "2026-05-14T10:19:39.027Z",
+      "cancelledAt": "2026-05-14T10:19:40.139Z"
     }
   ]
 }

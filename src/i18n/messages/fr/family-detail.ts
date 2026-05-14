@@ -3,7 +3,6 @@ import type { AppMessageSchema } from '@/i18n/types'
 export const familyDetailMessages: AppMessageSchema = {
   hero: {
     eyebrow: 'Dossier de coordination familiale',
-    accessNote: 'Cette page aide les familles a former un premier jugement avant toute mise en relation guidee par la plateforme.',
   },
   actions: {
     backToFamily: 'Retour a la recherche famille',

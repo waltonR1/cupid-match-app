@@ -13,4 +13,4 @@ export type AppLocaleMessages = Record<AppLocale, AppMessageSchema>
 export type AppMessages = Record<AppLocale, Record<string, AppMessageSchema>>
 
 /** i18n 翻译函数类型 */
-export type Translate = (key: string) => string
+export type Translate = (key: string, params?: Record<string, string | number>) => string

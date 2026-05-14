@@ -616,9 +616,10 @@ interface EventRegistrationRecord {
   id: string
   userId: string
   eventId: string
-  status: 'confirmed' | 'waitlist' | 'cancelled' | 'attended'
+  status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
   requestedAt: string
   confirmedAt?: string
+  declinedAt?: string
   cancelledAt?: string
   note?: LocalizedText
   createdAt: string

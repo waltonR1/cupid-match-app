@@ -148,6 +148,20 @@
       }
     },
     {
+      "path": "pages/debug/events",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动调试"
+      }
+    },
+    {
+      "path": "pages/debug/event-registrations",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "活动申请审核"
+      }
+    },
+    {
       "path": "pages/debug/profile-access-preview",
       "style": {
         "navigationStyle": "custom",
