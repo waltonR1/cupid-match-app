@@ -74,7 +74,7 @@ import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultT
 import {useFamilyProfileDirectory} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import type {FamilySortKey} from '@/types/profiles/directory'
-import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/view'
+import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/directory'
 import {openFamilyProfileDetail} from '@/utils/navigation'
 
 /** 页面文案 */

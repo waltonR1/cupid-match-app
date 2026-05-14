@@ -10,7 +10,7 @@ import {
 } from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
 import type {DirectoryOption} from '@/types/profiles/directory'
-import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
+import type {ProfileFilterToolbarItem} from '@/types/profiles/directory'
 
 type FilterGroup = ProfileFilterToolbarItem['group']
 

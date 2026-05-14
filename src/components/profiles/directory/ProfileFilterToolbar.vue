@@ -75,7 +75,7 @@
 import {computed, ref} from 'vue'
 import ProfileActiveFilterChips from '@/components/profiles/directory/ProfileActiveFilterChips.vue'
 import ProfileFilterSelectCard from '@/components/profiles/directory/ProfileFilterSelectCard.vue'
-import type {ProfileActiveFilterChip, ProfileFilterToolbarItem} from '@/types/profiles/view'
+import type {ProfileActiveFilterChip, ProfileFilterToolbarItem} from '@/types/profiles/directory'
 
 /** 筛选工具栏组件参数 */
 const props = defineProps<{

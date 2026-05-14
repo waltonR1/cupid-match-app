@@ -1,61 +1,79 @@
 <template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1180px] px-5 py-10 lg:px-8">
-      <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-        <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
-          Debug Tool
-        </view>
-        <view class="mt-2 text-[28px] font-semibold leading-tight text-semantic-text-primary">
-          Profile Detail 访问层级预览
-        </view>
-        <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
-          用于预览 self / family detail 在 guest、free、member 下的字段开放与页面隐藏规则。
-        </view>
+      <DebugPageHeader
+        title="Profile Detail 访问层预览"
+        description="用隔离的 debug 接口预览 self / family detail 在 Backend、Guest、Free、Member 下的字段返回、锁定值与页面隐藏规则。"
+      >
+        <view class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+          <view class="grid gap-4 md:grid-cols-[auto_220px_auto] md:items-end">
+            <view>
+              <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Profile Type</view>
+              <view class="flex flex-wrap gap-2">
+                <AppButton
+                  v-for="item in profileTypes"
+                  :key="item.value"
+                  :variant="profileType === item.value ? 'primary' : 'secondary'"
+                  size="sm"
+                  @click="changeProfileType(item.value)"
+                >
+                  {{ item.label }}
+                </AppButton>
+              </view>
+            </view>
 
-        <view class="mt-6 flex flex-wrap items-end gap-3">
+            <view>
+              <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Profile ID</view>
+              <input
+                v-model="profileIdInput"
+                class="h-[40px] w-full border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] text-semantic-text-primary"
+              />
+            </view>
+
+            <view>
+              <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Access Mode</view>
+              <view class="flex flex-wrap gap-2">
+                <AppButton
+                  v-for="item in previewModes"
+                  :key="item.value"
+                  :variant="mode === item.value ? 'primary' : 'secondary'"
+                  size="sm"
+                  @click="changeMode(item.value)"
+                >
+                  {{ item.label }}
+                </AppButton>
+              </view>
+            </view>
+          </view>
+
           <view class="flex flex-wrap gap-2">
+            <AppButton variant="secondary" size="sm" @click="load">
+              读取资料
+            </AppButton>
+
             <AppButton
-              v-for="item in profileTypes"
-              :key="item.value"
-              :variant="profileType === item.value ? 'primary' : 'secondary'"
+              :variant="showActualLayout ? 'primary' : 'secondary'"
               size="sm"
-              @click="changeProfileType(item.value)"
+              @click="showActualLayout = !showActualLayout"
             >
-              {{ item.label }}
+              {{ showActualLayout ? '真实页面隐藏规则' : '显示全部字段状态' }}
             </AppButton>
           </view>
+        </view>
+      </DebugPageHeader>
 
-          <view>
-            <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Profile ID</view>
-            <input
-              v-model="profileIdInput"
-              class="h-[40px] min-w-[180px] border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] text-semantic-text-primary"
-            />
+      <view class="mt-6 grid gap-3 md:grid-cols-3">
+        <view
+          v-for="item in previewNotes"
+          :key="item.title"
+          class="border border-semantic-border-default bg-semantic-surface-card px-5 py-4"
+        >
+          <view class="text-[12px] uppercase tracking-[2.4px] text-semantic-text-eyebrow">
+            {{ item.title }}
           </view>
-
-          <view class="flex flex-wrap gap-2">
-            <AppButton
-              v-for="item in previewModes"
-              :key="item.value"
-              :variant="mode === item.value ? 'primary' : 'secondary'"
-              size="sm"
-              @click="changeMode(item.value)"
-            >
-              {{ item.label }}
-            </AppButton>
+          <view class="mt-2 text-[13px] leading-6 text-semantic-text-muted">
+            {{ item.description }}
           </view>
-
-          <AppButton variant="secondary" size="sm" @click="load">
-            读取资料
-          </AppButton>
-
-          <AppButton
-            :variant="showActualLayout ? 'primary' : 'secondary'"
-            size="sm"
-            @click="showActualLayout = !showActualLayout"
-          >
-            {{ showActualLayout ? '真实页面隐藏规则' : '显示全部字段状态' }}
-          </AppButton>
         </view>
       </view>
 
@@ -165,6 +183,7 @@
 <script lang="ts" setup>
 import {computed, onMounted, ref} from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
+import DebugPageHeader from '@/components/debug/DebugPageHeader.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
@@ -218,6 +237,20 @@ const heroData = computed(() => currentPageData.value.heroData)
 const snapshotFacts = computed(() => currentPageData.value.snapshotFacts)
 const showRegisteredSections = computed(() => !showActualLayout.value || accessLevel.value !== 'visitor')
 const showPremiumSections = computed(() => !showActualLayout.value || accessLevel.value === 'premium')
+const previewNotes = computed(() => [
+  {
+    title: 'Backend',
+    description: '查看后端字段经过访问层处理后的返回形态。',
+  },
+  {
+    title: 'Layout',
+    description: showActualLayout.value ? '当前按正式页面规则隐藏未开放 section。' : '当前显示全部 section，便于核对字段锁定状态。',
+  },
+  {
+    title: 'Scope',
+    description: '仅用于访问层预览，不改变正式用户状态或数据库数据。',
+  },
+])
 const revealSteps = computed(() => [
   {
     title: pageT('sections.revealVisitorTitle'),
@@ -244,6 +277,8 @@ function pageT(key: string) {
 function changeProfileType(nextType: ProfileAccessPreviewType) {
   profileType.value = nextType
   profileIdInput.value = nextType === 'self' ? 'p-009' : 'p-001'
+  selfProfile.value = null
+  familyProfile.value = null
   void load()
 }
 

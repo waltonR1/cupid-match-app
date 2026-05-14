@@ -73,7 +73,7 @@ import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultT
 import {useSelfProfileDirectory} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import type {SelfSortKey} from '@/types/profiles/directory'
-import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/view'
+import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/directory'
 import {openSelfDetail} from '@/utils/navigation'
 
 /** Self 页面命名空间文案 */

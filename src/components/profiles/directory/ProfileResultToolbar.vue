@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DirectoryResultSummary, DirectorySortControl } from '@/types/profiles/view'
+import type { DirectoryResultSummary, DirectorySortControl } from '@/types/profiles/directory'
 
 /** 结果工具栏组件参数 */
 defineProps<{

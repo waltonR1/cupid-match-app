@@ -1,7 +1,7 @@
-import type {FormatLocale} from './locale-format'
+﻿import type {FormatLocale} from './locale-format'
 import type {Translate} from '@/i18n/types'
 import type {ActiveDirectoryFilterChip} from '@/types/profiles/directory'
-import type {ProfileFilterToolbarItem} from '@/types/profiles/view'
+import type {ProfileFilterToolbarItem} from '@/types/profiles/directory'
 
 export type LocalizedTextValue = Record<FormatLocale, string>
 

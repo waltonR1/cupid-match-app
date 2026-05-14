@@ -1,18 +1,11 @@
 <template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1180px] px-5 py-10 lg:px-8">
-      <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-        <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
-          Debug Tool
-        </view>
-        <view class="mt-2 text-[28px] font-semibold leading-tight text-semantic-text-primary">
-          Event Detail 状态预览
-        </view>
-        <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
-          用隔离的 debug 预览接口查看 guest / free / member 下的数据返回与实际页面组件展示。
-        </view>
-
-        <view class="mt-6 flex flex-wrap items-end gap-3">
+      <DebugPageHeader
+        title="Event Detail 状态预览"
+        description="用隔离的 debug 预览接口查看 guest / free / member 下的数据返回与实际页面组件展示。"
+      >
+        <view class="flex flex-wrap items-end gap-3">
           <view>
             <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Event ID</view>
             <input
@@ -45,7 +38,7 @@
             {{ showDataSummary ? '隐藏数据摘要' : '显示数据摘要' }}
           </AppButton>
         </view>
-      </view>
+      </DebugPageHeader>
 
       <view v-if="pageData.hero && pageData.registration" class="mt-6 space-y-6">
         <EventDetailHero
@@ -98,6 +91,7 @@
 <script lang="ts" setup>
 import {computed, onMounted, ref} from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
+import DebugPageHeader from '@/components/debug/DebugPageHeader.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EventDetailAgenda from '@/components/events/EventDetailAgenda.vue'
 import EventDetailHero from '@/components/events/EventDetailHero.vue'

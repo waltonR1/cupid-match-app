@@ -1,22 +1,16 @@
 <template>
   <AppPageLayout>
     <view class="mx-auto max-w-[1080px] px-5 py-10 lg:px-8">
-      <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-7 shadow-panel">
-        <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-eyebrow">
-          Debug Tool
-        </view>
-        <view class="mt-2 text-[28px] font-semibold leading-tight text-semantic-text-primary">
-          私人介绍请求调试
-        </view>
-        <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
-          用于模拟对方接受或拒绝 Private Introduction。这个页面只操作 mock 后端状态，不参与正式用户流程。
-        </view>
-        <view class="mt-5">
+      <DebugPageHeader
+        title="私人介绍请求调试"
+        description="用于模拟对方接受或拒绝 Private Introduction。这个页面只操作 mock 后端状态，不参与正式用户流程。"
+      >
+        <view>
           <AppButton variant="secondary" size="sm" @click="load">
             刷新请求列表
           </AppButton>
         </view>
-      </view>
+      </DebugPageHeader>
 
       <view class="mt-6 grid gap-4">
         <view
@@ -81,6 +75,7 @@
 <script lang="ts" setup>
 import {onMounted, ref} from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
+import DebugPageHeader from '@/components/debug/DebugPageHeader.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import {
   acceptPrivateIntroductionDebugRequest,
