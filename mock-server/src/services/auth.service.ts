@@ -10,6 +10,7 @@ import type {
 } from '../types/database.js'
 import {nextId} from '../utils/id.js'
 import {getString} from '../utils/string.js'
+import {upsertAgreementAcceptances} from './legal.service.js'
 
 const PASSWORD_MIN = 8
 
@@ -43,7 +44,7 @@ export interface ServiceErrorResult {
   body: { error: string }
 }
 
-export function login(data: Database, body: Record<string, unknown>): AuthSession | null {
+export function login(data: Database, body: Record<string, unknown>, locale?: string): AuthSession | null {
   const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
   const authIdentity = data.auth_identities.find((item) => item.identifier === identifier)
@@ -55,6 +56,9 @@ export function login(data: Database, body: Record<string, unknown>): AuthSessio
   const user = data.users.find((item) => item.id === authIdentity.userId)
   if (!user) return null
 
+  const requestedLocale = locale ?? ''
+  const agreementLocale: PreferredLocale = isPreferredLocale(requestedLocale) ? requestedLocale : user.preferredLocale
+  upsertAgreementAcceptances(data, user.id, agreementLocale, new Date().toISOString())
   return buildSession(data, authIdentity, user)
 }
 
@@ -152,6 +156,7 @@ export async function register(
   db.data.auth_identities.push(newAuthIdentity)
   db.data.user_onboarding_states.push(onboarding)
   db.data.user_memberships.push(membership)
+  upsertAgreementAcceptances(db.data, userId, preferredLocale, now)
   await db.write()
 
   return {

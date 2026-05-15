@@ -978,8 +978,11 @@ interface LegalDocumentRecord {
   locale: 'zh' | 'fr' | 'en'
   title: string
   sections: Array<{
-    title: string
-    body: string
+    heading: string
+    clauses: Array<{
+      number: string
+      body: string
+    }>
     sortOrder: number
   }>
   status: 'draft' | 'active' | 'archived'
@@ -1008,7 +1011,8 @@ interface UserAgreementAcceptanceRecord {
 - `legal_documents` 每个 `type + locale` 只能有一个 active 文档。
 - `user_agreement_acceptances` 每个 `userId + documentType` 只保留最新确认版本。
 - 成功登录 / 注册后，后端读取当前 locale 下 active `terms` 和 `privacy`，upsert 用户确认记录；版本不变则跳过。
-- `sections` 是协议正文结构；前端按字段渲染标题和正文，不解析 Markdown。
+- `sections` 是协议正文结构；前端按 section heading 与 clauses 渲染，不解析 Markdown。
+- mock 可在目标语言缺失时回退到 `zh` active 文档；正式库应补齐三语言协议版本。
 
 ### API 目标
 
@@ -1025,8 +1029,11 @@ interface LegalDocumentDTO {
   locale: 'zh' | 'fr' | 'en'
   title: string
   sections: Array<{
-    title: string
-    body: string
+    heading: string
+    clauses: Array<{
+      number: string
+      body: string
+    }>
   }>
   effectiveAt: string
 }
@@ -1340,14 +1347,14 @@ Contract 对齐要求：
 | `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountMessagesPageData` |
 | `GET /api/account/preferences` | `user_preferences` | `AccountPreferenceDTO[]` | `AccountSafetyPageData` |
 | `GET /api/account/verifications` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountVerificationSummaryDTO[]` | `AccountVerificationPageData` |
-| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings`, `user_agreement_acceptances`, `legal_documents` | `AccountSafetyDTO` | `AccountSafetyPageData` |
+| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings` | `AccountSafetyDTO` | `AccountSafetyPageData` |
 
 补充规则：
 
 - `profile_detail_access` entitlement 表示付费 viewer 查看他人 profile detail 的字段开放层级，不表示提升自己 profile 曝光。
 - `favorite_profiles` 只保存收藏关系和时间戳；当前阶段不做私密备注，避免为 `note` 增加额外写接口。
 - `AccountPrivateIntroductionRoomDTO` 不返回 `unreadCount`，直到引入 read receipt source of truth；前端如需提示可先使用本地派生状态。
-- account safety 仅读取 Phase 4.5 已完成的 `user_agreement_acceptances` / `legal_documents`，不重新实现 agreement 写入链路。
+- agreement acceptance remains backend/audit data; account safety does not display agreement summaries by default.
 
 ### 前端修改范围
 

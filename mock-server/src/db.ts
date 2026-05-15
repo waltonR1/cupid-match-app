@@ -13,6 +13,8 @@ const defaultData: Database = {
     events: [],
     event_agenda_items: [],
     event_registrations: [],
+    legal_documents: [],
+    user_agreement_acceptances: [],
     users: [],
     auth_identities: [],
     user_onboarding_states: [],
@@ -49,6 +51,8 @@ export async function initDb(): Promise<void> {
     db.data.event_registrations ??= []
     db.data.user_onboarding_states ??= []
     db.data.user_memberships ??= []
+    db.data.legal_documents ??= []
+    db.data.user_agreement_acceptances ??= []
 }
 
 /** 获取数据库实例 */

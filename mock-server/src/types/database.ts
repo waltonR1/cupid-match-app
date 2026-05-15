@@ -195,6 +195,49 @@ export interface ProfileOwnershipRecord {
     updatedAt: string
 }
 
+/** 协议文档类型 */
+export type LegalDocumentType = 'terms' | 'privacy'
+
+/** 协议文档状态 */
+export type LegalDocumentStatus = 'draft' | 'active' | 'archived'
+
+export interface LegalDocumentClause {
+    number: string
+    body: string
+}
+
+/** 协议文档 section */
+export interface LegalDocumentSection {
+    heading: string
+    clauses: LegalDocumentClause[]
+    sortOrder: number
+}
+
+/** 协议文档记录 */
+export interface LegalDocumentRecord {
+    id: string
+    type: LegalDocumentType
+    version: string
+    locale: string
+    title: string
+    sections: LegalDocumentSection[]
+    status: LegalDocumentStatus
+    effectiveAt: string
+    createdAt: string
+    updatedAt: string
+}
+
+/** 用户协议确认记录 */
+export interface UserAgreementAcceptanceRecord {
+    id: string
+    userId: string
+    documentType: LegalDocumentType
+    documentVersion: string
+    locale: string
+    acceptedAt: string
+    createdAt: string
+}
+
 /** 数据库结构 */
 export interface Database {
     profiles: ProfileRecord[]
@@ -207,6 +250,8 @@ export interface Database {
     events: EventRecord[]
     event_agenda_items: EventAgendaItemRecord[]
     event_registrations: EventRegistrationRecord[]
+    legal_documents: LegalDocumentRecord[]
+    user_agreement_acceptances: UserAgreementAcceptanceRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
     user_onboarding_states: UserOnboardingStateRecord[]

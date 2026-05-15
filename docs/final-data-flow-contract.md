@@ -187,14 +187,15 @@ agreement dialog
 -> GET /api/legal/documents/:type?lang=
 -> legal_documents active record by type + locale
 -> LegalDocumentDTO
--> frontend renders sections in AgreementDialog
+-> frontend renders section headings and clauses in AgreementDialog
 ```
 
 Rules:
 
 - `legal_documents` is the source of truth for official agreement text and version.
 - i18n only provides button labels and helper copy, not the official legal document body.
-- Agreement content is returned as structured sections; frontend renders fields directly and does not parse Markdown.
+- Agreement content is returned as structured sections and clauses; frontend renders fields directly and does not parse Markdown.
+- If an active document is missing for the requested locale, mock API may fall back to the active `zh` document until official translations are added.
 - `AgreementDialog` 打开时按需调用此 API，不预加载。
 
 ## Profile Directory Chain
@@ -873,8 +874,6 @@ GET /api/account/verifications
 
 GET /api/account/safety
 -> user_preferences
--> user_agreement_acceptances
--> legal_documents
 -> profile_visibility_settings
 -> AccountSafetyDTO
 
@@ -891,7 +890,7 @@ Rules:
 - Managed profiles come from `profile_ownerships`.
 - Membership comes from membership collections.
 - Preferences come from `user_preferences`, not legacy `privacy_settings.title/desc`.
-- Agreement summaries come from latest `user_agreement_acceptances` joined with `legal_documents`.
+- Agreement acceptance records stay backend/audit data and are not shown in account pages by default.
 - Account safety reads `profile_visibility_settings` as code/value configuration and does not store page copy.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.

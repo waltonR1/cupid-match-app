@@ -193,6 +193,8 @@ GET /api/legal/documents/:type?lang=zh
 
 `:type` 为 `terms` 或 `privacy`。
 
+若目标 `lang` 暂无 active 文档，mock 后端可回退到 `zh` active 文档，正式库应补齐三语言版本。
+
 ```ts
 interface LegalDocumentDTO {
   type: LegalDocumentType
@@ -204,7 +206,12 @@ interface LegalDocumentDTO {
 }
 
 interface LegalDocumentSectionDTO {
-  title: string
+  heading: string
+  clauses: LegalDocumentClauseDTO[]
+}
+
+interface LegalDocumentClauseDTO {
+  number: string
   body: string
 }
 ```
@@ -213,7 +220,7 @@ interface LegalDocumentSectionDTO {
 
 - 返回当前 locale 下 active 的指定类型文档。
 - 前端 `AgreementDialog` 打开时按需调用，不预加载。
-- `sections` 为协议正文结构；前端按字段渲染标题和正文，不解析 Markdown。
+- `sections` 为协议正文结构；前端按 section heading 与 clause 字段渲染，不解析 Markdown。
 
 ## Profiles API
 

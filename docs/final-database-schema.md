@@ -237,9 +237,14 @@ interface LegalDocumentRecord {
 }
 
 interface LegalDocumentSection {
-  title: string
-  body: string
+  heading: string
+  clauses: LegalDocumentClause[]
   sortOrder: number
+}
+
+interface LegalDocumentClause {
+  number: string
+  body: string
 }
 ```
 
@@ -247,7 +252,7 @@ interface LegalDocumentSection {
 
 - 同一 `type + locale` 只能有一个 `active` 文档。
 - `version` 是面向确认记录的稳定版本号，不使用页面发布时间临时派生。
-- `sections` 是该语言完整正文结构；前端按 `sortOrder` 渲染标题和正文，不解析 Markdown。
+- `sections` 是该语言完整正文结构；每个 section 包含稳定 heading 与 clauses，前端按字段渲染，不解析 Markdown。
 
 ### user_agreement_acceptances
 

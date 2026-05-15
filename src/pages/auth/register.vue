@@ -154,8 +154,8 @@
     </view>
 
     <AgreementDialog
-      :open="Boolean(agreementDialog)"
-      :kind="agreementDialog || 'terms'"
+      :open="agreementDialog !== null"
+      :kind="agreementDialog"
       @close="closeAgreementDialog"
     />
   </AppPageLayout>

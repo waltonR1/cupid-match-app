@@ -158,7 +158,12 @@ interface AgreementDocumentViewModel {
 }
 
 interface AgreementDocumentSectionViewModel {
-  title: string
+  heading: string
+  clauses: AgreementDocumentClauseViewModel[]
+}
+
+interface AgreementDocumentClauseViewModel {
+  number: string
   body: string
 }
 
@@ -172,7 +177,7 @@ interface AgreementDialogViewModel {
 规则：
 
 - `AgreementDialog` 打开时调 `GET /api/legal/documents/:type?lang=` 按需拉取正文，不做预加载。
-- `AgreementDocumentViewModel.sections` 来自 legal API，前端按字段渲染 section 标题和正文，不解析 Markdown。
+- `AgreementDocumentViewModel.sections` 来自 legal API，前端按 heading 与 clauses 渲染，不解析 Markdown。
 - i18n 只提供按钮和标题辅助文案，不存正式协议正文。
 
 ## Profile Directory Pages
@@ -652,7 +657,6 @@ interface ProfileVerificationSummaryViewModel {
 interface AccountSafetyPageData {
   preferences: AccountPreferenceViewModel[]
   profileVisibility: ProfileVisibilitySettingViewModel[]
-  agreements: AccountAgreementSummaryViewModel[]
 }
 
 interface AccountPreferenceViewModel {
@@ -670,12 +674,6 @@ interface ProfileVisibilitySettingViewModel {
   lockedByAdvisor: boolean
 }
 
-interface AccountAgreementSummaryViewModel {
-  type: 'terms' | 'privacy'
-  title: string
-  version: string
-  acceptedAtText: string
-}
 ```
 
 ## Forbidden Page Fields
