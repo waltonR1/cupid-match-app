@@ -89,6 +89,8 @@ type HabitCode = 'never' | 'social' | 'often'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileFieldVisibility = 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 type ProfileFieldCode =
   | 'photos'
@@ -198,17 +200,22 @@ interface UserOnboardingStateRecord {
 账户偏好和开关，使用 code/value，而不是存页面文案。
 
 ```ts
+type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
+
 interface UserPreferenceRecord {
   id: string
   userId: string
-  code: string
+  code: AccountPreferenceCode
   value: string | boolean | number | string[]
   createdAt: string
   updatedAt: string
 }
 ```
 
-示例 code：
+当前稳定 code：
 
 ```text
 preferred_city
@@ -216,7 +223,7 @@ advisor_contact_enabled
 family_assist_enabled
 ```
 
-本节 code 只是示例。完整 `user_preferences.code` 列表在 Phase 5 account 重写时按最终账户页面需求补齐。默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。
+默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。后续若新增明确的设置项，再扩展 `AccountPreferenceCode`，不使用任意字符串兜底。
 
 ### legal_documents
 
@@ -463,11 +470,11 @@ interface ProfileVerificationRecord {
   profileId: string
   legalName?: string
   dateOfBirth?: string
-  identityStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-  educationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-  incomeStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-  maritalStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-  advisorStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
+  identityStatus: ProfileVerificationStatus
+  educationStatus: ProfileVerificationStatus
+  incomeStatus: ProfileVerificationStatus
+  maritalStatus: ProfileVerificationStatus
+  advisorStatus: AdvisorReviewStatus
   verifiedAt?: string
   verifiedBy?: string
   createdAt: string
@@ -770,6 +777,7 @@ interface AdvisorFollowUpRecord {
   status: 'open' | 'done' | 'snoozed'
   priority: 'low' | 'normal' | 'high'
   note: LocalizedText
+  visibility: 'internal' | 'user_visible'
   dueAt?: string
   completedAt?: string
   createdAt: string

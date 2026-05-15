@@ -55,6 +55,13 @@ type ProfileFieldCode =
   | 'communicationStyle'
   | 'prompts'
   | 'contactMethods'
+type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'settings'
+type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
 
 interface PageAsyncState {
   loading: boolean
@@ -407,7 +414,7 @@ interface AccountShellPageData {
 }
 
 interface AccountNavItemViewModel {
-  key: string
+  key: AccountNavKey
   label: string
   active: boolean
   disabled?: boolean
@@ -429,20 +436,22 @@ interface AccountUserSummaryViewModel {
 }
 ```
 
-### Account Dashboard
+### Account Home
 
-`/pages/account/profile` 作为账户入口时，展示账户壳和几个摘要模块，不再拼接 profile 旧字段。
+`/pages/account/index` 作为账户入口时，按用户阶段展示下一步引导与最近动态，不再只是平铺后端集合摘要。
 
 ```ts
-interface AccountDashboardPageData {
+interface AccountHomePageData {
   user: AccountUserSummaryViewModel
   onboarding: AccountOnboardingViewModel
   managedProfiles: ManagedProfileSummaryViewModel[]
   membership: AccountMembershipSummaryViewModel
   entitlements: AccountEntitlementBalanceViewModel[]
   upcomingEvents: AccountEventRegistrationViewModel[]
-  introductions: AccountIntroductionSummaryViewModel[]
-  advisorFollowUps: AdvisorFollowUpViewModel[]
+  recentIntroductions: AccountIntroductionSummaryViewModel[]
+  favoriteCount: number
+  userVisibleFollowUps: AdvisorFollowUpViewModel[]
+  primaryAction?: PageActionViewModel
 }
 
 interface AccountOnboardingViewModel {
@@ -465,7 +474,7 @@ interface AdvisorFollowUpViewModel {
 }
 ```
 
-### Managed Profiles
+### Profiles
 
 ```ts
 interface ManagedProfileSummaryViewModel {
@@ -479,7 +488,22 @@ interface ManagedProfileSummaryViewModel {
   permission: 'owner' | 'manager' | 'viewer'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
   isPrimary: boolean
+  verification: ProfileVerificationSummaryViewModel
   action: PageActionViewModel
+}
+
+interface AccountProfilesPageData {
+  profiles: ManagedProfileSummaryViewModel[]
+  profileVisibility: ProfileVisibilitySettingViewModel[]
+  emptyState?: PageEmptyState
+}
+
+interface ProfileVerificationSummaryViewModel {
+  identityStatus: ProfileVerificationStatus
+  educationStatus: ProfileVerificationStatus
+  incomeStatus: ProfileVerificationStatus
+  maritalStatus: ProfileVerificationStatus
+  advisorStatus: AdvisorReviewStatus
 }
 ```
 
@@ -488,12 +512,6 @@ interface ManagedProfileSummaryViewModel {
 ### Membership
 
 ```ts
-interface AccountMembershipPageData {
-  currentPlan: AccountMembershipSummaryViewModel
-  entitlementBalances: AccountEntitlementBalanceViewModel[]
-  availablePlans: MembershipPlanViewModel[]
-}
-
 interface MembershipPlanViewModel {
   tier: 'free' | 'silver' | 'gold' | 'diamond'
   name: string
@@ -523,11 +541,12 @@ interface AccountEntitlementBalanceViewModel {
 }
 ```
 
-### Activity
+### Events
 
 ```ts
-interface AccountActivityPageData {
+interface AccountEventsPageData {
   eventRegistrations: AccountEventRegistrationViewModel[]
+  recommendedEvents: EventOverviewItem[]
   emptyState?: PageEmptyState
 }
 
@@ -546,13 +565,22 @@ interface AccountEventRegistrationViewModel {
 }
 ```
 
-### Connections
+### Relationship
 
 ```ts
-interface AccountConnectionsPageData {
+interface AccountRelationshipPageData {
+  activeTab: 'favorites' | 'introductions' | 'messages'
+  tabs: AccountRelationshipTabViewModel[]
   favorites: FavoriteProfileSummaryViewModel[]
   introductions: AccountIntroductionSummaryViewModel[]
+  rooms: PrivateIntroductionRoomViewModel[]
   emptyState?: PageEmptyState
+}
+
+interface AccountRelationshipTabViewModel {
+  key: 'favorites' | 'introductions' | 'messages'
+  label: string
+  count?: number
 }
 
 interface FavoriteProfileSummaryViewModel {
@@ -577,15 +605,6 @@ interface AccountIntroductionSummaryViewModel {
   respondedAtText?: string
   cooldownUntilText?: string
   action?: PageActionViewModel
-}
-```
-
-### Messages
-
-```ts
-interface AccountMessagesPageData {
-  rooms: PrivateIntroductionRoomViewModel[]
-  emptyState?: PageEmptyState
 }
 
 interface PrivateIntroductionRoomViewModel {
@@ -631,39 +650,28 @@ interface PrivateIntroductionRoomMessagePageViewModel {
 }
 ```
 
-### Verification
+### Settings
 
 ```ts
-interface AccountVerificationPageData {
-  profiles: ProfileVerificationSummaryViewModel[]
-  emptyState?: PageEmptyState
-}
-
-interface ProfileVerificationSummaryViewModel {
-  profileId: string
-  displayName: string
-  identityStatus: string
-  educationStatus: string
-  incomeStatus: string
-  maritalStatus: string
-  advisorStatus: string
-  action?: PageActionViewModel
-}
-```
-
-### Safety
-
-```ts
-interface AccountSafetyPageData {
+interface AccountSettingsPageData {
+  currentPlan: AccountMembershipSummaryViewModel
+  entitlementBalances: AccountEntitlementBalanceViewModel[]
+  availablePlans: MembershipPlanViewModel[]
   preferences: AccountPreferenceViewModel[]
-  profileVisibility: ProfileVisibilitySettingViewModel[]
+  legalDocuments: LegalDocumentLinkViewModel[]
 }
 
 interface AccountPreferenceViewModel {
-  code: string
+  code: AccountPreferenceCode
   label: string
   value: string | boolean | number | string[]
   action?: PageActionViewModel
+}
+
+interface LegalDocumentLinkViewModel {
+  type: 'terms' | 'privacy'
+  title: string
+  action: PageActionViewModel
 }
 
 interface ProfileVisibilitySettingViewModel {

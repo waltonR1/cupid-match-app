@@ -148,9 +148,8 @@ message_threads
 
 account 页面先统一成稳定占位：
 
-- account profile：展示登录账户名和“账户中心重建中”的空态。
-- membership：展示“会员体系重建中”的空态。
-- activity/connections/messages/verification/safety：展示对应模块占位。
+- index：展示登录账户名和“账户中心重建中”的空态。
+- relationship / profiles / events / settings：展示对应模块占位。
 - 不读取 profile detail 字段来拼 account 摘要。
 - 不为了 account 页保留任何 profile 旧字段。
 
@@ -1186,10 +1185,15 @@ interface AuthIdentityRecord {
 `user_preferences`：
 
 ```ts
+type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
+
 interface UserPreferenceRecord {
   id: string
   userId: string
-  code: string
+  code: AccountPreferenceCode
   value: string | boolean | number | string[]
   createdAt: string
   updatedAt: string
@@ -1290,6 +1294,7 @@ interface AdvisorFollowUpRecord {
   status: 'open' | 'done' | 'snoozed'
   priority: 'low' | 'normal' | 'high'
   note: LocalizedText
+  visibility: 'internal' | 'user_visible'
   dueAt?: string
   completedAt?: string
   createdAt: string
@@ -1320,9 +1325,7 @@ GET /api/account/favorites
 GET /api/account/events
 GET /api/account/private-introductions
 GET /api/account/private-introduction-rooms
-GET /api/account/preferences
-GET /api/account/verifications
-GET /api/account/safety
+GET /api/account/settings
 ```
 
 如果仍需聚合接口，可以作为页面优化层：
@@ -1338,23 +1341,26 @@ Contract 对齐要求：
 | Endpoint / Page | Source of truth | API DTO | PageData / ViewModel |
 | --- | --- | --- | --- |
 | `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
-| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles`, `event_registrations`, `private_introduction_requests`, `advisor_follow_ups` | `AccountDashboardDTO` | `AccountDashboardPageData` |
-| `GET /api/account/profiles` | `profile_ownerships`, derived profile identity | `ManagedProfileSummaryDTO[]` | `ManagedProfileSummaryViewModel[]` |
-| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]` | `AccountMembershipPageData` |
-| `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountConnectionsPageData` |
-| `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountActivityPageData` |
-| `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountConnectionsPageData` |
-| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountMessagesPageData` |
-| `GET /api/account/preferences` | `user_preferences` | `AccountPreferenceDTO[]` | `AccountSafetyPageData` |
-| `GET /api/account/verifications` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountVerificationSummaryDTO[]` | `AccountVerificationPageData` |
-| `GET /api/account/safety` | `user_preferences`, `profile_visibility_settings` | `AccountSafetyDTO` | `AccountSafetyPageData` |
+| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests`, user-visible `advisor_follow_ups` | `AccountDashboardDTO` | `AccountHomePageData` |
+| `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, `profile_visibility_settings`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
+| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]` | `AccountSettingsPageData` |
+| `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
+| `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountEventsPageData` |
+| `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountRelationshipPageData` |
+| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountRelationshipPageData` |
+| `GET /api/account/settings` | `user_preferences` | `AccountSettingsDTO` | `AccountSettingsPageData` |
 
 补充规则：
 
 - `profile_detail_access` entitlement 表示付费 viewer 查看他人 profile detail 的字段开放层级，不表示提升自己 profile 曝光。
 - `favorite_profiles` 只保存收藏关系和时间戳；当前阶段不做私密备注，避免为 `note` 增加额外写接口。
 - `AccountPrivateIntroductionRoomDTO` 不返回 `unreadCount`，直到引入 read receipt source of truth；前端如需提示可先使用本地派生状态。
-- agreement acceptance remains backend/audit data; account safety does not display agreement summaries by default.
+- agreement acceptance remains backend/audit data; account settings may expose current legal-document entry points, but does not display acceptance history by default.
+- dashboard 只返回 `favoriteCount`，不返回完整 favorites 列表；收藏明细归 relationship。
+- dashboard 只返回摘要切片：`upcomingEvents` 与 `recentIntroductions`；完整列表分别归 events 与 relationship。
+- events 页面可组合 `GET /api/account/events` 与公开活动目录接口，前者负责“我的报名”，后者负责“可参加活动入口”。
+- settings 页面可组合 membership、preferences 与 legal document API；协议确认历史仍只作为后端审计数据保存。
+- `advisor_follow_ups` 默认是内部记录；只有 `visibility = 'user_visible'` 的记录可进入用户端 dashboard。
 
 ### 前端修改范围
 
@@ -1371,14 +1377,13 @@ Contract 对齐要求：
 
 ### Account 页面建议
 
-account 应拆成稳定模块：
+account center 应按用户任务收敛为 5 个稳定页面：
 
-- 账户资料：账户名、城市偏好、语言、头像。
-- 我的资料：self/family 管理关系。
-- 我的会员：当前套餐、额度、权益。
-- 我的活动：报名、候补、历史活动。
-- 我的私人介绍：申请状态、额度、冷却。
-- 顾问跟进：后续可做。
+- `/pages/account/index`：首页，按 onboarding 阶段展示下一步引导、关系动态、资料状态、剩余额度和近期活动。
+- `/pages/account/relationship`：关系，内部以 tab 串联收藏、私人介绍和受控沟通房间。
+- `/pages/account/profiles`：资料，展示 self/family 管理关系、认证状态和字段可见性。
+- `/pages/account/events`：活动，展示我的报名、候补、历史活动和可参加活动入口。
+- `/pages/account/settings`：设置，展示会员、权益、账户偏好和协议入口。
 
 ### 验收标准
 
@@ -1388,7 +1393,7 @@ account 应拆成稳定模块：
 - profile ownership 支持一个用户管理多个 profile。
 - privacy/preferences 不在 DB 保存页面文案。
 - account dashboard 不把页面 view model 当成数据库模型。
-- account safety 页可展示 Phase 4.5 已写入的协议确认版本摘要。
+- account settings 不展示协议确认摘要；agreement acceptance 仅保留为后端审计数据。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。

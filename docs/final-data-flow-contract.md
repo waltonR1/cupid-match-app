@@ -819,10 +819,10 @@ Forbidden:
 
 Phase 1 account is frozen. Final account is rebuilt after profile, auth, and events are stable.
 
-Final flow:
+Home flow:
 
 ```text
-account page
+account home page
 -> account dashboard api
 -> users
 -> user_onboarding_states
@@ -831,14 +831,14 @@ account page
 -> user_memberships
 -> membership_entitlements
 -> user_entitlement_balances
--> favorite_profiles
 -> event_registrations
 -> private_introduction_requests
--> advisor_follow_ups
+-> favorite_profiles count
+-> advisor_follow_ups where visibility = 'user_visible'
 -> AccountDashboardDTO
 ```
 
-Account DTO:
+Home DTO:
 
 ```ts
 interface AccountDashboardDTO {
@@ -847,10 +847,10 @@ interface AccountDashboardDTO {
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO
   entitlements: AccountEntitlementBalanceDTO[]
-  favorites: FavoriteProfileSummaryDTO[]
-  events: AccountEventRegistrationDTO[]
-  introductions: AccountIntroductionSummaryDTO[]
-  advisorFollowUps: AdvisorFollowUpDTO[]
+  upcomingEvents: AccountEventRegistrationDTO[]
+  recentIntroductions: AccountIntroductionSummaryDTO[]
+  favoriteCount: number
+  userVisibleFollowUps: AdvisorFollowUpDTO[]
 }
 ```
 
@@ -862,20 +862,38 @@ GET /api/account/me
 -> user_onboarding_states
 -> AccountMeDTO
 
-GET /api/account/preferences
--> user_preferences
--> AccountPreferenceDTO[]
-
-GET /api/account/verifications
+GET /api/account/profiles
 -> profile_ownerships
 -> profile_verifications
--> derived profile identity
--> AccountVerificationSummaryDTO[]
-
-GET /api/account/safety
--> user_preferences
 -> profile_visibility_settings
--> AccountSafetyDTO
+-> derived profile identity
+-> AccountProfilesDTO
+
+GET /api/account/membership
+-> membership_plans
+-> user_memberships
+-> membership_entitlements
+-> user_entitlement_balances
+-> AccountMembershipDTO + AccountEntitlementBalanceDTO[]
+
+GET /api/account/favorites
+-> favorite_profiles
+-> derived profile identity
+-> FavoriteProfileSummaryDTO[]
+
+GET /api/account/events
+-> event_registrations
+-> derived event summary
+-> AccountEventRegistrationDTO[]
+
+GET /api/account/private-introductions
+-> private_introduction_requests
+-> derived profile identity
+-> AccountIntroductionSummaryDTO[]
+
+GET /api/account/settings
+-> user_preferences
+-> AccountSettingsDTO
 
 GET /api/account/private-introduction-rooms
 -> private_introduction_rooms
@@ -891,7 +909,10 @@ Rules:
 - Membership comes from membership collections.
 - Preferences come from `user_preferences`, not legacy `privacy_settings.title/desc`.
 - Agreement acceptance records stay backend/audit data and are not shown in account pages by default.
-- Account safety reads `profile_visibility_settings` as code/value configuration and does not store page copy.
+- Account profiles reads `profile_visibility_settings` as code/value configuration and does not store page copy.
+- Dashboard returns `favoriteCount`, not a full favorites list; detailed favorites stay under relationship.
+- Dashboard only returns summary slices: `upcomingEvents` and `recentIntroductions`; full event and introduction lists stay on their dedicated pages.
+- Advisor follow-up notes are internal by default; only records marked `user_visible` may enter account dashboard DTOs.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.
 
@@ -900,6 +921,38 @@ Forbidden:
 - Do not store account page copy in database.
 - Do not store privacy setting title/description in database.
 - Do not let account summary force profile fields back into `profiles`.
+
+Page composition:
+
+```text
+/pages/account/index
+-> dashboard summary
+-> user stage decides primary action and module order
+
+/pages/account/relationship
+-> favorites
+-> private introductions
+-> private introduction rooms
+-> one journey page with tabs
+
+/pages/account/profiles
+-> managed profiles
+-> profile verifications
+-> profile visibility settings
+-> one self-presentation page
+
+/pages/account/events
+-> account event registrations
+-> event directory recommendations
+-> one participation page
+
+/pages/account/settings
+-> membership
+-> entitlements
+-> user preferences
+-> legal document entry points from legal API
+-> one low-frequency configuration page
+```
 
 ## Favorite Chain
 

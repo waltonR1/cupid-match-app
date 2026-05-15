@@ -36,6 +36,12 @@ type ProfileAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'advi
 type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTRODUCTION_REQUIRED__' | '__HIDDEN__'
 type RestrictedProfileField<T> = T | ProfileFieldLockCode
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
 type ProfileFieldCode =
   | 'photos'
   | 'country'
@@ -114,16 +120,14 @@ interface ApiErrorDTO {
 | Events | `POST` | `/api/events/:id/register` | 报名活动。 |
 | Events | `POST` | `/api/events/:id/cancel` | 取消活动报名。 |
 | Account | `GET` | `/api/account/me` | 当前账户身份。 |
-| Account | `GET` | `/api/account/dashboard` | 账户首页聚合。 |
-| Account | `GET` | `/api/account/profiles` | 用户管理的 profiles。 |
+| Account | `GET` | `/api/account/dashboard` | 账户首页阶段引导与动态摘要。 |
+| Account | `GET` | `/api/account/profiles` | 用户管理的 profiles、认证和字段可见性。 |
 | Account | `GET` | `/api/account/membership` | 当前会员和权益。 |
 | Account | `GET` | `/api/account/favorites` | 收藏列表。 |
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introduction-rooms` | 私人介绍沟通空间。 |
-| Account | `GET` | `/api/account/preferences` | 账户偏好。 |
-| Account | `GET` | `/api/account/verifications` | 资料认证状态。 |
-| Account | `GET` | `/api/account/safety` | 账户安全与可见性设置。 |
+| Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 调试拒绝申请。 |
@@ -775,10 +779,10 @@ interface AccountDashboardDTO {
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO
   entitlements: AccountEntitlementBalanceDTO[]
-  favorites: FavoriteProfileSummaryDTO[]
-  events: AccountEventRegistrationDTO[]
-  introductions: AccountIntroductionSummaryDTO[]
-  advisorFollowUps: AdvisorFollowUpDTO[]
+  upcomingEvents: AccountEventRegistrationDTO[]
+  recentIntroductions: AccountIntroductionSummaryDTO[]
+  favoriteCount: number
+  userVisibleFollowUps: AdvisorFollowUpDTO[]
 }
 
 interface AdvisorFollowUpDTO {
@@ -794,6 +798,11 @@ interface AdvisorFollowUpDTO {
 ### Account Profiles
 
 ```ts
+interface AccountProfilesDTO {
+  profiles: ManagedProfileSummaryDTO[]
+  profileVisibility: AccountProfileVisibilityDTO[]
+}
+
 interface ManagedProfileSummaryDTO {
   profileId: string
   displayName: string
@@ -805,6 +814,15 @@ interface ManagedProfileSummaryDTO {
   permission: 'owner' | 'manager' | 'viewer'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
   isPrimary: boolean
+  verification: AccountProfileVerificationDTO
+}
+
+interface AccountProfileVerificationDTO {
+  identityStatus: ProfileVerificationStatus
+  educationStatus: ProfileVerificationStatus
+  incomeStatus: ProfileVerificationStatus
+  maritalStatus: ProfileVerificationStatus
+  advisorStatus: AdvisorReviewStatus
 }
 ```
 
@@ -885,31 +903,16 @@ interface AccountPrivateIntroductionRoomDTO {
 
 ```ts
 interface AccountPreferenceDTO {
-  code: string
+  code: AccountPreferenceCode
   value: string | boolean | number | string[]
 }
 ```
 
-### Account Verifications
+### Account Settings
 
 ```ts
-interface AccountVerificationSummaryDTO {
-  profileId: string
-  displayName: string
-  identityStatus: string
-  educationStatus: string
-  incomeStatus: string
-  maritalStatus: string
-  advisorStatus: string
-}
-```
-
-### Account Safety
-
-```ts
-interface AccountSafetyDTO {
+interface AccountSettingsDTO {
   preferences: AccountPreferenceDTO[]
-  profileVisibility: AccountProfileVisibilityDTO[]
 }
 
 interface AccountProfileVisibilityDTO {
