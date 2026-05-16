@@ -658,6 +658,104 @@ profiles.dateIdeas
 profiles.compatibilityDimensions
 ```
 
+## Account Center Write Chains
+
+### Managed profile update
+
+```text
+/pages/account/profile-detail
+-> account profile edit form
+-> PATCH /api/account/profiles/:profileId
+-> ownership permission check
+-> profiles write
+-> rebuild AccountProfileDetailDTO
+-> refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- Only `owner` and `manager` can write.
+- `viewer` is read-only.
+- This endpoint writes only profile main-table fields.
+- Contact methods, internal records, verification, photos and prompts stay on separate chains.
+- Localized fields write only to the current request locale slot.
+- `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
+
+### Managed profile visibility update
+
+```text
+/pages/account/profile-detail
+-> visibility editor
+-> PATCH /api/account/profiles/:profileId/visibility
+-> ownership permission check
+-> advisor lock check
+-> profile_visibility_settings write
+-> return AccountProfileVisibilityDTO[]
+-> refresh visibilityItems
+```
+
+Rules:
+
+- `fieldCode` must be a `ProfileFieldCode`.
+- `lockedByAdvisor = true` fields cannot be changed by the user.
+- Missing fields are not overwritten.
+- Visibility remains profile-specific, not account-wide.
+
+### Account preferences update
+
+```text
+/pages/account/settings
+-> preference controls
+-> PATCH /api/account/settings/preferences
+-> user_preferences upsert
+-> return AccountSettingsDTO
+-> refresh AccountSettingsPageData
+```
+
+Rules:
+
+- Only `AccountPreferenceCode` values may be written.
+- Settings stores code/value, never display copy.
+- This chain does not mutate `users`, `auth_identities`, or agreement acceptance history.
+
+### Account basics update
+
+```text
+/pages/account/settings
+-> account identity form
+-> PATCH /api/account/me
+-> users write
+-> return AccountMeDTO
+-> refresh account shell and AccountSettingsPageData
+```
+
+Rules:
+
+- Only `accountName` and `avatarUrl` are writable in this phase.
+- `preferredLocale` remains owned by the language flow.
+- `status`, onboarding and auth identities are not mutated here.
+
+### Membership upgrade
+
+```text
+/pages/account/membership
+-> choose target plan
+-> POST /api/account/membership/upgrade
+-> validate active target plan and upgrade direction
+-> close current active user_memberships
+-> create next active user_memberships
+-> rebuild user_entitlement_balances from target plan
+-> return AccountMembershipUpgradeResultDTO
+-> refresh membership page
+```
+
+Rules:
+
+- Users can only upgrade to active plans above their current tier.
+- Mock implementation may complete immediately; production may later insert payment / advisor approval before activation.
+- The page contract stays stable even if the execution path later becomes asynchronous.
+- Membership tier is never written into `users`.
+
 ## Event Directory Chain
 
 Flow:

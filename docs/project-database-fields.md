@@ -22,14 +22,14 @@
 | `profile_internal_records` | `ProfileInternalRecord[]` | 后台 / 顾问可见的敏感运营资料。 | 后续进入顾问后台，不直接返回前端 detail。 |
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、顾问审核等认证资料。 | detail 的 `isVerified` 由该集合派生。 |
 | `profile_contact_methods` | `ProfileContactMethodRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
-| `profile_visibility_settings` | `ProfileVisibilitySettingRecord[]` | profile 字段可见性配置；detail 链路会优先读取该集合，空集合时使用默认常量表。 | 后续与 account safety / membership 权限联动。 |
+| `profile_visibility_settings` | `ProfileVisibilitySettingRecord[]` | profile 字段可见性配置；detail 链路会优先读取该集合，空集合时使用默认常量表。 | Phase 5.5 接入 account profile detail 写入。 |
 | `events` | `EventRecord[]` | 活动主表，保存扁平活动资料、开放范围、地址可见性、容量与展示文案。 | 后续接入真实活动创建 / 编辑入口。 |
 | `event_agenda_items` | `EventAgendaItemRecord[]` | 活动流程项，按 `eventId + sortOrder` 关联活动。 | 后续接入活动后台编辑。 |
 | `event_registrations` | `EventRegistrationRecord[]` | 活动报名关系，是活动人数、候补与报名状态的 source of truth。 | 后续与 account activity / notification 联动。 |
-| `users` | `UserRecord[]` | 登录账户主体，只保存账户身份、头像、默认语言和状态。 | Phase 5 与 account 页面重写继续扩展 preferences。 |
+| `users` | `UserRecord[]` | 登录账户主体，只保存账户身份、头像、默认语言和状态。 | 保持账户主体精简；Phase 5.5 只补 `accountName` / `avatarUrl` 写入。 |
 | `auth_identities` | `AuthIdentityRecord[]` | 登录身份，使用 `provider + identifier + passwordHash`。 | 后续接入真实哈希和第三方 provider。 |
 | `user_onboarding_states` | `UserOnboardingStateRecord[]` | 注册入口路径和 onboarding 进度。 | 后续 profile 创建链路更新 `profileId` / `completedAt`。 |
-| `user_memberships` | `UserMembershipRecord[]` | 当前用户会员等级与状态。 | Phase 5 拆为 plan、entitlement、balance。 |
+| `user_memberships` | `UserMembershipRecord[]` | 当前用户会员等级与状态。 | 已与 plan、entitlement、balance 分层；Phase 5.5 接入升级写入。 |
 | `profile_ownerships` | `ProfileOwnershipRecord[]` | user 与 profile 的拥有关系。 | 后续扩展多 profile 管理和 advisor 权限。 |
 | `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 后续统一时间字段。 |
 | `message_threads` | `MessageThreadRecord[]` | 旧会话摘要。 | 后续被 private introduction room / messages 替代。 |
@@ -316,6 +316,6 @@ interface EventRegistrationRecord {
 
 ## 仍待后续阶段处理
 
-- `profile_visibility_settings` 已接入 detail 链路，但 account safety 页面还未提供写入入口。
-- private introduction 还未拆出 room / messages / read receipts。
-- account 页面仍是 Phase 1 冻结后的壳，Phase 5 重写。
+- `profile_visibility_settings` 已接入 detail 读取链路；Phase 5.5 需要在 account profile detail 提供写入入口。
+- private introduction room / messages 已有基础结构，read receipts 仍待后续阶段处理。
+- account center 已完成 Phase 5 只读重写；Phase 5.5 需要补齐 profile、visibility、account basics、preferences、membership 的写操作。

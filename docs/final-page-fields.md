@@ -149,7 +149,7 @@ interface RegisterPageFields {
 
 注册页不采集 profile 字段，例如 `city`、身高、学历、职业、婚恋偏好等。城市进入 profile 创建或账户偏好，不进入账户注册字段。
 
-注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；用户后续可在 account preferences 中修改账户默认语言。
+注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；Phase 5.5 不在 settings 中提供手动语言写入口。
 
 `agreed` 勾选后才允许提交。成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（版本不变则跳过）。
 
@@ -506,6 +506,7 @@ interface AccountProfileDetailPageData {
   sections: AccountProfileDetailSectionViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
   visibilityItems: ProfileVisibilitySettingViewModel[]
+  editState: AccountProfileEditStateViewModel
 }
 
 interface AccountProfileDetailSectionViewModel {
@@ -515,8 +516,19 @@ interface AccountProfileDetailSectionViewModel {
 }
 
 interface AccountProfileDetailFieldViewModel {
+  key: string
   label: string
   value: string
+  editable: boolean
+  inputType?: 'text' | 'number' | 'boolean' | 'select' | 'multi_select'
+  options?: Array<{ label: string; value: string }>
+}
+
+interface AccountProfileEditStateViewModel {
+  canEdit: boolean
+  dirty: boolean
+  saving: boolean
+  saveAction?: PageActionViewModel
 }
 
 interface ProfileVerificationSummaryViewModel {
@@ -679,15 +691,30 @@ interface PrivateIntroductionRoomMessagePageViewModel {
 
 ```ts
 interface AccountSettingsPageData {
+  account: AccountSettingsIdentityViewModel
   preferences: AccountPreferenceViewModel[]
   legalDocuments: LegalDocumentLinkViewModel[]
+  editState: AccountSettingsEditStateViewModel
+}
+
+interface AccountSettingsIdentityViewModel {
+  accountName: string
+  avatarUrl: string
+  editable: boolean
 }
 
 interface AccountPreferenceViewModel {
   code: AccountPreferenceCode
   label: string
   value: string | boolean | number | string[]
+  editable: boolean
   action?: PageActionViewModel
+}
+
+interface AccountSettingsEditStateViewModel {
+  dirty: boolean
+  saving: boolean
+  saveAction?: PageActionViewModel
 }
 
 interface LegalDocumentLinkViewModel {

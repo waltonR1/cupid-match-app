@@ -19,6 +19,7 @@ Phase 3: 修正当前 auth / registration / onboarding 模型
 Phase 4: 完成 events 页面与 API 字段链路
 Phase 4.5: 升级 agreement / legal documents 链路
 Phase 5: 按最终态重写 account / membership / entitlement
+Phase 5.5: 补齐 account center 写操作
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
 
@@ -1401,6 +1402,144 @@ account center 应按用户任务收敛为 6 个稳定页面：
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。
 
+## Phase 5.5：补齐 account center 写操作
+
+### 目标
+
+在 Phase 5 已完成的只读账户中心上补齐第一批真实写操作，让页面职责和用户心智真正闭环：
+
+- 用户可以在统一资料详情页维护自己有权限管理的 profile。
+- 用户可以在同一页调整该 profile 的字段可见性。
+- 用户可以在设置页维护账户基础信息和账户级偏好。
+- 用户可以在会员页发起会员等级变更，并让当前会员与权益余额同步刷新。
+
+这一阶段只补齐 **account center 内已经出现的操作入口**，不扩展为新的产品线。
+
+### 明确范围
+
+本阶段要做：
+
+- profile main fields 更新。
+- profile photos / prompts 后续可独立编辑，但本阶段先只定义链路，不强制做完整 UI。
+- profile visibility settings 更新。
+- account basic fields 更新。
+- account preferences 更新。
+- membership upgrade mock flow。
+
+本阶段不做：
+
+- auth identities 管理，例如改邮箱、改手机号、改密码。
+- 正式支付、订单、退款、续费账单。
+- 顾问后台审批流。
+- 私人介绍 room 发消息。
+- event 报名流程重写。
+- profile verification 的用户侧提交和审核。
+
+### 页面职责
+
+- `/pages/account/profile-detail`
+  - 仍是 self / family 共用的统一资料详情页。
+  - 从只读档案升级为“可编辑档案”。
+  - 每个 section 对应一组可编辑字段。
+  - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
+  - profile visibility 在同页维护，不再散落到 settings。
+
+- `/pages/account/settings`
+  - 只维护账户级信息和偏好。
+  - 本阶段支持更新 `accountName`、`avatarUrl` 与 `user_preferences`。
+  - `preferredLocale` 继续由语言链路维护，不在 settings 里提供手动写入口。
+
+- `/pages/account/membership`
+  - 展示当前套餐、额度和可升级套餐。
+  - 支持对更高套餐发起升级动作。
+  - mock 阶段可直接完成等级切换；正式产品以后替换为支付 / 顾问流程，不改变页面 contract。
+
+### API 目标
+
+```text
+PATCH /api/account/profiles/:profileId
+PATCH /api/account/profiles/:profileId/visibility
+PATCH /api/account/me
+PATCH /api/account/settings/preferences
+POST  /api/account/membership/upgrade
+```
+
+| Endpoint | Source of truth | Payload | Response |
+| --- | --- | --- | --- |
+| `PATCH /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
+| `PATCH /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
+| `PATCH /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
+| `PATCH /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
+| `POST /api/account/membership/upgrade` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
+
+### 写入规则
+
+profile：
+
+- 只允许 `owner` / `manager` 修改；`viewer` 只能读。
+- 只允许更新 profile 主表字段，不允许通过该接口顺手写 contact / internal / verification。
+- localized 字段仍遵守当前 locale slot 写入规则。
+- `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
+- `isPriorityProfile` 不是用户可写字段。
+
+visibility：
+
+- 只允许编辑未被 `lockedByAdvisor` 锁定的字段。
+- `fieldCode` 必须来自 `ProfileFieldCode`。
+- 只更新传入项；未传字段保持原值。
+- profile detail 返回的 visibility 必须是最新结果，避免页面刷新后回退。
+
+preferences：
+
+- `code` 必须来自 `AccountPreferenceCode`。
+- 本阶段只支持 `preferred_city`、`advisor_contact_enabled`、`family_assist_enabled`。
+- 设置页不保存文案，只保存 code/value。
+
+account me：
+
+- 本阶段只允许更新 `accountName` 和 `avatarUrl`。
+- `preferredLocale` 由语言切换链路维护，不在 settings form 里手动提交。
+- 不通过该接口修改 `status`、onboarding 或 auth identity。
+
+membership：
+
+- 只允许升级到比当前套餐更高的 active plan。
+- mock 阶段升级成功后：
+  - 关闭旧 active `user_memberships`
+  - 创建新 active `user_memberships`
+  - 按目标套餐重建 `user_entitlement_balances`
+- 不在 `users` 上写 tier。
+- 正式支付未接入前，接口语义仍保留为“升级申请 / 升级结果”，避免未来换实现时前端 contract 再改一次。
+
+### 前端改动建议
+
+- `src/api/account/*`
+- `src/hooks/account/use-account-profile-detail.ts`
+- `src/hooks/account/use-account-settings.ts`
+- `src/hooks/account/use-account-membership.ts`
+- `src/pages/account/profile-detail.vue`
+- `src/pages/account/settings.vue`
+- `src/pages/account/membership.vue`
+- `src/mappers/account-profile-detail.ts`
+- `src/mappers/account-settings.ts`
+- `src/mappers/account-membership.ts`
+- `src/i18n/messages/*/account-center.ts`
+
+### 验收标准
+
+- 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
+- `viewer` 无法提交 profile 更新。
+- visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
+- settings 页修改偏好后刷新仍保持。
+- settings 页修改 `accountName` / `avatarUrl` 后刷新仍保持。
+- membership 升级后当前套餐与 entitlement balances 同步变化。
+- 写接口都返回更新后的 DTO，前端不需要本地猜测新状态。
+- 不新增 account 页面专属数据库字段。
+- `npm run type-check` 通过。
+- `npm run mock:build` 通过。
+- `npm run check:i18n` 通过。
+- `npm run build:h5` 通过。
+
 ## Phase 6：完成 profile / event / account / private introduction 联动
 
 ### 目标
@@ -1527,6 +1666,16 @@ refactor(common): load agreement dialog content from api
 refactor(account): split account api modules
 refactor(account): rebuild membership model
 refactor(account): use profile ownerships
+```
+
+### Phase 5.5
+
+```text
+feat(account): add managed profile updates
+feat(account): add profile visibility controls
+feat(account): add account basics updates
+feat(account): add preference updates
+feat(account): add membership upgrade flow
 ```
 
 ### Phase 6

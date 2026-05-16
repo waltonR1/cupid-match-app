@@ -129,6 +129,11 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introduction-rooms` | 私人介绍沟通空间。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
+| Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
+| Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
+| Account | `PATCH` | `/api/account/me` | 更新账户基础信息。 |
+| Account | `PATCH` | `/api/account/settings/preferences` | 更新账户偏好。 |
+| Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 调试拒绝申请。 |
@@ -953,7 +958,86 @@ interface AccountProfileVisibilityDTO {
   visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
   lockedByAdvisor: boolean
 }
+
+interface AccountProfileUpdatePayload {
+  gender?: 'male' | 'female'
+  birthYear?: number
+  height?: number
+  city?: string
+  country?: string
+  nationality?: string
+  languages?: string[]
+  familyVisible?: boolean
+  allowFamilyContact?: boolean
+  familyPriority?: boolean
+  degreeLevel?: 'bachelor' | 'master' | 'phd'
+  education?: string
+  industry?: string
+  careerDirection?: string
+  maritalStatus?: 'never_married' | 'divorced' | 'widowed'
+  hasChildren?: boolean
+  childrenPlan?: 'wants' | 'open_to_discuss' | 'does_not_want'
+  acceptsLongDistance?: boolean
+  datingIntentionCode?: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
+  relationshipPlan?: string
+  residencePlan?: string
+  relocationWillingness?: string
+  values?: string[]
+  preferredAgeMin?: number
+  preferredAgeMax?: number
+  locationScope?: string
+  preferredEducation?: string
+  familyPlan?: string
+  dealBreakers?: string[]
+  smoking?: 'never' | 'social' | 'often'
+  drinking?: 'never' | 'social' | 'often'
+  exercise?: string
+  activityLevel?: string
+  weekendStyle?: string
+  pets?: string
+  personalityTraits?: string[]
+  interests?: string[]
+  communicationStyle?: string
+  summary?: string
+  tags?: string[]
+}
+
+interface AccountProfileVisibilityUpdatePayload {
+  entries: Array<{
+    fieldCode: ProfileFieldCode
+    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+  }>
+}
+
+interface AccountPreferenceUpdatePayload {
+  entries: Array<{
+    code: AccountPreferenceCode
+    value: string | boolean | number | string[]
+  }>
+}
+
+interface AccountMeUpdatePayload {
+  accountName?: string
+  avatarUrl?: string
+}
+
+interface AccountMembershipUpgradePayload {
+  targetTier: 'silver' | 'gold' | 'diamond'
+}
+
+interface AccountMembershipUpgradeResultDTO {
+  membership: AccountMembershipDTO
+  entitlements: AccountEntitlementBalanceDTO[]
+}
 ```
+
+Write rules:
+
+- `PATCH /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
+- `PATCH /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
+- `PATCH /api/account/me` updates account display basics only; auth identities and status are out of scope.
+- `PATCH /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.
+- `POST /api/account/membership/upgrade` accepts only active higher-tier plans and returns the refreshed membership snapshot.
 
 禁止在 account DTO 中返回这些 legacy 字段：
 
