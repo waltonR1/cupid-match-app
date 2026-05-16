@@ -2,8 +2,8 @@ import type {LocalizedText} from './common.js'
 import type {ProfileRestrictedFieldValue} from '../constants/profile-access.js'
 import type {MembershipLevel, PrivateIntroductionStatus} from './database.js'
 
-/** 资料状态 */
-export type ProfileStatus = 'open' | 'vip' | 'review' | 'draft' | 'paused' | 'hidden'
+/** 资料发布状态 */
+export type ProfileStatus = 'open' | 'review' | 'draft' | 'paused' | 'hidden'
 
 /** 性别编码 */
 export type GenderCode = 'male' | 'female'
@@ -77,9 +77,11 @@ export interface ProfileVerificationRecord {
     profileId: string
     legalName?: string
     dateOfBirth?: string
-    identityStatus: 'pending' | 'verified' | 'rejected'
-    educationStatus: 'pending' | 'verified' | 'rejected'
-    advisorStatus: 'pending' | 'verified' | 'rejected'
+    identityStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
+    educationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
+    incomeStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
+    maritalStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
+    advisorStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
     createdAt: string
     updatedAt: string
 }
@@ -100,7 +102,7 @@ export interface ProfileVisibilitySettingRecord {
     id: string
     profileId: string
     fieldCode: string
-    visibility: 'public' | 'registered' | 'member' | 'private'
+    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
     createdAt: string
     updatedAt: string
 }
@@ -116,6 +118,7 @@ export interface ProfileRecord {
     nationality: LocalizedText
     languages: string[]
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     lastActiveAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
@@ -205,6 +208,7 @@ export interface SelfProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -222,6 +226,7 @@ export interface FamilyProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatus
@@ -247,6 +252,7 @@ export interface SelfProfileDetailDTO {
     country: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     isVerified: boolean
     education: string
     industry: Restricted<string>
@@ -295,6 +301,7 @@ export interface FamilyProfileDetailDTO {
     nationality: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     isVerified: boolean
     familyVisible: boolean
     allowFamilyContact: boolean

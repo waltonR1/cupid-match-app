@@ -18,6 +18,7 @@ export const commonMessages: AppMessageSchema = {
       account: '个人中心',
       myProfile: '我的资料',
       messages: '消息中心',
+      settings: '设置',
     },
     footer: {
       brandDesc: '以巴黎为起点，连接全球高质量的相遇。',

@@ -86,42 +86,52 @@ export function openEventDetail(id: string) {
   openPage(`/pages/events/detail?id=${encodeURIComponent(id)}`)
 }
 
-/** 打开账号资料页 */
+/** 打开账户首页 */
 export function openAccountPage() {
-  openPage('/pages/account/profile')
+  openPage('/pages/account/index')
 }
 
-/** 打开我的资料页，目前复用账号资料页 */
+/** 打开我的资料页 */
 export function openMyProfilePage() {
-  openAccountPage()
+  openPage('/pages/account/profiles')
 }
 
-/** 打开账号动态页 */
-export function openActivityPage() {
-  openPage('/pages/account/activity')
+/** 打开账户中心统一档案详情页 */
+export function openAccountProfileDetail(id: string) {
+  openPage(`/pages/account/profile-detail?id=${encodeURIComponent(id)}`)
 }
 
-/** 打开消息页 */
-export function openMessagesPage() {
-  openPage('/pages/account/messages')
+/** 打开活动页 */
+export function openAccountEventsPage() {
+  openPage('/pages/account/events')
 }
 
-/** 打开认证页 */
-export function openVerificationPage() {
-  openPage('/pages/account/verification')
+/** 打开关系页 */
+export function openRelationshipPage() {
+  openPage('/pages/account/relationship')
 }
 
-/** 打开人脉 / 连接页 */
-export function openConnectionsPage() {
-  openPage('/pages/account/connections')
+/** 打开设置页 */
+export function openAccountSettingsPage() {
+  openPage('/pages/account/settings')
 }
 
-/** 打开安全设置页 */
-export function openSafetyPage() {
-  openPage('/pages/account/safety')
-}
-
-/** 打开会员页 */
+/** 打开会员页。 */
 export function openMembershipPage() {
   openPage('/pages/account/membership')
+}
+
+/** 打开关系页中的沟通区域。 */
+export function openMessagesPage() {
+  openRelationshipPage()
+}
+
+/** 打开资料页中的认证区域。 */
+export function openVerificationPage() {
+  openMyProfilePage()
+}
+
+/** 打开关系页。 */
+export function openConnectionsPage() {
+  openRelationshipPage()
 }

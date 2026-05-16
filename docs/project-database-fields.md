@@ -193,6 +193,7 @@ interface ProfileRecord {
     nationality: LocalizedText
     languages: string[]
     profileStatus: ProfileStatus
+    isPriorityProfile: boolean
     lastActiveAt: string
     familyVisible: boolean
     allowFamilyContact: boolean

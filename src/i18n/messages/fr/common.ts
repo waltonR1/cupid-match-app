@@ -18,6 +18,7 @@ export const commonMessages: AppMessageSchema = {
       account: 'Mon compte',
       myProfile: 'Mon profil',
       messages: 'Messages',
+      settings: 'Parametres',
     },
     footer: {
       brandDesc: 'Depuis Paris, pour des rencontres de qualite a l echelle mondiale.',

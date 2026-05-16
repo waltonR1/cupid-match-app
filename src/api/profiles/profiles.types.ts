@@ -4,8 +4,8 @@ export type FormatLocale = 'zh' | 'fr' | 'en'
 /** 性别编码 */
 export type GenderCode = 'male' | 'female'
 
-/** 资料状态编码 */
-export type ProfileStatusCode = 'open' | 'review' | 'vip'
+/** 资料发布状态编码 */
+export type ProfileStatusCode = 'open' | 'review'
 
 /** 婚姻状态编码 */
 export type MaritalStatusCode = 'never_married' | 'divorced' | 'widowed'
@@ -93,6 +93,7 @@ export interface SelfProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
+    isPriorityProfile: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -110,6 +111,7 @@ export interface FamilyProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
+    isPriorityProfile: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatusCode
@@ -135,6 +137,7 @@ export interface SelfProfileDetail {
     country: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
+    isPriorityProfile: boolean
     isVerified: boolean
     education: string
     industry: RestrictedProfileField<string>
@@ -183,6 +186,7 @@ export interface FamilyProfileDetail {
     nationality: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
+    isPriorityProfile: boolean
     isVerified: boolean
     familyVisible: boolean
     allowFamilyContact: boolean

@@ -309,7 +309,8 @@ interface ProfileRecord {
   country: LocalizedText
   nationality: LocalizedText
   languages: string[]
-  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
+  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
+  isPriorityProfile: boolean
   lastActiveAt: string
   familyVisible: boolean
   allowFamilyContact: boolean
@@ -1342,8 +1343,9 @@ Contract 对齐要求：
 | --- | --- | --- | --- |
 | `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
 | `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests`, user-visible `advisor_follow_ups` | `AccountDashboardDTO` | `AccountHomePageData` |
-| `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, `profile_visibility_settings`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
-| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]` | `AccountSettingsPageData` |
+| `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
+| `GET /api/account/profiles/:profileId` | `profiles`, `profile_photos`, `profile_prompts`, `profile_visibility_settings`, `profile_verifications`, `profile_ownerships` | `AccountProfileDetailDTO` | `AccountProfileDetailPageData` |
+| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]`, `MembershipPlanDTO[]` | `AccountMembershipPageData` |
 | `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
 | `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountEventsPageData` |
 | `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountRelationshipPageData` |
@@ -1358,8 +1360,8 @@ Contract 对齐要求：
 - agreement acceptance remains backend/audit data; account settings may expose current legal-document entry points, but does not display acceptance history by default.
 - dashboard 只返回 `favoriteCount`，不返回完整 favorites 列表；收藏明细归 relationship。
 - dashboard 只返回摘要切片：`upcomingEvents` 与 `recentIntroductions`；完整列表分别归 events 与 relationship。
-- events 页面可组合 `GET /api/account/events` 与公开活动目录接口，前者负责“我的报名”，后者负责“可参加活动入口”。
-- settings 页面可组合 membership、preferences 与 legal document API；协议确认历史仍只作为后端审计数据保存。
+- events 页面当前只负责“我的报名”；可参加活动入口保留在公开 events 链路。
+- settings 页面组合 preferences 与 legal document API；协议确认历史仍只作为后端审计数据保存。
 - `advisor_follow_ups` 默认是内部记录；只有 `visibility = 'user_visible'` 的记录可进入用户端 dashboard。
 
 ### 前端修改范围
@@ -1377,13 +1379,14 @@ Contract 对齐要求：
 
 ### Account 页面建议
 
-account center 应按用户任务收敛为 5 个稳定页面：
+account center 应按用户任务收敛为 6 个稳定页面：
 
 - `/pages/account/index`：首页，按 onboarding 阶段展示下一步引导、关系动态、资料状态、剩余额度和近期活动。
 - `/pages/account/relationship`：关系，内部以 tab 串联收藏、私人介绍和受控沟通房间。
-- `/pages/account/profiles`：资料，展示 self/family 管理关系、认证状态和字段可见性。
-- `/pages/account/events`：活动，展示我的报名、候补、历史活动和可参加活动入口。
-- `/pages/account/settings`：设置，展示会员、权益、账户偏好和协议入口。
+- `/pages/account/profiles`：资料，展示 self/family 管理关系和认证摘要；字段可见性进入单份资料详情页。
+- `/pages/account/events`：活动，展示我的报名、候补和历史活动。
+- `/pages/account/membership`：会员，展示当前套餐、权益、额度、套餐比较和升级入口。
+- `/pages/account/settings`：设置，展示账户偏好和协议入口。
 
 ### 验收标准
 

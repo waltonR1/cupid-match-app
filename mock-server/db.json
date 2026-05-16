@@ -25,6 +25,7 @@
         "EN"
       ],
       "profileStatus": "open",
+      "isPriorityProfile": false,
       "lastActiveAt": "2026-04-20T18:30:00Z",
       "familyVisible": false,
       "allowFamilyContact": false,
@@ -217,7 +218,8 @@
         "FR",
         "EN"
       ],
-      "profileStatus": "vip",
+      "profileStatus": "open",
+      "isPriorityProfile": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -410,6 +412,7 @@
         "EN"
       ],
       "profileStatus": "review",
+      "isPriorityProfile": false,
       "lastActiveAt": "2026-04-21T20:30:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -602,7 +605,8 @@
         "EN",
         "DE"
       ],
-      "profileStatus": "vip",
+      "profileStatus": "open",
+      "isPriorityProfile": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -796,6 +800,7 @@
         "FR"
       ],
       "profileStatus": "open",
+      "isPriorityProfile": false,
       "lastActiveAt": "2026-04-21T10:45:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -1224,99 +1229,18 @@
       "id": "f-001",
       "userId": "u-001",
       "profileId": "p-001",
-      "savedAt": "2026-03-12",
-      "note": {
-        "zh": "资料完成度高，适合继续了解。",
-        "fr": "Profil complet, a revoir de plus pres.",
-        "en": "High profile completeness and worth reviewing further."
-      }
+      "createdAt": "2026-03-12",
+      "updatedAt": "2026-03-12"
     },
     {
       "id": "f-002",
       "userId": "u-001",
       "profileId": "p-006",
-      "savedAt": "2026-03-28",
-      "note": {
-        "zh": "适合进一步讨论家庭节奏与双城安排。",
-        "fr": "A explorer autour du rythme familial et de la double ville.",
-        "en": "Worth exploring around family rhythm and two-city logistics."
-      }
-    }
-  ],
-  "message_threads": [
-    {
-      "id": "m-001",
-      "userId": "u-001",
-      "profileId": "p-001",
-      "updatedAt": "2026-04-18T19:10:00Z",
-      "unread": 2,
-      "lastMessage": {
-        "zh": "最近巴黎的双语沙龙你会参加吗？",
-        "fr": "Participeras-tu au prochain salon bilingue de Paris ?",
-        "en": "Will you be joining the upcoming bilingual salon in Paris?"
-      }
-    },
-    {
-      "id": "m-002",
-      "userId": "u-001",
-      "profileId": "p-006",
-      "updatedAt": "2026-04-22T20:30:00Z",
-      "unread": 1,
-      "lastMessage": {
-        "zh": "如果节奏合适，也可以讨论巴黎和布鲁塞尔之间的安排。",
-        "fr": "Si le rythme convient, on peut aussi parler d un equilibre Paris-Bruxelles.",
-        "en": "If the pace fits, we can also talk about a Paris-Brussels setup."
-      }
+      "createdAt": "2026-03-28",
+      "updatedAt": "2026-03-28"
     }
   ],
   "private_introduction_requests": [],
-  "privacy_settings": [
-    {
-      "id": "privacy-contact",
-      "userId": "u-001",
-      "enabled": true,
-      "title": {
-        "zh": "允许顾问联系",
-        "fr": "Autoriser le contact conseiller",
-        "en": "Allow advisor contact"
-      },
-      "desc": {
-        "zh": "顾问可在活动、会员升级或资料审核阶段主动联系你。",
-        "fr": "La conseillere peut te contacter pour le suivi des evenements, du profil ou de l abonnement.",
-        "en": "Advisors may proactively contact you for events, profile review, or membership follow-up."
-      }
-    },
-    {
-      "id": "privacy-family",
-      "userId": "u-001",
-      "enabled": true,
-      "title": {
-        "zh": "允许家长辅助了解",
-        "fr": "Autoriser un appui familial limite",
-        "en": "Allow limited family-assisted context"
-      },
-      "desc": {
-        "zh": "在你的授权下，家长可查看有限背景说明。",
-        "fr": "Avec ton accord, la famille peut voir un contexte limite.",
-        "en": "With your permission, family may review limited background context."
-      }
-    },
-    {
-      "id": "privacy-visibility",
-      "userId": "u-001",
-      "enabled": false,
-      "title": {
-        "zh": "公开更多资料字段",
-        "fr": "Rendre plus de champs visibles",
-        "en": "Expose more profile fields"
-      },
-      "desc": {
-        "zh": "当前关闭，部分细节需在进一步互动后开放。",
-        "fr": "Desactive pour garder certains champs visibles seulement plus tard.",
-        "en": "Disabled so some details remain hidden until later interaction."
-      }
-    }
-  ],
   "profile_photos": [
     {
       "id": "p-001-photo-1",
@@ -1985,7 +1909,9 @@
       "legalName": "Aline M.",
       "identityStatus": "verified",
       "educationStatus": "verified",
-      "advisorStatus": "verified",
+      "incomeStatus": "verified",
+      "maritalStatus": "verified",
+      "advisorStatus": "approved",
       "createdAt": "2026-01-12",
       "updatedAt": "2026-04-20T18:30:00Z"
     },
@@ -1995,7 +1921,9 @@
       "legalName": "Lin S.",
       "identityStatus": "verified",
       "educationStatus": "verified",
-      "advisorStatus": "verified",
+      "incomeStatus": "verified",
+      "maritalStatus": "verified",
+      "advisorStatus": "approved",
       "createdAt": "2026-01-18",
       "updatedAt": "2026-04-22T09:00:00Z"
     },
@@ -2005,7 +1933,9 @@
       "legalName": "Sophie L.",
       "identityStatus": "verified",
       "educationStatus": "verified",
-      "advisorStatus": "verified",
+      "incomeStatus": "verified",
+      "maritalStatus": "verified",
+      "advisorStatus": "approved",
       "createdAt": "2026-03-01",
       "updatedAt": "2026-04-21T20:30:00Z"
     },
@@ -2015,7 +1945,9 @@
       "legalName": "Martin K.",
       "identityStatus": "verified",
       "educationStatus": "verified",
-      "advisorStatus": "verified",
+      "incomeStatus": "verified",
+      "maritalStatus": "verified",
+      "advisorStatus": "approved",
       "createdAt": "2026-02-02",
       "updatedAt": "2026-04-25T07:50:00Z"
     },
@@ -2025,7 +1957,9 @@
       "legalName": "Iris N.",
       "identityStatus": "verified",
       "educationStatus": "verified",
-      "advisorStatus": "verified",
+      "incomeStatus": "verified",
+      "maritalStatus": "verified",
+      "advisorStatus": "approved",
       "createdAt": "2026-02-14",
       "updatedAt": "2026-04-21T10:45:00Z"
     }
@@ -3580,5 +3514,278 @@
       "updatedAt": "2026-01-01T00:00:00Z"
     }
   ],
-  "user_agreement_acceptances": []
+  "user_agreement_acceptances": [
+    {
+      "id": "ua-001",
+      "userId": "u-001",
+      "documentType": "terms",
+      "documentVersion": "1.0",
+      "locale": "zh",
+      "acceptedAt": "2026-05-15T22:13:49.126Z",
+      "createdAt": "2026-05-15T22:13:49.126Z"
+    },
+    {
+      "id": "ua-002",
+      "userId": "u-001",
+      "documentType": "privacy",
+      "documentVersion": "1.0",
+      "locale": "zh",
+      "acceptedAt": "2026-05-15T22:13:49.126Z",
+      "createdAt": "2026-05-15T22:13:49.126Z"
+    }
+  ],
+  "membership_plans": [
+    {
+      "id": "plan-free",
+      "tier": "free",
+      "name": {
+        "zh": "免费会员",
+        "fr": "Gratuit",
+        "en": "Free"
+      },
+      "description": {
+        "zh": "基础浏览和匹配功能",
+        "fr": "Consultation et matching de base",
+        "en": "Basic browsing and matching"
+      },
+      "priceCents": 0,
+      "currency": "EUR",
+      "billingPeriod": "monthly",
+      "conciergePriority": false,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "plan-silver",
+      "tier": "silver",
+      "name": {
+        "zh": "银卡会员",
+        "fr": "Argent",
+        "en": "Silver"
+      },
+      "description": {
+        "zh": "更多介绍额度和优先活动报名",
+        "fr": "Plus de quotas et priorite evenements",
+        "en": "More introduction quota and priority event registration"
+      },
+      "priceCents": 2999,
+      "currency": "EUR",
+      "billingPeriod": "monthly",
+      "conciergePriority": false,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "plan-gold",
+      "tier": "gold",
+      "name": {
+        "zh": "金卡会员",
+        "fr": "Or",
+        "en": "Gold"
+      },
+      "description": {
+        "zh": "专属顾问和更多可见性",
+        "fr": "Conseiller dedie et visibilite accrue",
+        "en": "Dedicated advisor and enhanced visibility"
+      },
+      "priceCents": 7999,
+      "currency": "EUR",
+      "billingPeriod": "monthly",
+      "conciergePriority": true,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "plan-diamond",
+      "tier": "diamond",
+      "name": {
+        "zh": "钻石会员",
+        "fr": "Diamant",
+        "en": "Diamond"
+      },
+      "description": {
+        "zh": "顶级服务和无限介绍额度",
+        "fr": "Service premium et quotas illimites",
+        "en": "Premium service and unlimited introductions"
+      },
+      "priceCents": 14999,
+      "currency": "EUR",
+      "billingPeriod": "monthly",
+      "conciergePriority": true,
+      "isActive": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "membership_entitlements": [
+    {
+      "id": "ent-free-pi",
+      "planId": "plan-free",
+      "code": "private_introduction",
+      "quota": 1,
+      "period": "monthly",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-silver-pi",
+      "planId": "plan-silver",
+      "code": "private_introduction",
+      "quota": 3,
+      "period": "monthly",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-silver-ep",
+      "planId": "plan-silver",
+      "code": "event_priority",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-gold-pi",
+      "planId": "plan-gold",
+      "code": "private_introduction",
+      "quota": 10,
+      "period": "monthly",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-gold-ep",
+      "planId": "plan-gold",
+      "code": "event_priority",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-gold-ar",
+      "planId": "plan-gold",
+      "code": "advisor_review",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-gold-pda",
+      "planId": "plan-gold",
+      "code": "profile_detail_access",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-diamond-pi",
+      "planId": "plan-diamond",
+      "code": "private_introduction",
+      "quota": 30,
+      "period": "monthly",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-diamond-ep",
+      "planId": "plan-diamond",
+      "code": "event_priority",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-diamond-ar",
+      "planId": "plan-diamond",
+      "code": "advisor_review",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "ent-diamond-pda",
+      "planId": "plan-diamond",
+      "code": "profile_detail_access",
+      "quota": -1,
+      "period": "none",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "user_entitlement_balances": [
+    {
+      "id": "ueb-001",
+      "userId": "u-001",
+      "entitlementCode": "private_introduction",
+      "period": "monthly",
+      "quotaTotal": 10,
+      "quotaUsed": 0,
+      "quotaRemaining": 10,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    },
+    {
+      "id": "ueb-002",
+      "userId": "u-001",
+      "entitlementCode": "event_priority",
+      "period": "none",
+      "quotaTotal": 0,
+      "quotaUsed": 0,
+      "quotaRemaining": 0,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    },
+    {
+      "id": "ueb-003",
+      "userId": "u-001",
+      "entitlementCode": "advisor_review",
+      "period": "none",
+      "quotaTotal": 0,
+      "quotaUsed": 0,
+      "quotaRemaining": 0,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    },
+    {
+      "id": "ueb-004",
+      "userId": "u-001",
+      "entitlementCode": "profile_detail_access",
+      "period": "none",
+      "quotaTotal": 0,
+      "quotaUsed": 0,
+      "quotaRemaining": 0,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18"
+    }
+  ],
+  "user_preferences": [
+    {
+      "id": "pref-001",
+      "userId": "u-001",
+      "code": "preferred_city",
+      "value": "Paris",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "pref-002",
+      "userId": "u-001",
+      "code": "advisor_contact_enabled",
+      "value": true,
+      "createdAt": "2026-01-01T00:00:00Z",
+      "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "advisor_follow_ups": [],
+  "private_introduction_rooms": [],
+  "private_introduction_room_messages": []
 }

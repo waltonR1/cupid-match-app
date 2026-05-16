@@ -118,7 +118,7 @@ export const familyDetailMessages: AppMessageSchema = {
   status: {
     open: 'Dossier ouvert',
     review: 'En verification',
-    vip: 'Dossier prioritaire',
+    priority: 'Dossier prioritaire',
   },
   maritalStatus: {
     never_married: 'Celibataire',

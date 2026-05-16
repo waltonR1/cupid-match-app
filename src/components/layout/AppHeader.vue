@@ -105,6 +105,13 @@
               <view class="h-px bg-semantic-border-divider" />
               <view
                 class="cursor-pointer px-4 py-3.5 text-[14px] text-semantic-text-secondary transition-colors duration-200 hover:bg-component-header-menu-hover hover:text-semantic-text-primary"
+                @click="handleSettings"
+              >
+                {{ t('common.nav.settings') }}
+              </view>
+              <view class="h-px bg-semantic-border-divider" />
+              <view
+                class="cursor-pointer px-4 py-3.5 text-[14px] text-semantic-text-secondary transition-colors duration-200 hover:bg-component-header-menu-hover hover:text-semantic-text-primary"
                 @click="handleLogout"
               >
                 {{ t('common.nav.logout') }}
@@ -168,7 +175,7 @@ import { ref } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
-import { openAccountPage, openHomePage, openLoginPage, openMessagesPage } from '@/utils/navigation'
+import { openAccountPage, openAccountSettingsPage, openHomePage, openLoginPage, openMessagesPage, openMyProfilePage } from '@/utils/navigation'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useThemeStore } from '@/stores/modules/theme'
 
@@ -237,12 +244,17 @@ function handleAccount() {
 
 function handleMyProfile() {
   closeAllDropdowns()
-  openAccountPage()
+  openMyProfilePage()
 }
 
 function handleMessages() {
   closeAllDropdowns()
   openMessagesPage()
+}
+
+function handleSettings() {
+  closeAllDropdowns()
+  openAccountSettingsPage()
 }
 
 function handleLogout() {

@@ -78,14 +78,14 @@ function toDebugItem(
     request: PrivateIntroductionRequestRecord,
 ): PrivateIntroductionDebugItemDTO {
     const requester = data.users.find((item) => item.id === request.requesterUserId)
-    const profile = data.profiles.find((item) => item.id === request.profileId)
+    const profile = data.profiles.find((item) => item.id === request.targetProfileId)
 
     return {
         id: request.id,
         requesterUserId: request.requesterUserId,
         requesterName: requester?.accountName || request.requesterUserId,
-        profileId: request.profileId,
-        profileName: profile ? deriveProfileDisplayName(profile.id) : request.profileId,
+        profileId: request.targetProfileId,
+        profileName: profile ? deriveProfileDisplayName(profile.id) : request.targetProfileId,
         status: request.status,
         requestedAt: request.requestedAt,
         respondedAt: request.respondedAt,

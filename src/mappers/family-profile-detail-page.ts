@@ -244,8 +244,8 @@ function buildBadges(profile: FamilyProfileDetail, familyModeText: string, t: Tr
         {label: verificationText, tone: profile.isVerified ? 'highlight' : 'muted'},
     ]
 
-    if (profile.profileStatus === 'vip' || profile.familyPriority) {
-        badges.unshift({label: t('status.vip'), tone: 'highlight'})
+    if (profile.isPriorityProfile || profile.familyPriority) {
+        badges.unshift({label: t('status.priority'), tone: 'highlight'})
     }
 
     return badges

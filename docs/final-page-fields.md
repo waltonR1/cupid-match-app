@@ -57,7 +57,7 @@ type ProfileFieldCode =
   | 'contactMethods'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'settings'
+type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'membership' | 'settings'
 type AccountPreferenceCode =
   | 'preferred_city'
   | 'advisor_contact_enabled'
@@ -486,7 +486,8 @@ interface ManagedProfileSummaryViewModel {
   role: 'self' | 'parent' | 'guardian' | 'advisor'
   relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
   permission: 'owner' | 'manager' | 'viewer'
-  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
+  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
+  isPriorityProfile: boolean
   isPrimary: boolean
   verification: ProfileVerificationSummaryViewModel
   action: PageActionViewModel
@@ -494,8 +495,28 @@ interface ManagedProfileSummaryViewModel {
 
 interface AccountProfilesPageData {
   profiles: ManagedProfileSummaryViewModel[]
-  profileVisibility: ProfileVisibilitySettingViewModel[]
   emptyState?: PageEmptyState
+}
+
+interface AccountProfileDetailPageData {
+  profileId: string
+  displayName: string
+  avatarUrl: string
+  ownershipBadges: string[]
+  sections: AccountProfileDetailSectionViewModel[]
+  statusItems: AccountProfileDetailFieldViewModel[]
+  visibilityItems: ProfileVisibilitySettingViewModel[]
+}
+
+interface AccountProfileDetailSectionViewModel {
+  key: string
+  title: string
+  items: AccountProfileDetailFieldViewModel[]
+}
+
+interface AccountProfileDetailFieldViewModel {
+  label: string
+  value: string
 }
 
 interface ProfileVerificationSummaryViewModel {
@@ -512,6 +533,12 @@ interface ProfileVerificationSummaryViewModel {
 ### Membership
 
 ```ts
+interface AccountMembershipPageData {
+  currentPlan: AccountMembershipSummaryViewModel
+  entitlementBalances: AccountEntitlementBalanceViewModel[]
+  availablePlans: MembershipPlanViewModel[]
+}
+
 interface MembershipPlanViewModel {
   tier: 'free' | 'silver' | 'gold' | 'diamond'
   name: string
@@ -546,7 +573,6 @@ interface AccountEntitlementBalanceViewModel {
 ```ts
 interface AccountEventsPageData {
   eventRegistrations: AccountEventRegistrationViewModel[]
-  recommendedEvents: EventOverviewItem[]
   emptyState?: PageEmptyState
 }
 
@@ -569,7 +595,6 @@ interface AccountEventRegistrationViewModel {
 
 ```ts
 interface AccountRelationshipPageData {
-  activeTab: 'favorites' | 'introductions' | 'messages'
   tabs: AccountRelationshipTabViewModel[]
   favorites: FavoriteProfileSummaryViewModel[]
   introductions: AccountIntroductionSummaryViewModel[]
@@ -654,9 +679,6 @@ interface PrivateIntroductionRoomMessagePageViewModel {
 
 ```ts
 interface AccountSettingsPageData {
-  currentPlan: AccountMembershipSummaryViewModel
-  entitlementBalances: AccountEntitlementBalanceViewModel[]
-  availablePlans: MembershipPlanViewModel[]
   preferences: AccountPreferenceViewModel[]
   legalDocuments: LegalDocumentLinkViewModel[]
 }

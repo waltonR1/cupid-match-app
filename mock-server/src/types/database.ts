@@ -107,7 +107,7 @@ export type PrivateIntroductionStatus =
 export interface PrivateIntroductionRequestRecord {
     id: string
     requesterUserId: string
-    profileId: string
+    targetProfileId: string
     status: PrivateIntroductionStatus
     requestedAt: string
     respondedAt?: string
@@ -238,6 +238,108 @@ export interface UserAgreementAcceptanceRecord {
     createdAt: string
 }
 
+/** 会员套餐定义 */
+export interface MembershipPlanRecord {
+    id: string
+    tier: MembershipLevel
+    name: LocalizedText
+    description: LocalizedText
+    priceCents?: number
+    currency?: 'EUR' | 'USD' | 'CNY'
+    billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+    conciergePriority: boolean
+    isActive: boolean
+    createdAt: string
+    updatedAt: string
+}
+
+/** 权益编码 */
+export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+
+/** 套餐权益定义 */
+export interface MembershipEntitlementRecord {
+    id: string
+    planId: string
+    code: EntitlementCode
+    quota: number
+    period: 'none' | 'monthly' | 'quarterly' | 'yearly'
+    createdAt: string
+    updatedAt: string
+}
+
+/** 用户权益余额 */
+export interface UserEntitlementBalanceRecord {
+    id: string
+    userId: string
+    entitlementCode: EntitlementCode
+    period: string
+    quotaTotal: number
+    quotaUsed: number
+    quotaRemaining: number
+    resetAt?: string
+    createdAt: string
+    updatedAt: string
+}
+
+/** 账户偏好编码 */
+export type AccountPreferenceCode = 'preferred_city' | 'advisor_contact_enabled' | 'family_assist_enabled'
+
+/** 账户偏好 */
+export interface UserPreferenceRecord {
+    id: string
+    userId: string
+    code: AccountPreferenceCode
+    value: string | boolean | number | string[]
+    createdAt: string
+    updatedAt: string
+}
+
+/** 顾问跟进记录可见性 */
+export type AdvisorFollowUpVisibility = 'internal' | 'user_visible'
+
+/** 顾问跟进记录 */
+export interface AdvisorFollowUpRecord {
+    id: string
+    advisorId: string
+    userId?: string
+    profileId?: string
+    requestId?: string
+    eventId?: string
+    status: 'open' | 'done' | 'snoozed'
+    priority: 'low' | 'normal' | 'high'
+    visibility: AdvisorFollowUpVisibility
+    note: LocalizedText
+    dueAt?: string
+    completedAt?: string
+    createdAt: string
+    updatedAt: string
+}
+
+/** 私人介绍 room */
+export interface PrivateIntroductionRoomRecord {
+    id: string
+    requestId: string
+    requesterUserId: string
+    targetProfileId: string
+    status: 'open' | 'paused' | 'closed'
+    openedAt: string
+    closedAt?: string
+    advisorId?: string
+    createdAt: string
+    updatedAt: string
+}
+
+/** 私人介绍 room 消息 */
+export interface PrivateIntroductionRoomMessageRecord {
+    id: string
+    roomId: string
+    senderType: 'user' | 'advisor' | 'system'
+    senderUserId?: string
+    body: string
+    createdAt: string
+    updatedAt: string
+}
+
 /** 数据库结构 */
 export interface Database {
     profiles: ProfileRecord[]
@@ -250,15 +352,20 @@ export interface Database {
     events: EventRecord[]
     event_agenda_items: EventAgendaItemRecord[]
     event_registrations: EventRegistrationRecord[]
+    membership_plans: MembershipPlanRecord[]
+    membership_entitlements: MembershipEntitlementRecord[]
+    user_memberships: UserMembershipRecord[]
+    user_entitlement_balances: UserEntitlementBalanceRecord[]
+    user_preferences: UserPreferenceRecord[]
+    advisor_follow_ups: AdvisorFollowUpRecord[]
+    private_introduction_rooms: PrivateIntroductionRoomRecord[]
+    private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
     legal_documents: LegalDocumentRecord[]
     user_agreement_acceptances: UserAgreementAcceptanceRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
     user_onboarding_states: UserOnboardingStateRecord[]
-    user_memberships: UserMembershipRecord[]
     profile_ownerships: ProfileOwnershipRecord[]
     favorite_profiles: FavoriteProfileRecord[]
-    message_threads: MessageThreadRecord[]
     private_introduction_requests: PrivateIntroductionRequestRecord[]
-    privacy_settings: PrivacySettingRecord[]
 }

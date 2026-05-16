@@ -13,17 +13,22 @@ const defaultData: Database = {
     events: [],
     event_agenda_items: [],
     event_registrations: [],
+    membership_plans: [],
+    membership_entitlements: [],
+    user_memberships: [],
+    user_entitlement_balances: [],
+    user_preferences: [],
+    advisor_follow_ups: [],
+    private_introduction_rooms: [],
+    private_introduction_room_messages: [],
     legal_documents: [],
     user_agreement_acceptances: [],
     users: [],
     auth_identities: [],
     user_onboarding_states: [],
-    user_memberships: [],
     profile_ownerships: [],
     favorite_profiles: [],
-    message_threads: [],
     private_introduction_requests: [],
-    privacy_settings: [],
 }
 
 /** 数据库实例 */
@@ -51,8 +56,16 @@ export async function initDb(): Promise<void> {
     db.data.event_registrations ??= []
     db.data.user_onboarding_states ??= []
     db.data.user_memberships ??= []
+    db.data.membership_plans ??= []
+    db.data.membership_entitlements ??= []
+    db.data.user_entitlement_balances ??= []
+    db.data.user_preferences ??= []
+    db.data.advisor_follow_ups ??= []
+    db.data.private_introduction_rooms ??= []
+    db.data.private_introduction_room_messages ??= []
     db.data.legal_documents ??= []
     db.data.user_agreement_acceptances ??= []
+    db.data.favorite_profiles ??= []
 }
 
 /** 获取数据库实例 */

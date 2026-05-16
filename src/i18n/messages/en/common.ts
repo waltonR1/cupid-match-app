@@ -18,6 +18,7 @@ export const commonMessages: AppMessageSchema = {
       account: 'Account',
       myProfile: 'My Profile',
       messages: 'Messages',
+      settings: 'Settings',
 
     },
     footer: {

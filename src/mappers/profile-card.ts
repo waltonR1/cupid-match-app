@@ -25,7 +25,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
             {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
         ],
         tags: profile.tags.slice(0, 3),
-        footer: t(resolveSelfFooterKey(profile.profileStatus)),
+        footer: t(resolveSelfFooterKey(profile.profileStatus, profile.isPriorityProfile)),
     }
 }
 
@@ -71,12 +71,12 @@ function resolveIntentBadgeKey(code: DatingIntentionCode): string {
 }
 
 /** 解析个人卡片底部文案 */
-function resolveSelfFooterKey(profileStatus: ProfileStatusCode): string {
+function resolveSelfFooterKey(profileStatus: ProfileStatusCode, isPriorityProfile: boolean): string {
+    if (isPriorityProfile) return 'card.labelPriority'
+
     switch (profileStatus) {
         case 'review':
             return 'card.labelReview'
-        case 'vip':
-            return 'card.labelPriority'
         case 'open':
         default:
             return 'card.labelSelected'

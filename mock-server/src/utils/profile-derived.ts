@@ -42,7 +42,7 @@ export function deriveProfileVerified(verifications: ProfileVerificationRecord[]
     return verifications.some((item) => {
         return item.identityStatus === 'verified'
             || item.educationStatus === 'verified'
-            || item.advisorStatus === 'verified'
+            || item.advisorStatus === 'approved'
     })
 }
 

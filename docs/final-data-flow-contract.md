@@ -261,7 +261,8 @@ interface ProfileDirectoryBaseItemDTO {
   gender: 'male' | 'female'
   age: number
   city: string
-  profileStatus: 'open' | 'review' | 'vip'
+  profileStatus: 'open' | 'review'
+  isPriorityProfile: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -354,7 +355,8 @@ interface ProfileDetailBaseDTO {
   country: RestrictedProfileField<string>
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
-  profileStatus: 'open' | 'review' | 'vip'
+  profileStatus: 'open' | 'review'
+  isPriorityProfile: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -946,9 +948,13 @@ Page composition:
 -> event directory recommendations
 -> one participation page
 
-/pages/account/settings
+/pages/account/membership
 -> membership
 -> entitlements
+-> available plans
+-> one service-value page
+
+/pages/account/settings
 -> user preferences
 -> legal document entry points from legal API
 -> one low-frequency configuration page

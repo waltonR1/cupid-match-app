@@ -118,7 +118,7 @@ export const familyDetailMessages: AppMessageSchema = {
   status: {
     open: '开放资料',
     review: '审核中',
-    vip: '优先资料',
+    priority: '优先资料',
   },
   maritalStatus: {
     never_married: '未婚',

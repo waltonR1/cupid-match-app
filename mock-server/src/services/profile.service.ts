@@ -288,7 +288,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
     data.private_introduction_requests.push({
         id: nextId('intro', data.private_introduction_requests),
         requesterUserId: userContext.userId,
-        profileId,
+        targetProfileId: profileId,
         status: 'requested',
         requestedAt: now,
     })
@@ -327,6 +327,7 @@ export function toSelfProfileListItem(locale: ApiLocale, profile: ProfileWithDis
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
+        isPriorityProfile: profile.isPriorityProfile,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
         datingIntentionCode: profile.datingIntentionCode,
@@ -346,6 +347,7 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
+        isPriorityProfile: profile.isPriorityProfile,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
@@ -382,6 +384,7 @@ export function toSelfProfileDetail(
         country: resolveLocalizedText(locale, profile.country),
         languages: profile.languages,
         profileStatus: profile.profileStatus,
+        isPriorityProfile: profile.isPriorityProfile,
         isVerified: profile.isVerified,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
@@ -445,6 +448,7 @@ export function toFamilyProfileDetail(
         nationality: resolveLocalizedText(locale, profile.nationality),
         languages: profile.languages,
         profileStatus: profile.profileStatus,
+        isPriorityProfile: profile.isPriorityProfile,
         isVerified: profile.isVerified,
         familyVisible: profile.familyVisible,
         allowFamilyContact: profile.allowFamilyContact,
@@ -613,9 +617,6 @@ function resolveVisibilityRestrictedValue(
     visibility: ProfileVisibilitySettingRecord['visibility'],
 ): ProfileRestrictedFieldValue | null {
     if (visibility === 'public') return null
-    if (visibility === 'registered') {
-        return accessLevel === 'guest' ? PROFILE_FIELD_LOGIN_REQUIRED : null
-    }
     if (visibility === 'member') {
         return accessLevel === 'guest' ? PROFILE_FIELD_LOGIN_REQUIRED : accessLevel === 'free' ? PROFILE_FIELD_MEMBER_ONLY : null
     }
@@ -707,7 +708,7 @@ function latestProfileIntroductionRequest(
     profileId: string,
 ): PrivateIntroductionRequestRecord | null {
     const profileRequests = requests
-        .filter((item) => item.profileId === profileId)
+        .filter((item) => item.targetProfileId === profileId)
         .sort((left, right) => toTimestamp(right.requestedAt) - toTimestamp(left.requestedAt))
 
     return profileRequests[0] ?? null
@@ -769,7 +770,7 @@ function toTimestamp(value: string): number {
 
 /** 获取个人资料优先级 */
 function getSelfPriorityRank(profile: ProfileWithDisplayName): number {
-    return profile.profileStatus === 'vip' ? 0 : 1
+    return profile.isPriorityProfile ? 0 : 1
 }
 
 /** 获取家庭资料优先级 */

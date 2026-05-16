@@ -121,8 +121,9 @@ interface ApiErrorDTO {
 | Events | `POST` | `/api/events/:id/cancel` | 取消活动报名。 |
 | Account | `GET` | `/api/account/me` | 当前账户身份。 |
 | Account | `GET` | `/api/account/dashboard` | 账户首页阶段引导与动态摘要。 |
-| Account | `GET` | `/api/account/profiles` | 用户管理的 profiles、认证和字段可见性。 |
-| Account | `GET` | `/api/account/membership` | 当前会员和权益。 |
+| Account | `GET` | `/api/account/profiles` | 用户管理的 profiles 与认证摘要。 |
+| Account | `GET` | `/api/account/profiles/:profileId` | 单份可管理 profile 的完整详情、认证和字段可见性。 |
+| Account | `GET` | `/api/account/membership` | 当前会员、权益和可升级套餐。 |
 | Account | `GET` | `/api/account/favorites` | 收藏列表。 |
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
@@ -291,7 +292,8 @@ interface ProfileDirectoryBaseItemDTO {
   gender: 'male' | 'female'
   age: number
   city: string
-  profileStatus: 'open' | 'review' | 'vip'
+  profileStatus: 'open' | 'review'
+  isPriorityProfile: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -365,7 +367,8 @@ interface ProfileDetailBaseDTO {
   country: RestrictedProfileField<string>
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
-  profileStatus: 'open' | 'review' | 'vip'
+  profileStatus: 'open' | 'review'
+  isPriorityProfile: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -800,7 +803,23 @@ interface AdvisorFollowUpDTO {
 ```ts
 interface AccountProfilesDTO {
   profiles: ManagedProfileSummaryDTO[]
-  profileVisibility: AccountProfileVisibilityDTO[]
+}
+
+interface AccountProfileDetailDTO {
+  profileId: string
+  displayName: string
+  avatarUrl: string
+  ownership: {
+    role: 'self' | 'parent' | 'guardian' | 'advisor'
+    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    permission: 'owner' | 'manager' | 'viewer'
+    isPrimary: boolean
+  }
+  verification: AccountProfileVerificationDTO
+  visibility: AccountProfileVisibilityDTO[]
+  photos: Array<{ id: string; url: string; caption: string; isPrimary: boolean; sortOrder: number }>
+  prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
+  // 其余业务字段与当前 profile 主表字段保持扁平一致
 }
 
 interface ManagedProfileSummaryDTO {
@@ -812,7 +831,8 @@ interface ManagedProfileSummaryDTO {
   role: 'self' | 'parent' | 'guardian' | 'advisor'
   relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
   permission: 'owner' | 'manager' | 'viewer'
-  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
+  profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
+  isPriorityProfile: boolean
   isPrimary: boolean
   verification: AccountProfileVerificationDTO
 }
@@ -836,6 +856,18 @@ interface AccountMembershipDTO {
   startedAt: string
   expiresAt?: string
   conciergePriority: boolean
+}
+
+interface MembershipPlanDTO {
+  id: string
+  tier: MembershipTier
+  name: string
+  description: string
+  priceCents?: number
+  currency?: string
+  billingPeriod?: string
+  conciergePriority: boolean
+  entitlements: EntitlementCode[]
 }
 
 interface AccountEntitlementBalanceDTO {
