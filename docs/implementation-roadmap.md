@@ -95,7 +95,7 @@ npm run build:h5
 9. account 当前仍读取旧 profile 字段、用户 onboarding 字段和联系方式相关聚合，是 profile 清理的最大阻塞点。Phase 1 必须先冻结 account。
 10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态迁移到 `user_onboarding_states`，注册不写 city。
 11. 当前 `photos / prompts / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / profile_prompts / event_agenda_items`。
-12. profile detail 当前没有直接返回 phone / email / wechat，这是正确方向；后续联系方式进入 `profile_contact_methods`，detail DTO 只返回 contact access 状态。
+12. 面向浏览者的 public profile detail 不直接返回 phone / email / wechat，这是正确方向；受控联系方式进入 `profile_contact_methods`。账户中心中的 owner-side profile detail 可以读取并维护本人管理档案的联系方式。
 13. 权限结果目前主要由后端 masking 给出，前端消费 locked placeholder；这是可承接方向，但应继续收敛为 DTO access/privacy 空间。
 14. 当前 `ProfileRecord` 实际承担数据库、筛选、account 聚合和 DTO 来源等多重职责。Phase 2 必须避免继续扩大这个万能对象。
 15. 总结：当前代码仍是 `Record -> service mapper -> page` 的旧方向，文档应作为下一轮重构目标，而不是描述当前实现。
@@ -1432,6 +1432,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
 
 - profile 创建。
 - profile main fields 更新。
+- profile contact methods 更新。
 - profile 删除。
 - profile photos / prompts 后续可独立编辑，但本阶段先只定义链路，不强制做完整 UI。
 - profile visibility settings 更新。
@@ -1455,6 +1456,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
   - 从只读档案升级为“可编辑档案”。
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
+  - 联系方式 section 在同页维护，但写入 `profile_contact_methods`，不回填 `profiles` 主表。
   - profile visibility 在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与 `删除资料`；删除属于危险操作，必须二次确认。
 
@@ -1469,7 +1471,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
   - `preferredLocale` 继续由语言链路维护，不在 settings 里提供手动写入口。
 
 - `/pages/account/membership`
-  - 展示当前套餐、额度和可升级套餐。
+  - 展示当前套餐、额度和下一可升级套餐。
   - 支持对更高套餐发起升级动作。
   - mock 阶段可直接完成等级切换；正式产品以后替换为支付 / 顾问流程，不改变页面 contract。
 
@@ -1478,6 +1480,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
 ```text
 POST  /api/account/profiles
 PATCH /api/account/profiles/:profileId
+PATCH /api/account/profiles/:profileId/contact-methods
 DELETE /api/account/profiles/:profileId
 PATCH /api/account/profiles/:profileId/visibility
 PATCH /api/account/me
@@ -1489,6 +1492,7 @@ POST  /api/account/membership/upgrade
 | --- | --- | --- | --- |
 | `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountProfileCreatePayload` | `AccountProfileDetailDTO` |
 | `PATCH /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
+| `PATCH /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
 | `DELETE /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | - | `AccountProfileDeleteResultDTO` |
 | `PATCH /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
 | `PATCH /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
@@ -1503,7 +1507,8 @@ profile：
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
 - 只允许 `owner` 删除；`manager` / `viewer` 不可删除。
 - 已进入正式对外流转的 profile 若有关联中的正式关系链路，不允许直接删除，需先结束关联流程；接口返回明确失败原因。
-- 只允许更新 profile 主表字段，不允许通过该接口顺手写 contact / internal / verification。
+- `PATCH /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
+- 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。
@@ -1557,6 +1562,7 @@ membership：
 
 - 用户可以从资料列表页新建 profile，并进入统一 detail 页继续维护。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
+- 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
 - 用户在拥有 `owner` 权限且 profile 满足删除规则时，可以在 detail 页删除该 profile；删除后列表页同步移除。
 - `viewer` 无法提交 profile 更新。
 - visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。

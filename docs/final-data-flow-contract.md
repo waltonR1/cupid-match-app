@@ -700,6 +700,25 @@ Rules:
 - Localized fields write only to the current request locale slot.
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
 
+### Managed profile contact methods update
+
+```text
+/pages/account/profile-detail
+-> contact methods editor
+-> PATCH /api/account/profiles/:profileId/contact-methods
+-> ownership permission check
+-> profile_contact_methods upsert
+-> rebuild AccountProfileDetailDTO
+-> refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- Contact methods are editable from the unified owner-side profile detail page, but they never write back into `profiles`.
+- Only `owner` and `manager` can write.
+- The payload writes controlled contact records such as phone, email and wechat plus `visibleAfterIntroduction`.
+- Public browsing detail DTOs still do not expose raw contact values.
+
 ### Managed profile delete
 
 ```text

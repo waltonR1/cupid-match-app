@@ -136,6 +136,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/private-introduction-rooms` | 独立消息中心读取的私人介绍沟通空间。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
+| Account | `PATCH` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
 | Account | `PATCH` | `/api/account/me` | 更新账户基础信息。 |
 | Account | `PATCH` | `/api/account/settings/preferences` | 更新账户偏好。 |
@@ -994,49 +995,6 @@ interface AccountProfileVisibilityDTO {
   lockedByAdvisor: boolean
 }
 
-interface AccountProfileUpdatePayload {
-  gender?: 'male' | 'female'
-  birthYear?: number
-  height?: number
-  city?: string
-  country?: string
-  nationality?: string
-  languages?: string[]
-  familyVisible?: boolean
-  allowFamilyContact?: boolean
-  familyPriority?: boolean
-  degreeLevel?: 'bachelor' | 'master' | 'phd'
-  education?: string
-  industry?: string
-  careerDirection?: string
-  maritalStatus?: 'never_married' | 'divorced' | 'widowed'
-  hasChildren?: boolean
-  childrenPlan?: 'wants' | 'open_to_discuss' | 'does_not_want'
-  acceptsLongDistance?: boolean
-  datingIntentionCode?: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-  relationshipPlan?: string
-  residencePlan?: string
-  relocationWillingness?: string
-  values?: string[]
-  preferredAgeMin?: number
-  preferredAgeMax?: number
-  locationScope?: string
-  preferredEducation?: string
-  familyPlan?: string
-  dealBreakers?: string[]
-  smoking?: 'never' | 'social' | 'often'
-  drinking?: 'never' | 'social' | 'often'
-  exercise?: string
-  activityLevel?: string
-  weekendStyle?: string
-  pets?: string
-  personalityTraits?: string[]
-  interests?: string[]
-  communicationStyle?: string
-  summary?: string
-  tags?: string[]
-}
-
 interface AccountProfileVisibilityUpdatePayload {
   entries: Array<{
     fieldCode: ProfileFieldCode
@@ -1047,6 +1005,14 @@ interface AccountProfileVisibilityUpdatePayload {
 type AccountProfileCreatePayload = ProfileCreatePayload
 
 type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
+
+interface AccountProfileContactMethodsUpdatePayload {
+  entries: Array<{
+    type: 'phone' | 'email' | 'wechat'
+    value: string
+    visibleAfterIntroduction: boolean
+  }>
+}
 
 interface AccountProfileDeleteResultDTO {
   profileId: string
@@ -1079,6 +1045,7 @@ Write rules:
 
 - `POST /api/account/profiles` creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
 - `PATCH /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
+- `PATCH /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
 - `DELETE /api/account/profiles/:profileId` is owner-only, rejects unsafe deletion when active formal flows still exist, and returns a typed delete result.
 - `PATCH /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `PATCH /api/account/me` updates account display basics only; auth identities and status are out of scope.
