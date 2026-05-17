@@ -512,7 +512,6 @@ interface AccountProfileDetailPageData {
   visibilityItems: ProfileVisibilitySettingViewModel[]
   visibilityGroups: ProfileVisibilityGroupViewModel[]
   editState: AccountProfileEditStateViewModel
-  contactEditState?: AccountProfileEditStateViewModel
   deleteAction?: PageActionViewModel
 }
 

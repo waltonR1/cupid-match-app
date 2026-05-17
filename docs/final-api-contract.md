@@ -135,8 +135,10 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introduction-rooms` | 独立消息中心读取的私人介绍沟通空间。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
+| Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
+| Account | `DELETE` | `/api/account/profiles/:profileId` | 删除满足规则的可管理 profile。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
 | Account | `PATCH` | `/api/account/me` | 更新账户基础信息。 |
 | Account | `PATCH` | `/api/account/settings/preferences` | 更新账户偏好。 |
