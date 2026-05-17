@@ -9,7 +9,7 @@ export interface PersistedStateOptions<S extends StateTree = StateTree> {
   paths?: Array<keyof S>
 
   /** 状态恢复前的数据预处理 */
-  beforeHydrate?: (state: unknown) => Partial<S> | null | void
+  beforeHydrate?: (state: unknown) => Record<string, unknown> | null | void
 
   /** 是否开启调试日志 */
   debug?: boolean

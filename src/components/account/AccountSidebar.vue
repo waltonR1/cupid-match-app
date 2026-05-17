@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import {
@@ -52,15 +53,15 @@ const props = defineProps<{
 
 const { t } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
-const membershipName = globalT(`membership.${props.membership}.title`)
-const items: Array<{ key: AccountPageKey; label: string }> = [
+const membershipName = computed(() => globalT(`membership.${props.membership}.title`))
+const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [
   { key: 'home', label: t('nav.home') },
   { key: 'profiles', label: t('nav.profiles') },
   { key: 'relationship', label: t('nav.relationship') },
   { key: 'events', label: t('nav.events') },
   { key: 'membership', label: t('nav.membership') },
   { key: 'settings', label: t('nav.settings') },
-]
+])
 
 function openNavigation(key: AccountPageKey) {
   if (key === 'home') { openAccountPage(); return }

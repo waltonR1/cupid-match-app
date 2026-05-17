@@ -22,16 +22,18 @@ function isAppTheme(value: unknown): value is AppTheme {
  * - 旧版本缓存
  * - undefined / null
  */
-function restoreThemeState(state: unknown): void {
+function restoreThemeState(state: unknown): { theme: AppTheme } | null {
   // 非对象直接忽略
   if (!state || typeof state !== 'object') {
-    return
+    return null
   }
 
   const theme = (state as { theme?: unknown }).theme
 
-      // 非法主题时回退默认值
-  ;(state as { theme?: AppTheme }).theme = isAppTheme(theme) ? theme : DEFAULT_THEME
+  // 非法主题时回退默认值
+  return {
+    theme: isAppTheme(theme) ? theme : DEFAULT_THEME,
+  }
 }
 
 /** 应用主题 Store */

@@ -13,14 +13,16 @@ import type { AppLocale } from '@/i18n/types'
  * - 旧版本缓存
  * - undefined / null
  */
-function restoreLocaleState(state: unknown): void {
+function restoreLocaleState(state: unknown): { locale: AppLocale } | null {
   // 非对象直接忽略
   if (!state || typeof state !== 'object') {
-    return
+    return null
   }
 
   // 强制标准化 locale
-  ;(state as { locale?: AppLocale }).locale = normalizeLocale((state as { locale?: unknown }).locale)
+  return {
+    locale: normalizeLocale((state as { locale?: unknown }).locale),
+  }
 }
 
 /** 多语言状态 Store */
