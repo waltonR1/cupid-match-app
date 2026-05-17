@@ -60,8 +60,14 @@ type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'membership' | 'settings'
 type AccountPreferenceCode =
   | 'preferred_city'
+  | 'preferred_contact_channel'
   | 'advisor_contact_enabled'
   | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'
 
 interface PageAsyncState {
   loading: boolean
@@ -442,15 +448,13 @@ interface AccountUserSummaryViewModel {
 
 ```ts
 interface AccountHomePageData {
-  user: AccountUserSummaryViewModel
-  onboarding: AccountOnboardingViewModel
-  managedProfiles: ManagedProfileSummaryViewModel[]
-  membership: AccountMembershipSummaryViewModel
-  entitlements: AccountEntitlementBalanceViewModel[]
-  upcomingEvents: AccountEventRegistrationViewModel[]
-  recentIntroductions: AccountIntroductionSummaryViewModel[]
-  favoriteCount: number
-  userVisibleFollowUps: AdvisorFollowUpViewModel[]
+  onboarding: AccountOnboardingViewModel | null
+  accountItems: Array<{ key: string; label: string; value: string }>
+  summaryItems: Array<{ key: string; label: string; value: string | number }>
+  quotaSummary: { label: string; value: string; description: string } | null
+  attentionItems: Array<{ key: string; label: string; value: string; description: string }>
+  upcomingItems: Array<{ key: string; title: string; meta: string; status: string }>
+  profileItems: Array<{ key: string; title: string; meta: string; status: string }>
   primaryAction?: PageActionViewModel
 }
 
@@ -460,7 +464,6 @@ interface AccountOnboardingViewModel {
   profileId?: string
   title: string
   description: string
-  action?: PageActionViewModel
 }
 
 interface AdvisorFollowUpViewModel {
@@ -495,6 +498,7 @@ interface ManagedProfileSummaryViewModel {
 
 interface AccountProfilesPageData {
   profiles: ManagedProfileSummaryViewModel[]
+  createAction?: PageActionViewModel
   emptyState?: PageEmptyState
 }
 
@@ -506,7 +510,9 @@ interface AccountProfileDetailPageData {
   sections: AccountProfileDetailSectionViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
   visibilityItems: ProfileVisibilitySettingViewModel[]
+  visibilityGroups: ProfileVisibilityGroupViewModel[]
   editState: AccountProfileEditStateViewModel
+  deleteAction?: PageActionViewModel
 }
 
 interface AccountProfileDetailSectionViewModel {
@@ -531,6 +537,12 @@ interface AccountProfileEditStateViewModel {
   saveAction?: PageActionViewModel
 }
 
+interface ProfileVisibilityGroupViewModel {
+  key: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+  title: string
+  items: ProfileVisibilitySettingViewModel[]
+}
+
 interface ProfileVerificationSummaryViewModel {
   identityStatus: ProfileVerificationStatus
   educationStatus: ProfileVerificationStatus
@@ -546,9 +558,9 @@ interface ProfileVerificationSummaryViewModel {
 
 ```ts
 interface AccountMembershipPageData {
-  currentPlan: AccountMembershipSummaryViewModel
+  currentPlan: AccountMembershipSummaryViewModel | null
   entitlementBalances: AccountEntitlementBalanceViewModel[]
-  availablePlans: MembershipPlanViewModel[]
+  nextPlan: MembershipPlanViewModel | null
 }
 
 interface MembershipPlanViewModel {
@@ -576,6 +588,7 @@ interface AccountEntitlementBalanceViewModel {
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
+  displayValue: string
   resetAtText?: string
 }
 ```
@@ -584,7 +597,8 @@ interface AccountEntitlementBalanceViewModel {
 
 ```ts
 interface AccountEventsPageData {
-  eventRegistrations: AccountEventRegistrationViewModel[]
+  attentionRegistrations: AccountEventRegistrationViewModel[]
+  historyRegistrations: AccountEventRegistrationViewModel[]
   emptyState?: PageEmptyState
 }
 
@@ -595,10 +609,10 @@ interface AccountEventRegistrationViewModel {
   coverImageUrl: string
   city: string
   venue: string
-  addressText?: string
   dateText: string
   timeText: string
   status: 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
+  badgeStatus: 'open' | 'waitlist' | 'closed'
   action?: PageActionViewModel
 }
 ```
@@ -608,16 +622,24 @@ interface AccountEventRegistrationViewModel {
 ```ts
 interface AccountRelationshipPageData {
   tabs: AccountRelationshipTabViewModel[]
+  overview: AccountRelationshipOverviewItemViewModel[]
   favorites: FavoriteProfileSummaryViewModel[]
   introductions: AccountIntroductionSummaryViewModel[]
-  rooms: PrivateIntroductionRoomViewModel[]
-  emptyState?: PageEmptyState
+  attentionIntroductions: AccountIntroductionSummaryViewModel[]
+  historyIntroductions: AccountIntroductionSummaryViewModel[]
 }
 
 interface AccountRelationshipTabViewModel {
-  key: 'favorites' | 'introductions' | 'messages'
+  key: 'favorites' | 'introductions'
   label: string
   count?: number
+}
+
+interface AccountRelationshipOverviewItemViewModel {
+  key: 'favorites' | 'introductions'
+  label: string
+  description: string
+  value: number
 }
 
 interface FavoriteProfileSummaryViewModel {
@@ -628,7 +650,6 @@ interface FavoriteProfileSummaryViewModel {
   age: string
   city: string
   savedAtText: string
-  action: PageActionViewModel
 }
 
 interface AccountIntroductionSummaryViewModel {
@@ -644,6 +665,11 @@ interface AccountIntroductionSummaryViewModel {
   action?: PageActionViewModel
 }
 
+### Messages
+
+`/pages/account/relationship` 只承接收藏与私人介绍；消息中心是独立产品模块。Phase 5 仅保留占位页，完整消息页面在 Phase 5.6 收敛。
+
+```ts
 interface PrivateIntroductionRoomViewModel {
   roomId: string
   requestId: string
@@ -654,11 +680,6 @@ interface PrivateIntroductionRoomViewModel {
   openedAtText: string
   lastMessageText?: string
 }
-```
-
-即使产品暂时不开放自由聊天，该页面也可以用于顾问代发说明、系统通知和受控沟通记录。
-
-```ts
 interface PrivateIntroductionRoomPageData {
   room: PrivateIntroductionRoomViewModel
   messages: PrivateIntroductionRoomMessageViewModel[]
@@ -687,40 +708,63 @@ interface PrivateIntroductionRoomMessagePageViewModel {
 }
 ```
 
+即使产品暂时不开放自由聊天，独立消息中心也可以用于顾问代发说明、系统通知和受控沟通记录。
+
 ### Settings
 
 ```ts
 interface AccountSettingsPageData {
-  account: AccountSettingsIdentityViewModel
-  preferences: AccountPreferenceViewModel[]
+  account: AccountSettingsIdentityViewModel | null
+  security: AccountSecurityIdentityViewModel[]
+  password: AccountPasswordSecurityViewModel | null
+  notificationPreferences: AccountPreferenceViewModel[]
+  servicePreferences: AccountPreferenceViewModel[]
+  privacyPreferences: AccountPreferenceViewModel[]
   legalDocuments: LegalDocumentLinkViewModel[]
-  editState: AccountSettingsEditStateViewModel
+  accountActions: AccountActionViewModel[]
 }
 
 interface AccountSettingsIdentityViewModel {
-  accountName: string
   avatarUrl: string
-  editable: boolean
+  status: string
+  items: AccountSettingsIdentityItemViewModel[]
+}
+
+interface AccountSettingsIdentityItemViewModel {
+  key: 'accountName' | 'accountId' | 'status' | 'preferredLocale'
+  label: string
+  value: string
 }
 
 interface AccountPreferenceViewModel {
   code: AccountPreferenceCode
   label: string
-  value: string | boolean | number | string[]
-  editable: boolean
-  action?: PageActionViewModel
+  displayValue: string
 }
 
-interface AccountSettingsEditStateViewModel {
-  dirty: boolean
-  saving: boolean
-  saveAction?: PageActionViewModel
+interface AccountSecurityIdentityViewModel {
+  id: string
+  providerLabel: string
+  identifier: string
+  verifiedText: string
+}
+
+interface AccountPasswordSecurityViewModel {
+  isSetText: string
+  lastChangedText: string
+  canResetText: string
+  requiresMfaText: string
+}
+
+interface AccountActionViewModel {
+  key: 'exportData' | 'deactivateAccount'
+  label: string
+  hint: string
 }
 
 interface LegalDocumentLinkViewModel {
   type: 'terms' | 'privacy'
-  title: string
-  action: PageActionViewModel
+  label: string
 }
 
 interface ProfileVisibilitySettingViewModel {

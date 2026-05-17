@@ -20,6 +20,7 @@ Phase 4: 完成 events 页面与 API 字段链路
 Phase 4.5: 升级 agreement / legal documents 链路
 Phase 5: 按最终态重写 account / membership / entitlement
 Phase 5.5: 补齐 account center 写操作
+Phase 5.6: 设计独立消息中心
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
 
@@ -993,6 +994,8 @@ interface LegalDocumentRecord {
 }
 ```
 
+`attended` 是活动完成后的用户可见终态。当前保留该状态并允许前端展示；后续由自动结算或顾问到场确认将 `confirmed` 推进为 `attended`，不由用户侧直接写入。
+
 `user_agreement_acceptances`：
 
 ```ts
@@ -1189,8 +1192,14 @@ interface AuthIdentityRecord {
 ```ts
 type AccountPreferenceCode =
   | 'preferred_city'
+  | 'preferred_contact_channel'
   | 'advisor_contact_enabled'
   | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'
 
 interface UserPreferenceRecord {
   id: string
@@ -1350,8 +1359,8 @@ Contract 对齐要求：
 | `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
 | `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountEventsPageData` |
 | `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountRelationshipPageData` |
-| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | `AccountRelationshipPageData` |
-| `GET /api/account/settings` | `user_preferences` | `AccountSettingsDTO` | `AccountSettingsPageData` |
+| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | Phase 5.6 独立消息中心 |
+| `GET /api/account/settings` | `users`, `auth_identities`, `user_preferences` | `AccountSettingsDTO` | `AccountSettingsPageData` |
 
 补充规则：
 
@@ -1383,11 +1392,11 @@ Contract 对齐要求：
 account center 应按用户任务收敛为 6 个稳定页面：
 
 - `/pages/account/index`：首页，按 onboarding 阶段展示下一步引导、关系动态、资料状态、剩余额度和近期活动。
-- `/pages/account/relationship`：关系，内部以 tab 串联收藏、私人介绍和受控沟通房间。
+- `/pages/account/relationship`：关系进展，内部以 tab 串联收藏和私人介绍；受控沟通不再挂在 account relationship 下。
 - `/pages/account/profiles`：资料，展示 self/family 管理关系和认证摘要；字段可见性进入单份资料详情页。
 - `/pages/account/events`：活动，展示我的报名、候补和历史活动。
 - `/pages/account/membership`：会员，展示当前套餐、权益、额度、套餐比较和升级入口。
-- `/pages/account/settings`：设置，展示账户偏好和协议入口。
+- `/pages/account/settings`：设置，展示账户基础信息、登录与安全、通知、服务偏好、隐私授权、协议入口和账户操作。
 
 ### 验收标准
 
@@ -1409,6 +1418,8 @@ account center 应按用户任务收敛为 6 个稳定页面：
 在 Phase 5 已完成的只读账户中心上补齐第一批真实写操作，让页面职责和用户心智真正闭环：
 
 - 用户可以在统一资料详情页维护自己有权限管理的 profile。
+- 用户可以在资料列表页新建一份由自己管理的 profile。
+- 用户可以在统一资料详情页删除自己有权限管理且允许删除的 profile。
 - 用户可以在同一页调整该 profile 的字段可见性。
 - 用户可以在设置页维护账户基础信息和账户级偏好。
 - 用户可以在会员页发起会员等级变更，并让当前会员与权益余额同步刷新。
@@ -1419,7 +1430,9 @@ account center 应按用户任务收敛为 6 个稳定页面：
 
 本阶段要做：
 
+- profile 创建。
 - profile main fields 更新。
+- profile 删除。
 - profile photos / prompts 后续可独立编辑，但本阶段先只定义链路，不强制做完整 UI。
 - profile visibility settings 更新。
 - account basic fields 更新。
@@ -1443,6 +1456,12 @@ account center 应按用户任务收敛为 6 个稳定页面：
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
   - profile visibility 在同页维护，不再散落到 settings。
+  - detail 页提供 `编辑资料` 与 `删除资料`；删除属于危险操作，必须二次确认。
+
+- `/pages/account/profiles`
+  - 是用户管理资料集合的入口。
+  - 提供 `新建资料` 主操作。
+  - 列表项进入统一 profile detail 继续维护。
 
 - `/pages/account/settings`
   - 只维护账户级信息和偏好。
@@ -1457,7 +1476,9 @@ account center 应按用户任务收敛为 6 个稳定页面：
 ### API 目标
 
 ```text
+POST  /api/account/profiles
 PATCH /api/account/profiles/:profileId
+DELETE /api/account/profiles/:profileId
 PATCH /api/account/profiles/:profileId/visibility
 PATCH /api/account/me
 PATCH /api/account/settings/preferences
@@ -1466,7 +1487,9 @@ POST  /api/account/membership/upgrade
 
 | Endpoint | Source of truth | Payload | Response |
 | --- | --- | --- | --- |
+| `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountProfileCreatePayload` | `AccountProfileDetailDTO` |
 | `PATCH /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
+| `DELETE /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | - | `AccountProfileDeleteResultDTO` |
 | `PATCH /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
 | `PATCH /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `PATCH /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
@@ -1476,7 +1499,10 @@ POST  /api/account/membership/upgrade
 
 profile：
 
+- 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
+- 只允许 `owner` 删除；`manager` / `viewer` 不可删除。
+- 已进入正式对外流转的 profile 若有关联中的正式关系链路，不允许直接删除，需先结束关联流程；接口返回明确失败原因。
 - 只允许更新 profile 主表字段，不允许通过该接口顺手写 contact / internal / verification。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
@@ -1492,7 +1518,7 @@ visibility：
 preferences：
 
 - `code` 必须来自 `AccountPreferenceCode`。
-- 本阶段只支持 `preferred_city`、`advisor_contact_enabled`、`family_assist_enabled`。
+- 本阶段支持服务偏好、通知与隐私授权相关的稳定设置项：`preferred_city`、`preferred_contact_channel`、`advisor_contact_enabled`、`family_assist_enabled`、`introduction_updates_enabled`、`event_reminders_enabled`、`service_announcements_enabled`、`marketing_emails_enabled`、`analytics_consent_enabled`。
 - 设置页不保存文案，只保存 code/value。
 
 account me：
@@ -1515,9 +1541,11 @@ membership：
 
 - `src/api/account/*`
 - `src/hooks/account/use-account-profile-detail.ts`
+- `src/hooks/account/use-account-profiles.ts`
 - `src/hooks/account/use-account-settings.ts`
 - `src/hooks/account/use-account-membership.ts`
 - `src/pages/account/profile-detail.vue`
+- `src/pages/account/profiles.vue`
 - `src/pages/account/settings.vue`
 - `src/pages/account/membership.vue`
 - `src/mappers/account-profile-detail.ts`
@@ -1527,7 +1555,9 @@ membership：
 
 ### 验收标准
 
+- 用户可以从资料列表页新建 profile，并进入统一 detail 页继续维护。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
+- 用户在拥有 `owner` 权限且 profile 满足删除规则时，可以在 detail 页删除该 profile；删除后列表页同步移除。
 - `viewer` 无法提交 profile 更新。
 - visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
 - settings 页修改偏好后刷新仍保持。
@@ -1537,6 +1567,43 @@ membership：
 - 不新增 account 页面专属数据库字段。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
+- `npm run check:i18n` 通过。
+- `npm run build:h5` 通过。
+
+## Phase 5.6：设计独立消息中心
+
+### 目标
+
+把消息从 account relationship 中彻底拆出，形成独立产品模块，用于承接：
+
+- 平台通知。
+- 私人介绍进展通知。
+- 双方确认后的受控沟通。
+
+Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回 account center。
+
+### 明确范围
+
+本阶段要做：
+
+- 设计 `/pages/messages/index` 与后续 room detail 页面职责。
+- 明确通知流和受控沟通流是否同页分区、同页 tab，或拆成不同页面。
+- 读取 `GET /api/account/private-introduction-rooms` 与 room message DTO，建立消息中心自己的 PageData。
+- 设计消息未读、已读 source of truth；在引入正式 read receipt 前，不返回伪造 `unreadCount`。
+- 保留 room messages 的 cursor 分页。
+
+本阶段不做：
+
+- 不把 room 列表重新挂回 `/pages/account/relationship`。
+- 不提前把 profile 跨模块跳转闭环塞进消息中心；这部分留到 Phase 6 一起收口。
+
+### 验收标准
+
+- 消息中心是独立入口，不再依赖 relationship 页面承载 room。
+- 平台通知与受控沟通的边界明确。
+- room list、room detail、message page model 与 API DTO 对齐。
+- 未读状态有明确 source of truth 或明确延期，不使用无来源的展示字段。
+- `npm run type-check` 通过。
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
@@ -1676,6 +1743,13 @@ feat(account): add profile visibility controls
 feat(account): add account basics updates
 feat(account): add preference updates
 feat(account): add membership upgrade flow
+```
+
+### Phase 5.6
+
+```text
+feat(messages): add standalone message center
+feat(messages): connect mediated rooms
 ```
 
 ### Phase 6

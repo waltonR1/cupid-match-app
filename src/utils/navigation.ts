@@ -121,9 +121,9 @@ export function openMembershipPage() {
   openPage('/pages/account/membership')
 }
 
-/** 打开关系页中的沟通区域。 */
+/** 打开消息中心。 */
 export function openMessagesPage() {
-  openRelationshipPage()
+  openPage('/pages/messages/index')
 }
 
 /** 打开资料页中的认证区域。 */

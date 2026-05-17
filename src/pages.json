@@ -134,6 +134,13 @@
       }
     },
     {
+      "path": "pages/messages/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "消息中心"
+      }
+    },
+    {
       "path": "pages/debug/private-introductions",
       "style": {
         "navigationStyle": "custom",

@@ -38,6 +38,11 @@ interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
+  contactMethods: Array<{
+    type: Database['profile_contact_methods'][number]['type']
+    value: string
+    visibleAfterIntroduction: boolean
+  }>
   photos: Array<{ id: string; url: string; caption: string; isPrimary: boolean; sortOrder: number }>
   prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   gender: string
@@ -90,7 +95,7 @@ interface AccountProfileDetailDTO {
 interface AccountMembershipDTO {
   tier: MembershipLevel
   name: string
-  status: string
+  status: Database['user_memberships'][number]['status']
   startedAt: string
   expiresAt?: string
   conciergePriority: boolean
@@ -109,7 +114,7 @@ interface MembershipPlanDTO {
 }
 
 interface AccountEntitlementBalanceDTO {
-  code: string
+  code: Database['membership_entitlements'][number]['code']
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
@@ -117,7 +122,32 @@ interface AccountEntitlementBalanceDTO {
 }
 
 interface AccountSettingsDTO {
+  account: {
+    id: string
+    accountName: string
+    avatarUrl: string
+    preferredLocale: string
+    status: string
+    createdAt: string
+    updatedAt: string
+  }
+  identities: AccountAuthIdentityDTO[]
+  password: AccountPasswordSecurityDTO
   preferences: AccountPreferenceDTO[]
+}
+
+interface AccountAuthIdentityDTO {
+  id: string
+  provider: Database['auth_identities'][number]['provider']
+  identifier: string
+  verifiedAt?: string
+}
+
+interface AccountPasswordSecurityDTO {
+  isSet: boolean
+  lastChangedAt?: string
+  canReset: boolean
+  requiresMfa: boolean
 }
 
 interface AccountPreferenceDTO {
@@ -162,11 +192,10 @@ interface AccountEventRegistrationDTO {
   coverImageUrl: string
   city: string
   venue: string
-  address?: string
   date: string
   startTime: string
   endTime: string
-  status: string
+  status: Database['event_registrations'][number]['status']
 }
 
 interface AccountIntroductionSummaryDTO {
@@ -365,6 +394,13 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
       visibility: item.visibility,
       lockedByAdvisor: false,
     }))
+  const contactMethods = data.profile_contact_methods
+    .filter((item) => item.profileId === profileId)
+    .map((item) => ({
+      type: item.type,
+      value: item.value,
+      visibleAfterIntroduction: item.visibleAfterIntroduction,
+    }))
 
   return {
     profileId,
@@ -384,6 +420,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
       advisorStatus: verification?.advisorStatus ?? 'unreviewed',
     },
     visibility,
+    contactMethods,
     photos: data.profile_photos
       .filter((item) => item.profileId === profileId)
       .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -569,7 +606,8 @@ export function getAccountRooms(data: Database, userId: string): AccountPrivateI
 // -- Settings -- //
 
 export function getAccountSettings(data: Database, userId: string): AccountSettingsDTO | null {
-  if (!findUser(data, userId)) return null
+  const user = findUser(data, userId)
+  if (!user) return null
 
   const preferences = data.user_preferences
     .filter((p) => p.userId === userId)
@@ -578,7 +616,35 @@ export function getAccountSettings(data: Database, userId: string): AccountSetti
       value: p.value,
     }))
 
-  return { preferences }
+  const identities = data.auth_identities
+    .filter((item) => item.userId === userId)
+    .map((item) => ({
+      id: item.id,
+      provider: item.provider,
+      identifier: item.identifier,
+      verifiedAt: item.verifiedAt,
+    }))
+  const passwordIdentity = data.auth_identities.find((item) => item.userId === userId && Boolean(item.passwordHash))
+
+  return {
+    account: {
+      id: user.id,
+      accountName: user.accountName,
+      avatarUrl: user.avatarUrl,
+      preferredLocale: user.preferredLocale,
+      status: user.status,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    },
+    identities,
+    password: {
+      isSet: Boolean(passwordIdentity),
+      lastChangedAt: passwordIdentity?.updatedAt,
+      canReset: identities.some((item) => item.provider === 'email' || item.provider === 'phone'),
+      requiresMfa: false,
+    },
+    preferences,
+  }
 }
 
 // -- Internal helpers -- //
@@ -627,7 +693,6 @@ function getEntitlementBalances(data: Database, userId: string): AccountEntitlem
 
 function toAccountEventReg(data: Database, reg: Database['event_registrations'][number], locale: ApiLocale): AccountEventRegistrationDTO {
   const event = data.events.find((e) => e.id === reg.eventId)
-  const addr = event?.address ? resolveLocalizedText(locale, event.address) : undefined
   return {
     registrationId: reg.id,
     eventId: reg.eventId,
@@ -635,7 +700,6 @@ function toAccountEventReg(data: Database, reg: Database['event_registrations'][
     coverImageUrl: event?.coverImageUrl ?? '',
     city: event ? resolveLocalizedText(locale, event.city) : '',
     venue: event ? resolveLocalizedText(locale, event.venue) : '',
-    address: addr,
     date: event?.date ?? '',
     startTime: event?.startTime ?? '',
     endTime: event?.endTime ?? '',

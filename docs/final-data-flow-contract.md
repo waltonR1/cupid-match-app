@@ -660,6 +660,25 @@ profiles.compatibilityDimensions
 
 ## Account Center Write Chains
 
+### Managed profile create
+
+```text
+/pages/account/profiles
+-> create profile action
+-> POST /api/account/profiles
+-> create profiles row
+-> create current user owner ownership
+-> rebuild AccountProfileDetailDTO
+-> open / refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- Creation starts from the managed profiles collection page, not from settings.
+- The current user becomes the initial `owner`.
+- The created profile uses the same unified self / family account detail editor afterward.
+- Photos, prompts, contact methods, verification and visibility remain on their own chains.
+
 ### Managed profile update
 
 ```text
@@ -680,6 +699,26 @@ Rules:
 - Contact methods, internal records, verification, photos and prompts stay on separate chains.
 - Localized fields write only to the current request locale slot.
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
+
+### Managed profile delete
+
+```text
+/pages/account/profile-detail
+-> delete profile action
+-> DELETE /api/account/profiles/:profileId
+-> ownership permission check
+-> relation safety check
+-> delete profile-owned account data
+-> return AccountProfileDeleteResultDTO
+-> refresh /pages/account/profiles
+```
+
+Rules:
+
+- Only the `owner` can delete.
+- `manager` and `viewer` cannot delete.
+- Profiles with active formal relationship flows cannot be deleted directly.
+- The page labels the action as delete; the backend may reject unsafe deletion with a typed reason instead of silently converting it into a different lifecycle action.
 
 ### Managed profile visibility update
 
@@ -903,6 +942,11 @@ Event review / admin action
 -> update event_registrations.status = confirmed / waitlist / declined
 -> return EventRegistrationStateDTO + derived counts
 
+Event settlement
+-> scheduled settlement or advisor attendance confirmation
+-> update confirmed event_registrations.status = attended
+-> return attended as a user-visible terminal state
+
 POST /api/events/:id/cancel
 -> viewer context
 -> update event_registrations.status = cancelled
@@ -992,7 +1036,7 @@ GET /api/account/private-introductions
 -> AccountIntroductionSummaryDTO[]
 
 GET /api/account/settings
--> user_preferences
+-> users + auth_identities + user_preferences
 -> AccountSettingsDTO
 
 GET /api/account/private-introduction-rooms
@@ -1032,8 +1076,12 @@ Page composition:
 /pages/account/relationship
 -> favorites
 -> private introductions
+-> one account relationship page with tabs
+
+/pages/messages/index
+-> platform notifications
 -> private introduction rooms
--> one journey page with tabs
+-> standalone message center, not an account relationship tab
 
 /pages/account/profiles
 -> managed profiles

@@ -12,6 +12,7 @@ export type EventRegistrationStatus =
   | 'declined'
   | 'waitlist'
   | 'cancelled'
+  | 'attended'
   | 'closed'
   | 'member_required'
 

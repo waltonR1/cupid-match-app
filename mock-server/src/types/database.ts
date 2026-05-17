@@ -282,7 +282,16 @@ export interface UserEntitlementBalanceRecord {
 }
 
 /** 账户偏好编码 */
-export type AccountPreferenceCode = 'preferred_city' | 'advisor_contact_enabled' | 'family_assist_enabled'
+export type AccountPreferenceCode =
+    | 'preferred_city'
+    | 'preferred_contact_channel'
+    | 'advisor_contact_enabled'
+    | 'family_assist_enabled'
+    | 'introduction_updates_enabled'
+    | 'event_reminders_enabled'
+    | 'service_announcements_enabled'
+    | 'marketing_emails_enabled'
+    | 'analytics_consent_enabled'
 
 /** 账户偏好 */
 export interface UserPreferenceRecord {

@@ -15,6 +15,10 @@
         :description="t('profiles.detail.subtitle')"
       />
 
+      <view class="border border-semantic-border-default bg-semantic-surface-card px-5 py-4 text-[14px] leading-7 text-semantic-text-secondary shadow-panel">
+        {{ t('profiles.detail.readOnlyNotice') }}
+      </view>
+
       <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
         <view class="flex flex-wrap items-center gap-4">
           <image :src="pageData.avatarUrl" class="h-16 w-16 rounded-full object-cover" />
@@ -54,9 +58,6 @@
           >
             <view class="flex items-center justify-between gap-4">
               <view class="text-[16px] font-semibold">{{ section.title }}</view>
-              <view class="text-[12px] uppercase tracking-[2px] text-semantic-text-card-label">
-                {{ t('profiles.detail.readOnly') }}
-              </view>
             </view>
             <view class="mt-5 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
               <view
@@ -74,14 +75,29 @@
         <aside class="grid h-fit gap-6 xl:sticky xl:top-6">
           <view class="border border-semantic-border-default bg-semantic-surface-card px-5 py-5 shadow-panel">
             <view class="text-[16px] font-semibold">{{ t('profiles.visibility') }}</view>
-            <view class="mt-4 grid gap-3">
+            <view
+              v-if="pageData.visibilityGroups.length === 0"
+              class="mt-4 border-t border-semantic-border-soft pt-4 text-[14px] leading-7 text-semantic-text-secondary"
+            >
+              {{ t('profiles.visibilityCustom.emptyDescription') }}
+            </view>
+            <view v-else class="mt-4 grid gap-5">
               <view
-                v-for="item in pageData.visibilityItems"
-                :key="`${item.profileId}-${item.fieldCode}`"
-                class="border-t border-semantic-border-soft pt-3"
+                v-for="group in pageData.visibilityGroups"
+                :key="group.key"
               >
-                <view class="text-[13px] text-semantic-text-secondary">{{ item.label }}</view>
-                <view class="mt-1 text-[14px]">{{ item.visibilityText }}</view>
+                <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                  {{ group.title }}
+                </view>
+                <view class="mt-3 grid gap-3">
+                  <view
+                    v-for="item in group.items"
+                    :key="`${item.profileId}-${item.fieldCode}`"
+                    class="border-t border-semantic-border-soft pt-3"
+                  >
+                    <view class="text-[14px]">{{ item.label }}</view>
+                  </view>
+                </view>
               </view>
             </view>
           </view>

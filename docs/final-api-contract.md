@@ -40,8 +40,14 @@ type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'reject
 type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type AccountPreferenceCode =
   | 'preferred_city'
+  | 'preferred_contact_channel'
   | 'advisor_contact_enabled'
   | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'
 type ProfileFieldCode =
   | 'photos'
   | 'country'
@@ -127,7 +133,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/favorites` | 收藏列表。 |
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
-| Account | `GET` | `/api/account/private-introduction-rooms` | 私人介绍沟通空间。 |
+| Account | `GET` | `/api/account/private-introduction-rooms` | 独立消息中心读取的私人介绍沟通空间。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
@@ -739,7 +745,7 @@ interface EventAgendaItemDTO {
 }
 
 interface EventRegistrationStateDTO {
-  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'closed' | 'member_required'
+  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended' | 'closed' | 'member_required'
   registrationId?: string
 }
 ```
@@ -822,6 +828,11 @@ interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
+  contactMethods: Array<{
+    type: 'phone' | 'email' | 'wechat'
+    value: string
+    visibleAfterIntroduction: boolean
+  }>
   photos: Array<{ id: string; url: string; caption: string; isPrimary: boolean; sortOrder: number }>
   prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   // 其余业务字段与当前 profile 主表字段保持扁平一致
@@ -904,7 +915,6 @@ interface AccountEventRegistrationDTO {
   coverImageUrl: string
   city: string
   venue: string
-  address?: string
   date: string
   startTime: string
   endTime: string
@@ -949,7 +959,32 @@ interface AccountPreferenceDTO {
 
 ```ts
 interface AccountSettingsDTO {
+  account: {
+    id: string
+    accountName: string
+    avatarUrl: string
+    preferredLocale: string
+    status: string
+    createdAt: string
+    updatedAt: string
+  }
+  identities: AccountAuthIdentityDTO[]
+  password: AccountPasswordSecurityDTO
   preferences: AccountPreferenceDTO[]
+}
+
+interface AccountAuthIdentityDTO {
+  id: string
+  provider: 'email' | 'phone' | 'wechat' | 'google'
+  identifier: string
+  verifiedAt?: string
+}
+
+interface AccountPasswordSecurityDTO {
+  isSet: boolean
+  lastChangedAt?: string
+  canReset: boolean
+  requiresMfa: boolean
 }
 
 interface AccountProfileVisibilityDTO {
@@ -1009,6 +1044,15 @@ interface AccountProfileVisibilityUpdatePayload {
   }>
 }
 
+type AccountProfileCreatePayload = ProfileCreatePayload
+
+type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
+
+interface AccountProfileDeleteResultDTO {
+  profileId: string
+  deleted: true
+}
+
 interface AccountPreferenceUpdatePayload {
   entries: Array<{
     code: AccountPreferenceCode
@@ -1033,7 +1077,9 @@ interface AccountMembershipUpgradeResultDTO {
 
 Write rules:
 
+- `POST /api/account/profiles` creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
 - `PATCH /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
+- `DELETE /api/account/profiles/:profileId` is owner-only, rejects unsafe deletion when active formal flows still exist, and returns a typed delete result.
 - `PATCH /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `PATCH /api/account/me` updates account display basics only; auth identities and status are out of scope.
 - `PATCH /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.

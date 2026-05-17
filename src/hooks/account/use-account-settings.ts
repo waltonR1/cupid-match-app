@@ -4,9 +4,11 @@ import { useAuthStore } from '@/stores/modules/auth'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { toAccountSettingsPageData } from '@/mappers/account-settings'
 import type { Translate } from '@/i18n/types'
+import { useLocaleStore } from '@/stores/modules/locale'
 
 export function useAccountSettings(t: Translate) {
   const authStore = useAuthStore()
+  const localeStore = useLocaleStore()
   const latest = useLatestRequest()
   const settings = ref<AccountSettingsDTO | null>(null)
   const currentUserId = computed(() => authStore.user?.id ?? '')
@@ -26,6 +28,7 @@ export function useAccountSettings(t: Translate) {
   const pageData = computed(() => toAccountSettingsPageData({
     settings: settings.value,
     t,
+    locale: localeStore.locale,
   }))
 
   return {

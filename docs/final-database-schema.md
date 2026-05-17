@@ -202,8 +202,14 @@ interface UserOnboardingStateRecord {
 ```ts
 type AccountPreferenceCode =
   | 'preferred_city'
+  | 'preferred_contact_channel'
   | 'advisor_contact_enabled'
   | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'
 
 interface UserPreferenceRecord {
   id: string
@@ -219,8 +225,14 @@ interface UserPreferenceRecord {
 
 ```text
 preferred_city
+preferred_contact_channel
 advisor_contact_enabled
 family_assist_enabled
+introduction_updates_enabled
+event_reminders_enabled
+service_announcements_enabled
+marketing_emails_enabled
+analytics_consent_enabled
 ```
 
 默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。后续若新增明确的设置项，再扩展 `AccountPreferenceCode`，不使用任意字符串兜底。

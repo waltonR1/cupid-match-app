@@ -2,7 +2,16 @@ export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-export type AccountPreferenceCode = 'preferred_city' | 'advisor_contact_enabled' | 'family_assist_enabled'
+export type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'preferred_contact_channel'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
 export type AccountRoomStatus = 'open' | 'paused' | 'closed'
@@ -40,6 +49,11 @@ export interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
+  contactMethods: Array<{
+    type: 'phone' | 'email' | 'wechat'
+    value: string
+    visibleAfterIntroduction: boolean
+  }>
   photos: Array<{ id: string; url: string; caption: string; isPrimary: boolean; sortOrder: number }>
   prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   gender: 'male' | 'female'
@@ -119,7 +133,32 @@ export interface AccountEntitlementBalanceDTO {
 }
 
 export interface AccountSettingsDTO {
+  account: {
+    id: string
+    accountName: string
+    avatarUrl: string
+    preferredLocale: string
+    status: string
+    createdAt: string
+    updatedAt: string
+  }
+  identities: AccountAuthIdentityDTO[]
+  password: AccountPasswordSecurityDTO
   preferences: AccountPreferenceDTO[]
+}
+
+export interface AccountAuthIdentityDTO {
+  id: string
+  provider: 'email' | 'phone' | 'wechat' | 'google'
+  identifier: string
+  verifiedAt?: string
+}
+
+export interface AccountPasswordSecurityDTO {
+  isSet: boolean
+  lastChangedAt?: string
+  canReset: boolean
+  requiresMfa: boolean
 }
 
 export interface AccountPreferenceDTO {
@@ -164,7 +203,6 @@ export interface AccountEventRegistrationDTO {
   coverImageUrl: string
   city: string
   venue: string
-  address?: string
   date: string
   startTime: string
   endTime: string

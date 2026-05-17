@@ -15,6 +15,7 @@ import { registerMessages } from '@/i18n/messages/zh/register'
 import { agreementsMessages } from '@/i18n/messages/zh/agreements'
 import { contactMessages } from '@/i18n/messages/zh/contact'
 import { notFoundMessages } from '@/i18n/messages/zh/not-found'
+import { messagesMessages } from '@/i18n/messages/zh/messages'
 
 export const zh: AppMessages['zh'] = {
   common: commonMessages,
@@ -33,4 +34,5 @@ export const zh: AppMessages['zh'] = {
   agreements: agreementsMessages,
   contact: contactMessages,
   notFound: notFoundMessages,
+  messages: messagesMessages,
 }

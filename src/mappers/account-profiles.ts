@@ -11,12 +11,6 @@ export function toAccountProfilesPageData(params: { payload: AccountProfilesDTO 
       profileStatusText: t(`profiles.status.${profile.profileStatus}`),
       verificationSummary: buildVerificationSummary(profile.verification, t),
       presentationBadges: buildPresentationBadges(profile, t),
-      verificationItems: [
-        { key: 'identity', label: t('profiles.verification.identity'), value: t(`profiles.verificationStatus.${profile.verification.identityStatus}`) },
-        { key: 'education', label: t('profiles.verification.education'), value: t(`profiles.verificationStatus.${profile.verification.educationStatus}`) },
-        { key: 'income', label: t('profiles.verification.income'), value: t(`profiles.verificationStatus.${profile.verification.incomeStatus}`) },
-        { key: 'marital', label: t('profiles.verification.marital'), value: t(`profiles.verificationStatus.${profile.verification.maritalStatus}`) },
-      ],
     })),
   }
 }

@@ -27,12 +27,17 @@ export function toAccountMembershipPageData(params: {
     entitlementBalances: entitlements.map((item) => ({
       ...item,
       label: t(`membership.entitlement.${item.code}`),
+      displayValue: item.quotaTotal > 0
+        ? `${item.quotaRemaining} / ${item.quotaTotal}`
+        : t(`membership.entitlementState.${item.code}`),
     })),
-    availablePlans: availablePlans
-      .filter((item) => item.tier !== membership?.tier)
-      .map((item) => ({
-        ...item,
-        entitlementLabels: item.entitlements.map((code) => t(`membership.entitlement.${code}`)),
-      })),
+    nextPlan: findNextPlan(availablePlans, membership?.tier),
   }
+}
+
+function findNextPlan(plans: MembershipPlanDTO[], currentTier?: AccountMembershipDTO['tier']) {
+  const tierOrder: AccountMembershipDTO['tier'][] = ['free', 'silver', 'gold', 'diamond']
+  const currentIndex = currentTier ? tierOrder.indexOf(currentTier) : -1
+  const nextTier = tierOrder[currentIndex + 1]
+  return plans.find((item) => item.tier === nextTier) ?? null
 }

@@ -3,13 +3,13 @@
     <view>
       <AccountSubPageHeader
         :label="t('nav.relationship')"
-        :title="t('nav.relationship')"
+        :title="t('relationship.title')"
         :description="t('relationship.subtitle')"
       />
 
       <view class="grid gap-6">
         <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
-          <view class="grid gap-4 lg:grid-cols-3">
+          <view class="grid gap-4 lg:grid-cols-2">
           <view
             v-for="item in pageData.overview"
             :key="item.key"
@@ -59,40 +59,107 @@
 
         <view v-if="activeTab === 'introductions'">
           <view class="mb-4 text-[14px] leading-7 text-semantic-text-secondary">{{ t('relationship.panelDescription.introductions') }}</view>
-          <view v-if="pageData.introductions.length > 0" class="grid gap-3">
+          <view v-if="pageData.attentionIntroductions.length > 0" class="border border-semantic-border-default bg-semantic-surface-card shadow-panel">
+            <view class="border-b border-semantic-border-soft px-5 py-4">
+              <view class="text-[15px] font-semibold">{{ t('relationship.attention.title') }}</view>
+              <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                {{ t('relationship.attention.description') }}
+              </view>
+            </view>
             <view
-              v-for="i in pageData.introductions"
+              v-for="i in pageData.attentionIntroductions"
               :key="i.requestId"
-              class="flex items-center gap-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-4 shadow-panel"
+              class="grid gap-4 border-b border-semantic-border-soft px-5 py-4 last:border-b-0 sm:grid-cols-[auto_minmax(0,1fr)]"
             >
               <image :src="i.targetAvatarUrl" class="h-12 w-12 rounded-full object-cover" />
-              <view class="flex-1">
-                <view class="font-medium">{{ i.targetDisplayName }}</view>
-                <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ i.statusText }}</view>
+              <view class="min-w-0">
+                <view class="flex flex-wrap items-start justify-between gap-3">
+                  <view>
+                    <view class="font-medium">{{ i.targetDisplayName }}</view>
+                    <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ i.statusText }}</view>
+                  </view>
+                  <view class="text-[12px] text-semantic-text-card-label">{{ t('relationship.labels.introduction') }}</view>
+                </view>
+                <view class="mt-4 grid gap-3 border-t border-semantic-border-soft pt-4 text-[13px] leading-6 text-semantic-text-secondary sm:grid-cols-2">
+                  <view>
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.requestedAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.requestedAtText }}</view>
+                  </view>
+                  <view v-if="i.expiresAtText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.expiresAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.expiresAtText }}</view>
+                  </view>
+                  <view v-if="i.respondedAtText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.respondedAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.respondedAtText }}</view>
+                  </view>
+                  <view v-if="i.cooldownUntilText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.cooldownUntil') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.cooldownUntilText }}</view>
+                  </view>
+                </view>
               </view>
-              <view class="text-[12px] text-semantic-text-card-label">{{ t('relationship.labels.introduction') }}</view>
             </view>
           </view>
-          <EmptyStatePanel v-else size="page" :title="t('relationship.empty.introductions')" />
-        </view>
 
-        <view v-if="activeTab === 'messages'">
-          <view class="mb-4 text-[14px] leading-7 text-semantic-text-secondary">{{ t('relationship.panelDescription.messages') }}</view>
-          <view v-if="pageData.rooms.length > 0" class="grid gap-3">
-            <view
-              v-for="r in pageData.rooms"
-              :key="r.roomId"
-              class="flex items-center gap-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-4 shadow-panel"
-            >
-              <image :src="r.targetAvatarUrl" class="h-12 w-12 rounded-full object-cover" />
-              <view class="flex-1">
-                <view class="font-medium">{{ r.targetDisplayName }}</view>
-                <view v-if="r.lastMessageText" class="mt-1 text-[13px] text-semantic-text-muted">{{ r.lastMessageText }}</view>
+          <view
+            v-if="pageData.attentionIntroductions.length === 0 && pageData.historyIntroductions.length > 0"
+            class="mt-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-5 text-[14px] leading-7 text-semantic-text-secondary shadow-panel"
+          >
+            {{ t('relationship.noActiveIntroductions') }}
+          </view>
+
+          <view
+            v-if="pageData.historyIntroductions.length > 0"
+            class="mt-4 border border-semantic-border-default bg-semantic-surface-card shadow-panel"
+          >
+            <view class="border-b border-semantic-border-soft px-5 py-4">
+              <view class="text-[15px] font-semibold">{{ t('relationship.history.title') }}</view>
+              <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                {{ t('relationship.history.description') }}
               </view>
-              <view class="text-[12px] text-semantic-text-card-label">{{ t('relationship.labels.message') }}</view>
+            </view>
+            <view
+              v-for="i in pageData.historyIntroductions"
+              :key="i.requestId"
+              class="grid gap-4 border-b border-semantic-border-soft px-5 py-4 last:border-b-0 sm:grid-cols-[auto_minmax(0,1fr)]"
+            >
+              <image :src="i.targetAvatarUrl" class="h-12 w-12 rounded-full object-cover" />
+              <view class="min-w-0">
+                <view class="flex flex-wrap items-start justify-between gap-3">
+                  <view>
+                    <view class="font-medium">{{ i.targetDisplayName }}</view>
+                    <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ i.statusText }}</view>
+                  </view>
+                  <view class="text-[12px] text-semantic-text-card-label">{{ t('relationship.labels.introduction') }}</view>
+                </view>
+                <view class="mt-4 grid gap-3 border-t border-semantic-border-soft pt-4 text-[13px] leading-6 text-semantic-text-secondary sm:grid-cols-2">
+                  <view>
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.requestedAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.requestedAtText }}</view>
+                  </view>
+                  <view v-if="i.expiresAtText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.expiresAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.expiresAtText }}</view>
+                  </view>
+                  <view v-if="i.respondedAtText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.respondedAt') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.respondedAtText }}</view>
+                  </view>
+                  <view v-if="i.cooldownUntilText">
+                    <view class="text-semantic-text-card-label">{{ t('relationship.labels.cooldownUntil') }}</view>
+                    <view class="mt-1 text-semantic-text-primary">{{ i.cooldownUntilText }}</view>
+                  </view>
+                </view>
+              </view>
             </view>
           </view>
-          <EmptyStatePanel v-else size="page" :title="t('relationship.empty.messages')" />
+
+          <EmptyStatePanel
+            v-if="pageData.attentionIntroductions.length === 0 && pageData.historyIntroductions.length === 0"
+            size="page"
+            :title="t('relationship.empty.introductions')"
+          />
         </view>
       </view>
     </view>
@@ -110,6 +177,6 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 const { t } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
 const { pageData } = useAccountRelationship(t)
-const activeTab = ref<'favorites' | 'introductions' | 'messages'>('favorites')
+const activeTab = ref<'favorites' | 'introductions'>('favorites')
 
 </script>

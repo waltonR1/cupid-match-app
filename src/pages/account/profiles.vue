@@ -12,11 +12,11 @@
           <view
             v-for="profile in pageData.profiles"
             :key="profile.profileId"
-            class="flex cursor-pointer items-center gap-4 border-b border-semantic-border-soft px-5 py-5 last:border-b-0 hover:bg-semantic-surface-soft"
+            class="grid cursor-pointer gap-5 border-b border-semantic-border-soft px-5 py-5 transition-colors last:border-b-0 hover:bg-semantic-surface-soft md:grid-cols-[auto_minmax(0,1fr)_220px]"
             @click="openProfile(profile)"
           >
             <image :src="profile.avatarUrl" class="h-14 w-14 rounded-full object-cover" />
-            <view class="min-w-0 flex-1">
+            <view class="min-w-0">
               <view class="flex flex-wrap items-center gap-2">
                 <view class="text-[18px] font-semibold">{{ profile.displayName }}, {{ profile.age }}</view>
                 <view
@@ -27,11 +27,27 @@
                   {{ badge }}
                 </view>
               </view>
-              <view class="mt-1 text-[14px] text-semantic-text-secondary">
-                {{ profile.city }} / {{ profile.profileStatusText }}
+              <view class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] text-semantic-text-secondary">
+                <view>{{ profile.city }}</view>
+                <view class="border border-semantic-border-soft bg-semantic-surface-panel px-2.5 py-1 text-[12px] text-semantic-text-primary">
+                  {{ profile.profileStatusText }}
+                </view>
+              </view>
+              <view class="mt-3 text-[13px] leading-6 text-semantic-text-secondary">
+                {{ profile.verificationSummary.description }}
               </view>
             </view>
-            <view class="text-[13px] text-semantic-text-link">{{ t('profiles.actions.view') }}</view>
+            <view class="grid content-between gap-4 border-t border-semantic-border-soft pt-4 md:border-l md:border-t-0 md:pl-5 md:pt-0">
+              <view>
+                <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
+                  {{ profile.verificationSummary.label }}
+                </view>
+                <view class="mt-2 text-[24px] font-semibold text-semantic-text-primary">
+                  {{ profile.verificationSummary.value }}
+                </view>
+              </view>
+              <view class="text-[13px] text-semantic-text-link">{{ t('profiles.actions.view') }}</view>
+            </view>
           </view>
         </view>
 

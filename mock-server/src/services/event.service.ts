@@ -10,6 +10,7 @@ type EventRegistrationStatus =
   | 'declined'
   | 'waitlist'
   | 'cancelled'
+  | 'attended'
   | 'closed'
   | 'member_required'
 
@@ -201,7 +202,7 @@ function resolveRegistrationState(data: Database, event: EventRecord, userId: st
   const existing = data.event_registrations.find((item) => item.userId === userId && item.eventId === event.id)
   if (existing) {
     return {
-      status: existing.status === 'attended' ? 'confirmed' : existing.status,
+      status: existing.status,
       registrationId: existing.id,
     }
   }

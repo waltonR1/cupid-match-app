@@ -28,7 +28,7 @@ export function toAccountProfileDetailPageData(params: {
           item(t('profiles.detail.fields.city'), payload.city, t),
           item(t('profiles.detail.fields.country'), payload.country, t),
           item(t('profiles.detail.fields.nationality'), payload.nationality, t),
-          item(t('profiles.detail.fields.languages'), payload.languages, t),
+          item(t('profiles.detail.fields.languages'), formatLanguages(payload.languages, t), t),
           translatedItem(t('profiles.detail.fields.degreeLevel'), 'profiles.detail.values.degreeLevel', payload.degreeLevel, t),
           item(t('profiles.detail.fields.education'), payload.education, t),
           item(t('profiles.detail.fields.industry'), payload.industry, t),
@@ -94,13 +94,23 @@ export function toAccountProfileDetailPageData(params: {
           item(t('profiles.detail.fields.isPriorityProfile'), payload.isPriorityProfile, t),
         ],
       },
+      {
+        key: 'contact',
+        title: t('profiles.detail.sections.contact'),
+        items: [
+          item(t('profiles.detail.fields.phone'), findContactValue(payload.contactMethods, 'phone'), t),
+          item(t('profiles.detail.fields.email'), findContactValue(payload.contactMethods, 'email'), t),
+          item(t('profiles.detail.fields.wechat'), findContactValue(payload.contactMethods, 'wechat'), t),
+        ],
+      },
     ],
     statusItems: [
       translatedItem(t('profiles.detail.fields.profileStatus'), 'profiles.status', payload.profileStatus, t),
       item(t('profiles.detail.fields.lastActiveAt'), formatLocalizedDateTime(locale, payload.lastActiveAt), t),
-      item(t('profiles.detail.fields.createdAt'), formatLocalizedDateTime(locale, payload.createdAt), t),
-      item(t('profiles.detail.fields.updatedAt'), formatLocalizedDateTime(locale, payload.updatedAt), t),
+      item(t('profiles.verificationSummary'), buildVerificationRatio(payload.verification), t),
+      item(t('profiles.visibility'), buildVisibilitySummary(payload.visibility, t), t),
     ],
+    visibilityGroups: buildVisibilityGroups(payload.visibility, t),
     visibilityItems: payload.visibility.map((entry) => ({
       ...entry,
       label: t(`profiles.visibilityField.${entry.fieldCode}`),
@@ -128,4 +138,70 @@ function formatValue(value: unknown, t: Translate) {
   if (Array.isArray(value)) return value.length > 0 ? value.join(' / ') : '-'
   if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
   return String(value)
+}
+
+function buildVerificationRatio(verification: AccountProfileDetailDTO['verification']) {
+  const statuses = [
+    verification.identityStatus,
+    verification.educationStatus,
+    verification.incomeStatus,
+    verification.maritalStatus,
+  ]
+
+  return `${statuses.filter((status) => status === 'verified').length}/${statuses.length}`
+}
+
+function buildVisibilitySummary(
+  visibility: AccountProfileDetailDTO['visibility'],
+  t: Translate,
+) {
+  const mostRestricted = visibility.reduce<AccountProfileDetailDTO['visibility'][number]['visibility'] | null>(
+    (current, item) => {
+      if (!current) return item.visibility
+      return visibilityRank(item.visibility) > visibilityRank(current) ? item.visibility : current
+    },
+    null,
+  )
+
+  return mostRestricted ? t(`profiles.visibilityLevel.${mostRestricted}`) : t('profiles.visibilityCustom.emptyValue')
+}
+
+function buildVisibilityGroups(
+  visibility: AccountProfileDetailDTO['visibility'],
+  t: Translate,
+) {
+  return (['public', 'member', 'introduced', 'owner_only', 'hidden'] as const)
+    .map((level) => ({
+      key: level,
+      title: t(`profiles.visibilityLevel.${level}`),
+      items: visibility
+        .filter((entry) => entry.visibility === level)
+        .map((entry) => ({
+          ...entry,
+          label: t(`profiles.visibilityField.${entry.fieldCode}`),
+          visibilityText: t(`profiles.visibilityLevel.${entry.visibility}`),
+        })),
+    }))
+    .filter((group) => group.items.length > 0)
+}
+
+function visibilityRank(level: AccountProfileDetailDTO['visibility'][number]['visibility']) {
+  return {
+    public: 0,
+    member: 1,
+    introduced: 2,
+    owner_only: 3,
+    hidden: 4,
+  }[level]
+}
+
+function formatLanguages(languages: string[], t: Translate) {
+  return languages.map((language) => t(`profiles.detail.values.language.${language.toLowerCase()}`))
+}
+
+function findContactValue(
+  contactMethods: AccountProfileDetailDTO['contactMethods'],
+  type: AccountProfileDetailDTO['contactMethods'][number]['type'],
+) {
+  return contactMethods.find((item) => item.type === type)?.value
 }
