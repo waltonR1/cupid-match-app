@@ -1552,32 +1552,32 @@ POST /api/account/profiles/:profileId/archive
 
 ```text
 POST  /api/account/profiles
-PATCH /api/account/profiles/:profileId
-PATCH /api/account/profiles/:profileId/contact-methods
+POST /api/account/profiles/:profileId
+POST /api/account/profiles/:profileId/contact-methods
 POST  /api/account/profiles/:profileId/photos
-PATCH /api/account/profiles/:profileId/photos/:photoId
+POST /api/account/profiles/:profileId/photos/:photoId
 DELETE /api/account/profiles/:profileId/photos/:photoId
 POST  /api/account/profiles/:profileId/prompts
-PATCH /api/account/profiles/:profileId/prompts/:promptId
+POST /api/account/profiles/:profileId/prompts/:promptId
 DELETE /api/account/profiles/:profileId/prompts/:promptId
 POST  /api/account/profiles/:profileId/archive
-PATCH /api/account/profiles/:profileId/visibility
-PATCH /api/account/me
-PATCH /api/account/settings/preferences
+POST /api/account/profiles/:profileId/visibility
+POST /api/account/me
+POST /api/account/settings/preferences
 POST  /api/account/membership/upgrade
 ```
 
 | Endpoint | Source of truth | Payload | Response |
 | --- | --- | --- | --- |
 | `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountManagedProfileCreatePayload` | `AccountProfileDetailDTO` |
-| `PATCH /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
-| `PATCH /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
 | photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
 | prompt endpoints | `profile_prompts`, `profile_ownerships` | `ProfilePromptMutationPayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
-| `PATCH /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
-| `PATCH /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
-| `PATCH /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
+| `POST /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
+| `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
+| `POST /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
 | `POST /api/account/membership/upgrade` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
 
 ### 写入规则
@@ -1588,7 +1588,7 @@ profile：
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
-- `PATCH /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
+- `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
 - 照片与 prompts 由独立接口更新 `profile_photos` / `profile_prompts`；同页展示不代表同表写入。
 - owner-side profile DTO 返回 `archivedAt`，页面模型派生归档标记；archive 不混入 `profileStatus`。

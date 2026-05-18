@@ -107,14 +107,14 @@ interface ApiErrorDTO {
 | Profiles | `GET` | `/api/profiles/family/:id` | family 资料详情。 |
 | Profiles | `POST` | `/api/profiles/self` | 创建 self profile。 |
 | Profiles | `POST` | `/api/profiles/family` | 创建 family profile。 |
-| Profiles | `PATCH` | `/api/profiles/self/:id` | 更新 self profile。 |
-| Profiles | `PATCH` | `/api/profiles/family/:id` | 更新 family profile。 |
+| Profiles | `POST` | `/api/profiles/self/:id` | 更新 self profile。 |
+| Profiles | `POST` | `/api/profiles/family/:id` | 更新 family profile。 |
 | Profiles | `POST` | `/api/profiles/self/:id/photos` | 新增 self profile 照片。 |
 | Profiles | `POST` | `/api/profiles/family/:id/photos` | 新增 family profile 照片。 |
-| Profiles | `PATCH` | `/api/profiles/self/:id/photos/:photoId` | 更新 self profile 照片。 |
-| Profiles | `PATCH` | `/api/profiles/family/:id/photos/:photoId` | 更新 family profile 照片。 |
+| Profiles | `POST` | `/api/profiles/self/:id/photos/:photoId` | 更新 self profile 照片。 |
+| Profiles | `POST` | `/api/profiles/family/:id/photos/:photoId` | 更新 family profile 照片。 |
 | Profiles | `POST` | `/api/profiles/self/:id/prompts` | 新增 self profile 问答。 |
-| Profiles | `PATCH` | `/api/profiles/self/:id/prompts/:promptId` | 更新 self profile 问答。 |
+| Profiles | `POST` | `/api/profiles/self/:id/prompts/:promptId` | 更新 self profile 问答。 |
 | Favorites | `POST` | `/api/favorites/:profileId` | 收藏 profile。 |
 | Favorites | `DELETE` | `/api/favorites/:profileId` | 取消收藏。 |
 | Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 从 self detail 申请私人介绍。 |
@@ -136,18 +136,18 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/private-introduction-rooms` | 独立消息中心读取的私人介绍沟通空间。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
-| Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
-| Account | `PATCH` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
+| Account | `POST` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
+| Account | `POST` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
-| Account | `PATCH` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
+| Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
 | Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
 | Account | `POST` | `/api/account/profiles/:profileId/prompts` | 新增可管理 profile 的 prompt。 |
-| Account | `PATCH` | `/api/account/profiles/:profileId/prompts/:promptId` | 更新可管理 profile 的 prompt。 |
+| Account | `POST` | `/api/account/profiles/:profileId/prompts/:promptId` | 更新可管理 profile 的 prompt。 |
 | Account | `DELETE` | `/api/account/profiles/:profileId/prompts/:promptId` | 删除可管理 profile 的 prompt。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
-| Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
-| Account | `PATCH` | `/api/account/me` | 更新账户基础信息。 |
-| Account | `PATCH` | `/api/account/settings/preferences` | 更新账户偏好。 |
+| Account | `POST` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
+| Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
+| Account | `POST` | `/api/account/settings/preferences` | 更新账户偏好。 |
 | Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |

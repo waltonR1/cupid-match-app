@@ -685,7 +685,7 @@ Rules:
 ```text
 /pages/account/profile-detail
 -> account profile edit form
--> PATCH /api/account/profiles/:profileId
+-> POST /api/account/profiles/:profileId
 -> ownership permission check
 -> profiles write
 -> rebuild AccountProfileDetailDTO
@@ -706,7 +706,7 @@ Rules:
 ```text
 /pages/account/profile-detail
 -> contact methods editor
--> PATCH /api/account/profiles/:profileId/contact-methods
+-> POST /api/account/profiles/:profileId/contact-methods
 -> ownership permission check
 -> profile_contact_methods upsert
 -> rebuild AccountProfileDetailDTO
@@ -725,7 +725,7 @@ Rules:
 ```text
 /pages/account/profile-detail
 -> photos editor
--> POST / PATCH / DELETE profile photo endpoints
+-> POST / POST / DELETE profile photo endpoints
 -> ownership permission check
 -> profile_photos write
 -> rebuild AccountProfileDetailDTO
@@ -743,7 +743,7 @@ Rules:
 ```text
 /pages/account/profile-detail
 -> prompts editor
--> POST / PATCH / DELETE profile prompt endpoints
+-> POST / POST / DELETE profile prompt endpoints
 -> ownership permission check
 -> profile_prompts write
 -> rebuild AccountProfileDetailDTO
@@ -785,7 +785,7 @@ Rules:
 ```text
 /pages/account/profile-detail
 -> visibility editor
--> PATCH /api/account/profiles/:profileId/visibility
+-> POST /api/account/profiles/:profileId/visibility
 -> ownership permission check
 -> advisor lock check
 -> profile_visibility_settings write
@@ -805,7 +805,7 @@ Rules:
 ```text
 /pages/account/settings
 -> preference controls
--> PATCH /api/account/settings/preferences
+-> POST /api/account/settings/preferences
 -> user_preferences upsert
 -> return AccountSettingsDTO
 -> refresh AccountSettingsPageData
@@ -822,7 +822,7 @@ Rules:
 ```text
 /pages/account/settings
 -> account identity form
--> PATCH /api/account/me
+-> POST /api/account/me
 -> users write
 -> return AccountMeDTO
 -> refresh account shell and AccountSettingsPageData
