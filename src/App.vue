@@ -37,4 +37,22 @@ onPageNotFound(({ path }) => {
 @tailwind components;
 @tailwind utilities;
 /*每个页面公共css */
+
+   /* #ifdef H5 */
+ html,
+ body,
+ #app,
+ uni-app,
+ uni-page,
+ uni-page-wrapper,
+ uni-page-body,
+ uni-view,
+ uni-text,
+ uni-text span {
+   -webkit-user-select: text !important;
+   -moz-user-select: text !important;
+   user-select: text !important;
+ }
+/* #endif */
+
 </style>
