@@ -1425,7 +1425,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
 - `profiles` 增加仅供后端使用的 `archivedAt?: string`。
 - 统一 archived profile 在 public directory、public detail、推荐和私人介绍创建中的过滤规则。
 - 统一历史链路对 archived profile 的保留规则。
-- 明确 owner-side account profiles 是否继续可见 archived profile，以及前端如何标记。
+- 明确 archived profile 在普通 owner-side account 页面也不再返回；历史保留只属于后端审计与既有历史链路。
 - 定义 account 侧 archive API 与 archive 前置条件。
 
 本阶段不做：
@@ -1450,8 +1450,8 @@ account center 应按用户任务收敛为 6 个稳定页面：
   - 已存在 room
   - verification / audit / ownership 等历史记录
 - public detail 对 archived profile 不再作为普通可浏览资料返回。
-- account profiles 可继续保留 archived profile 的管理可见性，用于历史追溯；默认列表与交互样式需明确区分正常资料和已归档资料。
-- account owner-side DTO 需要保留 `archivedAt`，页面再派生已归档展示状态；不能让前端从 `profileStatus` 猜测 archive。
+- 普通 account profiles / profile detail 不再返回 archived profile；用户侧“删除资料”后，该资料应从正常管理入口消失。
+- 若未来需要“已删除资料”历史，必须提供单独、显式的历史入口；不能混入正常资料列表。
 
 ### API 目标
 
@@ -1474,7 +1474,7 @@ POST /api/account/profiles/:profileId/archive
 
 - archived profile 不再出现在 public directory、推荐或新的 private introduction 可选目标中。
 - archived profile 的历史 favorite / introduction / room 仍可追溯。
-- owner 可以在 account 场景识别已归档资料。
+- 普通 owner-side account 页面不再返回已归档资料。
 - active formal flow 存在时 archive 被明确拒绝。
 - 不产生孤儿记录，不通过物理删除破坏历史链路。
 - `npm run type-check` 通过。
@@ -1591,7 +1591,7 @@ profile：
 - `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
 - 照片与 prompts 由独立接口更新 `profile_photos` / `profile_prompts`；同页展示不代表同表写入。
-- owner-side profile DTO 返回 `archivedAt`，页面模型派生归档标记；archive 不混入 `profileStatus`。
+- 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。

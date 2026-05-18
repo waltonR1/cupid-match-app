@@ -8,7 +8,6 @@ export function toAccountProfilesPageData(params: { payload: AccountProfilesDTO 
   return {
     profiles: payload.profiles.map((profile) => ({
       ...profile,
-      archived: Boolean(profile.archivedAt),
       profileStatusText: t(`profiles.status.${profile.profileStatus}`),
       verificationSummary: buildVerificationSummary(profile.verification, t),
       presentationBadges: buildPresentationBadges(profile, t),
@@ -40,7 +39,6 @@ function buildPresentationBadges(
   t: Translate,
 ) {
   return [
-    profile.archivedAt ? t('profiles.badges.archived') : null,
     profile.isPrimary ? t('profiles.badges.primary') : null,
     profile.isPriorityProfile ? t('profiles.badges.priority') : null,
     t(`profiles.role.${profile.role}`),

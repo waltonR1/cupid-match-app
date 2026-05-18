@@ -12,9 +12,7 @@ export function toAccountProfileDetailPageData(params: {
 
   return {
     ...payload,
-    archived: Boolean(payload.archivedAt),
     ownershipBadges: [
-      payload.archivedAt ? t('profiles.badges.archived') : null,
       t(`profiles.role.${payload.ownership.role}`),
       t(`profiles.permission.${payload.ownership.permission}`),
       payload.ownership.isPrimary ? t('profiles.badges.primary') : null,
@@ -107,7 +105,7 @@ export function toAccountProfileDetailPageData(params: {
       },
     ],
     statusItems: [
-      item(t('profiles.detail.fields.lifecycle'), payload.archivedAt ? t('profiles.lifecycle.archived') : t('profiles.lifecycle.active'), t),
+      item(t('profiles.detail.fields.lifecycle'), t('profiles.lifecycle.active'), t),
       translatedItem(t('profiles.detail.fields.profileStatus'), 'profiles.status', payload.profileStatus, t),
       item(t('profiles.detail.fields.lastActiveAt'), formatLocalizedDateTime(locale, payload.lastActiveAt), t),
       item(t('profiles.verificationSummary'), buildVerificationRatio(payload.verification), t),

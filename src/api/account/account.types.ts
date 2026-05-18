@@ -41,7 +41,6 @@ export interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
-  archivedAt?: string
   ownership: {
     role: 'self' | 'parent' | 'guardian' | 'advisor'
     relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
@@ -173,7 +172,6 @@ export interface ManagedProfileSummaryDTO {
   avatarUrl: string
   age: number
   city: string
-  archivedAt?: string
   role: 'self' | 'parent' | 'guardian' | 'advisor'
   relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
   permission: 'owner' | 'manager' | 'viewer'

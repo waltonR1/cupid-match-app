@@ -777,7 +777,7 @@ Rules:
 - `archivedAt` is a backend lifecycle marker, not another `profileStatus` value.
 - `archivedAt != null` profiles no longer participate in new public directory results, recommendation, private-introduction creation, or other new business actions.
 - Historical favorites, introductions, rooms and audit records remain queryable for history.
-- Owner-side account DTOs keep `archivedAt` so the management UI can distinguish archived profiles from active ones.
+- Ordinary owner-side account DTOs do not return archived profiles. Historical retention remains backend-only unless a dedicated history surface is introduced later.
 - The page may label the action as delete, but the backend lifecycle action is archive.
 
 ### Managed profile visibility update

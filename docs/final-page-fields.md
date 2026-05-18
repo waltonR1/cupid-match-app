@@ -521,8 +521,6 @@ interface AccountProfileDetailPageData {
   profileId: string
   displayName: string
   avatarUrl: string
-  archived: boolean
-  archivedAtText?: string
   ownershipBadges: string[]
   sections: AccountProfileDetailSectionViewModel[]
   photos: AccountProfilePhotoViewModel[]

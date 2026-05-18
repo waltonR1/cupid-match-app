@@ -30,7 +30,6 @@ interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
-  archivedAt?: string
   ownership: {
     role: string
     relationshipToProfile?: string
@@ -162,7 +161,6 @@ interface ManagedProfileSummaryDTO {
   avatarUrl: string
   age: number
   city: string
-  archivedAt?: string
   role: string
   relationshipToProfile?: string
   permission: string
@@ -285,7 +283,7 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
   const ownerships = data.profile_ownerships.filter((o) => o.userId === userId)
   const profiles = ownerships.map((o) => {
     const profile = data.profiles.find((p) => p.id === o.profileId)
-    if (!profile) return null
+    if (!profile || profile.archivedAt) return null
     return toManagedProfileSummary(data, o, profile, locale)
   }).filter((p): p is ManagedProfileSummaryDTO => p !== null)
 
@@ -375,7 +373,7 @@ export function getAccountProfiles(data: Database, userId: string): AccountProfi
 
   const profiles = ownerships.map((o) => {
     const profile = data.profiles.find((p) => p.id === o.profileId)
-    if (!profile) return null
+    if (!profile || profile.archivedAt) return null
     return toManagedProfileSummary(data, o, profile, locale)
   }).filter((p): p is ManagedProfileSummaryDTO => p !== null)
 
@@ -388,7 +386,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
 
   const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
   const profile = data.profiles.find((item) => item.id === profileId)
-  if (!ownership || !profile) return null
+  if (!ownership || !profile || profile.archivedAt) return null
 
   const locale = resolveUserLocale(data, userId)
   const view = buildProfileView(data, profile)
@@ -413,7 +411,6 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
     profileId,
     displayName: view.displayName,
     avatarUrl: view.avatarUrl,
-    archivedAt: profile.archivedAt,
     ownership: {
       role: ownership.role,
       relationshipToProfile: ownership.relationshipToProfile,
@@ -689,7 +686,6 @@ function toManagedProfileSummary(
     avatarUrl: view.avatarUrl,
     age: view.age,
     city: resolveLocalizedText(locale, profile.city),
-    archivedAt: profile.archivedAt,
     role: ownership.role,
     relationshipToProfile: ownership.relationshipToProfile,
     permission: ownership.permission,
