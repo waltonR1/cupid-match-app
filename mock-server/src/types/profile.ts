@@ -153,6 +153,7 @@ export interface ProfileRecord {
     communicationStyle: LocalizedText
     summary: LocalizedText
     tags: LocalizedText[]
+    archivedAt?: string
     createdAt: string
     updatedAt: string
 }

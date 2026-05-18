@@ -30,6 +30,7 @@ interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
+  archivedAt?: string
   ownership: {
     role: string
     relationshipToProfile?: string
@@ -161,6 +162,7 @@ interface ManagedProfileSummaryDTO {
   avatarUrl: string
   age: number
   city: string
+  archivedAt?: string
   role: string
   relationshipToProfile?: string
   permission: string
@@ -239,6 +241,11 @@ interface AdvisorFollowUpDTO {
   note: string
   dueAt?: string
   completedAt?: string
+}
+
+interface AccountProfileArchiveResultDTO {
+  profileId: string
+  archivedAt: string
 }
 
 // -- Helpers -- //
@@ -406,6 +413,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
     profileId,
     displayName: view.displayName,
     avatarUrl: view.avatarUrl,
+    archivedAt: profile.archivedAt,
     ownership: {
       role: ownership.role,
       relationshipToProfile: ownership.relationshipToProfile,
@@ -487,6 +495,24 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
     createdAt: profile.createdAt,
     updatedAt: profile.updatedAt,
   }
+}
+
+export function archiveAccountProfile(data: Database, userId: string, profileId: string):
+  | { status: 'archived'; result: AccountProfileArchiveResultDTO }
+  | { status: 'not_found' | 'forbidden' | 'already_archived' | 'active_flow' } {
+  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
+  const profile = data.profiles.find((item) => item.id === profileId)
+
+  if (!ownership || !profile) return { status: 'not_found' }
+  if (ownership.permission !== 'owner') return { status: 'forbidden' }
+  if (profile.archivedAt) return { status: 'already_archived' }
+  if (hasActiveProfileFlow(data, profileId)) return { status: 'active_flow' }
+
+  const archivedAt = new Date().toISOString()
+  profile.archivedAt = archivedAt
+  profile.updatedAt = archivedAt
+
+  return { status: 'archived', result: { profileId, archivedAt } }
 }
 
 // -- Membership -- //
@@ -663,6 +689,7 @@ function toManagedProfileSummary(
     avatarUrl: view.avatarUrl,
     age: view.age,
     city: resolveLocalizedText(locale, profile.city),
+    archivedAt: profile.archivedAt,
     role: ownership.role,
     relationshipToProfile: ownership.relationshipToProfile,
     permission: ownership.permission,
@@ -677,6 +704,14 @@ function toManagedProfileSummary(
       advisorStatus: verif?.advisorStatus ?? 'unreviewed',
     },
   }
+}
+
+function hasActiveProfileFlow(data: Database, profileId: string): boolean {
+  return data.private_introduction_requests.some((request) =>
+    request.targetProfileId === profileId && (request.status === 'requested' || request.status === 'accepted'),
+  ) || data.private_introduction_rooms.some((room) =>
+    room.targetProfileId === profileId && (room.status === 'open' || room.status === 'paused'),
+  )
 }
 
 function getEntitlementBalances(data: Database, userId: string): AccountEntitlementBalanceDTO[] {

@@ -78,7 +78,8 @@ export const accountCenterMessages: AppMessageSchema = {
       partial: '认证仍在补充，继续完善会提高资料可信度。',
       empty: '还没有完成认证，建议先补齐基础信任信息。',
     },
-    badges: { primary: '主资料', priority: '优先展示' },
+    badges: { archived: '已归档', primary: '主资料', priority: '优先展示' },
+    lifecycle: { active: '正常业务中', archived: '已归档' },
     role: { self: '本人资料', parent: '家长代管', guardian: '监护人代管', advisor: '顾问代管' },
     permission: { owner: '可编辑', manager: '可管理', viewer: '仅查看' },
     status: {
@@ -168,7 +169,7 @@ export const accountCenterMessages: AppMessageSchema = {
         familyPlan: '家庭计划偏好', dealBreakers: '不能接受的点', smoking: '吸烟', drinking: '饮酒', exercise: '运动',
         activityLevel: '活跃程度', weekendStyle: '周末节奏', pets: '宠物', personalityTraits: '性格关键词', interests: '兴趣',
         communicationStyle: '沟通方式', summary: '简介', tags: '标签', familyVisible: '家庭可见', allowFamilyContact: '允许家庭联系',
-        familyPriority: '家庭优先', isPriorityProfile: '优先展示', profileStatus: '资料状态', lastActiveAt: '最近活跃', createdAt: '创建时间', updatedAt: '更新时间',
+        familyPriority: '家庭优先', isPriorityProfile: '优先展示', lifecycle: '生命周期', profileStatus: '资料状态', lastActiveAt: '最近活跃', createdAt: '创建时间', updatedAt: '更新时间',
         phone: '手机号', email: '邮箱', wechat: '微信',
       },
       values: {

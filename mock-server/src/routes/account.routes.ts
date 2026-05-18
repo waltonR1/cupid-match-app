@@ -6,6 +6,7 @@ import {
   getAccountMe,
   getAccountProfiles,
   getAccountProfileDetail,
+  archiveAccountProfile,
   getAccountMembership,
   getAccountEvents,
   getAccountFavorites,
@@ -60,6 +61,24 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const result = getAccountProfileDetail(getDb().data, userId, profileId)
     if (!result) return reply.code(404).send({ error: 'Profile not found' })
     return result
+  })
+
+  app.post(`/account/profiles/:profileId/archive`, async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+
+    const { profileId } = request.params as { profileId: string }
+    const db = getDb()
+    const result = archiveAccountProfile(db.data, userId, profileId)
+
+    if (result.status === 'not_found') return reply.code(404).send({ error: 'Profile not found' })
+    if (result.status === 'forbidden') return reply.code(403).send({ error: 'Only profile owners can archive profiles' })
+    if (result.status === 'already_archived') return reply.code(409).send({ error: 'Profile is already archived' })
+    if (result.status === 'active_flow') return reply.code(409).send({ error: 'Profile has active formal relationship flows' })
+    if (result.status !== 'archived') return reply.code(500).send({ error: 'Unexpected archive result' })
+
+    await db.write()
+    return result.result
   })
 
   app.get(`/account/membership`, async (request, reply) => {

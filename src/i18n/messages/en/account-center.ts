@@ -88,7 +88,8 @@ export const accountCenterMessages: AppMessageSchema = {
       partial: 'Verification is still in progress. Completing it strengthens trust.',
       empty: 'No verification is complete yet. Start with the core trust signals.',
     },
-    badges: { primary: 'Primary profile', priority: 'Priority display' },
+    badges: { archived: 'Archived', primary: 'Primary profile', priority: 'Priority display' },
+    lifecycle: { active: 'In service', archived: 'Archived' },
     role: { self: 'Self profile', parent: 'Managed by parent', guardian: 'Managed by guardian', advisor: 'Managed by advisor' },
     permission: { owner: 'Editable', manager: 'Manageable', viewer: 'View only' },
     status: { draft: 'Draft', review: 'Under review', open: 'Open', paused: 'Paused', hidden: 'Hidden' },
@@ -145,7 +146,7 @@ export const accountCenterMessages: AppMessageSchema = {
         familyPlan: 'Family plan preference', dealBreakers: 'Deal breakers', smoking: 'Smoking', drinking: 'Drinking', exercise: 'Exercise',
         activityLevel: 'Activity level', weekendStyle: 'Weekend style', pets: 'Pets', personalityTraits: 'Personality traits', interests: 'Interests',
         communicationStyle: 'Communication style', summary: 'Summary', tags: 'Tags', familyVisible: 'Visible to family', allowFamilyContact: 'Allow family contact',
-        familyPriority: 'Family priority', isPriorityProfile: 'Priority display', profileStatus: 'Profile status', lastActiveAt: 'Last active', createdAt: 'Created at', updatedAt: 'Updated at',
+        familyPriority: 'Family priority', isPriorityProfile: 'Priority display', lifecycle: 'Lifecycle', profileStatus: 'Profile status', lastActiveAt: 'Last active', createdAt: 'Created at', updatedAt: 'Updated at',
         phone: 'Phone', email: 'Email', wechat: 'WeChat',
       },
       values: {

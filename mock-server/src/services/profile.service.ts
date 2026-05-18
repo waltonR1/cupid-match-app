@@ -169,7 +169,7 @@ export function featuredProfiles(locale: ApiLocale, data: Database, rawPageSize:
     items: SelfProfileListItemDTO[]
 } {
     const pageSize = clamp(Number.parseInt(getString(rawPageSize) || '3', 10) || 3, 1, 12)
-    const source = buildProfileViews(data, data.profiles)
+    const source = buildProfileViews(data, data.profiles.filter(isBusinessActiveProfile))
     const sorted = sortSelfProfiles(source, 'recentActive')
 
     return {
@@ -184,7 +184,7 @@ export function listSelfProfiles(locale: ApiLocale, data: Database, query: Query
     facets: SelfProfileDirectoryFacetsDTO
 } {
     const normalizedQuery = normalizeProfileQuery(query)
-    const source = buildProfileViews(data, data.profiles)
+    const source = buildProfileViews(data, data.profiles.filter(isBusinessActiveProfile))
     const filtered = source.filter((profile) => matchesSelfDirectory(profile, normalizedQuery))
     const sorted = sortSelfProfiles(filtered, normalizedQuery.sort)
 
@@ -202,7 +202,7 @@ export function listFamilyProfiles(locale: ApiLocale, data: Database, query: Que
     facets: FamilyProfileDirectoryFacetsDTO
 } {
     const normalizedQuery = normalizeProfileQuery(query)
-    const source = buildProfileViews(data, data.profiles.filter((profile) => profile.familyVisible))
+    const source = buildProfileViews(data, data.profiles.filter((profile) => isBusinessActiveProfile(profile) && profile.familyVisible))
     const filtered = source.filter((profile) => matchesFamilyDirectory(profile, normalizedQuery))
     const sorted = sortFamilyProfiles(filtered, normalizedQuery.sort)
 
@@ -248,6 +248,11 @@ function buildProfileViews(data: Database, profiles: ProfileRecord[]): ProfileWi
     return profiles.map((profile) => buildProfileView(data, profile))
 }
 
+/** 是否仍参与新的公开业务流 */
+export function isBusinessActiveProfile(profile: ProfileRecord): boolean {
+    return !profile.archivedAt
+}
+
 function resolveProfileVisibilitySettings(data: Database, profileId: string): ProfileVisibilitySettingRecord[] {
     return data.profile_visibility_settings.filter((item) => item.profileId === profileId)
 }
@@ -257,7 +262,7 @@ export function selfProfileDetail(locale: ApiLocale, data: Database, id: string,
     const profile = data.profiles.find((item) => item.id === id)
     const userContext = userId ? resolveUserContext(data, userId) : null
 
-    if (!profile || (userId && !userContext)) {
+    if (!profile || !isBusinessActiveProfile(profile) || (userId && !userContext)) {
         return null
     }
 
@@ -275,7 +280,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
     const profile = data.profiles.find((item) => item.id === profileId)
     const userContext = userId ? resolveUserContext(data, userId) : null
 
-    if (!profile) return {status: 'not_found' as const}
+    if (!profile || !isBusinessActiveProfile(profile)) return {status: 'not_found' as const}
     if (!userContext) return {status: 'login_required' as const}
 
     const introduction = resolvePrivateIntroduction(userContext, profileId, data.private_introduction_requests)
@@ -301,7 +306,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
 
 /** 获取家庭资料详情 */
 export function familyProfileDetail(locale: ApiLocale, data: Database, id: string, userId?: string): FamilyProfileDetailDTO | null {
-    const profile = data.profiles.find((item) => item.id === id && item.familyVisible)
+    const profile = data.profiles.find((item) => item.id === id && isBusinessActiveProfile(item) && item.familyVisible)
     const userContext = userId ? resolveUserContext(data, userId) : null
 
     if (!profile || (userId && !userContext)) {

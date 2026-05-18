@@ -6,6 +6,7 @@ import type {
   AccountMembershipDTO,
   MembershipPlanDTO,
   AccountProfileDetailDTO,
+  AccountProfileArchiveResultDTO,
   AccountEntitlementBalanceDTO,
   AccountMeDTO,
   AccountPrivateIntroductionRoomDTO,
@@ -55,6 +56,12 @@ export function getAccountProfiles(): Promise<AccountProfilesDTO> {
 
 export function getAccountProfileDetail(profileId: string): Promise<AccountProfileDetailDTO> {
   return requestJson<AccountProfileDetailDTO>(`/account/profiles/${profileId}`)
+}
+
+export function archiveAccountProfile(profileId: string): Promise<AccountProfileArchiveResultDTO> {
+  return requestJson<AccountProfileArchiveResultDTO>(`/account/profiles/${profileId}/archive`, {
+    method: 'POST',
+  })
 }
 
 export function getAccountMembership(): Promise<{
