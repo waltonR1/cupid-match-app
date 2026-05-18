@@ -138,7 +138,13 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
-| Account | `DELETE` | `/api/account/profiles/:profileId` | 删除满足规则的可管理 profile。 |
+| Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
+| Account | `PATCH` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
+| Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
+| Account | `POST` | `/api/account/profiles/:profileId/prompts` | 新增可管理 profile 的 prompt。 |
+| Account | `PATCH` | `/api/account/profiles/:profileId/prompts/:promptId` | 更新可管理 profile 的 prompt。 |
+| Account | `DELETE` | `/api/account/profiles/:profileId/prompts/:promptId` | 删除可管理 profile 的 prompt。 |
+| Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
 | Account | `PATCH` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
 | Account | `PATCH` | `/api/account/me` | 更新账户基础信息。 |
 | Account | `PATCH` | `/api/account/settings/preferences` | 更新账户偏好。 |
@@ -823,6 +829,7 @@ interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
+  archivedAt?: string
   ownership: {
     role: 'self' | 'parent' | 'guardian' | 'advisor'
     relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
@@ -847,6 +854,7 @@ interface ManagedProfileSummaryDTO {
   avatarUrl: string
   age: number
   city: string
+  archivedAt?: string
   role: 'self' | 'parent' | 'guardian' | 'advisor'
   relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
   permission: 'owner' | 'manager' | 'viewer'
@@ -1008,6 +1016,14 @@ type AccountProfileCreatePayload = ProfileCreatePayload
 
 type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
 
+interface AccountManagedProfileCreatePayload extends AccountProfileCreatePayload {
+  ownership: {
+    role: 'self' | 'parent' | 'guardian'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+    isPrimary?: boolean
+  }
+}
+
 interface AccountProfileContactMethodsUpdatePayload {
   entries: Array<{
     type: 'phone' | 'email' | 'wechat'
@@ -1016,9 +1032,9 @@ interface AccountProfileContactMethodsUpdatePayload {
   }>
 }
 
-interface AccountProfileDeleteResultDTO {
+interface AccountProfileArchiveResultDTO {
   profileId: string
-  deleted: true
+  archivedAt: string
 }
 
 interface AccountPreferenceUpdatePayload {
@@ -1045,10 +1061,11 @@ interface AccountMembershipUpgradeResultDTO {
 
 Write rules:
 
-- `POST /api/account/profiles` creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
+- `POST /api/account/profiles` accepts an explicit ownership choice, creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
 - `PATCH /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
 - `PATCH /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
-- `DELETE /api/account/profiles/:profileId` is owner-only, rejects unsafe deletion when active formal flows still exist, and returns a typed delete result.
+- `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
+- account photo / prompt mutation endpoints reuse `ProfilePhotoMutationPayload` / `ProfilePromptMutationPayload`, write their dedicated collections, and return the rebuilt detail DTO for the unified editor.
 - `PATCH /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `PATCH /api/account/me` updates account display basics only; auth identities and status are out of scope.
 - `PATCH /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.

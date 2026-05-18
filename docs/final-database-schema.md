@@ -353,6 +353,7 @@ interface ProfileRecord {
   summary: LocalizedText
   tags: LocalizedText[]
 
+  archivedAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -400,6 +401,7 @@ joinedAt
 - `nickname`：若确实需要用户自定义公开称呼，迁移为 `publicAlias` 并走审核；否则删除。
 - `occupation`：不公开精确职位；公开层使用 `industry` / `careerDirection`。
 - `joinedAt`：统一为 `createdAt`。
+- `archivedAt`：仅供后端生命周期判断使用；非空时表示该 profile 已退出正常业务流，不再参与新的公开目录、推荐、私人介绍或其他新增动作，但历史关系仍保留。
 
 ### profile_photos
 

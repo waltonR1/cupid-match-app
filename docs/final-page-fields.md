@@ -486,6 +486,8 @@ interface ManagedProfileSummaryViewModel {
   avatarUrl: string
   age: string
   city: string
+  archived: boolean
+  archivedAtText?: string
   role: 'self' | 'parent' | 'guardian' | 'advisor'
   relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
   permission: 'owner' | 'manager' | 'viewer'
@@ -502,17 +504,34 @@ interface AccountProfilesPageData {
   emptyState?: PageEmptyState
 }
 
+interface AccountManagedProfileCreateViewModel {
+  ownershipOptions: Array<{
+    role: 'self' | 'parent' | 'guardian'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+    label: string
+  }>
+  defaultOwnership?: {
+    role: 'self' | 'parent' | 'guardian'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  }
+  submitAction: PageActionViewModel
+}
+
 interface AccountProfileDetailPageData {
   profileId: string
   displayName: string
   avatarUrl: string
+  archived: boolean
+  archivedAtText?: string
   ownershipBadges: string[]
   sections: AccountProfileDetailSectionViewModel[]
+  photos: AccountProfilePhotoViewModel[]
+  prompts: AccountProfilePromptViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
   visibilityItems: ProfileVisibilitySettingViewModel[]
   visibilityGroups: ProfileVisibilityGroupViewModel[]
   editState: AccountProfileEditStateViewModel
-  deleteAction?: PageActionViewModel
+  archiveAction?: PageActionViewModel
 }
 
 interface AccountProfileDetailSectionViewModel {
@@ -535,6 +554,28 @@ interface AccountProfileEditStateViewModel {
   dirty: boolean
   saving: boolean
   saveAction?: PageActionViewModel
+}
+
+interface AccountProfilePhotoViewModel {
+  id: string
+  url: string
+  caption: string
+  isPrimary: boolean
+  sortOrder: number
+  editable: boolean
+  updateAction?: PageActionViewModel
+  deleteAction?: PageActionViewModel
+}
+
+interface AccountProfilePromptViewModel {
+  id: string
+  promptCode: string
+  prompt: string
+  answer: string
+  sortOrder: number
+  editable: boolean
+  updateAction?: PageActionViewModel
+  deleteAction?: PageActionViewModel
 }
 
 interface ProfileVisibilityGroupViewModel {

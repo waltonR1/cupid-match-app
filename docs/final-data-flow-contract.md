@@ -667,7 +667,7 @@ profiles.compatibilityDimensions
 -> create profile action
 -> POST /api/account/profiles
 -> create profiles row
--> create current user owner ownership
+-> create current user owner ownership from explicit ownership selection
 -> rebuild AccountProfileDetailDTO
 -> open / refresh AccountProfileDetailPageData
 ```
@@ -676,6 +676,7 @@ Rules:
 
 - Creation starts from the managed profiles collection page, not from settings.
 - The current user becomes the initial `owner`.
+- The create action explicitly records whether this profile is for `self`, a child managed by `parent`, or another guarded family relation; registration onboarding may provide a default, but it does not silently decide later ownership.
 - The created profile uses the same unified self / family account detail editor afterward.
 - Photos, prompts, contact methods, verification and visibility remain on their own chains.
 
@@ -719,25 +720,65 @@ Rules:
 - The payload writes controlled contact records such as phone, email and wechat plus `visibleAfterIntroduction`.
 - Public browsing detail DTOs still do not expose raw contact values.
 
-### Managed profile delete
+### Managed profile photos update
+
+```text
+/pages/account/profile-detail
+-> photos editor
+-> POST / PATCH / DELETE profile photo endpoints
+-> ownership permission check
+-> profile_photos write
+-> rebuild AccountProfileDetailDTO
+-> refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- Photos are maintained from the unified owner-side profile detail page.
+- Photo writes stay in `profile_photos`; `avatarUrl` remains derived from the approved primary photo.
+- At most one approved primary photo may exist per profile.
+
+### Managed profile prompts update
+
+```text
+/pages/account/profile-detail
+-> prompts editor
+-> POST / PATCH / DELETE profile prompt endpoints
+-> ownership permission check
+-> profile_prompts write
+-> rebuild AccountProfileDetailDTO
+-> refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- Prompts are maintained from the unified owner-side profile detail page.
+- Prompt writes stay in `profile_prompts`, not the profile main table.
+- Localized prompt / answer fields still write to the current request locale slot.
+
+### Managed profile archive
 
 ```text
 /pages/account/profile-detail
 -> delete profile action
--> DELETE /api/account/profiles/:profileId
+-> POST /api/account/profiles/:profileId/archive
 -> ownership permission check
 -> relation safety check
--> delete profile-owned account data
--> return AccountProfileDeleteResultDTO
+-> profiles.archivedAt write
+-> return AccountProfileArchiveResultDTO
 -> refresh /pages/account/profiles
 ```
 
 Rules:
 
-- Only the `owner` can delete.
-- `manager` and `viewer` cannot delete.
-- Profiles with active formal relationship flows cannot be deleted directly.
-- The page labels the action as delete; the backend may reject unsafe deletion with a typed reason instead of silently converting it into a different lifecycle action.
+- Only the `owner` can archive.
+- `manager` and `viewer` cannot archive.
+- Profiles with active formal relationship flows cannot be archived directly.
+- `archivedAt` is a backend lifecycle marker, not another `profileStatus` value.
+- `archivedAt != null` profiles no longer participate in new public directory results, recommendation, private-introduction creation, or other new business actions.
+- Historical favorites, introductions, rooms and audit records remain queryable for history.
+- Owner-side account DTOs keep `archivedAt` so the management UI can distinguish archived profiles from active ones.
+- The page may label the action as delete, but the backend lifecycle action is archive.
 
 ### Managed profile visibility update
 

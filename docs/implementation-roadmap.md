@@ -19,6 +19,7 @@ Phase 3: 修正当前 auth / registration / onboarding 模型
 Phase 4: 完成 events 页面与 API 字段链路
 Phase 4.5: 升级 agreement / legal documents 链路
 Phase 5: 按最终态重写 account / membership / entitlement
+Phase 5.4: 引入 profile 归档生命周期
 Phase 5.5: 补齐 account center 写操作
 Phase 5.6: 设计独立消息中心
 Phase 6: 完成 profile / event / account / private introduction 联动
@@ -1411,6 +1412,75 @@ account center 应按用户任务收敛为 6 个稳定页面：
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。
 
+## Phase 5.4：引入 profile 归档生命周期
+
+### 目标
+
+在补齐账户中心写操作之前，先把 profile 退出业务流的全局语义定清楚，避免“删除资料”只在 account 页面局部实现，却让目录、详情、推荐、收藏和私人介绍各自猜测规则。
+
+### 明确范围
+
+本阶段要做：
+
+- `profiles` 增加仅供后端使用的 `archivedAt?: string`。
+- 统一 archived profile 在 public directory、public detail、推荐和私人介绍创建中的过滤规则。
+- 统一历史链路对 archived profile 的保留规则。
+- 明确 owner-side account profiles 是否继续可见 archived profile，以及前端如何标记。
+- 定义 account 侧 archive API 与 archive 前置条件。
+
+本阶段不做：
+
+- 不做 account 页面主字段编辑 UI。
+- 不做 profile 主字段、联系方式、照片、prompts 的写入。
+- 不把 archive 误做成物理删除。
+
+### 生命周期规则
+
+- `archivedAt = null`：正常业务 profile。
+- `archivedAt != null`：已退出正常业务流。
+- `archivedAt` 是单独的后端生命周期标记，不并入 `profileStatus`；`profileStatus` 继续描述业务展示状态，archive 负责表示该资料是否还参与正常业务。
+- archived profile 不再参与：
+  - self / family directory
+  - 新推荐
+  - 新 private introduction 申请
+  - 其他新增业务动作
+- archived profile 仍保留：
+  - 历史 favorite
+  - 历史 private introduction
+  - 已存在 room
+  - verification / audit / ownership 等历史记录
+- public detail 对 archived profile 不再作为普通可浏览资料返回。
+- account profiles 可继续保留 archived profile 的管理可见性，用于历史追溯；默认列表与交互样式需明确区分正常资料和已归档资料。
+- account owner-side DTO 需要保留 `archivedAt`，页面再派生已归档展示状态；不能让前端从 `profileStatus` 猜测 archive。
+
+### API 目标
+
+```text
+POST /api/account/profiles/:profileId/archive
+```
+
+| Endpoint | Source of truth | Payload | Response |
+| --- | --- | --- | --- |
+| `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships`, active relation checks | - | `AccountProfileArchiveResultDTO` |
+
+### 归档规则
+
+- 只有 `owner` 可以归档；`manager` / `viewer` 不可归档。
+- 有进行中的正式关系链路时不允许归档；至少包括未终结的 private introduction / room，后续若 event 或顾问流程需要阻塞，也应在这里统一扩展。
+- 归档只写 `profiles.archivedAt`，不物理删除任何历史集合。
+- 前端可以显示 `删除资料`，但确认文案必须说明：资料将退出匹配和公开展示，历史记录仍保留。
+
+### 验收标准
+
+- archived profile 不再出现在 public directory、推荐或新的 private introduction 可选目标中。
+- archived profile 的历史 favorite / introduction / room 仍可追溯。
+- owner 可以在 account 场景识别已归档资料。
+- active formal flow 存在时 archive 被明确拒绝。
+- 不产生孤儿记录，不通过物理删除破坏历史链路。
+- `npm run type-check` 通过。
+- `npm run mock:build` 通过。
+- `npm run build:h5` 通过。
+
 ## Phase 5.5：补齐 account center 写操作
 
 ### 目标
@@ -1419,7 +1489,7 @@ account center 应按用户任务收敛为 6 个稳定页面：
 
 - 用户可以在统一资料详情页维护自己有权限管理的 profile。
 - 用户可以在资料列表页新建一份由自己管理的 profile。
-- 用户可以在统一资料详情页删除自己有权限管理且允许删除的 profile。
+- 用户可以在统一资料详情页将自己有权限管理且允许归档的 profile 退出正常业务流。
 - 用户可以在同一页调整该 profile 的字段可见性。
 - 用户可以在设置页维护账户基础信息和账户级偏好。
 - 用户可以在会员页发起会员等级变更，并让当前会员与权益余额同步刷新。
@@ -1433,8 +1503,9 @@ account center 应按用户任务收敛为 6 个稳定页面：
 - profile 创建。
 - profile main fields 更新。
 - profile contact methods 更新。
-- profile 删除。
-- profile photos / prompts 后续可独立编辑，但本阶段先只定义链路，不强制做完整 UI。
+- profile photos 更新。
+- profile prompts 更新。
+- profile archive 入口接入。
 - profile visibility settings 更新。
 - account basic fields 更新。
 - account preferences 更新。
@@ -1457,12 +1528,14 @@ account center 应按用户任务收敛为 6 个稳定页面：
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
   - 联系方式 section 在同页维护，但写入 `profile_contact_methods`，不回填 `profiles` 主表。
+- 照片与 prompts 在同页维护，但分别写入 `profile_photos` / `profile_prompts`。
   - profile visibility 在同页维护，不再散落到 settings。
-  - detail 页提供 `编辑资料` 与 `删除资料`；删除属于危险操作，必须二次确认。
+  - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
 
 - `/pages/account/profiles`
   - 是用户管理资料集合的入口。
   - 提供 `新建资料` 主操作。
+- 新建时用户主动选择“这份资料属于谁”；注册时 onboarding 选择只能作为默认值，不直接替代本次 ownership 选择。
   - 列表项进入统一 profile detail 继续维护。
 
 - `/pages/account/settings`
@@ -1481,7 +1554,13 @@ account center 应按用户任务收敛为 6 个稳定页面：
 POST  /api/account/profiles
 PATCH /api/account/profiles/:profileId
 PATCH /api/account/profiles/:profileId/contact-methods
-DELETE /api/account/profiles/:profileId
+POST  /api/account/profiles/:profileId/photos
+PATCH /api/account/profiles/:profileId/photos/:photoId
+DELETE /api/account/profiles/:profileId/photos/:photoId
+POST  /api/account/profiles/:profileId/prompts
+PATCH /api/account/profiles/:profileId/prompts/:promptId
+DELETE /api/account/profiles/:profileId/prompts/:promptId
+POST  /api/account/profiles/:profileId/archive
 PATCH /api/account/profiles/:profileId/visibility
 PATCH /api/account/me
 PATCH /api/account/settings/preferences
@@ -1490,10 +1569,12 @@ POST  /api/account/membership/upgrade
 
 | Endpoint | Source of truth | Payload | Response |
 | --- | --- | --- | --- |
-| `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountProfileCreatePayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountManagedProfileCreatePayload` | `AccountProfileDetailDTO` |
 | `PATCH /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
 | `PATCH /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
-| `DELETE /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | - | `AccountProfileDeleteResultDTO` |
+| photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
+| prompt endpoints | `profile_prompts`, `profile_ownerships` | `ProfilePromptMutationPayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
 | `PATCH /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
 | `PATCH /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `PATCH /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
@@ -1503,12 +1584,14 @@ POST  /api/account/membership/upgrade
 
 profile：
 
+- 新建时必须显式选择 ownership 类型；注册时 onboarding 选择仅可作为默认项，不可静默决定后续新建资料的归属。
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
-- 只允许 `owner` 删除；`manager` / `viewer` 不可删除。
-- 已进入正式对外流转的 profile 若有关联中的正式关系链路，不允许直接删除，需先结束关联流程；接口返回明确失败原因。
+- archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
 - `PATCH /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
+- 照片与 prompts 由独立接口更新 `profile_photos` / `profile_prompts`；同页展示不代表同表写入。
+- owner-side profile DTO 返回 `archivedAt`，页面模型派生归档标记；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。
@@ -1561,9 +1644,11 @@ membership：
 ### 验收标准
 
 - 用户可以从资料列表页新建 profile，并进入统一 detail 页继续维护。
+- 用户新建 profile 时必须明确选择资料归属；onboarding 默认值不会覆盖本次选择。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
-- 用户在拥有 `owner` 权限且 profile 满足删除规则时，可以在 detail 页删除该 profile；删除后列表页同步移除。
+- 用户在拥有 `owner` / `manager` 权限时，可以维护照片和 prompts，且写入后刷新仍保持。
+- 用户在拥有 `owner` 权限且 profile 满足 archive 规则时，可以在 detail 页执行删除入口；profile 退出正常业务流但历史链路保留。
 - `viewer` 无法提交 profile 更新。
 - visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
 - settings 页修改偏好后刷新仍保持。
