@@ -1528,14 +1528,14 @@ POST /api/account/profiles/:profileId/archive
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
   - 联系方式 section 在同页维护，但写入 `profile_contact_methods`，不回填 `profiles` 主表。
-- 照片与 prompts 在同页维护，但分别写入 `profile_photos` / `profile_prompts`。
+  - 照片与 prompts 在同页维护，但分别写入 `profile_photos` / `profile_prompts`。
   - profile visibility 在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
 
 - `/pages/account/profiles`
   - 是用户管理资料集合的入口。
   - 提供 `新建资料` 主操作。
-- 新建时用户主动选择“这份资料属于谁”；注册时 onboarding 选择只能作为默认值，不直接替代本次 ownership 选择。
+  - 新建时用户主动选择“这份资料属于谁”；注册时 onboarding 选择只能作为默认值，不直接替代本次 ownership 选择。
   - 列表项进入统一 profile detail 继续维护。
 
 - `/pages/account/settings`
@@ -1829,7 +1829,9 @@ refactor(account): use profile ownerships
 ### Phase 5.5
 
 ```text
-feat(account): add managed profile updates
+feat(account): add managed profile creation
+feat(account): add managed profile editing
+feat(account): add managed profile media editing
 feat(account): add profile visibility controls
 feat(account): add account basics updates
 feat(account): add preference updates
