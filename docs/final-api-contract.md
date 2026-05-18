@@ -137,6 +137,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
 | Account | `POST` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
+| Account | `POST` | `/api/account/profiles/:profileId/ownership` | 更新可管理 profile 的归属关系。 |
 | Account | `POST` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
@@ -1014,13 +1015,7 @@ type AccountProfileCreatePayload = ProfileCreatePayload
 
 type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
 
-interface AccountManagedProfileCreatePayload extends AccountProfileCreatePayload {
-  ownership: {
-    role: 'self' | 'parent' | 'guardian'
-    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-    isPrimary?: boolean
-  }
-}
+interface AccountManagedProfileCreatePayload {}
 
 interface AccountProfileContactMethodsUpdatePayload {
   entries: Array<{
@@ -1048,26 +1043,27 @@ interface AccountMeUpdatePayload {
 }
 
 interface AccountMembershipUpgradePayload {
-  targetTier: 'silver' | 'gold' | 'diamond'
+  tier: 'free' | 'silver' | 'gold' | 'diamond'
 }
 
 interface AccountMembershipUpgradeResultDTO {
-  membership: AccountMembershipDTO
-  entitlements: AccountEntitlementBalanceDTO[]
+  status: 'pending_external_flow'
+  requestedTier: 'free' | 'silver' | 'gold' | 'diamond'
 }
 ```
 
 Write rules:
 
-- `POST /api/account/profiles` accepts an explicit ownership choice, creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
-- `PATCH /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
-- `PATCH /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
+- `POST /api/account/profiles` derives the initial ownership from account attributes, creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
+- `POST /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
+- `POST /api/account/profiles/:profileId/ownership` updates the editable owner relation defaults shown in profile detail.
+- `POST /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
 - account photo / prompt mutation endpoints reuse `ProfilePhotoMutationPayload` / `ProfilePromptMutationPayload`, write their dedicated collections, and return the rebuilt detail DTO for the unified editor.
-- `PATCH /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
-- `PATCH /api/account/me` updates account display basics only; auth identities and status are out of scope.
-- `PATCH /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.
-- `POST /api/account/membership/upgrade` accepts only active higher-tier plans and returns the refreshed membership snapshot.
+- `POST /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
+- `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
+- `POST /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.
+- `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or advisor confirmation happens before future membership state changes.
 
 禁止在 account DTO 中返回这些 legacy 字段：
 

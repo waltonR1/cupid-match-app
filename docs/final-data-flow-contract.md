@@ -667,7 +667,7 @@ profiles.compatibilityDimensions
 -> create profile action
 -> POST /api/account/profiles
 -> create profiles row
--> create current user owner ownership from explicit ownership selection
+-> derive initial current-user owner ownership from account attributes
 -> rebuild AccountProfileDetailDTO
 -> open / refresh AccountProfileDetailPageData
 ```
@@ -676,7 +676,7 @@ Rules:
 
 - Creation starts from the managed profiles collection page, not from settings.
 - The current user becomes the initial `owner`.
-- The create action explicitly records whether this profile is for `self`, a child managed by `parent`, or another guarded family relation; registration onboarding may provide a default, but it does not silently decide later ownership.
+- The create action derives an initial ownership default from account attributes; the owner may later adjust it from profile detail.
 - The created profile uses the same unified self / family account detail editor afterward.
 - Photos, prompts, contact methods, verification and visibility remain on their own chains.
 
@@ -700,6 +700,24 @@ Rules:
 - Contact methods, internal records, verification, photos and prompts stay on separate chains.
 - Localized fields write only to the current request locale slot.
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
+
+### Managed profile ownership update
+
+```text
+/pages/account/profile-detail
+-> ownership editor
+-> POST /api/account/profiles/:profileId/ownership
+-> owner permission check
+-> profile_ownerships write
+-> rebuild AccountProfileDetailDTO
+-> refresh AccountProfileDetailPageData
+```
+
+Rules:
+
+- New profiles receive an initial ownership default from account attributes.
+- The owner may adjust that relation later from the unified profile detail editor.
+- This chain updates only `profile_ownerships`, not profile main-table fields.
 
 ### Managed profile contact methods update
 
@@ -840,18 +858,14 @@ Rules:
 /pages/account/membership
 -> choose target plan
 -> POST /api/account/membership/upgrade
--> validate active target plan and upgrade direction
--> close current active user_memberships
--> create next active user_memberships
--> rebuild user_entitlement_balances from target plan
+-> return placeholder external-flow acknowledgement
 -> return AccountMembershipUpgradeResultDTO
--> refresh membership page
 ```
 
 Rules:
 
-- Users can only upgrade to active plans above their current tier.
-- Mock implementation may complete immediately; production may later insert payment / advisor approval before activation.
+- Phase 5.5 only reserves the upgrade entry point.
+- Formal payment or advisor confirmation is introduced later before membership state changes.
 - The page contract stays stable even if the execution path later becomes asynchronous.
 - Membership tier is never written into `users`.
 

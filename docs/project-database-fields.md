@@ -36,6 +36,26 @@
 | `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。 | 后续补齐 room、messages、quota source of truth。 |
 | `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences / profile visibility。 |
 
+## 通用本地化字段
+
+```ts
+interface LocalizedValue {
+    value: string
+    source: 'manual' | 'machine'
+    provider: 'human' | 'placeholder' | 'translation_api'
+    status: 'ready' | 'pending' | 'failed' | 'stale'
+    updatedAt: string
+}
+
+interface LocalizedText {
+    zh: LocalizedValue
+    fr: LocalizedValue
+    en: LocalizedValue
+}
+```
+
+当前 `mock-server/db.json` 中所有 `LocalizedText` 字段都按上述结构保存：文本值与翻译元信息放在同一个 locale slot 内，不再拆成独立的 `meta` 对象。
+
 ## Auth / Account 当前字段
 
 ### users

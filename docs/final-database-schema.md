@@ -66,10 +66,18 @@ interface FinalDatabase {
 ## 通用类型
 
 ```ts
+interface LocalizedValue {
+  value: string
+  source: 'manual' | 'machine'
+  provider: 'human' | 'placeholder' | 'translation_api'
+  status: 'ready' | 'pending' | 'failed' | 'stale'
+  updatedAt: string
+}
+
 interface LocalizedText {
-  zh: string
-  fr: string
-  en: string
+  zh: LocalizedValue
+  fr: LocalizedValue
+  en: LocalizedValue
 }
 
 type LocaleCode = 'zh' | 'fr' | 'en'

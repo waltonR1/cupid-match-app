@@ -1535,7 +1535,7 @@ POST /api/account/profiles/:profileId/archive
 - `/pages/account/profiles`
   - 是用户管理资料集合的入口。
   - 提供 `新建资料` 主操作。
-  - 新建时用户主动选择“这份资料属于谁”；注册时 onboarding 选择只能作为默认值，不直接替代本次 ownership 选择。
+  - 新建时根据账户 onboarding 属性生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
   - 列表项进入统一 profile detail 继续维护。
 
 - `/pages/account/settings`
@@ -1546,7 +1546,7 @@ POST /api/account/profiles/:profileId/archive
 - `/pages/account/membership`
   - 展示当前套餐、额度和下一可升级套餐。
   - 支持对更高套餐发起升级动作。
-  - mock 阶段可直接完成等级切换；正式产品以后替换为支付 / 顾问流程，不改变页面 contract。
+  - Phase 5.5 只保留升级入口占位；正式产品后续接入支付 / 顾问流程后才会改变会员状态，不改变页面 contract。
 
 ### API 目标
 
@@ -1578,13 +1578,14 @@ POST  /api/account/membership/upgrade
 | `POST /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
 | `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `POST /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
-| `POST /api/account/membership/upgrade` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
+| `POST /api/account/profiles/:profileId/ownership` | `profile_ownerships` | `AccountProfileOwnershipUpdatePayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/membership/upgrade` | external payment / advisor flow placeholder | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
 
 ### 写入规则
 
 profile：
 
-- 新建时必须显式选择 ownership 类型；注册时 onboarding 选择仅可作为默认项，不可静默决定后续新建资料的归属。
+- 新建时根据账户 onboarding 属性生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
@@ -1618,10 +1619,7 @@ account me：
 membership：
 
 - 只允许升级到比当前套餐更高的 active plan。
-- mock 阶段升级成功后：
-  - 关闭旧 active `user_memberships`
-  - 创建新 active `user_memberships`
-  - 按目标套餐重建 `user_entitlement_balances`
+- Phase 5.5 的升级接口只返回外部流程占位结果，不直接改写会员状态。
 - 不在 `users` 上写 tier。
 - 正式支付未接入前，接口语义仍保留为“升级申请 / 升级结果”，避免未来换实现时前端 contract 再改一次。
 
@@ -1644,7 +1642,7 @@ membership：
 ### 验收标准
 
 - 用户可以从资料列表页新建 profile，并进入统一 detail 页继续维护。
-- 用户新建 profile 时必须明确选择资料归属；onboarding 默认值不会覆盖本次选择。
+- 用户新建 profile 时由账户 onboarding 属性生成默认归属，之后可在统一 detail 页修改。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护照片和 prompts，且写入后刷新仍保持。
@@ -1653,7 +1651,7 @@ membership：
 - visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
 - settings 页修改偏好后刷新仍保持。
 - settings 页修改 `accountName` / `avatarUrl` 后刷新仍保持。
-- membership 升级后当前套餐与 entitlement balances 同步变化。
+- membership 升级入口可返回占位结果；正式支付或顾问确认接入前，不直接改写当前套餐与 entitlement balances。
 - 写接口都返回更新后的 DTO，前端不需要本地猜测新状态。
 - 不新增 account 页面专属数据库字段。
 - `npm run type-check` 通过。
