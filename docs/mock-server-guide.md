@@ -88,7 +88,6 @@ npm run mock:build
 
 - `users`
 - `auth_identities`
-- `user_onboarding_states`
 - `user_memberships`
 
 注册不会创建 profile，不写 profile 字段，也不写 account city。`preferredLocale` 由前端当前语言自动传入，不是注册页手动字段。

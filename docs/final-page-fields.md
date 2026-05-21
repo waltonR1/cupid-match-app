@@ -448,7 +448,6 @@ interface AccountUserSummaryViewModel {
 
 ```ts
 interface AccountHomePageData {
-  onboarding: AccountOnboardingViewModel | null
   accountItems: Array<{ key: string; label: string; value: string }>
   summaryItems: Array<{ key: string; label: string; value: string | number }>
   quotaSummary: { label: string; value: string; description: string } | null
