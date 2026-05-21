@@ -3,7 +3,6 @@ import type { Translate } from '@/i18n/types'
 import type { PageActionViewModel } from '@/types/account/common'
 
 export interface AccountHomeViewModel {
-  onboarding: { path: string; step: string; title: string; description: string } | null
   accountItems: { key: string; label: string; value: string }[]
   summaryItems: { key: string; label: string; value: string | number }[]
   quotaSummary: { label: string; value: string; description: string } | null
@@ -16,16 +15,6 @@ export interface AccountHomeViewModel {
 export function toAccountHomePageData(params: { payload: AccountDashboardDTO | null; t: Translate }): AccountHomeViewModel | null {
   const { payload, t } = params
   if (!payload) return null
-
-  const rawOnboarding = payload.onboarding
-  const onboarding = rawOnboarding
-    ? {
-        path: rawOnboarding.path,
-        step: rawOnboarding.step,
-        title: t(`home.onboarding.${rawOnboarding.step}.title`),
-        description: t(`home.onboarding.${rawOnboarding.step}.desc`),
-      }
-    : null
 
   const primaryAction = resolvePrimaryAction(payload, t)
   const accountItems = [
@@ -81,7 +70,6 @@ export function toAccountHomePageData(params: { payload: AccountDashboardDTO | n
   }))
 
   return {
-    onboarding,
     accountItems,
     summaryItems,
     quotaSummary,

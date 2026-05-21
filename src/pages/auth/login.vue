@@ -220,7 +220,7 @@ async function handleSubmit() {
     return
   }
 
-  redirectToAuthLanding(session)
+  redirectToAuthLanding()
 }
 
 function toggleAgreement() {

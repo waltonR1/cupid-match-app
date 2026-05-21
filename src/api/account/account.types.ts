@@ -18,12 +18,10 @@ export type AccountRoomStatus = 'open' | 'paused' | 'closed'
 
 export interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
-  onboarding: { path: string; step: string; profileId?: string } | null
 }
 
 export interface AccountDashboardDTO {
   user: AccountMeDTO['user']
-  onboarding: AccountMeDTO['onboarding']
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO | null
   entitlements: AccountEntitlementBalanceDTO[]
@@ -41,6 +39,7 @@ export interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
+  isBlankDraft: boolean
   ownership: {
     role: 'self' | 'parent' | 'guardian' | 'advisor'
     relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
@@ -199,6 +198,118 @@ export interface AccountProfileVisibilityDTO {
 export interface AccountProfileArchiveResultDTO {
   profileId: string
   archivedAt: string
+}
+
+export type AccountManagedProfileOwnershipPayload = {
+  role: 'self' | 'parent' | 'guardian'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  isPrimary?: boolean
+}
+
+export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
+  | 'gender'
+  | 'birthYear'
+  | 'height'
+  | 'city'
+  | 'country'
+  | 'nationality'
+  | 'languages'
+  | 'degreeLevel'
+  | 'education'
+  | 'industry'
+  | 'careerDirection'
+  | 'maritalStatus'
+  | 'hasChildren'
+  | 'childrenPlan'
+  | 'acceptsLongDistance'
+  | 'datingIntentionCode'
+  | 'relationshipPlan'
+  | 'residencePlan'
+  | 'relocationWillingness'
+  | 'values'
+  | 'preferredAgeMin'
+  | 'preferredAgeMax'
+  | 'locationScope'
+  | 'preferredEducation'
+  | 'familyPlan'
+  | 'dealBreakers'
+  | 'smoking'
+  | 'drinking'
+  | 'exercise'
+  | 'activityLevel'
+  | 'weekendStyle'
+  | 'pets'
+  | 'personalityTraits'
+  | 'interests'
+  | 'communicationStyle'
+  | 'summary'
+  | 'tags'
+  | 'familyVisible'
+  | 'allowFamilyContact'
+  | 'familyPriority'
+>
+
+export interface AccountManagedProfileCreatePayload {
+  role: 'self' | 'parent' | 'guardian'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+}
+
+export type AccountProfileUpdatePayload = AccountProfileMutablePayload
+
+export interface AccountProfileOwnershipUpdatePayload {
+  role: AccountManagedProfileOwnershipPayload['role']
+  relationshipToProfile: AccountManagedProfileOwnershipPayload['relationshipToProfile']
+  isPrimary: boolean
+}
+
+export interface AccountProfileContactMethodsUpdatePayload {
+  entries: Array<{
+    type: 'phone' | 'email' | 'wechat'
+    value: string
+    visibleAfterIntroduction: boolean
+  }>
+}
+
+export interface AccountProfileVisibilityUpdatePayload {
+  entries: Array<{
+    fieldCode: string
+    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+  }>
+}
+
+export interface ProfilePhotoMutationPayload {
+  url: string
+  caption?: string
+  isPrimary?: boolean
+  sortOrder?: number
+}
+
+export interface ProfilePromptMutationPayload {
+  promptCode: string
+  prompt: string
+  answer: string
+  sortOrder?: number
+}
+
+export interface AccountMeUpdatePayload {
+  accountName?: string
+  avatarUrl?: string
+}
+
+export interface AccountPreferenceUpdatePayload {
+  entries: Array<{
+    code: AccountPreferenceCode
+    value: string | boolean | number | string[]
+  }>
+}
+
+export interface AccountMembershipUpgradePayload {
+  tier: 'free' | 'silver' | 'gold' | 'diamond'
+}
+
+export interface AccountMembershipUpgradeResultDTO {
+  status: 'pending_external_flow'
+  requestedTier: 'free' | 'silver' | 'gold' | 'diamond'
 }
 
 export interface AccountEventRegistrationDTO {

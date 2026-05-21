@@ -171,7 +171,7 @@ import { isDuplicateRegistrationError, useRegister } from '@/hooks/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { validateAccountName, validateIdentifier, validatePassword } from '@/utils/validate'
-import { openLoginPage, redirectToAuthLanding } from '@/utils/navigation'
+import { openLoginPage, redirectToRegistrationLanding } from '@/utils/navigation'
 
 type OnboardingPath = 'self' | 'family'
 type AuthProvider = 'email' | 'phone'
@@ -270,7 +270,7 @@ async function handleSubmit() {
   })
 
   if (session) {
-    redirectToAuthLanding(session)
+    redirectToRegistrationLanding(path.value)
   } else {
     registerError.value = isDuplicateRegistrationError(registerAction.error.value)
       ? t('form.error.duplicate')

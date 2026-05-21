@@ -1,5 +1,4 @@
 export type AuthPath = 'self' | 'family'
-export type AuthOnboardingStep = 'create_profile' | 'review_profile' | 'browse'
 export type AuthProvider = 'email' | 'phone'
 export type AuthLocale = 'zh' | 'fr' | 'en'
 
@@ -24,14 +23,7 @@ export interface AuthUser {
   preferredLocale: AuthLocale
 }
 
-export interface AuthOnboarding {
-  path: AuthPath
-  step: AuthOnboardingStep
-  profileId?: string
-}
-
 export interface AuthSession {
   token: string
   user: AuthUser
-  onboarding: AuthOnboarding
 }

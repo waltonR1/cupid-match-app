@@ -25,7 +25,6 @@ const defaultData: Database = {
     user_agreement_acceptances: [],
     users: [],
     auth_identities: [],
-    user_onboarding_states: [],
     profile_ownerships: [],
     favorite_profiles: [],
     private_introduction_requests: [],
@@ -54,7 +53,6 @@ export async function initDb(): Promise<void> {
     db.data.profile_visibility_settings ??= []
     db.data.event_agenda_items ??= []
     db.data.event_registrations ??= []
-    db.data.user_onboarding_states ??= []
     db.data.user_memberships ??= []
     db.data.membership_plans ??= []
     db.data.membership_entitlements ??= []

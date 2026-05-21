@@ -129,12 +129,6 @@ export type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 /** 用户状态 */
 export type UserStatus = 'active' | 'paused' | 'banned'
 
-/** 注册路径 */
-export type OnboardingPath = 'self' | 'family'
-
-/** 注册步骤 */
-export type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
-
 /** 用户记录 */
 export interface UserRecord {
     id: string
@@ -154,18 +148,6 @@ export interface AuthIdentityRecord {
     identifier: string
     passwordHash?: string
     verifiedAt?: string
-    createdAt: string
-    updatedAt: string
-}
-
-/** 会员记录 */
-export interface UserOnboardingStateRecord {
-    id: string
-    userId: string
-    path: OnboardingPath
-    step: OnboardingStep
-    profileId?: string
-    completedAt?: string
     createdAt: string
     updatedAt: string
 }
@@ -373,7 +355,6 @@ export interface Database {
     user_agreement_acceptances: UserAgreementAcceptanceRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
-    user_onboarding_states: UserOnboardingStateRecord[]
     profile_ownerships: ProfileOwnershipRecord[]
     favorite_profiles: FavoriteProfileRecord[]
     private_introduction_requests: PrivateIntroductionRequestRecord[]

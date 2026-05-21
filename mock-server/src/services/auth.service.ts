@@ -2,10 +2,7 @@ import type {DbInstance} from '../db.js'
 import type {
   AuthIdentityRecord,
   Database,
-  OnboardingPath,
-  OnboardingStep,
   UserMembershipRecord,
-  UserOnboardingStateRecord,
   UserRecord,
 } from '../types/database.js'
 import {nextId} from '../utils/id.js'
@@ -16,12 +13,7 @@ const PASSWORD_MIN = 8
 
 type PreferredLocale = 'zh' | 'fr' | 'en'
 type RegisterProvider = 'email' | 'phone'
-
-export interface AuthOnboardingState {
-  path: OnboardingPath
-  step: OnboardingStep
-  profileId?: string
-}
+type RegisterPath = 'self' | 'family'
 
 export interface AuthSession {
   token: string
@@ -31,7 +23,6 @@ export interface AuthSession {
     avatarUrl: string
     preferredLocale: PreferredLocale
   }
-  onboarding: AuthOnboardingState
 }
 
 export interface RegisterResult {
@@ -59,7 +50,7 @@ export function login(data: Database, body: Record<string, unknown>, locale?: st
   const requestedLocale = locale ?? ''
   const agreementLocale: PreferredLocale = isPreferredLocale(requestedLocale) ? requestedLocale : user.preferredLocale
   upsertAgreementAcceptances(data, user.id, agreementLocale, new Date().toISOString())
-  return buildSession(data, authIdentity, user)
+  return buildSession(authIdentity, user)
 }
 
 export async function register(
@@ -133,15 +124,6 @@ export async function register(
     updatedAt: now,
   }
 
-  const onboarding: UserOnboardingStateRecord = {
-    id: nextId('onboarding', db.data.user_onboarding_states),
-    userId,
-    path,
-    step: 'create_profile',
-    createdAt: now,
-    updatedAt: now,
-  }
-
   const membership: UserMembershipRecord = {
     id: nextId('user-membership', db.data.user_memberships),
     userId,
@@ -154,18 +136,17 @@ export async function register(
 
   db.data.users.push(newUser)
   db.data.auth_identities.push(newAuthIdentity)
-  db.data.user_onboarding_states.push(onboarding)
   db.data.user_memberships.push(membership)
   upsertAgreementAcceptances(db.data, userId, preferredLocale, now)
   await db.write()
 
   return {
     statusCode: 201,
-    body: buildSession(db.data, newAuthIdentity, newUser),
+    body: buildSession(newAuthIdentity, newUser),
   }
 }
 
-function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
+function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
   return {
     token: `mock-token-${authIdentity.id}`,
     user: {
@@ -174,17 +155,6 @@ function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: Us
       avatarUrl: user.avatarUrl || '',
       preferredLocale: user.preferredLocale,
     },
-    onboarding: resolveOnboarding(data, user.id),
-  }
-}
-
-function resolveOnboarding(data: Database, userId: string): AuthOnboardingState {
-  const state = data.user_onboarding_states.find((item) => item.userId === userId)
-
-  return {
-    path: state?.path ?? 'self',
-    step: state?.step ?? 'create_profile',
-    profileId: state?.profileId,
   }
 }
 
@@ -196,7 +166,7 @@ function isPasswordMatch(authIdentity: AuthIdentityRecord, password: string): bo
   return authIdentity.passwordHash === mockHashPassword(password)
 }
 
-function isOnboardingPath(value: string): value is OnboardingPath {
+function isOnboardingPath(value: string): value is RegisterPath {
   return value === 'self' || value === 'family'
 }
 

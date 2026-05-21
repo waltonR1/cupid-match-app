@@ -1,18 +1,19 @@
 import type { Database, MembershipLevel } from '../types/database.js'
 import type { ApiLocale } from '../types/common.js'
+import type { ProfileRecord } from '../types/profile.js'
 import { resolveLocalizedText } from '../utils/localized.js'
 import { buildProfileView } from './profile.service.js'
+import { nextId } from '../utils/id.js'
+import { mergeTranslatedText } from './translation.service.js'
 
 // -- DTOs -- //
 
 interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
-  onboarding: { path: string; step: string; profileId?: string } | null
 }
 
 interface AccountDashboardDTO {
   user: AccountMeDTO['user']
-  onboarding: AccountMeDTO['onboarding']
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO | null
   entitlements: AccountEntitlementBalanceDTO[]
@@ -30,6 +31,7 @@ interface AccountProfileDetailDTO {
   profileId: string
   displayName: string
   avatarUrl: string
+  isBlankDraft: boolean
   ownership: {
     role: string
     relationshipToProfile?: string
@@ -241,9 +243,101 @@ interface AdvisorFollowUpDTO {
   completedAt?: string
 }
 
+type AccountProfileMutablePayload = {
+  gender: ProfileRecord['gender']
+  birthYear: number
+  height: number
+  city: string
+  country: string
+  nationality: string
+  languages: string[]
+  degreeLevel: ProfileRecord['degreeLevel']
+  education: string
+  industry: string
+  careerDirection?: string
+  maritalStatus: ProfileRecord['maritalStatus']
+  hasChildren: boolean
+  childrenPlan: ProfileRecord['childrenPlan']
+  acceptsLongDistance: boolean
+  datingIntentionCode: ProfileRecord['datingIntentionCode']
+  relationshipPlan: string
+  residencePlan: string
+  relocationWillingness: string
+  values: string[]
+  preferredAgeMin: number
+  preferredAgeMax: number
+  locationScope: string
+  preferredEducation: string
+  familyPlan: string
+  dealBreakers: string[]
+  smoking: ProfileRecord['smoking']
+  drinking: ProfileRecord['drinking']
+  exercise: string
+  activityLevel: string
+  weekendStyle: string
+  pets: string
+  personalityTraits: string[]
+  interests: string[]
+  communicationStyle: string
+  summary: string
+  tags: string[]
+  familyVisible: boolean
+  allowFamilyContact: boolean
+  familyPriority: boolean
+}
+
+interface AccountManagedProfileCreatePayload {
+  role?: 'self' | 'parent' | 'guardian'
+  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative'
+}
+
+type AccountProfileUpdatePayload = AccountProfileMutablePayload
+
+interface AccountProfileOwnershipUpdatePayload {
+  role: 'self' | 'parent' | 'guardian'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  isPrimary: boolean
+}
+
+interface AccountProfileContactMethodsUpdatePayload {
+  entries: Array<{ type: Database['profile_contact_methods'][number]['type']; value: string; visibleAfterIntroduction: boolean }>
+}
+
+interface AccountProfileVisibilityUpdatePayload {
+  entries: Array<{ fieldCode: string; visibility: Database['profile_visibility_settings'][number]['visibility'] }>
+}
+
+interface ProfilePhotoMutationPayload {
+  url: string
+  caption?: string
+  isPrimary?: boolean
+  sortOrder?: number
+}
+
+interface ProfilePromptMutationPayload {
+  promptCode: string
+  prompt: string
+  answer: string
+  sortOrder?: number
+}
+
+interface AccountMeUpdatePayload {
+  accountName?: string
+  avatarUrl?: string
+}
+
+interface AccountPreferenceUpdatePayload {
+  entries: Array<{ code: Database['user_preferences'][number]['code']; value: string | boolean | number | string[] }>
+}
+
 interface AccountProfileArchiveResultDTO {
   profileId: string
   archivedAt: string
+}
+
+interface AccountMembershipUpgradeResultDTO {
+  status: 'pending_external_flow'
+  requestedTier: MembershipLevel
 }
 
 // -- Helpers -- //
@@ -275,7 +369,6 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
   const user = findUser(data, userId)
   if (!user) return null
 
-  const onboardingState = data.user_onboarding_states.find((s) => s.userId === userId)
   const membership = findActiveMembership(data, userId)
   const plan = membership ? findActivePlan(data, membership.tier) : findActivePlan(data, 'free')
   const locale = user.preferredLocale
@@ -316,11 +409,6 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
       preferredLocale: user.preferredLocale,
       status: user.status,
     },
-    onboarding: onboardingState ? {
-      path: onboardingState.path,
-      step: onboardingState.step,
-      profileId: onboardingState.profileId,
-    } : null,
     profiles,
     membership: plan ? {
       tier: plan.tier,
@@ -344,8 +432,6 @@ export function getAccountMe(data: Database, userId: string): AccountMeDTO | nul
   const user = findUser(data, userId)
   if (!user) return null
 
-  const onboardingState = data.user_onboarding_states.find((s) => s.userId === userId)
-
   return {
     user: {
       id: user.id,
@@ -354,11 +440,6 @@ export function getAccountMe(data: Database, userId: string): AccountMeDTO | nul
       preferredLocale: user.preferredLocale,
       status: user.status,
     },
-    onboarding: onboardingState ? {
-      path: onboardingState.path,
-      step: onboardingState.step,
-      profileId: onboardingState.profileId,
-    } : null,
   }
 }
 
@@ -380,7 +461,7 @@ export function getAccountProfiles(data: Database, userId: string): AccountProfi
   return { profiles }
 }
 
-export function getAccountProfileDetail(data: Database, userId: string, profileId: string): AccountProfileDetailDTO | null {
+export function getAccountProfileDetail(data: Database, userId: string, profileId: string, requestedLocale?: ApiLocale): AccountProfileDetailDTO | null {
   const user = findUser(data, userId)
   if (!user) return null
 
@@ -388,17 +469,10 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
   const profile = data.profiles.find((item) => item.id === profileId)
   if (!ownership || !profile || profile.archivedAt) return null
 
-  const locale = resolveUserLocale(data, userId)
+  const locale = requestedLocale ?? resolveUserLocale(data, userId)
   const view = buildProfileView(data, profile)
   const verification = findVerification(data, profileId)
-  const visibility = data.profile_visibility_settings
-    .filter((item) => item.profileId === profileId)
-    .map((item) => ({
-      profileId,
-      fieldCode: item.fieldCode,
-      visibility: item.visibility,
-      lockedByAdvisor: false,
-    }))
+  const visibility = buildVisibilityDto(data, profileId)
   const contactMethods = data.profile_contact_methods
     .filter((item) => item.profileId === profileId)
     .map((item) => ({
@@ -411,6 +485,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
     profileId,
     displayName: view.displayName,
     avatarUrl: view.avatarUrl,
+    isBlankDraft: isBlankDraftProfile(profile),
     ownership: {
       role: ownership.role,
       relationshipToProfile: ownership.relationshipToProfile,
@@ -510,6 +585,244 @@ export function archiveAccountProfile(data: Database, userId: string, profileId:
   profile.updatedAt = archivedAt
 
   return { status: 'archived', result: { profileId, archivedAt } }
+}
+
+export function createAccountProfile(data: Database, userId: string, locale: ApiLocale, _payload: AccountManagedProfileCreatePayload) {
+  const user = findUser(data, userId)
+  if (!user) return null
+  const role = _payload?.role ?? 'self'
+  if (role === 'self' && data.profile_ownerships.some((o) => o.userId === userId && o.role === 'self')) {
+    return 'duplicate_self' as const
+  }
+  const relationshipToProfile = _payload?.relationshipToProfile ?? (role === 'self' ? 'self' : 'relative')
+
+  const now = new Date().toISOString()
+  const profileId = nextId('p', data.profiles)
+  const profile = {
+    id: profileId,
+    profileStatus: 'draft' as const,
+    isPriorityProfile: false,
+    lastActiveAt: now,
+    createdAt: now,
+    updatedAt: now,
+    ...createEmptyStoredProfile(locale),
+  } as ProfileRecord
+  data.profiles.push(profile)
+  data.profile_ownerships.push({
+    id: nextId('ownership', data.profile_ownerships),
+    profileId,
+    userId,
+    role,
+    relationshipToProfile,
+    permission: 'owner',
+    isPrimary: false,
+    createdAt: now,
+    updatedAt: now,
+  })
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+/**
+ * 占位接口：正式产品中这里会进入支付或顾问确认流程，而不是直接改写会员等级。
+ */
+export function requestAccountMembershipUpgrade(
+  data: Database,
+  userId: string,
+  requestedTier: MembershipLevel,
+): AccountMembershipUpgradeResultDTO | null {
+  if (!findUser(data, userId)) return null
+  return {status: 'pending_external_flow', requestedTier}
+}
+
+export function updateAccountProfileOwnership(
+  data: Database,
+  userId: string,
+  profileId: string,
+  requestedLocale: ApiLocale,
+  payload: AccountProfileOwnershipUpdatePayload,
+) {
+  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
+  if (!ownership) return null
+  if (ownership.permission !== 'owner') return 'forbidden' as const
+  ownership.role = payload.role
+  ownership.relationshipToProfile = payload.relationshipToProfile
+  ownership.isPrimary = payload.isPrimary
+  ownership.updatedAt = new Date().toISOString()
+  return getAccountProfileDetail(data, userId, profileId, requestedLocale)
+}
+
+export function updateAccountProfile(data: Database, userId: string, profileId: string, locale: ApiLocale, payload: AccountProfileUpdatePayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const profile = data.profiles.find((item) => item.id === profileId)
+  if (!profile) return null
+  Object.assign(profile, toStoredProfilePayload(payload, locale, profile))
+  profile.updatedAt = new Date().toISOString()
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+export function updateAccountProfileContactMethods(data: Database, userId: string, profileId: string, requestedLocale: ApiLocale, payload: AccountProfileContactMethodsUpdatePayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const now = new Date().toISOString()
+  data.profile_contact_methods = data.profile_contact_methods.filter((item) => item.profileId !== profileId)
+  payload.entries.forEach((entry) => data.profile_contact_methods.push({
+    id: nextId('contact', data.profile_contact_methods),
+    profileId,
+    ...entry,
+    createdAt: now,
+    updatedAt: now,
+  }))
+  return getAccountProfileDetail(data, userId, profileId, requestedLocale)
+}
+
+export function createAccountProfilePhoto(data: Database, userId: string, profileId: string, locale: ApiLocale, payload: ProfilePhotoMutationPayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const now = new Date().toISOString()
+  if (payload.isPrimary) clearPrimaryPhotos(data, profileId)
+  data.profile_photos.push({
+    id: nextId('photo', data.profile_photos),
+    profileId,
+    url: payload.url,
+    caption: mergeTranslatedText(undefined, locale, payload.caption ?? ''),
+    isPrimary: payload.isPrimary ?? false,
+    sortOrder: payload.sortOrder ?? data.profile_photos.filter((item) => item.profileId === profileId).length + 1,
+    status: 'approved',
+    createdAt: now,
+    updatedAt: now,
+  })
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+export function updateAccountProfilePhoto(data: Database, userId: string, profileId: string, photoId: string, locale: ApiLocale, payload: ProfilePhotoMutationPayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const photo = data.profile_photos.find((item) => item.id === photoId && item.profileId === profileId)
+  if (!photo) return null
+  if (payload.isPrimary) clearPrimaryPhotos(data, profileId)
+  photo.url = payload.url
+  if (payload.caption !== undefined) {
+    photo.caption = mergeTranslatedText(photo.caption, locale, payload.caption)
+  }
+  photo.isPrimary = payload.isPrimary ?? photo.isPrimary
+  photo.sortOrder = payload.sortOrder ?? photo.sortOrder
+  photo.updatedAt = new Date().toISOString()
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+export function deleteAccountProfilePhoto(data: Database, userId: string, profileId: string, photoId: string, requestedLocale: ApiLocale) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const before = data.profile_photos.length
+  data.profile_photos = data.profile_photos.filter((item) => !(item.id === photoId && item.profileId === profileId))
+  return before === data.profile_photos.length ? null : getAccountProfileDetail(data, userId, profileId, requestedLocale)
+}
+
+export function createAccountProfilePrompt(data: Database, userId: string, profileId: string, locale: ApiLocale, payload: ProfilePromptMutationPayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const now = new Date().toISOString()
+  data.profile_prompts.push({
+    id: nextId('prompt', data.profile_prompts),
+    profileId,
+    promptCode: payload.promptCode,
+    prompt: mergeTranslatedText(undefined, locale, payload.prompt),
+    answer: mergeTranslatedText(undefined, locale, payload.answer),
+    sortOrder: payload.sortOrder ?? data.profile_prompts.filter((item) => item.profileId === profileId).length + 1,
+    status: 'active',
+    createdAt: now,
+    updatedAt: now,
+  })
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+export function updateAccountProfilePrompt(data: Database, userId: string, profileId: string, promptId: string, locale: ApiLocale, payload: ProfilePromptMutationPayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const prompt = data.profile_prompts.find((item) => item.id === promptId && item.profileId === profileId)
+  if (!prompt) return null
+  prompt.promptCode = payload.promptCode
+  prompt.prompt = mergeTranslatedText(prompt.prompt, locale, payload.prompt)
+  prompt.answer = mergeTranslatedText(prompt.answer, locale, payload.answer)
+  prompt.sortOrder = payload.sortOrder ?? prompt.sortOrder
+  prompt.updatedAt = new Date().toISOString()
+  return getAccountProfileDetail(data, userId, profileId, locale)
+}
+
+export function deleteAccountProfilePrompt(data: Database, userId: string, profileId: string, promptId: string, requestedLocale: ApiLocale) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const before = data.profile_prompts.length
+  data.profile_prompts = data.profile_prompts.filter((item) => !(item.id === promptId && item.profileId === profileId))
+  return before === data.profile_prompts.length ? null : getAccountProfileDetail(data, userId, profileId, requestedLocale)
+}
+
+export function updateAccountProfileVisibility(data: Database, userId: string, profileId: string, payload: AccountProfileVisibilityUpdatePayload) {
+  const permission = resolveProfileWritePermission(data, userId, profileId)
+  if (!permission) return null
+  if (permission === 'viewer') return 'forbidden' as const
+  const isLocked = data.profile_visibility_settings.some((item) =>
+    item.profileId === profileId && item.lockedByAdvisor && payload.entries.some((entry) => entry.fieldCode === item.fieldCode),
+  )
+  if (isLocked) return 'locked' as const
+  const now = new Date().toISOString()
+  payload.entries.forEach((entry) => {
+    const existing = data.profile_visibility_settings.find((item) => item.profileId === profileId && item.fieldCode === entry.fieldCode)
+    if (existing) {
+      existing.visibility = entry.visibility
+      existing.updatedAt = now
+      return
+    }
+    data.profile_visibility_settings.push({
+      id: nextId('visibility', data.profile_visibility_settings),
+      profileId,
+      fieldCode: entry.fieldCode,
+      visibility: entry.visibility,
+      createdAt: now,
+      updatedAt: now,
+    })
+  })
+  return buildVisibilityDto(data, profileId)
+}
+
+export function updateAccountMe(data: Database, userId: string, payload: AccountMeUpdatePayload) {
+  const user = findUser(data, userId)
+  if (!user) return null
+  if (payload.accountName !== undefined) user.accountName = payload.accountName
+  if (payload.avatarUrl !== undefined) user.avatarUrl = payload.avatarUrl
+  user.updatedAt = new Date().toISOString()
+  return getAccountMe(data, userId)
+}
+
+export function updateAccountPreferences(data: Database, userId: string, payload: AccountPreferenceUpdatePayload) {
+  if (!findUser(data, userId)) return null
+  const now = new Date().toISOString()
+  payload.entries.forEach((entry) => {
+    const existing = data.user_preferences.find((item) => item.userId === userId && item.code === entry.code)
+    if (existing) {
+      existing.value = entry.value
+      existing.updatedAt = now
+      return
+    }
+    data.user_preferences.push({
+      id: nextId('preference', data.user_preferences),
+      userId,
+      code: entry.code,
+      value: entry.value,
+      createdAt: now,
+      updatedAt: now,
+    })
+  })
+  return getAccountSettings(data, userId)
 }
 
 // -- Membership -- //
@@ -710,6 +1023,106 @@ function hasActiveProfileFlow(data: Database, profileId: string): boolean {
   )
 }
 
+function resolveProfileWritePermission(data: Database, userId: string, profileId: string) {
+  return data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)?.permission
+}
+
+function buildVisibilityDto(data: Database, profileId: string): AccountProfileVisibilityDTO[] {
+  return data.profile_visibility_settings
+    .filter((item) => item.profileId === profileId)
+    .map((item) => ({
+      profileId,
+      fieldCode: item.fieldCode,
+      visibility: item.visibility,
+      lockedByAdvisor: item.lockedByAdvisor ?? false,
+    }))
+}
+
+function toStoredProfilePayload(payload: Partial<AccountProfileMutablePayload>, locale: ApiLocale, current?: ProfileRecord): Partial<ProfileRecord> {
+  const textFields = [
+    'city', 'country', 'nationality', 'education', 'industry', 'careerDirection', 'relationshipPlan',
+    'residencePlan', 'relocationWillingness', 'locationScope', 'preferredEducation', 'familyPlan', 'exercise',
+    'activityLevel', 'weekendStyle', 'pets', 'communicationStyle', 'summary',
+  ] as const
+  const textArrayFields = ['values', 'dealBreakers', 'personalityTraits', 'interests', 'tags'] as const
+  const next: Partial<ProfileRecord> = {}
+  Object.entries(payload).forEach(([key, value]) => {
+    if (textFields.includes(key as never) || textArrayFields.includes(key as never)) return
+    ;(next as Record<string, unknown>)[key] = value
+  })
+  textFields.forEach((key) => {
+    const value = payload[key]
+    if (value === undefined) return
+    next[key] = mergeTranslatedText(current?.[key], locale, value) as never
+  })
+  textArrayFields.forEach((key) => {
+    const value = payload[key]
+    if (value === undefined) return
+    next[key] = value.map((item, index) => mergeTranslatedText(current?.[key]?.[index], locale, item)) as never
+  })
+  return next
+}
+
+function createEmptyStoredProfile(locale: ApiLocale): Partial<ProfileRecord> {
+  return {
+    gender: 'female',
+    birthYear: 0,
+    height: 0,
+    city: mergeTranslatedText(undefined, locale, ''),
+    country: mergeTranslatedText(undefined, locale, ''),
+    nationality: mergeTranslatedText(undefined, locale, ''),
+    languages: [],
+    familyVisible: false,
+    allowFamilyContact: false,
+    familyPriority: false,
+    degreeLevel: 'bachelor',
+    education: mergeTranslatedText(undefined, locale, ''),
+    industry: mergeTranslatedText(undefined, locale, ''),
+    maritalStatus: 'never_married',
+    hasChildren: false,
+    childrenPlan: 'open_to_discuss',
+    acceptsLongDistance: false,
+    datingIntentionCode: 'serious',
+    relationshipPlan: mergeTranslatedText(undefined, locale, ''),
+    residencePlan: mergeTranslatedText(undefined, locale, ''),
+    relocationWillingness: mergeTranslatedText(undefined, locale, ''),
+    values: [],
+    preferredAgeMin: 0,
+    preferredAgeMax: 0,
+    locationScope: mergeTranslatedText(undefined, locale, ''),
+    preferredEducation: mergeTranslatedText(undefined, locale, ''),
+    familyPlan: mergeTranslatedText(undefined, locale, ''),
+    dealBreakers: [],
+    smoking: 'never',
+    drinking: 'never',
+    exercise: mergeTranslatedText(undefined, locale, ''),
+    activityLevel: mergeTranslatedText(undefined, locale, ''),
+    weekendStyle: mergeTranslatedText(undefined, locale, ''),
+    pets: mergeTranslatedText(undefined, locale, ''),
+    personalityTraits: [],
+    interests: [],
+    communicationStyle: mergeTranslatedText(undefined, locale, ''),
+    summary: mergeTranslatedText(undefined, locale, ''),
+    tags: [],
+  }
+}
+
+function isBlankDraftProfile(profile: ProfileRecord) {
+  return profile.profileStatus === 'draft'
+    && profile.birthYear === 0
+    && profile.height === 0
+    && profile.languages.length === 0
+    && !resolveLocalizedText('zh', profile.city)
+    && !resolveLocalizedText('zh', profile.education)
+    && !resolveLocalizedText('zh', profile.summary)
+}
+
+function clearPrimaryPhotos(data: Database, profileId: string) {
+  data.profile_photos.filter((item) => item.profileId === profileId).forEach((item) => {
+    item.isPrimary = false
+  })
+}
+
 function getEntitlementBalances(data: Database, userId: string): AccountEntitlementBalanceDTO[] {
   return data.user_entitlement_balances
     .filter((b) => b.userId === userId)
@@ -763,7 +1176,7 @@ function toAdvisorFollowUp(f: Database['advisor_follow_ups'][number]): AdvisorFo
     id: f.id,
     status: f.status,
     priority: f.priority,
-    note: f.note.zh,
+    note: resolveLocalizedText('zh', f.note),
     dueAt: f.dueAt,
     completedAt: f.completedAt,
   }

@@ -6,16 +6,12 @@
     <view v-if="pageData" class="grid gap-6">
       <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <view
-          v-if="pageData.onboarding"
+          v-if="pageData.primaryAction"
           class="border border-semantic-border-emphasis bg-semantic-surface-emphasis px-6 py-6 shadow-emphasis"
         >
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.nextStage') }}</view>
-          <view class="mt-4 text-[24px] font-semibold">{{ pageData.onboarding.title }}</view>
-          <view class="mt-3 max-w-[720px] text-[15px] leading-7 text-semantic-text-secondary">
-            {{ pageData.onboarding.description }}
-          </view>
+          <view class="mt-4 text-[24px] font-semibold">{{ pageData.primaryAction.label }}</view>
           <view
-            v-if="pageData.primaryAction"
             class="mt-6 inline-flex cursor-pointer border border-semantic-border-emphasis bg-component-button-primary-background px-5 py-3 text-[14px] text-semantic-text-inverse transition-opacity hover:opacity-90"
             @click="handleAction(pageData.primaryAction.key)"
           >
