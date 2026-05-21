@@ -824,15 +824,15 @@ Rules:
 /pages/account/settings
 -> preference controls
 -> POST /api/account/settings/preferences
--> user_preferences upsert
+-> user_preferences typed row update/create
 -> return AccountSettingsDTO
 -> refresh AccountSettingsPageData
 ```
 
 Rules:
 
-- Only `AccountPreferenceCode` values may be written.
-- Settings stores code/value, never display copy.
+- Account settings writes the current user's single typed `user_preferences` row.
+- Settings stores explicit preference fields, never display copy.
 - This chain does not mutate `users`, `auth_identities`, or agreement acceptance history.
 
 ### Account basics update

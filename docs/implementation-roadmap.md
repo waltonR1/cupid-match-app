@@ -1134,7 +1134,7 @@ advisor_follow_ups
 | --- | --- |
 | `users` | 登录账户主体，只描述账户身份。 |
 | `auth_identities` | 登录方式，例如 email、phone、wechat、google。 |
-| `user_preferences` | 账户偏好与开关，使用 code/value 存储。 |
+| `user_preferences` | 账户偏好与开关，一用户一条，使用明确字段。 |
 | `user_onboarding_states` | 注册后的引导状态。 |
 | `membership_plans` | 平台可售卖或可配置的会员套餐定义。 |
 | `user_memberships` | 用户当前或历史会员订阅记录。 |
@@ -1191,22 +1191,20 @@ interface AuthIdentityRecord {
 `user_preferences`：
 
 ```ts
-type AccountPreferenceCode =
-  | 'preferred_city'
-  | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
-  | 'family_assist_enabled'
-  | 'introduction_updates_enabled'
-  | 'event_reminders_enabled'
-  | 'service_announcements_enabled'
-  | 'marketing_emails_enabled'
-  | 'analytics_consent_enabled'
+type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 
 interface UserPreferenceRecord {
   id: string
   userId: string
-  code: AccountPreferenceCode
-  value: string | boolean | number | string[]
+  preferredCity?: string
+  preferredContactChannel?: PreferredContactChannel
+  advisorContactEnabled: boolean
+  familyAssistEnabled: boolean
+  introductionUpdatesEnabled: boolean
+  eventRemindersEnabled: boolean
+  serviceAnnouncementsEnabled: boolean
+  marketingEmailsEnabled: boolean
+  analyticsConsentEnabled: boolean
   createdAt: string
   updatedAt: string
 }
@@ -1321,7 +1319,7 @@ interface AdvisorFollowUpRecord {
 - `users.displayName`：统一为 `accountName`，不要新增 `users.displayName`。
 - `profiles.displayName`：从数据库移除，profile 展示名由后端根据 profile id 派生并返回 DTO。
 - `memberships`：替换为 `membership_plans` + `user_memberships` + `membership_entitlements` + `user_entitlement_balances`。
-- `privacy_settings.title/desc`：不要在数据库存页面文案，改为 `user_preferences.code/value`。
+- `privacy_settings.title/desc`：不要在数据库存页面文案，改为 `user_preferences` 明确字段。
 - `message_threads`：如果没有正式 mediated room 设计，先删除或暂停。
 - account API 中 `realName / nickName` 这类临时字段应重命名。
 
@@ -1606,9 +1604,9 @@ visibility：
 
 preferences：
 
-- `code` 必须来自 `AccountPreferenceCode`。
-- 本阶段支持服务偏好、通知与隐私授权相关的稳定设置项：`preferred_city`、`preferred_contact_channel`、`advisor_contact_enabled`、`family_assist_enabled`、`introduction_updates_enabled`、`event_reminders_enabled`、`service_announcements_enabled`、`marketing_emails_enabled`、`analytics_consent_enabled`。
-- 设置页不保存文案，只保存 code/value。
+- 写入当前用户的单条 `user_preferences` 记录。
+- 本阶段支持服务偏好、通知与隐私授权相关的稳定设置字段。
+- 设置页不保存文案，只保存明确偏好字段。
 
 account me：
 

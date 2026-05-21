@@ -2,16 +2,7 @@ export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-export type AccountPreferenceCode =
-  | 'preferred_city'
-  | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
-  | 'family_assist_enabled'
-  | 'introduction_updates_enabled'
-  | 'event_reminders_enabled'
-  | 'service_announcements_enabled'
-  | 'marketing_emails_enabled'
-  | 'analytics_consent_enabled'
+export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
 export type AccountRoomStatus = 'open' | 'paused' | 'closed'
@@ -143,7 +134,7 @@ export interface AccountSettingsDTO {
   }
   identities: AccountAuthIdentityDTO[]
   password: AccountPasswordSecurityDTO
-  preferences: AccountPreferenceDTO[]
+  preferences: AccountPreferencesDTO
 }
 
 export interface AccountAuthIdentityDTO {
@@ -160,9 +151,16 @@ export interface AccountPasswordSecurityDTO {
   requiresMfa: boolean
 }
 
-export interface AccountPreferenceDTO {
-  code: AccountPreferenceCode
-  value: string | boolean | number | string[]
+export interface AccountPreferencesDTO {
+  preferredCity?: string
+  preferredContactChannel?: PreferredContactChannel
+  advisorContactEnabled: boolean
+  familyAssistEnabled: boolean
+  introductionUpdatesEnabled: boolean
+  eventRemindersEnabled: boolean
+  serviceAnnouncementsEnabled: boolean
+  marketingEmailsEnabled: boolean
+  analyticsConsentEnabled: boolean
 }
 
 export interface ManagedProfileSummaryDTO {
@@ -297,10 +295,7 @@ export interface AccountMeUpdatePayload {
 }
 
 export interface AccountPreferenceUpdatePayload {
-  entries: Array<{
-    code: AccountPreferenceCode
-    value: string | boolean | number | string[]
-  }>
+  preferences: Partial<AccountPreferencesDTO>
 }
 
 export interface AccountMembershipUpgradePayload {

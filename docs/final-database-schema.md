@@ -25,7 +25,6 @@
 interface FinalDatabase {
   users: UserRecord[]
   auth_identities: AuthIdentityRecord[]
-  user_onboarding_states: UserOnboardingStateRecord[]
   user_preferences: UserPreferenceRecord[]
   legal_documents: LegalDocumentRecord[]
   user_agreement_acceptances: UserAgreementAcceptanceRecord[]
@@ -84,8 +83,6 @@ type LocaleCode = 'zh' | 'fr' | 'en'
 type GenderCode = 'male' | 'female'
 type UserStatus = 'active' | 'paused' | 'banned'
 type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
-type OnboardingPath = 'self' | 'family'
-type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
 type LegalDocumentType = 'terms' | 'privacy'
 type LegalDocumentStatus = 'draft' | 'active' | 'archived'
 type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
@@ -186,64 +183,31 @@ interface AuthIdentityRecord {
 - 开发阶段也使用 `passwordHash` 字段；如暂不接入真实哈希算法，可写入伪 hash，但不新增 `password` 字段。
 - email、phone、wechat 不重复存到 `users`。
 
-### user_onboarding_states
-
-注册后的引导状态。`self / family` 是入口路径，不是用户永久身份。
-
-```ts
-interface UserOnboardingStateRecord {
-  id: string
-  userId: string
-  path: OnboardingPath
-  step: OnboardingStep
-  profileId?: string
-  completedAt?: string
-  createdAt: string
-  updatedAt: string
-}
-```
-
 ### user_preferences
 
-账户偏好和开关，使用 code/value，而不是存页面文案。
+Account preferences are stored as one row per user with explicit typed fields. This is not a code/value KV table.
 
 ```ts
-type AccountPreferenceCode =
-  | 'preferred_city'
-  | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
-  | 'family_assist_enabled'
-  | 'introduction_updates_enabled'
-  | 'event_reminders_enabled'
-  | 'service_announcements_enabled'
-  | 'marketing_emails_enabled'
-  | 'analytics_consent_enabled'
+type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 
 interface UserPreferenceRecord {
   id: string
   userId: string
-  code: AccountPreferenceCode
-  value: string | boolean | number | string[]
+  preferredCity?: string
+  preferredContactChannel?: PreferredContactChannel
+  advisorContactEnabled: boolean
+  familyAssistEnabled: boolean
+  introductionUpdatesEnabled: boolean
+  eventRemindersEnabled: boolean
+  serviceAnnouncementsEnabled: boolean
+  marketingEmailsEnabled: boolean
+  analyticsConsentEnabled: boolean
   createdAt: string
   updatedAt: string
 }
 ```
 
-当前稳定 code：
-
-```text
-preferred_city
-preferred_contact_channel
-advisor_contact_enabled
-family_assist_enabled
-introduction_updates_enabled
-event_reminders_enabled
-service_announcements_enabled
-marketing_emails_enabled
-analytics_consent_enabled
-```
-
-默认语言不放入 `user_preferences`，统一以 `users.preferredLocale` 为 source of truth；账户偏好页修改语言时更新 `users.preferredLocale`。后续若新增明确的设置项，再扩展 `AccountPreferenceCode`，不使用任意字符串兜底。
+`users.preferredLocale` remains the source of truth for language. Add new account preference fields by extending `UserPreferenceRecord`; do not add arbitrary preference codes.
 
 ### legal_documents
 

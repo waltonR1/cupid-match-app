@@ -38,16 +38,7 @@ type RestrictedProfileField<T> = T | ProfileFieldLockCode
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-type AccountPreferenceCode =
-  | 'preferred_city'
-  | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
-  | 'family_assist_enabled'
-  | 'introduction_updates_enabled'
-  | 'event_reminders_enabled'
-  | 'service_announcements_enabled'
-  | 'marketing_emails_enabled'
-  | 'analytics_consent_enabled'
+type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 type ProfileFieldCode =
   | 'photos'
   | 'country'
@@ -958,16 +949,21 @@ interface AccountPrivateIntroductionRoomDTO {
 
 ### Account Preferences
 
-```ts
-interface AccountPreferenceDTO {
-  code: AccountPreferenceCode
-  value: string | boolean | number | string[]
-}
-```
-
 ### Account Settings
 
 ```ts
+interface AccountPreferencesDTO {
+  preferredCity?: string
+  preferredContactChannel?: PreferredContactChannel
+  advisorContactEnabled: boolean
+  familyAssistEnabled: boolean
+  introductionUpdatesEnabled: boolean
+  eventRemindersEnabled: boolean
+  serviceAnnouncementsEnabled: boolean
+  marketingEmailsEnabled: boolean
+  analyticsConsentEnabled: boolean
+}
+
 interface AccountSettingsDTO {
   account: {
     id: string
@@ -980,7 +976,7 @@ interface AccountSettingsDTO {
   }
   identities: AccountAuthIdentityDTO[]
   password: AccountPasswordSecurityDTO
-  preferences: AccountPreferenceDTO[]
+  preferences: AccountPreferencesDTO
 }
 
 interface AccountAuthIdentityDTO {
@@ -1031,10 +1027,7 @@ interface AccountProfileArchiveResultDTO {
 }
 
 interface AccountPreferenceUpdatePayload {
-  entries: Array<{
-    code: AccountPreferenceCode
-    value: string | boolean | number | string[]
-  }>
+  preferences: Partial<AccountPreferencesDTO>
 }
 
 interface AccountMeUpdatePayload {
@@ -1062,7 +1055,7 @@ Write rules:
 - account photo / prompt mutation endpoints reuse `ProfilePhotoMutationPayload` / `ProfilePromptMutationPayload`, write their dedicated collections, and return the rebuilt detail DTO for the unified editor.
 - `POST /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
-- `POST /api/account/settings/preferences` upserts only supported `AccountPreferenceCode` entries.
+- `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or advisor confirmation happens before future membership state changes.
 
 禁止在 account DTO 中返回这些 legacy 字段：

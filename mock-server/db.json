@@ -8752,80 +8752,15 @@
     {
       "id": "pref-001",
       "userId": "u-001",
-      "code": "preferred_city",
-      "value": "Paris",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-002",
-      "userId": "u-001",
-      "code": "advisor_contact_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-003",
-      "userId": "u-001",
-      "code": "family_assist_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-004",
-      "userId": "u-001",
-      "code": "preferred_contact_channel",
-      "value": "email",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-005",
-      "userId": "u-001",
-      "code": "introduction_updates_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-006",
-      "userId": "u-001",
-      "code": "event_reminders_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-007",
-      "userId": "u-001",
-      "code": "service_announcements_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-008",
-      "userId": "u-001",
-      "code": "marketing_emails_enabled",
-      "value": false,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-009",
-      "userId": "u-001",
-      "code": "profile_recommendations_enabled",
-      "value": true,
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "pref-010",
-      "userId": "u-001",
-      "code": "analytics_consent_enabled",
-      "value": false,
+      "preferredCity": "Paris",
+      "preferredContactChannel": "email",
+      "advisorContactEnabled": true,
+      "familyAssistEnabled": true,
+      "introductionUpdatesEnabled": true,
+      "eventRemindersEnabled": true,
+      "serviceAnnouncementsEnabled": true,
+      "marketingEmailsEnabled": false,
+      "analyticsConsentEnabled": false,
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z"
     }

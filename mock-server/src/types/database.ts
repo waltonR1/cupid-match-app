@@ -263,24 +263,22 @@ export interface UserEntitlementBalanceRecord {
     updatedAt: string
 }
 
-/** 账户偏好编码 */
-export type AccountPreferenceCode =
-    | 'preferred_city'
-    | 'preferred_contact_channel'
-    | 'advisor_contact_enabled'
-    | 'family_assist_enabled'
-    | 'introduction_updates_enabled'
-    | 'event_reminders_enabled'
-    | 'service_announcements_enabled'
-    | 'marketing_emails_enabled'
-    | 'analytics_consent_enabled'
+/** 偏好的联系渠道 */
+export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 
 /** 账户偏好 */
 export interface UserPreferenceRecord {
     id: string
     userId: string
-    code: AccountPreferenceCode
-    value: string | boolean | number | string[]
+    preferredCity?: string
+    preferredContactChannel?: PreferredContactChannel
+    advisorContactEnabled: boolean
+    familyAssistEnabled: boolean
+    introductionUpdatesEnabled: boolean
+    eventRemindersEnabled: boolean
+    serviceAnnouncementsEnabled: boolean
+    marketingEmailsEnabled: boolean
+    analyticsConsentEnabled: boolean
     createdAt: string
     updatedAt: string
 }

@@ -34,9 +34,34 @@
                   {{ t('settings.sectionDescriptions.account') }}
                 </view>
               </view>
+
+              <view class="ml-auto flex flex-wrap gap-2">
+                <view
+                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]"
+                  @click="editing = !editing"
+                >
+                  {{ editing ? t('common.open') : t('settings.actions.edit') }}
+                </view>
+                <view
+                  v-if="editing"
+                  class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                  @click="saveSettings"
+                >
+                  {{ t('settings.actions.save') }}
+                </view>
+              </view>
             </view>
 
             <view class="mt-6 grid gap-x-5 gap-y-3 border-t border-semantic-border-soft pt-6 md:grid-cols-2">
+              <view v-if="editing" class="px-3 py-3 md:col-span-2">
+                <view class="text-[12px] leading-5 text-semantic-text-muted">
+                  {{ t('settings.accountFields.avatarUrl') }}
+                </view>
+                <input
+                  v-model="accountDraft.avatarUrl"
+                  class="mt-1 w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                />
+              </view>
               <view
                   v-for="item in pageData.account.items"
                   :key="item.key"
@@ -46,7 +71,12 @@
                   {{ item.label }}
                 </view>
 
-                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
+                <input
+                  v-if="editing && item.key === 'accountName'"
+                  v-model="accountDraft.accountName"
+                  class="mt-1 w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                />
+                <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
                   {{ item.value }}
                 </view>
               </view>
@@ -132,9 +162,20 @@
                   {{ item.label }}
                 </text>
 
-                <text class="font-medium text-semantic-text-primary">
-                  {{ item.displayValue }}
-                </text>
+                <view v-if="editing" class="flex flex-wrap gap-2">
+                  <view
+                    v-for="option in booleanOptions"
+                    :key="String(option.value)"
+                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                    :class="readPreference(item.code) === option.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                    @click="writePreference(item.code, option.value)"
+                  >
+                    {{ option.label }}
+                  </view>
+                </view>
+                <text v-else class="font-medium text-semantic-text-primary">{{ item.displayValue }}</text>
               </view>
             </view>
           </view>
@@ -159,9 +200,32 @@
                   {{ item.label }}
                 </text>
 
-                <text class="font-medium text-semantic-text-primary">
-                  {{ item.displayValue }}
-                </text>
+                <input
+                  v-if="editing && item.code === 'preferred_city'"
+                  :value="String(readPreference(item.code) ?? '')"
+                  class="w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  @input="writePreference(item.code, getInputValue($event))"
+                />
+                <input
+                  v-else-if="editing && item.code === 'preferred_contact_channel'"
+                  :value="String(readPreference(item.code) ?? '')"
+                  class="w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  @input="writePreference(item.code, getInputValue($event))"
+                />
+                <view v-else-if="editing" class="flex flex-wrap gap-2">
+                  <view
+                    v-for="option in booleanOptions"
+                    :key="String(option.value)"
+                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                    :class="readPreference(item.code) === option.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                    @click="writePreference(item.code, option.value)"
+                  >
+                    {{ option.label }}
+                  </view>
+                </view>
+                <text v-else class="font-medium text-semantic-text-primary">{{ item.displayValue }}</text>
               </view>
             </view>
           </view>
@@ -186,9 +250,20 @@
                   {{ item.label }}
                 </text>
 
-                <text class="font-medium text-semantic-text-primary">
-                  {{ item.displayValue }}
-                </text>
+                <view v-if="editing" class="flex flex-wrap gap-2">
+                  <view
+                    v-for="option in booleanOptions"
+                    :key="String(option.value)"
+                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                    :class="readPreference(item.code) === option.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                    @click="writePreference(item.code, option.value)"
+                  >
+                    {{ option.label }}
+                  </view>
+                </view>
+                <text v-else class="font-medium text-semantic-text-primary">{{ item.displayValue }}</text>
               </view>
             </view>
           </view>
@@ -255,17 +330,33 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, ref} from 'vue'
+import {computed, ref, watch} from 'vue'
+import type {AccountPreferencesDTO} from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountOverview, useAccountSettings} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import type {AccountPreferenceCode} from '@/types/account/settings'
 
 const {t} = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
-const {pageData} = useAccountSettings(t)
+const {settings, pageData, saveAccount, savePreferences} = useAccountSettings(t)
+const editing = ref(false)
+const accountDraft = ref({ accountName: '', avatarUrl: '' })
+const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
+const PREFERENCE_CODE_TO_KEY = {
+  preferred_city: 'preferredCity',
+  preferred_contact_channel: 'preferredContactChannel',
+  advisor_contact_enabled: 'advisorContactEnabled',
+  family_assist_enabled: 'familyAssistEnabled',
+  introduction_updates_enabled: 'introductionUpdatesEnabled',
+  event_reminders_enabled: 'eventRemindersEnabled',
+  service_announcements_enabled: 'serviceAnnouncementsEnabled',
+  marketing_emails_enabled: 'marketingEmailsEnabled',
+  analytics_consent_enabled: 'analyticsConsentEnabled',
+} satisfies Record<AccountPreferenceCode, keyof AccountPreferencesDTO>
 const securityAccountItems = computed(() => mergePreviewSecurityAccounts(pageData.value.security, [
   previewSecurityAccount('phone-preview', t('settings.provider.phone'), t('settings.security.unbound'), t('settings.security.unverified')),
   previewSecurityAccount('wechat-preview', t('settings.provider.wechat'), t('settings.security.unbound'), t('settings.security.unverified')),
@@ -293,6 +384,23 @@ const privacyItems = computed(() => mergePreviewItems(pageData.value.privacyPref
 ]))
 
 const agreementDialog = ref<'terms' | 'privacy' | null>(null)
+const booleanOptions = computed(() => [
+  { label: t('common.yes'), value: true },
+  { label: t('common.no'), value: false },
+])
+
+watch(settings, (value) => {
+  if (!value) return
+  accountDraft.value = {
+    accountName: value.account.accountName,
+    avatarUrl: value.account.avatarUrl,
+  }
+  preferenceDraft.value = Object.fromEntries(
+    Object.entries(PREFERENCE_CODE_TO_KEY)
+      .filter(([, key]) => value.preferences[key] !== undefined)
+      .map(([code, key]) => [code, value.preferences[key]]),
+  ) as Record<string, string | boolean | number | string[]>
+}, { immediate: true })
 
 function openAgreementDialog(kind: 'terms' | 'privacy') {
   agreementDialog.value = kind
@@ -318,5 +426,36 @@ function previewSecurityAccount(id: string, providerLabel: string, identifier: s
 function mergePreviewSecurityAccounts<T extends { providerLabel: string }>(items: T[], previews: T[]) {
   const providers = new Set(items.map((item) => item.providerLabel))
   return [...items, ...previews.filter((item) => !providers.has(item.providerLabel))]
+}
+
+function readPreference(code: string) {
+  return preferenceDraft.value[code]
+}
+
+function writePreference(code: string, value: string | boolean | number | string[]) {
+  preferenceDraft.value[code] = value
+}
+
+function getInputValue(event: Event) {
+  return (event as unknown as { detail: { value: string } }).detail.value
+}
+
+async function saveSettings() {
+  await saveAccount({
+    accountName: accountDraft.value.accountName,
+    avatarUrl: accountDraft.value.avatarUrl,
+  })
+  await savePreferences({
+    preferences: toPreferencePayload(preferenceDraft.value),
+  })
+  editing.value = false
+}
+
+function toPreferencePayload(values: Record<string, string | boolean | number | string[]>): Partial<AccountPreferencesDTO> {
+  return Object.fromEntries(
+    Object.entries(PREFERENCE_CODE_TO_KEY)
+      .filter(([code]) => values[code] !== undefined)
+      .map(([code, key]) => [key, values[code]]),
+  ) as Partial<AccountPreferencesDTO>
 }
 </script>

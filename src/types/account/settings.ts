@@ -1,0 +1,10 @@
+export type AccountPreferenceCode =
+  | 'preferred_city'
+  | 'preferred_contact_channel'
+  | 'advisor_contact_enabled'
+  | 'family_assist_enabled'
+  | 'introduction_updates_enabled'
+  | 'event_reminders_enabled'
+  | 'service_announcements_enabled'
+  | 'marketing_emails_enabled'
+  | 'analytics_consent_enabled'

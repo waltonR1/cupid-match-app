@@ -135,7 +135,7 @@ interface AccountSettingsDTO {
   }
   identities: AccountAuthIdentityDTO[]
   password: AccountPasswordSecurityDTO
-  preferences: AccountPreferenceDTO[]
+  preferences: AccountPreferencesDTO
 }
 
 interface AccountAuthIdentityDTO {
@@ -152,9 +152,16 @@ interface AccountPasswordSecurityDTO {
   requiresMfa: boolean
 }
 
-interface AccountPreferenceDTO {
-  code: Database['user_preferences'][number]['code']
-  value: string | boolean | number | string[]
+interface AccountPreferencesDTO {
+  preferredCity?: string
+  preferredContactChannel?: Database['user_preferences'][number]['preferredContactChannel']
+  advisorContactEnabled: boolean
+  familyAssistEnabled: boolean
+  introductionUpdatesEnabled: boolean
+  eventRemindersEnabled: boolean
+  serviceAnnouncementsEnabled: boolean
+  marketingEmailsEnabled: boolean
+  analyticsConsentEnabled: boolean
 }
 
 interface ManagedProfileSummaryDTO {
@@ -327,7 +334,7 @@ interface AccountMeUpdatePayload {
 }
 
 interface AccountPreferenceUpdatePayload {
-  entries: Array<{ code: Database['user_preferences'][number]['code']; value: string | boolean | number | string[] }>
+  preferences: Partial<AccountPreferencesDTO>
 }
 
 interface AccountProfileArchiveResultDTO {
@@ -806,23 +813,57 @@ export function updateAccountMe(data: Database, userId: string, payload: Account
 export function updateAccountPreferences(data: Database, userId: string, payload: AccountPreferenceUpdatePayload) {
   if (!findUser(data, userId)) return null
   const now = new Date().toISOString()
-  payload.entries.forEach((entry) => {
-    const existing = data.user_preferences.find((item) => item.userId === userId && item.code === entry.code)
-    if (existing) {
-      existing.value = entry.value
-      existing.updatedAt = now
-      return
-    }
-    data.user_preferences.push({
+  const preferences = ensureUserPreferences(data, userId, now)
+  Object.assign(preferences, sanitizePreferencePatch(payload.preferences))
+  preferences.updatedAt = now
+  return getAccountSettings(data, userId)
+}
+
+function ensureUserPreferences(data: Database, userId: string, now = new Date().toISOString()) {
+  let preferences = data.user_preferences.find((item) => item.userId === userId)
+  if (!preferences) {
+    preferences = {
       id: nextId('preference', data.user_preferences),
       userId,
-      code: entry.code,
-      value: entry.value,
+      ...defaultAccountPreferences(),
       createdAt: now,
       updatedAt: now,
-    })
-  })
-  return getAccountSettings(data, userId)
+    }
+    data.user_preferences.push(preferences)
+  }
+  return preferences
+}
+
+function defaultAccountPreferences(): AccountPreferencesDTO {
+  return {
+    preferredCity: '',
+    preferredContactChannel: 'email',
+    advisorContactEnabled: true,
+    familyAssistEnabled: true,
+    introductionUpdatesEnabled: true,
+    eventRemindersEnabled: true,
+    serviceAnnouncementsEnabled: true,
+    marketingEmailsEnabled: false,
+    analyticsConsentEnabled: false,
+  }
+}
+
+function sanitizePreferencePatch(payload: Partial<AccountPreferencesDTO> = {}): Partial<AccountPreferencesDTO> {
+  return {
+    ...(payload.preferredCity !== undefined ? { preferredCity: String(payload.preferredCity) } : {}),
+    ...(isPreferredContactChannel(payload.preferredContactChannel) ? { preferredContactChannel: payload.preferredContactChannel } : {}),
+    ...(payload.advisorContactEnabled !== undefined ? { advisorContactEnabled: Boolean(payload.advisorContactEnabled) } : {}),
+    ...(payload.familyAssistEnabled !== undefined ? { familyAssistEnabled: Boolean(payload.familyAssistEnabled) } : {}),
+    ...(payload.introductionUpdatesEnabled !== undefined ? { introductionUpdatesEnabled: Boolean(payload.introductionUpdatesEnabled) } : {}),
+    ...(payload.eventRemindersEnabled !== undefined ? { eventRemindersEnabled: Boolean(payload.eventRemindersEnabled) } : {}),
+    ...(payload.serviceAnnouncementsEnabled !== undefined ? { serviceAnnouncementsEnabled: Boolean(payload.serviceAnnouncementsEnabled) } : {}),
+    ...(payload.marketingEmailsEnabled !== undefined ? { marketingEmailsEnabled: Boolean(payload.marketingEmailsEnabled) } : {}),
+    ...(payload.analyticsConsentEnabled !== undefined ? { analyticsConsentEnabled: Boolean(payload.analyticsConsentEnabled) } : {}),
+  }
+}
+
+function isPreferredContactChannel(value: unknown): value is AccountPreferencesDTO['preferredContactChannel'] {
+  return value === 'email' || value === 'phone' || value === 'wechat'
 }
 
 // -- Membership -- //
@@ -945,13 +986,6 @@ export function getAccountSettings(data: Database, userId: string): AccountSetti
   const user = findUser(data, userId)
   if (!user) return null
 
-  const preferences = data.user_preferences
-    .filter((p) => p.userId === userId)
-    .map((p) => ({
-      code: p.code,
-      value: p.value,
-    }))
-
   const identities = data.auth_identities
     .filter((item) => item.userId === userId)
     .map((item) => ({
@@ -979,7 +1013,21 @@ export function getAccountSettings(data: Database, userId: string): AccountSetti
       canReset: identities.some((item) => item.provider === 'email' || item.provider === 'phone'),
       requiresMfa: false,
     },
-    preferences,
+    preferences: toAccountPreferencesDto(ensureUserPreferences(data, userId)),
+  }
+}
+
+function toAccountPreferencesDto(preferences: Database['user_preferences'][number]): AccountPreferencesDTO {
+  return {
+    preferredCity: preferences.preferredCity,
+    preferredContactChannel: preferences.preferredContactChannel,
+    advisorContactEnabled: preferences.advisorContactEnabled,
+    familyAssistEnabled: preferences.familyAssistEnabled,
+    introductionUpdatesEnabled: preferences.introductionUpdatesEnabled,
+    eventRemindersEnabled: preferences.eventRemindersEnabled,
+    serviceAnnouncementsEnabled: preferences.serviceAnnouncementsEnabled,
+    marketingEmailsEnabled: preferences.marketingEmailsEnabled,
+    analyticsConsentEnabled: preferences.analyticsConsentEnabled,
   }
 }
 

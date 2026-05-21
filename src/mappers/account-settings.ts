@@ -1,8 +1,21 @@
-import type { AccountPreferenceCode, AccountSettingsDTO } from '@/api/account'
+import type { AccountPreferencesDTO, AccountSettingsDTO } from '@/api/account'
 import type { Translate } from '@/i18n/types'
+import type { AccountPreferenceCode } from '@/types/account/settings'
 import { formatLocalizedDateTime, type FormatLocale } from '@/utils/locale-format'
 
 type PreferenceMap = Partial<Record<AccountPreferenceCode, string | boolean | number | string[]>>
+
+const PREFERENCE_CODE_TO_KEY = {
+  preferred_city: 'preferredCity',
+  preferred_contact_channel: 'preferredContactChannel',
+  advisor_contact_enabled: 'advisorContactEnabled',
+  family_assist_enabled: 'familyAssistEnabled',
+  introduction_updates_enabled: 'introductionUpdatesEnabled',
+  event_reminders_enabled: 'eventRemindersEnabled',
+  service_announcements_enabled: 'serviceAnnouncementsEnabled',
+  marketing_emails_enabled: 'marketingEmailsEnabled',
+  analytics_consent_enabled: 'analyticsConsentEnabled',
+} satisfies Record<AccountPreferenceCode, keyof AccountPreferencesDTO>
 
 export function toAccountSettingsPageData(params: {
   settings: AccountSettingsDTO | null
@@ -68,7 +81,10 @@ function item(key: string, label: string, value: string) {
 }
 
 function toPreferenceMap(settings: AccountSettingsDTO | null): PreferenceMap {
-  return Object.fromEntries((settings?.preferences ?? []).map((pref) => [pref.code, pref.value]))
+  if (!settings) return {}
+  return Object.fromEntries(
+    Object.entries(PREFERENCE_CODE_TO_KEY).map(([code, key]) => [code, settings.preferences[key]]),
+  ) as PreferenceMap
 }
 
 function preferenceItems(codes: AccountPreferenceCode[], values: PreferenceMap, t: Translate) {
