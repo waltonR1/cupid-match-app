@@ -27,6 +27,7 @@ interface FinalDatabase {
   auth_identities: AuthIdentityRecord[]
   user_preferences: UserPreferenceRecord[]
   legal_documents: LegalDocumentRecord[]
+  legal_document_contents: LegalDocumentContentRecord[]
   user_agreement_acceptances: UserAgreementAcceptanceRecord[]
 
   profiles: ProfileRecord[]
@@ -211,22 +212,37 @@ interface UserPreferenceRecord {
 
 ### legal_documents
 
-协议文档版本。平台服务条款和隐私说明不只存在于前端 i18n；最终应由后端按类型、版本和语言返回当前生效文档。
+协议文档主记录。`version` 是跨语言的全局法律修订版本号，不按 locale 独立管理。
 
 ```ts
 interface LegalDocumentRecord {
   id: string
   type: LegalDocumentType
   version: string
-  locale: LocaleCode
-  title: string
-  sections: LegalDocumentSection[]
   status: LegalDocumentStatus
   effectiveAt: string
   createdAt: string
   updatedAt: string
 }
+```
 
+### legal_document_contents
+
+按 locale 的协议文档翻译内容。每个文档主记录可有多个 locale 的翻译。
+
+```ts
+interface LegalDocumentContentRecord {
+  id: string
+  documentId: string
+  locale: string
+  title: string
+  sections: LegalDocumentSection[]
+  createdAt: string
+  updatedAt: string
+}
+```
+
+```ts
 interface LegalDocumentSection {
   heading: string
   clauses: LegalDocumentClause[]
@@ -241,8 +257,11 @@ interface LegalDocumentClause {
 
 规则：
 
-- 同一 `type + locale` 只能有一个 `active` 文档。
-- `version` 是面向确认记录的稳定版本号，不使用页面发布时间临时派生。
+- `legal_documents`: 同一 `type` 只能有一个 `active` 文档。
+- `legal_documents`: `unique(type, version)`。
+- `legal_document_contents`: `unique(documentId, locale)`。
+- `version` 是全局法律修订版本号，所有 locale 共享。一次法律条款变更创建一个新版本，所有语言的翻译都关联到该版本。
+- 翻译修正（错字、措辞）不涉及 version bump，只更新 content。
 - `sections` 是该语言完整正文结构；每个 section 包含稳定 heading 与 clauses，前端按字段渲染，不解析 Markdown。
 
 ### user_agreement_acceptances
@@ -255,7 +274,6 @@ interface UserAgreementAcceptanceRecord {
   userId: string
   documentType: LegalDocumentType
   documentVersion: string
-  locale: LocaleCode
   acceptedAt: string
   createdAt: string
 }
@@ -265,6 +283,7 @@ interface UserAgreementAcceptanceRecord {
 
 - 每个用户对每个 `documentType` 最多保留一条最新确认记录（upsert by userId + documentType）。
 - 成功注册 / 成功登录后，后端读取当前 active 文档版本；若版本相同则跳过写入，版本不同则更新为最新版本和时间戳。
+- `documentVersion` 是全局版本号，与 locale 无关。
 - 前端不需要传版本号，不需要处理协议更新拦截；正常 UI 仍必须勾选同意后才允许提交登录 / 注册。
 
 ## Profiles
@@ -802,8 +821,9 @@ interface ProfilePublicIdentityDTO {
 
 ```text
 auth_identities: unique(provider, identifier)
-legal_documents: unique(type, locale, version)
-legal_documents: unique_active(type, locale) where status = 'active'
+legal_documents: unique(type, version)
+legal_documents: unique(type) where status = 'active'
+legal_document_contents: unique(documentId, locale)
 user_agreement_acceptances: unique(userId, documentType)
 user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)

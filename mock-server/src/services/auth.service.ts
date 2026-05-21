@@ -35,7 +35,7 @@ export interface ServiceErrorResult {
   body: { error: string }
 }
 
-export function login(data: Database, body: Record<string, unknown>, locale?: string): AuthSession | null {
+export function login(data: Database, body: Record<string, unknown>): AuthSession | null {
   const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
   const authIdentity = data.auth_identities.find((item) => item.identifier === identifier)
@@ -47,9 +47,7 @@ export function login(data: Database, body: Record<string, unknown>, locale?: st
   const user = data.users.find((item) => item.id === authIdentity.userId)
   if (!user) return null
 
-  const requestedLocale = locale ?? ''
-  const agreementLocale: PreferredLocale = isPreferredLocale(requestedLocale) ? requestedLocale : user.preferredLocale
-  upsertAgreementAcceptances(data, user.id, agreementLocale, new Date().toISOString())
+  upsertAgreementAcceptances(data, user.id, new Date().toISOString())
   return buildSession(authIdentity, user)
 }
 
@@ -137,7 +135,7 @@ export async function register(
   db.data.users.push(newUser)
   db.data.auth_identities.push(newAuthIdentity)
   db.data.user_memberships.push(membership)
-  upsertAgreementAcceptances(db.data, userId, preferredLocale, now)
+  upsertAgreementAcceptances(db.data, userId, now)
   await db.write()
 
   return {

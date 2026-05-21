@@ -185,17 +185,17 @@ Flow:
 ```text
 agreement dialog
 -> GET /api/legal/documents/:type?lang=
--> legal_documents active record by type + locale
+-> legal_documents active record by type, joined with legal_document_contents by documentId + locale
 -> LegalDocumentDTO
 -> frontend renders section headings and clauses in AgreementDialog
 ```
 
 Rules:
 
-- `legal_documents` is the source of truth for official agreement text and version.
+- `legal_documents` + `legal_document_contents` is the source of truth for official agreement text and version.
 - i18n only provides button labels and helper copy, not the official legal document body.
 - Agreement content is returned as structured sections and clauses; frontend renders fields directly and does not parse Markdown.
-- If an active document is missing for the requested locale, mock API may fall back to the active `zh` document until official translations are added.
+- If content is missing for the requested locale, mock API falls back to `zh` content for the same document, then to any available locale.
 - `AgreementDialog` 打开时按需调用此 API，不预加载。
 
 ## Profile Directory Chain

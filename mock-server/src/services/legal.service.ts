@@ -6,16 +6,18 @@ export function getLegalDocument(
   type: 'terms' | 'privacy',
   locale: string,
 ): LegalDocumentDTO | null {
-  const doc = findActiveLegalDocument(data, type, locale)
-
+  const doc = findActiveLegalDocument(data, type)
   if (!doc) return null
+
+  const content = findContent(data, doc.id, locale)
+  if (!content) return null
 
   return {
     type: doc.type,
     version: doc.version,
-    locale: doc.locale,
-    title: doc.title,
-    sections: doc.sections
+    locale: content.locale,
+    title: content.title,
+    sections: content.sections
       .sort((left, right) => left.sortOrder - right.sortOrder)
       .map((section): LegalDocumentSectionDTO => ({
         heading: section.heading,
@@ -27,23 +29,21 @@ export function getLegalDocument(
 
 export function resolveActiveDocumentVersions(
   data: Database,
-  locale: string,
-): Array<{ type: 'terms' | 'privacy'; version: string; locale: string }> {
+): Array<{ type: 'terms' | 'privacy'; version: string }> {
   return (['terms', 'privacy'] as const)
     .map((type) => {
-      const doc = findActiveLegalDocument(data, type, locale)
-      return doc ? { type, version: doc.version, locale: doc.locale } : null
+      const doc = findActiveLegalDocument(data, type)
+      return doc ? { type, version: doc.version } : null
     })
-    .filter((item): item is { type: 'terms' | 'privacy'; version: string; locale: string } => item !== null)
+    .filter((item): item is { type: 'terms' | 'privacy'; version: string } => item !== null)
 }
 
 export function upsertAgreementAcceptances(
   data: Database,
   userId: string,
-  locale: string,
   acceptedAt: string,
 ): void {
-  const activeVersions = resolveActiveDocumentVersions(data, locale)
+  const activeVersions = resolveActiveDocumentVersions(data)
 
   activeVersions.forEach((doc) => {
     const existing = data.user_agreement_acceptances.find(
@@ -53,7 +53,6 @@ export function upsertAgreementAcceptances(
     if (existing) {
       if (existing.documentVersion === doc.version) return
       existing.documentVersion = doc.version
-      existing.locale = doc.locale
       existing.acceptedAt = acceptedAt
     } else {
       data.user_agreement_acceptances.push({
@@ -61,7 +60,6 @@ export function upsertAgreementAcceptances(
         userId,
         documentType: doc.type,
         documentVersion: doc.version,
-        locale: doc.locale,
         acceptedAt,
         createdAt: acceptedAt,
       })
@@ -73,10 +71,22 @@ function nextAcceptanceId(data: Database): string {
   return `ua-${String(data.user_agreement_acceptances.length + 1).padStart(3, '0')}`
 }
 
-function findActiveLegalDocument(data: Database, type: 'terms' | 'privacy', locale: string) {
+function findActiveLegalDocument(data: Database, type: 'terms' | 'privacy') {
   return data.legal_documents.find(
-    (item) => item.type === type && item.locale === locale && item.status === 'active',
-  ) ?? data.legal_documents.find(
-    (item) => item.type === type && item.locale === 'zh' && item.status === 'active',
+    (item) => item.type === type && item.status === 'active',
   ) ?? null
+}
+
+function findContent(data: Database, documentId: string, locale: string) {
+  return (
+    data.legal_document_contents.find(
+      (item) => item.documentId === documentId && item.locale === locale,
+    ) ??
+    data.legal_document_contents.find(
+      (item) => item.documentId === documentId && item.locale === 'zh',
+    ) ??
+    data.legal_document_contents.find(
+      (item) => item.documentId === documentId,
+    ) ?? null
+  )
 }

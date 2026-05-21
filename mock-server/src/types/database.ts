@@ -195,27 +195,34 @@ export interface LegalDocumentSection {
     sortOrder: number
 }
 
-/** 协议文档记录 */
+/** 协议文档主记录 —— version 是跨语言的全局法律修订版本 */
 export interface LegalDocumentRecord {
     id: string
     type: LegalDocumentType
     version: string
-    locale: string
-    title: string
-    sections: LegalDocumentSection[]
     status: LegalDocumentStatus
     effectiveAt: string
     createdAt: string
     updatedAt: string
 }
 
-/** 用户协议确认记录 */
+/** 协议文档按 locale 的翻译内容 */
+export interface LegalDocumentContentRecord {
+    id: string
+    documentId: string
+    locale: string
+    title: string
+    sections: LegalDocumentSection[]
+    createdAt: string
+    updatedAt: string
+}
+
+/** 用户协议确认记录 —— version 是全局版本号，不再按 locale 存储 */
 export interface UserAgreementAcceptanceRecord {
     id: string
     userId: string
     documentType: LegalDocumentType
     documentVersion: string
-    locale: string
     acceptedAt: string
     createdAt: string
 }
@@ -350,6 +357,7 @@ export interface Database {
     private_introduction_rooms: PrivateIntroductionRoomRecord[]
     private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
     legal_documents: LegalDocumentRecord[]
+    legal_document_contents: LegalDocumentContentRecord[]
     user_agreement_acceptances: UserAgreementAcceptanceRecord[]
     users: UserRecord[]
     auth_identities: AuthIdentityRecord[]
