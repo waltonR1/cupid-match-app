@@ -40,7 +40,7 @@
 
       <!-- 右侧区域 -->
       <view class="flex items-center gap-4">
-        <!-- 未登�?-->
+        <!-- 未登录 -->
         <template v-if="!auth.isLoggedIn">
           <AppButton
             variant="secondary"
