@@ -40,7 +40,7 @@
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
 | profile 可见性 | `profile_visibility_settings` plus default constants | `access`, masked field values | frontend hardcoded member checks |
 | 联系方式 | `profile_contact_methods` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
-| 后台资料 | `profile_internal_records`, `profile_verifications` | advisor/admin DTO only | public profile DTO |
+| 后台资料 | `profile_internal_records`, `profile_verifications` | staff/admin DTO only | public profile DTO |
 | 活动主体 | `events` | localized event DTO | nested agenda |
 | 活动流程 | `event_agenda_items` | `agendaItems[]` | `events.agenda` |
 | 活动报名 | `event_registrations` | `registration`, `registeredCount`, `waitlistCount` | event main record counts |
@@ -547,7 +547,7 @@ Localized write rule:
 
 - `ProfileCreatePayload` and `ProfileUpdatePayload` accept plain strings from the current form locale.
 - Backend writes each localized field to the request locale slot, for example `lang=zh` writes `{ zh: value, fr: '', en: '' }`.
-- Empty locale slots are completed later by advisor/admin review or translation tooling; frontend must not synthesize missing translations.
+- Empty locale slots are completed later by staff/admin review or translation tooling; frontend must not synthesize missing translations.
 
 Profile main table writes:
 
@@ -609,7 +609,7 @@ profile_contact_methods:
   type, value, verifiedAt, visibleAfterIntroduction
 
 profile_internal_records:
-  employer, incomeRange, religion, politicalViews, staffNotes, riskFlags, source
+  employer, incomeRange, staffNotes, riskFlags, source, updatedByUserId
 
 profile_verifications:
   legalName, dateOfBirth, identityStatus, educationStatus, incomeStatus, maritalStatus, advisorStatus
@@ -1367,7 +1367,7 @@ Move to independent collections:
 photos -> profile_photos
 phone/email/wechat -> profile_contact_methods
 legalName/dateOfBirth/statuses -> profile_verifications
-employer/income/religion/political/staff notes -> profile_internal_records
+employer/income/staff notes/risk flags -> profile_internal_records
 field privacy -> profile_visibility_settings
 agenda -> event_agenda_items
 user registration -> event_registrations
@@ -1403,4 +1403,3 @@ Before generating or changing code for any chain:
 6. Keep page code on hooks and DTOs only.
 7. Reject any implementation that adds removed fields back to `users`, `profiles`, or `events`.
 8. Update `docs/project-database-fields.md` after implementation changes current schema.
-

@@ -58,7 +58,7 @@ interface FinalDatabase {
 说明：
 
 - `displayName`、`avatarUrl` 可以出现在 DTO，不保存在 `profiles` 主表。
-- `profile_internal_records`、`profile_verifications`、`profile_contact_methods` 只给后台、顾问、受控流程使用。
+- `profile_internal_records`、`profile_verifications`、`profile_contact_methods` 只给后台工作人员和受控流程使用。
 - `profile_visibility_settings` 是 profile 链路预留的字段可见性配置；account 重写后再和用户侧设置联调。
 
 ## 通用类型
@@ -129,7 +129,7 @@ type ProfileFieldCode =
   | 'contactMethods'
 ```
 
-`MaritalStatus` 是前台公开婚史状态，只表达当前可公开匹配语义。若顾问需要记录“已婚分居但未完成法律离婚”等敏感情况，不进入公开 enum，放入 `profile_internal_records` 或 `profile_verifications` 的顾问审核备注中处理。
+`MaritalStatus` 是前台公开婚史状态，只表达当前可公开匹配语义。若后台工作人员需要记录“已婚分居但未完成法律离婚”等敏感情况，不进入公开 enum，放入 `profile_internal_records` 或 `profile_verifications` 的内部审核备注中处理。
 
 ## Account and Auth
 
@@ -409,7 +409,7 @@ interface ProfilePhotoRecord {
 
 ### profile_ownerships
 
-用户和资料的关系。本人、父母、亲属、顾问都在这里表达。
+用户和资料的关系。本人、父母、亲属都在这里表达。
 
 ```ts
 interface ProfileOwnershipRecord {
@@ -430,7 +430,7 @@ interface ProfileOwnershipRecord {
 
 ### profile_internal_records
 
-后台工作人员和顾问看的敏感运营资料，不进入前台 profile DTO。
+平台工作人员看的敏感运营资料，不进入前台 profile DTO。
 
 ```ts
 interface ProfileInternalRecord {
@@ -438,12 +438,10 @@ interface ProfileInternalRecord {
   profileId: string
   employer?: LocalizedText
   incomeRange?: LocalizedText
-  religion?: LocalizedText
-  politicalViews?: LocalizedText
   staffNotes?: LocalizedText
   riskFlags?: string[]
-  source?: 'self_submitted' | 'family_submitted' | 'advisor_collected'
-  updatedBy?: string
+  source?: 'self_submitted' | 'family_submitted' | 'staff_collected'
+  updatedByUserId?: string
   createdAt: string
   updatedAt: string
 }

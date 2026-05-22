@@ -192,7 +192,7 @@ account 页面先统一成稳定占位：
 
 ### 第一批删除或迁移
 
-这些字段当前已经不在主要 API / 页面链路中展示，或不符合当前产品定位。执行时按三类处理，避免误删顾问仍可能需要的信息。
+这些字段当前已经不在主要 API / 页面链路中展示，或不符合当前产品定位。执行时按三类处理，避免误删后台工作人员仍可能需要的信息。
 
 确认删除，不做替代：
 
@@ -203,12 +203,12 @@ interestedIn
 zodiac
 ```
 
-迁移给后台或顾问使用：
+迁移给后台工作人员使用：
 
 ```text
-hometown -> profile_internal_records
-livingSituation -> profile_internal_records
-funFacts -> profile_internal_records 或 advisor note
+hometown -> 删除或进入 staffNotes
+livingSituation -> 删除或进入 staffNotes
+funFacts -> 删除或进入 staffNotes
 ```
 
 暂存或重新定义，后续如恢复必须换新模型：
@@ -223,23 +223,23 @@ compatibilityDimensions
 
 - `pronouns / sexuality / interestedIn` 更接近社交约会 App，不符合当前高端中介式资料表达。
 - `zodiac` 信息价值低，容易把 detail 拉回 dossier。
-- `hometown / livingSituation / funFacts` 如果顾问仍需要，可作为后台判断或破冰素材，不进入公开 profile DTO。
-- `conversationStarters / dateIdeas` 已从 self detail 链路移除，未来若恢复应由顾问流程重新定义。
+- `hometown / livingSituation / funFacts` 如果后台工作人员仍需要，只能进入 `staffNotes`，不再作为结构化字段保留。
+- `conversationStarters / dateIdeas` 已从 self detail 链路移除，未来若恢复应由受控运营流程重新定义。
 - `compatibilityDimensions` 不应使用百分比分数，若未来恢复，应改为定性判断模型。
 
-以下字段不再留在 `profiles` 主表，但可以迁移给后台或顾问使用：
+以下字段不再留在 `profiles` 主表，但可以迁移给后台工作人员使用：
 
 ```text
 employer -> profile_internal_records
 incomeRange -> profile_internal_records
-religion -> profile_internal_records 或 profile_review_answers
-politicalViews -> profile_internal_records 或 profile_review_answers
+religion -> 不结构化保留，必要时进入 staffNotes
+politicalViews -> 不结构化保留，必要时进入 staffNotes
 ```
 
 理由：
 
 - `employer / incomeRange` 过度敏感，前台只应展示职业方向与经济稳定度，不展示精确雇主或收入。
-- `religion / politicalViews` 可能是顾问判断或深度问卷信息，不适合作为公开 profile 主字段。
+- `religion / politicalViews` 是敏感信息，不适合作为公开 profile 主字段，也不作为内部结构化字段保留。
 - 这些字段若给后台工作人员使用，应进入受控 internal 结构，由后台接口读取，不进入 profile directory/detail DTO。
 
 ### 第二批迁移
@@ -423,12 +423,10 @@ interface ProfileInternalRecord {
   profileId: string
   employer?: LocalizedText
   incomeRange?: LocalizedText
-  religion?: LocalizedText
-  politicalViews?: LocalizedText
   staffNotes?: LocalizedText
   riskFlags?: string[]
-  source?: 'self_submitted' | 'family_submitted' | 'advisor_collected'
-  updatedBy?: string
+  source?: 'self_submitted' | 'family_submitted' | 'staff_collected'
+  updatedByUserId?: string
   createdAt: string
   updatedAt: string
 }
@@ -1131,8 +1129,8 @@ advisor_follow_ups
 | `user_entitlement_balances` | 用户权益余额，例如本月剩余介绍次数。 |
 | `profiles` | 被撮合的相亲资料主体。 |
 | `profile_photos` | 资料照片。 |
-| `profile_ownerships` | 用户与资料的关系，例如本人、父母、顾问。 |
-| `profile_internal_records` | 后台和顾问可见的敏感运营资料。 |
+| `profile_ownerships` | 用户与资料的关系，例如本人、父母、亲属。 |
+| `profile_internal_records` | 后台工作人员可见的敏感运营资料。 |
 | `profile_verifications` | 实名、学历、身份、顾问审核等认证状态。 |
 | `profile_contact_methods` | 受控联系方式。 |
 | `profile_visibility_settings` | profile 字段可见性配置。 |

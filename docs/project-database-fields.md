@@ -18,7 +18,7 @@
 | --- | --- | --- | --- |
 | `profiles` | `ProfileRecord[]` | 相亲资料主表，只保存结构化 profile 核心字段。 | 已完成 Phase 2 收紧；后续随 profile 编辑链路继续补齐。 |
 | `profile_photos` | `ProfilePhotoRecord[]` | profile 照片独立集合，头像由 `isPrimary` 派生。 | 后续接入照片上传、审核、排序。 |
-| `profile_internal_records` | `ProfileInternalRecord[]` | 后台 / 顾问可见的敏感运营资料。 | 后续进入顾问后台，不直接返回前端 detail。 |
+| `profile_internal_records` | `ProfileInternalRecord[]` | 后台工作人员可见的敏感运营资料。 | 当前不直接返回前端 detail。 |
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、顾问审核等认证资料。 | detail 的 `isVerified` 由该集合派生。 |
 | `profile_contact_methods` | `ProfileContactMethodRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
 | `profile_visibility_settings` | `ProfileVisibilitySettingRecord[]` | profile 字段可见性配置；detail 链路会优先读取该集合，空集合时使用默认常量表。 | Phase 5.5 接入 account profile detail 写入。 |
