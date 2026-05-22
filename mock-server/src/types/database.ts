@@ -3,7 +3,6 @@ import type {
     ProfileContactMethodRecord,
     ProfileInternalRecord,
     ProfilePhotoRecord,
-    ProfilePromptRecord,
     ProfileRecord,
     ProfileVerificationRecord,
     ProfileVisibilitySettingRecord,
@@ -340,7 +339,6 @@ export interface PrivateIntroductionRoomMessageRecord {
 export interface Database {
     profiles: ProfileRecord[]
     profile_photos: ProfilePhotoRecord[]
-    profile_prompts: ProfilePromptRecord[]
     profile_internal_records: ProfileInternalRecord[]
     profile_verifications: ProfileVerificationRecord[]
     profile_contact_methods: ProfileContactMethodRecord[]

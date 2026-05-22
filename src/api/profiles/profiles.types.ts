@@ -64,13 +64,6 @@ export interface ProfilePhoto {
 }
 
 /** 问答题 */
-export interface ProfilePrompt {
-    id: string
-    promptCode: string
-    prompt: string
-    answer: string
-}
-
 
 /** 私人介绍状态 */
 export interface PrivateIntroduction {
@@ -167,7 +160,6 @@ export interface SelfProfileDetail {
     communicationStyle: RestrictedProfileField<string>
     summary: string
     tags: string[]
-    prompts: RestrictedProfileField<ProfilePrompt[]>
     privateIntroduction: PrivateIntroduction
 }
 

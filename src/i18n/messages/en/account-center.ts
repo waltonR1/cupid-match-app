@@ -120,7 +120,6 @@ export const accountCenterMessages: AppMessageSchema = {
       personalityTraits: 'Personality traits',
       interests: 'Interests',
       communicationStyle: 'Communication style',
-      prompts: 'Profile prompts',
       contactMethods: 'Contact methods',
     },
     visibilityLevel: { public: 'Visible to visitors', member: 'Visible to members', introduced: 'Visible after introduction', owner_only: 'Only visible to me', hidden: 'Hidden' },
@@ -141,8 +140,8 @@ export const accountCenterMessages: AppMessageSchema = {
         approved: 'Approved',
         hidden: 'Hidden',
       },
-      placeholders: { photoUrl: 'Photo URL', prompt: 'Prompt', answer: 'Answer' },
-      sections: { editor: 'Quick edit', ownership: 'Profile ownership', photos: 'Photos', prompts: 'Profile prompts', basics: 'Basics', relationship: 'Relationship and future', preferences: 'Partner preferences', lifestyle: 'Lifestyle', expression: 'Personality and expression', family: 'Family support', contact: 'Contact methods' },
+      placeholders: { photoUrl: 'Photo URL' },
+      sections: { editor: 'Quick edit', ownership: 'Profile ownership', photos: 'Photos', basics: 'Basics', relationship: 'Relationship and future', preferences: 'Partner preferences', lifestyle: 'Lifestyle', expression: 'Personality and expression', family: 'Family support', contact: 'Contact methods' },
       fields: {
         gender: 'Gender', birthYear: 'Birth year', height: 'Height', city: 'City', country: 'Country', nationality: 'Nationality',
         languages: 'Languages', degreeLevel: 'Degree level', education: 'Education', industry: 'Industry', careerDirection: 'Career direction',

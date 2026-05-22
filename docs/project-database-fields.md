@@ -18,7 +18,6 @@
 | --- | --- | --- | --- |
 | `profiles` | `ProfileRecord[]` | 相亲资料主表，只保存结构化 profile 核心字段。 | 已完成 Phase 2 收紧；后续随 profile 编辑链路继续补齐。 |
 | `profile_photos` | `ProfilePhotoRecord[]` | profile 照片独立集合，头像由 `isPrimary` 派生。 | 后续接入照片上传、审核、排序。 |
-| `profile_prompts` | `ProfilePromptRecord[]` | self detail 使用的资料问答独立集合。 | 后续接入问答编辑与审核。 |
 | `profile_internal_records` | `ProfileInternalRecord[]` | 后台 / 顾问可见的敏感运营资料。 | 后续进入顾问后台，不直接返回前端 detail。 |
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、顾问审核等认证资料。 | detail 的 `isVerified` 由该集合派生。 |
 | `profile_contact_methods` | `ProfileContactMethodRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
@@ -265,7 +264,6 @@ interface ProfileRecord {
 | `isVerified` | `profile_verifications` 中任一认证状态为 `verified`。 |
 | `datingIntentionLabel` | `profiles.datingIntentionCode` 后端字典派生。 |
 | `photos` | `profile_photos` 按 `sortOrder` 返回。 |
-| `prompts` | `profile_prompts` 按 `sortOrder` 返回，当前只用于 self detail。 |
 
 ## Events 主链路
 
@@ -339,3 +337,4 @@ interface EventRegistrationRecord {
 - `profile_visibility_settings` 已接入 detail 读取链路；Phase 5.5 需要在 account profile detail 提供写入入口。
 - private introduction room / messages 已有基础结构，read receipts 仍待后续阶段处理。
 - account center 已完成 Phase 5 只读重写；Phase 5.5 需要补齐 profile、visibility、account basics、preferences、membership 的写操作。
+

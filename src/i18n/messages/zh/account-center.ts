@@ -126,7 +126,6 @@ export const accountCenterMessages: AppMessageSchema = {
       personalityTraits: '性格关键词',
       interests: '兴趣',
       communicationStyle: '沟通方式',
-      prompts: '资料问答',
       contactMethods: '联系方式',
     },
     visibilityLevel: {
@@ -159,12 +158,11 @@ export const accountCenterMessages: AppMessageSchema = {
         approved: '已通过',
         hidden: '已隐藏',
       },
-      placeholders: { photoUrl: '照片 URL', prompt: '问题', answer: '回答' },
+      placeholders: { photoUrl: '照片 URL' },
       sections: {
         editor: '快速编辑',
         ownership: '资料归属',
         photos: '照片',
-        prompts: '资料问答',
         basics: '基础资料',
         relationship: '婚恋与未来',
         preferences: '择偶偏好',

@@ -45,7 +45,6 @@ export interface AccountProfileDetailDTO {
     visibleAfterIntroduction: boolean
   }>
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
-  prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   gender: 'male' | 'female'
   birthYear: number
   height: number
@@ -278,13 +277,6 @@ export interface AccountProfileVisibilityUpdatePayload {
 export interface ProfilePhotoMutationPayload {
   url: string
   isPrimary?: boolean
-  sortOrder?: number
-}
-
-export interface ProfilePromptMutationPayload {
-  promptCode: string
-  prompt: string
-  answer: string
   sortOrder?: number
 }
 

@@ -32,7 +32,6 @@ interface FinalDatabase {
 
   profiles: ProfileRecord[]
   profile_photos: ProfilePhotoRecord[]
-  profile_prompts: ProfilePromptRecord[]
   profile_ownerships: ProfileOwnershipRecord[]
   profile_internal_records: ProfileInternalRecord[]
   profile_verifications: ProfileVerificationRecord[]
@@ -58,7 +57,6 @@ interface FinalDatabase {
 
 说明：
 
-- `profile_photos`、`profile_prompts`、`event_agenda_items` 是独立集合；mock-server 也应按最终形态实现，不再为了开发便利嵌套到主记录。
 - `displayName`、`avatarUrl` 可以出现在 DTO，不保存在 `profiles` 主表。
 - `profile_internal_records`、`profile_verifications`、`profile_contact_methods` 只给后台、顾问、受控流程使用。
 - `profile_visibility_settings` 是 profile 链路预留的字段可见性配置；account 重写后再和用户侧设置联调。
@@ -128,7 +126,6 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'prompts'
   | 'contactMethods'
 ```
 
@@ -379,7 +376,6 @@ conversationStarters
 dateIdeas
 compatibilityDimensions
 photos
-prompts
 joinedAt
 ```
 
@@ -409,21 +405,6 @@ interface ProfilePhotoRecord {
 }
 ```
 
-### profile_prompts
-
-```ts
-interface ProfilePromptRecord {
-  id: string
-  profileId: string
-  promptCode: string
-  prompt: LocalizedText
-  answer: LocalizedText
-  sortOrder: number
-  status: 'active' | 'hidden'
-  createdAt: string
-  updatedAt: string
-}
-```
 
 ### profile_ownerships
 
@@ -551,7 +532,6 @@ pets
 personalityTraits
 interests
 communicationStyle
-prompts
 photos
 contactMethods
 ```
@@ -845,3 +825,4 @@ private_introduction_rooms: unique(requestId)
 - `profiles.datingIntentionLabel` 从数据库移除；所有前端 DTO 的 datingIntentionLabel 由后端派生。
 - 所有主表和关系表保留 `createdAt` 和 `updatedAt`。
 - `project-database-fields.md` 继续记录当前实现；本文记录最终形态。
+

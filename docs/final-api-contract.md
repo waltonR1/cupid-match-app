@@ -69,7 +69,6 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'prompts'
   | 'contactMethods'
 
 interface PaginationDTO {
@@ -104,8 +103,6 @@ interface ApiErrorDTO {
 | Profiles | `POST` | `/api/profiles/family/:id/photos` | 新增 family profile 照片。 |
 | Profiles | `POST` | `/api/profiles/self/:id/photos/:photoId` | 更新 self profile 照片。 |
 | Profiles | `POST` | `/api/profiles/family/:id/photos/:photoId` | 更新 family profile 照片。 |
-| Profiles | `POST` | `/api/profiles/self/:id/prompts` | 新增 self profile 问答。 |
-| Profiles | `POST` | `/api/profiles/self/:id/prompts/:promptId` | 更新 self profile 问答。 |
 | Favorites | `POST` | `/api/favorites/:profileId` | 收藏 profile。 |
 | Favorites | `DELETE` | `/api/favorites/:profileId` | 取消收藏。 |
 | Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 从 self detail 申请私人介绍。 |
@@ -133,9 +130,6 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
 | Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
-| Account | `POST` | `/api/account/profiles/:profileId/prompts` | 新增可管理 profile 的 prompt。 |
-| Account | `POST` | `/api/account/profiles/:profileId/prompts/:promptId` | 更新可管理 profile 的 prompt。 |
-| Account | `DELETE` | `/api/account/profiles/:profileId/prompts/:promptId` | 删除可管理 profile 的 prompt。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
 | Account | `POST` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
 | Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
@@ -422,7 +416,6 @@ interface ProfileDetailBaseDTO {
 }
 
 interface SelfProfileDetailDTO extends ProfileDetailBaseDTO {
-  prompts: RestrictedProfileField<ProfilePromptDTO[]>
 }
 
 interface FamilyProfileDetailDTO extends ProfileDetailBaseDTO {}
@@ -450,13 +443,6 @@ interface ProfilePhotoDTO {
   sortOrder: number
 }
 
-interface ProfilePromptDTO {
-  id: string
-  promptCode: string
-  prompt: string
-  answer: string
-  sortOrder: number
-}
 
 interface FavoriteStateDTO {
   isFavorite: boolean
@@ -479,7 +465,6 @@ interface ProfilePrivateIntroductionDTO {
 规则：
 
 - `ProfileDetailBaseDTO` / `SelfProfileDetailDTO` / `FamilyProfileDetailDTO` 保持扁平字段；页面 section 由前端 mapper 组装。
-- `prompts` 只属于 `SelfProfileDetailDTO`；family detail 不默认返回 prompts，除非后续产品确认家长视角也需要该信息。
 - 受限字段返回 `ProfileFieldLockCode`，前端不根据会员状态自行判断原始字段是否可见。
 - `privateIntroduction` 只表达申请状态和额度，不包含 phone / email / wechat。
 
@@ -510,7 +495,6 @@ profiles.conversationStarters
 profiles.dateIdeas
 profiles.compatibilityDimensions
 profiles.photos
-profiles.prompts
 ```
 
 ### Favorite Actions
@@ -580,12 +564,6 @@ interface ProfilePhotoMutationPayload {
   sortOrder?: number
 }
 
-interface ProfilePromptMutationPayload {
-  promptCode: string
-  prompt: string
-  answer: string
-  sortOrder?: number
-}
 ```
 
 规则：
@@ -593,8 +571,6 @@ interface ProfilePromptMutationPayload {
 - 创建 / 更新 payload 使用前端输入值；后端负责保存为最终数据库结构和本地化字段。
 - `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言，例如 `lang=zh` 时写入 `{ zh: value, fr: '', en: '' }`；其他 locale 由后台、顾问或后续翻译流程补齐。
 - 创建 profile 时同步创建或更新 `profile_ownerships`。
-- 创建 / 更新不接受 `displayName`、`avatarUrl`、`age`、`phone`、`email`、`wechat`、`legalName`、`nickname`、`occupation`、`wantsChildren`、`photos`、`prompts` 或任何已迁移到 internal / verification / contact 集合的字段。
-- `photos` 和 `prompts` 通过独立 endpoint 写入 `profile_photos` / `profile_prompts`，不嵌套进 `ProfileCreatePayload`。
 
 ## Private Introduction API
 
@@ -833,7 +809,6 @@ interface AccountProfileDetailDTO {
     visibleAfterIntroduction: boolean
   }>
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
-  prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   // 其余业务字段与当前 profile 主表字段保持扁平一致
 }
 
@@ -1050,7 +1025,6 @@ Write rules:
 - `POST /api/account/profiles/:profileId/ownership` updates the editable owner relation defaults shown in profile detail.
 - `POST /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
-- account photo / prompt mutation endpoints reuse `ProfilePhotoMutationPayload` / `ProfilePromptMutationPayload`, write their dedicated collections, and return the rebuilt detail DTO for the unified editor.
 - `POST /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
@@ -1084,3 +1058,4 @@ interface DebugPrivateIntroductionItemDTO {
 ```
 
 Debug 页面可以调用 accept / decline 工具，但生产 account / profile 页面只能消费正式 private introduction 状态。
+

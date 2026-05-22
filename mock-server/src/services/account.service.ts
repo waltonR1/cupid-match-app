@@ -46,7 +46,6 @@ interface AccountProfileDetailDTO {
     visibleAfterIntroduction: boolean
   }>
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: Database['profile_photos'][number]['status'] }>
-  prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   gender: string
   birthYear: number
   height: number
@@ -320,13 +319,6 @@ interface ProfilePhotoMutationPayload {
   sortOrder?: number
 }
 
-interface ProfilePromptMutationPayload {
-  promptCode: string
-  prompt: string
-  answer: string
-  sortOrder?: number
-}
-
 interface AccountMeUpdatePayload {
   accountName?: string
   avatarUrl?: string
@@ -516,16 +508,6 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
         isPrimary: item.isPrimary,
         sortOrder: item.sortOrder,
         status: item.status,
-      })),
-    prompts: data.profile_prompts
-      .filter((item) => item.profileId === profileId)
-      .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map((item) => ({
-        id: item.id,
-        promptCode: item.promptCode,
-        prompt: resolveLocalizedText(locale, item.prompt),
-        answer: resolveLocalizedText(locale, item.answer),
-        sortOrder: item.sortOrder,
       })),
     gender: profile.gender,
     birthYear: profile.birthYear,
@@ -724,48 +706,6 @@ export function deleteAccountProfilePhoto(data: Database, userId: string, profil
   const before = data.profile_photos.length
   data.profile_photos = data.profile_photos.filter((item) => !(item.id === photoId && item.profileId === profileId))
   return before === data.profile_photos.length ? null : getAccountProfileDetail(data, userId, profileId, requestedLocale)
-}
-
-export function createAccountProfilePrompt(data: Database, userId: string, profileId: string, locale: ApiLocale, payload: ProfilePromptMutationPayload) {
-  const permission = resolveProfileWritePermission(data, userId, profileId)
-  if (!permission) return null
-  if (permission === 'viewer') return 'forbidden' as const
-  const now = new Date().toISOString()
-  data.profile_prompts.push({
-    id: nextId('prompt', data.profile_prompts),
-    profileId,
-    promptCode: payload.promptCode,
-    prompt: mergeTranslatedText(undefined, locale, payload.prompt),
-    answer: mergeTranslatedText(undefined, locale, payload.answer),
-    sortOrder: payload.sortOrder ?? data.profile_prompts.filter((item) => item.profileId === profileId).length + 1,
-    status: 'active',
-    createdAt: now,
-    updatedAt: now,
-  })
-  return getAccountProfileDetail(data, userId, profileId, locale)
-}
-
-export function updateAccountProfilePrompt(data: Database, userId: string, profileId: string, promptId: string, locale: ApiLocale, payload: ProfilePromptMutationPayload) {
-  const permission = resolveProfileWritePermission(data, userId, profileId)
-  if (!permission) return null
-  if (permission === 'viewer') return 'forbidden' as const
-  const prompt = data.profile_prompts.find((item) => item.id === promptId && item.profileId === profileId)
-  if (!prompt) return null
-  prompt.promptCode = payload.promptCode
-  prompt.prompt = mergeTranslatedText(prompt.prompt, locale, payload.prompt)
-  prompt.answer = mergeTranslatedText(prompt.answer, locale, payload.answer)
-  prompt.sortOrder = payload.sortOrder ?? prompt.sortOrder
-  prompt.updatedAt = new Date().toISOString()
-  return getAccountProfileDetail(data, userId, profileId, locale)
-}
-
-export function deleteAccountProfilePrompt(data: Database, userId: string, profileId: string, promptId: string, requestedLocale: ApiLocale) {
-  const permission = resolveProfileWritePermission(data, userId, profileId)
-  if (!permission) return null
-  if (permission === 'viewer') return 'forbidden' as const
-  const before = data.profile_prompts.length
-  data.profile_prompts = data.profile_prompts.filter((item) => !(item.id === promptId && item.profileId === profileId))
-  return before === data.profile_prompts.length ? null : getAccountProfileDetail(data, userId, profileId, requestedLocale)
 }
 
 export function updateAccountProfileVisibility(data: Database, userId: string, profileId: string, payload: AccountProfileVisibilityUpdatePayload) {

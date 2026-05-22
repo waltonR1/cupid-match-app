@@ -120,7 +120,6 @@ export const accountCenterMessages: AppMessageSchema = {
       personalityTraits: 'Traits de personnalite',
       interests: 'Interets',
       communicationStyle: 'Style de communication',
-      prompts: 'Questions du profil',
       contactMethods: 'Coordonnees',
     },
     visibilityLevel: { public: 'Visible aux visiteurs', member: 'Visible aux membres', introduced: 'Visible apres presentation', owner_only: 'Visible seulement par moi', hidden: 'Masque' },
@@ -141,8 +140,8 @@ export const accountCenterMessages: AppMessageSchema = {
         approved: 'Approuvee',
         hidden: 'Masquee',
       },
-      placeholders: { photoUrl: 'URL de la photo', prompt: 'Question', answer: 'Reponse' },
-      sections: { editor: 'Edition rapide', ownership: 'Propriete du profil', photos: 'Photos', prompts: 'Questions du profil', basics: 'Informations de base', relationship: 'Relation et avenir', preferences: 'Preferences', lifestyle: 'Mode de vie', expression: 'Personnalite et expression', family: 'Aide familiale', contact: 'Coordonnees' },
+      placeholders: { photoUrl: 'URL de la photo' },
+      sections: { editor: 'Edition rapide', ownership: 'Propriete du profil', photos: 'Photos', basics: 'Informations de base', relationship: 'Relation et avenir', preferences: 'Preferences', lifestyle: 'Mode de vie', expression: 'Personnalite et expression', family: 'Aide familiale', contact: 'Coordonnees' },
       fields: {
         gender: 'Genre', birthYear: 'Annee de naissance', height: 'Taille', city: 'Ville', country: 'Pays', nationality: 'Nationalite',
         languages: 'Langues', degreeLevel: 'Niveau d etudes', education: 'Etudes', industry: 'Secteur', careerDirection: 'Orientation professionnelle',

@@ -34,7 +34,6 @@ export const SELF_PROFILE_MEMBER_ONLY_FIELDS = [
     'dealBreakers',
     'personalityTraits',
     'communicationStyle',
-    'prompts',
 ] as const
 
 export const SELF_PROFILE_GUEST_REQUIRED_FIELDS = [

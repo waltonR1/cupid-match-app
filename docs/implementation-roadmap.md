@@ -95,7 +95,7 @@ npm run build:h5
 8. `profile_visibility_settings` 当前代码不存在；现有 masking 由 profile access 常量和 service 统一处理。Phase 2 先把 detail 链路接入 visibility settings，默认值可沿用当前常量。
 9. account 当前仍读取旧 profile 字段、用户 onboarding 字段和联系方式相关聚合，是 profile 清理的最大阻塞点。Phase 1 必须先冻结 account。
 10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态迁移到 `user_onboarding_states`，注册不写 city。
-11. 当前 `photos / prompts / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / profile_prompts / event_agenda_items`。
+11. 当前 `photos / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / event_agenda_items`。
 12. 面向浏览者的 public profile detail 不直接返回 phone / email / wechat，这是正确方向；受控联系方式进入 `profile_contact_methods`。账户中心中的 owner-side profile detail 可以读取并维护本人管理档案的联系方式。
 13. 权限结果目前主要由后端 masking 给出，前端消费 locked placeholder；这是可承接方向，但应继续收敛为 DTO access/privacy 空间。
 14. 当前 `ProfileRecord` 实际承担数据库、筛选、account 聚合和 DTO 来源等多重职责。Phase 2 必须避免继续扩大这个万能对象。
@@ -361,7 +361,6 @@ interface ProfileRecord {
 - `datingIntentionLabel` 不在数据库保存，后端 DTO 里由 `datingIntentionCode` 通过字典 / i18n 派生。
 - `legalName`、`phone`、`email`、`wechat` 不在 `profiles` 主表。
 - `occupation` 不作为精确职位公开字段，优先使用 `industry` / `careerDirection`。
-- `photos`、`prompts` 不嵌套在 `profiles` 主表，使用独立集合 `profile_photos`、`profile_prompts`。
 
 profile 照片、问答、可见性配置：
 
@@ -377,17 +376,6 @@ interface ProfilePhotoRecord {
   updatedAt: string
 }
 
-interface ProfilePromptRecord {
-  id: string
-  profileId: string
-  promptCode: string
-  prompt: LocalizedText
-  answer: LocalizedText
-  sortOrder: number
-  status: 'active' | 'hidden'
-  createdAt: string
-  updatedAt: string
-}
 
 interface ProfileVisibilitySettingRecord {
   id: string
@@ -483,7 +471,6 @@ interface ProfileVerificationRecord {
 
 - `mock-server/db.json` 的 `profiles` 主表中无旧字段。
 - `mock-server/src/types/profile.ts` 的 `ProfileRecord` 中无旧字段。
-- `profile_photos`、`profile_prompts`、`profile_visibility_settings` 使用独立集合，不嵌套在 `profiles` 主表。
 - `profiles.displayName` 已移除，DTO 中的 `displayName` 由后端按 id 派生。
 - `profiles.createdAt`、`profiles.updatedAt` 存在。
 - 后台工作人员字段迁移到 internal / verification / contact 结构，不进入前台 profile 主表。
@@ -1111,7 +1098,6 @@ membership_entitlements
 user_entitlement_balances
 profiles
 profile_photos
-profile_prompts
 profile_ownerships
 profile_internal_records
 profile_verifications
@@ -1141,7 +1127,6 @@ advisor_follow_ups
 | `user_entitlement_balances` | 用户权益余额，例如本月剩余介绍次数。 |
 | `profiles` | 被撮合的相亲资料主体。 |
 | `profile_photos` | 资料照片。 |
-| `profile_prompts` | 资料问答。 |
 | `profile_ownerships` | 用户与资料的关系，例如本人、父母、顾问。 |
 | `profile_internal_records` | 后台和顾问可见的敏感运营资料。 |
 | `profile_verifications` | 实名、学历、身份、顾问审核等认证状态。 |
@@ -1352,7 +1337,6 @@ Contract 对齐要求：
 | `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
 | `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests`, user-visible `advisor_follow_ups` | `AccountDashboardDTO` | `AccountHomePageData` |
 | `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
-| `GET /api/account/profiles/:profileId` | `profiles`, `profile_photos`, `profile_prompts`, `profile_visibility_settings`, `profile_verifications`, `profile_ownerships` | `AccountProfileDetailDTO` | `AccountProfileDetailPageData` |
 | `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]`, `MembershipPlanDTO[]` | `AccountMembershipPageData` |
 | `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
 | `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountEventsPageData` |
@@ -1428,7 +1412,6 @@ account center 应按用户任务收敛为 6 个稳定页面：
 本阶段不做：
 
 - 不做 account 页面主字段编辑 UI。
-- 不做 profile 主字段、联系方式、照片、prompts 的写入。
 - 不把 archive 误做成物理删除。
 
 ### 生命周期规则
@@ -1501,7 +1484,6 @@ POST /api/account/profiles/:profileId/archive
 - profile main fields 更新。
 - profile contact methods 更新。
 - profile photos 更新。
-- profile prompts 更新。
 - profile archive 入口接入。
 - profile visibility settings 更新。
 - account basic fields 更新。
@@ -1525,7 +1507,6 @@ POST /api/account/profiles/:profileId/archive
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
   - 联系方式 section 在同页维护，但写入 `profile_contact_methods`，不回填 `profiles` 主表。
-  - 照片与 prompts 在同页维护，但分别写入 `profile_photos` / `profile_prompts`。
   - profile visibility 在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
 
@@ -1554,9 +1535,6 @@ POST /api/account/profiles/:profileId/contact-methods
 POST  /api/account/profiles/:profileId/photos
 POST /api/account/profiles/:profileId/photos/:photoId
 DELETE /api/account/profiles/:profileId/photos/:photoId
-POST  /api/account/profiles/:profileId/prompts
-POST /api/account/profiles/:profileId/prompts/:promptId
-DELETE /api/account/profiles/:profileId/prompts/:promptId
 POST  /api/account/profiles/:profileId/archive
 POST /api/account/profiles/:profileId/visibility
 POST /api/account/me
@@ -1570,7 +1548,6 @@ POST  /api/account/membership/upgrade
 | `POST /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
 | photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
-| prompt endpoints | `profile_prompts`, `profile_ownerships` | `ProfilePromptMutationPayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
 | `POST /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
 | `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
@@ -1588,7 +1565,6 @@ profile：
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
 - `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
-- 照片与 prompts 由独立接口更新 `profile_photos` / `profile_prompts`；同页展示不代表同表写入。
 - 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
@@ -1642,7 +1618,6 @@ membership：
 - 用户新建 profile 时由账户 onboarding 属性生成默认归属，之后可在统一 detail 页修改。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
-- 用户在拥有 `owner` / `manager` 权限时，可以维护照片和 prompts，且写入后刷新仍保持。
 - 用户在拥有 `owner` 权限且 profile 满足 archive 规则时，可以在 detail 页执行删除入口；profile 退出正常业务流但历史链路保留。
 - `viewer` 无法提交 profile 更新。
 - visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
@@ -1865,3 +1840,4 @@ mock-server/db.json 用扁平结构模拟未来结构化数据库，不要在 pr
 每个阶段结束后运行 npm run type-check、npm run mock:build；涉及 i18n 运行 npm run check:i18n；涉及 H5 页面运行 npm run build:h5。
 不要为了兼容保留旧字段，除非当前阶段明确要求延后处理。
 ```
+

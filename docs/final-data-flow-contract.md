@@ -21,7 +21,6 @@
 - 当前 `X-User-Id` 只允许作为 mock request context。
 - 本 contract 的目标是让前端消费稳定，并为未来 Java 后端复刻领域模型。
 - 页面只消费 API DTO / ViewModel，不直接依赖数据库 Record。
-- `mock-server/db.json` 按最终数据库集合建模，不再为了 mock 便利嵌套 `photos / prompts / agenda`。
 - Database Record、API DTO、Frontend ViewModel 必须分层。
 - API DTO 的业务字段尽量保持扁平；页面所需的 section / group / card 结构由前端 mapper 组装。`access`、`favorite`、`privateIntroduction` 这类独立状态对象可以保留，因为它们表达领域状态，不是页面分组。
 - 主表只保存稳定事实；展示名、年龄、头像、文案 label、权限结果、报名人数等可派生字段由后端 mapper / service 输出到 DTO。
@@ -39,7 +38,6 @@
 | 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
-| profile 问答 | `profile_prompts` | `prompts[]` | `profiles.prompts` |
 | profile 可见性 | `profile_visibility_settings` plus default constants | `access`, masked field values | frontend hardcoded member checks |
 | 联系方式 | `profile_contact_methods` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
 | 后台资料 | `profile_internal_records`, `profile_verifications` | advisor/admin DTO only | public profile DTO |
@@ -318,7 +316,6 @@ profile detail page
 -> viewer context from auth request
 -> profiles lookup
 -> profile_photos lookup
--> profile_prompts lookup for self detail
 -> profile_visibility_settings/default access policy
 -> favorite_profiles lookup for viewer
 -> private introduction state lookup for viewer
@@ -332,7 +329,6 @@ Database reads:
 ```text
 profiles
 profile_photos
-profile_prompts
 profile_visibility_settings
 profile_ownerships
 favorite_profiles
@@ -398,7 +394,6 @@ interface ProfileDetailBaseDTO {
 }
 
 interface SelfProfileDetailDTO extends ProfileDetailBaseDTO {
-  prompts: RestrictedProfileField<ProfilePromptDTO[]>
 }
 
 interface FamilyProfileDetailDTO extends ProfileDetailBaseDTO {}
@@ -406,7 +401,6 @@ interface FamilyProfileDetailDTO extends ProfileDetailBaseDTO {}
 
 前端可在 `src/mappers` 中把这些扁平字段组装为 `basics`、`relationship`、`lifestyle`、`preferences`、`family` 等页面 section；后端 DTO 不以页面分组作为字段结构来源。
 
-`profile_prompts` 是独立集合；当前最终 contract 只要求 self detail 返回 `prompts`，family detail 不默认返回该字段。
 
 Visibility input:
 
@@ -453,7 +447,6 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'prompts'
   | 'contactMethods'
 
 interface ProfileAccessDTO {
@@ -501,7 +494,6 @@ Forbidden:
 
 - Do not return contact values in profile detail.
 - Do not let frontend decide raw field masking with scattered `isMember` checks.
-- Do not use nested `profile.photos` or `profile.prompts` as final source.
 
 ## Profile Self / Family Detail Chain
 
@@ -528,7 +520,6 @@ profile_ownerships:
 
 profiles
 profile_photos
-profile_prompts
 profile_visibility_settings
 ```
 
@@ -547,11 +538,10 @@ Flow:
 profile create/edit page
 -> profile api
 -> profiles write
--> profile_photos/profile_prompts writes through separate endpoints where applicable
+-> profile_photos writes through separate endpoints where applicable
 -> profile_ownerships created or updated
 ```
 
-Profile create/update writes only the profile main table fields. Photos and prompts use separate profile photo / prompt endpoints and write `profile_photos` / `profile_prompts`; contact, internal, and verification records never travel through `ProfileCreatePayload`.
 
 Localized write rule:
 
@@ -614,8 +604,6 @@ Separate writes:
 profile_photos:
   url, isPrimary, sortOrder, status
 
-profile_prompts:
-  promptCode, prompt, answer, sortOrder, status
 
 profile_contact_methods:
   type, value, verifiedAt, visibleAfterIntroduction
@@ -644,7 +632,6 @@ profiles.phone
 profiles.email
 profiles.wechat
 profiles.photos
-profiles.prompts
 profiles.pronouns
 profiles.sexuality
 profiles.interestedIn
@@ -678,7 +665,6 @@ Rules:
 - The current user becomes the initial `owner`.
 - The create action derives an initial ownership default from account attributes; the owner may later adjust it from profile detail.
 - The created profile uses the same unified self / family account detail editor afterward.
-- Photos, prompts, contact methods, verification and visibility remain on their own chains.
 
 ### Managed profile update
 
@@ -697,7 +683,6 @@ Rules:
 - Only `owner` and `manager` can write.
 - `viewer` is read-only.
 - This endpoint writes only profile main-table fields.
-- Contact methods, internal records, verification, photos and prompts stay on separate chains.
 - Localized fields write only to the current request locale slot.
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
 
@@ -758,23 +743,6 @@ Rules:
 - Newly uploaded account photos start in `review`; debug or admin review moves them to `approved` or `hidden`.
 - At most one approved primary photo may exist per profile.
 
-### Managed profile prompts update
-
-```text
-/pages/account/profile-detail
--> prompts editor
--> POST / POST / DELETE profile prompt endpoints
--> ownership permission check
--> profile_prompts write
--> rebuild AccountProfileDetailDTO
--> refresh AccountProfileDetailPageData
-```
-
-Rules:
-
-- Prompts are maintained from the unified owner-side profile detail page.
-- Prompt writes stay in `profile_prompts`, not the profile main table.
-- Localized prompt / answer fields still write to the current request locale slot.
 
 ### Managed profile archive
 
@@ -1383,7 +1351,6 @@ phone
 email
 wechat
 photos
-prompts
 employer
 incomeRange
 religion
@@ -1398,7 +1365,6 @@ Move to independent collections:
 
 ```text
 photos -> profile_photos
-prompts -> profile_prompts
 phone/email/wechat -> profile_contact_methods
 legalName/dateOfBirth/statuses -> profile_verifications
 employer/income/religion/political/staff notes -> profile_internal_records
@@ -1437,3 +1403,4 @@ Before generating or changing code for any chain:
 6. Keep page code on hooks and DTOs only.
 7. Reject any implementation that adds removed fields back to `users`, `profiles`, or `events`.
 8. Update `docs/project-database-fields.md` after implementation changes current schema.
+

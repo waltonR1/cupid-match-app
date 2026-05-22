@@ -53,7 +53,6 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'prompts'
   | 'contactMethods'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
@@ -523,7 +522,6 @@ interface AccountProfileDetailPageData {
   ownershipBadges: string[]
   sections: AccountProfileDetailSectionViewModel[]
   photos: AccountProfilePhotoViewModel[]
-  prompts: AccountProfilePromptViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
   visibilityItems: ProfileVisibilitySettingViewModel[]
   visibilityGroups: ProfileVisibilityGroupViewModel[]
@@ -565,16 +563,6 @@ interface AccountProfilePhotoViewModel {
   deleteAction?: PageActionViewModel
 }
 
-interface AccountProfilePromptViewModel {
-  id: string
-  promptCode: string
-  prompt: string
-  answer: string
-  sortOrder: number
-  editable: boolean
-  updateAction?: PageActionViewModel
-  deleteAction?: PageActionViewModel
-}
 
 interface ProfileVisibilityGroupViewModel {
   key: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
@@ -845,7 +833,6 @@ profile.conversationStarters
 profile.dateIdeas
 profile.compatibilityDimensions
 profile.photos as embedded DB field
-profile.prompts as embedded DB field
 privacy_settings.title
 privacy_settings.desc
 message_threads as final account messages source
@@ -858,3 +845,4 @@ message_threads as final account messages source
 - 活动报名来自 event registration DTO。
 - 私人介绍和消息来自 private introduction request / room DTO。
 - 页面 label、标题、说明来自前端 i18n。
+
