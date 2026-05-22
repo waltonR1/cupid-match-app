@@ -45,7 +45,7 @@ interface AccountProfileDetailDTO {
     value: string
     visibleAfterIntroduction: boolean
   }>
-  photos: Array<{ id: string; url: string; caption: string; isPrimary: boolean; sortOrder: number }>
+  photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: Database['profile_photos'][number]['status'] }>
   prompts: Array<{ id: string; promptCode: string; prompt: string; answer: string; sortOrder: number }>
   gender: string
   birthYear: number
@@ -316,7 +316,6 @@ interface AccountProfileVisibilityUpdatePayload {
 
 interface ProfilePhotoMutationPayload {
   url: string
-  caption?: string
   isPrimary?: boolean
   sortOrder?: number
 }
@@ -514,9 +513,9 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
       .map((item) => ({
         id: item.id,
         url: item.url,
-        caption: resolveLocalizedText(locale, item.caption),
         isPrimary: item.isPrimary,
         sortOrder: item.sortOrder,
+        status: item.status,
       })),
     prompts: data.profile_prompts
       .filter((item) => item.profileId === profileId)
@@ -695,10 +694,9 @@ export function createAccountProfilePhoto(data: Database, userId: string, profil
     id: nextId('photo', data.profile_photos),
     profileId,
     url: payload.url,
-    caption: mergeTranslatedText(undefined, locale, payload.caption ?? ''),
     isPrimary: payload.isPrimary ?? false,
     sortOrder: payload.sortOrder ?? data.profile_photos.filter((item) => item.profileId === profileId).length + 1,
-    status: 'approved',
+    status: 'review',
     createdAt: now,
     updatedAt: now,
   })
@@ -713,9 +711,6 @@ export function updateAccountProfilePhoto(data: Database, userId: string, profil
   if (!photo) return null
   if (payload.isPrimary) clearPrimaryPhotos(data, profileId)
   photo.url = payload.url
-  if (payload.caption !== undefined) {
-    photo.caption = mergeTranslatedText(photo.caption, locale, payload.caption)
-  }
   photo.isPrimary = payload.isPrimary ?? photo.isPrimary
   photo.sortOrder = payload.sortOrder ?? photo.sortOrder
   photo.updatedAt = new Date().toISOString()

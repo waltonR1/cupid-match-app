@@ -136,6 +136,11 @@ export const accountCenterMessages: AppMessageSchema = {
       editNotice: 'This profile can now be updated. Keep fields accurate and use the side panel for custom visibility.',
       photoPrimary: 'Primary photo',
       setPrimary: 'Set as primary',
+      photoStatus: {
+        review: 'In review',
+        approved: 'Approved',
+        hidden: 'Hidden',
+      },
       placeholders: { photoUrl: 'Photo URL', prompt: 'Prompt', answer: 'Answer' },
       sections: { editor: 'Quick edit', ownership: 'Profile ownership', photos: 'Photos', prompts: 'Profile prompts', basics: 'Basics', relationship: 'Relationship and future', preferences: 'Partner preferences', lifestyle: 'Lifestyle', expression: 'Personality and expression', family: 'Family support', contact: 'Contact methods' },
       fields: {

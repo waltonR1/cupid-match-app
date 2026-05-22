@@ -4576,29 +4576,6 @@
       "id": "p-001-photo-1",
       "profileId": "p-001",
       "url": "https://picsum.photos/seed/p-001-1/900/1200",
-      "caption": {
-        "zh": {
-          "value": "主照片",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo principale",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Primary photo",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": true,
       "sortOrder": 1,
       "status": "approved",
@@ -4609,29 +4586,6 @@
       "id": "p-001-photo-2",
       "profileId": "p-001",
       "url": "https://picsum.photos/seed/p-001-2/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 2,
       "status": "approved",
@@ -4642,29 +4596,6 @@
       "id": "p-001-photo-3",
       "profileId": "p-001",
       "url": "https://picsum.photos/seed/p-001-3/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 3,
       "status": "approved",
@@ -4675,29 +4606,6 @@
       "id": "p-002-photo-1",
       "profileId": "p-002",
       "url": "https://picsum.photos/seed/p-002-1/900/1200",
-      "caption": {
-        "zh": {
-          "value": "主照片",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo principale",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Primary photo",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": true,
       "sortOrder": 1,
       "status": "approved",
@@ -4708,29 +4616,6 @@
       "id": "p-002-photo-2",
       "profileId": "p-002",
       "url": "https://picsum.photos/seed/p-002-2/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 2,
       "status": "approved",
@@ -4741,29 +4626,6 @@
       "id": "p-002-photo-3",
       "profileId": "p-002",
       "url": "https://picsum.photos/seed/p-002-3/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 3,
       "status": "approved",
@@ -4774,29 +4636,6 @@
       "id": "p-006-photo-1",
       "profileId": "p-006",
       "url": "https://picsum.photos/seed/p-006-1/900/1200",
-      "caption": {
-        "zh": {
-          "value": "主照片",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo principale",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Primary photo",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": true,
       "sortOrder": 1,
       "status": "approved",
@@ -4807,29 +4646,6 @@
       "id": "p-006-photo-2",
       "profileId": "p-006",
       "url": "https://picsum.photos/seed/p-006-2/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 2,
       "status": "approved",
@@ -4840,29 +4656,6 @@
       "id": "p-006-photo-3",
       "profileId": "p-006",
       "url": "https://picsum.photos/seed/p-006-3/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 3,
       "status": "approved",
@@ -4873,29 +4666,6 @@
       "id": "p-009-photo-1",
       "profileId": "p-009",
       "url": "https://picsum.photos/seed/p-009-1/900/1200",
-      "caption": {
-        "zh": {
-          "value": "主照片",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo principale",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Primary photo",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": true,
       "sortOrder": 1,
       "status": "approved",
@@ -4906,29 +4676,6 @@
       "id": "p-009-photo-2",
       "profileId": "p-009",
       "url": "https://picsum.photos/seed/p-009-2/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 2,
       "status": "approved",
@@ -4939,29 +4686,6 @@
       "id": "p-009-photo-3",
       "profileId": "p-009",
       "url": "https://picsum.photos/seed/p-009-3/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 3,
       "status": "approved",
@@ -4972,29 +4696,6 @@
       "id": "p-010-photo-1",
       "profileId": "p-010",
       "url": "https://picsum.photos/seed/p-010-1/900/1200",
-      "caption": {
-        "zh": {
-          "value": "主照片",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo principale",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Primary photo",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": true,
       "sortOrder": 1,
       "status": "approved",
@@ -5005,29 +4706,6 @@
       "id": "p-010-photo-2",
       "profileId": "p-010",
       "url": "https://picsum.photos/seed/p-010-2/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 2",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 2,
       "status": "approved",
@@ -5038,29 +4716,6 @@
       "id": "p-010-photo-3",
       "profileId": "p-010",
       "url": "https://picsum.photos/seed/p-010-3/900/1200",
-      "caption": {
-        "zh": {
-          "value": "生活照片 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Photo de vie 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Lifestyle photo 3",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "isPrimary": false,
       "sortOrder": 3,
       "status": "approved",

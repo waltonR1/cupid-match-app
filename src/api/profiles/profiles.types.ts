@@ -60,7 +60,6 @@ export type FamilyModeCode = 'priority' | 'contact_ready' | 'context_only'
 export interface ProfilePhoto {
     id: string
     url: string
-    caption: string
     isPrimary: boolean
 }
 

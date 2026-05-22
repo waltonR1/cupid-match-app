@@ -401,10 +401,9 @@ interface ProfilePhotoRecord {
   id: string
   profileId: string
   url: string
-  caption: LocalizedText
   isPrimary: boolean
   sortOrder: number
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'review' | 'approved' | 'hidden'
   createdAt: string
   updatedAt: string
 }

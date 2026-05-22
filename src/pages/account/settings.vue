@@ -59,13 +59,14 @@
                 </view>
                 <input
                   v-model="accountDraft.avatarUrl"
-                  class="mt-1 w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  class="mt-1 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                 />
               </view>
               <view
                   v-for="item in pageData.account.items"
                   :key="item.key"
                   class="px-3 py-3"
+                  :class="editing && item.key === 'accountName' ? 'md:col-span-2' : ''"
               >
                 <view class="text-[12px] leading-5 text-semantic-text-muted">
                   {{ item.label }}
@@ -74,7 +75,7 @@
                 <input
                   v-if="editing && item.key === 'accountName'"
                   v-model="accountDraft.accountName"
-                  class="mt-1 w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  class="mt-1 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                 />
                 <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
                   {{ item.value }}
@@ -203,13 +204,13 @@
                 <input
                   v-if="editing && item.code === 'preferred_city'"
                   :value="String(readPreference(item.code) ?? '')"
-                  class="w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                   @input="writePreference(item.code, getInputValue($event))"
                 />
                 <input
                   v-else-if="editing && item.code === 'preferred_contact_channel'"
                   :value="String(readPreference(item.code) ?? '')"
-                  class="w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px]"
+                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                   @input="writePreference(item.code, getInputValue($event))"
                 />
                 <view v-else-if="editing" class="flex flex-wrap gap-2">

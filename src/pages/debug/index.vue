@@ -69,5 +69,11 @@ const debugItems = [
     description: '预览 self / family detail 在 Backend、Guest、Free、Member 下的字段展示差异。',
     path: '/pages/debug/profile-access-preview',
   },
+  {
+    label: 'Profile Photos',
+    title: '资料照片审核',
+    description: '查看 profile 照片，并模拟待审核、已通过、已隐藏状态切换。',
+    path: '/pages/debug/profile-photos',
+  },
 ]
 </script>

@@ -556,9 +556,10 @@ interface AccountProfileEditStateViewModel {
 interface AccountProfilePhotoViewModel {
   id: string
   url: string
-  caption: string
   isPrimary: boolean
   sortOrder: number
+  status: 'review' | 'approved' | 'hidden'
+  statusLabel: string
   editable: boolean
   updateAction?: PageActionViewModel
   deleteAction?: PageActionViewModel

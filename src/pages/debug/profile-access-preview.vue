@@ -26,7 +26,7 @@
               <view class="mb-2 text-[12px] tracking-[1px] text-semantic-text-muted">Profile ID</view>
               <input
                 v-model="profileIdInput"
-                class="h-[40px] w-full border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] text-semantic-text-primary"
+                class="box-border min-h-[44px] w-full min-w-[220px] border border-semantic-border-default bg-semantic-surface-soft px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
               />
             </view>
 

@@ -176,6 +176,13 @@
       }
     },
     {
+      "path": "pages/debug/profile-photos",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "Profile Photo Review"
+      }
+    },
+    {
       "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",

@@ -612,7 +612,7 @@ Separate writes:
 
 ```text
 profile_photos:
-  url, caption, isPrimary, sortOrder, status
+  url, isPrimary, sortOrder, status
 
 profile_prompts:
   promptCode, prompt, answer, sortOrder, status
@@ -754,6 +754,8 @@ Rules:
 
 - Photos are maintained from the unified owner-side profile detail page.
 - Photo writes stay in `profile_photos`; `avatarUrl` remains derived from the approved primary photo.
+- Public profile chains only expose approved profile photos.
+- Newly uploaded account photos start in `review`; debug or admin review moves them to `approved` or `hidden`.
 - At most one approved primary photo may exist per profile.
 
 ### Managed profile prompts update

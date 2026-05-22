@@ -136,6 +136,11 @@ export const accountCenterMessages: AppMessageSchema = {
       editNotice: 'Ce profil peut maintenant etre mis a jour. Gardez les champs justes et utilisez le panneau lateral pour la visibilite personnalisee.',
       photoPrimary: 'Photo principale',
       setPrimary: 'Definir comme principale',
+      photoStatus: {
+        review: 'En verification',
+        approved: 'Approuvee',
+        hidden: 'Masquee',
+      },
       placeholders: { photoUrl: 'URL de la photo', prompt: 'Question', answer: 'Reponse' },
       sections: { editor: 'Edition rapide', ownership: 'Propriete du profil', photos: 'Photos', prompts: 'Questions du profil', basics: 'Informations de base', relationship: 'Relation et avenir', preferences: 'Preferences', lifestyle: 'Mode de vie', expression: 'Personnalite et expression', family: 'Aide familiale', contact: 'Coordonnees' },
       fields: {

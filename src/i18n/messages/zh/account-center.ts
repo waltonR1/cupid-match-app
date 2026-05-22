@@ -154,6 +154,11 @@ export const accountCenterMessages: AppMessageSchema = {
       editNotice: '当前资料已可写入。请按真实情况维护字段，并在右侧控制个性化可见范围。',
       photoPrimary: '主照片',
       setPrimary: '设为主照片',
+      photoStatus: {
+        review: '待审核',
+        approved: '已通过',
+        hidden: '已隐藏',
+      },
       placeholders: { photoUrl: '照片 URL', prompt: '问题', answer: '回答' },
       sections: {
         editor: '快速编辑',
