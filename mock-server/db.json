@@ -4543,7 +4543,7 @@
   ],
   "profile_ownerships": [
     {
-      "id": "po-001",
+      "id": "ownership-001",
       "profileId": "p-002",
       "userId": "u-001",
       "role": "self",
