@@ -89,6 +89,8 @@ export const accountCenterMessages: AppMessageSchema = {
       education: '学历认证',
       income: '收入认证',
       marital: '婚姻认证',
+      platformReview: '平台审核',
+      verifiedAt: '完成时间',
     },
     verificationStatus: {
       unverified: '未认证',
@@ -96,6 +98,8 @@ export const accountCenterMessages: AppMessageSchema = {
       verified: '已认证',
       rejected: '未通过',
     },
+    reviewStatus: { unreviewed: '未审核', pending: '审核中', approved: '已通过', rejected: '未通过' },
+    verificationPanel: { title: '资料认证', description: '由平台工作人员审核的信任状态。编辑资料字段不会直接改变这些状态。' },
     visibilityField: {
       photos: '照片',
       country: '国家',

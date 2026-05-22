@@ -75,5 +75,11 @@ const debugItems = [
     description: '查看 profile 照片，并模拟待审核、已通过、已隐藏状态切换。',
     path: '/pages/debug/profile-photos',
   },
+  {
+    label: 'Profile Verification',
+    title: '资料认证审核',
+    description: '查看 profile_verifications，并模拟身份、学历、收入、婚姻和平台审核状态。',
+    path: '/pages/debug/profile-verifications',
+  },
 ]
 </script>

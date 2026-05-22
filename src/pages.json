@@ -183,6 +183,13 @@
       }
     },
     {
+      "path": "pages/debug/profile-verifications",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "Profile Verification Review"
+      }
+    },
+    {
       "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",

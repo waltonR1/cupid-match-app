@@ -88,8 +88,10 @@ export const accountCenterMessages: AppMessageSchema = {
     profileType: { self: 'Profil personnel', family: 'Profil gere par la famille' },
     permission: { owner: 'Modifiable', manager: 'Gerable', viewer: 'Lecture seule' },
     status: { draft: 'Brouillon', review: 'En verification', open: 'Ouvert', paused: 'En pause', hidden: 'Masque' },
-    verification: { identity: 'Verification d identite', education: 'Verification des etudes', income: 'Verification des revenus', marital: 'Verification matrimoniale' },
+    verification: { identity: 'Verification d identite', education: 'Verification des etudes', income: 'Verification des revenus', marital: 'Verification matrimoniale', platformReview: 'Revue plateforme', verifiedAt: 'Verifie le' },
     verificationStatus: { unverified: 'Non verifie', pending: 'En cours', verified: 'Verifie', rejected: 'Refuse' },
+    reviewStatus: { unreviewed: 'Non examine', pending: 'En cours', approved: 'Approuve', rejected: 'Refuse' },
+    verificationPanel: { title: 'Verification', description: 'Signaux de confiance examines par la plateforme. Modifier le profil ne change pas ces statuts.' },
     visibilityField: {
       photos: 'Photos',
       country: 'Pays',

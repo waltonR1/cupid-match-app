@@ -88,8 +88,10 @@ export const accountCenterMessages: AppMessageSchema = {
     profileType: { self: 'Self profile', family: 'Family-managed profile' },
     permission: { owner: 'Editable', manager: 'Manageable', viewer: 'View only' },
     status: { draft: 'Draft', review: 'Under review', open: 'Open', paused: 'Paused', hidden: 'Hidden' },
-    verification: { identity: 'Identity verification', education: 'Education verification', income: 'Income verification', marital: 'Marital verification' },
+    verification: { identity: 'Identity verification', education: 'Education verification', income: 'Income verification', marital: 'Marital verification', platformReview: 'Platform review', verifiedAt: 'Verified at' },
     verificationStatus: { unverified: 'Unverified', pending: 'Pending', verified: 'Verified', rejected: 'Rejected' },
+    reviewStatus: { unreviewed: 'Unreviewed', pending: 'Pending', approved: 'Approved', rejected: 'Rejected' },
+    verificationPanel: { title: 'Verification', description: 'Trust signals reviewed by the platform. Editing profile fields does not change these statuses.' },
     visibilityField: {
       photos: 'Photos',
       country: 'Country',
