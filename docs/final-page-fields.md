@@ -55,7 +55,7 @@ type ProfileFieldCode =
   | 'communicationStyle'
   | 'contactMethods'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
-type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'membership' | 'settings'
 type AccountPreferenceCode =
   | 'preferred_city'
@@ -576,7 +576,8 @@ interface ProfileVerificationSummaryViewModel {
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
-  advisorStatus: AdvisorReviewStatus
+  reviewStatus: ProfileReviewStatus
+  verifiedAtText?: string
 }
 ```
 

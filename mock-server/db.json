@@ -4738,7 +4738,9 @@
       "educationStatus": "verified",
       "incomeStatus": "verified",
       "maritalStatus": "verified",
-      "advisorStatus": "approved",
+      "reviewStatus": "approved",
+      "verifiedAt": "2026-04-20T18:30:00Z",
+      "verifiedByUserId": "u-001",
       "createdAt": "2026-01-12",
       "updatedAt": "2026-04-20T18:30:00Z"
     },
@@ -4750,7 +4752,9 @@
       "educationStatus": "verified",
       "incomeStatus": "verified",
       "maritalStatus": "verified",
-      "advisorStatus": "approved",
+      "reviewStatus": "approved",
+      "verifiedAt": "2026-04-20T18:30:00Z",
+      "verifiedByUserId": "u-001",
       "createdAt": "2026-01-18",
       "updatedAt": "2026-04-22T09:00:00Z"
     },
@@ -4762,7 +4766,9 @@
       "educationStatus": "verified",
       "incomeStatus": "verified",
       "maritalStatus": "verified",
-      "advisorStatus": "approved",
+      "reviewStatus": "approved",
+      "verifiedAt": "2026-04-20T18:30:00Z",
+      "verifiedByUserId": "u-001",
       "createdAt": "2026-03-01",
       "updatedAt": "2026-04-21T20:30:00Z"
     },
@@ -4774,7 +4780,9 @@
       "educationStatus": "verified",
       "incomeStatus": "verified",
       "maritalStatus": "verified",
-      "advisorStatus": "approved",
+      "reviewStatus": "approved",
+      "verifiedAt": "2026-04-20T18:30:00Z",
+      "verifiedByUserId": "u-001",
       "createdAt": "2026-02-02",
       "updatedAt": "2026-04-25T07:50:00Z"
     },
@@ -4786,7 +4794,9 @@
       "educationStatus": "verified",
       "incomeStatus": "verified",
       "maritalStatus": "verified",
-      "advisorStatus": "approved",
+      "reviewStatus": "approved",
+      "verifiedAt": "2026-04-20T18:30:00Z",
+      "verifiedByUserId": "u-001",
       "createdAt": "2026-02-14",
       "updatedAt": "2026-04-21T10:45:00Z"
     }

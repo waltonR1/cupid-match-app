@@ -188,7 +188,9 @@ interface AccountProfileVerificationDTO {
   educationStatus: Database['profile_verifications'][number]['educationStatus']
   incomeStatus: Database['profile_verifications'][number]['incomeStatus']
   maritalStatus: Database['profile_verifications'][number]['maritalStatus']
-  advisorStatus: Database['profile_verifications'][number]['advisorStatus']
+  reviewStatus: Database['profile_verifications'][number]['reviewStatus']
+  verifiedAt?: string
+  verifiedByUserId?: string
 }
 
 interface AccountProfileVisibilityDTO {
@@ -503,7 +505,9 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
       educationStatus: verification?.educationStatus ?? 'unverified',
       incomeStatus: verification?.incomeStatus ?? 'unverified',
       maritalStatus: verification?.maritalStatus ?? 'unverified',
-      advisorStatus: verification?.advisorStatus ?? 'unreviewed',
+      reviewStatus: verification?.reviewStatus ?? 'unreviewed',
+      verifiedAt: verification?.verifiedAt,
+      verifiedByUserId: verification?.verifiedByUserId,
     },
     visibility,
     contactMethods,
@@ -618,6 +622,17 @@ export function createAccountProfile(data: Database, userId: string, locale: Api
     permission: 'owner',
     status: 'active',
     isPrimary: false,
+    createdAt: now,
+    updatedAt: now,
+  })
+  data.profile_verifications.push({
+    id: nextId('verification', data.profile_verifications),
+    profileId,
+    identityStatus: 'unverified',
+    educationStatus: 'unverified',
+    incomeStatus: 'unverified',
+    maritalStatus: 'unverified',
+    reviewStatus: 'unreviewed',
     createdAt: now,
     updatedAt: now,
   })
@@ -1007,7 +1022,9 @@ function toManagedProfileSummary(
       educationStatus: verif?.educationStatus ?? 'unverified',
       incomeStatus: verif?.incomeStatus ?? 'unverified',
       maritalStatus: verif?.maritalStatus ?? 'unverified',
-      advisorStatus: verif?.advisorStatus ?? 'unreviewed',
+      reviewStatus: verif?.reviewStatus ?? 'unreviewed',
+      verifiedAt: verif?.verifiedAt,
+      verifiedByUserId: verif?.verifiedByUserId,
     },
   }
 }

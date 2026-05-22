@@ -612,7 +612,7 @@ profile_internal_records:
   employer, incomeRange, staffNotes, riskFlags, source, updatedByUserId
 
 profile_verifications:
-  legalName, dateOfBirth, identityStatus, educationStatus, incomeStatus, maritalStatus, advisorStatus
+  legalName, dateOfBirth, identityStatus, educationStatus, incomeStatus, maritalStatus, reviewStatus, verifiedAt, verifiedByUserId
 
 profile_visibility_settings:
   fieldCode, visibility, lockedByAdvisor, reason
@@ -655,6 +655,7 @@ profiles.compatibilityDimensions
 -> POST /api/account/profiles
 -> create profiles row
 -> derive initial current-user owner ownership from account attributes
+-> create profile_verifications row with unverified / unreviewed defaults
 -> rebuild AccountProfileDetailDTO
 -> open / refresh AccountProfileDetailPageData
 ```
@@ -665,6 +666,8 @@ Rules:
 - The current user becomes the initial `owner`.
 - The create action derives an initial ownership default from account attributes; the owner may later adjust it from profile detail.
 - The created profile uses the same unified self / family account detail editor afterward.
+- Create must write `profiles`, `profile_ownerships`, and `profile_verifications`.
+- `profile_photos`, `profile_contact_methods`, `profile_visibility_settings`, and `profile_internal_records` remain on-demand collections.
 
 ### Managed profile update
 

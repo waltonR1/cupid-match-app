@@ -37,7 +37,7 @@ type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTROD
 type RestrictedProfileField<T> = T | ProfileFieldLockCode
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
-type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 type ProfileFieldCode =
   | 'photos'
@@ -837,7 +837,9 @@ interface AccountProfileVerificationDTO {
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
-  advisorStatus: AdvisorReviewStatus
+  reviewStatus: ProfileReviewStatus
+  verifiedAt?: string
+  verifiedByUserId?: string
 }
 ```
 

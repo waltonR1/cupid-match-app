@@ -1,7 +1,7 @@
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
-export type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+export type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
@@ -190,7 +190,9 @@ export interface AccountProfileVerificationDTO {
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
-  advisorStatus: AdvisorReviewStatus
+  reviewStatus: ProfileReviewStatus
+  verifiedAt?: string
+  verifiedByUserId?: string
 }
 
 export interface AccountProfileVisibilityDTO {

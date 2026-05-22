@@ -24,8 +24,9 @@ function buildVerificationSummary(
     verification.educationStatus,
     verification.incomeStatus,
     verification.maritalStatus,
+    verification.reviewStatus,
   ]
-  const verifiedCount = statuses.filter((status) => status === 'verified').length
+  const verifiedCount = statuses.filter((status) => status === 'verified' || status === 'approved').length
 
   return {
     value: `${verifiedCount}/${statuses.length}`,

@@ -94,7 +94,7 @@ type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileFieldVisibility = 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
-type AdvisorReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
+type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
 type ProfileFieldCode =
   | 'photos'
@@ -461,9 +461,9 @@ interface ProfileVerificationRecord {
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
-  advisorStatus: AdvisorReviewStatus
+  reviewStatus: ProfileReviewStatus
   verifiedAt?: string
-  verifiedBy?: string
+  verifiedByUserId?: string
   createdAt: string
   updatedAt: string
 }
@@ -808,6 +808,7 @@ legal_document_contents: unique(documentId, locale)
 user_agreement_acceptances: unique(userId, documentType)
 user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)
+profile_verifications: unique(profileId)
 profile_contact_methods: unique(profileId, type, value)
 profile_visibility_settings: unique(profileId, fieldCode)
 user_memberships: index(userId, status)

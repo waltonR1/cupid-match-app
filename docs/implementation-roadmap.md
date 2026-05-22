@@ -444,9 +444,9 @@ interface ProfileVerificationRecord {
   educationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
   incomeStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
   maritalStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-  advisorStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
+  reviewStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
   verifiedAt?: string
-  verifiedBy?: string
+  verifiedByUserId?: string
   createdAt: string
   updatedAt: string
 }
@@ -1131,7 +1131,7 @@ advisor_follow_ups
 | `profile_photos` | 资料照片。 |
 | `profile_ownerships` | 用户与资料的关系，例如本人、父母、亲属。 |
 | `profile_internal_records` | 后台工作人员可见的敏感运营资料。 |
-| `profile_verifications` | 实名、学历、身份、顾问审核等认证状态。 |
+| `profile_verifications` | 实名、学历、收入、婚姻状态和平台审核等认证状态。 |
 | `profile_contact_methods` | 受控联系方式。 |
 | `profile_visibility_settings` | profile 字段可见性配置。 |
 | `favorite_profiles` | 用户收藏关系。 |
