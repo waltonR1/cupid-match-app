@@ -480,15 +480,16 @@ interface AdvisorFollowUpViewModel {
 ```ts
 interface ManagedProfileSummaryViewModel {
   profileId: string
+  profileType: 'self' | 'family'
   displayName: string
   avatarUrl: string
   age: string
   city: string
   archived: boolean
   archivedAtText?: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   permission: 'owner' | 'manager' | 'viewer'
+  ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isPriorityProfile: boolean
   isPrimary: boolean
@@ -504,12 +505,12 @@ interface AccountProfilesPageData {
 
 interface AccountManagedProfileCreateViewModel {
   ownershipOptions: Array<{
-    role: 'self' | 'parent' | 'guardian'
+    profileType: 'self' | 'family'
     relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
     label: string
   }>
   defaultOwnership?: {
-    role: 'self' | 'parent' | 'guardian'
+    profileType: 'self' | 'family'
     relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   }
   submitAction: PageActionViewModel
@@ -845,4 +846,3 @@ message_threads as final account messages source
 - 活动报名来自 event registration DTO。
 - 私人介绍和消息来自 private introduction request / room DTO。
 - 页面 label、标题、说明来自前端 i18n。
-

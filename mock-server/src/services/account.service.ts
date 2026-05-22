@@ -29,13 +29,17 @@ interface AccountProfilesDTO {
 
 interface AccountProfileDetailDTO {
   profileId: string
+  profileType: ProfileRecord['profileType']
   displayName: string
   avatarUrl: string
   isBlankDraft: boolean
   ownership: {
-    role: string
-    relationshipToProfile?: string
-    permission: string
+    relationshipToProfile: Database['profile_ownerships'][number]['relationshipToProfile']
+    permission: Database['profile_ownerships'][number]['permission']
+    status: Database['profile_ownerships'][number]['status']
+    invitedByUserId?: string
+    acceptedAt?: string
+    revokedAt?: string
     isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
@@ -165,13 +169,14 @@ interface AccountPreferencesDTO {
 
 interface ManagedProfileSummaryDTO {
   profileId: string
+  profileType: ProfileRecord['profileType']
   displayName: string
   avatarUrl: string
   age: number
   city: string
-  role: string
-  relationshipToProfile?: string
-  permission: string
+  relationshipToProfile: Database['profile_ownerships'][number]['relationshipToProfile']
+  permission: Database['profile_ownerships'][number]['permission']
+  ownershipStatus: Database['profile_ownerships'][number]['status']
   profileStatus: string
   isPriorityProfile: boolean
   isPrimary: boolean
@@ -293,15 +298,14 @@ type AccountProfileMutablePayload = {
 }
 
 interface AccountManagedProfileCreatePayload {
-  role?: 'self' | 'parent' | 'guardian'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative'
+  profileType?: ProfileRecord['profileType']
+  relationshipToProfile?: Database['profile_ownerships'][number]['relationshipToProfile']
 }
 
 type AccountProfileUpdatePayload = AccountProfileMutablePayload
 
 interface AccountProfileOwnershipUpdatePayload {
-  role: 'self' | 'parent' | 'guardian'
-  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  relationshipToProfile: Database['profile_ownerships'][number]['relationshipToProfile']
   isPrimary: boolean
 }
 
@@ -371,7 +375,7 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
   const plan = membership ? findActivePlan(data, membership.tier) : findActivePlan(data, 'free')
   const locale = user.preferredLocale
 
-  const ownerships = data.profile_ownerships.filter((o) => o.userId === userId)
+  const ownerships = data.profile_ownerships.filter((o) => o.userId === userId && o.status === 'active')
   const profiles = ownerships.map((o) => {
     const profile = data.profiles.find((p) => p.id === o.profileId)
     if (!profile || profile.archivedAt) return null
@@ -448,7 +452,7 @@ export function getAccountProfiles(data: Database, userId: string): AccountProfi
   if (!user) return null
 
   const locale = user.preferredLocale
-  const ownerships = data.profile_ownerships.filter((o) => o.userId === userId)
+  const ownerships = data.profile_ownerships.filter((o) => o.userId === userId && o.status === 'active')
 
   const profiles = ownerships.map((o) => {
     const profile = data.profiles.find((p) => p.id === o.profileId)
@@ -463,7 +467,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
   const user = findUser(data, userId)
   if (!user) return null
 
-  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
+  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId && item.status === 'active')
   const profile = data.profiles.find((item) => item.id === profileId)
   if (!ownership || !profile || profile.archivedAt) return null
 
@@ -481,13 +485,17 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
 
   return {
     profileId,
+    profileType: profile.profileType,
     displayName: view.displayName,
     avatarUrl: view.avatarUrl,
     isBlankDraft: isBlankDraftProfile(profile),
     ownership: {
-      role: ownership.role,
       relationshipToProfile: ownership.relationshipToProfile,
       permission: ownership.permission,
+      status: ownership.status,
+      invitedByUserId: ownership.invitedByUserId,
+      acceptedAt: ownership.acceptedAt,
+      revokedAt: ownership.revokedAt,
       isPrimary: ownership.isPrimary,
     },
     verification: {
@@ -560,7 +568,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
 export function archiveAccountProfile(data: Database, userId: string, profileId: string):
   | { status: 'archived'; result: AccountProfileArchiveResultDTO }
   | { status: 'not_found' | 'forbidden' | 'already_archived' | 'active_flow' } {
-  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
+  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId && item.status === 'active')
   const profile = data.profiles.find((item) => item.id === profileId)
 
   if (!ownership || !profile) return { status: 'not_found' }
@@ -578,16 +586,22 @@ export function archiveAccountProfile(data: Database, userId: string, profileId:
 export function createAccountProfile(data: Database, userId: string, locale: ApiLocale, _payload: AccountManagedProfileCreatePayload) {
   const user = findUser(data, userId)
   if (!user) return null
-  const role = _payload?.role ?? 'self'
-  if (role === 'self' && data.profile_ownerships.some((o) => o.userId === userId && o.role === 'self')) {
+  const profileType = _payload?.profileType ?? 'self'
+  if (profileType === 'self' && data.profile_ownerships.some((o) => {
+    const ownedProfile = data.profiles.find((profile) => profile.id === o.profileId)
+    return o.userId === userId && o.status === 'active' && ownedProfile?.profileType === 'self'
+  })) {
     return 'duplicate_self' as const
   }
-  const relationshipToProfile = _payload?.relationshipToProfile ?? (role === 'self' ? 'self' : 'relative')
+  const relationshipToProfile = profileType === 'self'
+    ? 'self'
+    : (_payload?.relationshipToProfile === 'self' ? 'relative' : _payload?.relationshipToProfile ?? 'relative')
 
   const now = new Date().toISOString()
   const profileId = nextId('p', data.profiles)
   const profile = {
     id: profileId,
+    profileType,
     profileStatus: 'draft' as const,
     isPriorityProfile: false,
     lastActiveAt: now,
@@ -600,9 +614,9 @@ export function createAccountProfile(data: Database, userId: string, locale: Api
     id: nextId('ownership', data.profile_ownerships),
     profileId,
     userId,
-    role,
     relationshipToProfile,
     permission: 'owner',
+    status: 'active',
     isPrimary: false,
     createdAt: now,
     updatedAt: now,
@@ -629,10 +643,9 @@ export function updateAccountProfileOwnership(
   requestedLocale: ApiLocale,
   payload: AccountProfileOwnershipUpdatePayload,
 ) {
-  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)
+  const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId && item.status === 'active')
   if (!ownership) return null
   if (ownership.permission !== 'owner') return 'forbidden' as const
-  ownership.role = payload.role
   ownership.relationshipToProfile = payload.relationshipToProfile
   ownership.isPrimary = payload.isPrimary
   ownership.updatedAt = new Date().toISOString()
@@ -970,7 +983,7 @@ function toAccountPreferencesDto(preferences: Database['user_preferences'][numbe
 
 function toManagedProfileSummary(
   data: Database,
-  ownership: { profileId: string; role: string; relationshipToProfile?: string; permission: string; isPrimary: boolean },
+  ownership: Database['profile_ownerships'][number],
   profile: Database['profiles'][number],
   locale: ApiLocale,
 ): ManagedProfileSummaryDTO {
@@ -978,13 +991,14 @@ function toManagedProfileSummary(
   const verif = findVerification(data, profile.id)
   return {
     profileId: profile.id,
+    profileType: profile.profileType,
     displayName: view.displayName,
     avatarUrl: view.avatarUrl,
     age: view.age,
     city: resolveLocalizedText(locale, profile.city),
-    role: ownership.role,
     relationshipToProfile: ownership.relationshipToProfile,
     permission: ownership.permission,
+    ownershipStatus: ownership.status,
     profileStatus: profile.profileStatus,
     isPriorityProfile: profile.isPriorityProfile,
     isPrimary: ownership.isPrimary,
@@ -1007,7 +1021,7 @@ function hasActiveProfileFlow(data: Database, profileId: string): boolean {
 }
 
 function resolveProfileWritePermission(data: Database, userId: string, profileId: string) {
-  return data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId)?.permission
+  return data.profile_ownerships.find((item) => item.userId === userId && item.profileId === profileId && item.status === 'active')?.permission
 }
 
 function buildVisibilityDto(data: Database, profileId: string): AccountProfileVisibilityDTO[] {

@@ -13,7 +13,8 @@ export function toAccountProfileDetailPageData(params: {
   return {
     ...payload,
     ownershipBadges: [
-      t(`profiles.role.${payload.ownership.role}`),
+      t(`profiles.profileType.${payload.profileType}`),
+      t(`profiles.relationship.${payload.ownership.relationshipToProfile}`),
       t(`profiles.permission.${payload.ownership.permission}`),
       payload.ownership.isPrimary ? t('profiles.badges.primary') : null,
     ].filter((item): item is string => Boolean(item)),

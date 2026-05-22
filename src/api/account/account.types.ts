@@ -6,6 +6,9 @@ export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
 export type AccountRoomStatus = 'open' | 'paused' | 'closed'
+export type AccountProfileType = 'self' | 'family'
+export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative'
+export type AccountProfileOwnershipStatus = 'pending' | 'active' | 'revoked'
 
 export interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
@@ -28,13 +31,17 @@ export interface AccountProfilesDTO {
 
 export interface AccountProfileDetailDTO {
   profileId: string
+  profileType: AccountProfileType
   displayName: string
   avatarUrl: string
   isBlankDraft: boolean
   ownership: {
-    role: 'self' | 'parent' | 'guardian' | 'advisor'
-    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    relationshipToProfile: AccountProfileRelationship
     permission: 'owner' | 'manager' | 'viewer'
+    status: AccountProfileOwnershipStatus
+    invitedByUserId?: string
+    acceptedAt?: string
+    revokedAt?: string
     isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
@@ -164,13 +171,14 @@ export interface AccountPreferencesDTO {
 
 export interface ManagedProfileSummaryDTO {
   profileId: string
+  profileType: AccountProfileType
   displayName: string
   avatarUrl: string
   age: number
   city: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: AccountProfileRelationship
   permission: 'owner' | 'manager' | 'viewer'
+  ownershipStatus: AccountProfileOwnershipStatus
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isPriorityProfile: boolean
   isPrimary: boolean
@@ -198,8 +206,7 @@ export interface AccountProfileArchiveResultDTO {
 }
 
 export type AccountManagedProfileOwnershipPayload = {
-  role: 'self' | 'parent' | 'guardian'
-  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  relationshipToProfile: AccountProfileRelationship
   isPrimary?: boolean
 }
 
@@ -247,14 +254,13 @@ export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
 >
 
 export interface AccountManagedProfileCreatePayload {
-  role: 'self' | 'parent' | 'guardian'
-  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  profileType: AccountProfileType
+  relationshipToProfile: AccountProfileRelationship
 }
 
 export type AccountProfileUpdatePayload = AccountProfileMutablePayload
 
 export interface AccountProfileOwnershipUpdatePayload {
-  role: AccountManagedProfileOwnershipPayload['role']
   relationshipToProfile: AccountManagedProfileOwnershipPayload['relationshipToProfile']
   isPrimary: boolean
 }

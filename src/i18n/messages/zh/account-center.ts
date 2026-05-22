@@ -75,7 +75,7 @@ export const accountCenterMessages: AppMessageSchema = {
     },
     badges: { archived: '已归档', primary: '主资料', priority: '优先展示' },
     lifecycle: { active: '正常业务中', archived: '已归档' },
-    role: { self: '本人资料', parent: '家长代管', guardian: '监护人代管', advisor: '顾问代管' },
+    profileType: { self: '本人资料', family: '家庭代管资料' },
     permission: { owner: '可编辑', manager: '可管理', viewer: '仅查看' },
     status: {
       draft: '草稿',

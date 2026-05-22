@@ -793,12 +793,16 @@ interface AccountProfilesDTO {
 
 interface AccountProfileDetailDTO {
   profileId: string
+  profileType: 'self' | 'family'
   displayName: string
   avatarUrl: string
   ownership: {
-    role: 'self' | 'parent' | 'guardian' | 'advisor'
-    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
     permission: 'owner' | 'manager' | 'viewer'
+    status: 'pending' | 'active' | 'revoked'
+    invitedByUserId?: string
+    acceptedAt?: string
+    revokedAt?: string
     isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
@@ -814,13 +818,14 @@ interface AccountProfileDetailDTO {
 
 interface ManagedProfileSummaryDTO {
   profileId: string
+  profileType: 'self' | 'family'
   displayName: string
   avatarUrl: string
   age: number
   city: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   permission: 'owner' | 'manager' | 'viewer'
+  ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isPriorityProfile: boolean
   isPrimary: boolean
@@ -984,7 +989,10 @@ type AccountProfileCreatePayload = ProfileCreatePayload
 
 type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
 
-interface AccountManagedProfileCreatePayload {}
+interface AccountManagedProfileCreatePayload {
+  profileType: 'self' | 'family'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+}
 
 interface AccountProfileContactMethodsUpdatePayload {
   entries: Array<{
@@ -1035,7 +1043,7 @@ Write rules:
 ```text
 realName
 nickName
-role as user identity
+profileType as profile identity
 completion
 profile phone/email/wechat
 privacy setting title/desc from DB
@@ -1058,4 +1066,3 @@ interface DebugPrivateIntroductionItemDTO {
 ```
 
 Debug 页面可以调用 accept / decline 工具，但生产 account / profile 页面只能消费正式 private introduction 状态。
-

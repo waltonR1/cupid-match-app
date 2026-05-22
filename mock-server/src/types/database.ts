@@ -168,9 +168,12 @@ export interface ProfileOwnershipRecord {
     id: string
     profileId: string
     userId: string
-    role: RegisterRole | 'guardian' | 'advisor'
-    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
     permission: 'owner' | 'manager' | 'viewer'
+    status: 'pending' | 'active' | 'revoked'
+    invitedByUserId?: string
+    acceptedAt?: string
+    revokedAt?: string
     isPrimary: boolean
     createdAt: string
     updatedAt: string

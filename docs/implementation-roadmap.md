@@ -305,6 +305,7 @@ joinedAt
 ```ts
 interface ProfileRecord {
   id: string
+  profileType: 'self' | 'family'
   gender: 'male' | 'female'
   birthYear: number
   height: number
@@ -622,9 +623,12 @@ interface ProfileOwnershipRecord {
   id: string
   userId: string
   profileId: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   permission: 'owner' | 'manager' | 'viewer'
+  status: 'pending' | 'active' | 'revoked'
+  invitedByUserId?: string
+  acceptedAt?: string
+  revokedAt?: string
   isPrimary: boolean
   createdAt: string
   updatedAt: string
@@ -1201,9 +1205,12 @@ interface ProfileOwnershipRecord {
   id: string
   userId: string
   profileId: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   permission: 'owner' | 'manager' | 'viewer'
+  status: 'pending' | 'active' | 'revoked'
+  invitedByUserId?: string
+  acceptedAt?: string
+  revokedAt?: string
   isPrimary: boolean
   createdAt: string
   updatedAt: string
@@ -1298,7 +1305,7 @@ interface AdvisorFollowUpRecord {
 
 ### 应删除或替换的旧结构
 
-- `users.role`：迁移到 `profile_ownerships.role`。
+- `users.role`：不再使用；资料类型进入 `profiles.profileType`，用户与资料关系进入 `profile_ownerships.relationshipToProfile`。
 - `users.profileCompletion`：迁移到 profile 完成度计算或 `profile_completion_snapshots`。
 - `users.displayName`：统一为 `accountName`，不要新增 `users.displayName`。
 - `profiles.displayName`：从数据库移除，profile 展示名由后端根据 profile id 派生并返回 DTO。
@@ -1840,4 +1847,3 @@ mock-server/db.json 用扁平结构模拟未来结构化数据库，不要在 pr
 每个阶段结束后运行 npm run type-check、npm run mock:build；涉及 i18n 运行 npm run check:i18n；涉及 H5 页面运行 npm run build:h5。
 不要为了兼容保留旧字段，除非当前阶段明确要求延后处理。
 ```
-

@@ -32,7 +32,7 @@
 
 | Concern | Source of truth | DTO derived fields | Must not be source of truth |
 | --- | --- | --- | --- |
-| 登录账户 | `users`, `auth_identities` | `AuthSession.user.accountName` | `profiles`, `profile_ownerships.role` |
+| 登录账户 | `users`, `auth_identities` | `AuthSession.user.accountName` | `profiles`, `profiles.profileType` |
 | 注册后引导 | `user_onboarding_states` | `AuthSession.onboarding` | `users.onboardingPath`, `users.onboardingStep` |
 | 协议文本 | `legal_documents` | `LegalDocumentDTO` | frontend i18n only |
 | 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |

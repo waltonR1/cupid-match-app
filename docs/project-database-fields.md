@@ -137,9 +137,12 @@ interface ProfileOwnershipRecord {
     id: string
     profileId: string
     userId: string
-    role: 'self' | 'parent' | 'guardian' | 'advisor'
-    relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
     permission: 'owner' | 'manager' | 'viewer'
+    status: 'pending' | 'active' | 'revoked'
+    invitedByUserId?: string
+    acceptedAt?: string
+    revokedAt?: string
     isPrimary: boolean
     createdAt: string
     updatedAt: string
@@ -204,6 +207,7 @@ interface AuthSession {
 ```ts
 interface ProfileRecord {
     id: string
+    profileType: 'self' | 'family'
     gender: GenderCode
     birthYear: number
     height: number
@@ -337,4 +341,3 @@ interface EventRegistrationRecord {
 - `profile_visibility_settings` 已接入 detail 读取链路；Phase 5.5 需要在 account profile detail 提供写入入口。
 - private introduction room / messages 已有基础结构，read receipts 仍待后续阶段处理。
 - account center 已完成 Phase 5 只读重写；Phase 5.5 需要补齐 profile、visibility、account basics、preferences、membership 的写操作。
-

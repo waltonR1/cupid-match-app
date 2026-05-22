@@ -5,6 +5,7 @@ import type {MembershipLevel, PrivateIntroductionStatus} from './database.js'
 /** 资料发布状态 */
 export type ProfileStatus = 'open' | 'review' | 'draft' | 'paused' | 'hidden'
 
+export type ProfileType = 'self' | 'family'
 /** 性别编码 */
 export type GenderCode = 'male' | 'female'
 
@@ -110,6 +111,7 @@ export interface ProfileVisibilitySettingRecord {
 /** 原始资料记录 */
 export interface ProfileRecord {
     id: string
+    profileType: ProfileType
     gender: GenderCode
     birthYear: number
     height: number

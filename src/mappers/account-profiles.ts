@@ -41,7 +41,8 @@ function buildPresentationBadges(
   return [
     profile.isPrimary ? t('profiles.badges.primary') : null,
     profile.isPriorityProfile ? t('profiles.badges.priority') : null,
-    t(`profiles.role.${profile.role}`),
+    t(`profiles.profileType.${profile.profileType}`),
+    t(`profiles.relationship.${profile.relationshipToProfile}`),
     t(`profiles.permission.${profile.permission}`),
   ].filter((item): item is string => Boolean(item))
 }

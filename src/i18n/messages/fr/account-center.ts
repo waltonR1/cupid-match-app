@@ -85,7 +85,7 @@ export const accountCenterMessages: AppMessageSchema = {
     },
     badges: { archived: 'Archive', primary: 'Profil principal', priority: 'Affichage prioritaire' },
     lifecycle: { active: 'En service', archived: 'Archive' },
-    role: { self: 'Profil personnel', parent: 'Gere par un parent', guardian: 'Gere par un tuteur', advisor: 'Gere par un conseiller' },
+    profileType: { self: 'Profil personnel', family: 'Profil gere par la famille' },
     permission: { owner: 'Modifiable', manager: 'Gerable', viewer: 'Lecture seule' },
     status: { draft: 'Brouillon', review: 'En verification', open: 'Ouvert', paused: 'En pause', hidden: 'Masque' },
     verification: { identity: 'Verification d identite', education: 'Verification des etudes', income: 'Verification des revenus', marital: 'Verification matrimoniale' },

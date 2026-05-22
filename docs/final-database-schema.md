@@ -292,6 +292,7 @@ interface UserAgreementAcceptanceRecord {
 ```ts
 interface ProfileRecord {
   id: string
+  profileType: 'self' | 'family'
   gender: GenderCode
   birthYear: number
   height: number
@@ -415,9 +416,12 @@ interface ProfileOwnershipRecord {
   id: string
   userId: string
   profileId: string
-  role: 'self' | 'parent' | 'guardian' | 'advisor'
-  relationshipToProfile?: 'self' | 'father' | 'mother' | 'relative' | 'advisor'
+  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
   permission: 'owner' | 'manager' | 'viewer'
+  status: 'pending' | 'active' | 'revoked'
+  invitedByUserId?: string
+  acceptedAt?: string
+  revokedAt?: string
   isPrimary: boolean
   createdAt: string
   updatedAt: string
@@ -825,4 +829,3 @@ private_introduction_rooms: unique(requestId)
 - `profiles.datingIntentionLabel` 从数据库移除；所有前端 DTO 的 datingIntentionLabel 由后端派生。
 - 所有主表和关系表保留 `createdAt` 和 `updatedAt`。
 - `project-database-fields.md` 继续记录当前实现；本文记录最终形态。
-
