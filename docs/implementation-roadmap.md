@@ -23,6 +23,7 @@ Phase 5.4: 引入 profile 归档生命周期
 Phase 5.5: 补齐 account center 写操作
 Phase 5.6: 设计独立消息中心
 Phase 5.7: 收敛会员套餐事实源
+Phase 5.8: 收敛活动字段与 debug 管理链路
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
 
@@ -1736,6 +1737,49 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
+## Phase 5.8：收敛活动字段与 debug 管理链路
+
+### 目标
+
+在进入 Phase 6 的跨模块联动前，先把活动表和实际活动链路收紧，避免公开 events、account events、debug 审核和后续消息联动继续依赖含糊字段或死字段。
+
+本阶段只处理 events 相关字段和 mock/debug 管理能力，不混入 membership、profile 或 account 设置重构。
+
+### 明确范围
+
+本阶段要做：
+
+- 移除 `events.registeredCountCache` 与 `events.waitlistCountCache`；活动人数继续由 `event_registrations` 动态计算。
+- 移除未使用且语义不清的 `event_registrations.note`。
+- 补齐 `event_registrations.waitlistedAt` 与 `event_registrations.attendedAt`，让 `waitlist` 和 `attended` 状态有对应时间点。
+- 将 `events.advisorNote` 改名为更符合用户可见语义的字段，例如 `curatorNote`；它是公开 / 详情页可见的活动策展说明，不是内部顾问备注。
+- 明确 `draft` 是活动管理态，用户端公开 `listEvents` / `eventDetail` 不返回 draft。
+- 在 debug 中建立活动管理入口，至少支持查看全部活动，包括 `draft`。
+- debug 活动管理可先支持状态查看 / 状态切换 / 跳转报名审核；完整创建和编辑可后续扩展。
+- 保持 account events 不返回精确 `address`；`city` 与 `venue` 可以继续返回，因为 `venue` 是公开场地名称，不等同于精确地址。
+
+本阶段不做：
+
+- 不建立正式运营后台。
+- 不接入真实活动发布审批工作流。
+- 不把 event 创建 / 编辑做成完整产品功能。
+- 不把 account events 改成地址权限判断页；精确地址仍只在 event detail 中按 `addressVisibility` 控制。
+- 不把 `draft` 暴露到公开活动列表和公开活动详情。
+
+### 验收标准
+
+- `registeredCount`、`waitlistCount`、`remainingSeats` 只由 `event_registrations` 明细派生。
+- `events` 主表不再保存报名人数缓存字段。
+- `event_registrations` 不再保留未使用的 `note` 字段。
+- `waitlist` / `attended` 状态有对应时间字段。
+- 用户端 events API 不返回 draft；debug 活动管理可以查看 draft。
+- `advisorNote` 相关 DB 字段、DTO、mapper、页面类型和 i18n key 完成统一改名。
+- account events 链路不返回精确地址。
+- `npm run type-check` 通过。
+- `npm run mock:build` 通过。
+- `npm run check:i18n` 通过。
+- `npm run build:h5` 通过。
+
 ## Phase 6：完成 profile / event / account / private introduction 联动
 
 ### 目标
@@ -1888,6 +1932,13 @@ feat(messages): connect mediated rooms
 ```text
 refactor(membership): centralize plan facts
 refactor(membership): use shared plan api
+```
+
+### Phase 5.8
+
+```text
+refactor(events): tighten event schema
+feat(debug): add event management tools
 ```
 
 ### Phase 6
