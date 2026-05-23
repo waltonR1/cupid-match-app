@@ -1753,6 +1753,9 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - 移除未使用且语义不清的 `event_registrations.note`。
 - 补齐 `event_registrations.waitlistedAt` 与 `event_registrations.attendedAt`，让 `waitlist` 和 `attended` 状态有对应时间点。
 - 将 `events.advisorNote` 改名为更符合用户可见语义的字段，例如 `curatorNote`；它是公开 / 详情页可见的活动策展说明，不是内部顾问备注。
+- 保留 `event_agenda_items` 独立表；它是一对多活动流程项，不能重新嵌回 `events` 主表。
+- 将 `event_agenda_items.desc` 改名为 `description`，与 API DTO 和前端 ViewModel 命名一致。
+- 评估 `event_agenda_items.time` 是否继续作为展示字符串保留，或改为 `startTime` / `endTime`；若本阶段暂不做结构化时间输入，可以先保持 `time`。
 - 明确 `draft` 是活动管理态，用户端公开 `listEvents` / `eventDetail` 不返回 draft。
 - 在 debug 中建立活动管理入口，至少支持查看全部活动，包括 `draft`。
 - debug 活动管理可先支持状态查看 / 状态切换 / 跳转报名审核；完整创建和编辑可后续扩展。
@@ -1774,6 +1777,7 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - `waitlist` / `attended` 状态有对应时间字段。
 - 用户端 events API 不返回 draft；debug 活动管理可以查看 draft。
 - `advisorNote` 相关 DB 字段、DTO、mapper、页面类型和 i18n key 完成统一改名。
+- `event_agenda_items` 继续作为活动流程项独立表存在，`desc` 命名完成收敛。
 - account events 链路不返回精确地址。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
