@@ -81,8 +81,8 @@ export interface FavoriteProfileRecord {
     id: string
     userId: string
     profileId: string
-    savedAt: string
-    note: LocalizedText
+    createdAt: string
+    updatedAt: string
 }
 
 /** 会话记录 */

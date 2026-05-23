@@ -192,6 +192,8 @@ export const accountCenterMessages: AppMessageSchema = {
     noActiveIntroductions: 'There are no requests requiring follow-up right now.',
     labels: {
       introduction: 'Private request',
+      savedAt: 'Saved',
+      openProfile: 'View profile',
       requestedAt: 'Requested',
       expiresAt: 'Valid until',
       respondedAt: 'Responded',

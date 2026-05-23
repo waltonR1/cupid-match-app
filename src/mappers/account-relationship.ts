@@ -4,6 +4,7 @@ import type {
 } from '@/api/account'
 import type { Translate } from '@/i18n/types'
 import { formatLocalizedDate, type FormatLocale } from '@/utils/locale-format'
+import { formatLocalizedAge } from '@/utils/profile-format'
 
 export function toAccountRelationshipPageData(params: {
   favorites: FavoriteProfileSummaryDTO[]
@@ -31,10 +32,15 @@ export function toAccountRelationshipPageData(params: {
     favorites: favorites.map((item) => ({
       favoriteId: item.favoriteId,
       profileId: item.profileId,
+      profileType: item.profileType,
       displayName: item.displayName,
       avatarUrl: item.avatarUrl,
-      age: String(item.age),
+      age: formatLocalizedAge(locale, item.age),
       city: item.city,
+      education: item.education,
+      industry: item.industry,
+      summary: item.summary,
+      tags: item.tags,
       savedAtText: formatLocalizedDate(locale, item.createdAt),
     })),
     introductions: introductionItems,

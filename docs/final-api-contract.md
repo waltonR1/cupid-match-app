@@ -877,10 +877,15 @@ interface AccountEntitlementBalanceDTO {
 interface FavoriteProfileSummaryDTO {
   favoriteId: string
   profileId: string
+  profileType: 'self' | 'family'
   displayName: string
   avatarUrl: string
   age: number
   city: string
+  education: string
+  industry: string
+  summary: string
+  tags: string[]
   createdAt: string
 }
 

@@ -30,7 +30,7 @@
 | `user_onboarding_states` | `UserOnboardingStateRecord[]` | 注册入口路径和 onboarding 进度。 | 后续 profile 创建链路更新 `profileId` / `completedAt`。 |
 | `user_memberships` | `UserMembershipRecord[]` | 当前用户会员等级与状态。 | 已与 plan、entitlement、balance 分层；Phase 5.5 接入升级写入。 |
 | `profile_ownerships` | `ProfileOwnershipRecord[]` | user 与 profile 的拥有关系。 | 后续扩展多 profile 管理和 advisor 权限。 |
-| `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 后续统一时间字段。 |
+| `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 当前只支持 account relationship 读取；收藏 / 取消收藏写入链路留到 Phase 6。 |
 | `message_threads` | `MessageThreadRecord[]` | 旧会话摘要。 | 后续被 private introduction room / messages 替代。 |
 | `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。 | 后续补齐 room、messages、quota source of truth。 |
 | `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences；profile 字段隐藏偏好使用 `profile_privacy_preferences`。 |

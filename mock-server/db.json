@@ -4575,7 +4575,15 @@
       "updatedAt": "2026-03-28"
     }
   ],
-  "private_introduction_requests": [],
+  "private_introduction_requests": [
+    {
+      "id": "intro-001",
+      "requesterUserId": "u-001",
+      "targetProfileId": "p-006",
+      "status": "requested",
+      "requestedAt": "2026-05-23T21:31:05.193Z"
+    }
+  ],
   "profile_photos": [
     {
       "id": "p-001-photo-1",

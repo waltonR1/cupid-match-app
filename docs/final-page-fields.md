@@ -667,10 +667,15 @@ interface AccountRelationshipOverviewItemViewModel {
 interface FavoriteProfileSummaryViewModel {
   favoriteId: string
   profileId: string
+  profileType: 'self' | 'family'
   displayName: string
   avatarUrl: string
   age: string
   city: string
+  education: string
+  industry: string
+  summary: string
+  tags: string[]
   savedAtText: string
 }
 

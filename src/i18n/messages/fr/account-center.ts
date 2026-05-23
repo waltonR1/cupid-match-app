@@ -192,6 +192,8 @@ export const accountCenterMessages: AppMessageSchema = {
     noActiveIntroductions: 'Aucune demande ne requiert de suivi pour le moment.',
     labels: {
       introduction: 'Demande privee',
+      savedAt: 'Ajoute le',
+      openProfile: 'Voir le profil',
       requestedAt: 'Demandee le',
       expiresAt: 'Valable jusqu au',
       respondedAt: 'Reponse le',

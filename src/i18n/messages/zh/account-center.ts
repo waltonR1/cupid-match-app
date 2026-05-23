@@ -221,6 +221,8 @@ export const accountCenterMessages: AppMessageSchema = {
     noActiveIntroductions: '当前没有需要继续跟进的申请。',
     labels: {
       introduction: '私人介绍申请',
+      savedAt: '收藏时间',
+      openProfile: '查看资料',
       requestedAt: '发起时间',
       expiresAt: '有效至',
       respondedAt: '回应时间',

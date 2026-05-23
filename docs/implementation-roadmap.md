@@ -1142,7 +1142,7 @@ advisor_follow_ups
 | `profile_verifications` | 实名、学历、收入、婚姻状态和平台审核等认证状态。 |
 | `profile_contacts` | 受控联系方式。 |
 | `profile_privacy_preferences` | profile 半敏感字段隐藏偏好。 |
-| `favorite_profiles` | 用户收藏关系。 |
+| `favorite_profiles` | 用户收藏关系，只保存 `userId`、`profileId` 和创建 / 更新时间；当前不做私密备注。 |
 | `events` | 活动主体。 |
 | `event_agenda_items` | 活动流程项。 |
 | `event_registrations` | 用户活动报名关系。 |
@@ -1814,6 +1814,9 @@ profile 与 account：
 - profile ownership 决定用户是否拥有资料。
 - account profiles 页面展示用户管理的资料。
 - detail 不应该允许用户对自己的 profile 申请 private introduction。
+- `favorite_profiles` 字段统一为 `id`、`userId`、`profileId`、`createdAt`、`updatedAt`；不保留 `note`。
+- account relationship 可以读取收藏列表；收藏 / 取消收藏写入和 profile detail / directory favorite state 在 Phase 6 补齐。
+- profile detail / directory 后续根据 viewer context 返回 `favorite.isFavorite` 与 `favoriteId`，profile 主表不保存全局收藏状态。
 
 event 与 account：
 
@@ -1837,6 +1840,9 @@ private introduction 与 account：
 新增或完善：
 
 ```text
+GET /api/account/favorites
+POST /api/favorites/:profileId
+DELETE /api/favorites/:profileId
 GET /api/account/private-introductions
 POST /api/profiles/self/:id/private-introduction
 POST /api/profiles/family/:id/private-introduction
@@ -1860,6 +1866,9 @@ room messages 使用 cursor 分页，可用于顾问代发说明、系统通知�
 ### 验收标准
 
 - 申请私人介绍后，account 能看到对应状态。
+- account relationship 能读取并展示收藏列表。
+- profile detail / directory 能展示当前 viewer 的收藏状态。
+- 收藏 / 取消收藏后，account relationship 和 profile favorite state 同步。
 - debug 接受/拒绝后，detail 和 account 状态同步。
 - quota 正确扣减。
 - 同一 profile 不能重复申请。

@@ -40,18 +40,40 @@
 
         <view v-if="activeTab === 'favorites'">
           <view class="mb-4 text-[14px] leading-7 text-semantic-text-secondary">{{ t('relationship.panelDescription.favorites') }}</view>
-          <view v-if="pageData.favorites.length > 0" class="grid gap-3">
+          <view v-if="pageData.favorites.length > 0" class="grid gap-4">
             <view
               v-for="f in pageData.favorites"
               :key="f.favoriteId"
-              class="flex items-center gap-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-4 shadow-panel"
+              class="group grid cursor-pointer gap-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-5 shadow-panel transition-all duration-200 hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft hover:shadow-card-hover md:grid-cols-[88px_minmax(0,1fr)_auto]"
+              @click="openFavoriteProfile(f.profileId, f.profileType)"
             >
-              <image :src="f.avatarUrl" class="h-12 w-12 rounded-full object-cover" />
-              <view class="flex-1">
-                <view class="font-medium">{{ f.displayName }}, {{ f.age }}</view>
-                <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ f.city }}</view>
+              <image :src="f.avatarUrl" class="h-20 w-20 object-cover" />
+              <view class="min-w-0">
+                <view class="flex flex-wrap items-center gap-2">
+                  <view class="text-[18px] font-semibold text-semantic-text-primary">{{ f.displayName }}</view>
+                  <view class="text-[14px] text-semantic-text-secondary">{{ f.age }}</view>
+                </view>
+                <view class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-semantic-text-secondary">
+                  <text>{{ f.city }}</text>
+                  <text>{{ f.education }}</text>
+                  <text>{{ f.industry }}</text>
+                </view>
+                <view class="mt-3 line-clamp-2 text-[14px] leading-6 text-semantic-text-muted">{{ f.summary }}</view>
+                <view v-if="f.tags.length > 0" class="mt-4 flex flex-wrap gap-2">
+                  <text
+                    v-for="tag in f.tags"
+                    :key="tag"
+                    class="rounded-full border border-semantic-border-soft px-2.5 py-1 text-[12px] text-semantic-text-secondary"
+                  >
+                    {{ tag }}
+                  </text>
+                </view>
               </view>
-              <view class="text-[12px] text-semantic-text-card-label">{{ f.savedAtText }}</view>
+              <view class="flex flex-row items-center justify-between gap-4 text-[12px] text-semantic-text-card-label md:flex-col md:items-end">
+                <text>{{ t('relationship.labels.savedAt') }}</text>
+                <text class="text-semantic-text-primary">{{ f.savedAtText }}</text>
+                <text class="transition-colors group-hover:text-semantic-text-primary">{{ t('relationship.labels.openProfile') }}</text>
+              </view>
             </view>
           </view>
           <EmptyStatePanel v-else size="page" :title="t('relationship.empty.favorites')" />
@@ -173,10 +195,20 @@ import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountOverview, useAccountRelationship } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { openFamilyProfileDetail, openSelfDetail } from '@/utils/navigation'
 
 const { t } = usePageI18n('accountCenter')
 const accountData = useAccountOverview()
 const { pageData } = useAccountRelationship(t)
 const activeTab = ref<'favorites' | 'introductions'>('favorites')
+
+function openFavoriteProfile(profileId: string, profileType: 'self' | 'family') {
+  if (profileType === 'family') {
+    openFamilyProfileDetail(profileId)
+    return
+  }
+
+  openSelfDetail(profileId)
+}
 
 </script>
