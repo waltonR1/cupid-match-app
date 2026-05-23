@@ -1703,6 +1703,9 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
   - `conciergePriority`
 - 保留 `user_memberships` 表达用户当前 / 历史会员状态。
 - 保留 `user_entitlement_balances` 表达用户级动态额度使用情况；它不保存套餐定义，只保存用户当前周期的 total / used / remaining。
+- 优化 `user_memberships`，让它通过 `planId` 关联当前开通套餐；`tier` 如保留，只作为读写方便的套餐快照，不作为套餐事实源。
+- 优化 `user_entitlement_balances`，让它只记录真正可计数权益的周期余额，例如私人介绍额度；活动优先、顾问审核、资料详情访问层级等布尔 / 访问型权益不进入余额表。
+- 为 `user_entitlement_balances` 增加清晰周期字段，例如 `periodStartedAt`、`periodEndsAt`，并将来源关联到具体 `membershipId`。
 - 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
 - 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
 - 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、顾问优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
@@ -1722,6 +1725,8 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 
 - 公开会员页、首页会员区、账户会员页展示的套餐名、价格、额度和核心权益来自同一套 `membership_plans` 宽表数据。
 - account membership 页面仍能展示当前会员、剩余额度和下一等级，但不再拥有另一套套餐事实。
+- `user_memberships` 能清楚表达用户当前开通的套餐、状态、起止时间和取消 / 过期信息。
+- `user_entitlement_balances` 只表达用户当前周期的可计数权益余额，并能追溯到对应会员记录。
 - i18n 不再保存套餐事实，只保存页面表达文案。
 - `membership_entitlements` 从 mock schema、db、service、API DTO 和文档中移除。
 - `MEMBERSHIP_BENEFITS` 不再与 `membership_plans` 形成并行 source of truth。
