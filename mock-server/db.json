@@ -4801,7 +4801,20 @@
       "updatedAt": "2026-04-21T10:45:00Z"
     }
   ],
-  "profile_visibility_settings": [],
+  "profile_privacy_preferences": [
+    {
+      "id": "privacy-001",
+      "profileId": "p-002",
+      "hideMaritalStatus": false,
+      "hideHasChildren": false,
+      "hideChildrenPlan": false,
+      "hideAcceptsLongDistance": false,
+      "hideSmoking": false,
+      "hideDrinking": false,
+      "createdAt": "2026-05-23T11:02:04.240Z",
+      "updatedAt": "2026-05-23T11:02:33.381Z"
+    }
+  ],
   "user_memberships": [
     {
       "id": "user-membership-001",

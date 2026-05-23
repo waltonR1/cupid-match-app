@@ -36,7 +36,7 @@ interface FinalDatabase {
   profile_internal_records: ProfileInternalRecord[]
   profile_verifications: ProfileVerificationRecord[]
   profile_contacts: ProfileContactRecord[]
-  profile_visibility_settings: ProfileVisibilitySettingRecord[]
+  profile_privacy_preferences: ProfilePrivacyPreferenceRecord[]
 
   membership_plans: MembershipPlanRecord[]
   membership_entitlements: MembershipEntitlementRecord[]
@@ -59,7 +59,7 @@ interface FinalDatabase {
 
 - `displayName`、`avatarUrl` 可以出现在 DTO，不保存在 `profiles` 主表。
 - `profile_internal_records`、`profile_verifications`、`profile_contacts` 只给后台工作人员和受控流程使用。
-- `profile_visibility_settings` 是 profile 链路预留的字段可见性配置；account 重写后再和用户侧设置联调。
+- `profile_privacy_preferences` 是 profile 所有人主动设置的半敏感字段隐藏偏好；它只在平台默认权限之上继续收紧展示。
 
 ## 通用类型
 
@@ -92,7 +92,6 @@ type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
 type HabitCode = 'never' | 'social' | 'often'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
-type ProfileFieldVisibility = 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
@@ -494,66 +493,31 @@ interface ProfileContactRecord {
 }
 ```
 
-### profile_visibility_settings
+### profile_privacy_preferences
 
-profile 字段可见性配置。此集合先在 profile 链路预留，用于 detail API 的字段权限判断；account 重写后再与用户偏好、会员权益、顾问审核联调。
+profile 级半敏感字段隐藏偏好。该集合不定义完整权限模型。后端必须先应用 guest / free / member 默认展示规则，再叠加该记录里的隐藏开关。没有记录表示完全沿用平台默认规则。
 
 ```ts
-interface ProfileVisibilitySettingRecord {
+interface ProfilePrivacyPreferenceRecord {
   id: string
   profileId: string
-  fieldCode: ProfileFieldCode
-  visibility: ProfileFieldVisibility
-  lockedByAdvisor: boolean
-  reason?: string
+  hideMaritalStatus: boolean
+  hideHasChildren: boolean
+  hideChildrenPlan: boolean
+  hideAcceptsLongDistance: boolean
+  hideSmoking: boolean
+  hideDrinking: boolean
   createdAt: string
   updatedAt: string
 }
 ```
 
-建议第一批 fieldCode：
+规则：
 
-```text
-country
-nationality
-languages
-industry
-careerDirection
-maritalStatus
-hasChildren
-childrenPlan
-acceptsLongDistance
-relationshipPlan
-residencePlan
-relocationWillingness
-values
-preferredAgeMin
-preferredAgeMax
-locationScope
-preferredEducation
-familyPlan
-dealBreakers
-smoking
-drinking
-exercise
-activityLevel
-weekendStyle
-pets
-personalityTraits
-interests
-communicationStyle
-photos
-contact
-```
-
-说明：
-
-- 默认可见性仍可由代码常量提供，避免每个 profile 都必须写完整配置。
-- 一旦存在 `profile_visibility_settings` 记录，detail API 应优先使用记录值。
-- `contact` 只代表联系方式开放策略，不直接暴露联系方式值。
-- `profile_detail_access` entitlement 只影响 viewer 查看他人 profile detail 的字段开放层级，不影响自己 profile 的曝光排序或公开范围；自己资料曝光仍由 `profile_visibility_settings`、顾问审核和页面策略控制。
-
-## Membership
+- 默认权限常量永远先执行。
+- `profile_privacy_preferences` 只能把指定半敏感字段继续隐藏，不能把默认锁定字段变公开。
+- 当前只覆盖婚姻 / 子女 / 是否接受异地 / 烟酒这类由用户决定是否公开的边缘敏感字段。
+- 后台工作人员强制下架、审核锁定、会员权限，不进入这张表。
 
 ### membership_plans
 
@@ -818,7 +782,7 @@ user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)
 profile_verifications: unique(profileId)
 profile_contacts: unique(profileId)
-profile_visibility_settings: unique(profileId, fieldCode)
+profile_privacy_preferences: unique(profileId)
 user_memberships: index(userId, status)
 user_entitlement_balances: unique(userId, entitlementCode, period)
 event_registrations: unique(userId, eventId)

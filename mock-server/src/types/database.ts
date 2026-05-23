@@ -3,9 +3,9 @@ import type {
     ProfileContactRecord,
     ProfileInternalRecord,
     ProfilePhotoRecord,
+    ProfilePrivacyPreferenceRecord,
     ProfileRecord,
     ProfileVerificationRecord,
-    ProfileVisibilitySettingRecord,
     RegisterRole,
 } from './profile.js'
 
@@ -345,7 +345,7 @@ export interface Database {
     profile_internal_records: ProfileInternalRecord[]
     profile_verifications: ProfileVerificationRecord[]
     profile_contacts: ProfileContactRecord[]
-    profile_visibility_settings: ProfileVisibilitySettingRecord[]
+    profile_privacy_preferences: ProfilePrivacyPreferenceRecord[]
     events: EventRecord[]
     event_agenda_items: EventAgendaItemRecord[]
     event_registrations: EventRegistrationRecord[]

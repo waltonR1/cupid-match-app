@@ -1,5 +1,5 @@
 import type {FormatLocale, RestrictedProfileField, SelfProfileDetail} from '@/api/profiles'
-import {PROFILE_FIELD_LOGIN_REQUIRED, PROFILE_FIELD_MEMBER_ONLY} from '@/api/profiles'
+import {PROFILE_FIELD_HIDDEN, PROFILE_FIELD_LOGIN_REQUIRED, PROFILE_FIELD_MEMBER_ONLY} from '@/api/profiles'
 import type {Translate} from '@/i18n/types'
 import type {
     ProfileDetailBadgeItem,
@@ -240,6 +240,9 @@ function buildBadges(profile: SelfProfileDetail, t: Translate): ProfileDetailBad
 
 /** 构建权限字段 */
 function accessFact(label: string, value: RestrictedProfileField<string>): ProfileDetailFactItem {
+    if (value === PROFILE_FIELD_HIDDEN) {
+        return {label, value: '', access: 'hidden'}
+    }
     if (value === PROFILE_FIELD_MEMBER_ONLY) {
         return {label, value: '', access: 'masked', lockReason: 'member'}
     }
@@ -306,8 +309,8 @@ function restrictedList<T>(value: RestrictedProfileField<T[]>): T[] {
 }
 
 /** 判断是否为受限值 */
-function isRestrictedValue(value: unknown): value is typeof PROFILE_FIELD_MEMBER_ONLY | typeof PROFILE_FIELD_LOGIN_REQUIRED {
-    return value === PROFILE_FIELD_MEMBER_ONLY || value === PROFILE_FIELD_LOGIN_REQUIRED
+function isRestrictedValue(value: unknown): value is typeof PROFILE_FIELD_MEMBER_ONLY | typeof PROFILE_FIELD_LOGIN_REQUIRED | typeof PROFILE_FIELD_HIDDEN {
+    return value === PROFILE_FIELD_MEMBER_ONLY || value === PROFILE_FIELD_LOGIN_REQUIRED || value === PROFILE_FIELD_HIDDEN
 }
 
 /** 判断资料是否包含指定受限值 */

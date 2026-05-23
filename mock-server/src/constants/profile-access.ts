@@ -1,9 +1,11 @@
 export const PROFILE_FIELD_MEMBER_ONLY = '__MEMBER_ONLY__'
 export const PROFILE_FIELD_LOGIN_REQUIRED = '__LOGIN_REQUIRED__'
+export const PROFILE_FIELD_HIDDEN = '__HIDDEN__'
 
 export type ProfileRestrictedFieldValue =
     | typeof PROFILE_FIELD_MEMBER_ONLY
     | typeof PROFILE_FIELD_LOGIN_REQUIRED
+    | typeof PROFILE_FIELD_HIDDEN
 
 export const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
     'country',

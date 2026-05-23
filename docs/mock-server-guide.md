@@ -98,7 +98,7 @@ npm run mock:build
 
 - `profiles` 只保存结构化主表字段。
 - `displayName`、`avatarUrl`、`age`、`isVerified`、`datingIntentionLabel` 由 mock-server 派生后进入 DTO。
-- detail 权限遮罩默认来自 `mock-server/src/constants/profile-access.ts`，如果存在 `profile_visibility_settings` 记录，则优先按记录处理。
+- detail 权限遮罩默认来自 `mock-server/src/constants/profile-access.ts`，`profile_privacy_preferences` 只在默认规则之上继续隐藏半敏感字段。
 
 ## 调试页面
 
@@ -132,4 +132,3 @@ npm run mock:build
 - 前端静态托管只提供构建产物。
 - `mock-server` 负责 HTTP 路由和数据读写。
 - 静态托管平台不执行 `npm run mock:start`。
-

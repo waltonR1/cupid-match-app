@@ -2,40 +2,29 @@ import type {LocalizedText} from './common.js'
 import type {ProfileRestrictedFieldValue} from '../constants/profile-access.js'
 import type {MembershipLevel, PrivateIntroductionStatus} from './database.js'
 
-/** 资料发布状态 */
-export type ProfileStatus = 'open' | 'review' | 'draft' | 'paused' | 'hidden'
+export type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'hidden'
 
 export type ProfileType = 'self' | 'family'
-/** 性别编码 */
 export type GenderCode = 'male' | 'female'
 
-/** 学历等级 */
 export type DegreeLevel = 'bachelor' | 'master' | 'phd'
 
-/** 婚姻状态 */
 export type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
 
-/** 家庭计划倾向 */
 export type ChildrenPlan = 'wants' | 'open_to_discuss' | 'does_not_want'
 
-/** 交友意向 */
 export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
 
-/** 生活习惯 */
 export type HabitCode = 'never' | 'social' | 'often'
 
-/** 目录排序方式 */
 export type DirectorySort = 'recentActive' | 'priorityFirst' | 'ageAsc' | 'ageDesc'
 
-/** 注册角色 */
 export type RegisterRole = 'self' | 'parent'
 
-/** 资料照片 */
 export interface ProfilePhotoRecord {
     id: string
     profileId: string
     url: string
-    caption: LocalizedText
     isPrimary: boolean
     sortOrder: number
     status: 'approved' | 'review' | 'hidden'
@@ -43,36 +32,19 @@ export interface ProfilePhotoRecord {
     updatedAt: string
 }
 
-/** 问答题 */
-export interface ProfilePromptRecord {
-    id: string
-    profileId: string
-    promptCode: string
-    prompt: LocalizedText
-    answer: LocalizedText
-    sortOrder: number
-    status: 'active' | 'hidden'
-    createdAt: string
-    updatedAt: string
-}
-
-/** 后台内部资料 */
 export interface ProfileInternalRecord {
     id: string
     profileId: string
     employer?: LocalizedText
     incomeRange?: LocalizedText
-    religion?: LocalizedText
-    politicalViews?: LocalizedText
-    hometown?: LocalizedText
-    livingSituation?: LocalizedText
-    funFacts?: LocalizedText[]
-    notes?: LocalizedText
+    staffNotes?: LocalizedText
+    riskFlags?: string[]
+    source?: string
+    updatedByUserId?: string
     createdAt: string
     updatedAt: string
 }
 
-/** 资料认证记录 */
 export interface ProfileVerificationRecord {
     id: string
     profileId: string
@@ -82,28 +54,41 @@ export interface ProfileVerificationRecord {
     educationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
     incomeStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
     maritalStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
-    advisorStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
+    reviewStatus: 'unreviewed' | 'pending' | 'approved' | 'rejected'
+    verifiedAt?: string
+    verifiedByUserId?: string
     createdAt: string
     updatedAt: string
 }
 
-/** 受控联系方式 */
-export interface ProfileContactMethodRecord {
+export type ProfileContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
+export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
+
+export interface ProfileContactRecord {
     id: string
     profileId: string
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
+    phone?: string
+    phoneVerificationStatus: ProfileContactVerificationStatus
+    email?: string
+    emailVerificationStatus: ProfileContactVerificationStatus
+    wechat?: string
+    wechatVerificationStatus: ProfileContactVerificationStatus
+    preferredChannel?: ProfileContactChannel
+    visibility: ProfileContactVisibility
     createdAt: string
     updatedAt: string
 }
 
-/** 资料字段可见性设置 */
-export interface ProfileVisibilitySettingRecord {
+export interface ProfilePrivacyPreferenceRecord {
     id: string
     profileId: string
-    fieldCode: string
-    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
+    hideMaritalStatus: boolean
+    hideHasChildren: boolean
+    hideChildrenPlan: boolean
+    hideAcceptsLongDistance: boolean
+    hideSmoking: boolean
+    hideDrinking: boolean
     createdAt: string
     updatedAt: string
 }
@@ -165,7 +150,6 @@ export interface ProfileWithDisplayName extends ProfileRecord {
     displayName: string
     avatarUrl: string
     photos: ProfilePhotoRecord[]
-    prompts: ProfilePromptRecord[]
     age: number
     isVerified: boolean
     datingIntentionLabel: LocalizedText
@@ -175,18 +159,8 @@ export interface ProfileWithDisplayName extends ProfileRecord {
 export interface LocalizedProfilePhotoDTO {
     id: string
     url: string
-    caption: string
     isPrimary: boolean
 }
-
-/** 本地化问答 DTO */
-export interface LocalizedProfilePromptDTO {
-    id: string
-    promptCode: string
-    prompt: string
-    answer: string
-}
-
 
 /** 私人介绍状态 */
 export interface PrivateIntroductionDTO {
@@ -286,7 +260,6 @@ export interface SelfProfileDetailDTO {
     communicationStyle: Restricted<string>
     summary: string
     tags: string[]
-    prompts: Restricted<LocalizedProfilePromptDTO[]>
     privateIntroduction: PrivateIntroductionDTO
 }
 

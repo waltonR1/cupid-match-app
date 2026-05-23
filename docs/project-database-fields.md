@@ -21,7 +21,7 @@
 | `profile_internal_records` | `ProfileInternalRecord[]` | 后台工作人员可见的敏感运营资料。 | 当前不直接返回前端 detail。 |
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、收入、婚姻状态和平台审核等认证资料。 | detail 的 `isVerified` 由身份认证和平台审核共同派生。 |
 | `profile_contacts` | `ProfileContactRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
-| `profile_visibility_settings` | `ProfileVisibilitySettingRecord[]` | profile 字段可见性配置；detail 链路会优先读取该集合，空集合时使用默认常量表。 | Phase 5.5 接入 account profile detail 写入。 |
+| `profile_privacy_preferences` | `ProfilePrivacyPreferenceRecord[]` | profile 半敏感字段隐藏偏好；detail 链路先使用默认常量表，再叠加该集合里的隐藏开关。 | Phase 5.5 接入 account profile detail 写入。 |
 | `events` | `EventRecord[]` | 活动主表，保存扁平活动资料、开放范围、地址可见性、容量与展示文案。 | 后续接入真实活动创建 / 编辑入口。 |
 | `event_agenda_items` | `EventAgendaItemRecord[]` | 活动流程项，按 `eventId + sortOrder` 关联活动。 | 后续接入活动后台编辑。 |
 | `event_registrations` | `EventRegistrationRecord[]` | 活动报名关系，是活动人数、候补与报名状态的 source of truth。 | 后续与 account activity / notification 联动。 |
@@ -33,7 +33,7 @@
 | `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 后续统一时间字段。 |
 | `message_threads` | `MessageThreadRecord[]` | 旧会话摘要。 | 后续被 private introduction room / messages 替代。 |
 | `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。 | 后续补齐 room、messages、quota source of truth。 |
-| `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences / profile visibility。 |
+| `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences；profile 字段隐藏偏好使用 `profile_privacy_preferences`。 |
 
 ## 通用本地化字段
 
@@ -338,6 +338,6 @@ interface EventRegistrationRecord {
 
 ## 仍待后续阶段处理
 
-- `profile_visibility_settings` 已接入 detail 读取链路；Phase 5.5 需要在 account profile detail 提供写入入口。
+- `profile_privacy_preferences` 已接入 detail 读取链路；它只作为默认权限之上的半敏感字段隐藏层。
 - private introduction room / messages 已有基础结构，read receipts 仍待后续阶段处理。
-- account center 已完成 Phase 5 只读重写；Phase 5.5 需要补齐 profile、visibility、account basics、preferences、membership 的写操作。
+- account center 已完成 Phase 5 只读重写；Phase 5.5 需要补齐 profile、半敏感字段隐藏偏好、account basics、preferences、membership 的写操作。

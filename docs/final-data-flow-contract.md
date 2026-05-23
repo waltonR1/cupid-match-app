@@ -38,7 +38,7 @@
 | 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
-| profile 可见性 | `profile_visibility_settings` plus default constants | `access`, masked field values | frontend hardcoded member checks |
+| profile 半敏感字段隐藏偏好 | `profile_privacy_preferences` + 默认权限常量 | `access`、遮罩字段值 | 前端散落的会员判断或通用可见性表 |
 | 联系方式 | `profile_contacts` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
 | 后台资料 | `profile_internal_records`, `profile_verifications` | staff/admin DTO only | public profile DTO |
 | 活动主体 | `events` | localized event DTO | nested agenda |
@@ -206,7 +206,7 @@ profile directory page
 -> GET /api/profiles/self or GET /api/profiles/family
 -> profiles query
 -> profile_photos primary lookup
--> profile_visibility_settings/default access policy
+-> 默认权限策略
 -> backend mapper
 -> SelfProfileDirectoryItemDTO[] / FamilyProfileDirectoryItemDTO[]
 -> frontend ViewModel
@@ -316,7 +316,7 @@ profile detail page
 -> viewer context from auth request
 -> profiles lookup
 -> profile_photos lookup
--> profile_visibility_settings/default access policy
+-> profile_privacy_preferences / 默认权限策略
 -> favorite_profiles lookup for viewer
 -> private introduction state lookup for viewer
 -> backend mapper/masking
@@ -329,7 +329,7 @@ Database reads:
 ```text
 profiles
 profile_photos
-profile_visibility_settings
+profile_privacy_preferences
 profile_ownerships
 favorite_profiles
 private_introduction_requests
@@ -402,17 +402,20 @@ interface FamilyProfileDetailDTO extends ProfileDetailBaseDTO {}
 前端可在 `src/mappers` 中把这些扁平字段组装为 `basics`、`relationship`、`lifestyle`、`preferences`、`family` 等页面 section；后端 DTO 不以页面分组作为字段结构来源。
 
 
-Visibility input:
+隐藏偏好输入：
 
 ```text
-profile_visibility_settings:
+profile_privacy_preferences:
   profileId
-  fieldCode
-  visibility
-  lockedByAdvisor
+  hideMaritalStatus
+  hideHasChildren
+  hideChildrenPlan
+  hideAcceptsLongDistance
+  hideSmoking
+  hideDrinking
 ```
 
-Visibility output:
+展示权限输出：
 
 ```ts
 type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTRODUCTION_REQUIRED__' | '__HIDDEN__'
@@ -457,12 +460,11 @@ interface ProfileAccessDTO {
   canRequestIntroduction: boolean
   lockedFields: ProfileFieldLockDTO[]
   hiddenFields: string[]
-  lockedByAdvisorFields: string[]
 }
 
 interface ProfileFieldLockDTO {
   fieldCode: ProfileFieldCode
-  reason: 'login' | 'member' | 'introduction' | 'advisor' | 'hidden'
+  reason: 'login' | 'member' | 'introduction' | 'staff' | 'hidden'
 }
 
 interface FavoriteStateDTO {
@@ -485,10 +487,10 @@ interface ProfilePrivateIntroductionDTO {
 
 Rules:
 
-- Backend decides field visibility.
-- Backend masks restricted fields with `ProfileFieldLockCode`; frontend renders locked / hidden states from DTO only.
-- If no `profile_visibility_settings` exists, backend uses default constants.
-- Owner/advisor can see fields according to ownership and advisor rules, not page assumptions.
+- 后端决定字段是否展示。
+- 后端用 `ProfileFieldLockCode` 遮罩受限字段；前端只根据 DTO 渲染锁定 / 隐藏状态。
+- 后端永远先应用默认权限常量，再叠加 `profile_privacy_preferences` 的半敏感字段隐藏偏好。
+- profile 所有人只能把允许自定义的半敏感字段继续隐藏，不能放开默认被锁定的字段。
 
 Forbidden:
 
@@ -520,14 +522,14 @@ profile_ownerships:
 
 profiles
 profile_photos
-profile_visibility_settings
+profile_privacy_preferences
 ```
 
 Rules:
 
 - Self/family pages still consume DTOs, not database records.
 - Ownership decides editable or managed profile scope.
-- Family-specific sections use `familyVisible`, `allowFamilyContact`, `familyPriority` and visibility policy.
+- Family-specific sections use `familyVisible`, `allowFamilyContact`, `familyPriority` and access policy.
 - Do not add family-only fields back into `users`.
 
 ## Profile Edit / Creation Chain
@@ -614,8 +616,8 @@ profile_internal_records:
 profile_verifications:
   legalName, dateOfBirth, identityStatus, educationStatus, incomeStatus, maritalStatus, reviewStatus, verifiedAt, verifiedByUserId
 
-profile_visibility_settings:
-  fieldCode, visibility, lockedByAdvisor, reason
+profile_privacy_preferences:
+  hideMaritalStatus, hideHasChildren, hideChildrenPlan, hideAcceptsLongDistance, hideSmoking, hideDrinking
 ```
 
 Forbidden writes:
@@ -667,7 +669,7 @@ Rules:
 - The create action derives an initial ownership default from account attributes; the owner may later adjust it from profile detail.
 - The created profile uses the same unified self / family account detail editor afterward.
 - Create must write `profiles`, `profile_ownerships`, and `profile_verifications`.
-- `profile_photos`, `profile_contacts`, `profile_visibility_settings`, and `profile_internal_records` remain on-demand collections.
+- `profile_photos`、`profile_contacts`、`profile_privacy_preferences` 和 `profile_internal_records` 保持按需创建。
 
 ### Managed profile update
 
@@ -771,25 +773,24 @@ Rules:
 - Ordinary owner-side account DTOs do not return archived profiles. Historical retention remains backend-only unless a dedicated history surface is introduced later.
 - The page may label the action as delete, but the backend lifecycle action is archive.
 
-### Managed profile visibility update
+### 可管理 profile 半敏感字段隐藏偏好更新
 
 ```text
 /pages/account/profile-detail
--> visibility editor
--> POST /api/account/profiles/:profileId/visibility
+-> privacy preference editor
+-> POST /api/account/profiles/:profileId/privacy-preferences
 -> ownership permission check
--> advisor lock check
--> profile_visibility_settings write
--> return AccountProfileVisibilityDTO[]
--> refresh visibilityItems
+-> profile_privacy_preferences update/create
+-> return AccountProfilePrivacyPreferencesDTO
+-> refresh privacyPreferenceItems
 ```
 
 Rules:
 
-- `fieldCode` must be a `ProfileFieldCode`.
-- `lockedByAdvisor = true` fields cannot be changed by the user.
-- Missing fields are not overwritten.
-- Visibility remains profile-specific, not account-wide.
+- 只允许更新 `hideMaritalStatus`、`hideHasChildren`、`hideChildrenPlan`、`hideAcceptsLongDistance`、`hideSmoking`、`hideDrinking`。
+- 未传入的布尔字段不覆盖。
+- 隐藏偏好属于具体 profile，不是 account-wide 设置。
+- 工作人员强制隐藏、审核锁定、会员权限规则不进入这张表。
 
 ### Account preferences update
 
@@ -1056,7 +1057,7 @@ GET /api/account/me
 GET /api/account/profiles
 -> profile_ownerships
 -> profile_verifications
--> profile_visibility_settings
+-> profile_privacy_preferences
 -> derived profile identity
 -> AccountProfilesDTO
 
@@ -1100,7 +1101,7 @@ Rules:
 - Membership comes from membership collections.
 - Preferences come from `user_preferences`, not legacy `privacy_settings.title/desc`.
 - Agreement acceptance records stay backend/audit data and are not shown in account pages by default.
-- Account profiles reads `profile_visibility_settings` as code/value configuration and does not store page copy.
+- Account profile detail 读取 `profile_privacy_preferences` 作为类型明确的布尔偏好，不存页面文案。
 - Dashboard returns `favoriteCount`, not a full favorites list; detailed favorites stay under relationship.
 - Dashboard only returns summary slices: `upcomingEvents` and `recentIntroductions`; full event and introduction lists stay on their dedicated pages.
 - Advisor follow-up notes are internal by default; only records marked `user_visible` may enter account dashboard DTOs.
@@ -1133,7 +1134,7 @@ Page composition:
 /pages/account/profiles
 -> managed profiles
 -> profile verifications
--> profile visibility settings
+-> profile 半敏感字段隐藏偏好
 -> one self-presentation page
 
 /pages/account/events
@@ -1237,7 +1238,7 @@ Rules:
 - User tier is not stored directly on `users`.
 - Quota is not derived ad hoc from a string tier in page code.
 - Private introduction permission reads entitlement result from backend DTO.
-- `profile_detail_access` means paid viewer access to additional restricted profile detail fields. It does not control a user's own profile exposure or ranking; those remain under `profile_visibility_settings` and advisor policy.
+- `profile_detail_access` means paid viewer access to additional restricted profile detail fields. It does not control a user's own profile exposure or ranking; those remain under default profile access, `profile_privacy_preferences`, and staff policy.
 
 ## Private Introduction Chain
 
@@ -1371,7 +1372,7 @@ photos -> profile_photos
 phone/email/wechat -> profile_contacts
 legalName/dateOfBirth/statuses -> profile_verifications
 employer/income/staff notes/risk flags -> profile_internal_records
-field privacy -> profile_visibility_settings
+field privacy（半敏感字段隐藏偏好）-> profile_privacy_preferences
 agenda -> event_agenda_items
 user registration -> event_registrations
 onboarding -> user_onboarding_states

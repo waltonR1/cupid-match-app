@@ -131,7 +131,7 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
 | Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
-| Account | `POST` | `/api/account/profiles/:profileId/visibility` | 更新可管理 profile 的字段可见性。 |
+| Account | `POST` | `/api/account/profiles/:profileId/privacy-preferences` | 更新可管理 profile 的半敏感字段隐藏偏好。 |
 | Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
 | Account | `POST` | `/api/account/settings/preferences` | 更新账户偏好。 |
 | Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
@@ -428,12 +428,11 @@ interface ProfileAccessDTO {
   canRequestIntroduction: boolean
   lockedFields: ProfileFieldLockDTO[]
   hiddenFields: string[]
-  lockedByAdvisorFields: string[]
 }
 
 interface ProfileFieldLockDTO {
   fieldCode: ProfileFieldCode
-  reason: 'login' | 'member' | 'introduction' | 'advisor' | 'hidden'
+  reason: 'login' | 'member' | 'introduction' | 'staff' | 'hidden'
 }
 
 interface ProfilePhotoDTO {
@@ -806,7 +805,7 @@ interface AccountProfileDetailDTO {
     isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
-  visibility: AccountProfileVisibilityDTO[]
+  privacyPreferences: AccountProfilePrivacyPreferencesDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   // 其余业务字段与当前 profile 主表字段保持扁平一致
@@ -969,19 +968,16 @@ interface AccountPasswordSecurityDTO {
   requiresMfa: boolean
 }
 
-interface AccountProfileVisibilityDTO {
-  profileId: string
-  fieldCode: ProfileFieldCode
-  visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  lockedByAdvisor: boolean
+interface AccountProfilePrivacyPreferencesDTO {
+  hideMaritalStatus: boolean
+  hideHasChildren: boolean
+  hideChildrenPlan: boolean
+  hideAcceptsLongDistance: boolean
+  hideSmoking: boolean
+  hideDrinking: boolean
 }
 
-interface AccountProfileVisibilityUpdatePayload {
-  entries: Array<{
-    fieldCode: ProfileFieldCode
-    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  }>
-}
+type AccountProfilePrivacyPreferencesUpdatePayload = Partial<AccountProfilePrivacyPreferencesDTO>
 
 type AccountProfileCreatePayload = ProfileCreatePayload
 
@@ -1042,7 +1038,7 @@ Write rules:
 - `POST /api/account/profiles/:profileId/ownership` updates the editable owner relation defaults shown in profile detail.
 - `POST /api/account/profiles/:profileId/contact` writes owner-managed contact records in `profile_contacts` and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
-- `POST /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
+- `POST /api/account/profiles/:profileId/privacy-preferences` 只更新 profile 所有人可控制的半敏感字段隐藏偏好，并返回最新偏好对象。
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or advisor confirmation happens before future membership state changes.

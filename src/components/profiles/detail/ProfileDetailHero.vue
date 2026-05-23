@@ -54,7 +54,7 @@
 
         <view class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <view
-              v-for="item in data.quickFacts"
+              v-for="item in visibleQuickFacts"
               :key="item.label"
               class="border border-semantic-border-divider bg-semantic-surface-soft px-4 py-4"
           >
@@ -126,6 +126,7 @@ const props = defineProps<{
 
 const primaryPhoto = computed(() => props.data.photos[0] || props.data.avatarUrl)
 const secondaryPhotos = computed(() => props.data.photos.slice(1, 4))
+const visibleQuickFacts = computed(() => props.data.quickFacts.filter(item => item.access !== 'hidden'))
 const previewPhoto = ref('')
 
 /** 打开图片预览 */

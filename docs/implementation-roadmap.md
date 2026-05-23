@@ -92,7 +92,7 @@ npm run build:h5
 5. `avatarUrl` 当前仍是 profile / user 字段，同时 profile photos 已存在嵌套主图概念。最终态由 `profile_photos.isPrimary` 派生 DTO avatarUrl。
 6. `age` 当前仍保存在 profile 中，并被筛选 / 排序依赖。最终态由 `birthYear` 或认证生日派生；ageRange filter 迁移到后端计算。
 7. `occupation` 当前主要被 account summary / account 页面继续读取。profile 公开层最终只保留 `industry` / `careerDirection`，account 先冻结，避免继续反向决定 profile schema。
-8. `profile_visibility_settings` 当前代码不存在；现有 masking 由 profile access 常量和 service 统一处理。Phase 2 先把 detail 链路接入 visibility settings，默认值可沿用当前常量。
+8. profile 半敏感字段隐藏偏好使用 `profile_privacy_preferences`。现有 masking 仍由 profile access 常量和 service 统一处理；该表只在默认规则之上继续隐藏少量可由用户决定是否公开的字段。
 9. account 当前仍读取旧 profile 字段、用户 onboarding 字段和联系方式相关聚合，是 profile 清理的最大阻塞点。Phase 1 必须先冻结 account。
 10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态迁移到 `user_onboarding_states`，注册不写 city。
 11. 当前 `photos / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / event_agenda_items`。
@@ -247,7 +247,7 @@ politicalViews -> 不结构化保留，必要时进入 staffNotes
 ```text
 legalName -> profile_verifications
 phone/email/wechat -> profile_contacts
-profile field privacy -> profile_visibility_settings
+profile 半敏感字段隐藏偏好 -> profile_privacy_preferences
 ```
 
 联系方式建议结构：
@@ -274,7 +274,7 @@ interface ProfileContactRecord {
 - 联系方式不是 profile 展示字段。
 - 只有私人介绍成功后才可能开放。
 - 独立表更容易做权限、审计、脱敏和顾问确认。
-- `profile_visibility_settings` 先由 profile detail 链路读取，后续再和 account preferences / membership entitlements 联调。
+- `profile_privacy_preferences` 由 profile detail 链路读取，只作为默认权限之上的隐藏偏好，不与会员权益混用。
 
 ### 第三批重定义
 
@@ -382,13 +382,15 @@ interface ProfilePhotoRecord {
 }
 
 
-interface ProfileVisibilitySettingRecord {
+interface ProfilePrivacyPreferenceRecord {
   id: string
   profileId: string
-  fieldCode: ProfileFieldCode
-  visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  lockedByAdvisor: boolean
-  reason?: string
+  hideMaritalStatus: boolean
+  hideHasChildren: boolean
+  hideChildrenPlan: boolean
+  hideAcceptsLongDistance: boolean
+  hideSmoking: boolean
+  hideDrinking: boolean
   createdAt: string
   updatedAt: string
 }
@@ -1108,7 +1110,7 @@ profile_ownerships
 profile_internal_records
 profile_verifications
 profile_contacts
-profile_visibility_settings
+profile_privacy_preferences
 favorite_profiles
 events
 event_agenda_items
@@ -1137,7 +1139,7 @@ advisor_follow_ups
 | `profile_internal_records` | 后台工作人员可见的敏感运营资料。 |
 | `profile_verifications` | 实名、学历、收入、婚姻状态和平台审核等认证状态。 |
 | `profile_contacts` | 受控联系方式。 |
-| `profile_visibility_settings` | profile 字段可见性配置。 |
+| `profile_privacy_preferences` | profile 半敏感字段隐藏偏好。 |
 | `favorite_profiles` | 用户收藏关系。 |
 | `events` | 活动主体。 |
 | `event_agenda_items` | 活动流程项。 |
@@ -1494,7 +1496,7 @@ POST /api/account/profiles/:profileId/archive
 - profile contact methods 更新。
 - profile photos 更新。
 - profile archive 入口接入。
-- profile visibility settings 更新。
+- profile 半敏感字段隐藏偏好更新。
 - account basic fields 更新。
 - account preferences 更新。
 - membership upgrade mock flow。
@@ -1516,7 +1518,7 @@ POST /api/account/profiles/:profileId/archive
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
   - 联系方式 section 在同页维护，但写入 `profile_contacts`，不回填 `profiles` 主表。
-  - profile visibility 在同页维护，不再散落到 settings。
+  - profile 半敏感字段隐藏偏好在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
 
 - `/pages/account/profiles`
@@ -1545,7 +1547,7 @@ POST  /api/account/profiles/:profileId/photos
 POST /api/account/profiles/:profileId/photos/:photoId
 DELETE /api/account/profiles/:profileId/photos/:photoId
 POST  /api/account/profiles/:profileId/archive
-POST /api/account/profiles/:profileId/visibility
+POST /api/account/profiles/:profileId/privacy-preferences
 POST /api/account/me
 POST /api/account/settings/preferences
 POST  /api/account/membership/upgrade
@@ -1558,7 +1560,7 @@ POST  /api/account/membership/upgrade
 | `POST /api/account/profiles/:profileId/contact` | `profile_contacts`, `profile_ownerships` | `AccountProfileContactUpdatePayload` | `AccountProfileDetailDTO` |
 | photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
-| `POST /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
+| `POST /api/account/profiles/:profileId/privacy-preferences` | `profile_privacy_preferences`, `profile_ownerships` | `AccountProfilePrivacyPreferencesUpdatePayload` | `AccountProfilePrivacyPreferencesDTO` |
 | `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `POST /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
 | `POST /api/account/profiles/:profileId/ownership` | `profile_ownerships` | `AccountProfileOwnershipUpdatePayload` | `AccountProfileDetailDTO` |
@@ -1579,12 +1581,12 @@ profile：
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。
 
-visibility：
+半敏感字段隐藏偏好：
 
-- 只允许编辑未被 `lockedByAdvisor` 锁定的字段。
-- `fieldCode` 必须来自 `ProfileFieldCode`。
+- 只允许编辑半敏感字段隐藏开关：婚姻、子女、异地、烟酒。
 - 只更新传入项；未传字段保持原值。
-- profile detail 返回的 visibility 必须是最新结果，避免页面刷新后回退。
+- profile detail 返回的半敏感字段隐藏偏好必须是最新结果，避免页面刷新后回退。
+- 审核锁定、会员权限、工作人员强制隐藏不进入这张表。
 
 preferences：
 
@@ -1629,7 +1631,7 @@ membership：
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
 - 用户在拥有 `owner` 权限且 profile 满足 archive 规则时，可以在 detail 页执行删除入口；profile 退出正常业务流但历史链路保留。
 - `viewer` 无法提交 profile 更新。
-- visibility 仅在该 profile 下生效，且 advisor 锁定字段不可改。
+- 半敏感字段隐藏偏好仅在该 profile 下生效，不能放开默认锁定字段。
 - settings 页修改偏好后刷新仍保持。
 - settings 页修改 `accountName` / `avatarUrl` 后刷新仍保持。
 - membership 升级入口可返回占位结果；正式支付或顾问确认接入前，不直接改写当前套餐与 entitlement balances。
@@ -1811,7 +1813,7 @@ refactor(account): use profile ownerships
 feat(account): add managed profile creation
 feat(account): add managed profile editing
 feat(account): add managed profile media editing
-feat(account): add profile visibility controls
+feat(account): add profile privacy preference controls
 feat(account): add account basics updates
 feat(account): add preference updates
 feat(account): add membership upgrade flow

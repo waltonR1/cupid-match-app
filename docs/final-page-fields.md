@@ -524,8 +524,7 @@ interface AccountProfileDetailPageData {
   sections: AccountProfileDetailSectionViewModel[]
   photos: AccountProfilePhotoViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
-  visibilityItems: ProfileVisibilitySettingViewModel[]
-  visibilityGroups: ProfileVisibilityGroupViewModel[]
+  privacyPreferenceItems: ProfilePrivacyPreferenceViewModel[]
   editState: AccountProfileEditStateViewModel
   archiveAction?: PageActionViewModel
 }
@@ -564,12 +563,6 @@ interface AccountProfilePhotoViewModel {
   deleteAction?: PageActionViewModel
 }
 
-
-interface ProfileVisibilityGroupViewModel {
-  key: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  title: string
-  items: ProfileVisibilitySettingViewModel[]
-}
 
 interface ProfileVerificationSummaryViewModel {
   identityStatus: ProfileVerificationStatus
@@ -796,12 +789,17 @@ interface LegalDocumentLinkViewModel {
   label: string
 }
 
-interface ProfileVisibilitySettingViewModel {
-  profileId: string
-  fieldCode: ProfileFieldCode
+interface ProfilePrivacyPreferenceViewModel {
+  key:
+    | 'hideMaritalStatus'
+    | 'hideHasChildren'
+    | 'hideChildrenPlan'
+    | 'hideAcceptsLongDistance'
+    | 'hideSmoking'
+    | 'hideDrinking'
   label: string
-  visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  lockedByAdvisor: boolean
+  hidden: boolean
+  statusText: string
 }
 
 ```

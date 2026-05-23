@@ -8,7 +8,7 @@ const defaultData: Database = {
     profile_internal_records: [],
     profile_verifications: [],
     profile_contacts: [],
-    profile_visibility_settings: [],
+    profile_privacy_preferences: [],
     events: [],
     event_agenda_items: [],
     event_registrations: [],
@@ -49,7 +49,7 @@ export async function initDb(): Promise<void> {
     db.data.profile_internal_records ??= []
     db.data.profile_verifications ??= []
     db.data.profile_contacts ??= []
-    db.data.profile_visibility_settings ??= []
+    db.data.profile_privacy_preferences ??= []
     db.data.event_agenda_items ??= []
     db.data.event_registrations ??= []
     db.data.user_memberships ??= []

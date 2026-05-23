@@ -22,13 +22,13 @@ export function getProfileAccessDebugPreview(
 
     const userContext = resolvePreviewUserContext(data, profileId, mode, userId)
     const profileView = buildProfileView(data, profile)
-    const visibilitySettings = data.profile_visibility_settings.filter((item) => item.profileId === profile.id)
+    const privacyPreference = data.profile_privacy_preferences.find((item) => item.profileId === profile.id)
 
     if (profileType === 'family') {
-        return toFamilyProfileDetail(locale, profileView, userContext, data.private_introduction_requests, visibilitySettings)
+        return toFamilyProfileDetail(locale, profileView, userContext, data.private_introduction_requests, privacyPreference)
     }
 
-    return toSelfProfileDetail(locale, profileView, userContext, data.private_introduction_requests, visibilitySettings)
+    return toSelfProfileDetail(locale, profileView, userContext, data.private_introduction_requests, privacyPreference)
 }
 
 function resolvePreviewUserContext(

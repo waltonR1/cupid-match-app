@@ -38,11 +38,13 @@ export const PROFILE_FIELD_MEMBER_ONLY = '__MEMBER_ONLY__'
 
 /** 仅登录可见*/
 export const PROFILE_FIELD_LOGIN_REQUIRED = '__LOGIN_REQUIRED__'
+export const PROFILE_FIELD_HIDDEN = '__HIDDEN__'
 
 /** 受限字段占位值 */
 export type ProfileRestrictedFieldValue =
     | typeof PROFILE_FIELD_MEMBER_ONLY
     | typeof PROFILE_FIELD_LOGIN_REQUIRED
+    | typeof PROFILE_FIELD_HIDDEN
 
 /** 支持权限控制的资料字段 */
 export type RestrictedProfileField<T> = T | ProfileRestrictedFieldValue
