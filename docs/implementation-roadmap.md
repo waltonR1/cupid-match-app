@@ -1684,7 +1684,7 @@ Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回
 
 ### 目标
 
-把会员套餐的业务事实从静态页面文案、account membership DTO 和 mock 常量中收敛到同一条数据链路，避免公开会员页、首页会员区、账户会员页展示不同版本的套餐、额度或顾问优先级。
+把会员套餐的业务事实从静态页面文案、account membership DTO、`membership_entitlements` 和 mock 常量中收敛到 `membership_plans` 宽表，避免公开会员页、首页会员区、账户会员页展示不同版本的套餐、额度或顾问优先级。
 
 Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account 写操作。Phase 5.5 只保留会员升级入口占位，不直接实现真实付费或套餐切换。
 
@@ -1692,11 +1692,21 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 
 本阶段要做：
 
-- 以 `membership_plans`、`membership_entitlements`、`user_memberships`、`user_entitlement_balances` 作为会员事实源。
+- 以 `membership_plans` 作为套餐定义和套餐权益配置事实源。
+- 移除 `membership_entitlements`，不再为当前阶段保留 plan-level entitlement 子表。
+- 将当前固定权益直接进入 `membership_plans` 宽表字段，例如：
+  - `privateIntroductionQuota`
+  - `privateIntroductionPeriod`
+  - `eventPriorityEnabled`
+  - `advisorReviewEnabled`
+  - `profileDetailAccessLevel`
+  - `conciergePriority`
+- 保留 `user_memberships` 表达用户当前 / 历史会员状态。
+- 保留 `user_entitlement_balances` 表达用户级动态额度使用情况；它不保存套餐定义，只保存用户当前周期的 total / used / remaining。
 - 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
 - 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
 - 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、顾问优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
-- 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、顾问优先级或 profile 访问权益的独立事实源；如短期保留，必须只作为旧链路迁移期间的 fallback，并在本阶段结束前移除或降级为内部兼容说明。
+- 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、顾问优先级或 profile 访问权益的独立事实源；本阶段结束前应移除或改为从 `membership_plans` 派生。
 - 评估并补齐 `membership_plans` 的排序和展示字段，例如 `sortOrder`、`featured`，避免前端用硬编码顺序判断套餐展示。
 - 保持升级入口是占位流程；点击升级可以进入后续流程占位或返回待接入状态，但不直接改写当前用户会员等级和余额。
 
@@ -1704,16 +1714,17 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 
 - 不接入真实支付、Stripe、退款、发票或订单系统。
 - 不把会员升级做成即时生效的 mock 写入。
-- 不在公开页面展示用户专属 entitlement balance。
+- 不在公开页面展示用户专属 quota balance。
 - 不把营销长文案、页面标题、协议说明塞进数据库。
 - 不修改 profile detail 的字段可见性策略；它只消费会员 access 结果，不直接读取 plan 页面文案。
 
 ### 验收标准
 
-- 公开会员页、首页会员区、账户会员页展示的套餐名、价格、额度和核心权益来自同一套 plan / entitlement 数据。
+- 公开会员页、首页会员区、账户会员页展示的套餐名、价格、额度和核心权益来自同一套 `membership_plans` 宽表数据。
 - account membership 页面仍能展示当前会员、剩余额度和下一等级，但不再拥有另一套套餐事实。
 - i18n 不再保存套餐事实，只保存页面表达文案。
-- `MEMBERSHIP_BENEFITS` 不再与 `membership_plans` / `membership_entitlements` 形成并行 source of truth。
+- `membership_entitlements` 从 mock schema、db、service、API DTO 和文档中移除。
+- `MEMBERSHIP_BENEFITS` 不再与 `membership_plans` 形成并行 source of truth。
 - 会员升级入口仍是占位，不改变当前用户套餐与余额。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
