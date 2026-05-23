@@ -1670,6 +1670,8 @@ Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回
 
 - 不把 room 列表重新挂回 `/pages/account/relationship`。
 - 不提前把 profile 跨模块跳转闭环塞进消息中心；这部分留到 Phase 6 一起收口。
+- 不处理私人介绍申请本身的业务状态收口；`requested`、`accepted`、`declined`、`expired`、`cooldown` 的规则留到 Phase 6。
+- 不决定 `accepted` 后是否立即创建 room；消息中心只承接已经存在或后续产生的受控沟通空间。
 
 ### 验收标准
 
@@ -1707,6 +1709,7 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - 优化 `user_memberships`，让它通过 `planId` 关联当前开通套餐；`tier` 如保留，只作为读写方便的套餐快照，不作为套餐事实源。
 - 优化 `user_entitlement_balances`，让它只记录真正可计数权益的周期余额，例如私人介绍额度；活动优先、顾问审核、资料详情访问层级等布尔 / 访问型权益不进入余额表。
 - 为 `user_entitlement_balances` 增加清晰周期字段，例如 `periodStartedAt`、`periodEndsAt`，并将来源关联到具体 `membershipId`。
+- 将私人介绍额度的事实源从临时 `MEMBERSHIP_BENEFITS` 迁移到 `membership_plans` + `user_entitlement_balances`；Phase 6 的申请接口只消费本阶段产出的余额结果，不再自行按会员等级推导额度。
 - 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
 - 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
 - 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、顾问优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
@@ -1832,8 +1835,15 @@ profile 与 event：
 
 private introduction 与 account：
 
-- account private introductions 展示 requested、accepted、declined、cooldown、quota exhausted。
-- debug 页面保留接受/拒绝工具，但生产页面不暴露。
+- account private introductions 展示 requested、accepted、declined、expired、cooldown、quota exhausted。
+- detail 不允许用户对自己拥有或管理的 profile 发起 private introduction。
+- `private_introduction_requests` 只记录申请事实，不保存联系方式值；联系方式开放必须通过后续 room / introduction flow。
+- `requested` 申请需要有 `expiresAt`；`expired` 是由 `requested + expiresAt < now` 派生出来的展示 / API 状态，不作为持久化 status。
+- `declined` 后进入 cooldown；cooldown 结束后才允许对同一 profile 再次发起申请。
+- 同一 requester 对同一 target profile 在 active 状态下不能重复申请。
+- quota 消耗规则在 Phase 6 明确执行，但额度来源必须来自 Phase 5.7 的 `user_entitlement_balances`，不再从会员等级常量即时推导。
+- debug 页面保留接受 / 拒绝工具，但生产页面不暴露审批操作。
+- `accepted` 后是否自动创建 `private_introduction_rooms` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / 顾问跟进中”的状态。
 
 ### 后端建议
 
@@ -1852,6 +1862,8 @@ POST /api/debug/private-introductions/:id/decline
 ```
 
 说明：当前 profile API 已按 self/family 拆分，私人介绍申请也沿用 detail 所在入口；`:id` 就是 target profile id，不在 body 里重复传 `targetProfileId`。
+申请接口应从 header/session 解析 requester，不允许从 query 或 body 传 requester user id。
+如果 target profile 已归当前用户拥有或管理，接口应返回不可申请状态。
 
 后续 room：
 
@@ -1870,10 +1882,13 @@ room messages 使用 cursor 分页，可用于顾问代发说明、系统通知�
 - profile detail / directory 能展示当前 viewer 的收藏状态。
 - 收藏 / 取消收藏后，account relationship 和 profile favorite state 同步。
 - debug 接受/拒绝后，detail 和 account 状态同步。
-- quota 正确扣减。
+- requested、accepted、declined、expired、cooldown 在 detail、account relationship、debug 中状态一致。
+- requested 申请过期后展示为 expired，且不会永久卡住同一 profile 的申请入口。
+- quota 基于 `user_entitlement_balances` 正确扣减或冻结，不再依赖 `MEMBERSHIP_BENEFITS`。
 - 同一 profile 不能重复申请。
 - 拒绝后 cooldown 生效。
 - 未登录不能申请。
+- 不能对自己拥有或管理的 profile 申请私人介绍。
 - free/silver/gold/diamond 权益差异明确。
 
 ## 建议提交拆分
