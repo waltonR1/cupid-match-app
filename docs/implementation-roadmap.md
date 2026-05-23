@@ -22,6 +22,7 @@ Phase 5: 按最终态重写 account / membership / entitlement
 Phase 5.4: 引入 profile 归档生命周期
 Phase 5.5: 补齐 account center 写操作
 Phase 5.6: 设计独立消息中心
+Phase 5.7: 收敛会员套餐事实源
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
 
@@ -1679,6 +1680,46 @@ Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
+## Phase 5.7：收敛会员套餐事实源
+
+### 目标
+
+把会员套餐的业务事实从静态页面文案、account membership DTO 和 mock 常量中收敛到同一条数据链路，避免公开会员页、首页会员区、账户会员页展示不同版本的套餐、额度或顾问优先级。
+
+Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account 写操作。Phase 5.5 只保留会员升级入口占位，不直接实现真实付费或套餐切换。
+
+### 明确范围
+
+本阶段要做：
+
+- 以 `membership_plans`、`membership_entitlements`、`user_memberships`、`user_entitlement_balances` 作为会员事实源。
+- 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
+- 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
+- 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、顾问优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
+- 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、顾问优先级或 profile 访问权益的独立事实源；如短期保留，必须只作为旧链路迁移期间的 fallback，并在本阶段结束前移除或降级为内部兼容说明。
+- 评估并补齐 `membership_plans` 的排序和展示字段，例如 `sortOrder`、`featured`，避免前端用硬编码顺序判断套餐展示。
+- 保持升级入口是占位流程；点击升级可以进入后续流程占位或返回待接入状态，但不直接改写当前用户会员等级和余额。
+
+本阶段不做：
+
+- 不接入真实支付、Stripe、退款、发票或订单系统。
+- 不把会员升级做成即时生效的 mock 写入。
+- 不在公开页面展示用户专属 entitlement balance。
+- 不把营销长文案、页面标题、协议说明塞进数据库。
+- 不修改 profile detail 的字段可见性策略；它只消费会员 access 结果，不直接读取 plan 页面文案。
+
+### 验收标准
+
+- 公开会员页、首页会员区、账户会员页展示的套餐名、价格、额度和核心权益来自同一套 plan / entitlement 数据。
+- account membership 页面仍能展示当前会员、剩余额度和下一等级，但不再拥有另一套套餐事实。
+- i18n 不再保存套餐事实，只保存页面表达文案。
+- `MEMBERSHIP_BENEFITS` 不再与 `membership_plans` / `membership_entitlements` 形成并行 source of truth。
+- 会员升级入口仍是占位，不改变当前用户套餐与余额。
+- `npm run type-check` 通过。
+- `npm run mock:build` 通过。
+- `npm run check:i18n` 通过。
+- `npm run build:h5` 通过。
+
 ## Phase 6：完成 profile / event / account / private introduction 联动
 
 ### 目标
@@ -1824,6 +1865,13 @@ feat(account): add membership upgrade flow
 ```text
 feat(messages): add standalone message center
 feat(messages): connect mediated rooms
+```
+
+### Phase 5.7
+
+```text
+refactor(membership): centralize plan facts
+refactor(membership): use shared plan api
 ```
 
 ### Phase 6
