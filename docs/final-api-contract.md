@@ -69,7 +69,7 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'contactMethods'
+  | 'contact'
 
 interface PaginationDTO {
   page: number
@@ -126,7 +126,7 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
 | Account | `POST` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
 | Account | `POST` | `/api/account/profiles/:profileId/ownership` | 更新可管理 profile 的归属关系。 |
-| Account | `POST` | `/api/account/profiles/:profileId/contact-methods` | 更新可管理 profile 的受控联系方式。 |
+| Account | `POST` | `/api/account/profiles/:profileId/contact` | 更新可管理 profile 的受控联系方式。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
 | Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
 | Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
@@ -807,11 +807,7 @@ interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
-  contactMethods: Array<{
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
-  }>
+  contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   // 其余业务字段与当前 profile 主表字段保持扁平一致
 }
@@ -996,12 +992,23 @@ interface AccountManagedProfileCreatePayload {
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
 }
 
-interface AccountProfileContactMethodsUpdatePayload {
-  entries: Array<{
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
-  }>
+interface AccountProfileContactDTO {
+  phone?: string
+  phoneVerificationStatus: ContactVerificationStatus
+  email?: string
+  emailVerificationStatus: ContactVerificationStatus
+  wechat?: string
+  wechatVerificationStatus: ContactVerificationStatus
+  preferredChannel?: 'phone' | 'email' | 'wechat'
+  visibility: 'after_introduction' | 'owner_only' | 'disabled'
+}
+
+interface AccountProfileContactUpdatePayload {
+  phone?: string
+  email?: string
+  wechat?: string
+  preferredChannel?: 'phone' | 'email' | 'wechat'
+  visibility?: 'after_introduction' | 'owner_only' | 'disabled'
 }
 
 interface AccountProfileArchiveResultDTO {
@@ -1033,7 +1040,7 @@ Write rules:
 - `POST /api/account/profiles` derives the initial ownership from account attributes, creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/ownership` updates the editable owner relation defaults shown in profile detail.
-- `POST /api/account/profiles/:profileId/contact-methods` writes owner-managed contact records in `profile_contact_methods` and returns the rebuilt detail DTO.
+- `POST /api/account/profiles/:profileId/contact` writes owner-managed contact records in `profile_contacts` and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
 - `POST /api/account/profiles/:profileId/visibility` rejects advisor-locked fields and returns the full latest visibility list.
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.

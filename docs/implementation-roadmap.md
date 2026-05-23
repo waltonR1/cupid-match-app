@@ -96,7 +96,7 @@ npm run build:h5
 9. account 当前仍读取旧 profile 字段、用户 onboarding 字段和联系方式相关聚合，是 profile 清理的最大阻塞点。Phase 1 必须先冻结 account。
 10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态迁移到 `user_onboarding_states`，注册不写 city。
 11. 当前 `photos / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / event_agenda_items`。
-12. 面向浏览者的 public profile detail 不直接返回 phone / email / wechat，这是正确方向；受控联系方式进入 `profile_contact_methods`。账户中心中的 owner-side profile detail 可以读取并维护本人管理档案的联系方式。
+12. 面向浏览者的 public profile detail 不直接返回 phone / email / wechat，这是正确方向；受控联系方式进入 `profile_contacts`。账户中心中的 owner-side profile detail 可以读取并维护本人管理档案的联系方式。
 13. 权限结果目前主要由后端 masking 给出，前端消费 locked placeholder；这是可承接方向，但应继续收敛为 DTO access/privacy 空间。
 14. 当前 `ProfileRecord` 实际承担数据库、筛选、account 聚合和 DTO 来源等多重职责。Phase 2 必须避免继续扩大这个万能对象。
 15. 总结：当前代码仍是 `Record -> service mapper -> page` 的旧方向，文档应作为下一轮重构目标，而不是描述当前实现。
@@ -246,20 +246,24 @@ politicalViews -> 不结构化保留，必要时进入 staffNotes
 
 ```text
 legalName -> profile_verifications
-phone/email/wechat -> profile_contact_methods
+phone/email/wechat -> profile_contacts
 profile field privacy -> profile_visibility_settings
 ```
 
 联系方式建议结构：
 
 ```ts
-interface ProfileContactMethodRecord {
+interface ProfileContactRecord {
   id: string
   profileId: string
-  type: 'phone' | 'email' | 'wechat'
-  value: string
-  verifiedAt?: string
-  visibleAfterIntroduction: boolean
+  phone?: string
+  phoneVerificationStatus: ContactVerificationStatus
+  email?: string
+  emailVerificationStatus: ContactVerificationStatus
+  wechat?: string
+  wechatVerificationStatus: ContactVerificationStatus
+  preferredChannel?: 'phone' | 'email' | 'wechat'
+  visibility: 'after_introduction' | 'owner_only' | 'disabled'
   createdAt: string
   updatedAt: string
 }
@@ -1103,7 +1107,7 @@ profile_photos
 profile_ownerships
 profile_internal_records
 profile_verifications
-profile_contact_methods
+profile_contacts
 profile_visibility_settings
 favorite_profiles
 events
@@ -1132,7 +1136,7 @@ advisor_follow_ups
 | `profile_ownerships` | 用户与资料的关系，例如本人、父母、亲属。 |
 | `profile_internal_records` | 后台工作人员可见的敏感运营资料。 |
 | `profile_verifications` | 实名、学历、收入、婚姻状态和平台审核等认证状态。 |
-| `profile_contact_methods` | 受控联系方式。 |
+| `profile_contacts` | 受控联系方式。 |
 | `profile_visibility_settings` | profile 字段可见性配置。 |
 | `favorite_profiles` | 用户收藏关系。 |
 | `events` | 活动主体。 |
@@ -1511,7 +1515,7 @@ POST /api/account/profiles/:profileId/archive
   - 从只读档案升级为“可编辑档案”。
   - 每个 section 对应一组可编辑字段。
   - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
-  - 联系方式 section 在同页维护，但写入 `profile_contact_methods`，不回填 `profiles` 主表。
+  - 联系方式 section 在同页维护，但写入 `profile_contacts`，不回填 `profiles` 主表。
   - profile visibility 在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
 
@@ -1536,7 +1540,7 @@ POST /api/account/profiles/:profileId/archive
 ```text
 POST  /api/account/profiles
 POST /api/account/profiles/:profileId
-POST /api/account/profiles/:profileId/contact-methods
+POST /api/account/profiles/:profileId/contact
 POST  /api/account/profiles/:profileId/photos
 POST /api/account/profiles/:profileId/photos/:photoId
 DELETE /api/account/profiles/:profileId/photos/:photoId
@@ -1551,7 +1555,7 @@ POST  /api/account/membership/upgrade
 | --- | --- | --- | --- |
 | `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountManagedProfileCreatePayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
-| `POST /api/account/profiles/:profileId/contact-methods` | `profile_contact_methods`, `profile_ownerships` | `AccountProfileContactMethodsUpdatePayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles/:profileId/contact` | `profile_contacts`, `profile_ownerships` | `AccountProfileContactUpdatePayload` | `AccountProfileDetailDTO` |
 | photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
 | `POST /api/account/profiles/:profileId/visibility` | `profile_visibility_settings`, `profile_ownerships` | `AccountProfileVisibilityUpdatePayload` | `AccountProfileVisibilityDTO[]` |
@@ -1569,7 +1573,7 @@ profile：
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
 - `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
-- 联系方式由独立接口更新 `profile_contact_methods`；同页展示不代表同表写入。
+- 联系方式由独立接口更新 `profile_contacts`；同页展示不代表同表写入。
 - 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。

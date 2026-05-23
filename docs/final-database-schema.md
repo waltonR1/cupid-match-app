@@ -35,7 +35,7 @@ interface FinalDatabase {
   profile_ownerships: ProfileOwnershipRecord[]
   profile_internal_records: ProfileInternalRecord[]
   profile_verifications: ProfileVerificationRecord[]
-  profile_contact_methods: ProfileContactMethodRecord[]
+  profile_contacts: ProfileContactRecord[]
   profile_visibility_settings: ProfileVisibilitySettingRecord[]
 
   membership_plans: MembershipPlanRecord[]
@@ -58,7 +58,7 @@ interface FinalDatabase {
 说明：
 
 - `displayName`、`avatarUrl` 可以出现在 DTO，不保存在 `profiles` 主表。
-- `profile_internal_records`、`profile_verifications`、`profile_contact_methods` 只给后台工作人员和受控流程使用。
+- `profile_internal_records`、`profile_verifications`、`profile_contacts` 只给后台工作人员和受控流程使用。
 - `profile_visibility_settings` 是 profile 链路预留的字段可见性配置；account 重写后再和用户侧设置联调。
 
 ## 通用类型
@@ -126,7 +126,7 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'contactMethods'
+  | 'contact'
 ```
 
 `MaritalStatus` 是前台公开婚史状态，只表达当前可公开匹配语义。若后台工作人员需要记录“已婚分居但未完成法律离婚”等敏感情况，不进入公开 enum，放入 `profile_internal_records` 或 `profile_verifications` 的内部审核备注中处理。
@@ -469,18 +469,26 @@ interface ProfileVerificationRecord {
 }
 ```
 
-### profile_contact_methods
+### profile_contacts
 
 联系方式受控保存。只有私人介绍成功或顾问确认后才可能开放。
 
 ```ts
-interface ProfileContactMethodRecord {
+type ContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
+type ProfileContactChannel = 'phone' | 'email' | 'wechat'
+
+interface ProfileContactRecord {
   id: string
   profileId: string
-  type: 'phone' | 'email' | 'wechat'
-  value: string
-  verifiedAt?: string
-  visibleAfterIntroduction: boolean
+  phone?: string
+  phoneVerificationStatus: ContactVerificationStatus
+  email?: string
+  emailVerificationStatus: ContactVerificationStatus
+  wechat?: string
+  wechatVerificationStatus: ContactVerificationStatus
+  preferredChannel?: ProfileContactChannel
+  visibility: ProfileContactVisibility
   createdAt: string
   updatedAt: string
 }
@@ -535,14 +543,14 @@ personalityTraits
 interests
 communicationStyle
 photos
-contactMethods
+contact
 ```
 
 说明：
 
 - 默认可见性仍可由代码常量提供，避免每个 profile 都必须写完整配置。
 - 一旦存在 `profile_visibility_settings` 记录，detail API 应优先使用记录值。
-- `contactMethods` 只代表联系方式开放策略，不直接暴露联系方式值。
+- `contact` 只代表联系方式开放策略，不直接暴露联系方式值。
 - `profile_detail_access` entitlement 只影响 viewer 查看他人 profile detail 的字段开放层级，不影响自己 profile 的曝光排序或公开范围；自己资料曝光仍由 `profile_visibility_settings`、顾问审核和页面策略控制。
 
 ## Membership
@@ -809,7 +817,7 @@ user_agreement_acceptances: unique(userId, documentType)
 user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)
 profile_verifications: unique(profileId)
-profile_contact_methods: unique(profileId, type, value)
+profile_contacts: unique(profileId)
 profile_visibility_settings: unique(profileId, fieldCode)
 user_memberships: index(userId, status)
 user_entitlement_balances: unique(userId, entitlementCode, period)

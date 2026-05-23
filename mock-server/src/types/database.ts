@@ -1,6 +1,6 @@
 import type {LocalizedText} from './common.js'
 import type {
-    ProfileContactMethodRecord,
+    ProfileContactRecord,
     ProfileInternalRecord,
     ProfilePhotoRecord,
     ProfileRecord,
@@ -344,7 +344,7 @@ export interface Database {
     profile_photos: ProfilePhotoRecord[]
     profile_internal_records: ProfileInternalRecord[]
     profile_verifications: ProfileVerificationRecord[]
-    profile_contact_methods: ProfileContactMethodRecord[]
+    profile_contacts: ProfileContactRecord[]
     profile_visibility_settings: ProfileVisibilitySettingRecord[]
     events: EventRecord[]
     event_agenda_items: EventAgendaItemRecord[]

@@ -9,6 +9,9 @@ export type AccountRoomStatus = 'open' | 'paused' | 'closed'
 export type AccountProfileType = 'self' | 'family'
 export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative'
 export type AccountProfileOwnershipStatus = 'pending' | 'active' | 'revoked'
+export type ProfileContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
+export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
+export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
 
 export interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
@@ -46,11 +49,7 @@ export interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
-  contactMethods: Array<{
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
-  }>
+  contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   gender: 'male' | 'female'
   birthYear: number
@@ -202,6 +201,17 @@ export interface AccountProfileVisibilityDTO {
   lockedByAdvisor: boolean
 }
 
+export interface AccountProfileContactDTO {
+  phone?: string
+  phoneVerificationStatus: ProfileContactVerificationStatus
+  email?: string
+  emailVerificationStatus: ProfileContactVerificationStatus
+  wechat?: string
+  wechatVerificationStatus: ProfileContactVerificationStatus
+  preferredChannel?: ProfileContactChannel
+  visibility: ProfileContactVisibility
+}
+
 export interface AccountProfileArchiveResultDTO {
   profileId: string
   archivedAt: string
@@ -267,13 +277,13 @@ export interface AccountProfileOwnershipUpdatePayload {
   isPrimary: boolean
 }
 
-export interface AccountProfileContactMethodsUpdatePayload {
-  entries: Array<{
-    type: 'phone' | 'email' | 'wechat'
-    value: string
-    visibleAfterIntroduction: boolean
-  }>
-}
+export type AccountProfileContactUpdatePayload = Partial<Pick<AccountProfileContactDTO,
+  | 'phone'
+  | 'email'
+  | 'wechat'
+  | 'preferredChannel'
+  | 'visibility'
+>>
 
 export interface AccountProfileVisibilityUpdatePayload {
   entries: Array<{

@@ -4801,53 +4801,6 @@
       "updatedAt": "2026-04-21T10:45:00Z"
     }
   ],
-  "profile_contact_methods": [
-    {
-      "id": "contact-p-001-phone",
-      "profileId": "p-001",
-      "type": "phone",
-      "value": "+33 6 12 34 56 78",
-      "visibleAfterIntroduction": true,
-      "createdAt": "2026-01-12",
-      "updatedAt": "2026-04-20T18:30:00Z"
-    },
-    {
-      "id": "contact-p-001-email",
-      "profileId": "p-001",
-      "type": "email",
-      "value": "aline.m@example.com",
-      "visibleAfterIntroduction": true,
-      "createdAt": "2026-01-12",
-      "updatedAt": "2026-04-20T18:30:00Z"
-    },
-    {
-      "id": "contact-p-002-phone",
-      "profileId": "p-002",
-      "type": "phone",
-      "value": "+33 6 98 76 54 32",
-      "visibleAfterIntroduction": true,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-04-22T09:00:00Z"
-    },
-    {
-      "id": "contact-p-002-email",
-      "profileId": "p-002",
-      "type": "email",
-      "value": "loic.d@example.com",
-      "visibleAfterIntroduction": true,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-04-22T09:00:00Z"
-    },
-    {
-      "id": "contact-p-002-wechat",
-      "profileId": "p-002",
-      "type": "wechat",
-      "value": "loic_dubois",
-      "visibleAfterIntroduction": true,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-04-22T09:00:00Z"
-    }
-  ],
   "profile_visibility_settings": [],
   "user_memberships": [
     {
@@ -6923,6 +6876,35 @@
       ],
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "profile_contacts": [
+    {
+      "id": "contact-p-001",
+      "profileId": "p-001",
+      "phoneVerificationStatus": "unverified",
+      "emailVerificationStatus": "unverified",
+      "wechatVerificationStatus": "unverified",
+      "preferredChannel": "phone",
+      "visibility": "after_introduction",
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z",
+      "phone": "+33 6 12 34 56 78",
+      "email": "aline.m@example.com"
+    },
+    {
+      "id": "contact-p-002",
+      "profileId": "p-002",
+      "phoneVerificationStatus": "unverified",
+      "emailVerificationStatus": "unverified",
+      "wechatVerificationStatus": "unverified",
+      "preferredChannel": "phone",
+      "visibility": "after_introduction",
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-04-22T09:00:00Z",
+      "phone": "+33 6 98 76 54 32",
+      "email": "loic.d@example.com",
+      "wechat": "loic_dubois"
     }
   ]
 }

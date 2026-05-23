@@ -39,7 +39,7 @@
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
 | profile 可见性 | `profile_visibility_settings` plus default constants | `access`, masked field values | frontend hardcoded member checks |
-| 联系方式 | `profile_contact_methods` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
+| 联系方式 | `profile_contacts` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
 | 后台资料 | `profile_internal_records`, `profile_verifications` | staff/admin DTO only | public profile DTO |
 | 活动主体 | `events` | localized event DTO | nested agenda |
 | 活动流程 | `event_agenda_items` | `agendaItems[]` | `events.agenda` |
@@ -447,7 +447,7 @@ type ProfileFieldCode =
   | 'personalityTraits'
   | 'interests'
   | 'communicationStyle'
-  | 'contactMethods'
+  | 'contact'
 
 interface ProfileAccessDTO {
   viewerRole: 'guest' | 'free_user' | 'member' | 'owner' | 'advisor'
@@ -605,8 +605,8 @@ profile_photos:
   url, isPrimary, sortOrder, status
 
 
-profile_contact_methods:
-  type, value, verifiedAt, visibleAfterIntroduction
+profile_contacts:
+  phone, phoneVerificationStatus, email, emailVerificationStatus, wechat, wechatVerificationStatus, preferredChannel, visibility
 
 profile_internal_records:
   employer, incomeRange, staffNotes, riskFlags, source, updatedByUserId
@@ -667,7 +667,7 @@ Rules:
 - The create action derives an initial ownership default from account attributes; the owner may later adjust it from profile detail.
 - The created profile uses the same unified self / family account detail editor afterward.
 - Create must write `profiles`, `profile_ownerships`, and `profile_verifications`.
-- `profile_photos`, `profile_contact_methods`, `profile_visibility_settings`, and `profile_internal_records` remain on-demand collections.
+- `profile_photos`, `profile_contacts`, `profile_visibility_settings`, and `profile_internal_records` remain on-demand collections.
 
 ### Managed profile update
 
@@ -707,23 +707,23 @@ Rules:
 - The owner may adjust that relation later from the unified profile detail editor.
 - This chain updates only `profile_ownerships`, not profile main-table fields.
 
-### Managed profile contact methods update
+### Managed profile contact update
 
 ```text
 /pages/account/profile-detail
--> contact methods editor
--> POST /api/account/profiles/:profileId/contact-methods
+-> contact editor
+-> POST /api/account/profiles/:profileId/contact
 -> ownership permission check
--> profile_contact_methods upsert
+-> profile_contacts upsert
 -> rebuild AccountProfileDetailDTO
 -> refresh AccountProfileDetailPageData
 ```
 
 Rules:
 
-- Contact methods are editable from the unified owner-side profile detail page, but they never write back into `profiles`.
+- Contact information is edited as one flattened owner-side record, but it never writes back into `profiles`.
 - Only `owner` and `manager` can write.
-- The payload writes controlled contact records such as phone, email and wechat plus `visibleAfterIntroduction`.
+- The payload writes the flattened contact record: phone, email, wechat, preferred channel and the contact-level visibility policy.
 - Public browsing detail DTOs still do not expose raw contact values.
 
 ### Managed profile photos update
@@ -1368,7 +1368,7 @@ Move to independent collections:
 
 ```text
 photos -> profile_photos
-phone/email/wechat -> profile_contact_methods
+phone/email/wechat -> profile_contacts
 legalName/dateOfBirth/statuses -> profile_verifications
 employer/income/staff notes/risk flags -> profile_internal_records
 field privacy -> profile_visibility_settings

@@ -130,7 +130,7 @@ export const accountCenterMessages: AppMessageSchema = {
       personalityTraits: '性格关键词',
       interests: '兴趣',
       communicationStyle: '沟通方式',
-      contactMethods: '联系方式',
+      contact: '联系方式',
     },
     visibilityLevel: {
       public: '访客可见',
@@ -185,7 +185,7 @@ export const accountCenterMessages: AppMessageSchema = {
         activityLevel: '活跃程度', weekendStyle: '周末节奏', pets: '宠物', personalityTraits: '性格关键词', interests: '兴趣',
         communicationStyle: '沟通方式', summary: '简介', tags: '标签', familyVisible: '家庭可见', allowFamilyContact: '允许家庭联系',
         familyPriority: '家庭优先', isPriorityProfile: '优先展示', lifecycle: '生命周期', profileStatus: '资料状态', lastActiveAt: '最近活跃', createdAt: '创建时间', updatedAt: '更新时间',
-        phone: '手机号', email: '邮箱', wechat: '微信', role: '管理角色', relationshipToProfile: '与资料本人的关系', isPrimary: '主资料',
+        phone: '手机', email: '邮箱', wechat: '微信', preferredChannel: '首选联系', contactVisibility: '联系方式开放', role: '管理角色', relationshipToProfile: '与资料本人的关系', isPrimary: '主资料',
       },
       values: {
         language: { zh: '中文', fr: 'Français', en: 'English' },
@@ -195,6 +195,8 @@ export const accountCenterMessages: AppMessageSchema = {
         childrenPlan: { wants: '希望有孩子', open_to_discuss: '愿意沟通', does_not_want: '不计划要孩子' },
         datingIntentionCode: { serious: '认真交往', marriage: '以婚姻为目标', exclusive: '稳定专一关系', cross_border: '接受跨境发展' },
         habit: { never: '从不', social: '社交场合', often: '经常' },
+        contactChannel: { phone: '手机', email: '邮箱', wechat: '微信' },
+        contactVisibility: { after_introduction: '介绍成功后开放', owner_only: '仅管理者可见', disabled: '暂不开放' },
       },
     },
     createPicker: { title: '这份资料属于谁？', selfDesc: '由你本人直接管理，用于表达自己的择偶意向。', parentDesc: '代家人管理，后续可在详情页完善具体关系。' },

@@ -44,11 +44,7 @@ interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   visibility: AccountProfileVisibilityDTO[]
-  contactMethods: Array<{
-    type: Database['profile_contact_methods'][number]['type']
-    value: string
-    visibleAfterIntroduction: boolean
-  }>
+  contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: Database['profile_photos'][number]['status'] }>
   gender: string
   birthYear: number
@@ -193,6 +189,17 @@ interface AccountProfileVerificationDTO {
   verifiedByUserId?: string
 }
 
+interface AccountProfileContactDTO {
+  phone?: string
+  phoneVerificationStatus: Database['profile_contacts'][number]['phoneVerificationStatus']
+  email?: string
+  emailVerificationStatus: Database['profile_contacts'][number]['emailVerificationStatus']
+  wechat?: string
+  wechatVerificationStatus: Database['profile_contacts'][number]['wechatVerificationStatus']
+  preferredChannel?: Database['profile_contacts'][number]['preferredChannel']
+  visibility: Database['profile_contacts'][number]['visibility']
+}
+
 interface AccountProfileVisibilityDTO {
   profileId: string
   fieldCode: string
@@ -311,9 +318,13 @@ interface AccountProfileOwnershipUpdatePayload {
   isPrimary: boolean
 }
 
-interface AccountProfileContactMethodsUpdatePayload {
-  entries: Array<{ type: Database['profile_contact_methods'][number]['type']; value: string; visibleAfterIntroduction: boolean }>
-}
+type AccountProfileContactUpdatePayload = Partial<Pick<AccountProfileContactDTO,
+  | 'phone'
+  | 'email'
+  | 'wechat'
+  | 'preferredChannel'
+  | 'visibility'
+>>
 
 interface AccountProfileVisibilityUpdatePayload {
   entries: Array<{ fieldCode: string; visibility: Database['profile_visibility_settings'][number]['visibility'] }>
@@ -360,6 +371,28 @@ function findActivePlan(data: Database, tier: MembershipLevel) {
 
 function findVerification(data: Database, profileId: string) {
   return data.profile_verifications.find((v) => v.profileId === profileId)
+}
+
+function findContact(data: Database, profileId: string) {
+  return data.profile_contacts.find((item) => item.profileId === profileId)
+}
+
+function toContactDto(contact: Database['profile_contacts'][number] | undefined): AccountProfileContactDTO {
+  return {
+    phone: contact?.phone,
+    phoneVerificationStatus: contact?.phoneVerificationStatus ?? 'unverified',
+    email: contact?.email,
+    emailVerificationStatus: contact?.emailVerificationStatus ?? 'unverified',
+    wechat: contact?.wechat,
+    wechatVerificationStatus: contact?.wechatVerificationStatus ?? 'unverified',
+    preferredChannel: contact?.preferredChannel,
+    visibility: contact?.visibility ?? 'after_introduction',
+  }
+}
+
+function normalizeOptionalString(value: string | undefined) {
+  const next = value?.trim()
+  return next ? next : undefined
 }
 
 function resolveUserLocale(data: Database, userId: string): ApiLocale {
@@ -477,13 +510,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
   const view = buildProfileView(data, profile)
   const verification = findVerification(data, profileId)
   const visibility = buildVisibilityDto(data, profileId)
-  const contactMethods = data.profile_contact_methods
-    .filter((item) => item.profileId === profileId)
-    .map((item) => ({
-      type: item.type,
-      value: item.value,
-      visibleAfterIntroduction: item.visibleAfterIntroduction,
-    }))
+  const contact = findContact(data, profileId)
 
   return {
     profileId,
@@ -510,7 +537,7 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
       verifiedByUserId: verification?.verifiedByUserId,
     },
     visibility,
-    contactMethods,
+    contact: toContactDto(contact),
     photos: data.profile_photos
       .filter((item) => item.profileId === profileId)
       .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -678,19 +705,35 @@ export function updateAccountProfile(data: Database, userId: string, profileId: 
   return getAccountProfileDetail(data, userId, profileId, locale)
 }
 
-export function updateAccountProfileContactMethods(data: Database, userId: string, profileId: string, requestedLocale: ApiLocale, payload: AccountProfileContactMethodsUpdatePayload) {
+export function updateAccountProfileContact(data: Database, userId: string, profileId: string, requestedLocale: ApiLocale, payload: AccountProfileContactUpdatePayload) {
   const permission = resolveProfileWritePermission(data, userId, profileId)
   if (!permission) return null
   if (permission === 'viewer') return 'forbidden' as const
   const now = new Date().toISOString()
-  data.profile_contact_methods = data.profile_contact_methods.filter((item) => item.profileId !== profileId)
-  payload.entries.forEach((entry) => data.profile_contact_methods.push({
-    id: nextId('contact', data.profile_contact_methods),
-    profileId,
-    ...entry,
-    createdAt: now,
-    updatedAt: now,
-  }))
+  const existing = findContact(data, profileId)
+  if (existing) {
+    existing.phone = normalizeOptionalString(payload.phone)
+    existing.email = normalizeOptionalString(payload.email)
+    existing.wechat = normalizeOptionalString(payload.wechat)
+    existing.preferredChannel = payload.preferredChannel
+    existing.visibility = payload.visibility ?? existing.visibility
+    existing.updatedAt = now
+  } else {
+    data.profile_contacts.push({
+      id: nextId('contact', data.profile_contacts),
+      profileId,
+      phone: normalizeOptionalString(payload.phone),
+      phoneVerificationStatus: 'unverified',
+      email: normalizeOptionalString(payload.email),
+      emailVerificationStatus: 'unverified',
+      wechat: normalizeOptionalString(payload.wechat),
+      wechatVerificationStatus: 'unverified',
+      preferredChannel: payload.preferredChannel,
+      visibility: payload.visibility ?? 'after_introduction',
+      createdAt: now,
+      updatedAt: now,
+    })
+  }
   return getAccountProfileDetail(data, userId, profileId, requestedLocale)
 }
 
