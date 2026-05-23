@@ -1752,6 +1752,8 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - 移除 `events.registeredCountCache` 与 `events.waitlistCountCache`；活动人数继续由 `event_registrations` 动态计算。
 - 移除未使用且语义不清的 `event_registrations.note`。
 - 补齐 `event_registrations.waitlistedAt` 与 `event_registrations.attendedAt`，让 `waitlist` 和 `attended` 状态有对应时间点。
+- 明确 `event_registrations` 是活动报名状态、活动人数、候补人数、account events 的唯一 source of truth。
+- 明确 `attended` 的自动结算可以后置；Phase 5.8 只补字段和 debug 可选模拟，不做真实定时任务或自动结算任务。
 - 将 `events.advisorNote` 改名为更符合用户可见语义的字段，例如 `curatorNote`；它是公开 / 详情页可见的活动策展说明，不是内部顾问备注。
 - 保留 `event_agenda_items` 独立表；它是一对多活动流程项，不能重新嵌回 `events` 主表。
 - 将 `event_agenda_items.desc` 改名为 `description`，与 API DTO 和前端 ViewModel 命名一致。
@@ -1775,6 +1777,8 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - `events` 主表不再保存报名人数缓存字段。
 - `event_registrations` 不再保留未使用的 `note` 字段。
 - `waitlist` / `attended` 状态有对应时间字段。
+- `event_registrations` 是活动报名状态和 account events 的唯一来源，account events 不从 event 主表猜测用户状态。
+- `attended` 自动结算没有被误做成 Phase 5.8 的强制范围；若 debug 提供手动标记到场，也必须只作为调试工具存在。
 - 用户端 events API 不返回 draft；debug 活动管理可以查看 draft。
 - `advisorNote` 相关 DB 字段、DTO、mapper、页面类型和 i18n key 完成统一改名。
 - `event_agenda_items` 继续作为活动流程项独立表存在，`desc` 命名完成收敛。
