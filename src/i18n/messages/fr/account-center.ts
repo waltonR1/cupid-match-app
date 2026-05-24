@@ -84,7 +84,7 @@ export const accountCenterMessages: AppMessageSchema = {
     lifecycle: { active: 'En service', archived: 'Archive' },
     profileType: { self: 'Profil personnel', family: 'Profil gere par la famille' },
     permission: { owner: 'Modifiable', manager: 'Gerable' },
-    status: { draft: 'Brouillon', review: 'En verification', open: 'Ouvert', paused: 'En pause', hidden: 'Masque' },
+    status: { draft: 'Non publié', review: 'En vérification', open: 'En recherche', paused: 'En pause', hidden: 'Masqué' },
     verification: { identity: 'Verification d identite', education: 'Verification des etudes', income: 'Verification des revenus', marital: 'Verification matrimoniale', platformReview: 'Revue plateforme', verifiedAt: 'Verifie le' },
     verificationStatus: { unverified: 'Non verifie', pending: 'En cours', verified: 'Verifie', rejected: 'Refuse' },
     reviewStatus: { unreviewed: 'Non examine', pending: 'En cours', approved: 'Approuve', rejected: 'Refuse' },

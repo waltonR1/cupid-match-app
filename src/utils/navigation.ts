@@ -88,6 +88,10 @@ export function openAccountProfileDetail(id: string) {
   openPage(`/pages/account/profile-detail?id=${encodeURIComponent(id)}`)
 }
 
+export function openAccountProfileCreate() {
+  openPage('/pages/account/profile-detail?mode=create')
+}
+
 /** 打开活动页 */
 export function openAccountEventsPage() {
   openPage('/pages/account/events')

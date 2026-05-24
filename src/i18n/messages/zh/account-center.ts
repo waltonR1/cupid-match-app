@@ -75,9 +75,9 @@ export const accountCenterMessages: AppMessageSchema = {
     profileType: { self: '本人资料', family: '家庭代管资料' },
     permission: { owner: '可编辑', manager: '可管理' },
     status: {
-      draft: '草稿',
+      draft: '未发布',
       review: '审核中',
-      open: '开放中',
+      open: '征集中',
       paused: '已暂停',
       hidden: '已隐藏',
     },
