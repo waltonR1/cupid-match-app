@@ -1,24 +1,7 @@
-import type { AccountProfilesDTO } from '@/api/account'
-import type { Translate } from '@/i18n/types'
+import type { AccountProfileVerificationDTO } from '@/api/account'
 
-export function toAccountProfilesPageData(params: { payload: AccountProfilesDTO | null; t: Translate }) {
-  const { payload, t } = params
-  if (!payload) return null
-
-  return {
-    profiles: payload.profiles.map((profile) => ({
-      ...profile,
-      profileStatusText: t(`profiles.status.${profile.profileStatus}`),
-      verificationSummary: buildVerificationSummary(profile.verification, t),
-      presentationBadges: buildPresentationBadges(profile, t),
-    })),
-  }
-}
-
-function buildVerificationSummary(
-  verification: AccountProfilesDTO['profiles'][number]['verification'],
-  t: Translate,
-) {
+/** 统计五项认证中已通过的数量与总数 */
+export function computeVerificationRatio(verification: AccountProfileVerificationDTO) {
   const statuses = [
     verification.identityStatus,
     verification.educationStatus,
@@ -26,30 +9,15 @@ function buildVerificationSummary(
     verification.maritalStatus,
     verification.reviewStatus,
   ]
-  const verifiedCount = statuses.filter((status) => status === 'verified' || status === 'approved').length
-
   return {
-    value: `${verifiedCount}/${statuses.length}`,
-    label: t('profiles.verificationSummary'),
-    description: resolveVerificationDescription(verifiedCount, statuses.length, t),
+    verified: statuses.filter((s) => s === 'verified' || s === 'approved').length,
+    total: statuses.length,
   }
 }
 
-function buildPresentationBadges(
-  profile: AccountProfilesDTO['profiles'][number],
-  t: Translate,
-) {
-  return [
-    profile.isPrimary ? t('profiles.badges.primary') : null,
-    profile.isPriorityProfile ? t('profiles.badges.priority') : null,
-    t(`profiles.profileType.${profile.profileType}`),
-    t(`profiles.relationship.${profile.relationshipToProfile}`),
-    t(`profiles.permission.${profile.permission}`),
-  ].filter((item): item is string => Boolean(item))
-}
-
-function resolveVerificationDescription(verifiedCount: number, totalCount: number, t: Translate) {
-  if (verifiedCount === totalCount) return t('profiles.verificationDescription.complete')
-  if (verifiedCount === 0) return t('profiles.verificationDescription.empty')
-  return t('profiles.verificationDescription.partial')
+/** 根据认证通过比例返回描述文案的 i18n key 后缀 */
+export function resolveVerificationDescriptionKey(verified: number, total: number) {
+  if (verified === total) return 'complete' as const
+  if (verified === 0) return 'empty' as const
+  return 'partial' as const
 }
