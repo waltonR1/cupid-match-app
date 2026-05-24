@@ -60,7 +60,7 @@ type AccountNavKey = 'home' | 'relationship' | 'profiles' | 'events' | 'membersh
 type AccountPreferenceCode =
   | 'preferred_city'
   | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
+  | 'staff_contact_enabled'
   | 'family_assist_enabled'
   | 'introduction_updates_enabled'
   | 'event_reminders_enabled'
@@ -244,9 +244,9 @@ interface ProfileCardFactViewModel {
 Self detail 和 family detail 共享基础 detail ViewModel。页面可以根据 view context 选择展示不同 section，但字段来源一致。
 
 ```ts
-type ProfileDetailAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'advisor'
+type ProfileDetailAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'staff'
 type ProfileDetailAccessState = 'visible' | 'masked' | 'hidden'
-type ProfileDetailLockReason = 'login' | 'member' | 'introduction' | 'advisor'
+type ProfileDetailLockReason = 'login' | 'member' | 'introduction' | 'staff'
 
 interface ProfileDetailFactItem {
   label: string
@@ -284,7 +284,7 @@ interface PrivateIntroductionSectionData {
   canRequest: boolean
   alreadyRequested: boolean
   expiresAtText?: string
-  showPrivateRoom: boolean
+  showInboxThread: boolean
 }
 
 interface SelfProfileDetailPageData {
@@ -595,7 +595,7 @@ interface AccountMembershipSummaryViewModel {
 }
 
 interface AccountEntitlementBalanceViewModel {
-  code: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+  code: 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
   label: string
   quotaTotal: number
   quotaUsed: number
@@ -684,48 +684,50 @@ interface AccountIntroductionSummaryViewModel {
 
 ### Messages
 
-`/pages/account/relationship` 只承接收藏与私人介绍；消息中心是独立产品模块。Phase 5 仅保留占位页，完整消息页面在 Phase 5.6 收敛。
+`/pages/account/relationship` 只承接收藏与私人介绍申请；消息中心是独立产品模块。用户可见通知、系统提醒、私人介绍受控沟通都进入 inbox。Phase 5 仅保留占位页，完整消息页面在 Phase 5.6 收敛。
 
 ```ts
-interface PrivateIntroductionRoomViewModel {
-  roomId: string
-  requestId: string
-  targetProfileId: string
-  targetDisplayName: string
-  targetAvatarUrl: string
-  status: 'open' | 'paused' | 'closed'
-  openedAtText: string
-  lastMessageText?: string
-}
-interface PrivateIntroductionRoomPageData {
-  room: PrivateIntroductionRoomViewModel
-  messages: PrivateIntroductionRoomMessageViewModel[]
-  messagePage: PrivateIntroductionRoomMessagePageViewModel
-  composer?: PrivateIntroductionRoomComposerViewModel
+interface InboxThreadViewModel {
+  threadId: string
+  type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+  title: string
+  preview: string
+  status: 'open' | 'closed' | 'archived'
+  unread: boolean
+  updatedAtText: string
 }
 
-interface PrivateIntroductionRoomMessageViewModel {
+interface InboxThreadPageData {
+  thread: InboxThreadViewModel
+  messages: InboxMessageViewModel[]
+  messagePage: InboxMessagePageViewModel
+  composer?: InboxComposerViewModel
+}
+
+interface InboxMessageViewModel {
   messageId: string
-  senderType: 'user' | 'advisor' | 'system'
+  senderType: 'user' | 'staff' | 'system'
   senderName: string
+  messageType: 'text' | 'status_update' | 'action_prompt'
   body: string
   createdAtText: string
+  action?: PageActionViewModel
 }
 
-interface PrivateIntroductionRoomComposerViewModel {
+interface InboxComposerViewModel {
   disabled: boolean
   placeholder: string
   submitAction: PageActionViewModel
 }
 
-interface PrivateIntroductionRoomMessagePageViewModel {
+interface InboxMessagePageViewModel {
   hasMore: boolean
   nextBefore?: string
   loadMoreAction?: PageActionViewModel
 }
 ```
 
-即使产品暂时不开放自由聊天，独立消息中心也可以用于顾问代发说明、系统通知和受控沟通记录。
+即使产品暂时不开放自由聊天，独立消息中心也可以用于系统通知、staff 可见说明和私人介绍受控沟通记录。
 
 ### Settings
 
@@ -838,5 +840,5 @@ message_threads as final account messages source
 - profile 展示名、头像、年龄来自 profile DTO 派生字段。
 - 会员、额度、权益来自 membership / entitlement DTO。
 - 活动报名来自 event registration DTO。
-- 私人介绍和消息来自 private introduction request / room DTO。
+- 私人介绍和消息来自 private introduction request / inbox DTO。
 - 页面 label、标题、说明来自前端 i18n。

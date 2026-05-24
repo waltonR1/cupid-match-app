@@ -15,7 +15,7 @@
 ```text
 Phase 1: 冻结 account，移除它对 profile 旧字段的依赖
 Phase 2: 清理 profile 主表旧字段，直接对齐最终 profile schema
-Phase 3: 修正当前 auth / registration / onboarding 模型
+Phase 3: 修正当前 auth / registration / 注册入口模型
 Phase 4: 完成 events 页面与 API 字段链路
 Phase 4.5: 升级 agreement / legal documents 链路
 Phase 5: 按最终态重写 account / membership / entitlement
@@ -35,7 +35,7 @@ page -> hook -> api -> mock-server
 
 ## Mock Server Positioning
 
-当前 `mock-server` 是 Node.js + TypeScript 写的 high-fidelity business mock / 领域模型验证层，用于验证前端数据链路、API DTO 边界、source of truth、ownership、visibility、onboarding、entitlement、registration 等业务规则，并支撑前端页面完整闭环。
+当前 `mock-server` 是 Node.js + TypeScript 写的 high-fidelity business mock / 领域模型验证层，用于验证前端数据链路、API DTO 边界、source of truth、ownership、visibility、注册入口意图、entitlement、registration 等业务规则，并支撑前端页面完整闭环。
 
 它不是 production backend。未来正式后端将由 Java 实现；当前 `mock-server` 的输出应成为 Java 后端复刻领域模型和接口 contract 的参考。
 
@@ -49,7 +49,7 @@ page -> hook -> api -> mock-server
 
 当前阶段不要把 JWT / refresh token、真实权限安全体系、真实数据库事务、Redis / MQ、审计系统、上传存储、部署 / monitoring、migration、限流、完整 security hardening 做成重点。
 
-但 domain boundary、DTO boundary、source of truth、ownership、visibility / masking、onboarding state、entitlement / quota 语义、event registration source of truth 必须认真实现。
+但 domain boundary、DTO boundary、source of truth、ownership、visibility / masking、注册入口意图、entitlement / quota 语义、event registration source of truth 必须认真实现。
 
 ## 全局约束
 
@@ -96,7 +96,7 @@ npm run build:h5
 7. `occupation` 当前主要被 account summary / account 页面继续读取。profile 公开层最终只保留 `industry` / `careerDirection`，account 先冻结，避免继续反向决定 profile schema。
 8. profile 半敏感字段隐藏偏好使用 `profile_privacy_preferences`。现有 masking 仍由 profile access 常量和 service 统一处理；该表只在默认规则之上继续隐藏少量可由用户决定是否公开的字段。
 9. account 当前仍读取旧 profile 字段、用户 onboarding 字段和联系方式相关聚合，是 profile 清理的最大阻塞点。Phase 1 必须先冻结 account。
-10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态迁移到 `user_onboarding_states`，注册不写 city。
+10. auth 当前仍把 `users.city / onboardingPath / onboardingStep` 作为注册和 session 的一部分，注册仍要求 city。最终态不保留 onboarding 持久化表；注册入口路径只作为本次请求的跳转意图，注册不写 city。
 11. 当前 `photos / agenda` 仍嵌套在主记录中。最终态不再为 mock 便利保留嵌套结构，统一使用 `profile_photos / event_agenda_items`。
 12. 面向浏览者的 public profile detail 不直接返回 phone / email / wechat，这是正确方向；受控联系方式进入 `profile_contacts`。账户中心中的 owner-side profile detail 可以读取并维护本人管理档案的联系方式。
 13. 权限结果目前主要由后端 masking 给出，前端消费 locked placeholder；这是可承接方向，但应继续收敛为 DTO access/privacy 空间。
@@ -275,7 +275,7 @@ interface ProfileContactRecord {
 
 - 联系方式不是 profile 展示字段。
 - 只有私人介绍成功后才可能开放。
-- 独立表更容易做权限、审计、脱敏和顾问确认。
+- 独立表更容易做权限、审计、脱敏和 staff 确认。
 - `profile_privacy_preferences` 由 profile detail 链路读取，只作为默认权限之上的隐藏偏好，不与会员权益混用。
 
 ### 第三批重定义
@@ -489,7 +489,7 @@ interface ProfileVerificationRecord {
 - `npm run mock:build` 通过。
 - `npm run build:h5` 通过。
 
-## Phase 3：修正当前 auth / registration / onboarding 模型
+## Phase 3：修正当前 auth / registration / 注册入口模型
 
 ### 基线对比
 
@@ -507,7 +507,7 @@ refactor(auth): align login register onboarding flow
 - 登录通过 `auth_identities.identifier + password` 查找用户。
 - 注册后写入 `users`、`auth_identities`、`memberships`。
 - 前端 `authStore.user.id` 可被 `requestJson` 转为 `X-User-Id`。
-- 登录 / 注册后按 onboarding path 跳转 self 或 family directory。
+- 注册后按本次注册入口路径跳转 self 或 family directory；登录后进入账户首页。
 
 因此，当前需要审视的是第一轮 auth 改造后留下的模型问题，而不是把 auth 当作完成态。
 
@@ -517,7 +517,7 @@ refactor(auth): align login register onboarding flow
 - `onboardingPath` 是注册入口状态，不应长期成为用户主体身份。
 - `self / family / parent` 这类关系应进入 `profile_ownerships`，而不是固定在 user 主体上。
 - `memberships` 只有 `tier / startedAt / expiresAt`，无法表达权益、额度、状态、续费和赠送。
-- 注册成功后没有创建 profile 是正确方向，但也没有建立清晰的 onboarding 记录或 profile creation intent。
+- 注册成功后没有创建 profile 是正确方向；注册入口路径只用于注册后的落点，不长期保存为用户状态。
 - `AuthSession.token` 当前返回但前端不保存、不使用；实际鉴权依赖 mock 的 `X-User-Id`。
 - `accountName` 是账户展示名；profile 对外展示名应由后端按 profile id 派生，不应从数据库读取 `profiles.displayName`。
 - 当前注册要求 `city`，但账户创建不需要城市；城市应在 profile 创建或偏好设置中填写。
@@ -527,7 +527,7 @@ refactor(auth): align login register onboarding flow
 - 注册只创建登录账户和初始账户状态，不创建 profile。
 - `users` 只描述登录账户主体，不表达永久角色、会员等级、profile 完成度。
 - 登录身份由 `auth_identities` 表达。
-- 注册入口路径只作为 onboarding 状态或 profile 创建意图，不作为长期用户身份。
+- 注册入口路径只作为本次请求的 profile 创建意图，不作为长期用户身份，也不进入独立表。
 - 可以保留 mock 鉴权的 `X-User-Id`，但必须在文档和代码边界上承认它是 mock context，不是正式 token 鉴权。
 - 为 Phase 5 的 membership entitlement、profile ownership、多 profile 管理预留结构。
 
@@ -548,10 +548,10 @@ refactor(auth): align login register onboarding flow
    - 写入 active free `user_memberships`
    - Phase 5 再完整拆出 membership plan / entitlement / balance
 
-4. 建立 onboarding 状态
+4. 收紧注册入口路径
    - path = self 或 family
-   - step = create_profile
-   - profileId = null
+   - 只用于注册成功后的前端落点
+   - 不写入 users，也不写入独立 onboarding 表
 
 5. 注册成功后进入 profile creation / directory 的临时落地页
 ```
@@ -563,7 +563,6 @@ refactor(auth): align login register onboarding flow
 ```text
 users
 auth_identities
-user_onboarding_states
 user_memberships
 profile_ownerships
 ```
@@ -582,24 +581,9 @@ interface UserRecord {
 }
 ```
 
-onboarding 独立结构：
-
-```ts
-interface UserOnboardingStateRecord {
-  id: string
-  userId: string
-  path: 'self' | 'family'
-  step: 'create_profile' | 'review_profile' | 'browse'
-  profileId?: string
-  completedAt?: string
-  createdAt: string
-  updatedAt: string
-}
-```
-
 说明：
 
-- `onboardingPath`、`onboardingStep` 不再写入 `users`，由 `user_onboarding_states` 表达。
+- `onboardingPath`、`onboardingStep` 不再写入 `users`，也不建立独立 onboarding 状态表。
 - 注册阶段不写入 `city`。
 - 注册阶段写入 `preferredLocale`，但该值来自当前前端 locale，不作为注册页手动字段。
 - 不新增 `role`。
@@ -675,11 +659,6 @@ interface AuthSession {
     avatarUrl: string
     preferredLocale: 'zh' | 'fr' | 'en'
   }
-  onboarding: {
-    path: 'self' | 'family'
-    step: 'create_profile' | 'review_profile' | 'browse'
-    profileId?: string
-  }
 }
 ```
 
@@ -725,7 +704,7 @@ interface LoginPayload {
 ### 验收标准
 
 - 注册仍不创建 profile，也不写 profile 字段。
-- 新用户注册后写入账户主体、认证身份、onboarding 状态、默认会员状态。
+- 新用户注册后写入账户主体、认证身份和默认会员状态。
 - 默认会员状态在 Phase 3 至少写入 active free `user_memberships`；quota 和 entitlement 余额在 Phase 5 完整落地。
 - `users` 不出现 `role`、`profileCompletion`、会员 tier、profile 展示字段。
 - `users` 不出现 `city`、`onboardingPath`、`onboardingStep`。
@@ -734,7 +713,7 @@ interface LoginPayload {
 - 注册 payload 不包含 `city`，注册服务不写入账户城市。
 - 若继续使用 `X-User-Id`，必须限定为 mock request context。
 - 登录后 `authStore.user.id` 正常存在，HTTP 自动带 `X-User-Id`。
-- 登录 / 注册返回的 onboarding 信息来自 `user_onboarding_states`，不来自 `users`。
+- 登录 / 注册不返回 onboarding 信息；注册页自行根据本次选择的 path 跳转。
 - 登录 / 注册返回 `user.preferredLocale`，前端据此同步 locale store。
 - `AuthSession.token` 的使用策略明确：要么进入 store 并作为未来 Authorization 预留，要么文档标注当前 token 仅为 mock 占位。
 - 未登录访问 detail 仍走 guest 权限。
@@ -753,7 +732,7 @@ events 应表达：
 
 - 活动定位。
 - 适合人群。
-- 顾问筛选感。
+- staff 策展筛选感。
 - 报名状态。
 - 席位节奏。
 - 和 profile / membership 的关系。
@@ -786,7 +765,7 @@ interface EventRecord {
   capacity: number
   registeredCountCache?: number
   waitlistCountCache?: number
-  advisorNote: LocalizedText
+  curatorNote: LocalizedText
   coverImageUrl: string
   createdAt: string
   updatedAt: string
@@ -890,7 +869,7 @@ interface EventDetail {
   registeredCount: number
   waitlistCount: number
   memberOnly: boolean
-  advisorNote: string
+  curatorNote: string
   coverImageUrl: string
   agendaItems: EventAgendaItem[]
   registration: EventRegistrationState
@@ -928,7 +907,7 @@ event detail：
 
 - 活动基本信息。
 - `venue` 可直接展示，精确 `address` 只展示 detail API 返回的可见值；未登录或未满足报名规则时展示锁定提示。
-- 顾问说明。
+- 策展说明。
 - 适合人群。
 - 活动流程。
 - 报名状态。
@@ -991,7 +970,7 @@ interface LegalDocumentRecord {
 }
 ```
 
-`attended` 是活动完成后的用户可见终态。当前保留该状态并允许前端展示；后续由自动结算或顾问到场确认将 `confirmed` 推进为 `attended`，不由用户侧直接写入。
+`attended` 是活动完成后的用户可见终态。当前保留该状态并允许前端展示；后续由自动结算或 staff 到场确认将 `confirmed` 推进为 `attended`，不由用户侧直接写入。
 
 `user_agreement_acceptances`：
 
@@ -1101,10 +1080,8 @@ interface LegalDocumentDTO {
 users
 auth_identities
 user_preferences
-user_onboarding_states
 membership_plans
 user_memberships
-membership_entitlements
 user_entitlement_balances
 profiles
 profile_photos
@@ -1118,9 +1095,14 @@ events
 event_agenda_items
 event_registrations
 private_introduction_requests
-private_introduction_rooms
-private_introduction_room_messages
+inbox_threads
+inbox_messages
+inbox_reads
+staff_members
 staff_tasks
+audit_logs
+orders
+payments
 ```
 
 职责划分：
@@ -1130,10 +1112,8 @@ staff_tasks
 | `users` | 登录账户主体，只描述账户身份。 |
 | `auth_identities` | 登录方式，例如 email、phone、wechat、google。 |
 | `user_preferences` | 账户偏好与开关，一用户一条，使用明确字段。 |
-| `user_onboarding_states` | 注册后的引导状态。 |
 | `membership_plans` | 平台可售卖或可配置的会员套餐定义。 |
 | `user_memberships` | 用户当前或历史会员订阅记录。 |
-| `membership_entitlements` | 套餐权益定义，例如私人介绍额度。 |
 | `user_entitlement_balances` | 用户权益余额，例如本月剩余介绍次数。 |
 | `profiles` | 被撮合的相亲资料主体。 |
 | `profile_photos` | 资料照片。 |
@@ -1147,9 +1127,14 @@ staff_tasks
 | `event_agenda_items` | 活动流程项。 |
 | `event_registrations` | 用户活动报名关系。 |
 | `private_introduction_requests` | 私人介绍申请。 |
-| `private_introduction_rooms` | 双方确认后的平台内私密沟通空间。 |
-| `private_introduction_room_messages` | 私人介绍 room 消息；若暂不做聊天可延后实现。 |
+| `inbox_threads` | 用户消息中心线程，承接系统通知、活动提醒、资料审核结果和私人介绍受控沟通。 |
+| `inbox_messages` | 消息中心线程里的消息。 |
+| `inbox_reads` | 用户消息已读状态。 |
+| `staff_members` | 后台工作人员身份与角色。 |
 | `staff_tasks` | 后台工作人员待办任务。 |
+| `audit_logs` | 重要状态变化与后台操作审计。 |
+| `orders` | 会员购买订单。 |
+| `payments` | 订单支付记录。 |
 
 ### 关键表
 
@@ -1192,7 +1177,7 @@ interface UserPreferenceRecord {
   userId: string
   preferredCity?: string
   preferredContactChannel?: PreferredContactChannel
-  advisorContactEnabled: boolean
+  staffContactEnabled: boolean
   familyAssistEnabled: boolean
   introductionUpdatesEnabled: boolean
   eventRemindersEnabled: boolean
@@ -1234,22 +1219,15 @@ interface MembershipPlanRecord {
   priceCents?: number
   currency?: 'EUR' | 'USD' | 'CNY'
   billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+  privateIntroductionQuota: number
+  privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventPriorityEnabled: boolean
+  profileDetailAccessLevel: 'registered' | 'premium'
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
+  featured: boolean
+  sortOrder: number
   isActive: boolean
-  createdAt: string
-  updatedAt: string
-}
-```
-
-`membership_entitlements`：
-
-```ts
-interface MembershipEntitlementRecord {
-  id: string
-  planId: string
-  code: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
-  quota: number
-  period: 'none' | 'monthly' | 'quarterly' | 'yearly'
   createdAt: string
   updatedAt: string
 }
@@ -1277,12 +1255,13 @@ interface UserMembershipRecord {
 interface UserEntitlementBalanceRecord {
   id: string
   userId: string
-  entitlementCode: 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
-  period: string
+  membershipId: string
+  entitlementCode: 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+  periodStartedAt: string
+  periodEndsAt: string
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
-  resetAt: string
   createdAt: string
   updatedAt: string
 }
@@ -1312,9 +1291,11 @@ interface StaffTaskRecord {
 - `users.profileCompletion`：迁移到 profile 完成度计算或 `profile_completion_snapshots`。
 - `users.displayName`：统一为 `accountName`，不要新增 `users.displayName`。
 - `profiles.displayName`：从数据库移除，profile 展示名由后端根据 profile id 派生并返回 DTO。
-- `memberships`：替换为 `membership_plans` + `user_memberships` + `membership_entitlements` + `user_entitlement_balances`。
+- `memberships`：替换为 `membership_plans` + `user_memberships` + `user_entitlement_balances`。
+- `membership_entitlements`：终态不保留；套餐权益进入 `membership_plans` 宽表。
 - `privacy_settings.title/desc`：不要在数据库存页面文案，改为 `user_preferences` 明确字段。
-- `message_threads`：如果没有正式 mediated room 设计，先删除或暂停。
+- `message_threads`：替换为统一 `inbox_threads` / `inbox_messages` / `inbox_reads`。
+- `private_introduction_rooms` / `private_introduction_room_messages`：终态不保留；私人介绍 accepted 后进入 `inbox_threads(type = private_introduction)`。
 - account API 中 `realName / nickName` 这类临时字段应重命名。
 
 ### Account API 目标
@@ -1328,7 +1309,7 @@ GET /api/account/profiles
 GET /api/account/favorites
 GET /api/account/events
 GET /api/account/private-introductions
-GET /api/account/private-introduction-rooms
+GET /api/account/inbox-summary
 GET /api/account/settings
 ```
 
@@ -1344,27 +1325,27 @@ Contract 对齐要求：
 
 | Endpoint / Page | Source of truth | API DTO | PageData / ViewModel |
 | --- | --- | --- | --- |
-| `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
-| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests` | `AccountDashboardDTO` | `AccountHomePageData` |
+| `GET /api/account/me` | `users` | `AccountMeDTO` | `AccountShellPageData` |
+| `GET /api/account/dashboard` | `users`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests` | `AccountDashboardDTO` | `AccountHomePageData` |
 | `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
-| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]`, `MembershipPlanDTO[]` | `AccountMembershipPageData` |
+| `GET /api/account/membership` | `membership_plans`, `user_memberships`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]`, `MembershipPlanDTO[]` | `AccountMembershipPageData` |
 | `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
 | `GET /api/account/events` | `event_registrations`, derived event summary | `AccountEventRegistrationDTO[]` | `AccountEventsPageData` |
 | `GET /api/account/private-introductions` | `private_introduction_requests`, derived profile identity | `AccountIntroductionSummaryDTO[]` | `AccountRelationshipPageData` |
-| `GET /api/account/private-introduction-rooms` | `private_introduction_rooms`, latest `private_introduction_room_messages`, derived profile identity | `AccountPrivateIntroductionRoomDTO[]` | Phase 5.6 独立消息中心 |
+| `GET /api/account/inbox-summary` | `inbox_threads`, latest `inbox_messages`, `inbox_reads` | `AccountInboxSummaryDTO` | Phase 5.6 独立消息中心 |
 | `GET /api/account/settings` | `users`, `auth_identities`, `user_preferences` | `AccountSettingsDTO` | `AccountSettingsPageData` |
 
 补充规则：
 
 - `profile_detail_access` entitlement 表示付费 viewer 查看他人 profile detail 的字段开放层级，不表示提升自己 profile 曝光。
 - `favorite_profiles` 只保存收藏关系和时间戳；当前阶段不做私密备注，避免为 `note` 增加额外写接口。
-- `AccountPrivateIntroductionRoomDTO` 不返回 `unreadCount`，直到引入 read receipt source of truth；前端如需提示可先使用本地派生状态。
+- 消息中心 unread 由 `inbox_reads` 提供 source of truth，不在 account relationship 中本地猜测。
 - agreement acceptance remains backend/audit data; account settings may expose current legal-document entry points, but does not display acceptance history by default.
 - dashboard 只返回 `favoriteCount`，不返回完整 favorites 列表；收藏明细归 relationship。
 - dashboard 只返回摘要切片：`upcomingEvents` 与 `recentIntroductions`；完整列表分别归 events 与 relationship。
 - events 页面当前只负责“我的报名”；可参加活动入口保留在公开 events 链路。
 - settings 页面组合 preferences 与 legal document API；协议确认历史仍只作为后端审计数据保存。
-- `staff_tasks` 是后台内部任务，不直接进入用户端 dashboard；需要用户可见提示时，应通过 notifications、messages 或具体业务 DTO 暴露。
+- `staff_tasks` 是后台内部任务，不直接进入用户端 dashboard；需要用户可见提示时，应通过 inbox messages 或具体业务 DTO 暴露。
 
 ### 前端修改范围
 
@@ -1383,7 +1364,7 @@ Contract 对齐要求：
 
 account center 应按用户任务收敛为 6 个稳定页面：
 
-- `/pages/account/index`：首页，按 onboarding 阶段展示下一步引导、关系动态、资料状态、剩余额度和近期活动。
+- `/pages/account/index`：首页，按账户状态、资料状态和关系动态展示下一步引导、剩余额度和近期活动。
 - `/pages/account/relationship`：关系进展，内部以 tab 串联收藏和私人介绍；受控沟通不再挂在 account relationship 下。
 - `/pages/account/profiles`：资料，展示 self/family 管理关系和认证摘要；字段可见性进入单份资料详情页。
 - `/pages/account/events`：活动，展示我的报名、候补和历史活动。
@@ -1456,7 +1437,7 @@ POST /api/account/profiles/:profileId/archive
 ### 归档规则
 
 - 只有 `owner` 可以归档；`manager` / `viewer` 不可归档。
-- 有进行中的正式关系链路时不允许归档；至少包括未终结的 private introduction / room，后续若 event 或顾问流程需要阻塞，也应在这里统一扩展。
+- 有进行中的正式关系链路时不允许归档；至少包括未终结的 private introduction / inbox thread，后续若 event 或 staff 流程需要阻塞，也应在这里统一扩展。
 - 归档只写 `profiles.archivedAt`，不物理删除任何历史集合。
 - 前端可以显示 `删除资料`，但确认文案必须说明：资料将退出匹配和公开展示，历史记录仍保留。
 
@@ -1504,7 +1485,7 @@ POST /api/account/profiles/:profileId/archive
 
 - auth identities 管理，例如改邮箱、改手机号、改密码。
 - 正式支付、订单、退款、续费账单。
-- 顾问后台审批流。
+- staff 后台审批流。
 - 私人介绍 room 发消息。
 - event 报名流程重写。
 - profile verification 的用户侧提交和审核。
@@ -1523,7 +1504,7 @@ POST /api/account/profiles/:profileId/archive
 - `/pages/account/profiles`
   - 是用户管理资料集合的入口。
   - 提供 `新建资料` 主操作。
-  - 新建时根据账户 onboarding 属性生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
+  - 新建时根据新建表单或默认规则生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
   - 列表项进入统一 profile detail 继续维护。
 
 - `/pages/account/settings`
@@ -1534,7 +1515,7 @@ POST /api/account/profiles/:profileId/archive
 - `/pages/account/membership`
   - 展示当前套餐、额度和下一可升级套餐。
   - 支持对更高套餐发起升级动作。
-  - Phase 5.5 只保留升级入口占位；正式产品后续接入支付 / 顾问流程后才会改变会员状态，不改变页面 contract。
+  - Phase 5.5 只保留升级入口占位；正式产品后续接入支付 / staff 流程后才会改变会员状态，不改变页面 contract。
 
 ### API 目标
 
@@ -1563,13 +1544,13 @@ POST  /api/account/membership/upgrade
 | `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `POST /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
 | `POST /api/account/profiles/:profileId/ownership` | `profile_ownerships` | `AccountProfileOwnershipUpdatePayload` | `AccountProfileDetailDTO` |
-| `POST /api/account/membership/upgrade` | external payment / advisor flow placeholder | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
+| `POST /api/account/membership/upgrade` | external payment / staff flow placeholder | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
 
 ### 写入规则
 
 profile：
 
-- 新建时根据账户 onboarding 属性生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
+- 新建时根据新建表单或默认规则生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改；`viewer` 只能读。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
@@ -1577,7 +1558,7 @@ profile：
 - 联系方式由独立接口更新 `profile_contacts`；同页展示不代表同表写入。
 - 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则。
-- `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给顾问审核或后续独立流程。
+- `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给 staff 审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。
 
 半敏感字段隐藏偏好：
@@ -1597,7 +1578,7 @@ account me：
 
 - 本阶段只允许更新 `accountName` 和 `avatarUrl`。
 - `preferredLocale` 由语言切换链路维护，不在 settings form 里手动提交。
-- 不通过该接口修改 `status`、onboarding 或 auth identity。
+- 不通过该接口修改 `status` 或 auth identity。
 
 membership：
 
@@ -1625,7 +1606,7 @@ membership：
 ### 验收标准
 
 - 用户可以从资料列表页新建 profile，并进入统一 detail 页继续维护。
-- 用户新建 profile 时由账户 onboarding 属性生成默认归属，之后可在统一 detail 页修改。
+- 用户新建 profile 时由新建表单或默认规则生成默认归属，之后可在统一 detail 页修改。
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
 - 用户在拥有 `owner` 权限且 profile 满足 archive 规则时，可以在 detail 页执行删除入口；profile 退出正常业务流但历史链路保留。
@@ -1633,7 +1614,7 @@ membership：
 - 半敏感字段隐藏偏好仅在该 profile 下生效，不能放开默认锁定字段。
 - settings 页修改偏好后刷新仍保持。
 - settings 页修改 `accountName` / `avatarUrl` 后刷新仍保持。
-- membership 升级入口可返回占位结果；正式支付或顾问确认接入前，不直接改写当前套餐与 entitlement balances。
+- membership 升级入口可返回占位结果；正式支付或 staff 确认接入前，不直接改写当前套餐与 entitlement balances。
 - 写接口都返回更新后的 DTO，前端不需要本地猜测新状态。
 - 不新增 account 页面专属数据库字段。
 - `npm run type-check` 通过。
@@ -1651,31 +1632,32 @@ membership：
 - 私人介绍进展通知。
 - 双方确认后的受控沟通。
 
-Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回 account center。
+Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回 account center。终态消息中心使用统一 inbox 模型，不再维护独立 notifications 表，也不再维护独立 private-introduction room/messages 表。
 
 ### 明确范围
 
 本阶段要做：
 
-- 设计 `/pages/messages/index` 与后续 room detail 页面职责。
+- 设计 `/pages/messages/index` 与后续 inbox thread detail 页面职责。
 - 明确通知流和受控沟通流是否同页分区、同页 tab，或拆成不同页面。
-- 读取 `GET /api/account/private-introduction-rooms` 与 room message DTO，建立消息中心自己的 PageData。
-- 设计消息未读、已读 source of truth；在引入正式 read receipt 前，不返回伪造 `unreadCount`。
-- 保留 room messages 的 cursor 分页。
+- 建立 `inbox_threads`、`inbox_messages`、`inbox_reads` 的 API DTO 与 PageData。
+- 读取 `GET /api/inbox/threads`、`GET /api/inbox/threads/:id?before=&limit=`，建立消息中心自己的 PageData。
+- 使用 `inbox_reads` 作为未读、已读 source of truth，不返回伪造 `unreadCount`。
+- 保留 inbox messages 的 cursor 分页。
 
 本阶段不做：
 
-- 不把 room 列表重新挂回 `/pages/account/relationship`。
+- 不把 inbox thread 列表重新挂回 `/pages/account/relationship`。
 - 不提前把 profile 跨模块跳转闭环塞进消息中心；这部分留到 Phase 6 一起收口。
 - 不处理私人介绍申请本身的业务状态收口；`requested`、`accepted`、`declined`、`expired`、`cooldown` 的规则留到 Phase 6。
-- 不决定 `accepted` 后是否立即创建 room；消息中心只承接已经存在或后续产生的受控沟通空间。
+- 不决定 `accepted` 后是否立即创建 private-introduction inbox thread；消息中心只提供统一承接结构。
 
 ### 验收标准
 
 - 消息中心是独立入口，不再依赖 relationship 页面承载 room。
 - 平台通知与受控沟通的边界明确。
-- room list、room detail、message page model 与 API DTO 对齐。
-- 未读状态有明确 source of truth 或明确延期，不使用无来源的展示字段。
+- inbox thread list、thread detail、message page model 与 API DTO 对齐。
+- 未读状态来自 `inbox_reads`，不使用无来源的展示字段。
 - `npm run type-check` 通过。
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
@@ -1684,7 +1666,7 @@ Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回
 
 ### 目标
 
-把会员套餐的业务事实从静态页面文案、account membership DTO、`membership_entitlements` 和 mock 常量中收敛到 `membership_plans` 宽表，避免公开会员页、首页会员区、账户会员页展示不同版本的套餐、额度或顾问优先级。
+把会员套餐的业务事实从静态页面文案、account membership DTO、`membership_entitlements` 和 mock 常量中收敛到 `membership_plans` 宽表，避免公开会员页、首页会员区、账户会员页展示不同版本的套餐、额度或 staff 优先级。
 
 Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account 写操作。Phase 5.5 只保留会员升级入口占位，不直接实现真实付费或套餐切换。
 
@@ -1698,19 +1680,19 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
   - `privateIntroductionQuota`
   - `privateIntroductionPeriod`
   - `eventPriorityEnabled`
-  - `advisorReviewEnabled`
+  - `staffReviewEnabled`
   - `profileDetailAccessLevel`
   - `conciergePriority`
 - 保留 `user_memberships` 表达用户当前 / 历史会员状态。
 - 保留 `user_entitlement_balances` 表达用户级动态额度使用情况；它不保存套餐定义，只保存用户当前周期的 total / used / remaining。
 - 优化 `user_memberships`，让它通过 `planId` 关联当前开通套餐；`tier` 如保留，只作为读写方便的套餐快照，不作为套餐事实源。
-- 优化 `user_entitlement_balances`，让它只记录真正可计数权益的周期余额，例如私人介绍额度；活动优先、顾问审核、资料详情访问层级等布尔 / 访问型权益不进入余额表。
+- 优化 `user_entitlement_balances`，让它只记录真正可计数权益的周期余额，例如私人介绍额度；活动优先、staff 审核、资料详情访问层级等布尔 / 访问型权益不进入余额表。
 - 为 `user_entitlement_balances` 增加清晰周期字段，例如 `periodStartedAt`、`periodEndsAt`，并将来源关联到具体 `membershipId`。
 - 将私人介绍额度的事实源从临时 `MEMBERSHIP_BENEFITS` 迁移到 `membership_plans` + `user_entitlement_balances`；Phase 6 的申请接口只消费本阶段产出的余额结果，不再自行按会员等级推导额度。
 - 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
 - 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
-- 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、顾问优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
-- 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、顾问优先级或 profile 访问权益的独立事实源；本阶段结束前应移除或改为从 `membership_plans` 派生。
+- 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、staff 优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
+- 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、staff 优先级或 profile 访问权益的独立事实源；本阶段结束前应移除或改为从 `membership_plans` 派生。
 - 评估并补齐 `membership_plans` 的排序和展示字段，例如 `sortOrder`、`featured`，避免前端用硬编码顺序判断套餐展示。
 - 保持升级入口是占位流程；点击升级可以进入后续流程占位或返回待接入状态，但不直接改写当前用户会员等级和余额。
 
@@ -1834,13 +1816,13 @@ private introduction 与 account：
 
 - account private introductions 展示 requested、accepted、declined、expired、cooldown、quota exhausted。
 - detail 不允许用户对自己拥有或管理的 profile 发起 private introduction。
-- `private_introduction_requests` 只记录申请事实，不保存联系方式值；联系方式开放必须通过后续 room / introduction flow。
+- `private_introduction_requests` 只记录申请事实，不保存联系方式值；联系方式开放必须通过后续 inbox / introduction flow。
 - `requested` 申请需要有 `expiresAt`；`expired` 是由 `requested + expiresAt < now` 派生出来的展示 / API 状态，不作为持久化 status。
 - `declined` 后进入 cooldown；cooldown 结束后才允许对同一 profile 再次发起申请。
 - 同一 requester 对同一 target profile 在 active 状态下不能重复申请。
 - quota 消耗规则在 Phase 6 明确执行，但额度来源必须来自 Phase 5.7 的 `user_entitlement_balances`，不再从会员等级常量即时推导。
 - debug 页面保留接受 / 拒绝工具，但生产页面不暴露审批操作。
-- `accepted` 后是否自动创建 `private_introduction_rooms` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / 顾问跟进中”的状态。
+- `accepted` 后是否自动创建 `inbox_threads(type = private_introduction)` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / staff 跟进中”的状态。
 
 ### 后端建议
 
@@ -1862,15 +1844,16 @@ POST /api/debug/private-introductions/:id/decline
 申请接口应从 header/session 解析 requester，不允许从 query 或 body 传 requester user id。
 如果 target profile 已归当前用户拥有或管理，接口应返回不可申请状态。
 
-后续 room：
+后续 inbox：
 
 ```text
-GET /api/account/private-introduction-rooms
-GET /api/private-introduction-rooms/:id?before=&limit=
-POST /api/private-introduction-rooms/:id/messages
+GET /api/inbox/threads
+GET /api/inbox/threads/:id?before=&limit=
+POST /api/inbox/threads/:id/messages
+POST /api/inbox/threads/:id/read
 ```
 
-room messages 使用 cursor 分页，可用于顾问代发说明、系统通知和受控沟通记录；即使不开放自由聊天，也保留该集合的最终形态。
+inbox messages 使用 cursor 分页，可用于系统通知、staff 可见说明和受控沟通记录；即使不开放自由聊天，也保留该集合的最终形态。
 
 ### 验收标准
 
@@ -1909,7 +1892,7 @@ docs(database): sync final profile schema
 
 ```text
 refactor(auth): clarify session and mock user context
-refactor(auth): separate onboarding from user identity
+refactor(auth): separate registration intent from user identity
 refactor(mock-server): tighten account identity fields
 ```
 
@@ -1986,7 +1969,7 @@ feat(debug): support introduction state testing
 当前优先执行 docs/implementation-roadmap.md。
 先冻结 account 页面和 overview 依赖，让它不再阻塞 profile schema 清理。
 不要为了 account 临时展示保留 profile 旧字段。
-清理 profile 字段后，再修正 auth / registration / onboarding 模型。
+清理 profile 字段后，再修正 auth / registration / 注册入口模型。
 auth 基线是 38de9b60e69afa5f5dc959e6a816a81f1d082110，但该提交不是 auth 完成态。
 不要把 self / family / parent 作为 users 的永久身份。
 不要在 users 中保存 role、profileCompletion、会员 tier、profile 展示字段。

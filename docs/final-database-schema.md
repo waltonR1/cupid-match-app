@@ -39,7 +39,6 @@ interface FinalDatabase {
   profile_privacy_preferences: ProfilePrivacyPreferenceRecord[]
 
   membership_plans: MembershipPlanRecord[]
-  membership_entitlements: MembershipEntitlementRecord[]
   user_memberships: UserMembershipRecord[]
   user_entitlement_balances: UserEntitlementBalanceRecord[]
 
@@ -49,9 +48,16 @@ interface FinalDatabase {
 
   favorite_profiles: FavoriteProfileRecord[]
   private_introduction_requests: PrivateIntroductionRequestRecord[]
-  private_introduction_rooms: PrivateIntroductionRoomRecord[]
-  private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
+  inbox_threads: InboxThreadRecord[]
+  inbox_messages: InboxMessageRecord[]
+  inbox_reads: InboxReadRecord[]
+
+  staff_members: StaffMemberRecord[]
   staff_tasks: StaffTaskRecord[]
+
+  audit_logs: AuditLogRecord[]
+  orders: OrderRecord[]
+  payments: PaymentRecord[]
 }
 ```
 
@@ -94,7 +100,14 @@ type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+type InboxThreadType = 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
+type InboxMessageType = 'text' | 'status_update' | 'action_prompt'
+type StaffRole = 'admin' | 'operator' | 'reviewer' | 'event_manager' | 'support'
+type ActorType = 'user' | 'staff' | 'system'
+type OrderStatus = 'pending' | 'paid' | 'cancelled' | 'refunded' | 'failed'
+type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'refunded'
 type ProfileFieldCode =
   | 'photos'
   | 'country'
@@ -192,7 +205,7 @@ interface UserPreferenceRecord {
   userId: string
   preferredCity?: string
   preferredContactChannel?: PreferredContactChannel
-  advisorContactEnabled: boolean
+  staffContactEnabled: boolean
   familyAssistEnabled: boolean
   introductionUpdatesEnabled: boolean
   eventRemindersEnabled: boolean
@@ -470,7 +483,7 @@ interface ProfileVerificationRecord {
 
 ### profile_contacts
 
-联系方式受控保存。只有私人介绍成功或顾问确认后才可能开放。
+联系方式受控保存。只有私人介绍成功或 staff 确认后才可能开放。
 
 ```ts
 type ContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
@@ -530,22 +543,16 @@ interface MembershipPlanRecord {
   priceCents?: number
   currency?: 'EUR' | 'USD' | 'CNY'
   billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+  privateIntroductionQuota: number
+  privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventPriorityEnabled: boolean
+  staffReviewEnabled: boolean
+  profileDetailAccessLevel: 'registered' | 'premium'
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
+  featured: boolean
+  sortOrder: number
   isActive: boolean
-  createdAt: string
-  updatedAt: string
-}
-```
-
-### membership_entitlements
-
-```ts
-interface MembershipEntitlementRecord {
-  id: string
-  planId: string
-  code: EntitlementCode
-  quota: number
-  period: 'none' | 'monthly' | 'quarterly' | 'yearly'
   createdAt: string
   updatedAt: string
 }
@@ -573,12 +580,13 @@ interface UserMembershipRecord {
 interface UserEntitlementBalanceRecord {
   id: string
   userId: string
+  membershipId: string
   entitlementCode: EntitlementCode
-  period: string
+  periodStartedAt: string
+  periodEndsAt: string
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
-  resetAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -608,9 +616,7 @@ interface EventRecord {
   relationshipFocus: LocalizedText[]
   languageCodes: string[]
   capacity: number
-  registeredCountCache?: number
-  waitlistCountCache?: number
-  advisorNote: LocalizedText
+  curatorNote: LocalizedText
   coverImageUrl: string
   createdAt: string
   updatedAt: string
@@ -619,7 +625,7 @@ interface EventRecord {
 
 `venue` 是公开地点名称，`address` 是精确地址。精确地址不公开进入列表链路，由后端按 `addressVisibility` 和 viewer 状态决定是否在 detail/account DTO 中返回。
 
-`event_registrations` 是报名人数的真实来源。`registeredCountCache` / `waitlistCountCache` 只允许作为可重建缓存；事件 DTO 可以继续返回 `registeredCount` / `waitlistCount`，但必须由 registration 明细或缓存计算得出。
+`event_registrations` 是报名人数、候补人数和用户报名状态的真实来源。事件 DTO 可以返回 `registeredCount` / `waitlistCount`，但必须由 registration 明细派生，不进入 `events` 主表。
 
 ### event_agenda_items
 
@@ -629,7 +635,7 @@ interface EventAgendaItemRecord {
   eventId: string
   time: string
   title: LocalizedText
-  desc: LocalizedText
+  description: LocalizedText
   sortOrder: number
   createdAt: string
   updatedAt: string
@@ -647,8 +653,9 @@ interface EventRegistrationRecord {
   requestedAt: string
   confirmedAt?: string
   declinedAt?: string
+  waitlistedAt?: string
   cancelledAt?: string
-  note?: LocalizedText
+  attendedAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -683,40 +690,72 @@ interface PrivateIntroductionRequestRecord {
   respondedAt?: string
   cooldownUntil?: string
   entitlementBalanceId?: string
-  advisorId?: string
   createdAt: string
   updatedAt: string
 }
 ```
 
-### private_introduction_rooms
+`expired` 不作为持久化状态；由 `status = 'requested'` 且 `expiresAt < now` 派生。
+
+## Inbox
+
+用户可见通知、系统提醒、私人介绍受控沟通统一进入 inbox，不再维护独立 notifications 表，也不再维护独立 private-introduction room/messages 表。
+
+### inbox_threads
 
 ```ts
-interface PrivateIntroductionRoomRecord {
+interface InboxThreadRecord {
   id: string
-  requestId: string
-  requesterUserId: string
-  targetProfileId: string
-  status: 'open' | 'paused' | 'closed'
-  openedAt: string
-  closedAt?: string
-  advisorId?: string
+  userId: string
+  type: InboxThreadType
+  subjectType?: InboxSubjectType
+  subjectId?: string
+  status: 'open' | 'closed' | 'archived'
   createdAt: string
   updatedAt: string
 }
 ```
 
-### private_introduction_room_messages
-
-私人介绍 room 的消息记录。若产品暂时不开放自由聊天，也可用于记录顾问代发说明、系统通知和受控沟通记录。
+### inbox_messages
 
 ```ts
-interface PrivateIntroductionRoomMessageRecord {
+interface InboxMessageRecord {
   id: string
-  roomId: string
-  senderType: 'user' | 'advisor' | 'system'
+  threadId: string
+  senderType: 'system' | 'staff' | 'user'
   senderUserId?: string
-  body: string
+  messageType: InboxMessageType
+  body: LocalizedText
+  actionType?: string
+  actionPayload?: unknown
+  createdAt: string
+  updatedAt: string
+}
+```
+
+### inbox_reads
+
+```ts
+interface InboxReadRecord {
+  id: string
+  threadId: string
+  userId: string
+  lastReadAt: string
+  createdAt: string
+  updatedAt: string
+}
+```
+
+## Staff Operations
+
+### staff_members
+
+```ts
+interface StaffMemberRecord {
+  id: string
+  userId: string
+  role: StaffRole
+  status: 'active' | 'paused' | 'revoked'
   createdAt: string
   updatedAt: string
 }
@@ -737,6 +776,59 @@ interface StaffTaskRecord {
   note: LocalizedText
   dueAt?: string
   completedAt?: string
+  createdAt: string
+  updatedAt: string
+}
+```
+
+`staff_tasks` 是内部后台待办。用户可见提醒必须通过 inbox 或具体业务 DTO 输出，不从 `staff_tasks` 直接暴露。
+
+## Audit and Billing
+
+### audit_logs
+
+```ts
+interface AuditLogRecord {
+  id: string
+  actorType: ActorType
+  actorUserId?: string
+  subjectType: 'user' | 'profile' | 'photo' | 'verification' | 'event' | 'event_registration' | 'private_introduction_request' | 'membership' | 'staff_task'
+  subjectId: string
+  action: string
+  before?: unknown
+  after?: unknown
+  reason?: string
+  createdAt: string
+}
+```
+
+### orders
+
+```ts
+interface OrderRecord {
+  id: string
+  userId: string
+  planId: string
+  status: OrderStatus
+  amountCents: number
+  currency: 'EUR' | 'USD' | 'CNY'
+  createdAt: string
+  updatedAt: string
+}
+```
+
+### payments
+
+```ts
+interface PaymentRecord {
+  id: string
+  orderId: string
+  provider: 'stripe' | 'manual' | 'mock'
+  providerPaymentId?: string
+  status: PaymentStatus
+  amountCents: number
+  currency: 'EUR' | 'USD' | 'CNY'
+  paidAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -777,17 +869,22 @@ legal_documents: unique(type, version)
 legal_documents: unique(type) where status = 'active'
 legal_document_contents: unique(documentId, locale)
 user_agreement_acceptances: unique(userId, documentType)
-user_onboarding_states: unique(userId)
 profile_ownerships: index(userId), index(profileId)
 profile_verifications: unique(profileId)
 profile_contacts: unique(profileId)
 profile_privacy_preferences: unique(profileId)
+membership_plans: unique(tier)
 user_memberships: index(userId, status)
-user_entitlement_balances: unique(userId, entitlementCode, period)
+user_entitlement_balances: unique(userId, entitlementCode, periodStartedAt, periodEndsAt)
 event_registrations: unique(userId, eventId)
 favorite_profiles: unique(userId, profileId)
 private_introduction_requests: unique(requesterUserId, targetProfileId, status in active statuses)
-private_introduction_rooms: unique(requestId)
+inbox_threads: index(userId, status), index(subjectType, subjectId)
+inbox_messages: index(threadId, createdAt)
+inbox_reads: unique(threadId, userId)
+staff_members: unique(userId)
+staff_tasks: index(subjectType, subjectId), index(assigneeUserId, status)
+payments: index(orderId)
 ```
 
 ## Migration Principles

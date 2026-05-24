@@ -33,20 +33,20 @@
 | Concern | Source of truth | DTO derived fields | Must not be source of truth |
 | --- | --- | --- | --- |
 | 登录账户 | `users`, `auth_identities` | `AuthSession.user.accountName` | `profiles`, `profiles.profileType` |
-| 注册后引导 | `user_onboarding_states` | `AuthSession.onboarding` | `users.onboardingPath`, `users.onboardingStep` |
 | 协议文本 | `legal_documents` | `LegalDocumentDTO` | frontend i18n only |
 | 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
 | profile 头像 | `profile_photos.isPrimary` | `avatarUrl` | `profiles.avatarUrl` |
 | profile 半敏感字段隐藏偏好 | `profile_privacy_preferences` + 默认权限常量 | `access`、遮罩字段值 | 前端散落的会员判断或通用可见性表 |
-| 联系方式 | `profile_contacts` | private introduction / room DTO | phone/email/wechat in profile detail DTO |
+| 联系方式 | `profile_contacts` | private introduction / inbox DTO | phone/email/wechat in profile detail DTO |
 | 后台资料 | `profile_internal_records`, `profile_verifications` | staff/admin DTO only | public profile DTO |
 | 活动主体 | `events` | localized event DTO | nested agenda |
 | 活动流程 | `event_agenda_items` | `agendaItems[]` | `events.agenda` |
 | 活动报名 | `event_registrations` | `registration`, `registeredCount`, `waitlistCount` | event main record counts |
 | 收藏 | `favorite_profiles` | `isFavorite`, favorite list items | profile record |
-| 会员权益 | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `membership`, `entitlements`, `quota` | `users.tier`, profile fields |
-| 私人介绍 | `private_introduction_requests`, `private_introduction_rooms` | request / room status DTO | contact values in profile detail |
+| 会员权益 | `membership_plans`, `user_memberships`, `user_entitlement_balances` | `membership`, `plans`, `quota` | `users.tier`, profile fields |
+| 私人介绍 | `private_introduction_requests`, `inbox_threads`, `inbox_messages` | request / inbox status DTO | contact values in profile detail |
+| 消息中心 | `inbox_threads`, `inbox_messages`, `inbox_reads` | thread summary, messages, unread state | standalone notifications table |
 
 ## Auth Chain
 
@@ -59,7 +59,7 @@ register page
 -> use auth hook / auth api
 -> POST /api/auth/register
 -> mock-server auth service
--> users + auth_identities + user_onboarding_states + default membership records + user_agreement_acceptances
+-> users + auth_identities + default membership records + user_agreement_acceptances
 -> AuthSession DTO
 -> auth store
 ```
@@ -83,15 +83,6 @@ auth_identities:
   identifier
   passwordHash
   verifiedAt
-  createdAt
-  updatedAt
-
-user_onboarding_states:
-  id
-  userId
-  path
-  step
-  profileId
   createdAt
   updatedAt
 
@@ -136,11 +127,6 @@ interface AuthSession {
     avatarUrl: string
     preferredLocale: 'zh' | 'fr' | 'en'
   }
-  onboarding: {
-    path: 'self' | 'family'
-    step: 'create_profile' | 'review_profile' | 'browse'
-    profileId?: string
-  }
 }
 ```
 
@@ -151,6 +137,7 @@ Field changes:
 - Remove `users.onboardingStep`.
 - Do not write profile fields during register.
 - Do not write `role`, membership tier, profile completion, or profile display fields into `users`.
+- `RegisterPayload.path` is request-time routing intent only; it is not persisted as user identity or onboarding state.
 
 ### Login
 
@@ -162,7 +149,6 @@ login page
 -> POST /api/auth/login
 -> auth_identities lookup
 -> users lookup
--> user_onboarding_states lookup
 -> user_agreement_acceptances upsert (backend only)
 -> AuthSession DTO
 -> auth store
@@ -170,7 +156,7 @@ login page
 
 Rules:
 
-- Login returns account identity and onboarding state.
+- Login returns account identity only.
 - Login returns `user.preferredLocale`; frontend syncs locale store from it after successful login.
 - Login 成功即表示用户接受当前 active 服务条款与隐私说明；后端自动 upsert `user_agreement_acceptances`（版本不变则跳过），前端无须传版本。
 - `X-User-Id` is mock request context only.
@@ -453,8 +439,8 @@ type ProfileFieldCode =
   | 'contact'
 
 interface ProfileAccessDTO {
-  viewerRole: 'guest' | 'free_user' | 'member' | 'owner' | 'advisor'
-  accessLevel: 'visitor' | 'registered' | 'premium' | 'owner' | 'advisor'
+  viewerRole: 'guest' | 'free_user' | 'member' | 'owner' | 'staff'
+  accessLevel: 'visitor' | 'registered' | 'premium' | 'owner' | 'staff'
   canViewFullProfile: boolean
   canViewFamilySection: boolean
   canRequestIntroduction: boolean
@@ -769,7 +755,7 @@ Rules:
 - Profiles with active formal relationship flows cannot be archived directly.
 - `archivedAt` is a backend lifecycle marker, not another `profileStatus` value.
 - `archivedAt != null` profiles no longer participate in new public directory results, recommendation, private-introduction creation, or other new business actions.
-- Historical favorites, introductions, rooms and audit records remain queryable for history.
+- Historical favorites, introductions, inbox threads and audit records remain queryable for history.
 - Ordinary owner-side account DTOs do not return archived profiles. Historical retention remains backend-only unless a dedicated history surface is introduced later.
 - The page may label the action as delete, but the backend lifecycle action is archive.
 
@@ -824,7 +810,7 @@ Rules:
 
 - Only `accountName` and `avatarUrl` are writable in this phase.
 - `preferredLocale` remains owned by the language flow.
-- `status`, onboarding and auth identities are not mutated here.
+- `status` and auth identities are not mutated here.
 
 ### Membership upgrade
 
@@ -839,7 +825,7 @@ Rules:
 Rules:
 
 - Phase 5.5 only reserves the upgrade entry point.
-- Formal payment or advisor confirmation is introduced later before membership state changes.
+- Formal payment or staff confirmation is introduced later before membership state changes.
 - The page contract stays stable even if the execution path later becomes asynchronous.
 - Membership tier is never written into `users`.
 
@@ -960,7 +946,7 @@ interface EventDetailDTO {
   registeredCount: number
   waitlistCount: number
   memberOnly: boolean
-  advisorNote: string
+  curatorNote: string
   coverImageUrl: string
   agendaItems: EventAgendaItemDTO[]
   registration: EventRegistrationStateDTO
@@ -986,12 +972,12 @@ POST /api/events/:id/register
 -> return EventRegistrationStateDTO + derived counts
 
 Event review / admin action
--> advisor context
+-> staff context
 -> update event_registrations.status = confirmed / waitlist / declined
 -> return EventRegistrationStateDTO + derived counts
 
 Event settlement
--> scheduled settlement or advisor attendance confirmation
+-> scheduled settlement or staff attendance confirmation
 -> update confirmed event_registrations.status = attended
 -> return attended as a user-visible terminal state
 
@@ -1017,11 +1003,9 @@ Home flow:
 account home page
 -> account dashboard api
 -> users
--> user_onboarding_states
 -> profile_ownerships
 -> membership_plans
 -> user_memberships
--> membership_entitlements
 -> user_entitlement_balances
 -> event_registrations
 -> private_introduction_requests
@@ -1034,7 +1018,6 @@ Home DTO:
 ```ts
 interface AccountDashboardDTO {
   user: AccountUserDTO
-  onboarding: AuthOnboardingDTO
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO
   entitlements: AccountEntitlementBalanceDTO[]
@@ -1049,7 +1032,6 @@ Split account endpoint flows:
 ```text
 GET /api/account/me
 -> users
--> user_onboarding_states
 -> AccountMeDTO
 
 GET /api/account/profiles
@@ -1062,7 +1044,6 @@ GET /api/account/profiles
 GET /api/account/membership
 -> membership_plans
 -> user_memberships
--> membership_entitlements
 -> user_entitlement_balances
 -> AccountMembershipDTO + AccountEntitlementBalanceDTO[]
 
@@ -1085,11 +1066,11 @@ GET /api/account/settings
 -> users + auth_identities + user_preferences
 -> AccountSettingsDTO
 
-GET /api/account/private-introduction-rooms
--> private_introduction_rooms
--> private_introduction_room_messages latest summary
--> derived target profile identity
--> AccountPrivateIntroductionRoomDTO[]
+GET /api/account/inbox-summary
+-> inbox_threads
+-> inbox_messages latest summary
+-> inbox_reads
+-> AccountInboxSummaryDTO
 ```
 
 Rules:
@@ -1102,7 +1083,7 @@ Rules:
 - Account profile detail 读取 `profile_privacy_preferences` 作为类型明确的布尔偏好，不存页面文案。
 - Dashboard returns `favoriteCount`, not a full favorites list; detailed favorites stay under relationship.
 - Dashboard only returns summary slices: `upcomingEvents` and `recentIntroductions`; full event and introduction lists stay on their dedicated pages.
-- Staff tasks are internal by default and do not enter account dashboard DTOs directly; user-visible follow-up should be exposed through notifications, messages, or the specific business DTO that owns the state.
+- Staff tasks are internal by default and do not enter account dashboard DTOs directly; user-visible follow-up should be exposed through inbox messages or the specific business DTO that owns the state.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.
 
@@ -1125,8 +1106,8 @@ Page composition:
 -> one account relationship page with tabs
 
 /pages/messages/index
--> platform notifications
--> private introduction rooms
+-> inbox threads
+-> private introduction messages
 -> standalone message center, not an account relationship tab
 
 /pages/account/profiles
@@ -1189,7 +1170,6 @@ account membership page or guarded action
 -> membership api
 -> membership_plans
 -> user_memberships
--> membership_entitlements
 -> user_entitlement_balances
 -> MembershipDTO / EntitlementDTO
 ```
@@ -1204,7 +1184,15 @@ membership_plans:
   priceCents
   currency
   billingPeriod
+  privateIntroductionQuota
+  privateIntroductionPeriod
+  eventPriorityEnabled
+  staffReviewEnabled
+  profileDetailAccessLevel
+  staffSupportLevel
   conciergePriority
+  featured
+  sortOrder
   isActive
 
 user_memberships:
@@ -1215,20 +1203,15 @@ user_memberships:
   startedAt
   expiresAt
 
-membership_entitlements:
-  planId
-  code
-  quota
-  period
-
 user_entitlement_balances:
   userId
+  membershipId
   entitlementCode
-  period
+  periodStartedAt
+  periodEndsAt
   quotaTotal
   quotaUsed
   quotaRemaining
-  resetAt
 ```
 
 Rules:
@@ -1254,21 +1237,22 @@ profile detail CTA
 -> ProfilePrivateIntroductionDTO / PrivateIntroductionDTO
 ```
 
-Room flow:
+Inbox flow:
 
 ```text
 accepted private introduction
--> create or open private_introduction_rooms
--> GET /api/private-introduction-rooms/:id?before=&limit=
--> viewer room membership check
--> private_introduction_room_messages cursor page
--> PrivateIntroductionRoomDetailDTO
+-> create or open inbox_threads where type = private_introduction and subjectId = requestId
+-> create inbox_messages status update
+-> GET /api/inbox/threads/:id?before=&limit=
+-> viewer thread ownership check
+-> inbox_messages cursor page
+-> InboxThreadDetailDTO
 
-POST /api/private-introduction-rooms/:id/messages
--> viewer room membership check
--> room status and moderation checks
--> private_introduction_room_messages write
--> PrivateIntroductionRoomMessageDTO
+POST /api/inbox/threads/:id/messages
+-> viewer thread ownership check
+-> thread status and moderation checks
+-> inbox_messages write
+-> InboxMessageDTO
 ```
 
 Database:
@@ -1286,28 +1270,36 @@ private_introduction_requests:
   respondedAt?
   cooldownUntil?
   entitlementBalanceId?
-  advisorId?
   createdAt
   updatedAt
 
-private_introduction_rooms:
+inbox_threads:
   id
-  requestId
-  requesterUserId
-  targetProfileId
+  userId
+  type
+  subjectType?
+  subjectId?
   status
-  openedAt
-  closedAt
-  advisorId?
   createdAt
   updatedAt
 
-private_introduction_room_messages:
+inbox_messages:
   id
-  roomId
+  threadId
   senderType
   senderUserId
+  messageType
   body
+  actionType?
+  actionPayload?
+  createdAt
+  updatedAt
+
+inbox_reads:
+  id
+  threadId
+  userId
+  lastReadAt
   createdAt
   updatedAt
 ```
@@ -1315,7 +1307,7 @@ private_introduction_room_messages:
 Rules:
 
 - Profile detail never returns contact values just because a request exists.
-- Contact values can only be exposed through a controlled private introduction / room flow.
+- Contact values can only be exposed through a controlled private introduction / inbox flow.
 - Users cannot request introduction to their own managed profile.
 - Quota and membership checks happen on backend.
 - Private introduction keeps the current self/family split: `POST /api/profiles/self/:id/private-introduction` and `POST /api/profiles/family/:id/private-introduction`.
@@ -1323,7 +1315,7 @@ Rules:
 - `cooldown` is derived from `status = 'declined'` plus `cooldownUntil`; do not use `cooldown` as a persisted request status.
 - `expired` is derived from `status = 'requested'` plus `expiresAt < now`; do not use `expired` as a persisted request status.
 - `quota_exhausted` is a DTO state returned by the create action when entitlement balance is insufficient; it is not persisted as request status.
-- Room messages use cursor pagination. Do not return the full message history by default.
+- Inbox messages use cursor pagination. Do not return the full message history by default.
 
 ## Field Migration Summary
 
@@ -1373,7 +1365,7 @@ employer/income/staff notes/risk flags -> profile_internal_records
 field privacy（半敏感字段隐藏偏好）-> profile_privacy_preferences
 agenda -> event_agenda_items
 user registration -> event_registrations
-onboarding -> user_onboarding_states
+registration path -> request-time routing intent only
 membership tier/quota -> membership and entitlement collections
 ```
 

@@ -16,7 +16,7 @@
 - 后端不返回 i18n key；返回 code 或已按 locale 本地化后的文案。
 - DTO 可以包含派生字段，例如 `displayName`、`avatarUrl`、`age`、`memberOnly`、`registeredCount`。
 - DTO 不返回数据库 Record。
-- DTO 不返回 profile 联系方式值；联系方式只允许通过 private introduction / room flow 的独立接口开放。
+- DTO 不返回 profile 联系方式值；联系方式只允许通过 private introduction / inbox flow 的独立接口开放。
 - `X-User-Id` 只作为 mock request context；正式鉴权 token 策略后续单独定义。
 - 所有列表接口统一返回 `items + pagination + facets?`。
 - 所有写操作返回变更后的领域状态 DTO，不要求前端自行拼状态。
@@ -26,16 +26,15 @@
 ```ts
 type LocaleCode = 'zh' | 'fr' | 'en'
 type RegisterProvider = 'email' | 'phone'
-type OnboardingPath = 'self' | 'family'
-type OnboardingStep = 'create_profile' | 'review_profile' | 'browse'
+type RegisterPath = 'self' | 'family'
 type LegalDocumentType = 'terms' | 'privacy'
-type ViewerRole = 'guest' | 'free_user' | 'member' | 'owner' | 'advisor'
+type ViewerRole = 'guest' | 'free_user' | 'member' | 'owner' | 'staff'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type IntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired'
-type ProfileAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'advisor'
+type ProfileAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'staff'
 type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTRODUCTION_REQUIRED__' | '__HIDDEN__'
 type RestrictedProfileField<T> = T | ProfileFieldLockCode
-type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type PreferredContactChannel = 'email' | 'phone' | 'wechat'
@@ -88,7 +87,7 @@ interface ApiErrorDTO {
 
 | Domain | Method | Endpoint | Purpose |
 | --- | --- | --- | --- |
-| Auth | `POST` | `/api/auth/register` | 创建账户和 onboarding 状态。 |
+| Auth | `POST` | `/api/auth/register` | 创建账户，注册入口路径只用于前端注册后落点。 |
 | Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
 | Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
 | Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |
@@ -107,8 +106,10 @@ interface ApiErrorDTO {
 | Favorites | `DELETE` | `/api/favorites/:profileId` | 取消收藏。 |
 | Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 从 self detail 申请私人介绍。 |
 | Private Introductions | `POST` | `/api/profiles/family/:id/private-introduction` | 从 family detail 申请私人介绍。 |
-| Private Introduction Rooms | `GET` | `/api/private-introduction-rooms/:id` | 查看受控私人沟通空间。 |
-| Private Introduction Rooms | `POST` | `/api/private-introduction-rooms/:id/messages` | 发送受控沟通消息。 |
+| Inbox | `GET` | `/api/inbox/threads` | 消息中心线程列表。 |
+| Inbox | `GET` | `/api/inbox/threads/:id` | 查看消息中心线程详情。 |
+| Inbox | `POST` | `/api/inbox/threads/:id/messages` | 在允许的受控线程中发送消息。 |
+| Inbox | `POST` | `/api/inbox/threads/:id/read` | 标记线程已读。 |
 | Events | `GET` | `/api/events` | 活动目录。 |
 | Events | `GET` | `/api/events/:id` | 活动详情。 |
 | Events | `POST` | `/api/events/:id/register` | 报名活动。 |
@@ -121,7 +122,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/favorites` | 收藏列表。 |
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
-| Account | `GET` | `/api/account/private-introduction-rooms` | 独立消息中心读取的私人介绍沟通空间。 |
+| Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
 | Account | `POST` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
@@ -145,7 +146,7 @@ interface ApiErrorDTO {
 
 ```ts
 interface RegisterPayload {
-  path: OnboardingPath
+  path: RegisterPath
   provider: RegisterProvider
   identifier: string
   password: string
@@ -156,7 +157,6 @@ interface RegisterPayload {
 interface AuthSessionDTO {
   token: string
   user: AuthUserDTO
-  onboarding: AuthOnboardingDTO
 }
 
 interface AuthUserDTO {
@@ -166,17 +166,13 @@ interface AuthUserDTO {
   preferredLocale: LocaleCode
 }
 
-interface AuthOnboardingDTO {
-  path: OnboardingPath
-  step: OnboardingStep
-  profileId?: string
-}
 ```
 
 规则：
 
 - 注册 payload 不包含 `city`。
 - 注册不创建 profile。
+- `RegisterPayload.path` 只表示本次注册入口，用于前端注册成功后跳转 self 或 family 目录；后端不持久化 onboarding 状态。
 - 成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（upsert by userId + documentType），版本不变则跳过。
 - 注册页不展示 `preferredLocale` 手动选择器；前端用当前页面 locale 自动填充 `RegisterPayload.preferredLocale`。
 - 登录和注册都返回 `AuthUserDTO.preferredLocale`；前端登录成功后用它同步 locale store，确保跨设备登录时使用账户默认语言。
@@ -554,7 +550,6 @@ type ProfileUpdatePayload = Partial<ProfileCreatePayload>
 
 interface ProfileMutationResponseDTO {
   profile: SelfProfileDetailDTO | FamilyProfileDetailDTO
-  onboarding?: AuthOnboardingDTO
 }
 
 interface ProfilePhotoMutationPayload {
@@ -568,7 +563,7 @@ interface ProfilePhotoMutationPayload {
 规则：
 
 - 创建 / 更新 payload 使用前端输入值；后端负责保存为最终数据库结构和本地化字段。
-- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言，例如 `lang=zh` 时写入 `{ zh: value, fr: '', en: '' }`；其他 locale 由后台、顾问或后续翻译流程补齐。
+- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言，例如 `lang=zh` 时写入 `{ zh: value, fr: '', en: '' }`；其他 locale 由后台、staff 或后续翻译流程补齐。
 - 创建 profile 时同步创建或更新 `profile_ownerships`。
 
 ## Private Introduction API
@@ -597,35 +592,49 @@ interface PrivateIntroductionDTO {
 - `expired` 是 DTO 派生状态，数据库使用 `requested + expiresAt < now`；过期后是否进入 cooldown 由服务策略决定。
 - 额度不足时返回 `quota_exhausted` 状态，不要求前端把普通错误转换成业务状态。
 
-## Private Introduction Room API
+## Inbox API
 
 ```ts
-interface PrivateIntroductionRoomDetailDTO {
-  roomId: string
-  requestId: string
-  targetProfileId: string
-  targetDisplayName: string
-  targetAvatarUrl: string
-  status: 'open' | 'paused' | 'closed'
-  openedAt: string
-  closedAt?: string
-  messages: PrivateIntroductionRoomMessageDTO[]
-  messagePage: PrivateIntroductionRoomMessagePageDTO
+interface InboxThreadSummaryDTO {
+  threadId: string
+  type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+  subjectType?: 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
+  subjectId?: string
+  title: string
+  preview: string
+  status: 'open' | 'closed' | 'archived'
+  unread: boolean
+  updatedAt: string
 }
 
-interface PrivateIntroductionRoomMessageDTO {
+interface InboxThreadDetailDTO {
+  thread: InboxThreadSummaryDTO
+  messages: InboxMessageDTO[]
+  messagePage: InboxMessagePageDTO
+  composer?: InboxComposerDTO
+}
+
+interface InboxMessageDTO {
   messageId: string
-  senderType: 'user' | 'advisor' | 'system'
+  senderType: 'system' | 'staff' | 'user'
   senderUserId?: string
+  messageType: 'text' | 'status_update' | 'action_prompt'
   body: string
+  actionType?: string
+  actionPayload?: unknown
   createdAt: string
 }
 
-interface SendPrivateIntroductionRoomMessagePayload {
+interface SendInboxMessagePayload {
   body: string
 }
 
-interface PrivateIntroductionRoomMessagePageDTO {
+interface InboxComposerDTO {
+  enabled: boolean
+  disabledReason?: 'closed' | 'staff_only' | 'rate_limited'
+}
+
+interface InboxMessagePageDTO {
   limit: number
   hasMore: boolean
   nextBefore?: string
@@ -634,10 +643,10 @@ interface PrivateIntroductionRoomMessagePageDTO {
 
 规则：
 
-- `GET /api/private-introduction-rooms/:id` 使用 cursor 分页读取消息：`?before=<messageCreatedAtOrId>&limit=30`。
-- room 只在双方接受私人介绍后创建或开放。
-- 产品暂时不开放自由聊天时，room messages 仍可承载顾问代发说明、系统通知和受控沟通记录。
-- `POST /api/private-introduction-rooms/:id/messages` 必须检查 room 状态、viewer 身份和平台风控，不允许绕过私人介绍申请直接联系。
+- `GET /api/inbox/threads/:id` 使用 cursor 分页读取消息：`?before=<messageCreatedAtOrId>&limit=30`。
+- 私人介绍 accepted 后如需要受控沟通，创建 `type = private_introduction` 的 inbox thread，不再创建独立 private-introduction room。
+- 活动报名、资料审核、协议更新、会员状态和 staff 可见说明都通过 inbox thread/message 进入消息中心。
+- `POST /api/inbox/threads/:id/messages` 必须检查 thread 类型、状态、viewer 身份和平台风控；不允许绕过私人介绍申请直接联系。
 
 ## Events API
 
@@ -705,7 +714,7 @@ interface EventDetailDTO extends EventDirectoryItemDTO {
   addressVisible: boolean
   addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
   languageCodes: string[]
-  advisorNote: string
+  curatorNote: string
   agendaItems: EventAgendaItemDTO[]
   registration: EventRegistrationStateDTO
 }
@@ -746,7 +755,6 @@ Account API 不应继续用一个过大的 legacy overview 反向决定数据库
 ```ts
 interface AccountMeDTO {
   user: AccountUserDTO
-  onboarding: AuthOnboardingDTO
 }
 
 interface AccountUserDTO {
@@ -763,7 +771,6 @@ interface AccountUserDTO {
 ```ts
 interface AccountDashboardDTO {
   user: AccountUserDTO
-  onboarding: AuthOnboardingDTO
   profiles: ManagedProfileSummaryDTO[]
   membership: AccountMembershipDTO
   entitlements: AccountEntitlementBalanceDTO[]
@@ -837,6 +844,7 @@ interface AccountMembershipDTO {
   status: 'active' | 'expired' | 'cancelled' | 'paused'
   startedAt: string
   expiresAt?: string
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
 }
 
@@ -848,8 +856,15 @@ interface MembershipPlanDTO {
   priceCents?: number
   currency?: string
   billingPeriod?: string
+  privateIntroductionQuota: number
+  privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventPriorityEnabled: boolean
+  staffReviewEnabled: boolean
+  profileDetailAccessLevel: 'registered' | 'premium'
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
-  entitlements: EntitlementCode[]
+  featured: boolean
+  sortOrder: number
 }
 
 interface AccountEntitlementBalanceDTO {
@@ -857,7 +872,8 @@ interface AccountEntitlementBalanceDTO {
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
-  resetAt?: string
+  periodStartedAt: string
+  periodEndsAt: string
 }
 ```
 
@@ -904,16 +920,9 @@ interface AccountIntroductionSummaryDTO {
   cooldownUntil?: string
 }
 
-interface AccountPrivateIntroductionRoomDTO {
-  roomId: string
-  requestId: string
-  targetProfileId: string
-  targetDisplayName: string
-  targetAvatarUrl: string
-  status: 'open' | 'paused' | 'closed'
-  openedAt: string
-  closedAt?: string
-  lastMessage?: string
+interface AccountInboxSummaryDTO {
+  unreadCount: number
+  latestThreads: InboxThreadSummaryDTO[]
 }
 ```
 
@@ -925,7 +934,7 @@ interface AccountPrivateIntroductionRoomDTO {
 interface AccountPreferencesDTO {
   preferredCity?: string
   preferredContactChannel?: PreferredContactChannel
-  advisorContactEnabled: boolean
+  staffContactEnabled: boolean
   familyAssistEnabled: boolean
   introductionUpdatesEnabled: boolean
   eventRemindersEnabled: boolean
@@ -1036,7 +1045,7 @@ Write rules:
 - `POST /api/account/profiles/:profileId/privacy-preferences` 只更新 profile 所有人可控制的半敏感字段隐藏偏好，并返回最新偏好对象。
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
-- `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or advisor confirmation happens before future membership state changes.
+- `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
 
 禁止在 account DTO 中返回这些 legacy 字段：
 
