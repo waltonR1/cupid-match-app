@@ -2,6 +2,7 @@
 import { watchEffect } from 'vue'
 import { onHide, onLaunch, onPageNotFound, onShow } from '@dcloudio/uni-app'
 import { useThemeStore } from '@/stores/modules/theme'
+import { installRouteGuard } from '@/utils/route-guard'
 
 const themeStore = useThemeStore()
 
@@ -14,6 +15,7 @@ watchEffect(() => {
 })
 
 onLaunch(() => {
+  installRouteGuard()
   console.log('App Launch')
 })
 

@@ -1,40 +1,36 @@
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import {
   getAccountMembership,
+  requestAccountMembershipUpgrade,
   type AccountEntitlementBalanceDTO,
   type AccountMembershipDTO,
+  type AccountMembershipUpgradePayload,
   type MembershipPlanDTO,
 } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { useAuthStore } from '@/stores/modules/auth'
 import { toAccountMembershipPageData } from '@/mappers/account-membership'
 import type { Translate } from '@/i18n/types'
 import type { FormatLocale } from '@/utils/locale-format'
 
 export function useAccountMembership(t: Translate, locale: () => FormatLocale) {
-  const authStore = useAuthStore()
   const latest = useLatestRequest()
   const membership = ref<AccountMembershipDTO | null>(null)
   const entitlements = ref<AccountEntitlementBalanceDTO[]>([])
   const availablePlans = ref<MembershipPlanDTO[]>([])
-  const currentUserId = computed(() => authStore.user?.id ?? '')
 
-  watch(currentUserId, () => { void load() }, { immediate: true })
+  void load()
 
   async function load() {
-    if (!currentUserId.value) {
-      membership.value = null
-      entitlements.value = []
-      availablePlans.value = []
-      return
-    }
-
     const data = await latest.run(() => getAccountMembership())
     if (data) {
       membership.value = data.membership
       entitlements.value = data.entitlements
       availablePlans.value = data.availablePlans
     }
+  }
+
+  async function requestUpgrade(tier: AccountMembershipUpgradePayload['tier']) {
+    return latest.run(() => requestAccountMembershipUpgrade({tier}))
   }
 
   const pageData = computed(() => toAccountMembershipPageData({
@@ -45,5 +41,5 @@ export function useAccountMembership(t: Translate, locale: () => FormatLocale) {
     locale: locale(),
   }))
 
-  return { loading: latest.loading, error: latest.error, pageData, refresh: load }
+  return { loading: latest.loading, error: latest.error, pageData, refresh: load, requestUpgrade }
 }
