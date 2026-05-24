@@ -46,8 +46,6 @@ export const accountCenterMessages: AppMessageSchema = {
       introductions: 'Demandes en cours',
       introductionsActive: 'En attente d une reponse ou d un suivi de la plateforme.',
       introductionsEmpty: 'Aucune demande ne necessite de suivi actuellement.',
-      followUps: 'Suivis conseiller',
-      followUpsEmpty: 'Aucun point conseiller a traiter actuellement.',
     },
     upcoming: {
       title: 'A venir',

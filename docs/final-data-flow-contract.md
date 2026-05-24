@@ -1026,7 +1026,6 @@ account home page
 -> event_registrations
 -> private_introduction_requests
 -> favorite_profiles count
--> advisor_follow_ups where visibility = 'user_visible'
 -> AccountDashboardDTO
 ```
 
@@ -1042,7 +1041,6 @@ interface AccountDashboardDTO {
   upcomingEvents: AccountEventRegistrationDTO[]
   recentIntroductions: AccountIntroductionSummaryDTO[]
   favoriteCount: number
-  userVisibleFollowUps: AdvisorFollowUpDTO[]
 }
 ```
 
@@ -1104,7 +1102,7 @@ Rules:
 - Account profile detail 读取 `profile_privacy_preferences` 作为类型明确的布尔偏好，不存页面文案。
 - Dashboard returns `favoriteCount`, not a full favorites list; detailed favorites stay under relationship.
 - Dashboard only returns summary slices: `upcomingEvents` and `recentIntroductions`; full event and introduction lists stay on their dedicated pages.
-- Advisor follow-up notes are internal by default; only records marked `user_visible` may enter account dashboard DTOs.
+- Staff tasks are internal by default and do not enter account dashboard DTOs directly; user-visible follow-up should be exposed through notifications, messages, or the specific business DTO that owns the state.
 - Account profile summaries must use profile DTO mappers, not raw profile records.
 - Account must not require `profiles.occupation`, `profiles.displayName`, `profiles.highlights`, or contact fields.
 

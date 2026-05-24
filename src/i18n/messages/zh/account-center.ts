@@ -31,8 +31,6 @@ export const accountCenterMessages: AppMessageSchema = {
       introductions: '进行中的申请',
       introductionsActive: '仍在等待对方回应或平台继续推进。',
       introductionsEmpty: '当前没有需要跟进的申请。',
-      followUps: '顾问跟进',
-      followUpsEmpty: '当前没有待处理的顾问事项。',
     },
     upcoming: {
       title: '近期安排',

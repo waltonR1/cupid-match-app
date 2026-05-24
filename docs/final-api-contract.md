@@ -770,16 +770,6 @@ interface AccountDashboardDTO {
   upcomingEvents: AccountEventRegistrationDTO[]
   recentIntroductions: AccountIntroductionSummaryDTO[]
   favoriteCount: number
-  userVisibleFollowUps: AdvisorFollowUpDTO[]
-}
-
-interface AdvisorFollowUpDTO {
-  id: string
-  status: 'open' | 'done' | 'snoozed'
-  priority: 'low' | 'normal' | 'high'
-  note: string
-  dueAt?: string
-  completedAt?: string
 }
 ```
 

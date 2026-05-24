@@ -1120,7 +1120,7 @@ event_registrations
 private_introduction_requests
 private_introduction_rooms
 private_introduction_room_messages
-advisor_follow_ups
+staff_tasks
 ```
 
 职责划分：
@@ -1149,7 +1149,7 @@ advisor_follow_ups
 | `private_introduction_requests` | 私人介绍申请。 |
 | `private_introduction_rooms` | 双方确认后的平台内私密沟通空间。 |
 | `private_introduction_room_messages` | 私人介绍 room 消息；若暂不做聊天可延后实现。 |
-| `advisor_follow_ups` | 顾问跟进记录。 |
+| `staff_tasks` | 后台工作人员待办任务。 |
 
 ### 关键表
 
@@ -1288,20 +1288,17 @@ interface UserEntitlementBalanceRecord {
 }
 ```
 
-`advisor_follow_ups`：
+`staff_tasks`：
 
 ```ts
-interface AdvisorFollowUpRecord {
+interface StaffTaskRecord {
   id: string
-  advisorId: string
-  userId?: string
-  profileId?: string
-  requestId?: string
-  eventId?: string
+  assigneeUserId?: string
+  subjectType: 'user' | 'profile' | 'private_introduction_request' | 'event'
+  subjectId: string
   status: 'open' | 'done' | 'snoozed'
   priority: 'low' | 'normal' | 'high'
   note: LocalizedText
-  visibility: 'internal' | 'user_visible'
   dueAt?: string
   completedAt?: string
   createdAt: string
@@ -1348,7 +1345,7 @@ Contract 对齐要求：
 | Endpoint / Page | Source of truth | API DTO | PageData / ViewModel |
 | --- | --- | --- | --- |
 | `GET /api/account/me` | `users`, `user_onboarding_states` | `AccountMeDTO` | `AccountShellPageData` |
-| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests`, user-visible `advisor_follow_ups` | `AccountDashboardDTO` | `AccountHomePageData` |
+| `GET /api/account/dashboard` | `users`, `user_onboarding_states`, `profile_ownerships`, `user_memberships`, `user_entitlement_balances`, `favorite_profiles` count, `event_registrations`, `private_introduction_requests` | `AccountDashboardDTO` | `AccountHomePageData` |
 | `GET /api/account/profiles` | `profile_ownerships`, `profile_verifications`, derived profile identity | `AccountProfilesDTO` | `AccountProfilesPageData` |
 | `GET /api/account/membership` | `membership_plans`, `user_memberships`, `membership_entitlements`, `user_entitlement_balances` | `AccountMembershipDTO`, `AccountEntitlementBalanceDTO[]`, `MembershipPlanDTO[]` | `AccountMembershipPageData` |
 | `GET /api/account/favorites` | `favorite_profiles`, derived profile identity | `FavoriteProfileSummaryDTO[]` | `AccountRelationshipPageData` |
@@ -1367,7 +1364,7 @@ Contract 对齐要求：
 - dashboard 只返回摘要切片：`upcomingEvents` 与 `recentIntroductions`；完整列表分别归 events 与 relationship。
 - events 页面当前只负责“我的报名”；可参加活动入口保留在公开 events 链路。
 - settings 页面组合 preferences 与 legal document API；协议确认历史仍只作为后端审计数据保存。
-- `advisor_follow_ups` 默认是内部记录；只有 `visibility = 'user_visible'` 的记录可进入用户端 dashboard。
+- `staff_tasks` 是后台内部任务，不直接进入用户端 dashboard；需要用户可见提示时，应通过 notifications、messages 或具体业务 DTO 暴露。
 
 ### 前端修改范围
 
@@ -1806,7 +1803,7 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 -> 收藏或参加 event
 -> 申请 private introduction
 -> 对方接受或拒绝
--> 进入 platform-mediated room 或 advisor follow-up
+-> 进入 platform-mediated room 或 staff follow-up
 -> account 中展示状态
 ```
 

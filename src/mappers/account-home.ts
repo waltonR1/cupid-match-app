@@ -47,14 +47,6 @@ export function toAccountHomePageData(params: { payload: AccountDashboardDTO | n
         ? t('home.attention.introductionsActive')
         : t('home.attention.introductionsEmpty'),
     },
-    {
-      key: 'follow-ups',
-      label: t('home.attention.followUps'),
-      value: String(payload.userVisibleFollowUps.length),
-      description: payload.userVisibleFollowUps.length > 0
-        ? payload.userVisibleFollowUps[0].note
-        : t('home.attention.followUpsEmpty'),
-    },
   ]
   const upcomingItems = payload.upcomingEvents.map((item) => ({
     key: item.registrationId,

@@ -11,9 +11,9 @@
 
 本文描述最终领域数据库形态，不代表当前 Node.js + TypeScript `mock-server` 已具备生产级安全、事务、审计、部署等能力。当前 `mock-server` 只用于验证未来 Java 后端可复刻的数据边界和领域模型；数据结构应贴近最终 Java 后端目标，实现能力可保持 prototype 级别。
 
-设计参照成熟婚恋平台、会员制服务、CRM 和顾问撮合系统的常见边界：
+设计参照成熟婚恋平台、会员制服务、CRM 和后台运营系统的常见边界：
 
-- 账户身份、被撮合资料、后台审核资料、联系方式、会员权益、活动报名、私人介绍、顾问跟进分开建模。
+- 账户身份、被撮合资料、后台审核资料、联系方式、会员权益、活动报名、私人介绍、后台任务分开建模。
 - 前台 profile 只保存可用于公开展示和撮合筛选的资料。
 - 后台工作人员需要看的敏感字段进入 internal / verification / contact 结构。
 - 任何页面 DTO 可以有派生字段，但派生字段不反向污染数据库主表。
@@ -51,7 +51,7 @@ interface FinalDatabase {
   private_introduction_requests: PrivateIntroductionRequestRecord[]
   private_introduction_rooms: PrivateIntroductionRoomRecord[]
   private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
-  advisor_follow_ups: AdvisorFollowUpRecord[]
+  staff_tasks: StaffTaskRecord[]
 }
 ```
 
@@ -722,20 +722,19 @@ interface PrivateIntroductionRoomMessageRecord {
 }
 ```
 
-### advisor_follow_ups
+### staff_tasks
 
 ```ts
-interface AdvisorFollowUpRecord {
+type StaffTaskSubjectType = 'user' | 'profile' | 'private_introduction_request' | 'event'
+
+interface StaffTaskRecord {
   id: string
-  advisorId: string
-  userId?: string
-  profileId?: string
-  requestId?: string
-  eventId?: string
+  assigneeUserId?: string
+  subjectType: StaffTaskSubjectType
+  subjectId: string
   status: 'open' | 'done' | 'snoozed'
   priority: 'low' | 'normal' | 'high'
   note: LocalizedText
-  visibility: 'internal' | 'user_visible'
   dueAt?: string
   completedAt?: string
   createdAt: string

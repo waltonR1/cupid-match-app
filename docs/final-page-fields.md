@@ -463,16 +463,6 @@ interface AccountOnboardingViewModel {
   title: string
   description: string
 }
-
-interface AdvisorFollowUpViewModel {
-  id: string
-  title: string
-  description: string
-  status: 'open' | 'done' | 'snoozed'
-  priority: 'low' | 'normal' | 'high'
-  dueAtText?: string
-  action?: PageActionViewModel
-}
 ```
 
 ### Profiles

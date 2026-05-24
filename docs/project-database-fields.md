@@ -33,6 +33,7 @@
 | `favorite_profiles` | `FavoriteProfileRecord[]` | 收藏关系。 | 当前只支持 account relationship 读取；收藏 / 取消收藏写入链路留到 Phase 6。 |
 | `message_threads` | `MessageThreadRecord[]` | 旧会话摘要。 | 后续被 private introduction room / messages 替代。 |
 | `private_introduction_requests` | `PrivateIntroductionRequestRecord[]` | 私人介绍申请。 | 后续补齐 room、messages、quota source of truth。 |
+| `staff_tasks` | `StaffTaskRecord[]` | 后台工作人员待办任务。 | 当前不直接进入用户端 dashboard；后续由 staff 后台管理。 |
 | `privacy_settings` | `PrivacySettingRecord[]` | 旧隐私设置。 | 后续迁移到 user preferences；profile 字段隐藏偏好使用 `profile_privacy_preferences`。 |
 
 ## 通用本地化字段

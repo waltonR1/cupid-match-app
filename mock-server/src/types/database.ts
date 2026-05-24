@@ -292,20 +292,17 @@ export interface UserPreferenceRecord {
     updatedAt: string
 }
 
-/** 顾问跟进记录可见性 */
-export type AdvisorFollowUpVisibility = 'internal' | 'user_visible'
+/** 后台任务关联对象 */
+export type StaffTaskSubjectType = 'user' | 'profile' | 'private_introduction_request' | 'event'
 
-/** 顾问跟进记录 */
-export interface AdvisorFollowUpRecord {
+/** 后台任务 */
+export interface StaffTaskRecord {
     id: string
-    advisorId: string
-    userId?: string
-    profileId?: string
-    requestId?: string
-    eventId?: string
+    assigneeUserId?: string
+    subjectType: StaffTaskSubjectType
+    subjectId: string
     status: 'open' | 'done' | 'snoozed'
     priority: 'low' | 'normal' | 'high'
-    visibility: AdvisorFollowUpVisibility
     note: LocalizedText
     dueAt?: string
     completedAt?: string
@@ -354,7 +351,7 @@ export interface Database {
     user_memberships: UserMembershipRecord[]
     user_entitlement_balances: UserEntitlementBalanceRecord[]
     user_preferences: UserPreferenceRecord[]
-    advisor_follow_ups: AdvisorFollowUpRecord[]
+    staff_tasks: StaffTaskRecord[]
     private_introduction_rooms: PrivateIntroductionRoomRecord[]
     private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
     legal_documents: LegalDocumentRecord[]

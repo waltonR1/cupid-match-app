@@ -46,8 +46,6 @@ export const accountCenterMessages: AppMessageSchema = {
       introductions: 'Active requests',
       introductionsActive: 'Still waiting for a response or platform follow-up.',
       introductionsEmpty: 'No requests currently need follow-up.',
-      followUps: 'Advisor follow-ups',
-      followUpsEmpty: 'No advisor items currently need attention.',
     },
     upcoming: {
       title: 'Upcoming',
