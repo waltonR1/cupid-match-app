@@ -156,6 +156,8 @@ interface RegisterPageFields {
 
 注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；Phase 5.5 不在 settings 中提供手动语言写入口。
 
+account profile detail 的编辑语言通过接口 `?lang=` 独立读取和保存。该编辑页展示当前语言槽位的真实值，不使用 fallback；同时消费 `localizedMeta` 了解当前编辑语言槽位的 source / provider / status / updatedAt / hasValue。public profile、directory、event 和 account summary 页面继续使用后端 fallback 后的展示 string。
+
 `agreed` 勾选后才允许提交。成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（版本不变则跳过）。
 
 ### Agreement Dialog

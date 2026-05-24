@@ -1557,7 +1557,9 @@ profile：
 - `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contacts`；同页展示不代表同表写入。
 - 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
-- localized 字段仍遵守当前 locale slot 写入规则。
+- localized 字段仍遵守当前 locale slot 写入规则：当前编辑语言写入 `manual / human / ready`，其他非人工语言保持空字符串 `machine / null / pending`。
+- public 展示接口使用 fallback resolver；account profile detail 编辑接口只读取当前 `lang` 槽位，不 fallback。
+- account profile detail 编辑接口返回当前 `lang` 的 `localizedMeta`，只暴露翻译元信息，不一次性返回三语全文。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给 staff 审核或后续独立流程。
 - `isPriorityProfile` 不是用户可写字段。
 

@@ -29,6 +29,7 @@ export function deriveProfileDisplayName(profileId: string): string {
 
 /** 从出生年份派生当前年龄 */
 export function deriveProfileAge(profile: ProfileRecord): number {
+    if (!profile.birthYear) return 0
     return new Date().getFullYear() - profile.birthYear
 }
 
@@ -40,9 +41,7 @@ export function deriveProfileAvatarUrl(photos: ProfilePhotoRecord[]): string {
 /** 判断资料认证是否已经完成 */
 export function deriveProfileVerified(verifications: ProfileVerificationRecord[]): boolean {
     return verifications.some((item) => {
-        return item.identityStatus === 'verified'
-            || item.educationStatus === 'verified'
-            || item.advisorStatus === 'approved'
+        return item.identityStatus === 'verified' && item.reviewStatus === 'approved'
     })
 }
 

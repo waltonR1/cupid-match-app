@@ -563,7 +563,8 @@ interface ProfilePhotoMutationPayload {
 规则：
 
 - 创建 / 更新 payload 使用前端输入值；后端负责保存为最终数据库结构和本地化字段。
-- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言，例如 `lang=zh` 时写入 `{ zh: value, fr: '', en: '' }`；其他 locale 由后台、staff 或后续翻译流程补齐。
+- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言；当前 locale 保存为 `manual / human / ready`，其他非人工 locale 保存为空字符串 `machine / null / pending`，由后台、staff 或后续翻译流程补齐。
+- public profile API 使用带 fallback 的本地化解析，跳过空字符串和 pending 值；account profile detail 编辑 API 使用当前 `lang` 槽位原值，不做 fallback。
 - 创建 profile 时同步创建或更新 `profile_ownerships`。
 
 ## Private Introduction API
@@ -803,9 +804,24 @@ interface AccountProfileDetailDTO {
   }
   verification: AccountProfileVerificationDTO
   privacyPreferences: AccountProfilePrivacyPreferencesDTO
+  localizedMeta: AccountProfileLocalizedMetaDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   // 其余业务字段与当前 profile 主表字段保持扁平一致
+}
+
+interface AccountProfileLocalizedMetaDTO {
+  editLocale: 'zh' | 'fr' | 'en'
+  fields: Record<string, EditableLocalizedFieldMetaDTO | EditableLocalizedFieldMetaDTO[]>
+}
+
+interface EditableLocalizedFieldMetaDTO {
+  locale: 'zh' | 'fr' | 'en'
+  source: 'manual' | 'machine' | null
+  provider: 'human' | 'translation_api' | null
+  status: 'ready' | 'pending' | 'failed' | 'stale' | 'missing'
+  updatedAt?: string
+  hasValue: boolean
 }
 
 interface ManagedProfileSummaryDTO {

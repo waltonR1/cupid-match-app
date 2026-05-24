@@ -73,7 +73,7 @@ interface FinalDatabase {
 interface LocalizedValue {
   value: string
   source: 'manual' | 'machine'
-  provider: 'human' | 'placeholder' | 'translation_api'
+  provider: 'human' | 'translation_api' | null
   status: 'ready' | 'pending' | 'failed' | 'stale'
   updatedAt: string
 }
@@ -83,7 +83,17 @@ interface LocalizedText {
   fr: LocalizedValue
   en: LocalizedValue
 }
+```
 
+LocalizedValue 规则：
+
+- 用户或后台工作人员主动填写当前语言槽位时，保存为 `manual / human / ready`。
+- 用户主动清空当前语言槽位时，仍保存为 `manual / human / ready / value = ''`，表示该语言被明确清空。
+- 等待机器翻译的槽位保存为 `machine / null / pending / value = ''`。
+- 机器翻译成功后保存为 `machine / translation_api / ready`。
+- 数据库不保存 UI 占位文案；待翻译提示由前端文案处理。
+
+```ts
 type LocaleCode = 'zh' | 'fr' | 'en'
 type GenderCode = 'male' | 'female'
 type UserStatus = 'active' | 'paused' | 'banned'

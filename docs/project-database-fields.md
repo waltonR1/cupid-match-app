@@ -42,7 +42,7 @@
 interface LocalizedValue {
     value: string
     source: 'manual' | 'machine'
-    provider: 'human' | 'placeholder' | 'translation_api'
+    provider: 'human' | 'translation_api' | null
     status: 'ready' | 'pending' | 'failed' | 'stale'
     updatedAt: string
 }
@@ -55,6 +55,13 @@ interface LocalizedText {
 ```
 
 当前 `mock-server/db.json` 中所有 `LocalizedText` 字段都按上述结构保存：文本值与翻译元信息放在同一个 locale slot 内，不再拆成独立的 `meta` 对象。
+
+当前规则：
+
+- 人工填写或用户主动清空当前语言槽位时，使用 `manual / human / ready`。
+- 待机器翻译的语言槽位使用 `machine / null / pending / value = ''`。
+- 机器翻译成功后使用 `machine / translation_api / ready`。
+- 数据库不保存 UI 占位文案；待翻译提示只由前端展示层处理。
 
 ## Auth / Account 当前字段
 

@@ -534,7 +534,11 @@ profile create/edit page
 Localized write rule:
 
 - `ProfileCreatePayload` and `ProfileUpdatePayload` accept plain strings from the current form locale.
-- Backend writes each localized field to the request locale slot, for example `lang=zh` writes `{ zh: value, fr: '', en: '' }`.
+- Backend writes each localized field to the request locale slot as `manual / human / ready`, including explicit empty strings.
+- Other non-manual locale slots are kept as empty `machine / null / pending`; database never stores UI placeholder text.
+- Public display DTOs use fallback resolver: current locale ready non-empty, then zh ready non-empty, then en ready non-empty, then any ready non-empty, otherwise `''`.
+- Account profile detail editing DTO uses the exact request locale slot value and does not fallback, so untranslated languages appear as empty editable fields.
+- Account profile detail editing DTO also returns `localizedMeta` for the request locale only. It exposes source / provider / status / updatedAt / hasValue per editable localized field, but does not return all three language values in one response.
 - Empty locale slots are completed later by staff/admin review or translation tooling; frontend must not synthesize missing translations.
 
 Profile main table writes:
