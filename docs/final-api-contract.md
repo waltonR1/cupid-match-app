@@ -795,7 +795,7 @@ interface AccountProfileDetailDTO {
   avatarUrl: string
   ownership: {
     relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-    permission: 'owner' | 'manager' | 'viewer'
+    permission: 'owner' | 'manager'
     status: 'pending' | 'active' | 'revoked'
     invitedByUserId?: string
     acceptedAt?: string
@@ -832,7 +832,7 @@ interface ManagedProfileSummaryDTO {
   age: number
   city: string
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isPriorityProfile: boolean

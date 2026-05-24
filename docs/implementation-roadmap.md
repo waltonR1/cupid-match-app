@@ -614,7 +614,7 @@ interface ProfileOwnershipRecord {
   userId: string
   profileId: string
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   status: 'pending' | 'active' | 'revoked'
   invitedByUserId?: string
   acceptedAt?: string
@@ -1197,7 +1197,7 @@ interface ProfileOwnershipRecord {
   userId: string
   profileId: string
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   status: 'pending' | 'active' | 'revoked'
   invitedByUserId?: string
   acceptedAt?: string
@@ -1436,7 +1436,7 @@ POST /api/account/profiles/:profileId/archive
 
 ### 归档规则
 
-- 只有 `owner` 可以归档；`manager` / `viewer` 不可归档。
+- 只有 `owner` 可以归档；`manager` 不可归档。
 - 有进行中的正式关系链路时不允许归档；至少包括未终结的 private introduction / inbox thread，后续若 event 或 staff 流程需要阻塞，也应在这里统一扩展。
 - 归档只写 `profiles.archivedAt`，不物理删除任何历史集合。
 - 前端可以显示 `删除资料`，但确认文案必须说明：资料将退出匹配和公开展示，历史记录仍保留。
@@ -1496,7 +1496,7 @@ POST /api/account/profiles/:profileId/archive
   - 仍是 self / family 共用的统一资料详情页。
   - 从只读档案升级为“可编辑档案”。
   - 每个 section 对应一组可编辑字段。
-  - 字段是否可编辑由 `ownership.permission` 决定；`viewer` 不可编辑。
+  - 字段是否可编辑由 `ownership.permission` 决定；只有 `owner` / `manager` 进入 account profile 管理链路。
   - 联系方式 section 在同页维护，但写入 `profile_contacts`，不回填 `profiles` 主表。
   - profile 半敏感字段隐藏偏好在同页维护，不再散落到 settings。
   - detail 页提供 `编辑资料` 与面向用户的 `删除资料` 入口；后端执行 Phase 5.4 已定义的 archive 流程，属于危险操作，必须二次确认。
@@ -1552,7 +1552,7 @@ profile：
 
 - 新建时根据新建表单或默认规则生成 ownership 默认值；之后用户可在统一 profile detail 中调整归属关系。
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
-- 只允许 `owner` / `manager` 修改；`viewer` 只能读。
+- 只允许 `owner` / `manager` 修改。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
 - `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
 - 联系方式由独立接口更新 `profile_contacts`；同页展示不代表同表写入。
@@ -1612,7 +1612,7 @@ membership：
 - 用户在拥有 `owner` / `manager` 权限时，可以修改统一 profile detail 页的可编辑字段并在刷新后保持。
 - 用户在拥有 `owner` / `manager` 权限时，可以维护联系方式 section，且写入后刷新仍保持。
 - 用户在拥有 `owner` 权限且 profile 满足 archive 规则时，可以在 detail 页执行删除入口；profile 退出正常业务流但历史链路保留。
-- `viewer` 无法提交 profile 更新。
+- ownership 不再提供只读 `viewer` 权限；不能管理的用户不进入 account profile 管理链路。
 - 半敏感字段隐藏偏好仅在该 profile 下生效，不能放开默认锁定字段。
 - settings 页修改偏好后刷新仍保持。
 - settings 页修改 `accountName` / `avatarUrl` 后刷新仍保持。

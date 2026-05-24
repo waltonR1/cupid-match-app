@@ -169,7 +169,7 @@ export interface ProfileOwnershipRecord {
     profileId: string
     userId: string
     relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-    permission: 'owner' | 'manager' | 'viewer'
+    permission: 'owner' | 'manager'
     status: 'pending' | 'active' | 'revoked'
     invitedByUserId?: string
     acceptedAt?: string

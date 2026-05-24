@@ -676,7 +676,6 @@ Rules:
 Rules:
 
 - Only `owner` and `manager` can write.
-- `viewer` is read-only.
 - This endpoint writes only profile main-table fields.
 - Localized fields write only to the current request locale slot.
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
@@ -755,7 +754,7 @@ Rules:
 Rules:
 
 - Only the `owner` can archive.
-- `manager` and `viewer` cannot archive.
+- `manager` cannot archive.
 - Profiles with active formal relationship flows cannot be archived directly.
 - `archivedAt` is a backend lifecycle marker, not another `profileStatus` value.
 - `archivedAt != null` profiles no longer participate in new public directory results, recommendation, private-introduction creation, or other new business actions.

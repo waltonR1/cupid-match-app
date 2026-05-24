@@ -480,7 +480,7 @@ interface ManagedProfileSummaryViewModel {
   archived: boolean
   archivedAtText?: string
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isPriorityProfile: boolean

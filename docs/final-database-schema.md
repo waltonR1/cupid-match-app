@@ -439,7 +439,7 @@ interface ProfileOwnershipRecord {
   userId: string
   profileId: string
   relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   status: 'pending' | 'active' | 'revoked'
   invitedByUserId?: string
   acceptedAt?: string
