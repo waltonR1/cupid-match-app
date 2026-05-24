@@ -108,6 +108,7 @@ export const accountCenterMessages: AppMessageSchema = {
     archiveDialog: { title: 'Supprimer le profil', description: 'Le profil quittera les flux actifs tout en conservant son historique. Continuer ?' },
     actions: { edit: 'Modifier', view: 'Voir', save: 'Enregistrer', archive: 'Supprimer le profil', create: 'Creer un profil', add: 'Ajouter', remove: 'Retirer' },
     detail: {
+      createTitle: 'Creer un profil',
       subtitle: 'Gerez les champs du profil, les contacts, les medias et la visibilite personnalisee.',
       back: 'Retour a mes profils',
       editLocale: 'Langue d edition',
@@ -124,7 +125,7 @@ export const accountCenterMessages: AppMessageSchema = {
       placeholders: { photoUrl: 'URL de la photo' },
       sections: { editor: 'Edition rapide', ownership: 'Propriete du profil', photos: 'Photos', basics: 'Informations de base', relationship: 'Relation et avenir', preferences: 'Preferences', lifestyle: 'Mode de vie', expression: 'Personnalite et expression', family: 'Aide familiale', contact: 'Coordonnees' },
       fields: {
-        gender: 'Genre', birthYear: 'Annee de naissance', height: 'Taille', city: 'Ville', country: 'Pays', nationality: 'Nationalite',
+        profileName: 'Nom prefere', gender: 'Genre', birthYear: 'Annee de naissance', height: 'Taille', city: 'Ville', country: 'Pays', nationality: 'Nationalite',
         languages: 'Langues', degreeLevel: 'Niveau d etudes', education: 'Etudes', industry: 'Secteur', careerDirection: 'Orientation professionnelle',
         maritalStatus: 'Situation matrimoniale', hasChildren: 'A des enfants', childrenPlan: 'Projet enfants', acceptsLongDistance: 'Accepte la distance',
         datingIntentionCode: 'Objectif relationnel', relationshipPlan: 'Plan relationnel', residencePlan: 'Projet de residence', relocationWillingness: 'Mobilite',
@@ -147,7 +148,6 @@ export const accountCenterMessages: AppMessageSchema = {
         contactVisibility: { after_introduction: 'Apres introduction', owner_only: 'Proprietaire seulement', disabled: 'Desactive' },
       },
     },
-    createPicker: { title: 'A qui appartient ce profil ?', selfDesc: 'Gere par vous-meme pour exprimer vos propres preferences.', parentDesc: 'Gere pour un membre de la famille. Vous pourrez preciser la relation plus tard.' },
     relationship: { self: 'Moi-meme', parent: 'Parent', father: 'Pere', mother: 'Mere', relative: 'Proche' },
     empty: { title: 'Aucun profil', description: 'Creez votre premier profil.' },
   },

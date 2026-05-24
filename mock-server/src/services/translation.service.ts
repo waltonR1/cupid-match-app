@@ -1,5 +1,5 @@
 import type {ApiLocale, LocalizedText} from '../types/common.js'
-import {isManualTranslation, manualValue, pendingMachineValue} from '../utils/localized.js'
+import {emptyManualLocalizedText, isManualTranslation, manualValue, pendingMachineValue} from '../utils/localized.js'
 
 const SUPPORTED_LOCALES: ApiLocale[] = ['zh', 'fr', 'en']
 
@@ -23,5 +23,12 @@ export function mergeTranslatedText(current: LocalizedText | undefined, locale: 
             next[targetLocale] = pendingMachineValue(now)
         })
 
+    return next
+}
+
+/** Merge a user-authored multilingual label without scheduling machine translation. */
+export function mergeManualLocalizedText(current: LocalizedText | undefined, locale: ApiLocale, value: string): LocalizedText {
+    const next = current ? {...current} : emptyManualLocalizedText()
+    next[locale] = manualValue(value)
     return next
 }

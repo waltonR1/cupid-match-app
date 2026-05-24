@@ -315,6 +315,7 @@ interface UserAgreementAcceptanceRecord {
 interface ProfileRecord {
   id: string
   profileType: 'self' | 'family'
+  profileName: LocalizedText
   gender: GenderCode
   birthYear: number
   height: number
@@ -405,6 +406,7 @@ joinedAt
 字段处理：
 
 - `displayName`：后端根据 `profile.id` 派生，返回 DTO，不入库。
+- `profileName`：账户中心用于管理资料的内部称呼，存为三语言 `LocalizedText`；该字段不作为公开展示名，不参与自动翻译队列，编辑时只更新当前语言槽位。
 - `avatarUrl`：由主图派生，返回 DTO，不入库。
 - `age`：由 `birthYear` 或认证生日派生，返回 DTO，不入库，避免年龄字段随时间失真。
 - `datingIntentionLabel`：由 `datingIntentionCode` 通过后端字典 / i18n 派生，返回 DTO，不入库。

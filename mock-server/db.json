@@ -750,7 +750,30 @@
       ],
       "createdAt": "2026-01-12",
       "updatedAt": "2026-04-20T18:30:00Z",
-      "profileType": "self"
+      "profileType": "self",
+      "profileName": {
+        "zh": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "fr": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "en": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        }
+      }
     },
     {
       "id": "p-002",
@@ -1503,7 +1526,30 @@
       ],
       "createdAt": "2026-01-18",
       "updatedAt": "2026-04-22T09:00:00Z",
-      "profileType": "self"
+      "profileType": "self",
+      "profileName": {
+        "zh": {
+          "value": "Lin",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "fr": {
+          "value": "Profile Lin",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "en": {
+          "value": "Lin profile",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        }
+      }
     },
     {
       "id": "p-006",
@@ -2255,7 +2301,30 @@
       ],
       "createdAt": "2026-03-01",
       "updatedAt": "2026-04-21T20:30:00Z",
-      "profileType": "self"
+      "profileType": "self",
+      "profileName": {
+        "zh": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "fr": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "en": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        }
+      }
     },
     {
       "id": "p-009",
@@ -3008,7 +3077,30 @@
       ],
       "createdAt": "2026-02-02",
       "updatedAt": "2026-04-25T07:50:00Z",
-      "profileType": "self"
+      "profileType": "self",
+      "profileName": {
+        "zh": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "fr": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "en": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        }
+      }
     },
     {
       "id": "p-010",
@@ -3761,7 +3853,30 @@
       ],
       "createdAt": "2026-02-14",
       "updatedAt": "2026-04-21T10:45:00Z",
-      "profileType": "self"
+      "profileType": "self",
+      "profileName": {
+        "zh": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "fr": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        },
+        "en": {
+          "value": "",
+          "source": "manual",
+          "provider": "human",
+          "status": "ready",
+          "updatedAt": "2026-05-24T00:00:00.000Z"
+        }
+      }
     }
   ],
   "events": [

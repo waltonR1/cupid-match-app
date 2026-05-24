@@ -108,6 +108,7 @@ export const accountCenterMessages: AppMessageSchema = {
     archiveDialog: { title: 'Delete profile', description: 'This removes the profile from normal business flows while preserving its history. Continue?' },
     actions: { edit: 'Edit', view: 'View', save: 'Save profile', archive: 'Delete profile', create: 'Create profile', add: 'Add', remove: 'Remove' },
     detail: {
+      createTitle: 'Create profile',
       subtitle: 'Maintain profile fields, contact methods, media, and custom visibility.',
       back: 'Back to my profiles',
       editLocale: 'Editing language',
@@ -124,7 +125,7 @@ export const accountCenterMessages: AppMessageSchema = {
       placeholders: { photoUrl: 'Photo URL' },
       sections: { editor: 'Quick edit', ownership: 'Profile ownership', photos: 'Photos', basics: 'Basics', relationship: 'Relationship and future', preferences: 'Partner preferences', lifestyle: 'Lifestyle', expression: 'Personality and expression', family: 'Family support', contact: 'Contact methods' },
       fields: {
-        gender: 'Gender', birthYear: 'Birth year', height: 'Height', city: 'City', country: 'Country', nationality: 'Nationality',
+        profileName: 'Preferred name', gender: 'Gender', birthYear: 'Birth year', height: 'Height', city: 'City', country: 'Country', nationality: 'Nationality',
         languages: 'Languages', degreeLevel: 'Degree level', education: 'Education', industry: 'Industry', careerDirection: 'Career direction',
         maritalStatus: 'Marital status', hasChildren: 'Has children', childrenPlan: 'Children plan', acceptsLongDistance: 'Accepts long distance',
         datingIntentionCode: 'Dating intention', relationshipPlan: 'Relationship plan', residencePlan: 'Residence plan', relocationWillingness: 'Relocation willingness',
@@ -147,7 +148,6 @@ export const accountCenterMessages: AppMessageSchema = {
         contactVisibility: { after_introduction: 'After introduction', owner_only: 'Owner only', disabled: 'Disabled' },
       },
     },
-    createPicker: { title: 'Who is this profile for?', selfDesc: 'Managed by you personally to express your own preferences.', parentDesc: 'Managed for a family member. You can refine the relationship later.' },
     relationship: { self: 'Self', parent: 'Parent', father: 'Father', mother: 'Mother', relative: 'Relative' },
     empty: { title: 'No profiles', description: 'Create your first profile.' },
   },

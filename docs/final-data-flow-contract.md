@@ -544,6 +544,7 @@ Localized write rule:
 Profile main table writes:
 
 ```text
+profileName
 gender
 birthYear
 height
@@ -678,6 +679,7 @@ Rules:
 - Only `owner` and `manager` can write.
 - This endpoint writes only profile main-table fields.
 - Localized fields write only to the current request locale slot.
+- `profileName` 是账户中心内部资料称呼。它只把当前语言槽位写为 `manual / human / ready`，不会为其他语言创建机翻任务。
 - `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
 
 ### Managed profile ownership update

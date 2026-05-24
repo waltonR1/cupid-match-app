@@ -312,6 +312,7 @@ joinedAt
 interface ProfileRecord {
   id: string
   profileType: 'self' | 'family'
+  profileName: LocalizedText
   gender: 'male' | 'female'
   birthYear: number
   height: number
@@ -370,6 +371,8 @@ interface ProfileRecord {
 - `occupation` 不作为精确职位公开字段，优先使用 `industry` / `careerDirection`。
 
 profile 照片、问答、可见性配置：
+
+`profileName` 是账户中心内部资料称呼，存入 `profiles`，不作为公开展示名，也不自动触发其他语言机翻。
 
 ```ts
 interface ProfilePhotoRecord {

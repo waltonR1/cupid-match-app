@@ -119,6 +119,7 @@ export const accountCenterMessages: AppMessageSchema = {
     },
     actions: { edit: '编辑资料', view: '查看详情', save: '保存资料', archive: '删除资料', create: '新建资料', add: '新增', remove: '移除' },
     detail: {
+      createTitle: '新建资料',
       subtitle: '维护档案字段、联系方式、媒体内容与可见范围。',
       back: '返回我的资料',
       editLocale: '编辑语言',
@@ -146,7 +147,7 @@ export const accountCenterMessages: AppMessageSchema = {
         contact: '联系方式',
       },
       fields: {
-        gender: '性别', birthYear: '出生年份', height: '身高', city: '城市', country: '国家', nationality: '国籍',
+        profileName: '称呼', gender: '性别', birthYear: '出生年份', height: '身高', city: '城市', country: '国家', nationality: '国籍',
         languages: '语言', degreeLevel: '学历层级', education: '学历', industry: '行业', careerDirection: '职业方向',
         maritalStatus: '婚姻状态', hasChildren: '是否有孩子', childrenPlan: '子女计划', acceptsLongDistance: '是否接受异地',
         datingIntentionCode: '关系目标', relationshipPlan: '关系规划', residencePlan: '定居规划', relocationWillingness: '迁居意愿',
@@ -169,7 +170,6 @@ export const accountCenterMessages: AppMessageSchema = {
         contactVisibility: { after_introduction: '介绍成功后开放', owner_only: '仅管理者可见', disabled: '暂不开放' },
       },
     },
-    createPicker: { title: '这份资料属于谁？', selfDesc: '由你本人直接管理，用于表达自己的择偶意向。', parentDesc: '代家人管理，后续可在详情页完善具体关系。' },
     relationship: { self: '本人', parent: '家长', father: '父亲', mother: '母亲', relative: '亲属' },
     empty: { title: '还没有资料', description: '创建你的第一份相亲资料。' },
   },

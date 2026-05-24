@@ -791,7 +791,7 @@ interface AccountProfilesDTO {
 interface AccountProfileDetailDTO {
   profileId: string
   profileType: 'self' | 'family'
-  displayName: string
+  profileName: string
   avatarUrl: string
   ownership: {
     relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
@@ -827,7 +827,7 @@ interface EditableLocalizedFieldMetaDTO {
 interface ManagedProfileSummaryDTO {
   profileId: string
   profileType: 'self' | 'family'
-  displayName: string
+  profileName: string
   avatarUrl: string
   age: number
   city: string

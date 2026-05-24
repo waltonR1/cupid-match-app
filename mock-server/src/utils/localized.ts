@@ -48,6 +48,14 @@ export function pendingMachineValue(updatedAt = new Date().toISOString()): Local
     return {value: '', source: 'machine', provider: null, status: 'pending', updatedAt}
 }
 
+export function emptyManualLocalizedText(updatedAt = new Date().toISOString()): LocalizedText {
+    return {
+        zh: manualValue('', updatedAt),
+        fr: manualValue('', updatedAt),
+        en: manualValue('', updatedAt),
+    }
+}
+
 export function translatedValue(value: string, updatedAt = new Date().toISOString()): LocalizedValue {
     return {value, source: 'machine', provider: 'translation_api', status: 'ready', updatedAt}
 }

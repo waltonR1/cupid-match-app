@@ -473,7 +473,8 @@ interface AccountOnboardingViewModel {
 interface ManagedProfileSummaryViewModel {
   profileId: string
   profileType: 'self' | 'family'
-  displayName: string
+  profileName: string
+  profileTitle: string
   avatarUrl: string
   age: string
   city: string
@@ -510,7 +511,8 @@ interface AccountManagedProfileCreateViewModel {
 
 interface AccountProfileDetailPageData {
   profileId: string
-  displayName: string
+  profileName: string
+  profileTitle: string
   avatarUrl: string
   ownershipBadges: string[]
   sections: AccountProfileDetailSectionViewModel[]
@@ -567,6 +569,8 @@ interface ProfileVerificationSummaryViewModel {
 ```
 
 `displayName`、`avatarUrl`、`age` 来自 profile DTO 派生结果，不从 account 数据库字段读取。
+
+`profileName` 是账户中心用于管理资料的内部称呼，页面可编辑并可作为 `profileTitle` 的优先展示值；公开 profile 仍使用后端派生 `displayName`。
 
 ### Membership
 

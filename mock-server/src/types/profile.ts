@@ -97,6 +97,7 @@ export interface ProfilePrivacyPreferenceRecord {
 export interface ProfileRecord {
     id: string
     profileType: ProfileType
+    profileName: LocalizedText
     gender: GenderCode
     birthYear: number
     height: number
