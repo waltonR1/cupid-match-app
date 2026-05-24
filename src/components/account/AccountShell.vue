@@ -10,7 +10,7 @@
         </view>
 
         <view class="mt-4 text-[26px] font-semibold text-semantic-text-primary">
-          {{ accountData.user.accountName || t('topSummary.guestName') }}
+          {{ auth.accountName || t('topSummary.guestName') }}
         </view>
         <view class="mt-2 text-[14px] leading-6 text-semantic-text-secondary">
           {{ membershipName }}
@@ -41,9 +41,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import type { AccountOverviewContext } from '@/hooks/account'
 import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { useAuthStore } from '@/stores/modules/auth'
 import {
   openAccountEventsPage,
   openAccountPage,
@@ -55,15 +55,14 @@ import {
 
 type AccountPageKey = 'home' | 'profiles' | 'relationship' | 'events' | 'membership' | 'settings'
 
-const props = defineProps<{
-  accountData: AccountOverviewContext
+defineProps<{
   activePage: AccountPageKey
 }>()
 
-const accountData = props.accountData
+const auth = useAuthStore()
 const { t } = usePageI18n('accountCenter')
 const { t: globalT } = useLocaleBridge()
-const membershipName = computed(() => globalT(`membership.${props.accountData.user.membership}.title`))
+const membershipName = computed(() => globalT(`membership.${auth.membershipTier}.title`))
 const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [
   { key: 'home', label: t('nav.home') },
   { key: 'profiles', label: t('nav.profiles') },

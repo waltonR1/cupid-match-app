@@ -1,8 +1,5 @@
 <template>
-  <AccountShell
-    :account-data="accountShellData"
-    active-page="home"
-  >
+  <AccountShell active-page="home">
     <view v-if="pageData" class="grid gap-6">
       <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <view
@@ -127,7 +124,7 @@
       </view>
     </view>
     <EmptyStatePanel
-      v-else-if="!accountData.loading.value"
+      v-else-if="!loading"
       size="page"
       :title="t('home.empty.title')"
       :subtitle="t('home.empty.profile')"
@@ -138,14 +135,12 @@
 <script setup lang="ts">
 import AccountShell from '@/components/account/AccountShell.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import { useAccountDashboard, useAccountOverview } from '@/hooks/account'
+import { useAccountDashboard } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMyProfilePage, openSelfDirectoryPage } from '@/utils/navigation'
 
 const { t } = usePageI18n('accountCenter')
-const accountData = useAccountOverview()
-const { pageData } = useAccountDashboard(t)
-const accountShellData = accountData
+const { loading, pageData } = useAccountDashboard(t)
 
 function handleAction(key: string) {
   if (key === 'create-profile') {

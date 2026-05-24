@@ -1,6 +1,8 @@
 export type AuthPath = 'self' | 'family'
 export type AuthProvider = 'email' | 'phone'
 export type AuthLocale = 'zh' | 'fr' | 'en'
+export type AuthMembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
+export type AuthMembershipStatus = 'active' | 'expired' | 'cancelled' | 'paused'
 
 export interface LoginPayload {
   identifier: string
@@ -23,7 +25,13 @@ export interface AuthUser {
   preferredLocale: AuthLocale
 }
 
+export interface AuthMembership {
+  tier: AuthMembershipTier
+  status: AuthMembershipStatus
+}
+
 export interface AuthSession {
   token: string
   user: AuthUser
+  membership: AuthMembership | null
 }

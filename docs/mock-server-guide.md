@@ -71,7 +71,9 @@ npm run mock:build
 - `POST /api/profiles/family/:id/private-introduction`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview`
+- `GET /api/account/dashboard`
+- `GET /api/account/me`
+- `GET /api/account/membership`
 - `GET /api/debug/profile-access-preview/:profileType/:id`
 - `GET /api/debug/private-introductions`
 - `POST /api/debug/private-introductions/:id/accept`
@@ -121,7 +123,7 @@ npm run mock:build
 - `GET /api/debug/private-introductions`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview`
+- `GET /api/account/dashboard`
 
 ## 与静态托管的关系
 

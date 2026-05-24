@@ -141,7 +141,6 @@ message_threads
 
 - `src/pages/account/*`
 - `src/components/account/*`
-- `src/hooks/account/use-account-overview.ts`
 - `src/api/account/*`
 - `mock-server/src/services/account.service.ts`
 - `mock-server/src/routes/account.routes.ts`

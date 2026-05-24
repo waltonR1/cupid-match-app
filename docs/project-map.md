@@ -102,6 +102,8 @@ mock 层通过独立的 HTTP 服务提供接口：
 - `GET /api/debug/profile-access-preview/:profileType/:id`
 - `GET /api/events`
 - `GET /api/events/:id`
-- `GET /api/account/overview`
+- `GET /api/account/dashboard`
+- `GET /api/account/me`
+- `GET /api/account/membership`
 - `POST /api/auth/login`
 - `POST /api/auth/register`

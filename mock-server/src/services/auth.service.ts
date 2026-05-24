@@ -23,6 +23,10 @@ export interface AuthSession {
     avatarUrl: string
     preferredLocale: PreferredLocale
   }
+  membership: {
+    tier: UserMembershipRecord['tier']
+    status: UserMembershipRecord['status']
+  } | null
 }
 
 export interface RegisterResult {
@@ -48,7 +52,7 @@ export function login(data: Database, body: Record<string, unknown>): AuthSessio
   if (!user) return null
 
   upsertAgreementAcceptances(data, user.id, new Date().toISOString())
-  return buildSession(authIdentity, user)
+  return buildSession(data, authIdentity, user)
 }
 
 export async function register(
@@ -140,11 +144,13 @@ export async function register(
 
   return {
     statusCode: 201,
-    body: buildSession(newAuthIdentity, newUser),
+    body: buildSession(db.data, newAuthIdentity, newUser),
   }
 }
 
-function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
+function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: UserRecord): AuthSession {
+  const membership = data.user_memberships.find((item) => item.userId === user.id && item.status === 'active') ?? null
+
   return {
     token: `mock-token-${authIdentity.id}`,
     user: {
@@ -153,6 +159,10 @@ function buildSession(authIdentity: AuthIdentityRecord, user: UserRecord): AuthS
       avatarUrl: user.avatarUrl || '',
       preferredLocale: user.preferredLocale,
     },
+    membership: membership ? {
+      tier: membership.tier,
+      status: membership.status,
+    } : null,
   }
 }
 

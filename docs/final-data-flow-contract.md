@@ -149,6 +149,7 @@ login page
 -> POST /api/auth/login
 -> auth_identities lookup
 -> users lookup
+-> active user_memberships lookup
 -> user_agreement_acceptances upsert (backend only)
 -> AuthSession DTO
 -> auth store
@@ -156,7 +157,7 @@ login page
 
 Rules:
 
-- Login returns account identity only.
+- Login returns account identity and lightweight membership state for app shell display.
 - Login returns `user.preferredLocale`; frontend syncs locale store from it after successful login.
 - Login 成功即表示用户接受当前 active 服务条款与隐私说明；后端自动 upsert `user_agreement_acceptances`（版本不变则跳过），前端无须传版本。
 - `X-User-Id` is mock request context only.

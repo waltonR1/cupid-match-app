@@ -416,6 +416,7 @@ Account 的最终页面字段提前定义，用于后续重写时避免继续借
 ```ts
 interface AccountShellPageData {
   user: AccountUserSummaryViewModel
+  membershipTier: 'free' | 'silver' | 'gold' | 'diamond'
   navItems: AccountNavItemViewModel[]
   notices: AccountNoticeViewModel[]
 }
@@ -442,6 +443,8 @@ interface AccountUserSummaryViewModel {
   status: 'active' | 'paused' | 'banned'
 }
 ```
+
+Account shell reads the authenticated user and lightweight membership tier from the auth store. It must not call a separate account overview API only to render the sidebar.
 
 ### Account Home
 

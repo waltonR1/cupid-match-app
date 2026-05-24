@@ -1,43 +1,50 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type {AuthSession, AuthUser} from '@/api/auth'
+import type { AuthMembership, AuthSession, AuthUser } from '@/api/auth'
 
 export type UserInfo = AuthUser
+export type MembershipInfo = AuthMembership
 
 /** 认证状态 Store */
 export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = ref(false)
   const token = ref('')
   const user = ref<UserInfo | null>(null)
+  const membership = ref<MembershipInfo | null>(null)
 
   const accountName = computed(() => user.value?.accountName || '')
   const avatarUrl = computed(() => user.value?.avatarUrl || '')
   const preferredLocale = computed(() => user.value?.preferredLocale ?? 'zh')
+  const membershipTier = computed(() => membership.value?.tier ?? 'free')
 
   function login(session: AuthSession) {
     isLoggedIn.value = true
     token.value = session.token
     user.value = session.user
+    membership.value = session.membership
   }
 
   function logout() {
     isLoggedIn.value = false
     token.value = ''
     user.value = null
+    membership.value = null
   }
 
   return {
     isLoggedIn,
     token,
     user,
+    membership,
     accountName,
     avatarUrl,
     preferredLocale,
+    membershipTier,
     login,
     logout,
   }
 }, {
   persist: {
-    paths: ['isLoggedIn', 'token', 'user'],
+    paths: ['isLoggedIn', 'token', 'user', 'membership'],
   },
 })

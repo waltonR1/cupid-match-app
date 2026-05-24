@@ -157,6 +157,12 @@ interface RegisterPayload {
 interface AuthSessionDTO {
   token: string
   user: AuthUserDTO
+  membership: AuthSessionMembershipDTO | null
+}
+
+interface AuthSessionMembershipDTO {
+  tier: MembershipTier
+  status: 'active' | 'expired' | 'cancelled' | 'paused'
 }
 
 interface AuthUserDTO {
