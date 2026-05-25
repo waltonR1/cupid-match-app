@@ -1,39 +1,41 @@
-import { computed, ref, watch } from 'vue'
-import { getAccountSettings, type AccountSettingsDTO } from '@/api/account'
-import { useAuthStore } from '@/stores/modules/auth'
+import { ref } from 'vue'
+import {
+  getAccountSettings,
+  updateAccountMe,
+  updateAccountPreferences,
+  type AccountPreferenceUpdatePayload,
+  type AccountSettingsDTO,
+  type AccountMeUpdatePayload,
+} from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { toAccountSettingsPageData } from '@/mappers/account-settings'
-import type { Translate } from '@/i18n/types'
-import { useLocaleStore } from '@/stores/modules/locale'
 
-export function useAccountSettings(t: Translate) {
-  const authStore = useAuthStore()
-  const localeStore = useLocaleStore()
+export function useAccountSettings() {
   const latest = useLatestRequest()
   const settings = ref<AccountSettingsDTO | null>(null)
-  const currentUserId = computed(() => authStore.user?.id ?? '')
 
-  watch(currentUserId, () => { void load() }, { immediate: true })
+  void load()
 
   async function load() {
-    if (!currentUserId.value) {
-      settings.value = null
-      return
-    }
-
     const data = await latest.run(() => getAccountSettings())
     if (data) settings.value = data
   }
 
-  const pageData = computed(() => toAccountSettingsPageData({
-    settings: settings.value,
-    t,
-    locale: localeStore.locale,
-  }))
+  async function saveAccount(payload: AccountMeUpdatePayload) {
+    const data = await latest.run(() => updateAccountMe(payload))
+    if (data) await load()
+  }
+
+  async function savePreferences(payload: AccountPreferenceUpdatePayload) {
+    const data = await latest.run(() => updateAccountPreferences(payload))
+    if (data) settings.value = data
+  }
 
   return {
     loading: latest.loading,
     error: latest.error,
-    pageData, refresh: load,
+    settings,
+    refresh: load,
+    saveAccount,
+    savePreferences,
   }
 }
