@@ -1,10 +1,8 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { getAccountDashboard, type AccountDashboardDTO } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { toAccountHomePageData } from '@/mappers/account-home'
-import type { Translate } from '@/i18n/types'
 
-export function useAccountDashboard(t: Translate) {
+export function useAccountDashboard() {
   const latest = useLatestRequest()
   const payload = ref<AccountDashboardDTO | null>(null)
 
@@ -15,7 +13,5 @@ export function useAccountDashboard(t: Translate) {
     if (data) payload.value = data
   }
 
-  const pageData = computed(() => toAccountHomePageData({ payload: payload.value, t }))
-
-  return { loading: latest.loading, error: latest.error, pageData, refresh: load }
+  return { loading: latest.loading, error: latest.error, payload, refresh: load }
 }

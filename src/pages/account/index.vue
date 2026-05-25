@@ -1,31 +1,31 @@
 <template>
   <AccountShell active-page="home">
-    <view v-if="pageData" class="grid gap-6">
+    <view v-if="payload" class="grid gap-6">
       <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <view
-          v-if="pageData.primaryAction"
+          v-if="primaryAction"
           class="border border-semantic-border-emphasis bg-semantic-surface-emphasis px-6 py-6 shadow-emphasis"
         >
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.nextStage') }}</view>
-          <view class="mt-4 text-[24px] font-semibold">{{ pageData.primaryAction.label }}</view>
+          <view class="mt-4 text-[24px] font-semibold">{{ t(`home.actions.${primaryAction}`) }}</view>
           <view
             class="mt-6 inline-flex cursor-pointer border border-semantic-border-emphasis bg-component-button-primary-background px-5 py-3 text-[14px] text-semantic-text-inverse transition-opacity hover:opacity-90"
-            @click="handleAction(pageData.primaryAction.key)"
+            @click="handleAction(primaryAction)"
           >
-            {{ pageData.primaryAction.label }}
+            {{ t(`home.actions.${primaryAction}`) }}
           </view>
         </view>
 
         <view
-          v-if="pageData.quotaSummary"
+          v-if="privateIntroQuota"
           class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel"
         >
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-            {{ pageData.quotaSummary.label }}
+            {{ t('home.quota.title') }}
           </view>
-          <view class="mt-5 text-[34px] font-semibold">{{ pageData.quotaSummary.value }}</view>
+          <view class="mt-5 text-[34px] font-semibold">{{ privateIntroQuota.quotaRemaining }} / {{ privateIntroQuota.quotaTotal }}</view>
           <view class="mt-3 text-[14px] leading-7 text-semantic-text-secondary">
-            {{ pageData.quotaSummary.description }}
+            {{ t('home.quota.description') }}
           </view>
         </view>
       </view>
@@ -35,16 +35,14 @@
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.attention.title') }}</view>
           <view class="mt-5 grid gap-4">
             <view
-              v-for="item in pageData.attentionItems"
-              :key="item.key"
               class="border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
               <view class="flex items-start justify-between gap-4">
                 <view>
-                  <view class="text-[14px] text-semantic-text-secondary">{{ item.label }}</view>
-                  <view class="mt-2 text-[15px] leading-7">{{ item.description }}</view>
+                  <view class="text-[14px] text-semantic-text-secondary">{{ t('home.attention.introductions') }}</view>
+                  <view class="mt-2 text-[15px] leading-7">{{ requestedIntroductions.length > 0 ? t('home.attention.introductionsActive') : t('home.attention.introductionsEmpty') }}</view>
                 </view>
-                <view class="text-[28px] font-semibold">{{ item.value }}</view>
+                <view class="text-[28px] font-semibold">{{ requestedIntroductions.length }}</view>
               </view>
             </view>
           </view>
@@ -52,19 +50,19 @@
 
         <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.upcoming.title') }}</view>
-          <view v-if="pageData.upcomingItems.length > 0" class="mt-5 grid gap-4">
+          <view v-if="payload.upcomingEvents.length > 0" class="mt-5 grid gap-4">
             <view
-              v-for="item in pageData.upcomingItems"
-              :key="item.key"
+              v-for="item in payload.upcomingEvents"
+              :key="item.registrationId"
               class="border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
             >
               <view class="flex flex-wrap items-center justify-between gap-3">
                 <view>
                   <view class="text-[15px]">{{ item.title }}</view>
-                  <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.meta }}</view>
+                  <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.city }} · {{ item.date }}</view>
                 </view>
                 <view class="border border-semantic-border-soft px-3 py-1 text-[12px] text-semantic-text-secondary">
-                  {{ item.status }}
+                  {{ t(`events.registrationStatus.${item.status}`) }}
                 </view>
               </view>
             </view>
@@ -78,17 +76,21 @@
       <view class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
         <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.profiles.title') }}</view>
-          <view v-if="pageData.profileItems.length > 0" class="mt-5 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
+          <view v-if="payload.profiles.length > 0" class="mt-5 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
             <view
-              v-for="item in pageData.profileItems"
-              :key="item.key"
+              v-for="item in payload.profiles"
+              :key="item.profileId"
               class="grid gap-2 py-4 sm:grid-cols-[minmax(0,1fr)_auto]"
             >
               <view>
-                <view class="text-[15px]">{{ item.title }}</view>
-                <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.meta }}</view>
+                <view class="text-[15px]">
+                  <template v-if="item.profileName">{{ item.profileName }}</template>
+                  <template v-else-if="item.profileType === 'self'">{{ t('profiles.profileType.self') }}</template>
+                  <template v-else>{{ t(`profiles.relationship.${item.relationshipToProfile}`) }} {{ t('profiles.profileType.family') }}</template>
+                </view>
+                <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.city }}</view>
               </view>
-              <view class="text-[13px] text-semantic-text-secondary">{{ item.status }}</view>
+              <view class="text-[13px] text-semantic-text-secondary">{{ t(`profiles.status.${item.profileStatus}`) }}</view>
             </view>
           </view>
           <view v-else class="mt-5 text-[15px] leading-7 text-semantic-text-secondary">
@@ -101,13 +103,21 @@
             {{ t('home.accountSummary') }}
           </view>
           <view class="mt-4 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
-            <view
-              v-for="item in pageData.accountItems"
-              :key="item.key"
-              class="grid gap-1 py-4"
-            >
-              <view class="text-[13px] text-semantic-text-secondary">{{ item.label }}</view>
-              <view class="text-[15px]">{{ item.value }}</view>
+            <view class="grid gap-1 py-4">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.accountName') }}</view>
+              <view class="text-[15px]">{{ payload.user.accountName }}</view>
+            </view>
+            <view class="grid gap-1 py-4">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.status') }}</view>
+              <view class="text-[15px]">{{ t(`home.accountStatus.${payload.user.status}`) }}</view>
+            </view>
+            <view class="grid gap-1 py-4">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.preferredLocale') }}</view>
+              <view class="text-[15px]">{{ t(`home.locale.${payload.user.preferredLocale}`) }}</view>
+            </view>
+            <view class="grid gap-1 py-4">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.membership') }}</view>
+              <view class="text-[15px]">{{ payload.membership?.name ?? t('home.functional.noMembership') }}</view>
             </view>
           </view>
         </view>
@@ -116,9 +126,21 @@
       <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
         <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.activitySummary') }}</view>
         <view class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <view v-for="item in pageData.summaryItems" :key="item.key">
-            <view class="text-[13px] text-semantic-text-secondary">{{ item.label }}</view>
-            <view class="mt-2 text-[26px] font-semibold">{{ item.value }}</view>
+          <view>
+            <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.profiles') }}</view>
+            <view class="mt-2 text-[26px] font-semibold">{{ payload.profiles.length }}</view>
+          </view>
+          <view>
+            <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.favorites') }}</view>
+            <view class="mt-2 text-[26px] font-semibold">{{ payload.favoriteCount }}</view>
+          </view>
+          <view>
+            <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.introductions') }}</view>
+            <view class="mt-2 text-[26px] font-semibold">{{ payload.recentIntroductions.length }}</view>
+          </view>
+          <view>
+            <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.events') }}</view>
+            <view class="mt-2 text-[26px] font-semibold">{{ payload.upcomingEvents.length }}</view>
           </view>
         </view>
       </view>
@@ -133,14 +155,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountDashboard } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMyProfilePage, openSelfDirectoryPage } from '@/utils/navigation'
+import { resolvePrimaryAction } from '@/mappers/account-home'
 
 const { t } = usePageI18n('accountCenter')
-const { loading, pageData } = useAccountDashboard(t)
+const { loading, payload } = useAccountDashboard()
+
+const primaryAction = computed(() => payload.value ? resolvePrimaryAction(payload.value) : undefined)
+const privateIntroQuota = computed(() => payload.value?.entitlements.find((item) => item.code === 'private_introduction'))
+const requestedIntroductions = computed(() => payload.value?.recentIntroductions.filter((item) => item.status === 'requested') ?? [])
 
 function handleAction(key: string) {
   if (key === 'create-profile') {
