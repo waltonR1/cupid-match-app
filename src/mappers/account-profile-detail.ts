@@ -1,145 +1,169 @@
 import type { AccountProfileDetailDTO } from '@/api/account'
-import type { Translate } from '@/i18n/types'
-import { formatLocalizedDateTime, type FormatLocale } from '@/utils/locale-format'
 
-export function toAccountProfileDetailPageData(params: {
-  payload: AccountProfileDetailDTO | null
-  t: Translate
-  locale: FormatLocale
-}) {
-  const { payload, t, locale } = params
+interface SectionItem {
+  fieldKey: string
+  labelKey: string
+  rawValue: unknown
+  editor: 'text' | 'number' | 'boolean' | 'enum' | 'list' | 'ageRange'
+  valueKey?: string
+}
+
+interface Section {
+  key: string
+  titleKey: string
+  items: SectionItem[]
+}
+
+export interface ProfileDetailPageData {
+  profileTitle: string | null
+  profileTitleKey: string | undefined
+  profileTitleRelation: string | undefined
+  avatarUrl: string
+  city: string
+  ownershipBadgeKeys: string[]
+  statusItems: Array<{ labelKey: string; rawValue: unknown }>
+  sections: Section[]
+  photos: AccountProfileDetailDTO['photos']
+  verificationItems: Array<{ key: string; labelKey: string; valueKey: string; valueRaw?: string; tone: string }>
+  privacyPreferenceItems: Array<{ key: string; labelKey: string; statusKey: string; hidden: boolean }>
+}
+
+export function toAccountProfileDetailPageData(params: { payload: AccountProfileDetailDTO | null }): ProfileDetailPageData | null {
+  const { payload } = params
   if (!payload) return null
 
+  const profileTitle = payload.profileName || null
+  let profileTitleKey: string | undefined
+  let profileTitleRelation: string | undefined
+  if (!payload.profileName) {
+    if (!payload.profileId) {
+      profileTitleKey = 'profiles.detail.createTitle'
+    } else if (payload.profileType === 'self') {
+      profileTitleKey = 'profiles.profileType.self'
+    } else {
+      profileTitleKey = 'profiles.profileType.family'
+      profileTitleRelation = `profiles.relationship.${payload.ownership.relationshipToProfile}`
+    }
+  }
+
   return {
-    ...payload,
-    ownershipBadges: [
-      t(`profiles.profileType.${payload.profileType}`),
-      t(`profiles.relationship.${payload.ownership.relationshipToProfile}`),
-      t(`profiles.permission.${payload.ownership.permission}`),
-      payload.ownership.isPrimary ? t('profiles.badges.primary') : null,
-    ].filter((item): item is string => Boolean(item)),
-    sections: [
-      {
-        key: 'basics',
-        title: t('profiles.detail.sections.basics'),
-        items: [
-          translatedItem(t('profiles.detail.fields.gender'), 'profiles.detail.values.gender', payload.gender, t),
-          item(t('profiles.detail.fields.birthYear'), payload.birthYear, t),
-          item(t('profiles.detail.fields.height'), payload.height, t),
-          item(t('profiles.detail.fields.city'), payload.city, t),
-          item(t('profiles.detail.fields.country'), payload.country, t),
-          item(t('profiles.detail.fields.nationality'), payload.nationality, t),
-          item(t('profiles.detail.fields.languages'), formatLanguages(payload.languages, t), t),
-          translatedItem(t('profiles.detail.fields.degreeLevel'), 'profiles.detail.values.degreeLevel', payload.degreeLevel, t),
-          item(t('profiles.detail.fields.education'), payload.education, t),
-          item(t('profiles.detail.fields.industry'), payload.industry, t),
-          item(t('profiles.detail.fields.careerDirection'), payload.careerDirection, t),
-        ],
-      },
-      {
-        key: 'relationship',
-        title: t('profiles.detail.sections.relationship'),
-        items: [
-          translatedItem(t('profiles.detail.fields.maritalStatus'), 'profiles.detail.values.maritalStatus', payload.maritalStatus, t),
-          item(t('profiles.detail.fields.hasChildren'), payload.hasChildren, t),
-          translatedItem(t('profiles.detail.fields.childrenPlan'), 'profiles.detail.values.childrenPlan', payload.childrenPlan, t),
-          item(t('profiles.detail.fields.acceptsLongDistance'), payload.acceptsLongDistance, t),
-          translatedItem(t('profiles.detail.fields.datingIntentionCode'), 'profiles.detail.values.datingIntentionCode', payload.datingIntentionCode, t),
-          item(t('profiles.detail.fields.relationshipPlan'), payload.relationshipPlan, t),
-          item(t('profiles.detail.fields.residencePlan'), payload.residencePlan, t),
-          item(t('profiles.detail.fields.relocationWillingness'), payload.relocationWillingness, t),
-          item(t('profiles.detail.fields.values'), payload.values, t),
-        ],
-      },
-      {
-        key: 'preferences',
-        title: t('profiles.detail.sections.preferences'),
-        items: [
-          item(t('profiles.detail.fields.preferredAgeRange'), `${payload.preferredAgeMin} - ${payload.preferredAgeMax}`, t),
-          item(t('profiles.detail.fields.locationScope'), payload.locationScope, t),
-          item(t('profiles.detail.fields.preferredEducation'), payload.preferredEducation, t),
-          item(t('profiles.detail.fields.familyPlan'), payload.familyPlan, t),
-          item(t('profiles.detail.fields.dealBreakers'), payload.dealBreakers, t),
-        ],
-      },
-      {
-        key: 'lifestyle',
-        title: t('profiles.detail.sections.lifestyle'),
-        items: [
-          translatedItem(t('profiles.detail.fields.smoking'), 'profiles.detail.values.habit', payload.smoking, t),
-          translatedItem(t('profiles.detail.fields.drinking'), 'profiles.detail.values.habit', payload.drinking, t),
-          item(t('profiles.detail.fields.exercise'), payload.exercise, t),
-          item(t('profiles.detail.fields.activityLevel'), payload.activityLevel, t),
-          item(t('profiles.detail.fields.weekendStyle'), payload.weekendStyle, t),
-          item(t('profiles.detail.fields.pets'), payload.pets, t),
-        ],
-      },
-      {
-        key: 'expression',
-        title: t('profiles.detail.sections.expression'),
-        items: [
-          item(t('profiles.detail.fields.personalityTraits'), payload.personalityTraits, t),
-          item(t('profiles.detail.fields.interests'), payload.interests, t),
-          item(t('profiles.detail.fields.communicationStyle'), payload.communicationStyle, t),
-          item(t('profiles.detail.fields.summary'), payload.summary, t),
-          item(t('profiles.detail.fields.tags'), payload.tags, t),
-        ],
-      },
-      {
-        key: 'family',
-        title: t('profiles.detail.sections.family'),
-        items: [
-          item(t('profiles.detail.fields.familyVisible'), payload.familyVisible, t),
-          item(t('profiles.detail.fields.allowFamilyContact'), payload.allowFamilyContact, t),
-          item(t('profiles.detail.fields.familyPriority'), payload.familyPriority, t),
-          item(t('profiles.detail.fields.isPriorityProfile'), payload.isPriorityProfile, t),
-        ],
-      },
-      {
-        key: 'contact',
-        title: t('profiles.detail.sections.contact'),
-        items: [
-          item(t('profiles.detail.fields.phone'), findContactValue(payload.contactMethods, 'phone'), t),
-          item(t('profiles.detail.fields.email'), findContactValue(payload.contactMethods, 'email'), t),
-          item(t('profiles.detail.fields.wechat'), findContactValue(payload.contactMethods, 'wechat'), t),
-        ],
-      },
+    profileTitle,
+    profileTitleKey,
+    profileTitleRelation,
+    avatarUrl: payload.avatarUrl,
+    city: payload.city,
+    ownershipBadgeKeys: [
+      `profiles.profileType.${payload.profileType}`,
+      `profiles.relationship.${payload.ownership.relationshipToProfile}`,
+      `profiles.permission.${payload.ownership.permission}`,
+      ...(payload.ownership.isPrimary ? ['profiles.badges.primary' as const] : []),
     ],
     statusItems: [
-      item(t('profiles.detail.fields.lifecycle'), t('profiles.lifecycle.active'), t),
-      translatedItem(t('profiles.detail.fields.profileStatus'), 'profiles.status', payload.profileStatus, t),
-      item(t('profiles.detail.fields.lastActiveAt'), formatLocalizedDateTime(locale, payload.lastActiveAt), t),
-      item(t('profiles.verificationSummary'), buildVerificationRatio(payload.verification), t),
-      item(t('profiles.visibility'), buildVisibilitySummary(payload.visibility, t), t),
+      { labelKey: 'profiles.detail.fields.lifecycle', rawValue: 'profiles.lifecycle.active' },
+      { labelKey: 'profiles.detail.fields.profileStatus', rawValue: `profiles.status.${payload.profileStatus}` },
+      { labelKey: 'profiles.detail.fields.lastActiveAt', rawValue: payload.lastActiveAt },
+      { labelKey: 'profiles.verificationSummary', rawValue: buildVerificationRatio(payload.verification) },
+      { labelKey: 'profiles.privacyPreferences.title', rawValue: buildPrivacyPreferenceSummaryKey(payload.privacyPreferences) },
     ],
-    visibilityGroups: buildVisibilityGroups(payload.visibility, t),
-    visibilityItems: payload.visibility.map((entry) => ({
-      ...entry,
-      label: t(`profiles.visibilityField.${entry.fieldCode}`),
-      visibilityText: t(`profiles.visibilityLevel.${entry.visibility}`),
-    })),
+    sections: buildSections(payload),
+    photos: payload.photos,
+    verificationItems: buildVerificationItems(payload.verification),
+    privacyPreferenceItems: buildPrivacyPreferenceItems(payload.privacyPreferences),
   }
 }
 
-function item(label: string, value: unknown, t: Translate) {
-  return {
-    label,
-    value: formatValue(value, t),
-  }
-}
-
-function translatedItem(label: string, keyPrefix: string, value: string, t: Translate) {
-  return {
-    label,
-    value: t(`${keyPrefix}.${value}`),
-  }
-}
-
-function formatValue(value: unknown, t: Translate) {
-  if (value === undefined || value === null || value === '') return '-'
-  if (Array.isArray(value)) return value.length > 0 ? value.join(' / ') : '-'
-  if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
-  return String(value)
+function buildSections(payload: AccountProfileDetailDTO): Section[] {
+  const blank = payload.isBlankDraft
+  return [
+    {
+      key: 'basics',
+      titleKey: 'profiles.detail.sections.basics',
+      items: [
+        { fieldKey: 'profileName', labelKey: 'profiles.detail.fields.profileName', rawValue: payload.profileName, editor: 'text' },
+        { fieldKey: 'gender', labelKey: 'profiles.detail.fields.gender', rawValue: blank ? null : payload.gender, editor: 'enum', valueKey: `profiles.detail.values.gender.${payload.gender}` },
+        { fieldKey: 'birthYear', labelKey: 'profiles.detail.fields.birthYear', rawValue: payload.birthYear, editor: 'number' },
+        { fieldKey: 'height', labelKey: 'profiles.detail.fields.height', rawValue: payload.height, editor: 'number' },
+        { fieldKey: 'city', labelKey: 'profiles.detail.fields.city', rawValue: payload.city, editor: 'text' },
+        { fieldKey: 'country', labelKey: 'profiles.detail.fields.country', rawValue: payload.country, editor: 'text' },
+        { fieldKey: 'nationality', labelKey: 'profiles.detail.fields.nationality', rawValue: payload.nationality, editor: 'text' },
+        { fieldKey: 'languages', labelKey: 'profiles.detail.fields.languages', rawValue: payload.languages, editor: 'list' },
+        { fieldKey: 'degreeLevel', labelKey: 'profiles.detail.fields.degreeLevel', rawValue: blank ? null : payload.degreeLevel, editor: 'enum', valueKey: `profiles.detail.values.degreeLevel.${payload.degreeLevel}` },
+        { fieldKey: 'education', labelKey: 'profiles.detail.fields.education', rawValue: payload.education, editor: 'text' },
+        { fieldKey: 'industry', labelKey: 'profiles.detail.fields.industry', rawValue: payload.industry, editor: 'text' },
+        { fieldKey: 'careerDirection', labelKey: 'profiles.detail.fields.careerDirection', rawValue: payload.careerDirection, editor: 'text' },
+      ],
+    },
+    {
+      key: 'relationship',
+      titleKey: 'profiles.detail.sections.relationship',
+      items: [
+        { fieldKey: 'maritalStatus', labelKey: 'profiles.detail.fields.maritalStatus', rawValue: blank ? null : payload.maritalStatus, editor: 'enum', valueKey: `profiles.detail.values.maritalStatus.${payload.maritalStatus}` },
+        { fieldKey: 'hasChildren', labelKey: 'profiles.detail.fields.hasChildren', rawValue: blank ? null : payload.hasChildren, editor: 'boolean' },
+        { fieldKey: 'childrenPlan', labelKey: 'profiles.detail.fields.childrenPlan', rawValue: blank ? null : payload.childrenPlan, editor: 'enum', valueKey: `profiles.detail.values.childrenPlan.${payload.childrenPlan}` },
+        { fieldKey: 'acceptsLongDistance', labelKey: 'profiles.detail.fields.acceptsLongDistance', rawValue: blank ? null : payload.acceptsLongDistance, editor: 'boolean' },
+        { fieldKey: 'datingIntentionCode', labelKey: 'profiles.detail.fields.datingIntentionCode', rawValue: blank ? null : payload.datingIntentionCode, editor: 'enum', valueKey: `profiles.detail.values.datingIntentionCode.${payload.datingIntentionCode}` },
+        { fieldKey: 'relationshipPlan', labelKey: 'profiles.detail.fields.relationshipPlan', rawValue: payload.relationshipPlan, editor: 'text' },
+        { fieldKey: 'residencePlan', labelKey: 'profiles.detail.fields.residencePlan', rawValue: payload.residencePlan, editor: 'text' },
+        { fieldKey: 'relocationWillingness', labelKey: 'profiles.detail.fields.relocationWillingness', rawValue: payload.relocationWillingness, editor: 'text' },
+        { fieldKey: 'values', labelKey: 'profiles.detail.fields.values', rawValue: payload.values, editor: 'list' },
+      ],
+    },
+    {
+      key: 'preferences',
+      titleKey: 'profiles.detail.sections.preferences',
+      items: [
+        { fieldKey: 'preferredAgeMin', labelKey: 'profiles.detail.fields.preferredAgeRange', rawValue: payload.preferredAgeMin || payload.preferredAgeMax ? `${payload.preferredAgeMin} - ${payload.preferredAgeMax}` : null, editor: 'ageRange' },
+        { fieldKey: 'locationScope', labelKey: 'profiles.detail.fields.locationScope', rawValue: payload.locationScope, editor: 'text' },
+        { fieldKey: 'preferredEducation', labelKey: 'profiles.detail.fields.preferredEducation', rawValue: payload.preferredEducation, editor: 'text' },
+        { fieldKey: 'familyPlan', labelKey: 'profiles.detail.fields.familyPlan', rawValue: payload.familyPlan, editor: 'text' },
+        { fieldKey: 'dealBreakers', labelKey: 'profiles.detail.fields.dealBreakers', rawValue: payload.dealBreakers, editor: 'list' },
+      ],
+    },
+    {
+      key: 'lifestyle',
+      titleKey: 'profiles.detail.sections.lifestyle',
+      items: [
+        { fieldKey: 'smoking', labelKey: 'profiles.detail.fields.smoking', rawValue: blank ? null : payload.smoking, editor: 'enum', valueKey: `profiles.detail.values.habit.${payload.smoking}` },
+        { fieldKey: 'drinking', labelKey: 'profiles.detail.fields.drinking', rawValue: blank ? null : payload.drinking, editor: 'enum', valueKey: `profiles.detail.values.habit.${payload.drinking}` },
+        { fieldKey: 'exercise', labelKey: 'profiles.detail.fields.exercise', rawValue: payload.exercise, editor: 'text' },
+        { fieldKey: 'activityLevel', labelKey: 'profiles.detail.fields.activityLevel', rawValue: payload.activityLevel, editor: 'text' },
+        { fieldKey: 'weekendStyle', labelKey: 'profiles.detail.fields.weekendStyle', rawValue: payload.weekendStyle, editor: 'text' },
+        { fieldKey: 'pets', labelKey: 'profiles.detail.fields.pets', rawValue: payload.pets, editor: 'text' },
+      ],
+    },
+    {
+      key: 'expression',
+      titleKey: 'profiles.detail.sections.expression',
+      items: [
+        { fieldKey: 'personalityTraits', labelKey: 'profiles.detail.fields.personalityTraits', rawValue: payload.personalityTraits, editor: 'list' },
+        { fieldKey: 'interests', labelKey: 'profiles.detail.fields.interests', rawValue: payload.interests, editor: 'list' },
+        { fieldKey: 'communicationStyle', labelKey: 'profiles.detail.fields.communicationStyle', rawValue: payload.communicationStyle, editor: 'text' },
+        { fieldKey: 'summary', labelKey: 'profiles.detail.fields.summary', rawValue: payload.summary, editor: 'text' },
+        { fieldKey: 'tags', labelKey: 'profiles.detail.fields.tags', rawValue: payload.tags, editor: 'list' },
+      ],
+    },
+    {
+      key: 'family',
+      titleKey: 'profiles.detail.sections.family',
+      items: [
+        { fieldKey: 'familyVisible', labelKey: 'profiles.detail.fields.familyVisible', rawValue: blank ? null : payload.familyVisible, editor: 'boolean' },
+        { fieldKey: 'allowFamilyContact', labelKey: 'profiles.detail.fields.allowFamilyContact', rawValue: blank ? null : payload.allowFamilyContact, editor: 'boolean' },
+        { fieldKey: 'familyPriority', labelKey: 'profiles.detail.fields.familyPriority', rawValue: blank ? null : payload.familyPriority, editor: 'boolean' },
+        { fieldKey: 'isPriorityProfile', labelKey: 'profiles.detail.fields.isPriorityProfile', rawValue: blank ? null : payload.isPriorityProfile, editor: 'boolean' },
+      ],
+    },
+    {
+      key: 'contact',
+      titleKey: 'profiles.detail.sections.contact',
+      items: [
+        { fieldKey: 'phone', labelKey: 'profiles.detail.fields.phone', rawValue: payload.contact.phone, editor: 'text' },
+        { fieldKey: 'email', labelKey: 'profiles.detail.fields.email', rawValue: payload.contact.email, editor: 'text' },
+        { fieldKey: 'wechat', labelKey: 'profiles.detail.fields.wechat', rawValue: payload.contact.wechat, editor: 'text' },
+        { fieldKey: 'preferredChannel', labelKey: 'profiles.detail.fields.preferredChannel', rawValue: payload.contact.preferredChannel ?? 'email', editor: 'enum', valueKey: `profiles.detail.values.contactChannel.${payload.contact.preferredChannel ?? 'email'}` },
+        { fieldKey: 'contactVisibility', labelKey: 'profiles.detail.fields.contactVisibility', rawValue: payload.contact.visibility, editor: 'enum', valueKey: `profiles.detail.values.contactVisibility.${payload.contact.visibility}` },
+      ],
+    },
+  ]
 }
 
 function buildVerificationRatio(verification: AccountProfileDetailDTO['verification']) {
@@ -148,62 +172,40 @@ function buildVerificationRatio(verification: AccountProfileDetailDTO['verificat
     verification.educationStatus,
     verification.incomeStatus,
     verification.maritalStatus,
+    verification.reviewStatus,
   ]
-
-  return `${statuses.filter((status) => status === 'verified').length}/${statuses.length}`
+  return `${statuses.filter((s) => s === 'verified' || s === 'approved').length}/${statuses.length}`
 }
 
-function buildVisibilitySummary(
-  visibility: AccountProfileDetailDTO['visibility'],
-  t: Translate,
-) {
-  const mostRestricted = visibility.reduce<AccountProfileDetailDTO['visibility'][number]['visibility'] | null>(
-    (current, item) => {
-      if (!current) return item.visibility
-      return visibilityRank(item.visibility) > visibilityRank(current) ? item.visibility : current
-    },
-    null,
-  )
-
-  return mostRestricted ? t(`profiles.visibilityLevel.${mostRestricted}`) : t('profiles.visibilityCustom.emptyValue')
+function buildPrivacyPreferenceSummaryKey(preferences: AccountProfileDetailDTO['privacyPreferences']) {
+  const fields = ['hideMaritalStatus', 'hideHasChildren', 'hideChildrenPlan', 'hideAcceptsLongDistance', 'hideSmoking', 'hideDrinking'] as const
+  const hiddenCount = fields.filter((key) => preferences[key]).length
+  return hiddenCount > 0 ? 'profiles.privacyPreferences.hiddenSummary' : 'profiles.privacyPreferences.defaultSummary'
 }
 
-function buildVisibilityGroups(
-  visibility: AccountProfileDetailDTO['visibility'],
-  t: Translate,
-) {
-  return (['public', 'member', 'introduced', 'owner_only', 'hidden'] as const)
-    .map((level) => ({
-      key: level,
-      title: t(`profiles.visibilityLevel.${level}`),
-      items: visibility
-        .filter((entry) => entry.visibility === level)
-        .map((entry) => ({
-          ...entry,
-          label: t(`profiles.visibilityField.${entry.fieldCode}`),
-          visibilityText: t(`profiles.visibilityLevel.${entry.visibility}`),
-        })),
-    }))
-    .filter((group) => group.items.length > 0)
+function buildVerificationItems(verification: AccountProfileDetailDTO['verification']) {
+  return [
+    { key: 'identity', labelKey: 'profiles.verification.identity', valueKey: `profiles.verificationStatus.${verification.identityStatus}`, tone: resolveTone(verification.identityStatus) },
+    { key: 'education', labelKey: 'profiles.verification.education', valueKey: `profiles.verificationStatus.${verification.educationStatus}`, tone: resolveTone(verification.educationStatus) },
+    { key: 'income', labelKey: 'profiles.verification.income', valueKey: `profiles.verificationStatus.${verification.incomeStatus}`, tone: resolveTone(verification.incomeStatus) },
+    { key: 'marital', labelKey: 'profiles.verification.marital', valueKey: `profiles.verificationStatus.${verification.maritalStatus}`, tone: resolveTone(verification.maritalStatus) },
+    { key: 'review', labelKey: 'profiles.verification.platformReview', valueKey: `profiles.reviewStatus.${verification.reviewStatus}`, tone: resolveTone(verification.reviewStatus) },
+    { key: 'verifiedAt', labelKey: 'profiles.verification.verifiedAt', valueKey: '', valueRaw: verification.verifiedAt, tone: verification.verifiedAt ? 'complete' : 'unverified' },
+  ]
 }
 
-function visibilityRank(level: AccountProfileDetailDTO['visibility'][number]['visibility']) {
-  return {
-    public: 0,
-    member: 1,
-    introduced: 2,
-    owner_only: 3,
-    hidden: 4,
-  }[level]
+function resolveTone(status: string) {
+  if (status === 'verified' || status === 'approved') return 'complete'
+  if (status === 'rejected') return 'rejected'
+  return 'pending'
 }
 
-function formatLanguages(languages: string[], t: Translate) {
-  return languages.map((language) => t(`profiles.detail.values.language.${language.toLowerCase()}`))
-}
-
-function findContactValue(
-  contactMethods: AccountProfileDetailDTO['contactMethods'],
-  type: AccountProfileDetailDTO['contactMethods'][number]['type'],
-) {
-  return contactMethods.find((item) => item.type === type)?.value
+function buildPrivacyPreferenceItems(preferences: AccountProfileDetailDTO['privacyPreferences']) {
+  const fields = ['hideMaritalStatus', 'hideHasChildren', 'hideChildrenPlan', 'hideAcceptsLongDistance', 'hideSmoking', 'hideDrinking'] as const
+  return fields.map((key) => ({
+    key,
+    labelKey: `profiles.privacyPreferenceField.${key}`,
+    statusKey: preferences[key] ? 'profiles.privacyPreferences.hidden' : 'profiles.privacyPreferences.default',
+    hidden: preferences[key],
+  }))
 }
