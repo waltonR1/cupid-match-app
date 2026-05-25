@@ -1,68 +1,9 @@
-import type {
-  AccountIntroductionSummaryDTO,
-  FavoriteProfileSummaryDTO,
-} from '@/api/account'
-import type { Translate } from '@/i18n/types'
-import { formatLocalizedDate, type FormatLocale } from '@/utils/locale-format'
-import { formatLocalizedAge } from '@/utils/profile-format'
+import type { AccountIntroductionSummaryDTO } from '@/api/account'
 
-export function toAccountRelationshipPageData(params: {
-  favorites: FavoriteProfileSummaryDTO[]
-  introductions: AccountIntroductionSummaryDTO[]
-  t: Translate
-  locale: FormatLocale
-}) {
-  const { favorites, introductions, t, locale } = params
-  const introductionItems = introductions.map((item) => ({
-    requestId: item.requestId,
-    targetProfileId: item.targetProfileId,
-    targetDisplayName: item.targetDisplayName,
-    targetAvatarUrl: item.targetAvatarUrl,
-    status: item.status,
-    statusText: t(`introduction.status.${item.status}`),
-    requestedAtText: formatLocalizedDate(locale, item.requestedAt),
-    expiresAtText: item.expiresAt ? formatLocalizedDate(locale, item.expiresAt) : undefined,
-    respondedAtText: item.respondedAt ? formatLocalizedDate(locale, item.respondedAt) : undefined,
-    cooldownUntilText: item.cooldownUntil ? formatLocalizedDate(locale, item.cooldownUntil) : undefined,
-  }))
-  const attentionIntroductions = introductionItems.filter((item) => item.status === 'requested')
-  const historyIntroductions = introductionItems.filter((item) => item.status !== 'requested')
-
+/** 将介绍请求按状态分为"进行中"和"历史"两组 */
+export function splitIntroductions(items: AccountIntroductionSummaryDTO[]) {
   return {
-    favorites: favorites.map((item) => ({
-      favoriteId: item.favoriteId,
-      profileId: item.profileId,
-      profileType: item.profileType,
-      displayName: item.displayName,
-      avatarUrl: item.avatarUrl,
-      age: formatLocalizedAge(locale, item.age),
-      city: item.city,
-      education: item.education,
-      industry: item.industry,
-      summary: item.summary,
-      tags: item.tags,
-      savedAtText: formatLocalizedDate(locale, item.createdAt),
-    })),
-    introductions: introductionItems,
-    attentionIntroductions,
-    historyIntroductions,
-    tabs: [
-      { key: 'favorites' as const, label: t('relationship.tabs.favorites'), count: favorites.length },
-      { key: 'introductions' as const, label: t('relationship.tabs.introductions'), count: introductions.length },
-    ],
-    overview: [
-      {
-        key: 'favorites' as const,
-        label: t('relationship.overview.favorites'),
-        description: t('relationship.stageDescription.favorites'),
-        value: favorites.length,
-      },
-      {
-        key: 'introductions' as const,
-        label: t('relationship.overview.introductions'),
-        description: t('relationship.stageDescription.introductions'),
-        value: attentionIntroductions.length,
-      },
-    ],
+    attention: items.filter((item) => item.status === 'requested'),
+    history: items.filter((item) => item.status !== 'requested'),
   }
 }
