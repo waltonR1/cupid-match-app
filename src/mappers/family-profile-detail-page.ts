@@ -146,8 +146,8 @@ function buildFamilyReviewFacts(profile: FamilyProfileDetail, access: FactBuilde
     return [
         createProfileFact(t('fields.familySupport'), resolveFamilyModeText(profile, t)),
         createProfileFact(t('fields.visibility'), profile.familyVisible ? t('visibility.familyVisible') : t('visibility.userVisible')),
-        access(t('fields.relationshipValues'), joinRestrictedList(profile.values)),
-        access(t('fields.communicationStyle'), profile.communicationStyle),
+        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, t)),
+        access(t('fields.communicationStyle'), formatEnumValue('communicationStyle', profile.communicationStyle, t)),
     ]
 }
 
@@ -161,11 +161,11 @@ function buildRelationshipFacts(
     return [
         pub(t('fields.intent'), profile.datingIntentionLabel),
         access(t('fields.maritalStatus'), formatRestrictedMaritalStatus(profile.maritalStatus, t)),
-        access(t('fields.maritalPlan'), profile.relationshipPlan),
+        access(t('fields.relationshipGoal'), profile.relationshipGoal),
         access(t('fields.residencePlan'), profile.residencePlan),
-        access(t('fields.relocationWillingness'), profile.relocationWillingness),
+        access(t('fields.relocation'), formatEnumValue('relocation', profile.relocation, t)),
         access(t('fields.longDistance'), formatRestrictedBoolean(profile.acceptsLongDistance, t)),
-        access(t('fields.familyPlan'), profile.familyPlan),
+        access(t('fields.familyLife'), profile.familyLife),
     ]
 }
 
@@ -173,11 +173,11 @@ function buildRelationshipFacts(
 function buildLifestyleFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
         access(t('fields.exercise'), profile.exercise),
-        access(t('fields.activityLevel'), profile.activityLevel),
-        access(t('fields.weekendStyle'), profile.weekendStyle),
+        access(t('fields.activityLevel'), formatEnumValue('activityLevel', profile.activityLevel, t)),
+        access(t('fields.weekendStyle'), formatEnumValue('weekendStyle', profile.weekendStyle, t)),
         access(t('fields.smoke'), formatRestrictedHabit(profile.smoking, t)),
         access(t('fields.drink'), formatRestrictedHabit(profile.drinking, t)),
-        access(t('fields.pets'), profile.pets),
+        access(t('fields.pets'), formatEnumValue('pets', profile.pets, t)),
     ]
 }
 
@@ -185,9 +185,9 @@ function buildLifestyleFacts(profile: FamilyProfileDetail, access: FactBuilder, 
 function buildPreferenceFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
         access(t('fields.preferredAgeRange'), formatPreferredAgeRange(profile.preferredAgeMin, profile.preferredAgeMax)),
-        access(t('fields.preferredCityScope'), profile.locationScope),
+        access(t('fields.preferredLocation'), formatEnumValue('preferredLocation', profile.preferredLocation, t)),
         access(t('fields.preferredEducation'), profile.preferredEducation),
-        access(t('fields.preferredFamilyPlan'), profile.familyPlan),
+        access(t('fields.preferredFamilyPlan'), profile.familyLife),
         access(t('fields.dealBreakers'), joinRestrictedList(profile.dealBreakers)),
     ]
 }
@@ -195,9 +195,9 @@ function buildPreferenceFacts(profile: FamilyProfileDetail, access: FactBuilder,
 /** 构建家庭价值观 */
 function buildValueFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
-        access(t('fields.relationshipValues'), joinRestrictedList(profile.values)),
+        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, t)),
         access(t('fields.personalityTraits'), joinRestrictedList(profile.personalityTraits)),
-        access(t('fields.communicationStyle'), profile.communicationStyle),
+        access(t('fields.communicationStyle'), formatEnumValue('communicationStyle', profile.communicationStyle, t)),
         access(t('fields.children'), formatRestrictedBoolean(profile.hasChildren, t)),
         access(t('fields.childrenPlan'), formatRestrictedChildrenPlan(profile.childrenPlan, t)),
     ]
@@ -244,7 +244,7 @@ function buildBadges(profile: FamilyProfileDetail, familyModeText: string, t: Tr
         {label: verificationText, tone: profile.isVerified ? 'highlight' : 'muted'},
     ]
 
-    if (profile.isPriorityProfile || profile.familyPriority) {
+    if (profile.isFeatured || profile.familyPriority) {
         badges.unshift({label: t('status.priority'), tone: 'highlight'})
     }
 
@@ -309,6 +309,16 @@ function formatPreferredAgeRange(
 /** 拼接受限列表 */
 function joinRestrictedList(value: RestrictedProfileField<string[]>): RestrictedProfileField<string> {
     return isRestrictedValue(value) ? value : value.join(' / ')
+}
+
+/** Format an enum code through the detail i18n value group. */
+function formatEnumValue(group: string, value: string, t: Translate): string {
+    return t(`${group}.${value}`)
+}
+
+/** Join enum code arrays through the detail i18n value group. */
+function joinEnumValues(group: string, values: string[], t: Translate): string {
+    return values.map(value => formatEnumValue(group, value, t)).join(' / ')
 }
 
 /** 判断是否为受限值 */

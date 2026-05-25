@@ -25,7 +25,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
             {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
         ],
         tags: profile.tags.slice(0, 3),
-        footer: t(resolveSelfFooterKey(profile.profileStatus, profile.isPriorityProfile)),
+        footer: t(resolveSelfFooterKey(profile.profileStatus, profile.isFeatured)),
     }
 }
 
@@ -44,7 +44,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         gender: profile.gender,
         meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
         badge: t(resolveFamilyModeBadgeKey(familyMode)),
-        summary: profile.relationshipPlan,
+        summary: profile.relationshipGoal,
         facts: [
             {label: t('fields.city'), value: profile.city},
             {label: t('fields.education'), value: profile.education},
@@ -71,8 +71,8 @@ function resolveIntentBadgeKey(code: DatingIntentionCode): string {
 }
 
 /** 解析个人卡片底部文案 */
-function resolveSelfFooterKey(profileStatus: ProfileStatusCode, isPriorityProfile: boolean): string {
-    if (isPriorityProfile) return 'card.labelPriority'
+function resolveSelfFooterKey(profileStatus: ProfileStatusCode, isFeatured: boolean): string {
+    if (isFeatured) return 'card.labelPriority'
 
     switch (profileStatus) {
         case 'review':

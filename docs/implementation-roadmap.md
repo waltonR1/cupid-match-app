@@ -320,7 +320,7 @@ interface ProfileRecord {
   nationality: LocalizedText
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
   allowFamilyContact: boolean
@@ -334,22 +334,22 @@ interface ProfileRecord {
   childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
   acceptsLongDistance: boolean
   datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-  relationshipPlan: LocalizedText
+  relationshipGoal: LocalizedText
   residencePlan: LocalizedText
-  relocationWillingness: LocalizedText
-  values: LocalizedText[]
+  relocation: RelocationCode
+  relationshipValues: RelationshipValueCode[]
   preferredAgeMin: number
   preferredAgeMax: number
-  locationScope: LocalizedText
+  preferredLocation: LocationScopeCode
   preferredEducation: LocalizedText
-  familyPlan: LocalizedText
+  familyLife: LocalizedText
   dealBreakers: LocalizedText[]
   smoking: 'never' | 'social' | 'often'
   drinking: 'never' | 'social' | 'often'
   exercise: LocalizedText
-  activityLevel: LocalizedText
-  weekendStyle: LocalizedText
-  pets: LocalizedText
+  activityLevel: ActivityLevelCode
+  weekendStyle: WeekendStyleCode
+  pets: PetCode
   personalityTraits: LocalizedText[]
   interests: LocalizedText[]
   communicationStyle: LocalizedText
@@ -1563,7 +1563,7 @@ profile：
 - public 展示接口使用 fallback resolver；account profile detail 编辑接口只读取当前 `lang` 槽位，不 fallback。
 - account profile detail 编辑接口返回当前 `lang` 的 `localizedMeta`，只暴露翻译元信息，不一次性返回三语全文。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给 staff 审核或后续独立流程。
-- `isPriorityProfile` 不是用户可写字段。
+- `isFeatured` 不是用户可写字段。
 
 半敏感字段隐藏偏好：
 

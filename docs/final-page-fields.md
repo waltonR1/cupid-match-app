@@ -34,15 +34,15 @@ type ProfileFieldCode =
   | 'hasChildren'
   | 'childrenPlan'
   | 'acceptsLongDistance'
-  | 'relationshipPlan'
+  | 'relationshipGoal'
   | 'residencePlan'
-  | 'relocationWillingness'
-  | 'values'
+  | 'relocation'
+  | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
-  | 'locationScope'
+  | 'preferredLocation'
   | 'preferredEducation'
-  | 'familyPlan'
+  | 'familyLife'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
@@ -487,7 +487,7 @@ interface ManagedProfileSummaryViewModel {
   permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   isPrimary: boolean
   verification: ProfileVerificationSummaryViewModel
   action: PageActionViewModel

@@ -111,7 +111,7 @@ watch(locale, () => { void refresh() })
 function getProfileBadges(profile: ManagedProfileSummaryDTO) {
   const badges: Array<{ key: string; i18nKey: string }> = []
   if (profile.isPrimary) badges.push({ key: 'primary', i18nKey: 'profiles.badges.primary' })
-  if (profile.isPriorityProfile) badges.push({ key: 'priority', i18nKey: 'profiles.badges.priority' })
+  if (profile.isFeatured) badges.push({ key: 'priority', i18nKey: 'profiles.badges.priority' })
   badges.push({ key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}` })
   return badges
 }

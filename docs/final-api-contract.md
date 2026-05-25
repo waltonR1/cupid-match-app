@@ -49,15 +49,15 @@ type ProfileFieldCode =
   | 'hasChildren'
   | 'childrenPlan'
   | 'acceptsLongDistance'
-  | 'relationshipPlan'
+  | 'relationshipGoal'
   | 'residencePlan'
-  | 'relocationWillingness'
-  | 'values'
+  | 'relocation'
+  | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
-  | 'locationScope'
+  | 'preferredLocation'
   | 'preferredEducation'
-  | 'familyPlan'
+  | 'familyLife'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
@@ -301,7 +301,7 @@ interface ProfileDirectoryBaseItemDTO {
   age: number
   city: string
   profileStatus: 'open' | 'review'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -318,7 +318,7 @@ interface FamilyProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
   maritalStatus: 'never_married' | 'divorced' | 'widowed'
   hasChildren: boolean
   acceptsLongDistance: boolean
-  relationshipPlan: string
+  relationshipGoal: string
   residencePlan: string
   allowFamilyContact: boolean
   familyPriority: boolean
@@ -376,7 +376,7 @@ interface ProfileDetailBaseDTO {
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
   profileStatus: 'open' | 'review'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -388,25 +388,25 @@ interface ProfileDetailBaseDTO {
   acceptsLongDistance: RestrictedProfileField<boolean>
   datingIntentionCode: string
   datingIntentionLabel: string
-  relationshipPlan: RestrictedProfileField<string>
+  relationshipGoal: RestrictedProfileField<string>
   residencePlan: RestrictedProfileField<string>
-  relocationWillingness: RestrictedProfileField<string>
-  values: RestrictedProfileField<string[]>
+  relocation: RelocationCode
+  relationshipValues: RelationshipValueCode[]
   preferredAgeMin: RestrictedProfileField<number>
   preferredAgeMax: RestrictedProfileField<number>
-  locationScope: RestrictedProfileField<string>
+  preferredLocation: LocationScopeCode
   preferredEducation: RestrictedProfileField<string>
-  familyPlan: RestrictedProfileField<string>
+  familyLife: RestrictedProfileField<string>
   dealBreakers: RestrictedProfileField<string[]>
   smoking: RestrictedProfileField<'never' | 'social' | 'often'>
   drinking: RestrictedProfileField<'never' | 'social' | 'often'>
   exercise: RestrictedProfileField<string>
-  activityLevel: RestrictedProfileField<string>
-  weekendStyle: RestrictedProfileField<string>
-  pets: RestrictedProfileField<string>
+  activityLevel: ActivityLevelCode
+  weekendStyle: WeekendStyleCode
+  pets: PetCode
   personalityTraits: RestrictedProfileField<string[]>
   interests: RestrictedProfileField<string[]>
-  communicationStyle: RestrictedProfileField<string>
+  communicationStyle: CommunicationStyleCode
   summary: string
   tags: string[]
   familyVisible: boolean
@@ -526,25 +526,25 @@ interface ProfileCreatePayload {
   childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
   acceptsLongDistance: boolean
   datingIntentionCode: string
-  relationshipPlan: string
+  relationshipGoal: string
   residencePlan: string
-  relocationWillingness: string
-  values: string[]
+  relocation: RelocationCode
+  relationshipValues: RelationshipValueCode[]
   preferredAgeMin: number
   preferredAgeMax: number
-  locationScope: string
+  preferredLocation: LocationScopeCode
   preferredEducation: string
-  familyPlan: string
+  familyLife: string
   dealBreakers: string[]
   smoking: 'never' | 'social' | 'often'
   drinking: 'never' | 'social' | 'often'
   exercise: string
-  activityLevel: string
-  weekendStyle: string
-  pets: string
+  activityLevel: ActivityLevelCode
+  weekendStyle: WeekendStyleCode
+  pets: PetCode
   personalityTraits: string[]
   interests: string[]
-  communicationStyle: string
+  communicationStyle: CommunicationStyleCode
   summary: string
   tags: string[]
   familyVisible: boolean
@@ -841,7 +841,7 @@ interface ManagedProfileSummaryDTO {
   permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   isPrimary: boolean
   verification: AccountProfileVerificationDTO
 }

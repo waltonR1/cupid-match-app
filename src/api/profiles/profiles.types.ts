@@ -19,6 +19,41 @@ export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_
 /** 生活习惯编码 */
 export type HabitCode = 'never' | 'social' | 'often'
 
+/** 迁居意愿 */
+export type RelocationCode = 'willing' | 'unwilling' | 'open_to_discuss'
+
+/** 交友地理范围 */
+export type LocationScopeCode = 'local' | 'regional' | 'national' | 'international'
+
+/** 关系价值观 */
+export type RelationshipValueCode =
+  | 'honesty'
+  | 'trust'
+  | 'communication'
+  | 'respect'
+  | 'loyalty'
+  | 'family'
+  | 'growth'
+  | 'support'
+  | 'humor'
+  | 'ambition'
+  | 'kindness'
+  | 'independence'
+  | 'romance'
+  | 'stability'
+
+/** 活跃程度 */
+export type ActivityLevelCode = 'low' | 'moderate' | 'high'
+
+/** 宠物 */
+export type PetCode = 'has' | 'none' | 'likes'
+
+/** 周末风格 */
+export type WeekendStyleCode = 'outdoors' | 'indoors' | 'social' | 'flexible'
+
+/** 沟通风格 */
+export type CommunicationStyleCode = 'direct' | 'indirect' | 'balanced'
+
 /** 会员等级 */
 export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 
@@ -87,7 +122,7 @@ export interface SelfProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
-    isPriorityProfile: boolean
+    isFeatured: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -105,13 +140,13 @@ export interface FamilyProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
-    isPriorityProfile: boolean
+    isFeatured: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatusCode
     hasChildren: boolean
     acceptsLongDistance: boolean
-    relationshipPlan: string
+    relationshipGoal: string
     residencePlan: string
     tags: string[]
     allowFamilyContact: boolean
@@ -131,7 +166,7 @@ export interface SelfProfileDetail {
     country: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
-    isPriorityProfile: boolean
+    isFeatured: boolean
     isVerified: boolean
     education: string
     industry: RestrictedProfileField<string>
@@ -141,25 +176,25 @@ export interface SelfProfileDetail {
     acceptsLongDistance: RestrictedProfileField<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: RestrictedProfileField<string>
+    relationshipGoal: RestrictedProfileField<string>
     residencePlan: RestrictedProfileField<string>
-    relocationWillingness: RestrictedProfileField<string>
-    values: RestrictedProfileField<string[]>
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: RestrictedProfileField<number>
     preferredAgeMax: RestrictedProfileField<number>
-    locationScope: RestrictedProfileField<string>
+    preferredLocation: LocationScopeCode
     preferredEducation: RestrictedProfileField<string>
-    familyPlan: RestrictedProfileField<string>
+    familyLife: RestrictedProfileField<string>
     dealBreakers: RestrictedProfileField<string[]>
     smoking: RestrictedProfileField<HabitCode>
     drinking: RestrictedProfileField<HabitCode>
     exercise: RestrictedProfileField<string>
-    activityLevel: RestrictedProfileField<string>
-    weekendStyle: RestrictedProfileField<string>
-    pets: RestrictedProfileField<string>
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: RestrictedProfileField<string[]>
     interests: RestrictedProfileField<string[]>
-    communicationStyle: RestrictedProfileField<string>
+    communicationStyle: CommunicationStyleCode
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroduction
@@ -179,7 +214,7 @@ export interface FamilyProfileDetail {
     nationality: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
-    isPriorityProfile: boolean
+    isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
     allowFamilyContact: boolean
@@ -192,24 +227,24 @@ export interface FamilyProfileDetail {
     acceptsLongDistance: RestrictedProfileField<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: RestrictedProfileField<string>
+    relationshipGoal: RestrictedProfileField<string>
     residencePlan: RestrictedProfileField<string>
-    relocationWillingness: RestrictedProfileField<string>
-    values: RestrictedProfileField<string[]>
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: RestrictedProfileField<number>
     preferredAgeMax: RestrictedProfileField<number>
-    locationScope: RestrictedProfileField<string>
+    preferredLocation: LocationScopeCode
     preferredEducation: RestrictedProfileField<string>
-    familyPlan: RestrictedProfileField<string>
+    familyLife: RestrictedProfileField<string>
     dealBreakers: RestrictedProfileField<string[]>
     smoking: RestrictedProfileField<HabitCode>
     drinking: RestrictedProfileField<HabitCode>
     exercise: RestrictedProfileField<string>
-    activityLevel: RestrictedProfileField<string>
-    weekendStyle: RestrictedProfileField<string>
-    pets: RestrictedProfileField<string>
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: RestrictedProfileField<string[]>
-    communicationStyle: RestrictedProfileField<string>
+    communicationStyle: CommunicationStyleCode
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroduction

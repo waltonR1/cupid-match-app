@@ -100,12 +100,19 @@ type UserStatus = 'active' | 'paused' | 'banned'
 type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 type LegalDocumentType = 'terms' | 'privacy'
 type LegalDocumentStatus = 'draft' | 'active' | 'archived'
-type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'vip' | 'hidden'
+type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'hidden'
 type DegreeLevel = 'bachelor' | 'master' | 'phd'
 type MaritalStatus = 'never_married' | 'divorced' | 'widowed'
 type ChildrenPlan = 'wants' | 'open_to_discuss' | 'does_not_want'
 type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_border'
 type HabitCode = 'never' | 'social' | 'often'
+type RelocationCode = 'willing' | 'unwilling' | 'open_to_discuss'
+type LocationScopeCode = 'local' | 'regional' | 'national' | 'international'
+type RelationshipValueCode = 'honesty' | 'trust' | 'communication' | 'respect' | 'loyalty' | 'family' | 'growth' | 'support' | 'humor' | 'ambition' | 'kindness' | 'independence' | 'romance' | 'stability'
+type ActivityLevelCode = 'low' | 'moderate' | 'high'
+type PetCode = 'has' | 'none' | 'likes'
+type WeekendStyleCode = 'outdoors' | 'indoors' | 'social' | 'flexible'
+type CommunicationStyleCode = 'direct' | 'indirect' | 'balanced'
 type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
@@ -129,15 +136,15 @@ type ProfileFieldCode =
   | 'hasChildren'
   | 'childrenPlan'
   | 'acceptsLongDistance'
-  | 'relationshipPlan'
+  | 'relationshipGoal'
   | 'residencePlan'
-  | 'relocationWillingness'
-  | 'values'
+  | 'relocation'
+  | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
-  | 'locationScope'
+  | 'preferredLocation'
   | 'preferredEducation'
-  | 'familyPlan'
+  | 'familyLife'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
@@ -325,6 +332,7 @@ interface ProfileRecord {
   languages: string[]
 
   profileStatus: ProfileStatus
+  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
   allowFamilyContact: boolean
@@ -340,27 +348,27 @@ interface ProfileRecord {
   childrenPlan: ChildrenPlan
   acceptsLongDistance: boolean
   datingIntentionCode: DatingIntentionCode
-  relationshipPlan: LocalizedText
+  relationshipGoal: LocalizedText
   residencePlan: LocalizedText
-  relocationWillingness: LocalizedText
-  values: LocalizedText[]
+  relocation: RelocationCode
+  relationshipValues: RelationshipValueCode[]
 
   preferredAgeMin: number
   preferredAgeMax: number
-  locationScope: LocalizedText
+  preferredLocation: LocationScopeCode
   preferredEducation: LocalizedText
-  familyPlan: LocalizedText
+  familyLife: LocalizedText
   dealBreakers: LocalizedText[]
 
   smoking: HabitCode
   drinking: HabitCode
   exercise: LocalizedText
-  activityLevel: LocalizedText
-  weekendStyle: LocalizedText
-  pets: LocalizedText
+  activityLevel: ActivityLevelCode
+  weekendStyle: WeekendStyleCode
+  pets: PetCode
   personalityTraits: LocalizedText[]
   interests: LocalizedText[]
-  communicationStyle: LocalizedText
+  communicationStyle: CommunicationStyleCode
 
   summary: LocalizedText
   tags: LocalizedText[]

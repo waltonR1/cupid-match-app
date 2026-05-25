@@ -222,7 +222,7 @@ profiles:
   childrenPlan
   acceptsLongDistance
   datingIntentionCode
-  relationshipPlan
+  relationshipGoal
   residencePlan
   summary
   tags
@@ -247,7 +247,7 @@ interface ProfileDirectoryBaseItemDTO {
   age: number
   city: string
   profileStatus: 'open' | 'review'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -264,7 +264,7 @@ interface FamilyProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
   maritalStatus: 'never_married' | 'divorced' | 'widowed'
   hasChildren: boolean
   acceptsLongDistance: boolean
-  relationshipPlan: string
+  relationshipGoal: string
   residencePlan: string
   allowFamilyContact: boolean
   familyPriority: boolean
@@ -339,7 +339,7 @@ interface ProfileDetailBaseDTO {
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
   profileStatus: 'open' | 'review'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -351,15 +351,15 @@ interface ProfileDetailBaseDTO {
   acceptsLongDistance: RestrictedProfileField<boolean>
   datingIntentionCode: string
   datingIntentionLabel: string
-  relationshipPlan: RestrictedProfileField<string>
+  relationshipGoal: RestrictedProfileField<string>
   residencePlan: RestrictedProfileField<string>
-  relocationWillingness: RestrictedProfileField<string>
-  values: RestrictedProfileField<string[]>
+  relocation: RelocationCode
+  relationshipValues: RelationshipValueCode[]
   preferredAgeMin: RestrictedProfileField<number>
   preferredAgeMax: RestrictedProfileField<number>
-  locationScope: RestrictedProfileField<string>
+  preferredLocation: LocationScopeCode
   preferredEducation: RestrictedProfileField<string>
-  familyPlan: RestrictedProfileField<string>
+  familyLife: RestrictedProfileField<string>
   dealBreakers: RestrictedProfileField<string[]>
   smoking: RestrictedProfileField<'never' | 'social' | 'often'>
   drinking: RestrictedProfileField<'never' | 'social' | 'often'>
@@ -418,15 +418,15 @@ type ProfileFieldCode =
   | 'hasChildren'
   | 'childrenPlan'
   | 'acceptsLongDistance'
-  | 'relationshipPlan'
+  | 'relationshipGoal'
   | 'residencePlan'
-  | 'relocationWillingness'
-  | 'values'
+  | 'relocation'
+  | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
-  | 'locationScope'
+  | 'preferredLocation'
   | 'preferredEducation'
-  | 'familyPlan'
+  | 'familyLife'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
@@ -567,15 +567,15 @@ hasChildren
 childrenPlan
 acceptsLongDistance
 datingIntentionCode
-relationshipPlan
+relationshipGoal
 residencePlan
-relocationWillingness
-values
+relocation
+relationshipValues
 preferredAgeMin
 preferredAgeMax
-locationScope
+preferredLocation
 preferredEducation
-familyPlan
+familyLife
 dealBreakers
 smoking
 drinking
@@ -681,7 +681,7 @@ Rules:
 - This endpoint writes only profile main-table fields.
 - Localized fields write only to the current request locale slot.
 - `profileName` 是账户中心内部资料称呼。它只把当前语言槽位写为 `manual / human / ready`，不会为其他语言创建机翻任务。
-- `profileStatus` and `isPriorityProfile` are not user-editable through this chain.
+- `profileStatus` and `isFeatured` are not user-editable through this chain.
 
 ### Managed profile ownership update
 

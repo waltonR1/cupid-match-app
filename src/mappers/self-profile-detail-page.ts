@@ -152,9 +152,9 @@ function buildRelationshipFacts(
     return [
         pub(t('fields.intent'), profile.datingIntentionLabel),
         access(t('fields.maritalStatus'), formatRestrictedMaritalStatus(profile.maritalStatus, t)),
-        access(t('fields.maritalPlan'), profile.relationshipPlan),
+        access(t('fields.relationshipGoal'), profile.relationshipGoal),
         access(t('fields.longDistance'), formatRestrictedBoolean(profile.acceptsLongDistance, t)),
-        access(t('fields.relationshipValues'), joinRestrictedList(profile.values)),
+        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, t)),
     ]
 }
 
@@ -168,7 +168,7 @@ function buildPersonalityFacts(
     return [
         access(t('fields.personalityTraits'), joinRestrictedList(profile.personalityTraits)),
         access(t('fields.hobbies'), joinRestrictedList(profile.interests)),
-        access(t('fields.communicationStyle'), profile.communicationStyle),
+        access(t('fields.communicationStyle'), formatEnumValue('communicationStyle', profile.communicationStyle, t)),
     ]
 }
 
@@ -176,9 +176,9 @@ function buildPersonalityFacts(
 function buildPreferenceFacts(profile: SelfProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
         access(t('fields.preferredAgeRange'), formatPreferredAgeRange(profile.preferredAgeMin, profile.preferredAgeMax)),
-        access(t('fields.preferredCityScope'), profile.locationScope),
+        access(t('fields.preferredLocation'), formatEnumValue('preferredLocation', profile.preferredLocation, t)),
         access(t('fields.preferredEducation'), profile.preferredEducation),
-        access(t('fields.preferredFamilyPlan'), profile.familyPlan),
+        access(t('fields.preferredFamilyPlan'), profile.familyLife),
         access(t('fields.dealBreakers'), joinRestrictedList(profile.dealBreakers)),
     ]
 }
@@ -186,10 +186,9 @@ function buildPreferenceFacts(profile: SelfProfileDetail, access: FactBuilder, t
 /** 构建价值观资料 */
 function buildValueFacts(profile: SelfProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
-        access(t('fields.relationshipValues'), joinRestrictedList(profile.values)),
-        access(t('fields.maritalPlan'), profile.relationshipPlan),
+        access(t('fields.relationshipGoal'), profile.relationshipGoal),
         access(t('fields.residencePlan'), profile.residencePlan),
-        access(t('fields.relocationWillingness'), profile.relocationWillingness),
+        access(t('fields.relocation'), formatEnumValue('relocation', profile.relocation, t)),
     ]
 }
 
@@ -197,11 +196,11 @@ function buildValueFacts(profile: SelfProfileDetail, access: FactBuilder, t: Tra
 function buildLifestyleFacts(profile: SelfProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
     return [
         access(t('fields.exercise'), profile.exercise),
-        access(t('fields.activityLevel'), profile.activityLevel),
-        access(t('fields.weekendStyle'), profile.weekendStyle),
+        access(t('fields.activityLevel'), formatEnumValue('activityLevel', profile.activityLevel, t)),
+        access(t('fields.weekendStyle'), formatEnumValue('weekendStyle', profile.weekendStyle, t)),
         access(t('fields.smoke'), formatRestrictedHabit(profile.smoking, t)),
         access(t('fields.drink'), formatRestrictedHabit(profile.drinking, t)),
-        access(t('fields.pets'), profile.pets),
+        access(t('fields.pets'), formatEnumValue('pets', profile.pets, t)),
     ]
 }
 
@@ -231,7 +230,7 @@ function buildBadges(profile: SelfProfileDetail, t: Translate): ProfileDetailBad
         {label: verificationText, tone: profile.isVerified ? 'highlight' : 'muted'},
     ]
 
-    if (profile.isPriorityProfile) {
+    if (profile.isFeatured) {
         badges.unshift({label: t('status.priority'), tone: 'highlight'})
     }
 
@@ -301,6 +300,16 @@ function formatPreferredAgeRange(
 /** 拼接受限列表 */
 function joinRestrictedList(value: RestrictedProfileField<string[]>): RestrictedProfileField<string> {
     return isRestrictedValue(value) ? value : value.join(' / ')
+}
+
+/** Format an enum code through the detail i18n value group. */
+function formatEnumValue(group: string, value: string, t: Translate): string {
+    return t(`${group}.${value}`)
+}
+
+/** Join enum code arrays through the detail i18n value group. */
+function joinEnumValues(group: string, values: string[], t: Translate): string {
+    return values.map(value => formatEnumValue(group, value, t)).join(' / ')
 }
 
 /** 获取可见列表 */

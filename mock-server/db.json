@@ -79,7 +79,7 @@
         "EN"
       ],
       "profileStatus": "open",
-      "isPriorityProfile": false,
+      "isFeatured": false,
       "lastActiveAt": "2026-04-20T18:30:00Z",
       "familyVisible": false,
       "allowFamilyContact": false,
@@ -159,7 +159,7 @@
       "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "relationshipPlan": {
+      "relationshipGoal": {
         "zh": {
           "value": "一年内确认节奏",
           "source": "manual",
@@ -205,102 +205,14 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "relocationWillingness": {
-        "zh": {
-          "value": "接受跨城磨合，重视双方节奏可持续",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouvert a une phase interville si le rythme reste durable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to cross-city adjustment if the rhythm is sustainable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "values": [
-        {
-          "zh": {
-            "value": "坦诚沟通",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Communication sincere",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Honest communication",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        },
-        {
-          "zh": {
-            "value": "共同成长",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Grandir ensemble",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Growing together",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        }
+      "relocation": "willing",
+      "relationshipValues": [
+        "honesty",
+        "growth"
       ],
       "preferredAgeMin": 28,
       "preferredAgeMax": 40,
-      "locationScope": {
-        "zh": {
-          "value": "以巴黎为主，接受成熟的跨城安排",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Paris comme base, ouvert a une organisation interville mature",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Paris-based, open to a mature cross-city setup",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "preferredLocation": "regional",
       "preferredEducation": {
         "zh": {
           "value": "本科及以上，更看重学习能力和沟通方式",
@@ -324,7 +236,7 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "familyPlan": {
+      "familyLife": {
         "zh": {
           "value": "希望在稳定关系中自然讨论婚育节奏",
           "source": "manual",
@@ -420,75 +332,9 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "activityLevel": {
-        "zh": {
-          "value": "规律运动",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Activite reguliere",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Regularly active",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "weekendStyle": {
-        "zh": {
-          "value": "喜欢有计划但不过度排满的周末",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les week-ends organises sans etre surcharges",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes planned but not overpacked weekends",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "pets": {
-        "zh": {
-          "value": "喜欢猫，暂时没有养宠物",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les chats, pas d animal pour le moment",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes cats, no pet for now",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "activityLevel": "high",
+      "weekendStyle": "flexible",
+      "pets": "likes",
       "personalityTraits": [
         {
           "zh": {
@@ -631,29 +477,7 @@
           }
         }
       ],
-      "communicationStyle": {
-        "zh": {
-          "value": "偏好直接、及时、尊重边界的沟通",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Prefere une communication directe, reguliere et respectueuse",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Prefers direct, timely, respectful communication",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "communicationStyle": "direct",
       "summary": {
         "zh": {
           "value": "重视表达、节奏和跨文化理解。",
@@ -855,7 +679,7 @@
         "EN"
       ],
       "profileStatus": "open",
-      "isPriorityProfile": true,
+      "isFeatured": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -935,7 +759,7 @@
       "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "marriage",
-      "relationshipPlan": {
+      "relationshipGoal": {
         "zh": {
           "value": "明确方向后稳步推进",
           "source": "manual",
@@ -981,102 +805,14 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "relocationWillingness": {
-        "zh": {
-          "value": "接受跨城磨合，重视双方节奏可持续",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouvert a une phase interville si le rythme reste durable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to cross-city adjustment if the rhythm is sustainable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "values": [
-        {
-          "zh": {
-            "value": "长期承诺",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Engagement durable",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Long-term commitment",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        },
-        {
-          "zh": {
-            "value": "现实协作",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Cooperation concrete",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Practical partnership",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        }
+      "relocation": "willing",
+      "relationshipValues": [
+        "loyalty",
+        "support"
       ],
       "preferredAgeMin": 28,
       "preferredAgeMax": 40,
-      "locationScope": {
-        "zh": {
-          "value": "以巴黎为主，接受成熟的跨城安排",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Paris comme base, ouvert a une organisation interville mature",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Paris-based, open to a mature cross-city setup",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "preferredLocation": "regional",
       "preferredEducation": {
         "zh": {
           "value": "本科及以上，更看重学习能力和沟通方式",
@@ -1100,7 +836,7 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "familyPlan": {
+      "familyLife": {
         "zh": {
           "value": "希望在稳定关系中自然讨论婚育节奏",
           "source": "manual",
@@ -1196,75 +932,9 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "activityLevel": {
-        "zh": {
-          "value": "中高强度运动",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Activite moderee a soutenue",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Moderate to high activity",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "weekendStyle": {
-        "zh": {
-          "value": "喜欢有计划但不过度排满的周末",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les week-ends organises sans etre surcharges",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes planned but not overpacked weekends",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "pets": {
-        "zh": {
-          "value": "喜欢狗，接受未来一起养",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les chiens, ouvert a en adopter plus tard",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes dogs and is open to having one later",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "activityLevel": "high",
+      "weekendStyle": "flexible",
+      "pets": "likes",
       "personalityTraits": [
         {
           "zh": {
@@ -1407,29 +1077,7 @@
           }
         }
       ],
-      "communicationStyle": {
-        "zh": {
-          "value": "偏好直接、及时、尊重边界的沟通",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Prefere une communication directe, reguliere et respectueuse",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Prefers direct, timely, respectful communication",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "communicationStyle": "direct",
       "summary": {
         "zh": {
           "value": "重视长期关系中的稳定、透明和行动力。",
@@ -1630,7 +1278,7 @@
         "EN"
       ],
       "profileStatus": "review",
-      "isPriorityProfile": false,
+      "isFeatured": false,
       "lastActiveAt": "2026-04-21T20:30:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -1710,7 +1358,7 @@
       "childrenPlan": "does_not_want",
       "acceptsLongDistance": true,
       "datingIntentionCode": "exclusive",
-      "relationshipPlan": {
+      "relationshipGoal": {
         "zh": {
           "value": "先确认家庭节奏与城市安排",
           "source": "manual",
@@ -1756,102 +1404,14 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "relocationWillingness": {
-        "zh": {
-          "value": "接受跨城磨合，重视双方节奏可持续",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouvert a une phase interville si le rythme reste durable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to cross-city adjustment if the rhythm is sustainable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "values": [
-        {
-          "zh": {
-            "value": "尊重边界",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Respect des limites",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Respecting boundaries",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        },
-        {
-          "zh": {
-            "value": "稳定沟通",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Communication stable",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Steady communication",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        }
+      "relocation": "willing",
+      "relationshipValues": [
+        "respect",
+        "communication"
       ],
       "preferredAgeMin": 28,
       "preferredAgeMax": 40,
-      "locationScope": {
-        "zh": {
-          "value": "以巴黎为主，接受成熟的跨城安排",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Paris comme base, ouvert a une organisation interville mature",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Paris-based, open to a mature cross-city setup",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "preferredLocation": "regional",
       "preferredEducation": {
         "zh": {
           "value": "本科及以上，更看重学习能力和沟通方式",
@@ -1875,7 +1435,7 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "familyPlan": {
+      "familyLife": {
         "zh": {
           "value": "希望在稳定关系中自然讨论婚育节奏",
           "source": "manual",
@@ -1971,75 +1531,9 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "activityLevel": {
-        "zh": {
-          "value": "轻运动",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Activite douce",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Light activity",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "weekendStyle": {
-        "zh": {
-          "value": "喜欢有计划但不过度排满的周末",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les week-ends organises sans etre surcharges",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes planned but not overpacked weekends",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "pets": {
-        "zh": {
-          "value": "不排斥宠物，重视家里整洁",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouverte aux animaux, tient a un interieur soigne",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to pets, values a tidy home",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "activityLevel": "low",
+      "weekendStyle": "flexible",
+      "pets": "likes",
       "personalityTraits": [
         {
           "zh": {
@@ -2182,29 +1676,7 @@
           }
         }
       ],
-      "communicationStyle": {
-        "zh": {
-          "value": "偏好直接、及时、尊重边界的沟通",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Prefere une communication directe, reguliere et respectueuse",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Prefers direct, timely, respectful communication",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "communicationStyle": "direct",
       "summary": {
         "zh": {
           "value": "希望在成熟、清晰和尊重边界的前提下推进关系。",
@@ -2406,7 +1878,7 @@
         "DE"
       ],
       "profileStatus": "open",
-      "isPriorityProfile": true,
+      "isFeatured": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -2486,7 +1958,7 @@
       "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "cross_border",
-      "relationshipPlan": {
+      "relationshipGoal": {
         "zh": {
           "value": "接受跨境安排，优先确定共同城市策略",
           "source": "manual",
@@ -2532,102 +2004,14 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "relocationWillingness": {
-        "zh": {
-          "value": "接受跨城磨合，重视双方节奏可持续",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouvert a une phase interville si le rythme reste durable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to cross-city adjustment if the rhythm is sustainable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "values": [
-        {
-          "zh": {
-            "value": "共同规划",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Planification commune",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Shared planning",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        },
-        {
-          "zh": {
-            "value": "稳定执行",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Regularite dans l action",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Consistent follow-through",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        }
+      "relocation": "willing",
+      "relationshipValues": [
+        "family",
+        "trust"
       ],
       "preferredAgeMin": 28,
       "preferredAgeMax": 40,
-      "locationScope": {
-        "zh": {
-          "value": "以日内瓦为主，接受成熟的跨城安排",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Geneve comme base, ouvert a une organisation interville mature",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Geneva-based, open to a mature cross-city setup",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "preferredLocation": "regional",
       "preferredEducation": {
         "zh": {
           "value": "本科及以上，更看重学习能力和沟通方式",
@@ -2651,7 +2035,7 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "familyPlan": {
+      "familyLife": {
         "zh": {
           "value": "希望在稳定关系中自然讨论婚育节奏",
           "source": "manual",
@@ -2747,75 +2131,9 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "activityLevel": {
-        "zh": {
-          "value": "高强度户外",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Tres actif en exterieur",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Highly active outdoors",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "weekendStyle": {
-        "zh": {
-          "value": "喜欢有计划但不过度排满的周末",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les week-ends organises sans etre surcharges",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes planned but not overpacked weekends",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "pets": {
-        "zh": {
-          "value": "喜欢狗，常去户外",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les chiens et les sorties dehors",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes dogs and being outdoors",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "activityLevel": "high",
+      "weekendStyle": "flexible",
+      "pets": "likes",
       "personalityTraits": [
         {
           "zh": {
@@ -2958,29 +2276,7 @@
           }
         }
       ],
-      "communicationStyle": {
-        "zh": {
-          "value": "偏好直接、及时、尊重边界的沟通",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Prefere une communication directe, reguliere et respectueuse",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Prefers direct, timely, respectful communication",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "communicationStyle": "direct",
       "summary": {
         "zh": {
           "value": "重视跨城市协同能力和长期执行力。",
@@ -3182,7 +2478,7 @@
         "FR"
       ],
       "profileStatus": "open",
-      "isPriorityProfile": false,
+      "isFeatured": false,
       "lastActiveAt": "2026-04-21T10:45:00Z",
       "familyVisible": true,
       "allowFamilyContact": true,
@@ -3262,7 +2558,7 @@
       "childrenPlan": "wants",
       "acceptsLongDistance": true,
       "datingIntentionCode": "serious",
-      "relationshipPlan": {
+      "relationshipGoal": {
         "zh": {
           "value": "先建立共同生活节奏，再推进长期关系",
           "source": "manual",
@@ -3308,102 +2604,14 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "relocationWillingness": {
-        "zh": {
-          "value": "接受跨城磨合，重视双方节奏可持续",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Ouvert a une phase interville si le rythme reste durable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Open to cross-city adjustment if the rhythm is sustainable",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "values": [
-        {
-          "zh": {
-            "value": "尊重边界",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Respect des limites",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Respecting boundaries",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        },
-        {
-          "zh": {
-            "value": "稳定沟通",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "fr": {
-            "value": "Communication stable",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          },
-          "en": {
-            "value": "Steady communication",
-            "source": "manual",
-            "provider": "human",
-            "status": "ready",
-            "updatedAt": "2026-05-18T12:07:20.986Z"
-          }
-        }
+      "relocation": "willing",
+      "relationshipValues": [
+        "respect",
+        "communication"
       ],
       "preferredAgeMin": 28,
       "preferredAgeMax": 40,
-      "locationScope": {
-        "zh": {
-          "value": "以阿姆斯特丹为主，接受成熟的跨城安排",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Amsterdam comme base, ouvert a une organisation interville mature",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Amsterdam-based, open to a mature cross-city setup",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "preferredLocation": "regional",
       "preferredEducation": {
         "zh": {
           "value": "本科及以上，更看重学习能力和沟通方式",
@@ -3427,7 +2635,7 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "familyPlan": {
+      "familyLife": {
         "zh": {
           "value": "希望在稳定关系中自然讨论婚育节奏",
           "source": "manual",
@@ -3523,75 +2731,9 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "activityLevel": {
-        "zh": {
-          "value": "规律轻运动",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Activite douce et reguliere",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Regular light activity",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "weekendStyle": {
-        "zh": {
-          "value": "喜欢有计划但不过度排满的周末",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime les week-ends organises sans etre surcharges",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes planned but not overpacked weekends",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
-      "pets": {
-        "zh": {
-          "value": "喜欢猫狗，但需要提前规划",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Aime chats et chiens, avec organisation",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Likes cats and dogs with planning",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "activityLevel": "moderate",
+      "weekendStyle": "flexible",
+      "pets": "likes",
       "personalityTraits": [
         {
           "zh": {
@@ -3734,29 +2876,7 @@
           }
         }
       ],
-      "communicationStyle": {
-        "zh": {
-          "value": "偏好直接、及时、尊重边界的沟通",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Prefere une communication directe, reguliere et respectueuse",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Prefers direct, timely, respectful communication",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
+      "communicationStyle": "direct",
       "summary": {
         "zh": {
           "value": "重视生活一致性与沟通质量。",

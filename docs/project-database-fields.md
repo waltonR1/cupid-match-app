@@ -216,6 +216,7 @@ interface AuthSession {
 interface ProfileRecord {
     id: string
     profileType: 'self' | 'family'
+    profileName: LocalizedText
     gender: GenderCode
     birthYear: number
     height: number
@@ -223,8 +224,8 @@ interface ProfileRecord {
     country: LocalizedText
     nationality: LocalizedText
     languages: string[]
-    profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    profileStatus: ProfileStatus  // 'draft' | 'review' | 'open' | 'paused' | 'hidden'
+    isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
@@ -238,27 +239,28 @@ interface ProfileRecord {
     childrenPlan: ChildrenPlan
     acceptsLongDistance: boolean
     datingIntentionCode: DatingIntentionCode
-    relationshipPlan: LocalizedText
+    relationshipGoal: LocalizedText
     residencePlan: LocalizedText
-    relocationWillingness: LocalizedText
-    values: LocalizedText[]
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: number
     preferredAgeMax: number
-    locationScope: LocalizedText
+    preferredLocation: LocationScopeCode
     preferredEducation: LocalizedText
-    familyPlan: LocalizedText
+    familyLife: LocalizedText
     dealBreakers: LocalizedText[]
     smoking: HabitCode
     drinking: HabitCode
     exercise: LocalizedText
-    activityLevel: LocalizedText
-    weekendStyle: LocalizedText
-    pets: LocalizedText
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: LocalizedText[]
     interests: LocalizedText[]
-    communicationStyle: LocalizedText
+    communicationStyle: CommunicationStyleCode
     summary: LocalizedText
     tags: LocalizedText[]
+    archivedAt?: string
     createdAt: string
     updatedAt: string
 }

@@ -113,15 +113,6 @@ export interface PrivateIntroductionRequestRecord {
     cooldownUntil?: string
 }
 
-/** 隐私设置记录 */
-export interface PrivacySettingRecord {
-    id: string
-    userId: string
-    enabled: boolean
-    title: LocalizedText
-    desc: LocalizedText
-}
-
 /** 认证身份提供方 */
 export type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 
@@ -339,6 +330,7 @@ export interface PrivateIntroductionRoomMessageRecord {
 export interface Database {
     profiles: ProfileRecord[]
     profile_photos: ProfilePhotoRecord[]
+    // Reserved for future staff operation tools. Currently empty in prototype data.
     profile_internal_records: ProfileInternalRecord[]
     profile_verifications: ProfileVerificationRecord[]
     profile_contacts: ProfileContactRecord[]

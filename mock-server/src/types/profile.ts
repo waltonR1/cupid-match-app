@@ -17,6 +17,34 @@ export type DatingIntentionCode = 'serious' | 'marriage' | 'exclusive' | 'cross_
 
 export type HabitCode = 'never' | 'social' | 'often'
 
+export type RelocationCode = 'willing' | 'unwilling' | 'open_to_discuss'
+
+export type LocationScopeCode = 'local' | 'regional' | 'national' | 'international'
+
+export type RelationshipValueCode =
+  | 'honesty'
+  | 'trust'
+  | 'communication'
+  | 'respect'
+  | 'loyalty'
+  | 'family'
+  | 'growth'
+  | 'support'
+  | 'humor'
+  | 'ambition'
+  | 'kindness'
+  | 'independence'
+  | 'romance'
+  | 'stability'
+
+export type ActivityLevelCode = 'low' | 'moderate' | 'high'
+
+export type PetCode = 'has' | 'none' | 'likes'
+
+export type WeekendStyleCode = 'outdoors' | 'indoors' | 'social' | 'flexible'
+
+export type CommunicationStyleCode = 'direct' | 'indirect' | 'balanced'
+
 export type DirectorySort = 'recentActive' | 'priorityFirst' | 'ageAsc' | 'ageDesc'
 
 export type RegisterRole = 'self' | 'parent'
@@ -106,7 +134,7 @@ export interface ProfileRecord {
     nationality: LocalizedText
     languages: string[]
     profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
     allowFamilyContact: boolean
@@ -120,25 +148,25 @@ export interface ProfileRecord {
     childrenPlan: ChildrenPlan
     acceptsLongDistance: boolean
     datingIntentionCode: DatingIntentionCode
-    relationshipPlan: LocalizedText
+    relationshipGoal: LocalizedText
     residencePlan: LocalizedText
-    relocationWillingness: LocalizedText
-    values: LocalizedText[]
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: number
     preferredAgeMax: number
-    locationScope: LocalizedText
+    preferredLocation: LocationScopeCode
     preferredEducation: LocalizedText
-    familyPlan: LocalizedText
+    familyLife: LocalizedText
     dealBreakers: LocalizedText[]
     smoking: HabitCode
     drinking: HabitCode
     exercise: LocalizedText
-    activityLevel: LocalizedText
-    weekendStyle: LocalizedText
-    pets: LocalizedText
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: LocalizedText[]
     interests: LocalizedText[]
-    communicationStyle: LocalizedText
+    communicationStyle: CommunicationStyleCode
     summary: LocalizedText
     tags: LocalizedText[]
     archivedAt?: string
@@ -186,7 +214,7 @@ export interface SelfProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    isFeatured: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -204,13 +232,13 @@ export interface FamilyProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    isFeatured: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatus
     hasChildren: boolean
     acceptsLongDistance: boolean
-    relationshipPlan: string
+    relationshipGoal: string
     residencePlan: string
     tags: string[]
     allowFamilyContact: boolean
@@ -230,7 +258,7 @@ export interface SelfProfileDetailDTO {
     country: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    isFeatured: boolean
     isVerified: boolean
     education: string
     industry: Restricted<string>
@@ -240,25 +268,25 @@ export interface SelfProfileDetailDTO {
     acceptsLongDistance: Restricted<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: Restricted<string>
+    relationshipGoal: Restricted<string>
     residencePlan: Restricted<string>
-    relocationWillingness: Restricted<string>
-    values: Restricted<string[]>
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: Restricted<number>
     preferredAgeMax: Restricted<number>
-    locationScope: Restricted<string>
+    preferredLocation: LocationScopeCode
     preferredEducation: Restricted<string>
-    familyPlan: Restricted<string>
+    familyLife: Restricted<string>
     dealBreakers: Restricted<string[]>
     smoking: Restricted<HabitCode>
     drinking: Restricted<HabitCode>
     exercise: Restricted<string>
-    activityLevel: Restricted<string>
-    weekendStyle: Restricted<string>
-    pets: Restricted<string>
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: Restricted<string[]>
     interests: Restricted<string[]>
-    communicationStyle: Restricted<string>
+    communicationStyle: CommunicationStyleCode
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO
@@ -278,7 +306,7 @@ export interface FamilyProfileDetailDTO {
     nationality: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
-    isPriorityProfile: boolean
+    isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
     allowFamilyContact: boolean
@@ -291,24 +319,24 @@ export interface FamilyProfileDetailDTO {
     acceptsLongDistance: Restricted<boolean>
     datingIntentionCode: DatingIntentionCode
     datingIntentionLabel: string
-    relationshipPlan: Restricted<string>
+    relationshipGoal: Restricted<string>
     residencePlan: Restricted<string>
-    relocationWillingness: Restricted<string>
-    values: Restricted<string[]>
+    relocation: RelocationCode
+    relationshipValues: RelationshipValueCode[]
     preferredAgeMin: Restricted<number>
     preferredAgeMax: Restricted<number>
-    locationScope: Restricted<string>
+    preferredLocation: LocationScopeCode
     preferredEducation: Restricted<string>
-    familyPlan: Restricted<string>
+    familyLife: Restricted<string>
     dealBreakers: Restricted<string[]>
     smoking: Restricted<HabitCode>
     drinking: Restricted<HabitCode>
     exercise: Restricted<string>
-    activityLevel: Restricted<string>
-    weekendStyle: Restricted<string>
-    pets: Restricted<string>
+    activityLevel: ActivityLevelCode
+    weekendStyle: WeekendStyleCode
+    pets: PetCode
     personalityTraits: Restricted<string[]>
-    communicationStyle: Restricted<string>
+    communicationStyle: CommunicationStyleCode
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO
