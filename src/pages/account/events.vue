@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
@@ -110,7 +110,8 @@ import { formatLocalizedDate } from '@/utils/locale-format'
 import { toBadgeStatus, groupRegistrations } from '@/mappers/account-events'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { registrations } = useAccountEvents()
+const { registrations, refresh } = useAccountEvents()
+watch(locale, () => { void refresh() })
 
 const grouped = computed(() => groupRegistrations(registrations.value))
 </script>

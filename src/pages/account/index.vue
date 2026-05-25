@@ -155,7 +155,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountDashboard } from '@/hooks/account'
@@ -163,8 +163,9 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMyProfilePage, openSelfDirectoryPage } from '@/utils/navigation'
 import { resolvePrimaryAction } from '@/mappers/account-home'
 
-const { t } = usePageI18n('accountCenter')
-const { loading, payload } = useAccountDashboard()
+const { t, locale } = usePageI18n('accountCenter')
+const { loading, payload, refresh } = useAccountDashboard()
+watch(locale, () => { void refresh() })
 
 const primaryAction = computed(() => payload.value ? resolvePrimaryAction(payload.value) : undefined)
 const privateIntroQuota = computed(() => payload.value?.entitlements.find((item) => item.code === 'private_introduction'))

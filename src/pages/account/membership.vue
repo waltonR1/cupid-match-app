@@ -128,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import { useAccountMembership } from '@/hooks/account'
@@ -138,7 +138,8 @@ import { formatLocalizedDate } from '@/utils/locale-format'
 import { findNextPlan } from '@/mappers/account-membership'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { membership, entitlements, availablePlans, requestUpgrade } = useAccountMembership()
+const { membership, entitlements, availablePlans, refresh, requestUpgrade } = useAccountMembership()
+watch(locale, () => { void refresh() })
 
 const featuredEntitlement = computed(() => entitlements.value.find((item) => item.code === 'private_introduction'))
 const secondaryEntitlements = computed(() => entitlements.value.filter((item) => item.code !== 'private_introduction'))

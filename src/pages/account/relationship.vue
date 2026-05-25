@@ -183,7 +183,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
@@ -195,7 +195,8 @@ import { formatLocalizedAge } from '@/utils/profile-format'
 import { splitIntroductions } from '@/mappers/account-relationship'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { favorites, introductions } = useAccountRelationship()
+const { favorites, introductions, refresh } = useAccountRelationship()
+watch(locale, () => { void refresh() })
 const activeTab = ref<'favorites' | 'introductions'>('favorites')
 
 const introSplit = computed(() => splitIntroductions(introductions.value))

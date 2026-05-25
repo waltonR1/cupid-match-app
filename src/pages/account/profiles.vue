@@ -96,6 +96,7 @@
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
+import { watch } from 'vue'
 import { useAccountProfiles } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openAccountProfileCreate, openAccountProfileDetail } from '@/utils/navigation'
@@ -104,7 +105,8 @@ import type { AccountProfileVerificationDTO, ManagedProfileSummaryDTO } from '@/
 import { computeVerificationRatio, resolveVerificationDescriptionKey } from '@/mappers/account-profiles'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { loading, payload } = useAccountProfiles()
+const { loading, payload, refresh } = useAccountProfiles()
+watch(locale, () => { void refresh() })
 
 function getProfileBadges(profile: ManagedProfileSummaryDTO) {
   const badges: Array<{ key: string; i18nKey: string }> = []

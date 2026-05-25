@@ -361,7 +361,8 @@ import { maskIdentifier } from '@/mappers/account-settings'
 import type { AccountPreferenceCode } from '@/types/account/settings'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { loading, settings, saveAccount, savePreferences } = useAccountSettings()
+const { loading, settings, refresh, saveAccount, savePreferences } = useAccountSettings()
+watch(locale, () => { void refresh() })
 const editing = ref(false)
 const accountDraft = ref({ accountName: '', avatarUrl: '' })
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
