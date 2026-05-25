@@ -1,5 +1,5 @@
 <template>
-  <AccountShell :account-data="accountData" active-page="membership">
+  <AccountShell active-page="membership">
     <view>
       <AccountSubPageHeader
         :label="t('membership.title')"
@@ -9,55 +9,55 @@
 
       <view class="grid gap-6 xl:grid-cols-2">
         <view
-          v-if="pageData.currentPlan"
+          v-if="membership"
           class="px-7 py-7"
-          :class="currentPlanCardClass(pageData.currentPlan.tier)"
+          :class="currentPlanCardClass(membership.tier)"
         >
           <view class="flex items-start justify-between gap-4">
             <view>
-              <view class="text-[12px] uppercase tracking-[4px]" :class="currentPlanLabelClass(pageData.currentPlan.tier)">
+              <view class="text-[12px] uppercase tracking-[4px]" :class="currentPlanLabelClass(membership.tier)">
                 {{ t('membership.currentPlan') }}
               </view>
-              <view class="mt-4 text-[34px] font-semibold">{{ pageData.currentPlan.name }}</view>
-              <view class="mt-3 max-w-[340px] text-[14px] leading-7" :class="currentPlanDescriptionClass(pageData.currentPlan.tier)">
-                {{ t(`membership.tierPositioning.${pageData.currentPlan.tier}`) }}
+              <view class="mt-4 text-[34px] font-semibold">{{ membership.name }}</view>
+              <view class="mt-3 max-w-[340px] text-[14px] leading-7" :class="currentPlanDescriptionClass(membership.tier)">
+                {{ t(`membership.tierPositioning.${membership.tier}`) }}
               </view>
             </view>
 
-            <view class="rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[2px]" :class="currentPlanBadgeClass(pageData.currentPlan.tier)">
-              {{ t(`membership.status.${pageData.currentPlan.status}`) }}
+            <view class="rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[2px]" :class="currentPlanBadgeClass(membership.tier)">
+              {{ t(`membership.status.${membership.status}`) }}
             </view>
           </view>
 
           <view class="mt-8 grid gap-4 sm:grid-cols-2">
-            <view class="border px-4 py-4" :class="currentPlanFeatureClass(pageData.currentPlan.tier)">
-              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(pageData.currentPlan.tier)">
+            <view class="border px-4 py-4" :class="currentPlanFeatureClass(membership.tier)">
+              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(membership.tier)">
                 {{ t('membership.startedAt') }}
               </view>
               <view class="mt-2 text-[16px] font-medium">
-                {{ pageData.currentPlan.startedAtText }}
+                {{ formatLocalizedDate(locale, membership.startedAt) }}
               </view>
             </view>
 
-            <view class="border px-4 py-4" :class="currentPlanFeatureClass(pageData.currentPlan.tier)">
-              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(pageData.currentPlan.tier)">
+            <view class="border px-4 py-4" :class="currentPlanFeatureClass(membership.tier)">
+              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(membership.tier)">
                 {{ t('membership.conciergePriority') }}
               </view>
               <view class="mt-2 text-[16px] font-medium">
-                {{ pageData.currentPlan.conciergePriority ? t('common.yes') : t('common.no') }}
+                {{ membership.conciergePriority ? t('common.yes') : t('common.no') }}
               </view>
             </view>
 
             <view
-              v-if="pageData.currentPlan.expiresAtText"
+              v-if="membership.expiresAt"
               class="border px-4 py-4 sm:col-span-2"
-              :class="currentPlanFeatureClass(pageData.currentPlan.tier)"
+              :class="currentPlanFeatureClass(membership.tier)"
             >
-              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(pageData.currentPlan.tier)">
+              <view class="text-[12px] uppercase tracking-[2px]" :class="currentPlanLabelClass(membership.tier)">
                 {{ t('membership.expiresAt') }}
               </view>
               <view class="mt-2 text-[16px] font-medium">
-                {{ pageData.currentPlan.expiresAtText }}
+                {{ formatLocalizedDate(locale, membership.expiresAt) }}
               </view>
             </view>
           </view>
@@ -70,7 +70,7 @@
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
             {{ t('membership.coreQuota') }}
           </view>
-          <view class="mt-4 text-[20px] font-semibold">{{ featuredEntitlement.label }}</view>
+          <view class="mt-4 text-[20px] font-semibold">{{ t(`membership.entitlement.${featuredEntitlement.code}`) }}</view>
           <view class="mt-5 text-[42px] font-semibold leading-none">
             {{ featuredEntitlement.quotaRemaining }}
             <text class="text-[18px] font-normal text-semantic-text-secondary">/ {{ featuredEntitlement.quotaTotal }}</text>
@@ -88,8 +88,10 @@
               :key="item.code"
               class="border border-semantic-border-soft bg-semantic-surface-panel px-4 py-4"
             >
-              <view class="text-[13px] text-semantic-text-secondary">{{ item.label }}</view>
-              <view class="mt-3 text-[18px] font-semibold">{{ item.displayValue }}</view>
+              <view class="text-[13px] text-semantic-text-secondary">{{ t(`membership.entitlement.${item.code}`) }}</view>
+              <view class="mt-3 text-[18px] font-semibold">
+                {{ item.quotaTotal > 0 ? `${item.quotaRemaining} / ${item.quotaTotal}` : t(`membership.entitlementState.${item.code}`) }}
+              </view>
             </view>
           </view>
         </view>
@@ -106,10 +108,11 @@
 
           <view class="flex flex-wrap gap-3">
             <view
-              v-if="pageData.nextPlan"
-              class="border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px] font-medium text-semantic-text-primary"
+              v-if="nextPlan"
+              class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px] font-medium text-semantic-text-primary"
+              @click="requestNextUpgrade"
             >
-              {{ t('membership.upgrade.nextPlan', { plan: pageData.nextPlan.name }) }}
+              {{ t('membership.actions.upgrade') }} · {{ t('membership.upgrade.nextPlan', { plan: nextPlan.name }) }}
             </view>
             <view
               class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px] text-semantic-text-link"
@@ -128,18 +131,29 @@
 import { computed } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
-import { useAccountMembership, useAccountOverview } from '@/hooks/account'
+import { useAccountMembership } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openPage } from '@/utils/navigation'
+import { formatLocalizedDate } from '@/utils/locale-format'
+import { findNextPlan } from '@/mappers/account-membership'
 
 const { t, locale } = usePageI18n('accountCenter')
-const accountData = useAccountOverview()
-const { pageData } = useAccountMembership(t, () => locale.value)
-const featuredEntitlement = computed(() => pageData.value.entitlementBalances.find((item) => item.code === 'private_introduction'))
-const secondaryEntitlements = computed(() => pageData.value.entitlementBalances.filter((item) => item.code !== 'private_introduction'))
+const { membership, entitlements, availablePlans, requestUpgrade } = useAccountMembership()
+
+const featuredEntitlement = computed(() => entitlements.value.find((item) => item.code === 'private_introduction'))
+const secondaryEntitlements = computed(() => entitlements.value.filter((item) => item.code !== 'private_introduction'))
+const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
 
 function openMembershipSystemPage() {
   openPage('/pages/public/membership')
+}
+
+async function requestNextUpgrade() {
+  if (!nextPlan.value) return
+  const result = await requestUpgrade(nextPlan.value.tier)
+  if (result?.status === 'pending_external_flow') {
+    uni.showToast({ title: t('membership.upgrade.pending'), icon: 'none' })
+  }
 }
 
 function currentPlanCardClass(tier: string) {

@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import {
   getAccountMembership,
   requestAccountMembershipUpgrade,
@@ -8,11 +8,8 @@ import {
   type MembershipPlanDTO,
 } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { toAccountMembershipPageData } from '@/mappers/account-membership'
-import type { Translate } from '@/i18n/types'
-import type { FormatLocale } from '@/utils/locale-format'
 
-export function useAccountMembership(t: Translate, locale: () => FormatLocale) {
+export function useAccountMembership() {
   const latest = useLatestRequest()
   const membership = ref<AccountMembershipDTO | null>(null)
   const entitlements = ref<AccountEntitlementBalanceDTO[]>([])
@@ -30,16 +27,8 @@ export function useAccountMembership(t: Translate, locale: () => FormatLocale) {
   }
 
   async function requestUpgrade(tier: AccountMembershipUpgradePayload['tier']) {
-    return latest.run(() => requestAccountMembershipUpgrade({tier}))
+    return latest.run(() => requestAccountMembershipUpgrade({ tier }))
   }
 
-  const pageData = computed(() => toAccountMembershipPageData({
-    membership: membership.value,
-    entitlements: entitlements.value,
-    availablePlans: availablePlans.value,
-    t,
-    locale: locale(),
-  }))
-
-  return { loading: latest.loading, error: latest.error, pageData, refresh: load, requestUpgrade }
+  return { loading: latest.loading, error: latest.error, membership, entitlements, availablePlans, refresh: load, requestUpgrade }
 }
