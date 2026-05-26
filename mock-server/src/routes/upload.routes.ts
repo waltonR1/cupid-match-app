@@ -11,7 +11,8 @@ interface UploadBody {
 }
 
 interface UploadResponse {
-    url: string
+    url?: string
+    error?: string
 }
 
 export async function registerUploadRoutes(app: FastifyInstance): Promise<void> {

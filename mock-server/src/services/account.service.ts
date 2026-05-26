@@ -53,7 +53,6 @@ interface AccountProfileDetailDTO {
   nationality: string
   languages: string[]
   profileStatus: string
-  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
   degreeLevel: string
@@ -185,7 +184,6 @@ interface ManagedProfileSummaryDTO {
   permission: Database['profile_ownerships'][number]['permission']
   ownershipStatus: Database['profile_ownerships'][number]['status']
   profileStatus: string
-  isFeatured: boolean
   verification: AccountProfileVerificationDTO
 }
 
@@ -569,7 +567,6 @@ export function getAccountProfileDetail(data: Database, userId: string, profileI
     nationality: resolveEditableLocalizedText(locale, profile.nationality),
     languages: profile.languages,
     profileStatus: profile.profileStatus,
-    isFeatured: profile.isFeatured,
     lastActiveAt: profile.lastActiveAt,
     familyVisible: profile.familyVisible,
     degreeLevel: profile.degreeLevel,
@@ -649,7 +646,6 @@ function createAccountProfileRecord(data: Database, userId: string, locale: ApiL
     id: profileId,
     profileType,
     profileStatus: 'draft' as const,
-    isFeatured: false,
     lastActiveAt: now,
     createdAt: now,
     updatedAt: now,
@@ -657,6 +653,14 @@ function createAccountProfileRecord(data: Database, userId: string, locale: ApiL
   } as ProfileRecord
   Object.assign(profile, toStoredProfilePayload(payload, locale, profile))
   data.profiles.push(profile)
+  data.profile_internal_records.push({
+    id: nextId('internal', data.profile_internal_records),
+    profileId,
+    isFeatured: false,
+    riskFlags: [],
+    createdAt: now,
+    updatedAt: now,
+  })
   data.profile_ownerships.push({
     id: nextId('ownership', data.profile_ownerships),
     profileId,
@@ -1136,7 +1140,6 @@ function toManagedProfileSummary(
     permission: ownership.permission,
     ownershipStatus: ownership.status,
     profileStatus: profile.profileStatus,
-    isFeatured: profile.isFeatured,
     verification: {
       identityStatus: verif?.identityStatus ?? 'unverified',
       educationStatus: verif?.educationStatus ?? 'unverified',

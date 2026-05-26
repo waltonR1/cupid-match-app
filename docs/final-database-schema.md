@@ -332,7 +332,6 @@ interface ProfileRecord {
   languages: string[]
 
   profileStatus: ProfileStatus
-  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
 
@@ -465,6 +464,7 @@ interface ProfileOwnershipRecord {
 interface ProfileInternalRecord {
   id: string
   profileId: string
+  isFeatured: boolean
   employer?: LocalizedText
   incomeRange?: LocalizedText
   staffNotes?: LocalizedText

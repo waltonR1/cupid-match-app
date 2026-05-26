@@ -317,7 +317,6 @@ interface ProfileRecord {
   nationality: LocalizedText
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
@@ -426,6 +425,7 @@ profiles.id -> backend display name generator -> DTO.displayName
 interface ProfileInternalRecord {
   id: string
   profileId: string
+  isFeatured: boolean
   employer?: LocalizedText
   incomeRange?: LocalizedText
   staffNotes?: LocalizedText
@@ -1547,7 +1547,7 @@ profile：
 - public 展示接口使用 fallback resolver；account profile detail 编辑接口只读取当前 `lang` 槽位，不 fallback。
 - account profile detail 编辑接口返回当前 `lang` 的 `localizedMeta`，只暴露翻译元信息，不一次性返回三语全文。
 - `profileStatus` 生命周期字段不可由普通用户直接改成 `open` 或 `review`；若需状态流转，留给 staff 审核或后续独立流程。
-- `isFeatured` 不是用户可写字段。
+- `isFeatured` 属于 `profile_internal_records` 的运营排序字段，不进入公开 DTO，也不由普通用户写入。
 
 半敏感字段隐藏偏好：
 

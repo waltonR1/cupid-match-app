@@ -18,7 +18,7 @@
 | --- | --- | --- | --- |
 | `profiles` | `ProfileRecord[]` | 相亲资料主表，只保存结构化 profile 核心字段。 | 已完成 Phase 2 收紧；后续随 profile 编辑链路继续补齐。 |
 | `profile_photos` | `ProfilePhotoRecord[]` | profile 照片独立集合，头像由 `isPrimary` 派生。 | 后续接入照片上传、审核、排序。 |
-| `profile_internal_records` | `ProfileInternalRecord[]` | 后台工作人员可见的敏感运营资料。 | 当前不直接返回前端 detail。 |
+| `profile_internal_records` | `ProfileInternalRecord[]` | 后台工作人员可见的敏感运营资料与公开排序运营字段。 | `isFeatured` 只在后端用于排序 / 精选，不进入公开 DTO。 |
 | `profile_verifications` | `ProfileVerificationRecord[]` | 实名、学历、收入、婚姻状态和平台审核等认证资料。 | detail 的 `isVerified` 由身份认证和平台审核共同派生。 |
 | `profile_contacts` | `ProfileContactRecord[]` | phone / email / wechat 等受控联系方式。 | 仅 private introduction 成功后的受控流程可使用。 |
 | `profile_privacy_preferences` | `ProfilePrivacyPreferenceRecord[]` | profile 半敏感字段隐藏偏好；detail 链路先使用默认常量表，再叠加该集合里的隐藏开关。 | Phase 5.5 接入 account profile detail 写入。 |
@@ -224,7 +224,6 @@ interface ProfileRecord {
     nationality: LocalizedText
     languages: string[]
     profileStatus: ProfileStatus  // 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-    isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
     degreeLevel: DegreeLevel

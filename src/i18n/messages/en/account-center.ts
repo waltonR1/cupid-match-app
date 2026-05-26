@@ -137,7 +137,7 @@ export const accountCenterMessages: AppMessageSchema = {
         familyLife: 'Family life', dealBreakers: 'Deal breakers', smoking: 'Smoking', drinking: 'Drinking', exercise: 'Exercise',
         activityLevel: 'Activity level', weekendStyle: 'Weekend style', pets: 'Pets', personalityTraits: 'Personality traits', interests: 'Interests',
         communicationStyle: 'Communication style', summary: 'Summary', tags: 'Tags', familyVisible: 'Visible to family',
-        isFeatured: 'Featured', lifecycle: 'Lifecycle', profileStatus: 'Profile status', lastActiveAt: 'Last active', createdAt: 'Created at', updatedAt: 'Updated at',
+        lifecycle: 'Lifecycle', profileStatus: 'Profile status', lastActiveAt: 'Last active', createdAt: 'Created at', updatedAt: 'Updated at',
         phone: 'Phone', email: 'Email', wechat: 'WeChat', preferredChannel: 'Preferred contact', contactVisibility: 'Contact visibility', relationshipToProfile: 'Relationship to profile', isPrimary: 'Primary profile',
       },
       values: {

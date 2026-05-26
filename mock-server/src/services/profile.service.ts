@@ -229,6 +229,7 @@ export function buildProfileView(data: Database, profile: ProfileRecord): Profil
         .filter((item) => item.profileId === profile.id && item.status === 'approved')
         .sort((left, right) => left.sortOrder - right.sortOrder)
     const verifications = data.profile_verifications.filter((item) => item.profileId === profile.id)
+    const internal = resolveProfileInternalRecord(data, profile.id)
 
     return {
         ...profile,
@@ -237,6 +238,7 @@ export function buildProfileView(data: Database, profile: ProfileRecord): Profil
         photos,
         age: deriveProfileAge(profile),
         isVerified: deriveProfileVerified(verifications),
+        isFeatured: internal?.isFeatured ?? false,
         datingIntentionLabel: deriveDatingIntentionLabel(profile.datingIntentionCode),
     }
 }
@@ -252,6 +254,10 @@ export function isBusinessActiveProfile(profile: ProfileRecord): boolean {
 
 function resolveProfilePrivacyPreference(data: Database, profileId: string): ProfilePrivacyPreferenceRecord | undefined {
     return data.profile_privacy_preferences.find((item) => item.profileId === profileId)
+}
+
+function resolveProfileInternalRecord(data: Database, profileId: string) {
+    return data.profile_internal_records.find((item) => item.profileId === profileId)
 }
 
 /** 获取个人资料详情 */
@@ -329,7 +335,6 @@ export function toSelfProfileListItem(locale: ApiLocale, profile: ProfileWithDis
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
-        isFeatured: profile.isFeatured,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
         datingIntentionCode: profile.datingIntentionCode,
@@ -349,7 +354,6 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         age: profile.age,
         city: resolveLocalizedText(locale, profile.city),
         profileStatus: profile.profileStatus,
-        isFeatured: profile.isFeatured,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
@@ -385,7 +389,6 @@ export function toSelfProfileDetail(
         country: resolveLocalizedText(locale, profile.country),
         languages: profile.languages,
         profileStatus: profile.profileStatus,
-        isFeatured: profile.isFeatured,
         isVerified: profile.isVerified,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
@@ -445,7 +448,6 @@ export function toFamilyProfileDetail(
         nationality: resolveLocalizedText(locale, profile.nationality),
         languages: profile.languages,
         profileStatus: profile.profileStatus,
-        isFeatured: profile.isFeatured,
         isVerified: profile.isVerified,
         familyVisible: profile.familyVisible,
         education: resolveLocalizedText(locale, profile.education),

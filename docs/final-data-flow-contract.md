@@ -245,7 +245,6 @@ interface ProfileDirectoryBaseItemDTO {
   age: number
   city: string
   profileStatus: 'open' | 'review'
-  isFeatured: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -335,7 +334,6 @@ interface ProfileDetailBaseDTO {
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
   profileStatus: 'open' | 'review'
-  isFeatured: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -673,7 +671,7 @@ Rules:
 - This endpoint writes the owner-side editable profile draft while keeping each domain in its own table.
 - Localized fields write only to the current request locale slot.
 - `profileName` 是账户中心内部资料称呼。它只把当前语言槽位写为 `manual / human / ready`，不会为其他语言创建机翻任务。
-- `profileStatus` and `isFeatured` are not user-editable through this chain.
+- `profileStatus` is not user-editable through this chain.
 - The account owner may submit `profile_verifications.legalName/dateOfBirth`; verification status fields remain staff/debug controlled.
 
 ### Managed profile archive

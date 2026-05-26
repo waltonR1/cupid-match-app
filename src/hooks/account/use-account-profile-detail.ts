@@ -154,7 +154,6 @@ function createDraftProfileDetail(
     nationality: '',
     languages: [],
     profileStatus: 'draft',
-    isFeatured: false,
     lastActiveAt: now,
     familyVisible: false,
     degreeLevel: 'bachelor',

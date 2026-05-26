@@ -295,7 +295,6 @@ interface ProfileDirectoryBaseItemDTO {
   age: number
   city: string
   profileStatus: 'open' | 'review'
-  isFeatured: boolean
   education: string
   industry: string
   datingIntentionCode: string
@@ -368,7 +367,6 @@ interface ProfileDetailBaseDTO {
   nationality: RestrictedProfileField<string>
   languages: RestrictedProfileField<string[]>
   profileStatus: 'open' | 'review'
-  isFeatured: boolean
   isVerified: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
@@ -822,7 +820,6 @@ interface ManagedProfileSummaryDTO {
   permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isFeatured: boolean
   verification: AccountProfileVerificationDTO
 }
 

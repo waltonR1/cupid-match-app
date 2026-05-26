@@ -230,10 +230,6 @@ function buildBadges(profile: SelfProfileDetail, t: Translate): ProfileDetailBad
         {label: verificationText, tone: profile.isVerified ? 'highlight' : 'muted'},
     ]
 
-    if (profile.isFeatured) {
-        badges.unshift({label: t('status.priority'), tone: 'highlight'})
-    }
-
     return badges
 }
 

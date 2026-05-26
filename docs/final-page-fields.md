@@ -487,7 +487,6 @@ interface ManagedProfileSummaryViewModel {
   permission: 'owner' | 'manager'
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isFeatured: boolean
   verification: ProfileVerificationSummaryViewModel
   action: PageActionViewModel
 }

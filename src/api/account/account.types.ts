@@ -60,7 +60,6 @@ export interface AccountProfileDetailDTO {
   nationality: string
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
@@ -192,7 +191,6 @@ export interface ManagedProfileSummaryDTO {
   permission: 'owner' | 'manager'
   ownershipStatus: AccountProfileOwnershipStatus
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isFeatured: boolean
   verification: AccountProfileVerificationDTO
 }
 

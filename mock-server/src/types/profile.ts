@@ -63,6 +63,7 @@ export interface ProfilePhotoRecord {
 export interface ProfileInternalRecord {
     id: string
     profileId: string
+    isFeatured: boolean
     employer?: LocalizedText
     incomeRange?: LocalizedText
     staffNotes?: LocalizedText
@@ -130,7 +131,6 @@ export interface ProfileRecord {
     nationality: LocalizedText
     languages: string[]
     profileStatus: ProfileStatus
-    isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
     degreeLevel: DegreeLevel
@@ -175,6 +175,7 @@ export interface ProfileWithDisplayName extends ProfileRecord {
     photos: ProfilePhotoRecord[]
     age: number
     isVerified: boolean
+    isFeatured: boolean
     datingIntentionLabel: LocalizedText
 }
 
@@ -208,7 +209,6 @@ export interface SelfProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
-    isFeatured: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -226,7 +226,6 @@ export interface FamilyProfileListItemDTO {
     age: number
     city: string
     profileStatus: ProfileStatus
-    isFeatured: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatus
@@ -250,7 +249,6 @@ export interface SelfProfileDetailDTO {
     country: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
-    isFeatured: boolean
     isVerified: boolean
     education: string
     industry: Restricted<string>
@@ -298,7 +296,6 @@ export interface FamilyProfileDetailDTO {
     nationality: Restricted<string>
     languages: Restricted<string[]>
     profileStatus: ProfileStatus
-    isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
     education: string

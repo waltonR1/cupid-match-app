@@ -79,7 +79,6 @@
         "EN"
       ],
       "profileStatus": "open",
-      "isFeatured": false,
       "lastActiveAt": "2026-04-20T18:30:00Z",
       "familyVisible": false,
       "degreeLevel": "master",
@@ -677,7 +676,6 @@
         "EN"
       ],
       "profileStatus": "open",
-      "isFeatured": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
       "familyVisible": true,
       "degreeLevel": "master",
@@ -1274,7 +1272,6 @@
         "EN"
       ],
       "profileStatus": "review",
-      "isFeatured": false,
       "lastActiveAt": "2026-04-21T20:30:00Z",
       "familyVisible": true,
       "degreeLevel": "phd",
@@ -1872,7 +1869,6 @@
         "DE"
       ],
       "profileStatus": "open",
-      "isFeatured": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
       "familyVisible": true,
       "degreeLevel": "master",
@@ -2470,7 +2466,6 @@
         "FR"
       ],
       "profileStatus": "open",
-      "isFeatured": false,
       "lastActiveAt": "2026-04-21T10:45:00Z",
       "familyVisible": true,
       "degreeLevel": "master",
@@ -3960,7 +3955,48 @@
       "updatedAt": "2026-04-21T10:45:00Z"
     }
   ],
-  "profile_internal_records": [],
+  "profile_internal_records": [
+    {
+      "id": "internal-001",
+      "profileId": "p-001",
+      "isFeatured": false,
+      "riskFlags": [],
+      "createdAt": "2026-01-12",
+      "updatedAt": "2026-04-20T18:30:00Z"
+    },
+    {
+      "id": "internal-002",
+      "profileId": "p-002",
+      "isFeatured": true,
+      "riskFlags": [],
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-05-25T21:07:58.263Z"
+    },
+    {
+      "id": "internal-006",
+      "profileId": "p-006",
+      "isFeatured": false,
+      "riskFlags": [],
+      "createdAt": "2026-03-01",
+      "updatedAt": "2026-04-21T20:30:00Z"
+    },
+    {
+      "id": "internal-009",
+      "profileId": "p-009",
+      "isFeatured": true,
+      "riskFlags": [],
+      "createdAt": "2026-02-02",
+      "updatedAt": "2026-04-25T07:50:00Z"
+    },
+    {
+      "id": "internal-010",
+      "profileId": "p-010",
+      "isFeatured": false,
+      "riskFlags": [],
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-04-21T10:45:00Z"
+    }
+  ],
   "profile_verifications": [
     {
       "id": "verification-p-001",

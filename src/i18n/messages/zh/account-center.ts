@@ -161,7 +161,7 @@ export const accountCenterMessages: AppMessageSchema = {
         familyLife: '家庭生活', dealBreakers: '不能接受的点', smoking: '吸烟', drinking: '饮酒', exercise: '运动',
         activityLevel: '活跃程度', weekendStyle: '周末节奏', pets: '宠物', personalityTraits: '性格关键词', interests: '兴趣',
         communicationStyle: '沟通方式', summary: '简介', tags: '标签', familyVisible: '家庭可见',
-        isFeatured: '精选展示', lifecycle: '生命周期', profileStatus: '资料状态', lastActiveAt: '最近活跃', createdAt: '创建时间', updatedAt: '更新时间',
+        lifecycle: '生命周期', profileStatus: '资料状态', lastActiveAt: '最近活跃', createdAt: '创建时间', updatedAt: '更新时间',
         phone: '手机', email: '邮箱', wechat: '微信', preferredChannel: '首选联系', contactVisibility: '联系方式开放', relationshipToProfile: '与资料本人的关系', isPrimary: '主资料',
       },
       values: {

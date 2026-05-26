@@ -122,7 +122,6 @@ export interface SelfProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
-    isFeatured: boolean
     education: string
     industry: string
     datingIntentionCode: DatingIntentionCode
@@ -140,7 +139,6 @@ export interface FamilyProfileListItem {
     age: number
     city: string
     profileStatus: ProfileStatusCode
-    isFeatured: boolean
     education: string
     industry: string
     maritalStatus: MaritalStatusCode
@@ -164,7 +162,6 @@ export interface SelfProfileDetail {
     country: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
-    isFeatured: boolean
     isVerified: boolean
     education: string
     industry: RestrictedProfileField<string>
@@ -212,7 +209,6 @@ export interface FamilyProfileDetail {
     nationality: RestrictedProfileField<string>
     languages: RestrictedProfileField<string[]>
     profileStatus: ProfileStatusCode
-    isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
     education: string
