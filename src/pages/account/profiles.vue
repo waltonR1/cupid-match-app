@@ -75,7 +75,7 @@
       <view
           v-if="!loading"
           class="cursor-pointer border border-semantic-border-default bg-semantic-surface-card px-5 py-5 shadow-panel transition-colors hover:bg-semantic-surface-soft"
-          @click="openAccountProfileCreate"
+          @click="openAccountProfileCreate(hasSelfProfile)"
       >
         <view
             class="flex min-h-[72px] items-center justify-center gap-3 border border-dashed border-semantic-border-emphasis bg-semantic-surface-panel px-5 py-4 text-[14px] text-semantic-text-primary">
@@ -96,7 +96,7 @@
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useAccountProfiles } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -109,6 +109,10 @@ const { t, locale } = usePageI18n('accountCenter')
 const { loading, payload, refresh } = useAccountProfiles()
 watch(locale, () => { void refresh() })
 onShow(() => { void refresh() })
+
+const hasSelfProfile = computed(() =>
+  (payload.value?.profiles ?? []).some((p) => p.relationshipToProfile === 'self'),
+)
 
 function getProfileBadges(profile: ManagedProfileSummaryDTO) {
   const badges: Array<{ key: string; i18nKey: string }> = []

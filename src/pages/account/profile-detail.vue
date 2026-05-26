@@ -513,7 +513,7 @@ type PhotoDraft = {
 }
 const photoDrafts = ref<PhotoDraft[]>([])
 const draftOwnership = ref({
-  relationshipToProfile: 'self' as 'self' | 'father' | 'mother' | 'relative',
+  relationshipToProfile: 'relative' as 'self' | 'father' | 'mother' | 'relative',
 })
 const tagInputs = ref<Record<string, string>>({})
 const openSelectKey = ref<string | null>(null)
@@ -532,10 +532,16 @@ const selectedVerificationTitle = computed(() => {
   return item ? t(item.labelKey) : ''
 })
 
+const hasSelfProfile = ref(false)
+
 onLoad((query) => {
   createMode.value = query?.mode === 'create'
   if (createMode.value) {
     editing.value = true
+    if (query && typeof query.rel === 'string' && ['self', 'father', 'mother', 'relative'].includes(query.rel)) {
+      draftOwnership.value.relationshipToProfile = query.rel as typeof draftOwnership.value.relationshipToProfile
+    }
+    hasSelfProfile.value = query?.hasSelf === '1'
     return
   }
   if (query && typeof query.id === 'string') {
@@ -826,12 +832,17 @@ function buildProfilePayload() {
   }
 }
 
-const relationshipOptions = computed(() => [
-  { label: t('profiles.relationship.self'), value: 'self' as const },
-  { label: t('profiles.relationship.father'), value: 'father' as const },
-  { label: t('profiles.relationship.mother'), value: 'mother' as const },
-  { label: t('profiles.relationship.relative'), value: 'relative' as const },
-])
+const relationshipOptions = computed(() => {
+  const all = [
+    { label: t('profiles.relationship.father'), value: 'father' as const },
+    { label: t('profiles.relationship.mother'), value: 'mother' as const },
+    { label: t('profiles.relationship.relative'), value: 'relative' as const },
+  ]
+  if (!hasSelfProfile.value) {
+    all.unshift({ label: t('profiles.relationship.self'), value: 'self' as const })
+  }
+  return all
+})
 
 const selectedRelationshipLabel = computed(() => {
   return relationshipOptions.value.find((item) => item.value === draftOwnership.value.relationshipToProfile)?.label ?? '-'

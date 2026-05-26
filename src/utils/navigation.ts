@@ -41,10 +41,11 @@ export function redirectToAuthLanding() {
   })
 }
 
-/** 注册完成后按本次入口选择进入对应资料目录 */
+/** 注册完成后按本次入口选择进入资料创建页，关系已预填 */
 export function redirectToRegistrationLanding(path: RegistrationLandingPath) {
+  const rel = path === 'family' ? 'relative' : 'self'
   uni.redirectTo({
-    url: path === 'family' ? '/pages/profiles/family/index' : '/pages/profiles/self/index',
+    url: `/pages/account/profile-detail?mode=create&rel=${rel}`,
   })
 }
 
@@ -88,8 +89,11 @@ export function openAccountProfileDetail(id: string) {
   openPage(`/pages/account/profile-detail?id=${encodeURIComponent(id)}`)
 }
 
-export function openAccountProfileCreate() {
-  openPage('/pages/account/profile-detail?mode=create')
+export function openAccountProfileCreate(hasSelfProfile?: boolean) {
+  const url = hasSelfProfile
+    ? '/pages/account/profile-detail?mode=create&hasSelf=1'
+    : '/pages/account/profile-detail?mode=create'
+  openPage(url)
 }
 
 /** 打开活动页 */

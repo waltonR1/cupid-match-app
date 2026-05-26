@@ -107,7 +107,7 @@ function createDraftProfileDetail(
     avatarUrl: user?.avatarUrl ?? '',
     isBlankDraft: true,
     ownership: {
-      relationshipToProfile: 'self',
+      relationshipToProfile: 'relative',
       permission: 'owner',
       status: 'active',
     },
