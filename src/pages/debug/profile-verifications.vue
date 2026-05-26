@@ -34,8 +34,10 @@
               <view class="mt-2 text-[20px] font-semibold text-semantic-text-primary">
                 {{ item.profileName }}
               </view>
-              <view class="mt-2 text-[14px] leading-6 text-semantic-text-muted">
-                完成时间：{{ item.verifiedAt || '未完成' }}
+              <view class="mt-3 grid gap-1 text-[14px] leading-6 text-semantic-text-muted">
+                <text>真实姓名：{{ item.legalName || '未填写' }}</text>
+                <text>出生日期：{{ item.dateOfBirth || '未填写' }}</text>
+                <text>完成时间：{{ item.verifiedAt || '未完成' }}</text>
               </view>
             </view>
           </view>

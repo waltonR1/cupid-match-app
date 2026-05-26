@@ -1,25 +1,37 @@
 import { computed, ref, watch } from 'vue'
 import {
   archiveAccountProfile,
-  createAccountProfile,
   getAccountProfileDetail,
-  updateAccountProfile,
-  updateAccountProfileContact,
-  updateAccountProfileOwnership,
+  saveAccountProfileDetail,
   updateAccountProfilePrivacyPreferences,
-  createAccountProfilePhoto,
-  updateAccountProfilePhoto,
-  deleteAccountProfilePhoto,
   type AccountProfileDetailDTO,
-  type AccountManagedProfileCreatePayload,
-  type AccountProfileContactUpdatePayload,
+  type AccountProfileDetailSavePayload,
   type AccountProfilePrivacyPreferencesUpdatePayload,
-  type AccountProfileUpdatePayload,
 } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { toAccountProfileDetailPageData } from '@/mappers/account-profile-detail'
 import { useAuthStore } from '@/stores/modules/auth'
 import type { FormatLocale } from '@/utils/locale-format'
+
+const LOCALIZED_PROFILE_FIELD_KEYS = [
+  'profileName',
+  'city',
+  'country',
+  'nationality',
+  'education',
+  'industry',
+  'careerDirection',
+  'relationshipGoal',
+  'residencePlan',
+  'preferredEducation',
+  'familyLife',
+  'exercise',
+  'summary',
+  'dealBreakers',
+  'personalityTraits',
+  'interests',
+  'tags',
+] as const
 
 export function useAccountProfileDetail(
   profileId: () => string,
@@ -48,31 +60,10 @@ export function useAccountProfileDetail(
     if (data) payload.value = data
   }
 
-  async function createProfile(next: AccountManagedProfileCreatePayload) {
-    const data = await latest.run(() => createAccountProfile(next, editLocale()))
+  async function saveDetail(next: AccountProfileDetailSavePayload) {
+    const data = await latest.run(() => saveAccountProfileDetail(next, editLocale()))
     if (data) payload.value = data
     return data
-  }
-
-  async function saveProfile(next: AccountProfileUpdatePayload) {
-    if (!profileId()) return
-    const data = await latest.run(() => updateAccountProfile(profileId(), next, editLocale()))
-    if (data) payload.value = data
-  }
-
-  async function saveContact(contact: AccountProfileContactUpdatePayload) {
-    if (!profileId()) return
-    const data = await latest.run(() => updateAccountProfileContact(profileId(), contact, editLocale()))
-    if (data) payload.value = data
-  }
-
-  async function saveOwnership(next: {
-    relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
-    isPrimary: boolean
-  }) {
-    if (!profileId()) return
-    const data = await latest.run(() => updateAccountProfileOwnership(profileId(), next, editLocale()))
-    if (data) payload.value = data
   }
 
   async function savePrivacyPreferences(next: AccountProfilePrivacyPreferencesUpdatePayload) {
@@ -88,27 +79,6 @@ export function useAccountProfileDetail(
     return Boolean(result)
   }
 
-  async function addPhoto(url: string) {
-    if (!profileId() || !url) return
-    const data = await latest.run(() => createAccountProfilePhoto(profileId(), { url }, editLocale()))
-    if (data) payload.value = data
-  }
-
-  async function removePhoto(photoId: string) {
-    if (!profileId()) return
-    const data = await latest.run(() => deleteAccountProfilePhoto(profileId(), photoId, editLocale()))
-    if (data) payload.value = data
-  }
-
-  async function savePhoto(
-    photoId: string,
-    next: { url: string; isPrimary?: boolean; sortOrder?: number },
-  ) {
-    if (!profileId()) return
-    const data = await latest.run(() => updateAccountProfilePhoto(profileId(), photoId, next, editLocale()))
-    if (data) payload.value = data
-  }
-
   const pageData = computed(() => toAccountProfileDetailPageData({
     payload: payload.value,
   }))
@@ -119,15 +89,9 @@ export function useAccountProfileDetail(
     payload,
     pageData,
     refresh: load,
-    createProfile,
-    saveProfile,
-    saveOwnership,
-    saveContact,
+    saveDetail,
     savePrivacyPreferences,
     archive,
-    addPhoto,
-    savePhoto,
-    removePhoto,
   }
 }
 
@@ -146,9 +110,10 @@ function createDraftProfileDetail(
       relationshipToProfile: 'self',
       permission: 'owner',
       status: 'active',
-      isPrimary: false,
     },
     verification: {
+      legalName: '',
+      dateOfBirth: '',
       identityStatus: 'unverified',
       educationStatus: 'unverified',
       incomeStatus: 'unverified',
@@ -163,11 +128,20 @@ function createDraftProfileDetail(
       hideSmoking: false,
       hideDrinking: false,
     },
-    localizedMeta: { editLocale, fields: {} },
+    localizedMeta: {
+      editLocale,
+      fields: Object.fromEntries(LOCALIZED_PROFILE_FIELD_KEYS.map((key) => [
+        key,
+        {
+          locale: editLocale,
+          source: null,
+          provider: null,
+          status: 'missing',
+          hasValue: false,
+        },
+      ])),
+    },
     contact: {
-      phoneVerificationStatus: 'unverified',
-      emailVerificationStatus: 'unverified',
-      wechatVerificationStatus: 'unverified',
       preferredChannel: 'email',
       visibility: 'after_introduction',
     },
@@ -180,11 +154,9 @@ function createDraftProfileDetail(
     nationality: '',
     languages: [],
     profileStatus: 'draft',
-    isPriorityProfile: false,
+    isFeatured: false,
     lastActiveAt: now,
     familyVisible: false,
-    allowFamilyContact: false,
-    familyPriority: false,
     degreeLevel: 'bachelor',
     education: '',
     industry: '',
@@ -194,25 +166,25 @@ function createDraftProfileDetail(
     childrenPlan: 'open_to_discuss',
     acceptsLongDistance: false,
     datingIntentionCode: 'serious',
-    relationshipPlan: '',
+    relationshipGoal: '',
     residencePlan: '',
-    relocationWillingness: '',
-    values: [],
+    relocation: 'open_to_discuss',
+    relationshipValues: [],
     preferredAgeMin: 0,
     preferredAgeMax: 0,
-    locationScope: '',
+    preferredLocation: 'local',
     preferredEducation: '',
-    familyPlan: '',
+    familyLife: '',
     dealBreakers: [],
     smoking: 'never',
     drinking: 'never',
     exercise: '',
-    activityLevel: '',
-    weekendStyle: '',
-    pets: '',
+    activityLevel: 'moderate',
+    weekendStyle: 'flexible',
+    pets: 'none',
     personalityTraits: [],
     interests: [],
-    communicationStyle: '',
+    communicationStyle: 'balanced',
     summary: '',
     tags: [],
     createdAt: now,

@@ -335,8 +335,6 @@ interface ProfileRecord {
   isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
 
   degreeLevel: DegreeLevel
   education: LocalizedText
@@ -454,7 +452,6 @@ interface ProfileOwnershipRecord {
   invitedByUserId?: string
   acceptedAt?: string
   revokedAt?: string
-  isPrimary: boolean
   createdAt: string
   updatedAt: string
 }
@@ -506,7 +503,6 @@ interface ProfileVerificationRecord {
 联系方式受控保存。只有私人介绍成功或 staff 确认后才可能开放。
 
 ```ts
-type ContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
 type ProfileContactChannel = 'phone' | 'email' | 'wechat'
 
@@ -514,11 +510,8 @@ interface ProfileContactRecord {
   id: string
   profileId: string
   phone?: string
-  phoneVerificationStatus: ContactVerificationStatus
   email?: string
-  emailVerificationStatus: ContactVerificationStatus
   wechat?: string
-  wechatVerificationStatus: ContactVerificationStatus
   preferredChannel?: ProfileContactChannel
   visibility: ProfileContactVisibility
   createdAt: string

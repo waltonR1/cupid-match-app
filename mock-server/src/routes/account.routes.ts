@@ -2,18 +2,25 @@ import type { FastifyInstance } from 'fastify'
 
 import { getDb } from '../db.js'
 import {
-  getAccountDashboard,
-  getAccountMe,
-  getAccountProfiles,
-  getAccountProfileDetail,
   archiveAccountProfile,
-  getAccountMembership,
+  getAccountDashboard,
   getAccountEvents,
   getAccountFavorites,
   getAccountIntroductions,
+  getAccountMe,
+  getAccountMembership,
+  getAccountProfileDetail,
+  getAccountProfiles,
   getAccountRooms,
   getAccountSettings,
+  saveAccountProfileDetail,
+  updateAccountMe,
+  updateAccountPreferences,
+  updateAccountProfilePrivacyPreferences,
+  requestAccountMembershipUpgrade,
 } from '../services/account.service.js'
+import type { QueryRecord } from '../types/common.js'
+import { resolveApiLocale } from '../utils/localized.js'
 import { resolveUserIdHeader } from '../utils/request.js'
 
 function requireUser(request: any, reply: any) {
@@ -26,104 +33,91 @@ function requireUser(request: any, reply: any) {
 }
 
 export async function registerAccountRoutes(app: FastifyInstance): Promise<void> {
-  app.get(`/account/me`, async (request, reply) => {
+  app.get('/account/me', async (request, reply) => readAccount(request, reply, getAccountMe))
+  app.post('/account/me', async (request, reply) => mutateAccount(request, reply, (db, userId) => updateAccountMe(db.data, userId, request.body as never)))
+  app.get('/account/dashboard', async (request, reply) => readAccount(request, reply, getAccountDashboard))
+  app.get('/account/profiles', async (request, reply) => readAccount(request, reply, getAccountProfiles))
+  app.post('/account/profiles/save', async (request, reply) => {
     const userId = requireUser(request, reply)
     if (!userId) return
-
-    const result = getAccountMe(getDb().data, userId)
-    if (!result) return reply.code(404).send({ error: 'Account not found' })
-    return result
+    const db = getDb()
+    const result = saveAccountProfileDetail(db.data, userId, resolveApiLocale((request.query as QueryRecord).lang), request.body as never)
+    if (!result) return reply.code(404).send({ error: 'Profile not found' })
+    if (result === 'invalid_payload') return reply.code(400).send({ error: 'Invalid profile payload' })
+    if (result === 'duplicate_self') return reply.code(409).send({ error: 'You already have a self profile' })
+    if (result === 'forbidden') return reply.code(403).send({ error: 'Profile is read only' })
+    await db.write()
+    return reply.code((request.body as { profileId?: string })?.profileId ? 200 : 201).send(result)
   })
-
-  app.get(`/account/dashboard`, async (request, reply) => {
+  app.get('/account/profiles/:profileId', async (request, reply) => {
     const userId = requireUser(request, reply)
     if (!userId) return
-
-    const result = getAccountDashboard(getDb().data, userId)
-    if (!result) return reply.code(404).send({ error: 'Account not found' })
-    return result
-  })
-
-  app.get(`/account/profiles`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    const result = getAccountProfiles(getDb().data, userId)
-    if (!result) return reply.code(404).send({ error: 'Account not found' })
-    return result
-  })
-
-  app.get(`/account/profiles/:profileId`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    const { profileId } = request.params as { profileId: string }
-    const result = getAccountProfileDetail(getDb().data, userId, profileId)
+    const result = getAccountProfileDetail(
+      getDb().data,
+      userId,
+      (request.params as { profileId: string }).profileId,
+      resolveApiLocale((request.query as QueryRecord).lang),
+    )
     if (!result) return reply.code(404).send({ error: 'Profile not found' })
     return result
   })
-
-  app.post(`/account/profiles/:profileId/archive`, async (request, reply) => {
+  app.post('/account/profiles/:profileId/privacy-preferences', async (request, reply) => {
     const userId = requireUser(request, reply)
     if (!userId) return
-
+    const { profileId } = request.params as { profileId: string }
+    const db = getDb()
+    const result = updateAccountProfilePrivacyPreferences(db.data, userId, profileId, request.body as never)
+    if (!result) return reply.code(404).send({ error: 'Profile not found' })
+    if (result === 'forbidden') return reply.code(403).send({ error: 'Profile is read only' })
+    await db.write()
+    return result
+  })
+  app.post('/account/profiles/:profileId/archive', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
     const { profileId } = request.params as { profileId: string }
     const db = getDb()
     const result = archiveAccountProfile(db.data, userId, profileId)
-
     if (result.status === 'not_found') return reply.code(404).send({ error: 'Profile not found' })
     if (result.status === 'forbidden') return reply.code(403).send({ error: 'Only profile owners can archive profiles' })
     if (result.status === 'already_archived') return reply.code(409).send({ error: 'Profile is already archived' })
     if (result.status === 'active_flow') return reply.code(409).send({ error: 'Profile has active formal relationship flows' })
     if (result.status !== 'archived') return reply.code(500).send({ error: 'Unexpected archive result' })
-
     await db.write()
     return result.result
   })
+  app.get('/account/membership', async (request, reply) => readAccount(request, reply, getAccountMembership))
+  app.post('/account/membership/upgrade', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
+    requestAccountMembershipUpgrade(db.data, userId, (request.body as { tier: 'free' | 'silver' | 'gold' | 'diamond' }).tier)))
+  app.get('/account/events', async (request, reply) => readCollection(request, reply, getAccountEvents))
+  app.get('/account/favorites', async (request, reply) => readCollection(request, reply, getAccountFavorites))
+  app.get('/account/private-introductions', async (request, reply) => readCollection(request, reply, getAccountIntroductions))
+  app.get('/account/private-introduction-rooms', async (request, reply) => readCollection(request, reply, getAccountRooms))
+  app.get('/account/settings', async (request, reply) => readAccount(request, reply, getAccountSettings))
+  app.post('/account/settings/preferences', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
+    updateAccountPreferences(db.data, userId, request.body as never)))
+}
 
-  app.get(`/account/membership`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
+async function readAccount(request: any, reply: any, read: (data: any, userId: string) => unknown) {
+  const userId = requireUser(request, reply)
+  if (!userId) return
+  const result = read(getDb().data, userId)
+  if (!result) return reply.code(404).send({ error: 'Account not found' })
+  return result
+}
 
-    const result = getAccountMembership(getDb().data, userId)
-    if (!result) return reply.code(404).send({ error: 'Account not found' })
-    return result
-  })
+async function readCollection(request: any, reply: any, read: (data: any, userId: string) => unknown) {
+  const userId = requireUser(request, reply)
+  if (!userId) return
+  return read(getDb().data, userId)
+}
 
-  app.get(`/account/events`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    return getAccountEvents(getDb().data, userId)
-  })
-
-  app.get(`/account/favorites`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    return getAccountFavorites(getDb().data, userId)
-  })
-
-  app.get(`/account/private-introductions`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    return getAccountIntroductions(getDb().data, userId)
-  })
-
-  app.get(`/account/private-introduction-rooms`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    return getAccountRooms(getDb().data, userId)
-  })
-
-  app.get(`/account/settings`, async (request, reply) => {
-    const userId = requireUser(request, reply)
-    if (!userId) return
-
-    const result = getAccountSettings(getDb().data, userId)
-    if (!result) return reply.code(404).send({ error: 'Account not found' })
-    return result
-  })
+async function mutateAccount(request: any, reply: any, mutate: (db: ReturnType<typeof getDb>, userId: string) => unknown) {
+  const userId = requireUser(request, reply)
+  if (!userId) return
+  const db = getDb()
+  const result = mutate(db, userId)
+  if (!result) return reply.code(404).send({ error: 'Account not found' })
+  await db.write()
+  return result
 }

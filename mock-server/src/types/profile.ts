@@ -89,7 +89,6 @@ export interface ProfileVerificationRecord {
     updatedAt: string
 }
 
-export type ProfileContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
 export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
 
@@ -97,11 +96,8 @@ export interface ProfileContactRecord {
     id: string
     profileId: string
     phone?: string
-    phoneVerificationStatus: ProfileContactVerificationStatus
     email?: string
-    emailVerificationStatus: ProfileContactVerificationStatus
     wechat?: string
-    wechatVerificationStatus: ProfileContactVerificationStatus
     preferredChannel?: ProfileContactChannel
     visibility: ProfileContactVisibility
     createdAt: string
@@ -137,8 +133,6 @@ export interface ProfileRecord {
     isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
-    allowFamilyContact: boolean
-    familyPriority: boolean
     degreeLevel: DegreeLevel
     education: LocalizedText
     industry: LocalizedText
@@ -241,8 +235,6 @@ export interface FamilyProfileListItemDTO {
     relationshipGoal: string
     residencePlan: string
     tags: string[]
-    allowFamilyContact: boolean
-    familyPriority: boolean
 }
 
 /** 本人资料详情 */
@@ -309,8 +301,6 @@ export interface FamilyProfileDetailDTO {
     isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
-    allowFamilyContact: boolean
-    familyPriority: boolean
     education: string
     industry: string
     maritalStatus: Restricted<MaritalStatus>

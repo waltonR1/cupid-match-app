@@ -82,8 +82,6 @@
       "isFeatured": false,
       "lastActiveAt": "2026-04-20T18:30:00Z",
       "familyVisible": false,
-      "allowFamilyContact": false,
-      "familyPriority": false,
       "degreeLevel": "master",
       "education": {
         "zh": {
@@ -682,8 +680,6 @@
       "isFeatured": true,
       "lastActiveAt": "2026-04-22T09:00:00Z",
       "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": false,
       "degreeLevel": "master",
       "education": {
         "zh": {
@@ -1281,8 +1277,6 @@
       "isFeatured": false,
       "lastActiveAt": "2026-04-21T20:30:00Z",
       "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": true,
       "degreeLevel": "phd",
       "education": {
         "zh": {
@@ -1881,8 +1875,6 @@
       "isFeatured": true,
       "lastActiveAt": "2026-04-25T07:50:00Z",
       "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": false,
       "degreeLevel": "master",
       "education": {
         "zh": {
@@ -2481,8 +2473,6 @@
       "isFeatured": false,
       "lastActiveAt": "2026-04-21T10:45:00Z",
       "familyVisible": true,
-      "allowFamilyContact": true,
-      "familyPriority": false,
       "degreeLevel": "master",
       "education": {
         "zh": {
@@ -3786,7 +3776,6 @@
       "id": "ownership-001",
       "profileId": "p-002",
       "userId": "u-001",
-      "isPrimary": true,
       "permission": "owner",
       "relationshipToProfile": "self",
       "createdAt": "2026-01-01T00:00:00.000Z",
@@ -6138,9 +6127,6 @@
     {
       "id": "contact-p-001",
       "profileId": "p-001",
-      "phoneVerificationStatus": "unverified",
-      "emailVerificationStatus": "unverified",
-      "wechatVerificationStatus": "unverified",
       "preferredChannel": "phone",
       "visibility": "after_introduction",
       "createdAt": "2026-01-12",
@@ -6151,9 +6137,6 @@
     {
       "id": "contact-p-002",
       "profileId": "p-002",
-      "phoneVerificationStatus": "unverified",
-      "emailVerificationStatus": "unverified",
-      "wechatVerificationStatus": "unverified",
       "preferredChannel": "phone",
       "visibility": "after_introduction",
       "createdAt": "2026-01-18",

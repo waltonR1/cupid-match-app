@@ -97,6 +97,7 @@ import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { watch } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useAccountProfiles } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openAccountProfileCreate, openAccountProfileDetail } from '@/utils/navigation'
@@ -107,22 +108,21 @@ import { computeVerificationRatio, resolveVerificationDescriptionKey } from '@/m
 const { t, locale } = usePageI18n('accountCenter')
 const { loading, payload, refresh } = useAccountProfiles()
 watch(locale, () => { void refresh() })
+onShow(() => { void refresh() })
 
 function getProfileBadges(profile: ManagedProfileSummaryDTO) {
   const badges: Array<{ key: string; i18nKey: string }> = []
-  if (profile.isPrimary) badges.push({ key: 'primary', i18nKey: 'profiles.badges.primary' })
-  if (profile.isFeatured) badges.push({ key: 'priority', i18nKey: 'profiles.badges.priority' })
   badges.push({ key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}` })
   return badges
-}
-
-function verificationRatioText(v: AccountProfileVerificationDTO) {
-  const r = computeVerificationRatio(v)
-  return `${r.verified}/${r.total}`
 }
 
 function verificationDescription(v: AccountProfileVerificationDTO) {
   const r = computeVerificationRatio(v)
   return t(`profiles.verificationDescription.${resolveVerificationDescriptionKey(r.verified, r.total)}`)
+}
+
+function verificationRatioText(v: AccountProfileVerificationDTO) {
+  const r = computeVerificationRatio(v)
+  return `${r.verified}/${r.total}`
 }
 </script>

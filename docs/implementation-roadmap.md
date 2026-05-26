@@ -258,11 +258,8 @@ interface ProfileContactRecord {
   id: string
   profileId: string
   phone?: string
-  phoneVerificationStatus: ContactVerificationStatus
   email?: string
-  emailVerificationStatus: ContactVerificationStatus
   wechat?: string
-  wechatVerificationStatus: ContactVerificationStatus
   preferredChannel?: 'phone' | 'email' | 'wechat'
   visibility: 'after_introduction' | 'owner_only' | 'disabled'
   createdAt: string
@@ -323,8 +320,6 @@ interface ProfileRecord {
   isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: LocalizedText
   industry: LocalizedText
@@ -621,7 +616,6 @@ interface ProfileOwnershipRecord {
   invitedByUserId?: string
   acceptedAt?: string
   revokedAt?: string
-  isPrimary: boolean
   createdAt: string
   updatedAt: string
 }
@@ -1204,7 +1198,6 @@ interface ProfileOwnershipRecord {
   invitedByUserId?: string
   acceptedAt?: string
   revokedAt?: string
-  isPrimary: boolean
   createdAt: string
   updatedAt: string
 }
@@ -1522,12 +1515,7 @@ POST /api/account/profiles/:profileId/archive
 ### API 目标
 
 ```text
-POST  /api/account/profiles
-POST /api/account/profiles/:profileId
-POST /api/account/profiles/:profileId/contact
-POST  /api/account/profiles/:profileId/photos
-POST /api/account/profiles/:profileId/photos/:photoId
-DELETE /api/account/profiles/:profileId/photos/:photoId
+POST /api/account/profiles/save
 POST  /api/account/profiles/:profileId/archive
 POST /api/account/profiles/:profileId/privacy-preferences
 POST /api/account/me
@@ -1537,15 +1525,11 @@ POST  /api/account/membership/upgrade
 
 | Endpoint | Source of truth | Payload | Response |
 | --- | --- | --- | --- |
-| `POST /api/account/profiles` | `profiles`, `profile_ownerships` | `AccountManagedProfileCreatePayload` | `AccountProfileDetailDTO` |
-| `POST /api/account/profiles/:profileId` | `profiles`, `profile_ownerships` | `AccountProfileUpdatePayload` | `AccountProfileDetailDTO` |
-| `POST /api/account/profiles/:profileId/contact` | `profile_contacts`, `profile_ownerships` | `AccountProfileContactUpdatePayload` | `AccountProfileDetailDTO` |
-| photo endpoints | `profile_photos`, `profile_ownerships` | `ProfilePhotoMutationPayload` | `AccountProfileDetailDTO` |
+| `POST /api/account/profiles/save` | `profiles`, `profile_ownerships`, `profile_contacts`, `profile_photos` | `AccountProfileDetailSavePayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/profiles/:profileId/archive` | `profiles`, `profile_ownerships` | - | `AccountProfileArchiveResultDTO` |
 | `POST /api/account/profiles/:profileId/privacy-preferences` | `profile_privacy_preferences`, `profile_ownerships` | `AccountProfilePrivacyPreferencesUpdatePayload` | `AccountProfilePrivacyPreferencesDTO` |
 | `POST /api/account/me` | `users` | `AccountMeUpdatePayload` | `AccountMeDTO` |
 | `POST /api/account/settings/preferences` | `user_preferences` | `AccountPreferenceUpdatePayload` | `AccountSettingsDTO` |
-| `POST /api/account/profiles/:profileId/ownership` | `profile_ownerships` | `AccountProfileOwnershipUpdatePayload` | `AccountProfileDetailDTO` |
 | `POST /api/account/membership/upgrade` | external payment / staff flow placeholder | `AccountMembershipUpgradePayload` | `AccountMembershipUpgradeResultDTO` |
 
 ### 写入规则
@@ -1556,8 +1540,8 @@ profile：
 - 新建后自动创建当前用户的 `owner` ownership，并返回统一 detail DTO。
 - 只允许 `owner` / `manager` 修改。
 - archive 权限和阻塞条件沿用 Phase 5.4；5.5 只接入页面动作，不重新定义生命周期规则。
-- `POST /api/account/profiles/:profileId` 只允许更新 profile 主表字段，不允许顺手写 contact / internal / verification。
-- 联系方式由独立接口更新 `profile_contacts`；同页展示不代表同表写入。
+- `POST /api/account/profiles/save` 是 account profile detail 的主保存边界；页面在本地编辑 draft 后一次性提交主体字段、归属关系、联系方式和照片草稿。
+- 联系方式仍写入 `profile_contacts`，照片仍写入 `profile_photos`；统一接口不改变 source of truth。
 - 普通 owner-side profile DTO 不返回 archived profile；archive 不混入 `profileStatus`。
 - localized 字段仍遵守当前 locale slot 写入规则：当前编辑语言写入 `manual / human / ready`，其他非人工语言保持空字符串 `machine / null / pending`。
 - public 展示接口使用 fallback resolver；account profile detail 编辑接口只读取当前 `lang` 槽位，不 fallback。

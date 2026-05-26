@@ -14,6 +14,8 @@ export interface ProfileVerificationDebugItem {
     id: string
     profileId: string
     profileName: string
+    legalName?: string
+    dateOfBirth?: string
     identityStatus: ProfileVerificationRecord['identityStatus']
     educationStatus: ProfileVerificationRecord['educationStatus']
     incomeStatus: ProfileVerificationRecord['incomeStatus']
@@ -74,6 +76,8 @@ function toDebugItem(data: Database, verification: ProfileVerificationRecord): P
         id: verification.id,
         profileId: verification.profileId,
         profileName: profile?.id ?? verification.profileId,
+        legalName: verification.legalName,
+        dateOfBirth: verification.dateOfBirth,
         identityStatus: verification.identityStatus,
         educationStatus: verification.educationStatus,
         incomeStatus: verification.incomeStatus,

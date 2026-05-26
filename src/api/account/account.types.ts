@@ -9,9 +9,11 @@ export type AccountRoomStatus = 'open' | 'paused' | 'closed'
 export type AccountProfileType = 'self' | 'family'
 export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative'
 export type AccountProfileOwnershipStatus = 'pending' | 'active' | 'revoked'
-export type ProfileContactVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
 export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
+export type EditableLocalizedSource = 'manual' | 'machine'
+export type EditableLocalizedProvider = 'human' | 'translation_api' | null
+export type EditableLocalizedStatus = 'ready' | 'pending' | 'failed' | 'stale' | 'missing'
 
 export interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
@@ -25,7 +27,6 @@ export interface AccountDashboardDTO {
   upcomingEvents: AccountEventRegistrationDTO[]
   recentIntroductions: AccountIntroductionSummaryDTO[]
   favoriteCount: number
-  userVisibleFollowUps: AdvisorFollowUpDTO[]
 }
 
 export interface AccountProfilesDTO {
@@ -35,20 +36,20 @@ export interface AccountProfilesDTO {
 export interface AccountProfileDetailDTO {
   profileId: string
   profileType: AccountProfileType
-  displayName: string
+  profileName: string
   avatarUrl: string
   isBlankDraft: boolean
   ownership: {
     relationshipToProfile: AccountProfileRelationship
-    permission: 'owner' | 'manager' | 'viewer'
+    permission: 'owner' | 'manager'
     status: AccountProfileOwnershipStatus
     invitedByUserId?: string
     acceptedAt?: string
     revokedAt?: string
-    isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
-  visibility: AccountProfileVisibilityDTO[]
+  privacyPreferences: AccountProfilePrivacyPreferencesDTO
+  localizedMeta: AccountProfileLocalizedMetaDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   gender: 'male' | 'female'
@@ -59,11 +60,9 @@ export interface AccountProfileDetailDTO {
   nationality: string
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isPriorityProfile: boolean
+  isFeatured: boolean
   lastActiveAt: string
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
   education: string
   industry: string
@@ -73,29 +72,43 @@ export interface AccountProfileDetailDTO {
   childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
   acceptsLongDistance: boolean
   datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-  relationshipPlan: string
+  relationshipGoal: string
   residencePlan: string
-  relocationWillingness: string
-  values: string[]
+  relocation: 'willing' | 'unwilling' | 'open_to_discuss'
+  relationshipValues: ('honesty' | 'trust' | 'communication' | 'respect' | 'loyalty' | 'family' | 'growth' | 'support' | 'humor' | 'ambition' | 'kindness' | 'independence' | 'romance' | 'stability')[]
   preferredAgeMin: number
   preferredAgeMax: number
-  locationScope: string
+  preferredLocation: 'local' | 'regional' | 'national' | 'international'
   preferredEducation: string
-  familyPlan: string
+  familyLife: string
   dealBreakers: string[]
   smoking: 'never' | 'social' | 'often'
   drinking: 'never' | 'social' | 'often'
   exercise: string
-  activityLevel: string
-  weekendStyle: string
-  pets: string
+  activityLevel: 'low' | 'moderate' | 'high'
+  weekendStyle: 'outdoors' | 'indoors' | 'social' | 'flexible'
+  pets: 'has' | 'none' | 'likes'
   personalityTraits: string[]
   interests: string[]
-  communicationStyle: string
+  communicationStyle: 'direct' | 'indirect' | 'balanced'
   summary: string
   tags: string[]
   createdAt: string
   updatedAt: string
+}
+
+export interface AccountProfileLocalizedMetaDTO {
+  editLocale: 'zh' | 'fr' | 'en'
+  fields: Record<string, EditableLocalizedFieldMetaDTO | EditableLocalizedFieldMetaDTO[]>
+}
+
+export interface EditableLocalizedFieldMetaDTO {
+  locale: 'zh' | 'fr' | 'en'
+  source: EditableLocalizedSource | null
+  provider: EditableLocalizedProvider
+  status: EditableLocalizedStatus
+  updatedAt?: string
+  hasValue: boolean
 }
 
 export interface AccountMembershipDTO {
@@ -171,43 +184,42 @@ export interface AccountPreferencesDTO {
 export interface ManagedProfileSummaryDTO {
   profileId: string
   profileType: AccountProfileType
-  displayName: string
+  profileName: string
   avatarUrl: string
   age: number
   city: string
   relationshipToProfile: AccountProfileRelationship
-  permission: 'owner' | 'manager' | 'viewer'
+  permission: 'owner' | 'manager'
   ownershipStatus: AccountProfileOwnershipStatus
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
-  isPriorityProfile: boolean
-  isPrimary: boolean
+  isFeatured: boolean
   verification: AccountProfileVerificationDTO
 }
 
 export interface AccountProfileVerificationDTO {
+  legalName?: string
+  dateOfBirth?: string
   identityStatus: ProfileVerificationStatus
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
   reviewStatus: ProfileReviewStatus
-  verifiedAt?: string
   verifiedByUserId?: string
 }
 
-export interface AccountProfileVisibilityDTO {
-  profileId: string
-  fieldCode: string
-  visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  lockedByAdvisor: boolean
+export interface AccountProfilePrivacyPreferencesDTO {
+  hideMaritalStatus: boolean
+  hideHasChildren: boolean
+  hideChildrenPlan: boolean
+  hideAcceptsLongDistance: boolean
+  hideSmoking: boolean
+  hideDrinking: boolean
 }
 
 export interface AccountProfileContactDTO {
   phone?: string
-  phoneVerificationStatus: ProfileContactVerificationStatus
   email?: string
-  emailVerificationStatus: ProfileContactVerificationStatus
   wechat?: string
-  wechatVerificationStatus: ProfileContactVerificationStatus
   preferredChannel?: ProfileContactChannel
   visibility: ProfileContactVisibility
 }
@@ -217,12 +229,8 @@ export interface AccountProfileArchiveResultDTO {
   archivedAt: string
 }
 
-export type AccountManagedProfileOwnershipPayload = {
-  relationshipToProfile: AccountProfileRelationship
-  isPrimary?: boolean
-}
-
 export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
+  | 'profileName'
   | 'gender'
   | 'birthYear'
   | 'height'
@@ -239,15 +247,15 @@ export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
   | 'childrenPlan'
   | 'acceptsLongDistance'
   | 'datingIntentionCode'
-  | 'relationshipPlan'
+  | 'relationshipGoal'
   | 'residencePlan'
-  | 'relocationWillingness'
-  | 'values'
+  | 'relocation'
+  | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
-  | 'locationScope'
+  | 'preferredLocation'
   | 'preferredEducation'
-  | 'familyPlan'
+  | 'familyLife'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
@@ -261,20 +269,12 @@ export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
   | 'summary'
   | 'tags'
   | 'familyVisible'
-  | 'allowFamilyContact'
-  | 'familyPriority'
 >
-
-export interface AccountManagedProfileCreatePayload {
-  profileType: AccountProfileType
-  relationshipToProfile: AccountProfileRelationship
-}
 
 export type AccountProfileUpdatePayload = AccountProfileMutablePayload
 
 export interface AccountProfileOwnershipUpdatePayload {
-  relationshipToProfile: AccountManagedProfileOwnershipPayload['relationshipToProfile']
-  isPrimary: boolean
+  relationshipToProfile: AccountProfileRelationship
 }
 
 export type AccountProfileContactUpdatePayload = Partial<Pick<AccountProfileContactDTO,
@@ -285,17 +285,29 @@ export type AccountProfileContactUpdatePayload = Partial<Pick<AccountProfileCont
   | 'visibility'
 >>
 
-export interface AccountProfileVisibilityUpdatePayload {
-  entries: Array<{
-    fieldCode: string
-    visibility: 'public' | 'member' | 'introduced' | 'owner_only' | 'hidden'
-  }>
+export type AccountProfilePrivacyPreferencesUpdatePayload = Partial<AccountProfilePrivacyPreferencesDTO>
+
+export interface AccountProfileVerificationUpdatePayload {
+  legalName?: string
+  dateOfBirth?: string
 }
 
-export interface ProfilePhotoMutationPayload {
+export interface AccountProfilePhotoSavePayload {
+  id?: string
   url: string
-  isPrimary?: boolean
-  sortOrder?: number
+  isPrimary: boolean
+  sortOrder: number
+  delete?: boolean
+}
+
+export interface AccountProfileDetailSavePayload {
+  profileId?: string
+  profileType: AccountProfileType
+  ownership: AccountProfileOwnershipUpdatePayload
+  profile: AccountProfileUpdatePayload
+  contact: AccountProfileContactUpdatePayload
+  verification: AccountProfileVerificationUpdatePayload
+  photos: AccountProfilePhotoSavePayload[]
 }
 
 export interface AccountMeUpdatePayload {
@@ -344,10 +356,15 @@ export interface AccountIntroductionSummaryDTO {
 export interface FavoriteProfileSummaryDTO {
   favoriteId: string
   profileId: string
+  profileType: AccountProfileType
   displayName: string
   avatarUrl: string
   age: number
   city: string
+  education: string
+  industry: string
+  summary: string
+  tags: string[]
   createdAt: string
 }
 
@@ -361,13 +378,4 @@ export interface AccountPrivateIntroductionRoomDTO {
   openedAt: string
   closedAt?: string
   lastMessage?: string
-}
-
-export interface AdvisorFollowUpDTO {
-  id: string
-  status: 'open' | 'done' | 'snoozed'
-  priority: 'low' | 'normal' | 'high'
-  note: string
-  dueAt?: string
-  completedAt?: string
 }

@@ -17,6 +17,8 @@ export interface ProfileVerificationDebugItem {
   id: string
   profileId: string
   profileName: string
+  legalName?: string
+  dateOfBirth?: string
   identityStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
   educationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
   incomeStatus: 'unverified' | 'pending' | 'verified' | 'rejected'

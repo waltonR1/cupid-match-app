@@ -358,8 +358,6 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         relationshipGoal: resolveLocalizedText(locale, profile.relationshipGoal),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         tags: resolveLocalizedTexts(locale, profile.tags),
-        allowFamilyContact: profile.allowFamilyContact,
-        familyPriority: profile.familyPriority,
     }
 }
 
@@ -450,8 +448,6 @@ export function toFamilyProfileDetail(
         isFeatured: profile.isFeatured,
         isVerified: profile.isVerified,
         familyVisible: profile.familyVisible,
-        allowFamilyContact: profile.allowFamilyContact,
-        familyPriority: profile.familyPriority,
         education: resolveLocalizedText(locale, profile.education),
         industry: resolveLocalizedText(locale, profile.industry),
         maritalStatus: profile.maritalStatus,
@@ -758,13 +754,7 @@ function getSelfPriorityRank(profile: ProfileWithDisplayName): number {
 
 /** 获取家庭资料优先级 */
 function getFamilyPriorityRank(profile: ProfileWithDisplayName): number {
-    if (profile.familyPriority) {
-        return 0
-    }
-    if (profile.allowFamilyContact) {
-        return 1
-    }
-    return 2
+    return profile.isFeatured ? 0 : 1
 }
 
 /** 匹配年龄区间 */
@@ -847,11 +837,11 @@ function matchFamilyMode(profile: ProfileWithDisplayName, value: string): boolea
 
     switch (value) {
         case 'context_only':
-            return profile.familyVisible && !profile.allowFamilyContact && !profile.familyPriority
+            return profile.familyVisible
         case 'contact_ready':
-            return profile.allowFamilyContact
+            return profile.familyVisible
         case 'priority':
-            return profile.familyPriority
+            return profile.isFeatured
         default:
             return true
     }

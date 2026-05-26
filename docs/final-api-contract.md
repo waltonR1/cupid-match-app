@@ -124,13 +124,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
-| Account | `POST` | `/api/account/profiles` | 新建一份由当前用户管理的 profile。 |
-| Account | `POST` | `/api/account/profiles/:profileId` | 更新可管理 profile 的主表字段。 |
-| Account | `POST` | `/api/account/profiles/:profileId/ownership` | 更新可管理 profile 的归属关系。 |
-| Account | `POST` | `/api/account/profiles/:profileId/contact` | 更新可管理 profile 的受控联系方式。 |
-| Account | `POST` | `/api/account/profiles/:profileId/photos` | 新增可管理 profile 的照片。 |
-| Account | `POST` | `/api/account/profiles/:profileId/photos/:photoId` | 更新可管理 profile 的照片。 |
-| Account | `DELETE` | `/api/account/profiles/:profileId/photos/:photoId` | 删除可管理 profile 的照片。 |
+| Account | `POST` | `/api/account/profiles/save` | 新建或保存可管理 profile 的主体字段、归属关系、受控联系方式和照片草稿。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
 | Account | `POST` | `/api/account/profiles/:profileId/privacy-preferences` | 更新可管理 profile 的半敏感字段隐藏偏好。 |
 | Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
@@ -320,8 +314,6 @@ interface FamilyProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
   acceptsLongDistance: boolean
   relationshipGoal: string
   residencePlan: string
-  allowFamilyContact: boolean
-  familyPriority: boolean
 }
 
 interface SelfProfileDirectoryFacetsDTO {
@@ -410,8 +402,6 @@ interface ProfileDetailBaseDTO {
   summary: string
   tags: string[]
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
   access: ProfileAccessDTO
   favorite?: FavoriteStateDTO
   privateIntroduction: ProfilePrivateIntroductionDTO
@@ -548,20 +538,12 @@ interface ProfileCreatePayload {
   summary: string
   tags: string[]
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
 }
 
 type ProfileUpdatePayload = Partial<ProfileCreatePayload>
 
 interface ProfileMutationResponseDTO {
   profile: SelfProfileDetailDTO | FamilyProfileDetailDTO
-}
-
-interface ProfilePhotoMutationPayload {
-  url: string
-  isPrimary?: boolean
-  sortOrder?: number
 }
 
 ```
@@ -806,7 +788,6 @@ interface AccountProfileDetailDTO {
     invitedByUserId?: string
     acceptedAt?: string
     revokedAt?: string
-    isPrimary: boolean
   }
   verification: AccountProfileVerificationDTO
   privacyPreferences: AccountProfilePrivacyPreferencesDTO
@@ -842,17 +823,17 @@ interface ManagedProfileSummaryDTO {
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isFeatured: boolean
-  isPrimary: boolean
   verification: AccountProfileVerificationDTO
 }
 
 interface AccountProfileVerificationDTO {
+  legalName?: string
+  dateOfBirth?: string
   identityStatus: ProfileVerificationStatus
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
   reviewStatus: ProfileReviewStatus
-  verifiedAt?: string
   verifiedByUserId?: string
 }
 ```
@@ -1009,18 +990,33 @@ type AccountProfileCreatePayload = ProfileCreatePayload
 
 type AccountProfileUpdatePayload = Partial<AccountProfileCreatePayload>
 
-interface AccountManagedProfileCreatePayload {
+interface AccountProfilePhotoSavePayload {
+  id?: string
+  url: string
+  isPrimary: boolean
+  sortOrder: number
+  delete?: boolean
+}
+
+interface AccountProfileDetailSavePayload {
+  profileId?: string
   profileType: 'self' | 'family'
-  relationshipToProfile: 'self' | 'father' | 'mother' | 'relative'
+  ownership: AccountProfileOwnershipUpdatePayload
+  profile: AccountProfileUpdatePayload
+  contact: AccountProfileContactUpdatePayload
+  verification: AccountProfileVerificationUpdatePayload
+  photos: AccountProfilePhotoSavePayload[]
+}
+
+interface AccountProfileVerificationUpdatePayload {
+  legalName?: string
+  dateOfBirth?: string
 }
 
 interface AccountProfileContactDTO {
   phone?: string
-  phoneVerificationStatus: ContactVerificationStatus
   email?: string
-  emailVerificationStatus: ContactVerificationStatus
   wechat?: string
-  wechatVerificationStatus: ContactVerificationStatus
   preferredChannel?: 'phone' | 'email' | 'wechat'
   visibility: 'after_introduction' | 'owner_only' | 'disabled'
 }
@@ -1059,10 +1055,7 @@ interface AccountMembershipUpgradeResultDTO {
 
 Write rules:
 
-- `POST /api/account/profiles` derives the initial ownership from account attributes, creates a managed profile and current-user owner relation, then returns the rebuilt detail DTO.
-- `POST /api/account/profiles/:profileId` only writes user-editable profile main-table fields and returns the rebuilt detail DTO.
-- `POST /api/account/profiles/:profileId/ownership` updates the editable owner relation defaults shown in profile detail.
-- `POST /api/account/profiles/:profileId/contact` writes owner-managed contact records in `profile_contacts` and returns the rebuilt detail DTO.
+- `POST /api/account/profiles/save` is the primary owner-side save boundary for profile detail. It upserts the managed profile, writes user-editable profile fields, updates owner relation defaults, upserts `profile_contacts`, reconciles `profile_photos`, updates user-submitted `profile_verifications.legalName/dateOfBirth`, and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
 - `POST /api/account/profiles/:profileId/privacy-preferences` 只更新 profile 所有人可控制的半敏感字段隐藏偏好，并返回最新偏好对象。
 - `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.

@@ -1,5 +1,4 @@
 import type {
-    FamilyModeCode,
     FamilyProfileListItem,
     DatingIntentionCode,
     ProfileStatusCode,
@@ -31,7 +30,6 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
 
 /** 转换家庭资料卡片 */
 export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, locale: FormatLocale, t: Translate): ProfileCardViewModel {
-    const familyMode = resolveFamilyMode(profile)
     const tagTexts = [
         t(resolveMaritalStatusTagKey(profile.maritalStatus)),
         profile.acceptsLongDistance ? t('tags.longDistanceYes') : '',
@@ -43,7 +41,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         displayName: profile.displayName,
         gender: profile.gender,
         meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
-        badge: t(resolveFamilyModeBadgeKey(familyMode)),
+        badge: t('modes.contextOnly'),
         summary: profile.relationshipGoal,
         facts: [
             {label: t('fields.city'), value: profile.city},
@@ -51,7 +49,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
             {label: t('fields.residencePlan'), value: profile.residencePlan},
         ],
         tags: [...profile.tags, ...tagTexts].slice(0, 3),
-        footer: t(resolveFamilyFooterKey(profile.profileStatus, familyMode)),
+        footer: t(resolveFamilyFooterKey(profile.profileStatus)),
     }
 }
 
@@ -83,39 +81,10 @@ function resolveSelfFooterKey(profileStatus: ProfileStatusCode, isFeatured: bool
     }
 }
 
-/** 解析家庭展示模式 */
-function resolveFamilyMode(profile: FamilyProfileListItem): FamilyModeCode {
-    if (profile.familyPriority) return 'priority'
-    if (profile.allowFamilyContact) return 'contact_ready'
-    return 'context_only'
-}
-
-/** 解析家庭模式徽章文案 */
-function resolveFamilyModeBadgeKey(mode: FamilyModeCode): string {
-    switch (mode) {
-        case 'priority':
-            return 'modes.priority'
-        case 'contact_ready':
-            return 'modes.contactReady'
-        case 'context_only':
-        default:
-            return 'modes.contextOnly'
-    }
-}
-
 /** 解析家庭卡片底部文案 */
-function resolveFamilyFooterKey(profileStatus: ProfileStatusCode, mode: FamilyModeCode): string {
+function resolveFamilyFooterKey(profileStatus: ProfileStatusCode): string {
     if (profileStatus === 'review') return 'card.labelReview'
-
-    switch (mode) {
-        case 'priority':
-            return 'card.labelPriority'
-        case 'contact_ready':
-            return 'card.labelContactReady'
-        case 'context_only':
-        default:
-            return 'card.labelObserve'
-    }
+    return 'card.labelObserve'
 }
 
 /** 解析婚姻状态标签文案 */

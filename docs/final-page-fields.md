@@ -488,7 +488,6 @@ interface ManagedProfileSummaryViewModel {
   ownershipStatus: 'pending' | 'active' | 'revoked'
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   isFeatured: boolean
-  isPrimary: boolean
   verification: ProfileVerificationSummaryViewModel
   action: PageActionViewModel
 }
@@ -518,9 +517,11 @@ interface AccountProfileDetailPageData {
   profileTitle: string
   avatarUrl: string
   ownershipBadges: string[]
-  sections: AccountProfileDetailSectionViewModel[]
+  profileSections: AccountProfileDetailSectionViewModel[]
+  contactSection: AccountProfileDetailSectionViewModel
   photos: AccountProfilePhotoViewModel[]
   statusItems: AccountProfileDetailFieldViewModel[]
+  verification: ProfileVerificationSummaryViewModel
   privacyPreferenceItems: ProfilePrivacyPreferenceViewModel[]
   editState: AccountProfileEditStateViewModel
   archiveAction?: PageActionViewModel
@@ -562,12 +563,13 @@ interface AccountProfilePhotoViewModel {
 
 
 interface ProfileVerificationSummaryViewModel {
+  legalName?: string
+  dateOfBirth?: string
   identityStatus: ProfileVerificationStatus
   educationStatus: ProfileVerificationStatus
   incomeStatus: ProfileVerificationStatus
   maritalStatus: ProfileVerificationStatus
   reviewStatus: ProfileReviewStatus
-  verifiedAtText?: string
 }
 ```
 

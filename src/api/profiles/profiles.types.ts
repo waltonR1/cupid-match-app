@@ -149,8 +149,6 @@ export interface FamilyProfileListItem {
     relationshipGoal: string
     residencePlan: string
     tags: string[]
-    allowFamilyContact: boolean
-    familyPriority: boolean
 }
 
 /** 本人资料详情 */
@@ -217,8 +215,6 @@ export interface FamilyProfileDetail {
     isFeatured: boolean
     isVerified: boolean
     familyVisible: boolean
-    allowFamilyContact: boolean
-    familyPriority: boolean
     education: string
     industry: string
     maritalStatus: RestrictedProfileField<MaritalStatusCode>

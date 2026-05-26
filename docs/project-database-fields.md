@@ -151,7 +151,6 @@ interface ProfileOwnershipRecord {
     invitedByUserId?: string
     acceptedAt?: string
     revokedAt?: string
-    isPrimary: boolean
     createdAt: string
     updatedAt: string
 }
@@ -228,8 +227,6 @@ interface ProfileRecord {
     isFeatured: boolean
     lastActiveAt: string
     familyVisible: boolean
-    allowFamilyContact: boolean
-    familyPriority: boolean
     degreeLevel: DegreeLevel
     education: LocalizedText
     industry: LocalizedText

@@ -212,8 +212,6 @@ profiles:
   profileStatus
   lastActiveAt
   familyVisible
-  allowFamilyContact
-  familyPriority
   degreeLevel
   education
   industry
@@ -266,8 +264,6 @@ interface FamilyProfileDirectoryItemDTO extends ProfileDirectoryBaseItemDTO {
   acceptsLongDistance: boolean
   relationshipGoal: string
   residencePlan: string
-  allowFamilyContact: boolean
-  familyPriority: boolean
 }
 ```
 
@@ -373,8 +369,6 @@ interface ProfileDetailBaseDTO {
   summary: string
   tags: string[]
   familyVisible: boolean
-  allowFamilyContact: boolean
-  familyPriority: boolean
   access: ProfileAccessDTO
   favorite?: FavoriteStateDTO
   privateIntroduction: ProfilePrivateIntroductionDTO
@@ -516,7 +510,6 @@ Rules:
 
 - Self/family pages still consume DTOs, not database records.
 - Ownership decides editable or managed profile scope.
-- Family-specific sections use `familyVisible`, `allowFamilyContact`, `familyPriority` and access policy.
 - Do not add family-only fields back into `users`.
 
 ## Profile Edit / Creation Chain
@@ -556,8 +549,6 @@ languages
 profileStatus
 lastActiveAt
 familyVisible
-allowFamilyContact
-familyPriority
 degreeLevel
 education
 industry
@@ -600,7 +591,6 @@ profile_photos:
 
 
 profile_contacts:
-  phone, phoneVerificationStatus, email, emailVerificationStatus, wechat, wechatVerificationStatus, preferredChannel, visibility
 
 profile_internal_records:
   employer, incomeRange, staffNotes, riskFlags, source, updatedByUserId
@@ -646,7 +636,7 @@ profiles.compatibilityDimensions
 ```text
 /pages/account/profiles
 -> create profile action
--> POST /api/account/profiles
+-> POST /api/account/profiles/save
 -> create profiles row
 -> derive initial current-user owner ownership from account attributes
 -> create profile_verifications row with unverified / unreviewed defaults
@@ -665,12 +655,14 @@ Rules:
 
 ### Managed profile update
 
+Current account profile detail writes through `POST /api/account/profiles/save`. The page edits a local draft and submits profile fields, ownership defaults, contact fields, verification identity fields and photo draft changes together. The backend still writes each domain to its own source of truth: `profiles`, `profile_ownerships`, `profile_contacts`, `profile_verifications` and `profile_photos`.
+
 ```text
 /pages/account/profile-detail
 -> account profile edit form
--> POST /api/account/profiles/:profileId
+-> POST /api/account/profiles/save
 -> ownership permission check
--> profiles write
+-> profiles / profile_ownerships / profile_contacts / profile_verifications / profile_photos write
 -> rebuild AccountProfileDetailDTO
 -> refresh AccountProfileDetailPageData
 ```
@@ -678,68 +670,11 @@ Rules:
 Rules:
 
 - Only `owner` and `manager` can write.
-- This endpoint writes only profile main-table fields.
+- This endpoint writes the owner-side editable profile draft while keeping each domain in its own table.
 - Localized fields write only to the current request locale slot.
 - `profileName` 是账户中心内部资料称呼。它只把当前语言槽位写为 `manual / human / ready`，不会为其他语言创建机翻任务。
 - `profileStatus` and `isFeatured` are not user-editable through this chain.
-
-### Managed profile ownership update
-
-```text
-/pages/account/profile-detail
--> ownership editor
--> POST /api/account/profiles/:profileId/ownership
--> owner permission check
--> profile_ownerships write
--> rebuild AccountProfileDetailDTO
--> refresh AccountProfileDetailPageData
-```
-
-Rules:
-
-- New profiles receive an initial ownership default from account attributes.
-- The owner may adjust that relation later from the unified profile detail editor.
-- This chain updates only `profile_ownerships`, not profile main-table fields.
-
-### Managed profile contact update
-
-```text
-/pages/account/profile-detail
--> contact editor
--> POST /api/account/profiles/:profileId/contact
--> ownership permission check
--> profile_contacts upsert
--> rebuild AccountProfileDetailDTO
--> refresh AccountProfileDetailPageData
-```
-
-Rules:
-
-- Contact information is edited as one flattened owner-side record, but it never writes back into `profiles`.
-- Only `owner` and `manager` can write.
-- The payload writes the flattened contact record: phone, email, wechat, preferred channel and the contact-level visibility policy.
-- Public browsing detail DTOs still do not expose raw contact values.
-
-### Managed profile photos update
-
-```text
-/pages/account/profile-detail
--> photos editor
--> POST / POST / DELETE profile photo endpoints
--> ownership permission check
--> profile_photos write
--> rebuild AccountProfileDetailDTO
--> refresh AccountProfileDetailPageData
-```
-
-Rules:
-
-- Photos are maintained from the unified owner-side profile detail page.
-- Photo writes stay in `profile_photos`; `avatarUrl` remains derived from the approved primary photo.
-- Public profile chains only expose approved profile photos.
-- Newly uploaded account photos start in `review`; debug or admin review moves them to `approved` or `hidden`.
-- At most one approved primary photo may exist per profile.
-
+- The account owner may submit `profile_verifications.legalName/dateOfBirth`; verification status fields remain staff/debug controlled.
 
 ### Managed profile archive
 

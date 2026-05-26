@@ -244,7 +244,7 @@ function buildBadges(profile: FamilyProfileDetail, familyModeText: string, t: Tr
         {label: verificationText, tone: profile.isVerified ? 'highlight' : 'muted'},
     ]
 
-    if (profile.isFeatured || profile.familyPriority) {
+    if (profile.isFeatured) {
         badges.unshift({label: t('status.priority'), tone: 'highlight'})
     }
 
@@ -350,8 +350,6 @@ function resolveAccessLevel(profile: FamilyProfileDetail): FamilyProfileDetailAc
 
 /** 判断家庭协作模式 */
 function resolveFamilyMode(profile: FamilyProfileDetail): FamilyIntroductionSectionData['mode'] {
-    if (profile.familyPriority) return 'priority'
-    if (profile.allowFamilyContact) return 'contact_ready'
     return 'context_only'
 }
 

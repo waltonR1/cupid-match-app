@@ -165,7 +165,6 @@ export interface ProfileOwnershipRecord {
     invitedByUserId?: string
     acceptedAt?: string
     revokedAt?: string
-    isPrimary: boolean
     createdAt: string
     updatedAt: string
 }
