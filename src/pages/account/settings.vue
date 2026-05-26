@@ -13,7 +13,7 @@
           <view class="border border-semantic-border-default bg-semantic-surface-card px-7 py-7 shadow-panel">
             <view class="flex flex-wrap items-start gap-5">
               <image
-                  :src="settings.account.avatarUrl"
+                  :src="editing ? (accountDraft.avatarUrl || settings.account.avatarUrl || defaultAvatar) : (settings.account.avatarUrl || defaultAvatar)"
                   class="h-[72px] w-[72px] shrink-0 rounded-full border border-semantic-border-soft object-cover"
               />
 
@@ -30,6 +30,9 @@
                   </view>
                 </view>
 
+                <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                  {{ t('settings.sectionHints.account') }}
+                </view>
                 <view class="mt-2 max-w-[680px] text-[13px] leading-6 text-semantic-text-secondary">
                   {{ t('settings.sectionDescriptions.account') }}
                 </view>
@@ -38,13 +41,14 @@
               <view class="ml-auto flex flex-wrap gap-2">
                 <view
                   class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]"
-                  @click="editing = !editing"
+                  @click="editing ? cancelEditing() : startEditing()"
                 >
-                  {{ editing ? t('common.open') : t('settings.actions.edit') }}
+                  {{ editing ? t('settings.actions.cancelEdit') : t('settings.actions.edit') }}
                 </view>
                 <view
                   v-if="editing"
                   class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                  :class="saving ? 'opacity-50 pointer-events-none' : ''"
                   @click="saveSettings"
                 >
                   {{ t('settings.actions.save') }}
@@ -103,6 +107,24 @@
                   {{ t(`settings.locale.${settings.account.preferredLocale}`) }}
                 </view>
               </view>
+
+              <view class="px-3 py-3">
+                <view class="text-[12px] leading-5 text-semantic-text-muted">
+                  {{ t('settings.accountFields.createdAt') }}
+                </view>
+                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
+                  {{ formatLocalizedDateTime(locale, settings.account.createdAt) }}
+                </view>
+              </view>
+
+              <view class="px-3 py-3">
+                <view class="text-[12px] leading-5 text-semantic-text-muted">
+                  {{ t('settings.accountFields.updatedAt') }}
+                </view>
+                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
+                  {{ formatLocalizedDateTime(locale, settings.account.updatedAt) }}
+                </view>
+              </view>
             </view>
           </view>
 
@@ -112,6 +134,7 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.security.title') }}
               </view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.security') }}</view>
             </view>
 
             <view class="pt-5">
@@ -143,8 +166,11 @@
             </view>
 
             <view class="pt-6">
-              <view class="text-[13px] font-medium text-semantic-text-secondary">
-                {{ t('settings.security.password') }}
+              <view class="flex items-center gap-3">
+                <view class="text-[13px] font-medium text-semantic-text-secondary">
+                  {{ t('settings.security.password') }}
+                </view>
+                <view class="text-[12px] text-semantic-text-muted">{{ t('settings.security.passwordNote') }}</view>
               </view>
 
               <view class="mt-3 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
@@ -174,6 +200,7 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.notifications') }}
               </view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.notifications') }}</view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
@@ -208,6 +235,7 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.servicePreferences') }}
               </view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.servicePreferences') }}</view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
@@ -222,14 +250,21 @@
                   v-if="editing && item.code === 'preferred_city'"
                   :value="String(readPreference(item.code) ?? '')"
                   class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                  @input="writePreference(item.code, getInputValue($event))"
+                  @input="(e: { detail: { value: string } }) => writePreference(item.code, e.detail.value)"
                 />
-                <input
-                  v-else-if="editing && item.code === 'preferred_contact_channel'"
-                  :value="String(readPreference(item.code) ?? '')"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                  @input="writePreference(item.code, getInputValue($event))"
-                />
+                <view v-else-if="editing && item.code === 'preferred_contact_channel'" class="flex flex-wrap gap-2">
+                  <view
+                    v-for="ch in contactChannelOptions"
+                    :key="ch.value"
+                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                    :class="readPreference(item.code) === ch.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                    @click="writePreference(item.code, ch.value)"
+                  >
+                    {{ ch.label }}
+                  </view>
+                </view>
                 <view v-else-if="editing" class="flex flex-wrap gap-2">
                   <view
                     v-for="option in booleanOptions"
@@ -254,6 +289,7 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.privacy') }}
               </view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.privacy') }}</view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
@@ -288,23 +324,40 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.accountActions') }}
               </view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.accountActions') }}</view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
-              <view class="border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
-                <view class="text-[14px] font-medium text-semantic-text-primary">
+              <view class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+                <view>
+                  <view class="text-[14px] font-medium text-semantic-text-primary">
+                    {{ t('settings.actions.exportData') }}
+                  </view>
+                  <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                    {{ t('settings.actionHints.exportData') }}
+                  </view>
+                </view>
+                <view
+                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                  @click="handleExportData"
+                >
                   {{ t('settings.actions.exportData') }}
                 </view>
-                <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
-                  {{ t('settings.actionHints.exportData') }}
-                </view>
               </view>
-              <view class="border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
-                <view class="text-[14px] font-medium text-semantic-text-primary">
-                  {{ t('settings.actions.deactivateAccount') }}
+              <view class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+                <view>
+                  <view class="text-[14px] font-medium text-semantic-text-primary">
+                    {{ t('settings.actions.deactivateAccount') }}
+                  </view>
+                  <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                    {{ t('settings.actionHints.deactivateAccount') }}
+                  </view>
                 </view>
-                <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
-                  {{ t('settings.actionHints.deactivateAccount') }}
+                <view
+                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                  @click="handleDeactivateAccount"
+                >
+                  {{ t('settings.actions.deactivateAccount') }}
                 </view>
               </view>
             </view>
@@ -332,9 +385,15 @@
       </view>
 
       <EmptyStatePanel
-          v-else-if="!loading"
+          v-else-if="!loading && !error"
           :subtitle="t('settings.empty.description')"
           :title="t('settings.empty.title')"
+          size="page"
+      />
+      <EmptyStatePanel
+          v-else-if="!loading && error"
+          :subtitle="t('settings.error.description')"
+          :title="t('settings.error.title')"
           size="page"
       />
     </view>
@@ -361,10 +420,12 @@ import { maskIdentifier } from '@/mappers/account-settings'
 import type { AccountPreferenceCode } from '@/types/account/settings'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { loading, settings, refresh, saveAccount, savePreferences } = useAccountSettings()
-watch(locale, () => { void refresh() })
+const { loading, error, settings, refresh, saveAccount, savePreferences } = useAccountSettings()
+watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
+const saving = ref(false)
 const accountDraft = ref({ accountName: '', avatarUrl: '' })
+const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="58" text-anchor="middle" fill="%239ca3af" font-size="40">?</text></svg>'
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
 
 const PREFERENCE_CODE_TO_KEY = {
@@ -387,6 +448,7 @@ function buildPreferenceItems(codes: AccountPreferenceCode[]) {
 }
 
 function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
+  if (code === 'preferred_city' && (!value || value === '')) return t('settings.placeholders.preferredCity')
   if (code === 'preferred_contact_channel' && typeof value === 'string') return t(`settings.contactChannel.${value}`)
   if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
   if (Array.isArray(value)) return value.join(' / ')
@@ -452,6 +514,23 @@ watch(settings, (value) => {
   ) as Record<string, string | boolean | number | string[]>
 }, { immediate: true })
 
+function startEditing() {
+  accountDraft.value = {
+    accountName: settings.value?.account.accountName ?? '',
+    avatarUrl: settings.value?.account.avatarUrl ?? '',
+  }
+  preferenceDraft.value = Object.fromEntries(
+    Object.entries(PREFERENCE_CODE_TO_KEY)
+      .filter(([, key]) => settings.value?.preferences[key] !== undefined)
+      .map(([code, key]) => [code, settings.value.preferences[key]]),
+  ) as Record<string, string | boolean | number | string[]>
+  editing.value = true
+}
+
+function cancelEditing() {
+  editing.value = false
+}
+
 function openAgreementDialog(kind: 'terms' | 'privacy') {
   agreementDialog.value = kind
 }
@@ -477,19 +556,50 @@ function writePreference(code: string, value: string | boolean | number | string
   preferenceDraft.value[code] = value
 }
 
-function getInputValue(event: Event) {
-  return (event as unknown as { detail: { value: string } }).detail.value
+const contactChannelOptions = computed(() => [
+  { label: t('settings.contactChannel.email'), value: 'email' },
+  { label: t('settings.contactChannel.phone'), value: 'phone' },
+  { label: t('settings.contactChannel.wechat'), value: 'wechat' },
+])
+
+function handleExportData() {
+  uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
+}
+
+function handleDeactivateAccount() {
+  uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
 }
 
 async function saveSettings() {
-  await saveAccount({
-    accountName: accountDraft.value.accountName,
-    avatarUrl: accountDraft.value.avatarUrl,
-  })
-  await savePreferences({
-    preferences: toPreferencePayload(preferenceDraft.value),
-  })
-  editing.value = false
+  if (!accountDraft.value.accountName.trim()) {
+    uni.showToast({ title: t('settings.validation.accountNameRequired'), icon: 'none' })
+    return
+  }
+
+  saving.value = true
+  try {
+    const accountOk = await saveAccount({
+      accountName: accountDraft.value.accountName.trim(),
+      avatarUrl: accountDraft.value.avatarUrl.trim(),
+    })
+    if (!accountOk) {
+      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      return
+    }
+
+    const prefsOk = await savePreferences({
+      preferences: toPreferencePayload(preferenceDraft.value),
+    })
+    if (!prefsOk) {
+      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      return
+    }
+
+    uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+    editing.value = false
+  } finally {
+    saving.value = false
+  }
 }
 
 function toPreferencePayload(values: Record<string, string | boolean | number | string[]>): Partial<AccountPreferencesDTO> {

@@ -3752,7 +3752,7 @@
       "preferredLocale": "zh",
       "status": "active",
       "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
+      "updatedAt": "2026-05-26T12:50:33.511Z"
     }
   ],
   "auth_identities": [
@@ -4819,7 +4819,7 @@
       "marketingEmailsEnabled": false,
       "analyticsConsentEnabled": false,
       "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
+      "updatedAt": "2026-05-26T12:50:33.524Z"
     }
   ],
   "staff_tasks": [],
