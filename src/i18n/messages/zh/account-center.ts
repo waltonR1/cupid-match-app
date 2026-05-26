@@ -133,6 +133,7 @@ export const accountCenterMessages: AppMessageSchema = {
       setPrimary: '设为主照片',
       choosePhoto: '更换照片',
       addPhoto: '上传照片',
+      uploadFailed: '上传失败，请重试',
       photoStatus: {
         review: '待审核',
         approved: '已通过',

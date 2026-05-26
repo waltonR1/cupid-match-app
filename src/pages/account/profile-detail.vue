@@ -487,6 +487,7 @@ import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMyProfilePage } from '@/utils/navigation'
 import { formatLocalizedDateTime } from '@/utils/locale-format'
 import type { ProfileDetailPageData } from '@/mappers/account-profile-detail'
+import { uploadImage } from '@/api/upload/upload'
 
 const { t, locale, locales } = usePageI18n('accountCenter')
 const profileId = ref('')
@@ -1010,7 +1011,7 @@ function maskDate(value?: string) {
 }
 
 async function addDraftPhoto() {
-  const url = await chooseLocalImage()
+  const url = await chooseAndUploadImage()
   if (!url) return
   const nextOrder = visiblePhotoDrafts.value.length + 1
   photoDrafts.value.push({
@@ -1023,9 +1024,21 @@ async function addDraftPhoto() {
 }
 
 async function chooseDraftPhoto(clientId: string) {
-  const url = await chooseLocalImage()
+  const url = await chooseAndUploadImage()
   if (!url) return
   writePhotoDraft(clientId, url)
+}
+
+async function chooseAndUploadImage() {
+  const tempPath = await chooseLocalImage()
+  if (!tempPath) return null
+
+  try {
+    return await uploadImage(tempPath)
+  } catch {
+    uni.showToast({ title: t('profiles.detail.uploadFailed'), icon: 'none' })
+    return null
+  }
 }
 
 function chooseLocalImage() {

@@ -120,6 +120,7 @@ export const accountCenterMessages: AppMessageSchema = {
       setPrimary: 'Definir comme principale',
       choosePhoto: 'Remplacer la photo',
       addPhoto: 'Importer une photo',
+      uploadFailed: 'Échec du téléchargement, veuillez réessayer',
       photoStatus: {
         review: 'En verification',
         approved: 'Approuvee',

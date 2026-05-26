@@ -29,4 +29,5 @@ export const config = {
     port: parsePort(process.env.PORT),
     enableRequestLogging: parseEnvBoolean(process.env.ENABLE_REQUEST_LOGGING, DEFAULT.enableRequestLogging),
     dbPath: path.join(rootDir, 'db.json'),
+    uploadsDir: path.join(rootDir, 'uploads'),
 }
