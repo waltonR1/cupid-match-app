@@ -282,6 +282,7 @@ export const accountCenterMessages: AppMessageSchema = {
       servicePreferences: '顾问与推荐',
       privacy: '数据使用',
       legal: '条款与隐私',
+      accountActions: '敏感操作',
     },
     legalDescriptions: {
       terms: '查看平台服务条款的当前生效版本。',

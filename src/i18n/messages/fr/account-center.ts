@@ -247,6 +247,7 @@ export const accountCenterMessages: AppMessageSchema = {
       servicePreferences: 'Conciergerie et recommandations',
       privacy: 'Usage des donnees',
       legal: 'Conditions et confidentialite',
+      accountActions: 'Actions sensibles',
     },
     legalDescriptions: {
       terms: 'Consultez la version active des conditions de service.',
