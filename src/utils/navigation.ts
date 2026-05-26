@@ -102,8 +102,9 @@ export function openAccountEventsPage() {
 }
 
 /** 打开关系页 */
-export function openRelationshipPage() {
-  openPage('/pages/account/relationship')
+export function openRelationshipPage(tab?: 'favorites' | 'introductions') {
+  const url = tab ? `/pages/account/relationship?tab=${tab}` : '/pages/account/relationship'
+  openPage(url)
 }
 
 /** 打开设置页 */

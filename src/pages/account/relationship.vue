@@ -243,6 +243,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
 
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
@@ -268,6 +269,12 @@ watch(locale, () => {void refresh()})
 
 // 当前 Tab
 const activeTab = ref<'favorites' | 'introductions'>('favorites')
+
+onLoad((query) => {
+  if (query && (query.tab === 'favorites' || query.tab === 'introductions')) {
+    activeTab.value = query.tab
+  }
+})
 
 // 将介绍流程拆分为“需关注”和“历史”
 const introSplit = computed(() => splitIntroductions(introductions.value))

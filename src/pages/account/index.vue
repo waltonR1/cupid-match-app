@@ -36,6 +36,8 @@
           <view class="mt-5 grid gap-4">
             <view
               class="border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
+              :class="requestedIntroductions.length > 0 ? 'cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-2 px-2' : ''"
+              @click="requestedIntroductions.length > 0 && openRelationshipPage('introductions')"
             >
               <view class="flex items-start justify-between gap-4">
                 <view>
@@ -54,7 +56,8 @@
             <view
               v-for="item in payload.upcomingEvents"
               :key="item.registrationId"
-              class="border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0"
+              class="border-t border-semantic-border-soft pt-4 first:border-t-0 first:pt-0 cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-2 px-2"
+              @click="openAccountEventsPage()"
             >
               <view class="flex flex-wrap items-center justify-between gap-3">
                 <view>
@@ -80,7 +83,8 @@
             <view
               v-for="item in payload.profiles"
               :key="item.profileId"
-              class="grid gap-2 py-4 sm:grid-cols-[minmax(0,1fr)_auto]"
+              class="grid cursor-pointer gap-2 py-4 transition-colors hover:bg-semantic-surface-soft sm:grid-cols-[minmax(0,1fr)_auto] -mx-2 px-2"
+              @click="openAccountProfileDetail(item.profileId)"
             >
               <view>
                 <view class="text-[15px]">
@@ -126,19 +130,19 @@
       <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
         <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">{{ t('home.activitySummary') }}</view>
         <view class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <view>
+          <view class="cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-3 -my-2 px-3 py-2" @click="openMyProfilePage()">
             <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.profiles') }}</view>
             <view class="mt-2 text-[26px] font-semibold">{{ payload.profiles.length }}</view>
           </view>
-          <view>
+          <view class="cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-3 -my-2 px-3 py-2" @click="openRelationshipPage('favorites')">
             <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.favorites') }}</view>
             <view class="mt-2 text-[26px] font-semibold">{{ payload.favoriteCount }}</view>
           </view>
-          <view>
+          <view class="cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-3 -my-2 px-3 py-2" @click="openRelationshipPage('introductions')">
             <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.introductions') }}</view>
             <view class="mt-2 text-[26px] font-semibold">{{ payload.recentIntroductions.length }}</view>
           </view>
-          <view>
+          <view class="cursor-pointer transition-colors hover:bg-semantic-surface-soft -mx-3 -my-2 px-3 py-2" @click="openAccountEventsPage()">
             <view class="text-[13px] text-semantic-text-secondary">{{ t('home.overview.events') }}</view>
             <view class="mt-2 text-[26px] font-semibold">{{ payload.upcomingEvents.length }}</view>
           </view>
@@ -160,7 +164,7 @@ import AccountShell from '@/components/account/AccountShell.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountDashboard } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openMyProfilePage, openSelfDirectoryPage } from '@/utils/navigation'
+import { openAccountEventsPage, openAccountProfileCreate, openAccountProfileDetail, openMyProfilePage, openRelationshipPage, openSelfDirectoryPage } from '@/utils/navigation'
 import { resolvePrimaryAction } from '@/mappers/account-home'
 
 const { t, locale } = usePageI18n('accountCenter')
@@ -173,7 +177,7 @@ const requestedIntroductions = computed(() => payload.value?.recentIntroductions
 
 function handleAction(key: string) {
   if (key === 'create-profile') {
-    openMyProfilePage()
+    openAccountProfileCreate()
     return
   }
 
