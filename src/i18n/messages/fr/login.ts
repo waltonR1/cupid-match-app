@@ -20,6 +20,7 @@ export const loginMessages: AppMessageSchema = {
     form: {
       identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
       password: { label: 'Mot de passe', placeholder: 'Mot de passe' },
+      forgotPassword: 'Mot de passe oublie ?',
       error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de vous connecter.' },
     },
     access: {

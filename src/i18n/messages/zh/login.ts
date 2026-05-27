@@ -20,6 +20,7 @@ export const loginMessages: AppMessageSchema = {
     form: {
       identifier: { label: '邮箱或手机号', placeholder: '邮箱或手机号' },
       password: { label: '密码', placeholder: '密码' },
+      forgotPassword: '忘记密码？',
       error: { invalid: '账号或密码错误，请重试', agreement: '请先同意平台服务条款和隐私说明。' },
     },
     access: {

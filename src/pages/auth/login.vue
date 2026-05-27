@@ -74,6 +74,13 @@
                   autocomplete="current-password"
                 />
 
+                <text
+                  class="cursor-pointer text-[13px] text-semantic-text-hero-secondary transition-colors hover:text-semantic-text-inverse"
+                  @click="handleForgotPassword"
+                >
+                  {{ t('form.forgotPassword') }}
+                </text>
+
                 <view
                   v-if="loginError"
                   class="px-1 text-[14px] font-medium leading-6 text-semantic-state-danger"
@@ -232,6 +239,10 @@ function toggleAgreement() {
 
 function openAgreementDialog(kind: 'terms' | 'privacy') {
   agreementDialog.value = kind
+}
+
+function handleForgotPassword() {
+  uni.showToast({ title: '功能开发中', icon: 'none' })
 }
 
 function closeAgreementDialog() {
