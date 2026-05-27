@@ -689,12 +689,21 @@ interface AccountIntroductionSummaryViewModel {
   expiresAtText?: string
   respondedAtText?: string
   cooldownUntilText?: string
+  contact?: AccountIntroductionContactViewModel
   action?: PageActionViewModel
+}
+
+interface AccountIntroductionContactViewModel {
+  preferredChannel?: 'phone' | 'email' | 'wechat'
+  phone?: string
+  email?: string
+  wechat?: string
+  unavailableText?: string
 }
 
 ### Messages
 
-`/pages/account/relationship` 只承接收藏与私人介绍申请；消息中心是独立产品模块。用户可见通知、系统提醒、私人介绍受控沟通都进入 inbox。Phase 5 仅保留占位页，完整消息页面在 Phase 5.6 收敛。
+`/pages/account/relationship` 只承接收藏与私人介绍申请。私人介绍 accepted 后，relationship 通过独立 contact reveal API 展示对方联系方式，不开启聊天 room。消息中心是独立产品模块；Phase 5.6 先承接系统通知占位，后续受控沟通再进入 inbox。
 
 ```ts
 interface InboxThreadViewModel {
@@ -737,7 +746,7 @@ interface InboxMessagePageViewModel {
 }
 ```
 
-即使产品暂时不开放自由聊天，独立消息中心也可以用于系统通知、staff 可见说明和私人介绍受控沟通记录。
+Phase 5.6 的消息中心先用于系统通知和未读提示。消息详情、发送消息和私人介绍受控沟通留到后续阶段。
 
 ### Settings
 

@@ -1610,42 +1610,58 @@ membership：
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
-## Phase 5.6：设计独立消息中心
+## Phase 5.6：联系方式展示 + 消息中心占位
 
-### 目标
+### 设计决策
 
-把消息从 account relationship 中彻底拆出，形成独立产品模块，用于承接：
+- 私人介绍 accepted 后**不开启聊天/room**。改为展示对方联系方式（从 `profile_contacts` 读取），由独立 API 承接。
+- Inbox 当前只接系统通知，但 `inbox_threads.type` 保留 `private_introduction` 等后续类型，结构不降级。
+- 旧的 `private_introduction_rooms` / `private_introduction_room_messages` 在 Phase 5.6 废弃，终态由 inbox 统一承接。
 
-- 平台通知。
-- 私人介绍进展通知。
-- 双方确认后的受控沟通。
+### 5.6a：联系方式展示
 
-Phase 5 只保留独立占位页和入口，不提前把消息链路重新塞回 account center。终态消息中心使用统一 inbox 模型，不再维护独立 notifications 表，也不再维护独立 private-introduction room/messages 表。
+**目标**：私人介绍 accepted 后，requester 可通过独立 API 查看目标 profile 的联系方式。
 
-### 明确范围
+**API**：
+```
+GET /api/account/private-introductions/:requestId/contact
+```
+- 校验 requestId 归属当前用户 + status === 'accepted'
+- 从 `profile_contacts` 读取 phone / email / wechat / preferredChannel
+- `visibility === 'after_introduction'` 返回完整联系方式
+- `visibility === 'owner_only'` 或 `visibility === 'disabled'` 不向 requester 返回联系方式，并返回 unavailable reason
+- 非 accepted 状态、非本人申请或目标 profile 不存在时不返回联系方式
 
-本阶段要做：
+**前端**：`/pages/account/relationship` 介绍列表中，status === 'accepted' 的条目展示联系方式区域（替换原本留给聊天入口的位置）。
 
-- 设计 `/pages/messages/index` 与后续 inbox thread detail 页面职责。
-- 明确通知流和受控沟通流是否同页分区、同页 tab，或拆成不同页面。
-- 建立 `inbox_threads`、`inbox_messages`、`inbox_reads` 的 API DTO 与 PageData。
-- 读取 `GET /api/inbox/threads`、`GET /api/inbox/threads/:id?before=&limit=`，建立消息中心自己的 PageData。
-- 使用 `inbox_reads` 作为未读、已读 source of truth，不返回伪造 `unreadCount`。
-- 保留 inbox messages 的 cursor 分页。
+### 5.6b：Inbox 系统通知
 
-本阶段不做：
+**目标**：建立统一 inbox 数据结构和占位页面。当前只写入系统通知（`type = 'system'`），后续聊天和私人介绍通知通过同一 schema 扩展。
 
-- 不把 inbox thread 列表重新挂回 `/pages/account/relationship`。
-- 不提前把 profile 跨模块跳转闭环塞进消息中心；这部分留到 Phase 6 一起收口。
-- 不处理私人介绍申请本身的业务状态收口；`requested`、`accepted`、`declined`、`expired`、`cooldown` 的规则留到 Phase 6。
-- 不决定 `accepted` 后是否立即创建 private-introduction inbox thread；消息中心只提供统一承接结构。
+**数据库**（与 `docs/final-database-schema.md` 对齐）：
+```
+inbox_threads   — type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+inbox_messages  — senderType: 'system' | 'staff' | 'user', body: LocalizedText
+inbox_reads     — threadId + userId + lastReadAt
+```
+
+**API**：
+```
+GET  /api/inbox/threads                        — 线程列表（按 updatedAt 倒序）
+POST /api/inbox/threads/:id/read               — 标记已读
+```
+
+`GET /api/inbox/threads/:id/messages?before=&limit=` 保留在 final contract 中，Phase 5.6 不作为验收项。
+
+**前端**：`/pages/messages/index` 占位页，展示线程列表和未读标记。消息详情页和发送消息留到后续。
 
 ### 验收标准
 
-- 消息中心是独立入口，不再依赖 relationship 页面承载 room。
-- 平台通知与受控沟通的边界明确。
-- inbox thread list、thread detail、message page model 与 API DTO 对齐。
-- 未读状态来自 `inbox_reads`，不使用无来源的展示字段。
+- `GET /api/account/private-introductions/:requestId/contact` 返回联系方式，仅 accepted 且本人可访问。
+- `inbox_threads` / `inbox_messages` / `inbox_reads` 加入 mock db 和类型。
+- `GET /api/inbox/threads` 返回当前用户的系统通知线程。
+- 未读状态来自 `inbox_reads`，不返回伪造 `unreadCount`。
+- `/pages/messages/index` 作为独立入口存在，不挂在 account center。
 - `npm run type-check` 通过。
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
@@ -1923,8 +1939,8 @@ feat(account): add membership upgrade flow
 ### Phase 5.6
 
 ```text
-feat(messages): add standalone message center
-feat(messages): connect mediated rooms
+feat(introductions): add contact reveal api after acceptance
+feat(inbox): add inbox schema, mock service, and placeholder page
 ```
 
 ### Phase 5.7

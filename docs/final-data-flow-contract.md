@@ -1180,6 +1180,12 @@ Inbox flow:
 
 ```text
 accepted private introduction
+-> GET /api/account/private-introductions/:requestId/contact
+-> requester ownership and accepted status check
+-> profile_contacts visibility check
+-> AccountPrivateIntroductionContactDTO
+
+future controlled conversation
 -> create or open inbox_threads where type = private_introduction and subjectId = requestId
 -> create inbox_messages status update
 -> GET /api/inbox/threads/:id?before=&limit=
@@ -1246,7 +1252,7 @@ inbox_reads:
 Rules:
 
 - Profile detail never returns contact values just because a request exists.
-- Contact values can only be exposed through a controlled private introduction / inbox flow.
+- Contact values can only be exposed through `GET /api/account/private-introductions/:requestId/contact` after an accepted private introduction. They must not be returned by profile detail DTOs.
 - Users cannot request introduction to their own managed profile.
 - Quota and membership checks happen on backend.
 - Private introduction keeps the current self/family split: `POST /api/profiles/self/:id/private-introduction` and `POST /api/profiles/family/:id/private-introduction`.
@@ -1254,7 +1260,7 @@ Rules:
 - `cooldown` is derived from `status = 'declined'` plus `cooldownUntil`; do not use `cooldown` as a persisted request status.
 - `expired` is derived from `status = 'requested'` plus `expiresAt < now`; do not use `expired` as a persisted request status.
 - `quota_exhausted` is a DTO state returned by the create action when entitlement balance is insufficient; it is not persisted as request status.
-- Inbox messages use cursor pagination. Do not return the full message history by default.
+- Phase 5.6 does not open chat rooms after acceptance. If later controlled conversation is enabled, inbox messages use cursor pagination and must not return the full message history by default.
 
 ## Field Migration Summary
 
