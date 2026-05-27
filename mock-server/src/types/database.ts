@@ -147,7 +147,7 @@ export interface UserMembershipRecord {
     id: string
     userId: string
     tier: MembershipLevel
-    status: 'active' | 'expired' | 'cancelled'
+    status: 'active' | 'expired' | 'cancelled' | 'paused'
     startedAt: string
     expiresAt?: string
     createdAt: string
