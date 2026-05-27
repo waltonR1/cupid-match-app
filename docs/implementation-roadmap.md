@@ -1949,7 +1949,42 @@ feat(events): connect registrations to account
 feat(debug): support introduction state testing
 ```
 
-## 给接力 AI 的执行提示
+### Phase 7
+
+```text
+feat(account): add account deactivation flow
+feat(account): add data export
+feat(account): add identity binding / unbinding
+feat(account): add MFA setup and verification
+feat(settings): add password change UI
+feat(mock-server): add password change endpoint
+```
+
+## Phase 7：补齐账户安全与敏感操作
+
+### 目标
+
+在 account center 主流程稳定后，补齐账户安全相关功能，让设置页从"展示页"收敛为真正的"账户配置入口"。
+
+### Phase 7 项清单
+
+| 项 | 当前状态 | 涉及 |
+|------|------|------|
+| 密码修改 | 已在 Phase 5.5 提前完成 | `POST /account/password/change` mock 路由 + 前端内联表单 + 改后登出；`mockHashPassword` 抽到 `mock-server/src/utils/password.ts` 共用 |
+| 账户停用 | 未实现 | `POST /account/deactivate` → `status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')` |
+| 数据导出 | 未实现 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回 JSON 下载 |
+| 身份绑定/解绑 | 未实现 | `POST /account/identities` / `DELETE /account/identities/:id` / 验证码流程；当前安全区块只读展示 `auth_identities` 列表 + 未绑定占位 |
+| MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
+
+### DB 预留字段
+
+以下字段已在当前 schema 中预留，Phase 7 实现时直接使用：
+
+- `auth_identities` 表：`provider` / `identifier` / `passwordHash?` / `verifiedAt?` — 支持多身份绑定与验证
+- `AccountPasswordSecurityDTO.requiresMfa` — MFA 状态展示，mock 硬编码 `false`
+- `UserRecord.status` — 扩展为 `'active' | 'deactivated' | 'suspended'`（`suspended` 预留给平台风控）
+
+### 给接力 AI 的执行提示
 
 ```text
 你正在维护 Vue3 + uni-app 项目 cupid-match。
