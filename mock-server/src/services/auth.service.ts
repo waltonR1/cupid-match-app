@@ -6,6 +6,7 @@ import type {
   UserRecord,
 } from '../types/database.js'
 import {nextId} from '../utils/id.js'
+import {mockHashPassword} from '../utils/password.js'
 import {getString} from '../utils/string.js'
 import {upsertAgreementAcceptances} from './legal.service.js'
 
@@ -139,6 +140,21 @@ export async function register(
   db.data.users.push(newUser)
   db.data.auth_identities.push(newAuthIdentity)
   db.data.user_memberships.push(membership)
+  db.data.user_preferences.push({
+    id: nextId('preference', db.data.user_preferences),
+    userId,
+    preferredCity: '',
+    preferredContactChannel: 'email',
+    advisorContactEnabled: true,
+    familyAssistEnabled: true,
+    introductionUpdatesEnabled: true,
+    eventRemindersEnabled: true,
+    serviceAnnouncementsEnabled: true,
+    marketingEmailsEnabled: false,
+    analyticsConsentEnabled: false,
+    createdAt: now,
+    updatedAt: now,
+  })
   upsertAgreementAcceptances(db.data, userId, now)
   await db.write()
 
@@ -164,10 +180,6 @@ function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: Us
       status: membership.status,
     } : null,
   }
-}
-
-function mockHashPassword(password: string): string {
-  return `mock-sha256:${Buffer.from(password, 'utf8').toString('base64')}`
 }
 
 function isPasswordMatch(authIdentity: AuthIdentityRecord, password: string): boolean {

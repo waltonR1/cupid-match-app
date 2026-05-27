@@ -311,6 +311,16 @@ export interface AccountProfileDetailSavePayload {
 export interface AccountMeUpdatePayload {
   accountName?: string
   avatarUrl?: string
+  preferredLocale?: 'zh' | 'en' | 'fr'
+}
+
+export interface AccountPasswordChangePayload {
+  currentPassword: string
+  newPassword: string
+}
+
+export interface AccountPasswordChangeResultDTO {
+  passwordUpdatedAt: string
 }
 
 export interface AccountPreferenceUpdatePayload {

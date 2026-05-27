@@ -103,28 +103,20 @@
                 <view class="text-[12px] leading-5 text-semantic-text-muted">
                   {{ t('settings.accountFields.preferredLocale') }}
                 </view>
-                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
+                <view v-if="editing" class="mt-1 flex flex-wrap gap-2">
+                  <view v-for="loc in localeOptions" :key="loc.value"
+                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                    :class="accountDraft.preferredLocale === loc.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                    @click="accountDraft.preferredLocale = loc.value"
+                  >{{ loc.label }}</view>
+                </view>
+                <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
                   {{ t(`settings.locale.${settings.account.preferredLocale}`) }}
                 </view>
               </view>
 
-              <view class="px-3 py-3">
-                <view class="text-[12px] leading-5 text-semantic-text-muted">
-                  {{ t('settings.accountFields.createdAt') }}
-                </view>
-                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
-                  {{ formatLocalizedDateTime(locale, settings.account.createdAt) }}
-                </view>
-              </view>
-
-              <view class="px-3 py-3">
-                <view class="text-[12px] leading-5 text-semantic-text-muted">
-                  {{ t('settings.accountFields.updatedAt') }}
-                </view>
-                <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
-                  {{ formatLocalizedDateTime(locale, settings.account.updatedAt) }}
-                </view>
-              </view>
             </view>
           </view>
 
@@ -191,6 +183,39 @@
                   <text class="font-medium text-semantic-text-primary">{{ settings.password.requiresMfa ? t('common.yes') : t('common.no') }}</text>
                 </view>
               </view>
+
+              <view class="mt-4">
+                <view
+                  v-if="!showPasswordForm"
+                  class="inline-flex cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                  @click="handleChangePassword"
+                >
+                  {{ t('settings.actions.changePassword') }}
+                </view>
+
+                <view v-else class="max-w-[400px] space-y-3">
+                  <input v-model="passwordForm.current" type="password"
+                    :placeholder="t('settings.passwordFields.current')"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                  <input v-model="passwordForm.new" type="password"
+                    :placeholder="t('settings.passwordFields.newPassword')"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                  <input v-model="passwordForm.confirm" type="password"
+                    :placeholder="t('settings.passwordFields.confirmNew')"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                  <view v-if="passwordError" class="text-[13px] text-semantic-state-danger">{{ passwordError }}</view>
+                  <view class="flex gap-2">
+                    <view class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]" @click="cancelPasswordForm">
+                      {{ t('settings.actions.cancelEdit') }}
+                    </view>
+                    <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                      :class="changingPassword ? 'opacity-50 pointer-events-none' : ''" @click="confirmPasswordChange">
+                      {{ t('settings.actions.changePassword') }}
+                    </view>
+                  </view>
+                </view>
+              </view>
+
             </view>
           </view>
 
@@ -250,7 +275,7 @@
                   v-if="editing && item.code === 'preferred_city'"
                   :value="String(readPreference(item.code) ?? '')"
                   class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                  @input="(e: { detail: { value: string } }) => writePreference(item.code, e.detail.value)"
+                  @input="(e: any) => writePreference(item.code, e.detail.value)"
                 />
                 <view v-else-if="editing && item.code === 'preferred_contact_channel'" class="flex flex-wrap gap-2">
                   <view
@@ -408,6 +433,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { AccountPreferencesDTO } from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
@@ -417,6 +443,9 @@ import { useAccountSettings } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { formatLocalizedDateTime } from '@/utils/locale-format'
 import { maskIdentifier } from '@/mappers/account-settings'
+import { changeAccountPassword } from '@/api/account'
+import { validatePassword } from '@/utils/validate'
+import { useAuthStore } from '@/stores/modules/auth'
 import type { AccountPreferenceCode } from '@/types/account/settings'
 
 const { t, locale } = usePageI18n('accountCenter')
@@ -424,7 +453,7 @@ const { loading, error, settings, refresh, saveAccount, savePreferences } = useA
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
-const accountDraft = ref({ accountName: '', avatarUrl: '' })
+const accountDraft = ref<{ accountName: string; avatarUrl: string; preferredLocale: 'zh' | 'en' | 'fr' }>({ accountName: '', avatarUrl: '', preferredLocale: 'zh' })
 const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="58" text-anchor="middle" fill="%239ca3af" font-size="40">?</text></svg>'
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
 
@@ -506,6 +535,7 @@ watch(settings, (value) => {
   accountDraft.value = {
     accountName: value.account.accountName,
     avatarUrl: value.account.avatarUrl,
+    preferredLocale: (value.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
   preferenceDraft.value = Object.fromEntries(
     Object.entries(PREFERENCE_CODE_TO_KEY)
@@ -518,11 +548,12 @@ function startEditing() {
   accountDraft.value = {
     accountName: settings.value?.account.accountName ?? '',
     avatarUrl: settings.value?.account.avatarUrl ?? '',
+    preferredLocale: (settings.value?.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
   preferenceDraft.value = Object.fromEntries(
     Object.entries(PREFERENCE_CODE_TO_KEY)
       .filter(([, key]) => settings.value?.preferences[key] !== undefined)
-      .map(([code, key]) => [code, settings.value.preferences[key]]),
+      .map(([code, key]) => [code, settings.value?.preferences[key]]),
   ) as Record<string, string | boolean | number | string[]>
   editing.value = true
 }
@@ -556,11 +587,23 @@ function writePreference(code: string, value: string | boolean | number | string
   preferenceDraft.value[code] = value
 }
 
+const localeOptions = computed(() => [
+  { label: t('settings.locale.zh'), value: 'zh' as const },
+  { label: t('settings.locale.en'), value: 'en' as const },
+  { label: t('settings.locale.fr'), value: 'fr' as const },
+])
+
 const contactChannelOptions = computed(() => [
   { label: t('settings.contactChannel.email'), value: 'email' },
   { label: t('settings.contactChannel.phone'), value: 'phone' },
   { label: t('settings.contactChannel.wechat'), value: 'wechat' },
 ])
+
+// password change
+const showPasswordForm = ref(false)
+const passwordForm = ref({ current: '', new: '', confirm: '' })
+const passwordError = ref('')
+const changingPassword = ref(false)
 
 function handleExportData() {
   uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
@@ -568,6 +611,58 @@ function handleExportData() {
 
 function handleDeactivateAccount() {
   uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
+}
+
+function handleChangePassword() {
+  passwordForm.value = { current: '', new: '', confirm: '' }
+  passwordError.value = ''
+  showPasswordForm.value = true
+}
+
+function cancelPasswordForm() {
+  showPasswordForm.value = false
+}
+
+async function confirmPasswordChange() {
+  passwordError.value = ''
+  if (!passwordForm.value.current) {
+    passwordError.value = t('settings.validation.currentPasswordRequired')
+    return
+  }
+
+  const pwErrKey = validatePassword(passwordForm.value.new)
+  if (pwErrKey) {
+    const { t: globalT } = useI18n({ useScope: 'global' })
+    passwordError.value = globalT(pwErrKey)
+    return
+  }
+
+  if (passwordForm.value.new !== passwordForm.value.confirm) {
+    passwordError.value = t('settings.validation.passwordsMismatch')
+    return
+  }
+
+  changingPassword.value = true
+  try {
+    const result = await changeAccountPassword({
+      currentPassword: passwordForm.value.current,
+      newPassword: passwordForm.value.new,
+    })
+    if (result) {
+      uni.showToast({ title: t('settings.toasts.passwordChanged'), icon: 'success' })
+      const authStore = useAuthStore()
+      authStore.logout()
+      uni.redirectTo({ url: '/pages/auth/login' })
+    } else {
+      passwordError.value = t('settings.validation.incorrectPassword')
+    }
+  } catch (err: any) {
+    passwordError.value = err?.statusCode === 400
+      ? t('settings.validation.incorrectPassword')
+      : t('settings.toasts.saveFailed')
+  } finally {
+    changingPassword.value = false
+  }
 }
 
 async function saveSettings() {
@@ -581,6 +676,7 @@ async function saveSettings() {
     const accountOk = await saveAccount({
       accountName: accountDraft.value.accountName.trim(),
       avatarUrl: accountDraft.value.avatarUrl.trim(),
+      preferredLocale: accountDraft.value.preferredLocale,
     })
     if (!accountOk) {
       uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })

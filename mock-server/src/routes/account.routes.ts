@@ -3,6 +3,7 @@ import type { FastifyInstance } from 'fastify'
 import { getDb } from '../db.js'
 import {
   archiveAccountProfile,
+  changeAccountPassword,
   getAccountDashboard,
   getAccountEvents,
   getAccountFavorites,
@@ -96,6 +97,16 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.get('/account/settings', async (request, reply) => readAccount(request, reply, getAccountSettings))
   app.post('/account/settings/preferences', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
     updateAccountPreferences(db.data, userId, request.body as never)))
+  app.post('/account/password/change', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+    const db = getDb()
+    const result = changeAccountPassword(db.data, userId, request.body as { currentPassword: string; newPassword: string })
+    if (!result) return reply.code(404).send({ error: 'Account not found' })
+    if (result === 'incorrect_current_password') return reply.code(400).send({ error: 'Current password is incorrect' })
+    await db.write()
+    return result
+  })
 }
 
 async function readAccount(request: any, reply: any, read: (data: any, userId: string) => unknown) {

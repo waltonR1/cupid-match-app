@@ -5,6 +5,8 @@ import type {
   AccountIntroductionSummaryDTO,
   AccountMembershipDTO,
   MembershipPlanDTO,
+  AccountPasswordChangePayload,
+  AccountPasswordChangeResultDTO,
   AccountProfileDetailDTO,
   AccountProfileArchiveResultDTO,
   AccountProfileDetailSavePayload,
@@ -97,4 +99,8 @@ export function updateAccountPreferences(payload: AccountPreferenceUpdatePayload
 
 export function requestAccountMembershipUpgrade(payload: AccountMembershipUpgradePayload): Promise<AccountMembershipUpgradeResultDTO> {
   return requestJson<AccountMembershipUpgradeResultDTO>('/account/membership/upgrade', { method: 'POST', data: payload })
+}
+
+export function changeAccountPassword(payload: AccountPasswordChangePayload): Promise<AccountPasswordChangeResultDTO> {
+  return requestJson<AccountPasswordChangeResultDTO>('/account/password/change', { method: 'POST', data: payload })
 }

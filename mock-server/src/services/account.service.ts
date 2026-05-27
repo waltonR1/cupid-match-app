@@ -4,6 +4,7 @@ import type { ProfileRecord } from '../types/profile.js'
 import { emptyManualLocalizedText, resolveEditableLocalizedText, resolveLocalizedText } from '../utils/localized.js'
 import { buildProfileView } from './profile.service.js'
 import { nextId } from '../utils/id.js'
+import { mockHashPassword } from '../utils/password.js'
 import { mergeManualLocalizedText, mergeTranslatedText } from './translation.service.js'
 
 // -- DTOs -- //
@@ -358,6 +359,7 @@ interface AccountProfileDetailSavePayload {
 interface AccountMeUpdatePayload {
   accountName?: string
   avatarUrl?: string
+  preferredLocale?: 'zh' | 'en' | 'fr'
 }
 
 interface AccountPreferenceUpdatePayload {
@@ -889,32 +891,53 @@ export function updateAccountMe(data: Database, userId: string, payload: Account
   if (!user) return null
   if (payload.accountName !== undefined) user.accountName = payload.accountName
   if (payload.avatarUrl !== undefined) user.avatarUrl = payload.avatarUrl
+  if (payload.preferredLocale !== undefined) user.preferredLocale = payload.preferredLocale
   user.updatedAt = new Date().toISOString()
   return getAccountMe(data, userId)
 }
 
 export function updateAccountPreferences(data: Database, userId: string, payload: AccountPreferenceUpdatePayload) {
   if (!findUser(data, userId)) return null
-  const now = new Date().toISOString()
-  const preferences = ensureUserPreferences(data, userId, now)
-  Object.assign(preferences, sanitizePreferencePatch(payload.preferences))
-  preferences.updatedAt = now
-  return getAccountSettings(data, userId)
-}
-
-function ensureUserPreferences(data: Database, userId: string, now = new Date().toISOString()) {
-  let preferences = data.user_preferences.find((item) => item.userId === userId)
+  let preferences = ensureUserPreferences(data, userId)
   if (!preferences) {
     preferences = {
       id: nextId('preference', data.user_preferences),
       userId,
       ...defaultAccountPreferences(),
-      createdAt: now,
-      updatedAt: now,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
     data.user_preferences.push(preferences)
   }
-  return preferences
+  const now = new Date().toISOString()
+  Object.assign(preferences, sanitizePreferencePatch(payload.preferences))
+  preferences.updatedAt = now
+  return getAccountSettings(data, userId)
+}
+
+export function changeAccountPassword(
+  data: Database,
+  userId: string,
+  payload: { currentPassword: string; newPassword: string },
+) {
+  const user = findUser(data, userId)
+  if (!user) return null
+
+  const pwIdentity = data.auth_identities.find(
+    (item) => item.userId === userId && Boolean(item.passwordHash),
+  )
+  if (!pwIdentity || pwIdentity.passwordHash !== mockHashPassword(payload.currentPassword)) {
+    return 'incorrect_current_password' as const
+  }
+
+  const now = new Date().toISOString()
+  pwIdentity.passwordHash = mockHashPassword(payload.newPassword)
+  pwIdentity.updatedAt = now
+  return { passwordUpdatedAt: now }
+}
+
+function ensureUserPreferences(data: Database, userId: string) {
+  return data.user_preferences.find((item) => item.userId === userId) ?? null
 }
 
 function defaultAccountPreferences(): AccountPreferencesDTO {
@@ -1105,7 +1128,8 @@ export function getAccountSettings(data: Database, userId: string): AccountSetti
   }
 }
 
-function toAccountPreferencesDto(preferences: Database['user_preferences'][number]): AccountPreferencesDTO {
+function toAccountPreferencesDto(preferences: Database['user_preferences'][number] | null): AccountPreferencesDTO {
+  if (!preferences) return defaultAccountPreferences()
   return {
     preferredCity: preferences.preferredCity,
     preferredContactChannel: preferences.preferredContactChannel,

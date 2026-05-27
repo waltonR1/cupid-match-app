@@ -833,13 +833,13 @@ function buildProfilePayload() {
 }
 
 const relationshipOptions = computed(() => {
-  const all = [
-    { label: t('profiles.relationship.father'), value: 'father' as const },
-    { label: t('profiles.relationship.mother'), value: 'mother' as const },
-    { label: t('profiles.relationship.relative'), value: 'relative' as const },
+  const all: Array<{ label: string; value: typeof draftOwnership.value.relationshipToProfile }> = [
+    { label: t('profiles.relationship.father'), value: 'father' },
+    { label: t('profiles.relationship.mother'), value: 'mother' },
+    { label: t('profiles.relationship.relative'), value: 'relative' },
   ]
   if (!hasSelfProfile.value) {
-    all.unshift({ label: t('profiles.relationship.self'), value: 'self' as const })
+    all.unshift({ label: t('profiles.relationship.self'), value: 'self' })
   }
   return all
 })
