@@ -889,9 +889,17 @@ function reconcileAccountProfilePhotos(
 export function updateAccountMe(data: Database, userId: string, payload: AccountMeUpdatePayload) {
   const user = findUser(data, userId)
   if (!user) return null
-  if (payload.accountName !== undefined) user.accountName = payload.accountName
-  if (payload.avatarUrl !== undefined) user.avatarUrl = payload.avatarUrl
-  if (payload.preferredLocale !== undefined) user.preferredLocale = payload.preferredLocale
+
+  if (payload.accountName !== undefined) {
+    const accountName = payload.accountName.trim()
+    if (!accountName || accountName.length > 30) return 'invalid_payload' as const
+    user.accountName = accountName
+  }
+  if (payload.avatarUrl !== undefined) user.avatarUrl = payload.avatarUrl.trim()
+  if (payload.preferredLocale !== undefined) {
+    if (!isAccountLocale(payload.preferredLocale)) return 'invalid_payload' as const
+    user.preferredLocale = payload.preferredLocale
+  }
   user.updatedAt = new Date().toISOString()
   return getAccountMe(data, userId)
 }
@@ -928,6 +936,9 @@ export function changeAccountPassword(
   )
   if (!pwIdentity || pwIdentity.passwordHash !== mockHashPassword(payload.currentPassword)) {
     return 'incorrect_current_password' as const
+  }
+  if (!isValidPassword(payload.newPassword)) {
+    return 'invalid_password' as const
   }
 
   const now = new Date().toISOString()
@@ -970,6 +981,14 @@ function sanitizePreferencePatch(payload: Partial<AccountPreferencesDTO> = {}): 
 
 function isPreferredContactChannel(value: unknown): value is AccountPreferencesDTO['preferredContactChannel'] {
   return value === 'email' || value === 'phone' || value === 'wechat'
+}
+
+function isAccountLocale(value: unknown): value is ApiLocale {
+  return value === 'zh' || value === 'fr' || value === 'en'
+}
+
+function isValidPassword(value: string): boolean {
+  return value.length >= 8 && /[a-zA-Z]/.test(value) && /[0-9]/.test(value)
 }
 
 // -- Membership -- //

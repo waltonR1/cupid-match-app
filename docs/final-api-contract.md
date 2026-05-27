@@ -1038,6 +1038,7 @@ interface AccountPreferenceUpdatePayload {
 interface AccountMeUpdatePayload {
   accountName?: string
   avatarUrl?: string
+  preferredLocale?: LocaleCode
 }
 
 interface AccountMembershipUpgradePayload {
@@ -1055,7 +1056,7 @@ Write rules:
 - `POST /api/account/profiles/save` is the primary owner-side save boundary for profile detail. It upserts the managed profile, writes user-editable profile fields, updates owner relation defaults, upserts `profile_contacts`, reconciles `profile_photos`, updates user-submitted `profile_verifications.legalName/dateOfBirth`, and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
 - `POST /api/account/profiles/:profileId/privacy-preferences` 只更新 profile 所有人可控制的半敏感字段隐藏偏好，并返回最新偏好对象。
-- `POST /api/account/me` updates account display basics only; auth identities and status are out of scope.
+- `POST /api/account/me` updates account display basics and the account default language preference; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
 

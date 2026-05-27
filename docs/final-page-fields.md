@@ -154,7 +154,7 @@ interface RegisterPageFields {
 
 注册页不采集 profile 字段，例如 `city`、身高、学历、职业、婚恋偏好等。城市进入 profile 创建或账户偏好，不进入账户注册字段。
 
-注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；Phase 5.5 不在 settings 中提供手动语言写入口。
+注册页也不展示 `preferredLocale` 手动选择器。注册 payload 中的 `preferredLocale` 由当前前端 `locale` 自动填充；账户设置页可以维护登录后的默认语言偏好。顶部语言切换只影响当前浏览会话，保存后的 `preferredLocale` 用于下次登录或跨设备登录时的默认语言。
 
 account profile detail 的编辑语言通过接口 `?lang=` 独立读取和保存。该编辑页展示当前语言槽位的真实值，不使用 fallback；同时消费 `localizedMeta` 了解当前编辑语言槽位的 source / provider / status / updatedAt / hasValue。public profile、directory、event 和 account summary 页面继续使用后端 fallback 后的展示 string。
 

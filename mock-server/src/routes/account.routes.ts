@@ -35,7 +35,16 @@ function requireUser(request: any, reply: any) {
 
 export async function registerAccountRoutes(app: FastifyInstance): Promise<void> {
   app.get('/account/me', async (request, reply) => readAccount(request, reply, getAccountMe))
-  app.post('/account/me', async (request, reply) => mutateAccount(request, reply, (db, userId) => updateAccountMe(db.data, userId, request.body as never)))
+  app.post('/account/me', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+    const db = getDb()
+    const result = updateAccountMe(db.data, userId, request.body as never)
+    if (!result) return reply.code(404).send({ error: 'Account not found' })
+    if (result === 'invalid_payload') return reply.code(400).send({ error: 'Invalid account payload' })
+    await db.write()
+    return result
+  })
   app.get('/account/dashboard', async (request, reply) => readAccount(request, reply, getAccountDashboard))
   app.get('/account/profiles', async (request, reply) => readAccount(request, reply, getAccountProfiles))
   app.post('/account/profiles/save', async (request, reply) => {
@@ -104,6 +113,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const result = changeAccountPassword(db.data, userId, request.body as { currentPassword: string; newPassword: string })
     if (!result) return reply.code(404).send({ error: 'Account not found' })
     if (result === 'incorrect_current_password') return reply.code(400).send({ error: 'Current password is incorrect' })
+    if (result === 'invalid_password') return reply.code(400).send({ error: 'Invalid new password' })
     await db.write()
     return result
   })

@@ -271,6 +271,7 @@ export const accountCenterMessages: AppMessageSchema = {
       cancelEdit: 'Annuler',
       save: 'Enregistrer',
       changePassword: 'Changer le mot de passe',
+      changeAvatar: 'Changer',
       viewTerms: 'Conditions',
       viewPrivacy: 'Confidentialite',
       exportData: 'Exporter mes donnees',

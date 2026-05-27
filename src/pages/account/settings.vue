@@ -12,10 +12,24 @@
           <!-- Account summary -->
           <view class="border border-semantic-border-default bg-semantic-surface-card px-7 py-7 shadow-panel">
             <view class="flex flex-wrap items-start gap-5">
-              <image
-                  :src="editing ? (accountDraft.avatarUrl || settings.account.avatarUrl || defaultAvatar) : (settings.account.avatarUrl || defaultAvatar)"
-                  class="h-[72px] w-[72px] shrink-0 rounded-full border border-semantic-border-soft object-cover"
-              />
+              <view
+                class="shrink-0"
+                :class="editing ? 'cursor-pointer' : ''"
+                @click="editing && chooseAndUploadAvatar()"
+              >
+                <view class="relative h-[72px] w-[72px]">
+                  <image
+                      :src="editing ? (accountDraft.avatarUrl || settings.account.avatarUrl || defaultAvatar) : (settings.account.avatarUrl || defaultAvatar)"
+                      class="h-[72px] w-[72px] rounded-full border border-semantic-border-soft object-cover"
+                  />
+                  <view
+                    v-if="editing"
+                    class="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 opacity-0 transition-opacity hover:opacity-100"
+                  >
+                    <text class="text-[11px] text-white">{{ t('settings.actions.changeAvatar') }}</text>
+                  </view>
+                </view>
+              </view>
 
               <view class="min-w-0 flex-1">
                 <view class="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -57,17 +71,7 @@
             </view>
 
             <view class="mt-6 grid gap-x-5 gap-y-3 border-t border-semantic-border-soft pt-6 md:grid-cols-2">
-              <view v-if="editing" class="px-3 py-3 md:col-span-2">
-                <view class="text-[12px] leading-5 text-semantic-text-muted">
-                  {{ t('settings.accountFields.avatarUrl') }}
-                </view>
-                <input
-                  v-model="accountDraft.avatarUrl"
-                  class="mt-1 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                />
-              </view>
-
-              <view class="px-3 py-3" :class="editing ? 'md:col-span-2' : ''">
+              <view class="px-3 py-3">
                 <view class="text-[12px] leading-5 text-semantic-text-muted">
                   {{ t('settings.accountFields.accountName') }}
                 </view>
@@ -196,13 +200,13 @@
                 <view v-else class="max-w-[400px] space-y-3">
                   <input v-model="passwordForm.current" type="password"
                     :placeholder="t('settings.passwordFields.current')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
                   <input v-model="passwordForm.new" type="password"
                     :placeholder="t('settings.passwordFields.newPassword')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
                   <input v-model="passwordForm.confirm" type="password"
                     :placeholder="t('settings.passwordFields.confirmNew')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6" />
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
                   <view v-if="passwordError" class="text-[13px] text-semantic-state-danger">{{ passwordError }}</view>
                   <view class="flex gap-2">
                     <view class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]" @click="cancelPasswordForm">
@@ -443,13 +447,14 @@ import { useAccountSettings } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { formatLocalizedDateTime } from '@/utils/locale-format'
 import { maskIdentifier } from '@/mappers/account-settings'
-import { changeAccountPassword } from '@/api/account'
 import { validatePassword } from '@/utils/validate'
 import { useAuthStore } from '@/stores/modules/auth'
 import type { AccountPreferenceCode } from '@/types/account/settings'
+import { openLoginPage } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { loading, error, settings, refresh, saveAccount, savePreferences } = useAccountSettings()
+const { t: globalT } = useI18n({ useScope: 'global' })
+const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword } = useAccountSettings()
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
@@ -485,7 +490,9 @@ function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
 }
 
 const securityAccountItems = computed(() => {
-  const real = (settings.value?.identities ?? []).map((item) => ({
+  const real = (settings.value?.identities ?? [])
+    .filter((item) => item.provider !== 'google')
+    .map((item) => ({
     id: item.id,
     providerLabel: t(`settings.provider.${item.provider}`),
     identifier: maskIdentifier(item.identifier, item.provider),
@@ -499,30 +506,21 @@ const securityAccountItems = computed(() => {
   return [...real, ...previews.filter((item) => !providers.has(item.providerLabel))]
 })
 
-const notificationItems = computed(() => mergePreviewItems(
-  buildPreferenceItems(['introduction_updates_enabled', 'event_reminders_enabled', 'service_announcements_enabled', 'marketing_emails_enabled']),
-  [
-    previewItem('introduction_updates_enabled', t('settings.preference.introduction_updates_enabled'), t('common.yes')),
-    previewItem('event_reminders_enabled', t('settings.preference.event_reminders_enabled'), t('common.yes')),
-    previewItem('service_announcements_enabled', t('settings.preference.service_announcements_enabled'), t('common.yes')),
-    previewItem('marketing_emails_enabled', t('settings.preference.marketing_emails_enabled'), t('common.no')),
-  ],
-))
+const notificationItems = computed(() => buildPreferenceItems([
+  'introduction_updates_enabled',
+  'event_reminders_enabled',
+  'service_announcements_enabled',
+  'marketing_emails_enabled',
+]))
 
-const servicePreferenceItems = computed(() => mergePreviewItems(
-  buildPreferenceItems(['preferred_city', 'preferred_contact_channel', 'advisor_contact_enabled', 'family_assist_enabled']),
-  [
-    previewItem('preferred_city', t('settings.preference.preferred_city'), 'Paris'),
-    previewItem('preferred_contact_channel', t('settings.preference.preferred_contact_channel'), t('settings.contactChannel.email')),
-    previewItem('advisor_contact_enabled', t('settings.preference.advisor_contact_enabled'), t('common.yes')),
-    previewItem('family_assist_enabled', t('settings.preference.family_assist_enabled'), t('common.yes')),
-  ],
-))
+const servicePreferenceItems = computed(() => buildPreferenceItems([
+  'preferred_city',
+  'preferred_contact_channel',
+  'advisor_contact_enabled',
+  'family_assist_enabled',
+]))
 
-const privacyItems = computed(() => mergePreviewItems(
-  buildPreferenceItems(['analytics_consent_enabled']),
-  [previewItem('analytics_consent_enabled', t('settings.preference.analytics_consent_enabled'), t('common.no'))],
-))
+const privacyItems = computed(() => buildPreferenceItems(['analytics_consent_enabled']))
 
 const agreementDialog = ref<'terms' | 'privacy' | null>(null)
 const booleanOptions = computed(() => [
@@ -558,6 +556,26 @@ function startEditing() {
   editing.value = true
 }
 
+async function chooseAndUploadAvatar() {
+  const path = await new Promise<string | null>((resolve) => {
+    uni.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (result) => resolve(result.tempFilePaths[0] ?? null),
+      fail: () => resolve(null),
+    })
+  })
+  if (!path) return
+
+  try {
+    const url = await uploadAvatar(path)
+    accountDraft.value.avatarUrl = url
+  } catch {
+    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+  }
+}
+
 function cancelEditing() {
   editing.value = false
 }
@@ -568,15 +586,6 @@ function openAgreementDialog(kind: 'terms' | 'privacy') {
 
 function closeAgreementDialog() {
   agreementDialog.value = null
-}
-
-function previewItem(code: string, label: string, displayValue: string) {
-  return { code, label, displayValue }
-}
-
-function mergePreviewItems<T extends { code: string }>(items: T[], previews: T[]) {
-  const codes = new Set(items.map((item) => item.code))
-  return [...items, ...previews.filter((item) => !codes.has(item.code))]
 }
 
 function readPreference(code: string) {
@@ -632,7 +641,6 @@ async function confirmPasswordChange() {
 
   const pwErrKey = validatePassword(passwordForm.value.new)
   if (pwErrKey) {
-    const { t: globalT } = useI18n({ useScope: 'global' })
     passwordError.value = globalT(pwErrKey)
     return
   }
@@ -644,7 +652,7 @@ async function confirmPasswordChange() {
 
   changingPassword.value = true
   try {
-    const result = await changeAccountPassword({
+    const result = await changePassword({
       currentPassword: passwordForm.value.current,
       newPassword: passwordForm.value.new,
     })
@@ -652,7 +660,7 @@ async function confirmPasswordChange() {
       uni.showToast({ title: t('settings.toasts.passwordChanged'), icon: 'success' })
       const authStore = useAuthStore()
       authStore.logout()
-      uni.redirectTo({ url: '/pages/auth/login' })
+      openLoginPage()
     } else {
       passwordError.value = t('settings.validation.incorrectPassword')
     }

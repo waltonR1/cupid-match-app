@@ -1504,8 +1504,8 @@ POST /api/account/profiles/:profileId/archive
 
 - `/pages/account/settings`
   - 只维护账户级信息和偏好。
-  - 本阶段支持更新 `accountName`、`avatarUrl` 与 `user_preferences`。
-  - `preferredLocale` 继续由语言链路维护，不在 settings 里提供手动写入口。
+  - 本阶段支持更新 `accountName`、`avatarUrl`、`preferredLocale` 与 `user_preferences`。
+  - `preferredLocale` 是账户默认语言偏好；顶部语言切换仍只控制当前浏览会话，不因为保存设置而强制切换当前页面语言。
 
 - `/pages/account/membership`
   - 展示当前套餐、额度和下一可升级套餐。
@@ -1564,8 +1564,8 @@ preferences：
 
 account me：
 
-- 本阶段只允许更新 `accountName` 和 `avatarUrl`。
-- `preferredLocale` 由语言切换链路维护，不在 settings form 里手动提交。
+- 本阶段允许更新 `accountName`、`avatarUrl` 和 `preferredLocale`。
+- `preferredLocale` 作为账户默认语言写入；当前页面语言仍由顶部语言切换链路维护。
 - 不通过该接口修改 `status` 或 auth identity。
 
 membership：

@@ -300,7 +300,7 @@ export const accountCenterMessages: AppMessageSchema = {
       analytics_consent_enabled: '分析授权',
     },
     contactChannel: { email: '邮箱', phone: '手机', wechat: '微信' },
-    actions: { upgrade: '升级', edit: '编辑设置', cancelEdit: '取消编辑', save: '保存设置', viewTerms: '服务条款', viewPrivacy: '隐私说明', exportData: '导出我的数据', deactivateAccount: '停用账户', changePassword: '修改密码' },
+    actions: { upgrade: '升级', edit: '编辑设置', cancelEdit: '取消编辑', save: '保存设置', viewTerms: '服务条款', viewPrivacy: '隐私说明', exportData: '导出我的数据', deactivateAccount: '停用账户', changePassword: '修改密码', changeAvatar: '更换' },
     actionHints: {
       exportData: '申请导出平台保存的账户与资料数据。',
       deactivateAccount: '通过受控流程暂停账户访问与对外曝光。',

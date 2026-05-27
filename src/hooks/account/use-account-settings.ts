@@ -1,12 +1,15 @@
 import { ref } from 'vue'
 import {
+  changeAccountPassword,
   getAccountSettings,
   updateAccountMe,
   updateAccountPreferences,
+  type AccountPasswordChangePayload,
   type AccountPreferenceUpdatePayload,
   type AccountSettingsDTO,
   type AccountMeUpdatePayload,
 } from '@/api/account'
+import { uploadImage } from '@/api/upload/upload'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { useAuthStore } from '@/stores/modules/auth'
 
@@ -27,8 +30,15 @@ export function useAccountSettings() {
 
     const authStore = useAuthStore()
     if (authStore.user) {
-      if (payload.accountName !== undefined) authStore.user.accountName = payload.accountName
-      if (payload.avatarUrl !== undefined) authStore.user.avatarUrl = payload.avatarUrl
+      const preferredLocale = isAuthLocale(data.user.preferredLocale)
+        ? data.user.preferredLocale
+        : authStore.user.preferredLocale
+      authStore.user = {
+        ...authStore.user,
+        accountName: data.user.accountName,
+        avatarUrl: data.user.avatarUrl,
+        preferredLocale,
+      }
     }
     await load()
     return true
@@ -41,6 +51,15 @@ export function useAccountSettings() {
     return true
   }
 
+  async function uploadAvatar(filePath: string) {
+    return uploadImage(filePath)
+  }
+
+  async function changePassword(payload: AccountPasswordChangePayload) {
+    const data = await latest.run(() => changeAccountPassword(payload))
+    return data ?? null
+  }
+
   return {
     loading: latest.loading,
     error: latest.error,
@@ -48,5 +67,11 @@ export function useAccountSettings() {
     refresh: load,
     saveAccount,
     savePreferences,
+    uploadAvatar,
+    changePassword,
   }
+}
+
+function isAuthLocale(value: string): value is 'zh' | 'fr' | 'en' {
+  return value === 'zh' || value === 'fr' || value === 'en'
 }

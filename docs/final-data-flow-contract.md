@@ -747,8 +747,8 @@ Rules:
 
 Rules:
 
-- Only `accountName` and `avatarUrl` are writable in this phase.
-- `preferredLocale` remains owned by the language flow.
+- 本阶段允许写入 `accountName`、`avatarUrl` 和 `preferredLocale`。
+- `preferredLocale` 是账户默认语言偏好。顶部语言切换仍负责当前浏览会话语言；保存 `preferredLocale` 不应强制当前页面立即切换语言。
 - `status` and auth identities are not mutated here.
 
 ### Membership upgrade
