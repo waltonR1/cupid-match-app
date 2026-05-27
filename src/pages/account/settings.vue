@@ -531,7 +531,7 @@ const booleanOptions = computed(() => [
 ])
 
 watch(settings, (value) => {
-  if (!value) return
+  if (!value || saving.value) return
   accountDraft.value = {
     accountName: value.account.accountName,
     avatarUrl: value.account.avatarUrl,
@@ -672,20 +672,20 @@ async function saveSettings() {
   }
 
   saving.value = true
+  const accountPayload = {
+    accountName: accountDraft.value.accountName.trim(),
+    avatarUrl: accountDraft.value.avatarUrl.trim(),
+    preferredLocale: accountDraft.value.preferredLocale,
+  }
+  const prefsPayload = toPreferencePayload(preferenceDraft.value)
   try {
-    const accountOk = await saveAccount({
-      accountName: accountDraft.value.accountName.trim(),
-      avatarUrl: accountDraft.value.avatarUrl.trim(),
-      preferredLocale: accountDraft.value.preferredLocale,
-    })
+    const accountOk = await saveAccount(accountPayload)
     if (!accountOk) {
       uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
       return
     }
 
-    const prefsOk = await savePreferences({
-      preferences: toPreferencePayload(preferenceDraft.value),
-    })
+    const prefsOk = await savePreferences({ preferences: prefsPayload })
     if (!prefsOk) {
       uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
       return
