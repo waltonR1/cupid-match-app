@@ -190,6 +190,13 @@
       }
     },
     {
+      "path": "pages/debug/inbox",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "Inbox Debug"
+      }
+    },
+    {
       "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",

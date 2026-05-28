@@ -256,18 +256,6 @@ interface FavoriteProfileSummaryDTO {
   createdAt: string
 }
 
-interface AccountPrivateIntroductionRoomDTO {
-  roomId: string
-  requestId: string
-  targetProfileId: string
-  targetDisplayName: string
-  targetAvatarUrl: string
-  status: string
-  openedAt: string
-  closedAt?: string
-  lastMessage?: string
-}
-
 type AccountProfileMutablePayload = {
   profileName: string
   gender: ProfileRecord['gender']
@@ -1033,6 +1021,35 @@ export function getAccountMembership(data: Database, userId: string): {
   }
 }
 
+// -- Private Introduction Contact -- //
+
+export function getIntroductionContact(data: Database, userId: string, requestId: string) {
+  const request = data.private_introduction_requests.find((r) => r.id === requestId)
+  if (!request) return { available: false as const, reason: 'not_found' as const }
+  if (request.requesterUserId !== userId) return { available: false as const, reason: 'forbidden' as const }
+  if (request.status !== 'accepted') return { available: false as const, reason: 'not_accepted' as const }
+
+  const contacts = data.profile_contacts.find((c) => c.profileId === request.targetProfileId)
+  if (!contacts) return { available: false as const, reason: 'contact_unavailable' as const }
+  if (contacts.visibility === 'owner_only' || contacts.visibility === 'disabled') {
+    return { available: false as const, reason: 'visibility_restricted' as const }
+  }
+
+  return {
+    available: true as const,
+    phone: maskContactValue(contacts.phone),
+    email: maskContactValue(contacts.email),
+    wechat: maskContactValue(contacts.wechat),
+    preferredChannel: contacts.preferredChannel ?? null,
+    visibility: contacts.visibility,
+  }
+}
+
+function maskContactValue(value?: string) {
+  if (!value) return null
+  return value
+}
+
 // -- Events -- //
 
 export function getAccountEvents(data: Database, userId: string): AccountEventRegistrationDTO[] {
@@ -1083,32 +1100,6 @@ export function getAccountIntroductions(data: Database, userId: string): Account
 }
 
 // -- Rooms -- //
-
-export function getAccountRooms(data: Database, userId: string): AccountPrivateIntroductionRoomDTO[] {
-  const locale = resolveUserLocale(data, userId)
-  return data.private_introduction_rooms
-    .filter((r) => r.requesterUserId === userId)
-    .sort((a, b) => b.openedAt.localeCompare(a.openedAt))
-    .map((r) => {
-      const targetProfile = data.profiles.find((p) => p.id === r.targetProfileId)
-      const view = targetProfile ? buildProfileView(data, targetProfile) : null
-      const lastMsg = data.private_introduction_room_messages
-        .filter((m) => m.roomId === r.id)
-        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
-
-      return {
-        roomId: r.id,
-        requestId: r.requestId,
-        targetProfileId: r.targetProfileId,
-        targetDisplayName: view?.displayName ?? '',
-        targetAvatarUrl: view?.avatarUrl ?? '',
-        status: r.status,
-        openedAt: r.openedAt,
-        closedAt: r.closedAt,
-        lastMessage: lastMsg?.body?.slice(0, 100),
-      }
-    })
-}
 
 // -- Settings -- //
 
@@ -1197,8 +1188,6 @@ function toManagedProfileSummary(
 function hasActiveProfileFlow(data: Database, profileId: string): boolean {
   return data.private_introduction_requests.some((request) =>
     request.targetProfileId === profileId && (request.status === 'requested' || request.status === 'accepted'),
-  ) || data.private_introduction_rooms.some((room) =>
-    room.targetProfileId === profileId && (room.status === 'open' || room.status === 'paused'),
   )
 }
 

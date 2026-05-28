@@ -161,12 +161,45 @@
                 </view>
 
                 <!-- 时间信息 -->
-                <view class="mt-4 grid gap-3 border-t border-semantic-border-soft pt-4 text-[13px] leading-6 text-semantic-text-secondary sm:grid-cols-2">
+                <view class="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-semantic-border-soft pt-4 text-[13px] leading-6">
                   <view v-for="field in introDateFields" :key="field.key">
-                    <view v-if="i[field.key]">
-                      <view class="text-semantic-text-card-label">{{ t(field.labelKey) }}</view>
+                    <view v-if="i[field.key]" class="flex gap-2">
+                      <text class="text-semantic-text-card-label">{{ t(field.labelKey) }}</text>
+                      <text class="text-semantic-text-primary">{{ formatIntroductionDate(i[field.key]) }}</text>
+                    </view>
+                  </view>
+                </view>
 
-                      <view class="mt-1 text-semantic-text-primary">{{ formatIntroductionDate(i[field.key]) }}</view>
+                <!-- 联系方式（仅 accepted） -->
+                <view v-if="i.status === 'accepted'" class="mt-4 border-t border-semantic-border-soft pt-4">
+                  <view
+                    v-if="contactMap[i.requestId] === undefined"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                    :class="contactLoading[i.requestId] ? 'pointer-events-none opacity-50' : ''"
+                    @click="revealContact(i.requestId)"
+                  >
+                    {{ contactLoading[i.requestId] ? t('relationship.labels.loadingContact') : t('relationship.actions.viewContact') }}
+                  </view>
+                  <view v-else>
+                    <view v-if="!contactMap[i.requestId]?.available" class="text-[13px] text-semantic-text-muted">
+                      {{ t(`relationship.contactReason.${contactReason(contactMap[i.requestId])}`) }}
+                    </view>
+                    <view v-else class="grid gap-1 text-[13px]">
+                      <view v-if="contactField(contactMap[i.requestId], 'phone')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.phone') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'phone') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'phone'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
+                      <view v-if="contactField(contactMap[i.requestId], 'email')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.email') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'email') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'email'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
+                      <view v-if="contactField(contactMap[i.requestId], 'wechat')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.wechat') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'wechat') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'wechat'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
                     </view>
                   </view>
                 </view>
@@ -216,12 +249,45 @@
                 </view>
 
                 <!-- 时间字段 -->
-                <view class="mt-4 grid gap-3 border-t border-semantic-border-soft pt-4 text-[13px] leading-6 text-semantic-text-secondary sm:grid-cols-2">
+                <view class="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-semantic-border-soft pt-4 text-[13px] leading-6">
                   <view v-for="field in introDateFields" :key="field.key">
-                    <view v-if="i[field.key]">
-                      <view class="text-semantic-text-card-label">{{ t(field.labelKey) }}</view>
+                    <view v-if="i[field.key]" class="flex gap-2">
+                      <text class="text-semantic-text-card-label">{{ t(field.labelKey) }}</text>
+                      <text class="text-semantic-text-primary">{{ formatIntroductionDate(i[field.key]) }}</text>
+                    </view>
+                  </view>
+                </view>
 
-                      <view class="mt-1 text-semantic-text-primary">{{ formatIntroductionDate(i[field.key]) }}</view>
+                <!-- 联系方式（仅 accepted） -->
+                <view v-if="i.status === 'accepted'" class="mt-4 border-t border-semantic-border-soft pt-4">
+                  <view
+                    v-if="contactMap[i.requestId] === undefined"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                    :class="contactLoading[i.requestId] ? 'pointer-events-none opacity-50' : ''"
+                    @click="revealContact(i.requestId)"
+                  >
+                    {{ contactLoading[i.requestId] ? t('relationship.labels.loadingContact') : t('relationship.actions.viewContact') }}
+                  </view>
+                  <view v-else>
+                    <view v-if="!contactMap[i.requestId]?.available" class="text-[13px] text-semantic-text-muted">
+                      {{ t(`relationship.contactReason.${contactReason(contactMap[i.requestId])}`) }}
+                    </view>
+                    <view v-else class="grid gap-1 text-[13px]">
+                      <view v-if="contactField(contactMap[i.requestId], 'phone')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.phone') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'phone') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'phone'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
+                      <view v-if="contactField(contactMap[i.requestId], 'email')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.email') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'email') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'email'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
+                      <view v-if="contactField(contactMap[i.requestId], 'wechat')" class="flex gap-2">
+                        <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.wechat') }}</text>
+                        <text class="text-semantic-text-primary">{{ contactField(contactMap[i.requestId], 'wechat') }}</text>
+                        <text v-if="contactField(contactMap[i.requestId], 'preferredChannel') === 'wechat'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
+                      </view>
                     </view>
                   </view>
                 </view>
@@ -262,7 +328,15 @@ import { formatLocalizedAge } from '@/utils/profile-format'
 const { t, locale } = usePageI18n('accountCenter')
 
 // 关系数据
-const { favorites, introductions, refresh } = useAccountRelationship()
+const { favorites, introductions, contactMap, contactLoading, refresh, revealContact } = useAccountRelationship()
+
+function contactReason(item: unknown) {
+  return (item as { reason?: string })?.reason ?? ''
+}
+
+function contactField(item: unknown, field: string) {
+  return (item as Record<string, unknown>)?.[field] ?? null
+}
 
 // 语言切换时重新加载数据
 watch(locale, () => {void refresh()})

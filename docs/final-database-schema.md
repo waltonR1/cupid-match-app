@@ -120,7 +120,7 @@ type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 type InboxThreadType = 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
 type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
-type InboxMessageType = 'text' | 'status_update' | 'action_prompt'
+type InboxMessageType = 'text' | 'system_notice' | 'status_update' | 'action_prompt'
 type StaffRole = 'admin' | 'operator' | 'reviewer' | 'event_manager' | 'support'
 type ActorType = 'user' | 'staff' | 'system'
 type OrderStatus = 'pending' | 'paid' | 'cancelled' | 'refunded' | 'failed'
@@ -738,7 +738,9 @@ interface InboxMessageRecord {
   senderType: 'system' | 'staff' | 'user'
   senderUserId?: string
   messageType: InboxMessageType
-  body: LocalizedText
+  body: string
+  templateCode?: string
+  templateLocale?: 'zh' | 'fr' | 'en'
   actionType?: string
   actionPayload?: unknown
   createdAt: string

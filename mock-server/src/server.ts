@@ -6,6 +6,7 @@ import {registerAccountRoutes} from './routes/account.routes.js'
 import {registerAuthRoutes} from './routes/auth.routes.js'
 import {registerDebugRoutes} from './routes/debug.routes.js'
 import {registerEventRoutes} from './routes/events.routes.js'
+import {registerInboxRoutes} from './routes/inbox.routes.js'
 import {registerLegalRoutes} from './routes/legal.routes.js'
 import {registerPingRoutes} from './routes/ping.routes.js'
 import {registerUploadRoutes} from './routes/upload.routes.js'
@@ -42,6 +43,7 @@ export async function createServer() {
     await app.register(registerAccountRoutes, {prefix: config.apiPrefix})
     await app.register(registerLegalRoutes, {prefix: config.apiPrefix})
     await app.register(registerDebugRoutes, {prefix: config.apiPrefix})
+    await app.register(registerInboxRoutes, {prefix: config.apiPrefix})
     await app.register(registerUploadRoutes)
 
     return app

@@ -1,11 +1,23 @@
 ﻿# Final API Contract
 
-鏈枃瀹氫箟鏈€缁堢洰鏍囦笅鍓嶇 API 灞傚簲闈㈠鐨?endpoint銆乹uery銆乸ayload 鍜?DTO 瀛楁銆傚畠涓嶆弿杩版暟鎹簱瀛樺偍缁嗚妭锛屼篃涓嶆弿杩伴〉闈㈠浣曟帓鐗堛€?
-閰嶅鏂囨。锛?
-- `docs/final-database-schema.md`锛氭渶缁堟暟鎹簱瀛楁銆?- `docs/final-page-fields.md`锛氭渶缁堥〉闈?ViewModel 瀛楁銆?- `docs/final-data-flow-contract.md`锛氭暟鎹簱銆丄PI銆乵apper銆侀〉闈箣闂寸殑鏁版嵁娴佸姩銆?- `docs/implementation-roadmap.md`锛氬垎闃舵鎵ц椤哄簭銆?
+本文定义最终目标下前端 API 层应面对的 endpoint、query、payload 和 DTO 字段。它不描述数据库存储细节，也不描述页面如何排版。
+配套文档：
+- `docs/final-database-schema.md`：最终数据库字段。
+- `docs/final-page-fields.md`：最终页面 ViewModel 字段。
+- `docs/final-data-flow-contract.md`：数据库、API、mapper、页面之间的数据流动。
+- `docs/implementation-roadmap.md`：分阶段执行顺序。
+
 ## Global Rules
 
-- API 鏂囦欢鎷ユ湁 HTTP 杈圭晫鍜?DTO 绫诲瀷锛岄〉闈笉鐩存帴璋冪敤 HTTP銆?- API 鍒板墠绔殑涓氬姟瀛楁灏介噺鎵佸钩銆?- 鍚庣涓嶈繑鍥?i18n key锛涜繑鍥?code 鎴栧凡鎸?locale 鏈湴鍖栧悗鐨勬枃妗堛€?- DTO 鍙互鍖呭惈娲剧敓瀛楁锛屼緥濡?`displayName`銆乣avatarUrl`銆乣age`銆乣memberOnly`銆乣registeredCount`銆?- DTO 涓嶈繑鍥炴暟鎹簱 Record銆?- DTO 涓嶈繑鍥?profile 鑱旂郴鏂瑰紡鍊硷紱鑱旂郴鏂瑰紡鍙厑璁搁€氳繃 private introduction / inbox flow 鐨勭嫭绔嬫帴鍙ｅ紑鏀俱€?- `X-User-Id` 鍙綔涓?mock request context锛涙寮忛壌鏉?token 绛栫暐鍚庣画鍗曠嫭瀹氫箟銆?- 鎵€鏈夊垪琛ㄦ帴鍙ｇ粺涓€杩斿洖 `items + pagination + facets?`銆?- 鎵€鏈夊啓鎿嶄綔杩斿洖鍙樻洿鍚庣殑棰嗗煙鐘舵€?DTO锛屼笉瑕佹眰鍓嶇鑷鎷肩姸鎬併€?
+- API 文档拥有 HTTP 边界和 DTO 类型，页面不直接调用 HTTP。
+- API 到前端的业务字段尽量扁平。
+- 后端不返回 i18n key；返回 code 或已按 locale 本地化后的文案。
+- DTO 可以包含派生字段，例如 `displayName`、`avatarUrl`、`age`、`memberOnly`、`registeredCount`。
+- DTO 不返回数据库 Record。
+- DTO 不返回 profile 联系方式值；联系方式只允许通过 private introduction / inbox flow 的独立接口开放。
+- `X-User-Id` 只作为 mock request context；正式鉴权 token 策略后续单独定义。
+- 所有列表接口统一返回 `items + pagination + facets?`。
+- 所有写操作返回变更后的领域状态 DTO，不要求前端自行拼状态。
 ## Common Types
 
 ```ts
@@ -79,47 +91,46 @@ interface ApiErrorDTO {
 | Profiles | `GET` | `/api/profiles/family` | family 璧勬枡鐩綍銆?|
 | Profiles | `GET` | `/api/profiles/self/:id` | self 璧勬枡璇︽儏銆?|
 | Profiles | `GET` | `/api/profiles/family/:id` | family 璧勬枡璇︽儏銆?|
-| Profiles | `POST` | `/api/profiles/self` | 鍒涘缓 self profile銆?|
-| Profiles | `POST` | `/api/profiles/family` | 鍒涘缓 family profile銆?|
-| Profiles | `POST` | `/api/profiles/self/:id` | 鏇存柊 self profile銆?|
-| Profiles | `POST` | `/api/profiles/family/:id` | 鏇存柊 family profile銆?|
-| Profiles | `POST` | `/api/profiles/self/:id/photos` | 鏂板 self profile 鐓х墖銆?|
-| Profiles | `POST` | `/api/profiles/family/:id/photos` | 鏂板 family profile 鐓х墖銆?|
-| Profiles | `POST` | `/api/profiles/self/:id/photos/:photoId` | 鏇存柊 self profile 鐓х墖銆?|
-| Profiles | `POST` | `/api/profiles/family/:id/photos/:photoId` | 鏇存柊 family profile 鐓х墖銆?|
-| Favorites | `POST` | `/api/favorites/:profileId` | 鏀惰棌 profile銆?|
-| Favorites | `DELETE` | `/api/favorites/:profileId` | 鍙栨秷鏀惰棌銆?|
-| Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 浠?self detail 鐢宠绉佷汉浠嬬粛銆?|
-| Private Introductions | `POST` | `/api/profiles/family/:id/private-introduction` | 浠?family detail 鐢宠绉佷汉浠嬬粛銆?|
-| Account | `GET` | `/api/account/private-introductions/:requestId/contact` | accepted 绉佷汉浠嬬粛鍚庣殑鑱旂郴鏂瑰紡寮€鏀俱€?|
-| Inbox | `GET` | `/api/inbox/threads` | 娑堟伅涓績绾跨▼鍒楄〃銆?|
-| Inbox | `GET` | `/api/inbox/threads/:id` | 鏌ョ湅娑堟伅涓績绾跨▼璇︽儏銆?|
-| Inbox | `POST` | `/api/inbox/threads/:id/messages` | 鍦ㄥ厑璁哥殑鍙楁帶绾跨▼涓彂閫佹秷鎭€?|
-| Inbox | `POST` | `/api/inbox/threads/:id/read` | 鏍囪绾跨▼宸茶銆?|
-| Events | `GET` | `/api/events` | 娲诲姩鐩綍銆?|
-| Events | `GET` | `/api/events/:id` | 娲诲姩璇︽儏銆?|
-| Events | `POST` | `/api/events/:id/register` | 鎶ュ悕娲诲姩銆?|
-| Events | `POST` | `/api/events/:id/cancel` | 鍙栨秷娲诲姩鎶ュ悕銆?|
-| Account | `GET` | `/api/account/me` | 褰撳墠璐︽埛韬唤銆?|
-| Account | `GET` | `/api/account/dashboard` | 璐︽埛棣栭〉闃舵寮曞涓庡姩鎬佹憳瑕併€?|
-| Account | `GET` | `/api/account/profiles` | 鐢ㄦ埛绠＄悊鐨?profiles 涓庤璇佹憳瑕併€?|
-| Account | `GET` | `/api/account/profiles/:profileId` | 鍗曚唤鍙鐞?profile 鐨勫畬鏁磋鎯呫€佽璇佸拰瀛楁鍙鎬с€?|
-| Account | `GET` | `/api/account/membership` | 褰撳墠浼氬憳銆佹潈鐩婂拰鍙崌绾у椁愩€?|
-| Account | `GET` | `/api/account/favorites` | 鏀惰棌鍒楄〃銆?|
-| Account | `GET` | `/api/account/events` | 娲诲姩鎶ュ悕銆?|
-| Account | `GET` | `/api/account/private-introductions` | 绉佷汉浠嬬粛鐢宠銆?|
+| Profiles | `POST` | `/api/profiles/self` | 创建 self profile。 |
+| Profiles | `POST` | `/api/profiles/family` | 创建 family profile。 |
+| Profiles | `POST` | `/api/profiles/self/:id` | 更新 self profile。 |
+| Profiles | `POST` | `/api/profiles/family/:id` | 更新 family profile。 |
+| Profiles | `POST` | `/api/profiles/self/:id/photos` | 新增 self profile 照片。 |
+| Profiles | `POST` | `/api/profiles/family/:id/photos` | 新增 family profile 照片。 |
+| Profiles | `POST` | `/api/profiles/self/:id/photos/:photoId` | 更新 self profile 照片。 |
+| Profiles | `POST` | `/api/profiles/family/:id/photos/:photoId` | 更新 family profile 照片。 |
+| Favorites | `POST` | `/api/favorites/:profileId` | 收藏 profile。 |
+| Favorites | `DELETE` | `/api/favorites/:profileId` | 取消收藏。 |
+| Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 从 self detail 申请私人介绍。 |
+| Private Introductions | `POST` | `/api/profiles/family/:id/private-introduction` | 从 family detail 申请私人介绍。 |
+| Inbox | `GET` | `/api/inbox/threads` | 消息中心线程列表。 |
+| Inbox | `GET` | `/api/inbox/threads/:id` | 查看消息中心线程详情。 |
+| Inbox | `POST` | `/api/inbox/threads/:id/messages` | 在允许的受控线程中发送消息。 |
+| Inbox | `POST` | `/api/inbox/threads/:id/read` | 标记线程已读。 |
+| Events | `GET` | `/api/events` | 活动目录。 |
+| Events | `GET` | `/api/events/:id` | 活动详情。 |
+| Events | `POST` | `/api/events/:id/register` | 报名活动。 |
+| Events | `POST` | `/api/events/:id/cancel` | 取消活动报名。 |
+| Account | `GET` | `/api/account/me` | 当前账户身份。 |
+| Account | `GET` | `/api/account/dashboard` | 账户首页阶段引导与动态摘要。 |
+| Account | `GET` | `/api/account/profiles` | 用户管理的 profiles 与认证摘要。 |
+| Account | `GET` | `/api/account/profiles/:profileId` | 单份可管理 profile 的完整详情、认证和字段可见性。 |
+| Account | `GET` | `/api/account/membership` | 当前会员、权益和可升级套餐。 |
+| Account | `GET` | `/api/account/favorites` | 收藏列表。 |
+| Account | `GET` | `/api/account/events` | 活动报名。 |
+| Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introductions/:requestId/contact` | accepted 私人介绍后的联系方式开放。 |
-| Account | `GET` | `/api/account/inbox-summary` | 璐︽埛鍏ュ彛浣跨敤鐨勬秷鎭腑蹇冩憳瑕併€?|
-| Account | `GET` | `/api/account/settings` | 璐︽埛鍋忓ソ璁剧疆銆?|
-| Account | `POST` | `/api/account/profiles/save` | 鏂板缓鎴栦繚瀛樺彲绠＄悊 profile 鐨勪富浣撳瓧娈点€佸綊灞炲叧绯汇€佸彈鎺ц仈绯绘柟寮忓拰鐓х墖鑽夌銆?|
-| Account | `POST` | `/api/account/profiles/:profileId/archive` | 灏嗘弧瓒宠鍒欑殑鍙鐞?profile 褰掓。閫€鍑轰笟鍔°€?|
-| Account | `POST` | `/api/account/profiles/:profileId/privacy-preferences` | 鏇存柊鍙鐞?profile 鐨勫崐鏁忔劅瀛楁闅愯棌鍋忓ソ銆?|
-| Account | `POST` | `/api/account/me` | 鏇存柊璐︽埛鍩虹淇℃伅銆?|
-| Account | `POST` | `/api/account/settings/preferences` | 鏇存柊璐︽埛鍋忓ソ銆?|
-| Account | `POST` | `/api/account/membership/upgrade` | 鍙戣捣浼氬憳鍗囩骇銆?|
-| Debug | `GET` | `/api/debug/private-introductions` | 璋冭瘯绉佷汉浠嬬粛鐢宠銆?|
-| Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 璋冭瘯鎺ュ彈鐢宠銆?|
-| Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 璋冭瘯鎷掔粷鐢宠銆?|
+| Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要。 |
+| Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
+| Account | `POST` | `/api/account/profiles/save` | 新建或保存可管理 profile 的主体字段、归属关系、受控联系方式和照片草稿。 |
+| Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
+| Account | `POST` | `/api/account/profiles/:profileId/privacy-preferences` | 更新可管理 profile 的半敏感字段隐藏偏好。 |
+| Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
+| Account | `POST` | `/api/account/settings/preferences` | 更新账户偏好。 |
+| Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
+| Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
+| Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
+| Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 调试拒绝申请。 |
 
 ## Auth API
 
@@ -573,8 +584,10 @@ interface InboxMessageDTO {
   messageId: string
   senderType: 'system' | 'staff' | 'user'
   senderUserId?: string
-  messageType: 'text' | 'status_update' | 'action_prompt'
+  messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt'
   body: string
+  templateCode?: string
+  templateLocale?: 'zh' | 'fr' | 'en'
   actionType?: string
   actionPayload?: unknown
   createdAt: string

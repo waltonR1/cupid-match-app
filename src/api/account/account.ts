@@ -2,6 +2,8 @@ import { requestJson } from '@/api/shared/http'
 import type {
   AccountDashboardDTO,
   AccountEventRegistrationDTO,
+  IntroductionContactDTO,
+  IntroductionContactUnavailableDTO,
   AccountIntroductionSummaryDTO,
   AccountMembershipDTO,
   MembershipPlanDTO,
@@ -18,7 +20,6 @@ import type {
   AccountMembershipUpgradeResultDTO,
   AccountEntitlementBalanceDTO,
   AccountMeDTO,
-  AccountPrivateIntroductionRoomDTO,
   AccountProfilesDTO,
   AccountSettingsDTO,
   FavoriteProfileSummaryDTO,
@@ -81,9 +82,10 @@ export function getAccountIntroductions(): Promise<AccountIntroductionSummaryDTO
   return requestJson<AccountIntroductionSummaryDTO[]>('/account/private-introductions')
 }
 
-export function getAccountRooms(): Promise<AccountPrivateIntroductionRoomDTO[]> {
-  return requestJson<AccountPrivateIntroductionRoomDTO[]>('/account/private-introduction-rooms')
+export function getIntroductionContact(requestId: string): Promise<IntroductionContactDTO | IntroductionContactUnavailableDTO> {
+  return requestJson<IntroductionContactDTO | IntroductionContactUnavailableDTO>(`/account/private-introductions/${requestId}/contact`)
 }
+
 
 export function getAccountSettings(): Promise<AccountSettingsDTO> {
   return requestJson<AccountSettingsDTO>('/account/settings')

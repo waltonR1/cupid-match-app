@@ -5,6 +5,7 @@ import {
   archiveAccountProfile,
   changeAccountPassword,
   getAccountDashboard,
+  getIntroductionContact,
   getAccountEvents,
   getAccountFavorites,
   getAccountIntroductions,
@@ -12,7 +13,6 @@ import {
   getAccountMembership,
   getAccountProfileDetail,
   getAccountProfiles,
-  getAccountRooms,
   getAccountSettings,
   saveAccountProfileDetail,
   updateAccountMe,
@@ -102,7 +102,13 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.get('/account/events', async (request, reply) => readCollection(request, reply, getAccountEvents))
   app.get('/account/favorites', async (request, reply) => readCollection(request, reply, getAccountFavorites))
   app.get('/account/private-introductions', async (request, reply) => readCollection(request, reply, getAccountIntroductions))
-  app.get('/account/private-introduction-rooms', async (request, reply) => readCollection(request, reply, getAccountRooms))
+  app.get('/account/private-introductions/:requestId/contact', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+    const { requestId } = request.params as { requestId: string }
+    const result = getIntroductionContact(getDb().data, userId, requestId)
+    return result
+  })
   app.get('/account/settings', async (request, reply) => readAccount(request, reply, getAccountSettings))
   app.post('/account/settings/preferences', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
     updateAccountPreferences(db.data, userId, request.body as never)))

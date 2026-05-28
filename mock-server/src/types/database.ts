@@ -300,27 +300,40 @@ export interface StaffTaskRecord {
     updatedAt: string
 }
 
-/** 私人介绍 room */
-export interface PrivateIntroductionRoomRecord {
+/** Inbox 线程 */
+export interface InboxThreadRecord {
     id: string
-    requestId: string
-    requesterUserId: string
-    targetProfileId: string
-    status: 'open' | 'paused' | 'closed'
-    openedAt: string
-    closedAt?: string
-    advisorId?: string
+    userId: string
+    type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+    subjectType?: string
+    subjectId?: string
+    status: 'open' | 'closed' | 'archived'
     createdAt: string
     updatedAt: string
 }
 
-/** 私人介绍 room 消息 */
-export interface PrivateIntroductionRoomMessageRecord {
+/** Inbox 消息 */
+export interface InboxMessageRecord {
     id: string
-    roomId: string
-    senderType: 'user' | 'advisor' | 'system'
+    threadId: string
+    senderType: 'system' | 'staff' | 'user'
     senderUserId?: string
+    messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt'
     body: string
+    templateCode?: string
+    templateLocale?: 'zh' | 'fr' | 'en'
+    actionType?: string
+    actionPayload?: unknown
+    createdAt: string
+    updatedAt: string
+}
+
+/** Inbox 已读 */
+export interface InboxReadRecord {
+    id: string
+    threadId: string
+    userId: string
+    lastReadAt: string
     createdAt: string
     updatedAt: string
 }
@@ -343,8 +356,6 @@ export interface Database {
     user_entitlement_balances: UserEntitlementBalanceRecord[]
     user_preferences: UserPreferenceRecord[]
     staff_tasks: StaffTaskRecord[]
-    private_introduction_rooms: PrivateIntroductionRoomRecord[]
-    private_introduction_room_messages: PrivateIntroductionRoomMessageRecord[]
     legal_documents: LegalDocumentRecord[]
     legal_document_contents: LegalDocumentContentRecord[]
     user_agreement_acceptances: UserAgreementAcceptanceRecord[]
@@ -353,4 +364,7 @@ export interface Database {
     profile_ownerships: ProfileOwnershipRecord[]
     favorite_profiles: FavoriteProfileRecord[]
     private_introduction_requests: PrivateIntroductionRequestRecord[]
+    inbox_threads: InboxThreadRecord[]
+    inbox_messages: InboxMessageRecord[]
+    inbox_reads: InboxReadRecord[]
 }

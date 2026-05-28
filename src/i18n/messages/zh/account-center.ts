@@ -245,7 +245,12 @@ export const accountCenterMessages: AppMessageSchema = {
       expiresAt: '有效至',
       respondedAt: '回应时间',
       cooldownUntil: '冷静期至',
+      loadingContact: '读取中',
     },
+    actions: { viewContact: '查看联系方式' },
+    contactUnavailable: '联系方式暂不可用',
+    contactReason: { not_found: '未找到该申请', forbidden: '无权查看', not_accepted: '对方尚未接受申请', contact_unavailable: '对方未填写联系方式', visibility_restricted: '对方设置了联系方式不可见' },
+    preferredTag: '主要方式',
     empty: {
       title: '暂无记录',
       favorites: '你还没有收藏任何资料。',

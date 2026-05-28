@@ -12,50 +12,50 @@
           {{ t('title') }}
         </view>
         <view class="mt-3 max-w-[680px] text-[15px] leading-8 text-semantic-text-secondary">
-          {{ t('subtitle') }}
+          {{ t('placeholder') }}
         </view>
       </view>
 
-      <view class="mt-6 grid gap-4 md:grid-cols-2">
-        <view
-          v-for="item in sections"
-          :key="item.key"
-          class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel"
-        >
-          <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
-            {{ item.label }}
-          </view>
-          <view class="mt-4 text-[20px] font-semibold text-semantic-text-primary">
-            {{ item.title }}
-          </view>
-          <view class="mt-3 text-[14px] leading-7 text-semantic-text-secondary">
-            {{ item.description }}
+      <view class="mt-6 border border-semantic-border-default bg-semantic-surface-card shadow-panel">
+        <view class="border-b border-semantic-border-soft px-6 py-4">
+          <view class="text-[16px] font-semibold">{{ t('notifications') }}</view>
+        </view>
+
+        <view v-if="threads.length > 0" class="divide-y divide-semantic-border-soft">
+          <view
+            v-for="item in threads"
+            :key="item.id"
+            class="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-semantic-surface-soft"
+          >
+            <view
+              v-if="item.unread"
+              class="h-2 w-2 shrink-0 rounded-full bg-component-account-nav-current-border"
+            />
+            <view v-else class="w-2 shrink-0" />
+            <view class="min-w-0 flex-1">
+              <view class="text-[14px] text-semantic-text-primary">{{ item.lastMessage || t('empty.defaultMessage') }}</view>
+              <view class="mt-1 text-[12px] text-semantic-text-muted">{{ item.lastMessageAt }}</view>
+            </view>
           </view>
         </view>
+
+        <EmptyStatePanel
+          v-else
+          size="compact"
+          :title="t('empty.title')"
+          :description="t('empty.description')"
+        />
       </view>
     </view>
   </AppPageLayout>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
+import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import { useMessagesInbox } from '@/hooks/messages/use-messages-inbox'
 
 const { t } = usePageI18n('messages')
-
-const sections = computed(() => [
-  {
-    key: 'updates',
-    label: t('sections.updates.label'),
-    title: t('sections.updates.title'),
-    description: t('sections.updates.description'),
-  },
-  {
-    key: 'conversations',
-    label: t('sections.conversations.label'),
-    title: t('sections.conversations.title'),
-    description: t('sections.conversations.description'),
-  },
-])
+const { threads } = useMessagesInbox()
 </script>

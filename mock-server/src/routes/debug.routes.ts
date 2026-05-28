@@ -7,6 +7,10 @@ import {
     listPrivateIntroductionDebugRequests,
 } from '../services/private-introduction-debug.service.js'
 import {
+    listInboxDebugThreads,
+    sendInboxDebugNotification,
+} from '../services/inbox-debug.service.js'
+import {
     listEventRegistrationDebugItems,
     reviewEventRegistrationDebugItem,
     type EventRegistrationReviewStatus,
@@ -237,6 +241,17 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
 
         await db.write()
         return result.item
+    })
+
+    app.get('/debug/inbox/threads', async (_request) => {
+        return listInboxDebugThreads(getDb().data)
+    })
+
+    app.post('/debug/inbox/notify', async (request, reply) => {
+        const db = getDb()
+        const result = sendInboxDebugNotification(db.data, request.body as never)
+        await db.write()
+        return result
     })
 }
 

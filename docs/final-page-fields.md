@@ -727,7 +727,7 @@ interface InboxMessageViewModel {
   messageId: string
   senderType: 'user' | 'staff' | 'system'
   senderName: string
-  messageType: 'text' | 'status_update' | 'action_prompt'
+  messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt'
   body: string
   createdAtText: string
   action?: PageActionViewModel

@@ -81,5 +81,11 @@ const debugItems = [
     description: '查看 profile_verifications，并模拟身份、学历、收入、婚姻和平台审核状态。',
     path: '/pages/debug/profile-verifications',
   },
+  {
+    label: 'Inbox',
+    title: '通知调试',
+    description: '查看 mock 通知线程，并发送测试系统通知。',
+    path: '/pages/debug/inbox',
+  },
 ]
 </script>

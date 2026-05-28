@@ -5,7 +5,6 @@ export type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejec
 export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
-export type AccountRoomStatus = 'open' | 'paused' | 'closed'
 export type AccountProfileType = 'self' | 'family'
 export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative'
 export type AccountProfileOwnershipStatus = 'pending' | 'active' | 'revoked'
@@ -349,6 +348,20 @@ export interface AccountEventRegistrationDTO {
   status: AccountEventRegistrationStatus
 }
 
+export interface IntroductionContactDTO {
+  available: true
+  phone: string | null
+  email: string | null
+  wechat: string | null
+  preferredChannel: 'phone' | 'email' | 'wechat' | null
+  visibility: string
+}
+
+export interface IntroductionContactUnavailableDTO {
+  available: false
+  reason: 'not_found' | 'forbidden' | 'not_accepted' | 'contact_unavailable' | 'visibility_restricted'
+}
+
 export interface AccountIntroductionSummaryDTO {
   requestId: string
   targetProfileId: string
@@ -374,16 +387,4 @@ export interface FavoriteProfileSummaryDTO {
   summary: string
   tags: string[]
   createdAt: string
-}
-
-export interface AccountPrivateIntroductionRoomDTO {
-  roomId: string
-  requestId: string
-  targetProfileId: string
-  targetDisplayName: string
-  targetAvatarUrl: string
-  status: AccountRoomStatus
-  openedAt: string
-  closedAt?: string
-  lastMessage?: string
 }

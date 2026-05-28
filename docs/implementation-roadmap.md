@@ -1641,7 +1641,7 @@ GET /api/account/private-introductions/:requestId/contact
 **数据库**（与 `docs/final-database-schema.md` 对齐）：
 ```
 inbox_threads   — type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
-inbox_messages  — senderType: 'system' | 'staff' | 'user', body: LocalizedText
+inbox_messages  — senderType: 'system' | 'staff' | 'user', messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt', body: string
 inbox_reads     — threadId + userId + lastReadAt
 ```
 

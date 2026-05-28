@@ -214,7 +214,12 @@ export const accountCenterMessages: AppMessageSchema = {
       expiresAt: 'Valable jusqu au',
       respondedAt: 'Reponse le',
       cooldownUntil: 'Delai jusqu au',
+      loadingContact: 'Chargement...',
     },
+    actions: { viewContact: 'Voir les coordonnees' },
+    contactUnavailable: 'Coordonnees non disponibles',
+    contactReason: { not_found: 'Demande introuvable', forbidden: 'Acces refuse', not_accepted: 'Pas encore accepte', contact_unavailable: 'Aucun contact enregistre', visibility_restricted: 'Contact en prive' },
+    preferredTag: 'Prefere',
     empty: { title: 'Aucun', favorites: 'Pas encore de favoris.', introductions: 'Pas encore de presentations.' },
   },
   settings: {

@@ -3799,8 +3799,9 @@
       "id": "intro-001",
       "requesterUserId": "u-001",
       "targetProfileId": "p-006",
-      "status": "requested",
-      "requestedAt": "2026-05-23T21:31:05.193Z"
+      "status": "accepted",
+      "requestedAt": "2026-05-23T21:31:05.193Z",
+      "respondedAt": "2026-05-27T23:47:13.378Z"
     }
   ],
   "profile_photos": [
@@ -4823,8 +4824,6 @@
     }
   ],
   "staff_tasks": [],
-  "private_introduction_rooms": [],
-  "private_introduction_room_messages": [],
   "legal_document_contents": [
     {
       "id": "ldc-001-01",
@@ -6180,6 +6179,139 @@
       "phone": "+33 6 98 76 54 32",
       "email": "loic.d@example.com",
       "wechat": "loic_dubois"
+    },
+    {
+      "id": "contact-p-006",
+      "profileId": "p-006",
+      "preferredChannel": "email",
+      "visibility": "after_introduction",
+      "createdAt": "2026-02-14",
+      "updatedAt": "2026-05-28T10:00:00Z",
+      "phone": "+33 6 11 22 33 44",
+      "email": "camille.m@example.com",
+      "wechat": "camille_martin"
+    }
+  ],
+  "inbox_threads": [
+    {
+      "id": "inbox-thread-001",
+      "userId": "u-001",
+      "type": "system",
+      "subjectType": "profile_review",
+      "subjectId": "p-001",
+      "status": "open",
+      "createdAt": "2026-05-20T09:00:00Z",
+      "updatedAt": "2026-05-28T08:30:00Z"
+    },
+    {
+      "id": "inbox-thread-003",
+      "userId": "u-001",
+      "type": "system",
+      "status": "open",
+      "createdAt": "2026-05-28T06:00:00Z",
+      "updatedAt": "2026-05-28T06:00:00Z"
+    },
+    {
+      "id": "inbox-thread-002",
+      "userId": "u-001",
+      "type": "system",
+      "subjectType": "event",
+      "subjectId": "e-001",
+      "status": "open",
+      "createdAt": "2026-05-25T14:00:00Z",
+      "updatedAt": "2026-05-27T10:00:00Z"
+    },
+    {
+      "id": "inbox-1779927221830",
+      "userId": "u-001",
+      "type": "system",
+      "status": "open",
+      "createdAt": "2026-05-28T00:13:41.830Z",
+      "updatedAt": "2026-05-28T00:13:41.830Z"
+    }
+  ],
+  "inbox_messages": [
+    {
+      "id": "msg-001",
+      "threadId": "inbox-thread-001",
+      "senderType": "system",
+      "messageType": "system_notice",
+      "body": "你的资料 p-001 平台审核已通过，现状态变更为 open。",
+      "templateCode": "profile_review_approved",
+      "templateLocale": "zh",
+      "createdAt": "2026-05-20T09:00:00Z",
+      "updatedAt": "2026-05-20T09:00:00Z"
+    },
+    {
+      "id": "msg-002",
+      "threadId": "inbox-thread-001",
+      "senderType": "system",
+      "messageType": "text",
+      "body": "你的资料已完成身份认证，可信度已提升。",
+      "templateCode": "identity_verified",
+      "templateLocale": "zh",
+      "createdAt": "2026-05-28T08:30:00Z",
+      "updatedAt": "2026-05-28T08:30:00Z"
+    },
+    {
+      "id": "msg-003",
+      "threadId": "inbox-thread-002",
+      "senderType": "system",
+      "messageType": "system_notice",
+      "body": "你报名的活动《巴黎春季交流酒会》报名已确认。",
+      "templateCode": "event_registration_confirmed",
+      "templateLocale": "zh",
+      "createdAt": "2026-05-25T14:00:00Z",
+      "updatedAt": "2026-05-25T14:00:00Z"
+    },
+    {
+      "id": "msg-004",
+      "threadId": "inbox-thread-002",
+      "senderType": "system",
+      "messageType": "text",
+      "body": "活动地址：巴黎 8 区 Rue du Faubourg Saint-Honore 25 号。请提前 15 分钟到场。",
+      "templateCode": "event_reminder",
+      "templateLocale": "zh",
+      "createdAt": "2026-05-27T10:00:00Z",
+      "updatedAt": "2026-05-27T10:00:00Z"
+    },
+    {
+      "id": "msg-005",
+      "threadId": "inbox-thread-003",
+      "senderType": "system",
+      "messageType": "text",
+      "body": "欢迎使用相约巴黎！你可以创建资料、浏览活动、收藏感兴趣的会员。",
+      "templateCode": "welcome_message",
+      "templateLocale": "zh",
+      "createdAt": "2026-05-28T06:00:00Z",
+      "updatedAt": "2026-05-28T06:00:00Z"
+    },
+    {
+      "id": "msg-1779927221830",
+      "threadId": "inbox-1779927221830",
+      "senderType": "system",
+      "messageType": "text",
+      "body": "test notification",
+      "createdAt": "2026-05-28T00:13:41.830Z",
+      "updatedAt": "2026-05-28T00:13:41.830Z"
+    }
+  ],
+  "inbox_reads": [
+    {
+      "id": "read-001",
+      "threadId": "inbox-thread-003",
+      "userId": "u-001",
+      "lastReadAt": "2026-05-28T07:00:00Z",
+      "createdAt": "2026-05-28T07:00:00Z",
+      "updatedAt": "2026-05-28T07:00:00Z"
+    },
+    {
+      "id": "read-002",
+      "threadId": "inbox-thread-001",
+      "userId": "u-001",
+      "lastReadAt": "2026-05-28T00:13:32.750Z",
+      "createdAt": "2026-05-28T00:13:32.750Z",
+      "updatedAt": "2026-05-28T00:13:32.750Z"
     }
   ]
 }

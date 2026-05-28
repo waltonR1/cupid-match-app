@@ -18,8 +18,6 @@ const defaultData: Database = {
     user_entitlement_balances: [],
     user_preferences: [],
     staff_tasks: [],
-    private_introduction_rooms: [],
-    private_introduction_room_messages: [],
     legal_documents: [],
     legal_document_contents: [],
     user_agreement_acceptances: [],
@@ -28,6 +26,9 @@ const defaultData: Database = {
     profile_ownerships: [],
     favorite_profiles: [],
     private_introduction_requests: [],
+    inbox_threads: [],
+    inbox_messages: [],
+    inbox_reads: [],
 }
 
 /** 数据库实例 */
@@ -58,12 +59,13 @@ export async function initDb(): Promise<void> {
     db.data.user_entitlement_balances ??= []
     db.data.user_preferences ??= []
     db.data.staff_tasks ??= []
-    db.data.private_introduction_rooms ??= []
-    db.data.private_introduction_room_messages ??= []
     db.data.legal_documents ??= []
     db.data.legal_document_contents ??= []
     db.data.user_agreement_acceptances ??= []
     db.data.favorite_profiles ??= []
+    db.data.inbox_threads ??= []
+    db.data.inbox_messages ??= []
+    db.data.inbox_reads ??= []
 }
 
 /** 获取数据库实例 */

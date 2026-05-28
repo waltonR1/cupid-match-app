@@ -214,7 +214,12 @@ export const accountCenterMessages: AppMessageSchema = {
       expiresAt: 'Valid until',
       respondedAt: 'Responded',
       cooldownUntil: 'Cooldown until',
+      loadingContact: 'Loading...',
     },
+    actions: { viewContact: 'View contact info' },
+    contactUnavailable: 'Contact info is not available',
+    contactReason: { not_found: 'Request not found', forbidden: 'Access denied', not_accepted: 'Not yet accepted', contact_unavailable: 'No contact info on file', visibility_restricted: 'Contact is set to private' },
+    preferredTag: 'Preferred',
     empty: { title: 'No records', favorites: 'No favorites yet.', introductions: 'No introductions yet.' },
   },
   settings: {
