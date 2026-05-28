@@ -17,7 +17,7 @@ export const eventsMessages: AppMessageSchema = {
     seats: 'Places',
     focus: 'Theme relationnel',
     languages: 'Langues',
-    advisorNote: 'Note conseil',
+    curatorNote: 'Note du curateur',
     status: 'Statut',
   },
   seats: {

@@ -77,7 +77,7 @@ export interface EventAgendaItem {
   id: string
   time: string
   title: string
-  desc: string
+  description: string
   sortOrder: number
 }
 
@@ -91,7 +91,7 @@ export interface EventDetail extends EventDirectoryItem {
   addressVisible: boolean
   addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
   languageCodes: string[]
-  advisorNote: string
+  curatorNote: string
   agendaItems: EventAgendaItem[]
   registration: EventRegistrationState
 }

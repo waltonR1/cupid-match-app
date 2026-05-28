@@ -15,7 +15,7 @@ export const eventDetailMessages: AppMessageSchema = {
     seats: 'Places',
     focus: 'Theme relationnel',
     languages: 'Langues',
-    advisorNote: 'Note conseil',
+    curatorNote: 'Note du curateur',
   },
   actions: {
     register: 'Demander une place',
@@ -38,39 +38,39 @@ export const eventDetailMessages: AppMessageSchema = {
   registration: {
     guest: {
       title: 'Connexion requise',
-      desc: 'La participation demande un compte afin que la plateforme puisse verifier le profil et le rythme.',
+      description: 'La participation demande un compte afin que la plateforme puisse verifier le profil et le rythme.',
     },
     available: {
       title: 'Demande possible',
-      desc: 'Apres la demande, une conseillere verifie les places, le dossier et la coherence avec le format.',
+      description: 'Apres la demande, une conseillere verifie les places, le dossier et la coherence avec le format.',
     },
     requested: {
       title: 'Demande en attente',
-      desc: 'Votre demande est envoyee. Une conseillere confirmera la place et la coherence avant la suite.',
+      description: 'Votre demande est envoyee. Une conseillere confirmera la place et la coherence avant la suite.',
     },
     confirmed: {
       title: 'Place confirmee',
-      desc: 'Votre participation est confirmee. Des indications complementaires pourront suivre avant l evenement.',
+      description: 'Votre participation est confirmee. Des indications complementaires pourront suivre avant l evenement.',
     },
     declined: {
       title: 'Non confirme cette fois',
-      desc: 'La place n est pas confirmee pour cet evenement. La plateforme continuera a proposer des sessions plus adaptees.',
+      description: 'La place n est pas confirmee pour cet evenement. La plateforme continuera a proposer des sessions plus adaptees.',
     },
     waitlist: {
       title: 'En attente',
-      desc: 'Si une place se libere ou si une nouvelle session ouvre, les profils adaptes sont contactes en priorite.',
+      description: 'Si une place se libere ou si une nouvelle session ouvre, les profils adaptes sont contactes en priorite.',
     },
     cancelled: {
-      title: 'Demande annulee',
-      desc: 'Vous pouvez refaire une demande, la plateforme reverra les places et la coherence du profil.',
+      title: 'Place annulee',
+      description: 'Cette place confirmee a ete annulee. Contactez l equipe de la plateforme pour organiser une nouvelle option.',
     },
     closed: {
       title: 'Demandes fermees',
-      desc: 'Cet evenement ne prend plus de nouvelles demandes. Consultez une autre session.',
+      description: 'Cet evenement ne prend plus de nouvelles demandes. Consultez une autre session.',
     },
     member_required: {
       title: 'Reserve aux membres',
-      desc: 'Cet evenement est ouvert aux membres. Consultez les acces avant de demander une place.',
+      description: 'Cet evenement est ouvert aux membres. Consultez les acces avant de demander une place.',
     },
   },
   sections: {

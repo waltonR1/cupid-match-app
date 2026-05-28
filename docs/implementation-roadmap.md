@@ -760,8 +760,6 @@ interface EventRecord {
   relationshipFocus: LocalizedText[]
   languageCodes: string[]
   capacity: number
-  registeredCountCache?: number
-  waitlistCountCache?: number
   curatorNote: LocalizedText
   coverImageUrl: string
   createdAt: string
@@ -769,7 +767,7 @@ interface EventRecord {
 }
 ```
 
-`event_registrations` 是报名人数的真实来源。`registeredCountCache` / `waitlistCountCache` 只允许作为可重建缓存；Event DTO 可以继续返回 `registeredCount` / `waitlistCount`。
+`event_registrations` 是报名人数的真实来源。Event DTO 可以继续返回 `registeredCount` / `waitlistCount`，由 service 从 registrations 动态计算。
 
 活动流程使用独立集合，不嵌套在 `events` 主表：
 
@@ -779,7 +777,7 @@ interface EventAgendaItemRecord {
   eventId: string
   time: string
   title: LocalizedText
-  desc: LocalizedText
+  description: LocalizedText
   sortOrder: number
   createdAt: string
   updatedAt: string
@@ -798,7 +796,8 @@ interface EventRegistrationRecord {
   confirmedAt?: string
   declinedAt?: string
   cancelledAt?: string
-  note?: LocalizedText
+  waitlistedAt?: string
+  attendedAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -1765,9 +1764,9 @@ Phase 5.7 已完成 DB 层收敛，但 `MembershipTiersSection` 和 `HomeMembers
 - 补齐 `event_registrations.waitlistedAt` 与 `event_registrations.attendedAt`，让 `waitlist` 和 `attended` 状态有对应时间点。
 - 明确 `event_registrations` 是活动报名状态、活动人数、候补人数、account events 的唯一 source of truth。
 - 明确 `attended` 的自动结算可以后置；Phase 5.8 只补字段和 debug 可选模拟，不做真实定时任务或自动结算任务。
-- 将 `events.advisorNote` 改名为更符合用户可见语义的字段，例如 `curatorNote`；它是公开 / 详情页可见的活动策展说明，不是内部顾问备注。
+- 将 `events.curatorNote` 改名为更符合用户可见语义的字段，例如 `curatorNote`；它是公开 / 详情页可见的活动策展说明，不是内部顾问备注。
 - 保留 `event_agenda_items` 独立表；它是一对多活动流程项，不能重新嵌回 `events` 主表。
-- 将 `event_agenda_items.desc` 改名为 `description`，与 API DTO 和前端 ViewModel 命名一致。
+- 将旧 `event_agenda_items.desc` 收敛为 `description`，与 API DTO 和前端 ViewModel 命名一致。
 - 评估 `event_agenda_items.time` 是否继续作为展示字符串保留，或改为 `startTime` / `endTime`；若本阶段暂不做结构化时间输入，可以先保持 `time`。
 - 明确 `draft` 是活动管理态，用户端公开 `listEvents` / `eventDetail` 不返回 draft。
 - 在 debug 中建立活动管理入口，至少支持查看全部活动，包括 `draft`。
@@ -1791,8 +1790,8 @@ Phase 5.7 已完成 DB 层收敛，但 `MembershipTiersSection` 和 `HomeMembers
 - `event_registrations` 是活动报名状态和 account events 的唯一来源，account events 不从 event 主表猜测用户状态。
 - `attended` 自动结算没有被误做成 Phase 5.8 的强制范围；若 debug 提供手动标记到场，也必须只作为调试工具存在。
 - 用户端 events API 不返回 draft；debug 活动管理可以查看 draft。
-- `advisorNote` 相关 DB 字段、DTO、mapper、页面类型和 i18n key 完成统一改名。
-- `event_agenda_items` 继续作为活动流程项独立表存在，`desc` 命名完成收敛。
+- `curatorNote` 相关 DB 字段、DTO、mapper、页面类型和 i18n key 完成统一改名。
+- `event_agenda_items` 继续作为活动流程项独立表存在，旧 `desc` 命名完成收敛。
 - account events 链路不返回精确地址。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。

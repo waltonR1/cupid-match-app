@@ -690,7 +690,7 @@ interface EventAgendaItemDTO {
   id: string
   time: string
   title: string
-  desc: string
+  description: string
   sortOrder: number
 }
 

@@ -76,7 +76,7 @@ export function eventDetail(locale: ApiLocale, data: Database, id: string, userI
     addressVisible: address.addressVisible,
     addressLockReason: address.addressLockReason,
     languageCodes: event.languageCodes,
-    advisorNote: resolveLocalizedText(locale, event.advisorNote),
+    curatorNote: resolveLocalizedText(locale, event.curatorNote),
     agendaItems: data.event_agenda_items
       .filter((item) => item.eventId === event.id)
       .sort((left, right) => left.sortOrder - right.sortOrder)
@@ -84,7 +84,7 @@ export function eventDetail(locale: ApiLocale, data: Database, id: string, userI
         id: item.id,
         time: item.time,
         title: resolveLocalizedText(locale, item.title),
-        desc: resolveLocalizedText(locale, item.desc),
+        description: resolveLocalizedText(locale, item.description),
         sortOrder: item.sortOrder,
       })),
     registration,
@@ -100,7 +100,7 @@ export function registerForEvent(data: Database, eventId: string, userId: string
   }
 
   const currentState = resolveRegistrationState(data, event, userId)
-  if (currentState.status === 'member_required' || currentState.status === 'closed') {
+  if (currentState.status === 'member_required' || currentState.status === 'closed' || currentState.status === 'cancelled') {
     return { status: 'blocked', payload: buildRegistrationResponse(data, event, currentState) }
   }
 
@@ -126,6 +126,8 @@ export function registerForEvent(data: Database, eventId: string, userId: string
   nextRecord.requestedAt = now
   nextRecord.confirmedAt = undefined
   nextRecord.declinedAt = undefined
+  nextRecord.waitlistedAt = undefined
+  nextRecord.attendedAt = undefined
   nextRecord.cancelledAt = undefined
   nextRecord.updatedAt = now
 
@@ -162,10 +164,7 @@ export function cancelEventRegistration(data: Database, eventId: string, userId:
 
   return {
     status: 'success',
-    payload: buildRegistrationResponse(data, event, {
-      status: 'cancelled',
-      registrationId: existing.id,
-    }),
+    payload: buildRegistrationResponse(data, event, resolveRegistrationState(data, event, userId)),
   }
 }
 
@@ -200,7 +199,14 @@ function resolveRegistrationState(data: Database, event: EventRecord, userId: st
   if (!userId) return { status: 'guest' }
 
   const existing = data.event_registrations.find((item) => item.userId === userId && item.eventId === event.id)
-  if (existing) {
+  if (existing?.status === 'cancelled' && wasConfirmedRegistration(existing)) {
+    return {
+      status: 'cancelled',
+      registrationId: existing.id,
+    }
+  }
+
+  if (existing && existing.status !== 'cancelled' && existing.status !== 'declined') {
     return {
       status: existing.status,
       registrationId: existing.id,
@@ -216,6 +222,10 @@ function resolveRegistrationState(data: Database, event: EventRecord, userId: st
   }
 
   return { status: 'available' }
+}
+
+function wasConfirmedRegistration(registration: EventRegistrationRecord) {
+  return Boolean(registration.confirmedAt || registration.attendedAt)
 }
 
 function resolveEventAddress(

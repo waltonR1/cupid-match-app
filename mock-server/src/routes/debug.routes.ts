@@ -7,6 +7,10 @@ import {
     listPrivateIntroductionDebugRequests,
 } from '../services/private-introduction-debug.service.js'
 import {
+    listEventDebugItems,
+    updateEventDebugStatus,
+} from '../services/event-debug.service.js'
+import {
     listInboxDebugThreads,
     sendInboxDebugNotification,
 } from '../services/inbox-debug.service.js'
@@ -252,6 +256,20 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
         const result = sendInboxDebugNotification(db.data, request.body as never)
         await db.write()
         return result
+    })
+
+    app.get('/debug/events', async () => {
+        return listEventDebugItems(getDb().data)
+    })
+
+    app.post('/debug/events/:id/status', async (request, reply) => {
+        const { id } = request.params as { id: string }
+        const { status } = request.body as { status: string }
+        const result = updateEventDebugStatus(getDb().data, id, status)
+        if (result.status === 'not_found') return reply.code(404).send({ error: 'Event not found' })
+        if (result.status === 'invalid_status') return reply.code(400).send({ error: 'Invalid status' })
+        await getDb().write()
+        return result.item
     })
 }
 

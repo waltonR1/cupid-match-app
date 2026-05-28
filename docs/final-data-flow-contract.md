@@ -802,8 +802,6 @@ events:
   relationshipFocus
   languageCodes
   capacity
-  registeredCountCache
-  waitlistCountCache
   coverImageUrl
 
 event_registrations:
@@ -840,7 +838,6 @@ interface EventDirectoryItemDTO {
 Rules:
 
 - `event_registrations` is source of truth for registered/waitlist counts.
-- `registeredCountCache` and `waitlistCountCache` may be used only as rebuildable cache.
 - Directory DTO can expose counts, but EventRecord counts are not authoritative.
 - Directory card status is derived from `events.status`, not from remaining seats.
 - `memberOnly` in DTO is derived from `events.visibility === 'member'`; do not persist a second boolean source of truth on EventRecord.

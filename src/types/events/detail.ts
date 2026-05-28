@@ -12,7 +12,7 @@ export interface EventAgendaItem {
 
 export interface EventNoteItem {
   title: string
-  desc: string
+  description: string
 }
 
 export interface EventRegistrationViewModel {

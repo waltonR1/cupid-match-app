@@ -41,9 +41,7 @@ export interface EventRecord {
     relationshipFocus: LocalizedText[]
     languageCodes: string[]
     capacity: number
-    registeredCountCache?: number
-    waitlistCountCache?: number
-    advisorNote: LocalizedText
+    curatorNote: LocalizedText
     coverImageUrl: string
     createdAt: string
     updatedAt: string
@@ -55,7 +53,7 @@ export interface EventAgendaItemRecord {
     eventId: string
     time: string
     title: LocalizedText
-    desc: LocalizedText
+    description: LocalizedText
     sortOrder: number
     createdAt: string
     updatedAt: string
@@ -71,7 +69,8 @@ export interface EventRegistrationRecord {
     confirmedAt?: string
     declinedAt?: string
     cancelledAt?: string
-    note?: LocalizedText
+    waitlistedAt?: string
+    attendedAt?: string
     createdAt: string
     updatedAt: string
 }

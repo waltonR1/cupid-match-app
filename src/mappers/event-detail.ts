@@ -66,8 +66,8 @@ function buildEventFacts(event: EventDetail, t: Translate) {
 function buildEventNoteItems(event: EventDetail, t: Translate): EventNoteItem[] {
   return [
     {
-      title: t('fields.advisorNote'),
-      desc: event.advisorNote,
+      title: t('fields.curatorNote'),
+      description: event.curatorNote,
     },
   ]
 }
@@ -82,7 +82,7 @@ function buildRegistrationViewModel(
   return {
     status,
     title: t(`registration.${status}.title`),
-    description: t(`registration.${status}.desc`),
+    description: t(`registration.${status}.description`),
     action,
   }
 }
@@ -112,7 +112,7 @@ function toAgendaItem(item: EventDetail['agendaItems'][number]): EventAgendaItem
     id: item.id,
     time: item.time,
     title: item.title,
-    description: item.desc,
+    description: item.description,
   }
 }
 
@@ -132,7 +132,7 @@ function buildEventDetailFieldLabels(t: Translate) {
     seats: t('fields.seats'),
     focus: t('fields.focus'),
     languages: t('fields.languages'),
-    advisorNote: t('fields.advisorNote'),
+    curatorNote: t('fields.curatorNote'),
     status: t('fields.status'),
   }
 }

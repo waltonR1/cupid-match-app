@@ -3209,34 +3209,32 @@
         "en"
       ],
       "capacity": 12,
-      "registeredCountCache": 1,
-      "waitlistCountCache": 0,
-      "advisorNote": {
+      "coverImageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "curatorNote": {
         "zh": {
-          "value": "顾问会在报名后确认资料完整度与参与节奏。",
+          "value": "策展人会在报名后确认资料完整度与参与节奏。",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "fr": {
-          "value": "Une conseillere confirme le dossier et le rythme apres la demande.",
+          "value": "Note du curateur : Le curateur confirme le dossier et le rythme apres la demande.",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "An advisor reviews profile readiness and pacing after submission.",
+          "value": "Curator note: A curator reviews profile readiness and pacing after submission.",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "coverImageUrl": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80",
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     },
     {
       "id": "e-002",
@@ -3462,9 +3460,10 @@
         "en"
       ],
       "capacity": 8,
-      "registeredCountCache": 8,
-      "waitlistCountCache": 1,
-      "advisorNote": {
+      "coverImageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "curatorNote": {
         "zh": {
           "value": "本场优先邀请已完成资料审核并适合晚餐节奏的会员。",
           "source": "manual",
@@ -3486,10 +3485,7 @@
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "coverImageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     },
     {
       "id": "e-003",
@@ -3714,34 +3710,32 @@
         "en"
       ],
       "capacity": 16,
-      "registeredCountCache": 11,
-      "waitlistCountCache": 0,
-      "advisorNote": {
+      "coverImageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "curatorNote": {
         "zh": {
-          "value": "适合第一次参加平台活动的会员，顾问会协助控制交流边界。",
+          "value": "策展说明：适合第一次参加平台活动的会员，策展人会协助控制交流边界。",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "fr": {
-          "value": "Format adapte a une premiere participation, avec cadrage conseiller.",
+          "value": "Note du curateur : Format adapte a une premiere participation, avec cadrage du curateur.",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "Good for first participation, with advisor-guided boundaries.",
+          "value": "Curator note: Good for first participation, with curator-guided boundaries.",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "coverImageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     }
   ],
   "users": [
@@ -4103,28 +4097,31 @@
       "time": "18:30 - 19:00",
       "title": {
         "zh": {
-          "value": "签到与顾问说明",
+          "value": "签到与活动说明",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "fr": {
-          "value": "Accueil et cadrage conseiller",
+          "value": "Accueil et cadrage de l evenement",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "Check-in and advisor framing",
+          "value": "Check-in and event framing",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "desc": {
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "description": {
         "zh": {
           "value": "确认到场信息并说明当晚节奏。",
           "source": "manual",
@@ -4146,10 +4143,7 @@
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "sortOrder": 1,
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     },
     {
       "id": "agenda-e-001-2",
@@ -4178,7 +4172,10 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "desc": {
+      "sortOrder": 2,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "description": {
         "zh": {
           "value": "围绕关系、工作和城市生活展开交流。",
           "source": "manual",
@@ -4200,10 +4197,7 @@
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "sortOrder": 2,
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     },
     {
       "id": "agenda-e-002-1",
@@ -4232,9 +4226,12 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "desc": {
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "description": {
         "zh": {
-          "value": "顾问说明晚餐节奏与边界。",
+          "value": "晚餐节奏与边界说明。",
           "source": "manual",
           "provider": "human",
           "status": "ready",
@@ -4248,16 +4245,13 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "Advisor briefing on boundaries and dinner pacing.",
+          "value": "Briefing on boundaries and dinner pacing.",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "sortOrder": 1,
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     },
     {
       "id": "agenda-e-003-1",
@@ -4286,9 +4280,12 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "desc": {
+      "sortOrder": 1,
+      "createdAt": "2026-04-01T00:00:00Z",
+      "updatedAt": "2026-05-01T00:00:00Z",
+      "description": {
         "zh": {
-          "value": "顾问说明路线和交流节奏。",
+          "value": "路线与交流节奏说明。",
           "source": "manual",
           "provider": "human",
           "status": "ready",
@@ -4308,10 +4305,7 @@
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
-      },
-      "sortOrder": 1,
-      "createdAt": "2026-04-01T00:00:00Z",
-      "updatedAt": "2026-05-01T00:00:00Z"
+      }
     }
   ],
   "event_registrations": [
@@ -4322,29 +4316,6 @@
       "status": "cancelled",
       "requestedAt": "2026-05-01T09:00:00Z",
       "confirmedAt": "2026-05-14T01:01:44.771Z",
-      "note": {
-        "zh": {
-          "value": "已确认席位，可在活动前查看详情与注意事项。",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Place confirmee avec acces au detail avant la date.",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Seat confirmed with access to event detail before the date.",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "createdAt": "2026-05-01T09:00:00Z",
       "updatedAt": "2026-05-14T01:01:46.899Z",
       "cancelledAt": "2026-05-14T01:01:46.899Z"
@@ -4355,29 +4326,6 @@
       "eventId": "e-002",
       "status": "cancelled",
       "requestedAt": "2026-05-01T09:00:00Z",
-      "note": {
-        "zh": {
-          "value": "当前处于候补序列。",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "fr": {
-          "value": "Actuellement en liste d attente.",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        },
-        "en": {
-          "value": "Currently on the waitlist.",
-          "source": "manual",
-          "provider": "human",
-          "status": "ready",
-          "updatedAt": "2026-05-18T12:07:20.986Z"
-        }
-      },
       "createdAt": "2026-05-01T09:00:00Z",
       "updatedAt": "2026-05-14T00:37:05.072Z",
       "cancelledAt": "2026-05-14T00:37:05.072Z"
@@ -4386,10 +4334,11 @@
       "id": "er-003",
       "userId": "u-001",
       "eventId": "e-003",
-      "status": "requested",
-      "requestedAt": "2026-05-17T11:01:31.079Z",
+      "status": "cancelled",
+      "requestedAt": "2026-05-28T21:28:47.658Z",
       "createdAt": "2026-05-17T11:01:31.079Z",
-      "updatedAt": "2026-05-17T11:01:31.079Z"
+      "updatedAt": "2026-05-28T21:28:48.184Z",
+      "cancelledAt": "2026-05-28T21:28:48.184Z"
     }
   ],
   "legal_documents": [

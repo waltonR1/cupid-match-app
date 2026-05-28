@@ -20,7 +20,7 @@
               {{ item.title }}
             </view>
             <view class="mt-2 text-[15px] leading-7 text-semantic-text-muted">
-              {{ item.desc }}
+              {{ item.description }}
             </view>
           </view>
         </view>

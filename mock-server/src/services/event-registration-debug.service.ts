@@ -54,6 +54,7 @@ export function reviewEventRegistrationDebugItem(
     registration.status = nextStatus
     registration.confirmedAt = nextStatus === 'confirmed' ? now : undefined
     registration.declinedAt = nextStatus === 'declined' ? now : undefined
+    registration.waitlistedAt = nextStatus === 'waitlist' ? now : undefined
     registration.cancelledAt = undefined
     registration.updatedAt = now
 

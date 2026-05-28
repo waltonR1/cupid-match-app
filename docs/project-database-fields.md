@@ -299,9 +299,7 @@ interface EventRecord {
     relationshipFocus: LocalizedText[]
     languageCodes: string[]
     capacity: number
-    registeredCountCache?: number
-    waitlistCountCache?: number
-    advisorNote: LocalizedText
+    curatorNote: LocalizedText
     coverImageUrl: string
     createdAt: string
     updatedAt: string
@@ -318,7 +316,7 @@ interface EventAgendaItemRecord {
     eventId: string
     time: string
     title: LocalizedText
-    desc: LocalizedText
+    description: LocalizedText
     sortOrder: number
 }
 ```
@@ -335,12 +333,13 @@ interface EventRegistrationRecord {
     confirmedAt?: string
     declinedAt?: string
     cancelledAt?: string
+    waitlistedAt?: string
+    attendedAt?: string
     createdAt: string
     updatedAt: string
 }
 ```
 
-活动人数、候补人数和剩余席位当前由 `event_registrations` 动态计算，`registeredCountCache` / `waitlistCountCache` 仅作为后续缓存字段预留。
 
 ## 仍待后续阶段处理
 

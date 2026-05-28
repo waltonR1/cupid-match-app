@@ -10,7 +10,7 @@ export interface EventFieldLabels {
   seats: string
   focus: string
   languages: string
-  advisorNote: string
+  curatorNote: string
   status: string
 }
 
