@@ -1798,106 +1798,199 @@ Phase 5.7 已完成 DB 层收敛，但 `MembershipTiersSection` 和 `HomeMembers
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
-## Phase 6：完成 profile / event / account / private introduction 联动
+## Phase 6：补齐收藏与私人介绍闭环
 
-### 目标
+### 当前基线
 
-把平台中介撮合闭环串起来。
+Phase 5 到 Phase 5.8 已经完成以下基础能力，Phase 6 不再重复实现：
 
-核心闭环：
+- account profiles 管理、profile 创建 / 编辑 / 归档、隐私偏好、照片和联系方式写操作。
+- account events 读取、event detail 报名 / 取消、debug 活动审核和活动状态管理。
+- inbox 独立消息中心、thread/messages/read 基础接口与页面。
+- membership plans、user memberships、user entitlement balances 的事实源收敛。
+- account relationship 收藏和私人介绍的读取页面。
+- self / family profile detail 的私人介绍申请入口。
 
-```text
-注册登录
--> 创建或管理 profile
--> 浏览 profile
--> 收藏或参加 event
--> 申请 private introduction
--> 对方接受或拒绝
--> 进入 platform-mediated room 或 staff follow-up
--> account 中展示状态
-```
+Phase 6 只处理剩余跨模块闭环：收藏写操作、profile viewer state、私人介绍规则硬化、quota 扣减与 account/inbox 同步。
 
-### 需要补齐的联动
+### Phase 6.1：收藏闭环
 
-profile 与 account：
+目标：让 profile detail / directory 与 account relationship 的收藏状态互相同步。
 
-- profile ownership 决定用户是否拥有资料。
-- account profiles 页面展示用户管理的资料。
-- detail 不应该允许用户对自己的 profile 申请 private introduction。
-- `favorite_profiles` 字段统一为 `id`、`userId`、`profileId`、`createdAt`、`updatedAt`；不保留 `note`。
-- account relationship 可以读取收藏列表；收藏 / 取消收藏写入和 profile detail / directory favorite state 在 Phase 6 补齐。
-- profile detail / directory 后续根据 viewer context 返回 `favorite.isFavorite` 与 `favoriteId`，profile 主表不保存全局收藏状态。
-
-event 与 account：
-
-- account events 展示报名状态。
-- event detail 根据用户报名状态展示 CTA。
-- 会员等级可影响活动报名优先级。
-
-profile 与 event：
-
-- event 推荐相关 profile。
-- profile detail 展示可线下了解的活动入口。
-- event detail 展示适合的 profile 标签或参与条件。
-
-private introduction 与 account：
-
-- account private introductions 展示 requested、accepted、declined、expired、cooldown、quota exhausted。
-- detail 不允许用户对自己拥有或管理的 profile 发起 private introduction。
-- `private_introduction_requests` 只记录申请事实，不保存联系方式值；联系方式开放必须通过后续 inbox / introduction flow。
-- `requested` 申请需要有 `expiresAt`；`expired` 是由 `requested + expiresAt < now` 派生出来的展示 / API 状态，不作为持久化 status。
-- `declined` 后进入 cooldown；cooldown 结束后才允许对同一 profile 再次发起申请。
-- 同一 requester 对同一 target profile 在 active 状态下不能重复申请。
-- quota 消耗规则在 Phase 6 明确执行，但额度来源必须来自 Phase 5.7 的 `user_entitlement_balances`，不再从会员等级常量即时推导。
-- debug 页面保留接受 / 拒绝工具，但生产页面不暴露审批操作。
-- `accepted` 后是否自动创建 `inbox_threads(category = chat, subjectType = private_introduction_request)` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / staff 跟进中”的状态。
-
-### 后端建议
-
-新增或完善：
+后端与 API：
 
 ```text
-GET /api/account/favorites
 POST /api/favorites/:profileId
 DELETE /api/favorites/:profileId
+```
+
+规则：
+
+- requester user id 只能从请求 header/session 解析，不允许从 query 或 body 传入。
+- `favorite_profiles` 仍只保存 `id`、`userId`、`profileId`、`createdAt`、`updatedAt`。
+- 收藏 archived profile、不可见 profile、自己拥有或管理的 profile 时，后端返回不可收藏状态。
+- 重复收藏同一 profile 时返回已有 favorite，不创建重复记录。
+- 取消收藏不存在的记录时保持幂等，不报业务错误。
+
+前端链路：
+
+```text
+profile detail / directory
+-> hook
+-> profile API DTO favorite state
+-> favorites API
+-> account relationship refresh
+```
+
+DTO：
+
+```ts
+interface ProfileFavoriteStateDTO {
+  isFavorite: boolean
+  favoriteId?: string
+}
+```
+
+profile detail 和 directory item 都可以返回 `favorite`，但 `profiles` 主表不保存任何全局收藏状态。
+
+验收：
+
+- directory card 和 detail 页能显示收藏状态。
+- 收藏 / 取消收藏后当前页面状态立即更新。
+- account relationship 收藏列表与 profile 页面收藏状态一致。
+- 不能收藏自己拥有或管理的 profile。
+- archived profile 不进入新的收藏业务。
+
+### Phase 6.2：私人介绍申请规则硬化
+
+目标：让 private introduction 从“可提交”收敛为真正受额度、ownership、cooldown 和过期规则控制的业务流。
+
+规则：
+
+- detail 不允许用户对自己拥有或管理的 profile 发起私人介绍。
+- 同一 requester 对同一 target profile 在 active 状态下不能重复申请。
+- active 状态包括 `requested`、`accepted`，以及未过期的 `cooldown`。
+- `requested` 必须写入 `expiresAt`；`expired` 由 `requested + expiresAt < now` 派生，不作为数据库持久化 status。
+- `declined` 后进入 90 天 cooldown；cooldown 未结束不能再次申请。
+- quota 来源只允许使用 Phase 5.7 的 `user_entitlement_balances`，不能再通过会员等级常量推导。
+- 申请成功时扣减或冻结 `user_entitlement_balances.quotaRemaining`；失败、重复、不可申请不消耗额度。
+- 后续 accepted / declined 是否返还额度必须在规则中明确，不能由前端猜测。
+
+需要复核的文件：
+
+```text
+mock-server/src/services/profile.service.ts
+mock-server/src/services/account.service.ts
+mock-server/src/services/private-introduction-debug.service.ts
+src/api/profiles/*
+src/hooks/profiles/use-self-profile-detail.ts
+src/hooks/profiles/use-family-profile-detail.ts
+src/pages/account/relationship.vue
+```
+
+验收：
+
+- 未登录显示 login required。
+- quota exhausted 时无法申请。
+- 自己拥有或管理的 profile 无法申请。
+- requested 未过期时无法重复申请。
+- requested 过期后显示 expired，并释放重新申请入口。
+- declined 后进入 cooldown，cooldown 结束后可重新申请。
+- account relationship 与 detail 的状态一致。
+
+### Phase 6.3：accepted 后的 inbox / contact 边界
+
+目标：确认双方接受后，用户在 account relationship 和消息中心看到一致的后续状态。
+
+产品规则：
+
+- `private_introduction_requests` 只记录申请事实，不保存联系方式值。
+- 联系方式仍来自 `profile_contacts`，只通过受控接口读取。
+- accepted 后优先创建或关联 `inbox_threads(category = chat, subjectType = private_introduction_request)`。
+- 当前阶段不开放自由聊天发送时，可以只展示系统 / staff 消息和联系查看入口。
+- 生产页面不暴露接受 / 拒绝操作；接受 / 拒绝仍只在 debug 或后台工具中模拟。
+
+后端与 API：
+
+```text
 GET /api/account/private-introductions
-POST /api/profiles/self/:id/private-introduction
-POST /api/profiles/family/:id/private-introduction
-GET /api/debug/private-introductions
+GET /api/account/private-introductions/:requestId/contact
+GET /api/inbox/threads
+GET /api/inbox/threads/:id/messages?before=&limit=
+POST /api/inbox/threads/:id/read
+```
+
+可选补充：
+
+```text
 POST /api/debug/private-introductions/:id/accept
 POST /api/debug/private-introductions/:id/decline
 ```
 
-说明：当前 profile API 已按 self/family 拆分，私人介绍申请也沿用 detail 所在入口；`:id` 就是 target profile id，不在 body 里重复传 `targetProfileId`。
-申请接口应从 header/session 解析 requester，不允许从 query 或 body 传 requester user id。
-如果 target profile 已归当前用户拥有或管理，接口应返回不可申请状态。
+debug accept 时应：
 
-后续 inbox：
+- 更新 request 为 `accepted`。
+- 写入 `respondedAt`。
+- 创建或复用对应 inbox thread。
+- 写入一条系统或 staff 消息，说明平台已受理后续沟通。
+
+debug decline 时应：
+
+- 更新 request 为 `declined`。
+- 写入 `respondedAt` 和 `cooldownUntil`。
+- 不创建自由沟通 thread；可写入系统通知 thread。
+
+验收：
+
+- debug accept 后，detail 显示 accepted。
+- account relationship 显示 accepted。
+- messages 页面出现对应 thread 或通知。
+- contact reveal 只在 accepted 后可用。
+- debug decline 后，detail/account 显示 cooldown。
+
+### Phase 6.4：状态一致性与页面收口
+
+目标：把 profile detail、account relationship、debug、messages 的状态文案和操作统一。
+
+必须统一的状态：
 
 ```text
-GET /api/inbox/threads
-GET /api/inbox/threads/:id?before=&limit=
-POST /api/inbox/threads/:id/messages
-POST /api/inbox/threads/:id/read
+available
+login_required
+quota_exhausted
+requested
+accepted
+declined
+expired
+cooldown
+unavailable
 ```
 
-inbox messages 使用 cursor 分页，可用于系统通知、staff 可见说明和受控沟通记录；即使不开放自由聊天，也保留该集合的最终形态。
+要求：
 
-### 验收标准
+- self 和 family detail 的状态规则一致，但文案可以不同。
+- account relationship 只展示用户需要理解的状态，不暴露后台字段。
+- expired 是派生展示状态，不写入数据库。
+- cooldown 文案必须显示“暂不可再次申请”的明确含义。
+- accepted 文案必须引导到消息中心或联系查看，而不是直接暴露联系方式。
 
-- 申请私人介绍后，account 能看到对应状态。
-- account relationship 能读取并展示收藏列表。
-- profile detail / directory 能展示当前 viewer 的收藏状态。
-- 收藏 / 取消收藏后，account relationship 和 profile favorite state 同步。
-- debug 接受/拒绝后，detail 和 account 状态同步。
-- requested、accepted、declined、expired、cooldown 在 detail、account relationship、debug 中状态一致。
-- requested 申请过期后展示为 expired，且不会永久卡住同一 profile 的申请入口。
-- quota 基于 `user_entitlement_balances` 正确扣减或冻结，不再依赖 `MEMBERSHIP_BENEFITS`。
-- 同一 profile 不能重复申请。
-- 拒绝后 cooldown 生效。
-- 未登录不能申请。
-- 不能对自己拥有或管理的 profile 申请私人介绍。
-- free/silver/gold/diamond 权益差异明确。
+验收：
+
+- detail 申请后 account relationship 立即可见。
+- account relationship 刷新后状态与 detail 一致。
+- debug accept/decline 后，detail、account relationship、messages 状态同步。
+- 所有三语 i18n key 完整。
+
+### 暂不纳入 Phase 6
+
+以下内容不是当前闭环必需，后移：
+
+- event 推荐相关 profile。
+- profile detail 展示推荐活动入口。
+- event detail 展示适合的 profile 标签或参与条件。
+- 自由聊天发送能力。
+- 真实支付、真实额度购买、会员升级状态变更。
+- account security、身份绑定、MFA、数据导出、账户停用。
 
 ## 建议提交拆分
 
@@ -1992,9 +2085,10 @@ feat(debug): add event management tools
 ### Phase 6
 
 ```text
-feat(profiles): sync private introductions with account
-feat(events): connect registrations to account
-feat(debug): support introduction state testing
+feat(profiles): add favorite state and actions
+feat(introductions): enforce request quota and cooldown rules
+feat(introductions): sync accepted requests with inbox
+refactor(account): align relationship status states
 ```
 
 ### Phase 7
