@@ -108,11 +108,18 @@ interface MembershipPlanDTO {
   currency?: string
   billingPeriod?: string
   conciergePriority: boolean
-  entitlements: Database['membership_entitlements'][number]['code'][]
+  staffSupportLevel: string
+  sortOrder: number
+  featured: boolean
+  privateIntroductionQuota: number
+  privateIntroductionPeriod: string
+  eventPriorityEnabled: boolean
+  staffReviewEnabled: boolean
+  profileDetailAccessLevel: string
 }
 
 interface AccountEntitlementBalanceDTO {
-  code: Database['membership_entitlements'][number]['code']
+  code: Database['user_entitlement_balances'][number]['entitlementCode']
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
@@ -1005,6 +1012,7 @@ export function getAccountMembership(data: Database, userId: string): {
     entitlements: getEntitlementBalances(data, userId),
     availablePlans: data.membership_plans
       .filter((item) => item.isActive)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
       .map((item) => ({
         id: item.id,
         tier: item.tier,
@@ -1013,10 +1021,15 @@ export function getAccountMembership(data: Database, userId: string): {
         priceCents: item.priceCents,
         currency: item.currency,
         billingPeriod: item.billingPeriod,
+        privateIntroductionQuota: item.privateIntroductionQuota,
+        privateIntroductionPeriod: item.privateIntroductionPeriod,
+        eventPriorityEnabled: item.eventPriorityEnabled,
+        staffReviewEnabled: item.staffReviewEnabled,
+        profileDetailAccessLevel: item.profileDetailAccessLevel,
         conciergePriority: item.conciergePriority,
-        entitlements: data.membership_entitlements
-          .filter((entitlement) => entitlement.planId === item.id)
-          .map((entitlement) => entitlement.code),
+        staffSupportLevel: item.staffSupportLevel,
+        sortOrder: item.sortOrder,
+        featured: item.featured,
       })),
   }
 }
@@ -1385,7 +1398,7 @@ function getEntitlementBalances(data: Database, userId: string): AccountEntitlem
       quotaTotal: b.quotaTotal,
       quotaUsed: b.quotaUsed,
       quotaRemaining: b.quotaRemaining,
-      resetAt: b.resetAt,
+      resetAt: b.periodEndsAt,
     }))
 }
 

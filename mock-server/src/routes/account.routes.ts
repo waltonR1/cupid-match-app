@@ -99,6 +99,32 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.get('/account/membership', async (request, reply) => readAccount(request, reply, getAccountMembership))
   app.post('/account/membership/upgrade', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
     requestAccountMembershipUpgrade(db.data, userId, (request.body as { tier: 'free' | 'silver' | 'gold' | 'diamond' }).tier)))
+  app.get('/membership/plans', async (request, reply) => {
+    const lang = (request.query as Record<string, string>).lang || 'zh'
+    const locale = lang === 'fr' || lang === 'en' ? lang : 'zh'
+    const { resolveLocalizedText } = await import('../utils/localized.js')
+    return getDb().data.membership_plans
+      .filter((p) => p.isActive)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((p) => ({
+        id: p.id,
+        tier: p.tier,
+        name: resolveLocalizedText(locale, p.name),
+        description: resolveLocalizedText(locale, p.description),
+        priceCents: p.priceCents,
+        currency: p.currency,
+        billingPeriod: p.billingPeriod,
+        privateIntroductionQuota: p.privateIntroductionQuota,
+        privateIntroductionPeriod: p.privateIntroductionPeriod,
+        eventPriorityEnabled: p.eventPriorityEnabled,
+        staffReviewEnabled: p.staffReviewEnabled,
+        profileDetailAccessLevel: p.profileDetailAccessLevel,
+        conciergePriority: p.conciergePriority,
+        staffSupportLevel: p.staffSupportLevel,
+        sortOrder: p.sortOrder,
+        featured: p.featured,
+      }))
+  })
   app.get('/account/events', async (request, reply) => readCollection(request, reply, getAccountEvents))
   app.get('/account/favorites', async (request, reply) => readCollection(request, reply, getAccountFavorites))
   app.get('/account/private-introductions', async (request, reply) => readCollection(request, reply, getAccountIntroductions))

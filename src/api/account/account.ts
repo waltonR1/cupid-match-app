@@ -70,6 +70,10 @@ export function getAccountMembership(): Promise<{
   return requestJson('/account/membership')
 }
 
+export function getMembershipPlans(): Promise<MembershipPlanDTO[]> {
+  return requestJson<MembershipPlanDTO[]>('/membership/plans')
+}
+
 export function getAccountEvents(): Promise<AccountEventRegistrationDTO[]> {
   return requestJson<AccountEventRegistrationDTO[]>('/account/events')
 }

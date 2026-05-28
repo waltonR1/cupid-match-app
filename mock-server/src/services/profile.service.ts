@@ -27,7 +27,7 @@ import {
     SELF_PROFILE_MEMBER_ONLY_FIELDS,
     type ProfileRestrictedFieldValue,
 } from '../constants/profile-access.js'
-import {MEMBERSHIP_BENEFITS, PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
+import {PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
 import {buildPagination, paginate} from '../utils/pagination.js'
 import {nextId} from '../utils/id.js'
 import {resolveLocalizedText, resolveLocalizedTexts} from '../utils/localized.js'
@@ -271,6 +271,7 @@ export function selfProfileDetail(locale: ApiLocale, data: Database, id: string,
 
     return toSelfProfileDetail(
         locale,
+        data,
         buildProfileView(data, profile),
         userContext,
         data.private_introduction_requests,
@@ -286,7 +287,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
     if (!profile || !isBusinessActiveProfile(profile)) return {status: 'not_found' as const}
     if (!userContext) return {status: 'login_required' as const}
 
-    const introduction = resolvePrivateIntroduction(userContext, profileId, data.private_introduction_requests)
+    const introduction = resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)
 
     if (!introduction.canRequest) {
         return {status: 'blocked' as const, introduction}
@@ -303,7 +304,7 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
 
     return {
         status: 'created' as const,
-        introduction: resolvePrivateIntroduction(userContext, profileId, data.private_introduction_requests),
+        introduction: resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests),
     }
 }
 
@@ -318,6 +319,7 @@ export function familyProfileDetail(locale: ApiLocale, data: Database, id: strin
 
     return toFamilyProfileDetail(
         locale,
+        data,
         buildProfileView(data, profile),
         userContext,
         data.private_introduction_requests,
@@ -368,6 +370,7 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
 /** 转换为个人资料详情 */
 export function toSelfProfileDetail(
     locale: ApiLocale,
+    data: Database,
     profile: ProfileWithDisplayName,
     userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
@@ -419,13 +422,14 @@ export function toSelfProfileDetail(
         communicationStyle: profile.communicationStyle,
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
-        privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
+        privateIntroduction: resolvePrivateIntroduction(data, userContext, profile.id, introductionRequests),
     }, resolveSelfProfileAccessLevel(userContext), privacyPreference)
 }
 
 /** 转换为家庭资料详情 */
 export function toFamilyProfileDetail(
     locale: ApiLocale,
+    data: Database,
     profile: ProfileWithDisplayName,
     userContext: UserContext | null,
     introductionRequests: PrivateIntroductionRequestRecord[] = [],
@@ -478,7 +482,7 @@ export function toFamilyProfileDetail(
         communicationStyle: profile.communicationStyle,
         summary: resolveLocalizedText(locale, profile.summary),
         tags: resolveLocalizedTexts(locale, profile.tags),
-        privateIntroduction: resolvePrivateIntroduction(userContext, profile.id, introductionRequests),
+        privateIntroduction: resolvePrivateIntroduction(data, userContext, profile.id, introductionRequests),
     }, resolveProfileAccessLevel(userContext), privacyPreference)
 }
 
@@ -615,6 +619,7 @@ function resolveProfileAccessLevel(userContext: UserContext | null): ProfileAcce
 
 /** 计算私人介绍状态 */
 function resolvePrivateIntroduction(
+    data: Database,
     userContext: UserContext | null,
     profileId: string,
     requests: PrivateIntroductionRequestRecord[],
@@ -630,14 +635,13 @@ function resolvePrivateIntroduction(
         }
     }
 
-    const benefit = MEMBERSHIP_BENEFITS[userContext.membership]
+    const balance = data.user_entitlement_balances.find(
+        (b) => b.userId === userContext.userId && b.entitlementCode === 'private_introduction',
+    )
+    const quotaRemaining = balance ? Math.max(0, balance.quotaRemaining) : 0
     const relatedRequests = requests.filter((item) => item.requesterUserId === userContext.userId)
     const profileRequest = latestProfileIntroductionRequest(relatedRequests, profileId)
-    const quotaUsed = relatedRequests
-        .filter((item) => isCurrentMonthIntroduction(item))
-        .filter((item) => isQuotaConsumingIntroduction(item))
-        .length
-    const quotaRemaining = Math.max(0, benefit.privateIntroductionQuota - quotaUsed)
+    const quotaUsed = balance ? balance.quotaUsed : 0
 
     if (profileRequest && isBlockingProfileIntroduction(profileRequest)) {
         const blockingRequest = profileRequest.status === 'declined'
@@ -647,7 +651,7 @@ function resolvePrivateIntroduction(
         return {
             status: resolveBlockingIntroductionStatus(blockingRequest),
             membership: userContext.membership,
-            quotaTotal: benefit.privateIntroductionQuota,
+            quotaTotal: balance?.quotaTotal ?? 0,
             quotaRemaining,
             alreadyRequested: true,
             canRequest: false,
@@ -659,7 +663,7 @@ function resolvePrivateIntroduction(
         return {
             status: 'quota_exhausted',
             membership: userContext.membership,
-            quotaTotal: benefit.privateIntroductionQuota,
+            quotaTotal: balance?.quotaTotal ?? 0,
             quotaRemaining,
             alreadyRequested: false,
             canRequest: false,
@@ -669,7 +673,7 @@ function resolvePrivateIntroduction(
     return {
         status: 'available',
         membership: userContext.membership,
-        quotaTotal: benefit.privateIntroductionQuota,
+        quotaTotal: balance?.quotaTotal ?? 0,
         quotaRemaining,
         alreadyRequested: false,
         canRequest: true,

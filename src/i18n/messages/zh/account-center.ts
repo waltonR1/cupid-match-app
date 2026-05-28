@@ -334,12 +334,12 @@ export const accountCenterMessages: AppMessageSchema = {
       entitlement: {
         private_introduction: '私人介绍额度',
         event_priority: '活动优先报名',
-        advisor_review: '顾问审核',
+        staff_review: '顾问审核',
         profile_detail_access: '资料详情查看',
       },
       entitlementState: {
         event_priority: '已开通',
-        advisor_review: '已包含',
+        staff_review: '已包含',
         profile_detail_access: '已解锁',
       },
       tierPositioning: {

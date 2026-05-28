@@ -13,7 +13,6 @@ const defaultData: Database = {
     event_agenda_items: [],
     event_registrations: [],
     membership_plans: [],
-    membership_entitlements: [],
     user_memberships: [],
     user_entitlement_balances: [],
     user_preferences: [],
@@ -55,7 +54,6 @@ export async function initDb(): Promise<void> {
     db.data.event_registrations ??= []
     db.data.user_memberships ??= []
     db.data.membership_plans ??= []
-    db.data.membership_entitlements ??= []
     db.data.user_entitlement_balances ??= []
     db.data.user_preferences ??= []
     db.data.staff_tasks ??= []

@@ -130,6 +130,7 @@ export async function register(
   const membership: UserMembershipRecord = {
     id: nextId('user-membership', db.data.user_memberships),
     userId,
+    planId: 'plan-free',
     tier: 'free',
     status: 'active',
     startedAt: now.slice(0, 10),

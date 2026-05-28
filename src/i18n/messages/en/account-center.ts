@@ -307,8 +307,8 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: 'Expires at',
     conciergePriority: 'Concierge priority',
       status: { active: 'Active', expired: 'Expired', cancelled: 'Cancelled', paused: 'Paused' },
-      entitlement: { private_introduction: 'Private introductions', event_priority: 'Event priority', advisor_review: 'Advisor review', profile_detail_access: 'Profile detail access' },
-      entitlementState: { event_priority: 'Enabled', advisor_review: 'Included', profile_detail_access: 'Unlocked' },
+      entitlement: { private_introduction: 'Private introductions', event_priority: 'Event priority', staff_review: 'Advisor review', profile_detail_access: 'Profile detail access' },
+      entitlementState: { event_priority: 'Enabled', staff_review: 'Included', profile_detail_access: 'Unlocked' },
       tierPositioning: {
         free: 'Best for exploring the platform and core services.',
         silver: 'Built for starting steadier formal introductions.',

@@ -23,6 +23,7 @@ Phase 5.4: 引入 profile 归档生命周期
 Phase 5.5: 补齐 account center 写操作
 Phase 5.6: 设计独立消息中心
 Phase 5.7: 收敛会员套餐事实源
+Phase 5.7.2: 公开会员页接入 membership_plans API
 Phase 5.8: 收敛活动字段与 debug 管理链路
 Phase 6: 完成 profile / event / account / private introduction 联动
 ```
@@ -1695,9 +1696,7 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 - 优化 `user_entitlement_balances`，让它只记录真正可计数权益的周期余额，例如私人介绍额度；活动优先、staff 审核、资料详情访问层级等布尔 / 访问型权益不进入余额表。
 - 为 `user_entitlement_balances` 增加清晰周期字段，例如 `periodStartedAt`、`periodEndsAt`，并将来源关联到具体 `membershipId`。
 - 将私人介绍额度的事实源从临时 `MEMBERSHIP_BENEFITS` 迁移到 `membership_plans` + `user_entitlement_balances`；Phase 6 的申请接口只消费本阶段产出的余额结果，不再自行按会员等级推导额度。
-- 为公开会员页和首页会员模块提供只读计划接口，例如 `GET /api/membership/plans`。
-- 让 `/pages/public/membership`、首页会员区和 `/pages/account/membership` 复用同一组 plan DTO / mapper。
-- 从 i18n 中移除会造成事实分叉的套餐名、价格、额度、staff 优先级等业务事实；i18n 只保留标题、说明、CTA、营销叙事和页面文案。
+- 为公开会员页和首页会员模块预留只读计划接口，例如 `GET /api/membership/plans`；公开展示接入留到 Phase 5.7.2。
 - 检查并收敛 `MEMBERSHIP_BENEFITS`：它不应继续作为额度、staff 优先级或 profile 访问权益的独立事实源；本阶段结束前应移除或改为从 `membership_plans` 派生。
 - 评估并补齐 `membership_plans` 的排序和展示字段，例如 `sortOrder`、`featured`，避免前端用硬编码顺序判断套餐展示。
 - 保持升级入口是占位流程；点击升级可以进入后续流程占位或返回待接入状态，但不直接改写当前用户会员等级和余额。
@@ -1712,16 +1711,40 @@ Phase 5.7 排在独立消息中心之后执行，不混入 Phase 5.5 的 account
 
 ### 验收标准
 
-- 公开会员页、首页会员区、账户会员页展示的套餐名、价格、额度和核心权益来自同一套 `membership_plans` 宽表数据。
+- `membership_plans` 宽表成为 mock-server 和 account membership 的套餐事实源。
+- `GET /api/membership/plans` 返回完整 plan DTO，供 Phase 5.7.2 的公开会员页和首页会员模块复用。
 - account membership 页面仍能展示当前会员、剩余额度和下一等级，但不再拥有另一套套餐事实。
 - `user_memberships` 能清楚表达用户当前开通的套餐、状态、起止时间和取消 / 过期信息。
 - `user_entitlement_balances` 只表达用户当前周期的可计数权益余额，并能追溯到对应会员记录。
-- i18n 不再保存套餐事实，只保存页面表达文案。
+- account membership i18n 不再保存套餐事实，只保存页面表达文案；公开会员页和首页会员模块的套餐事实清理留到 Phase 5.7.2。
 - `membership_entitlements` 从 mock schema、db、service、API DTO 和文档中移除。
 - `MEMBERSHIP_BENEFITS` 不再与 `membership_plans` 形成并行 source of truth。
 - 会员升级入口仍是占位，不改变当前用户套餐与余额。
 - `npm run type-check` 通过。
 - `npm run mock:build` 通过。
+- `npm run check:i18n` 通过。
+- `npm run build:h5` 通过。
+
+## Phase 5.7.2：公开会员页接入 membership_plans API
+
+### 目标
+
+Phase 5.7 已完成 DB 层收敛，但 `MembershipTiersSection` 和 `HomeMembership` 组件仍使用硬编码 i18n 事实（价格、额度、特性）。本阶段将公开会员页和首页会员模块改为数据驱动，统一消费 `GET /api/membership/plans`。
+
+### 修改范围
+
+- `src/components/membership/MembershipTiersSection.vue` — 改为接收 `MembershipPlanDTO[]` props，循环渲染
+- `src/components/home/HomeMembership.vue` — 同上
+- `src/pages/public/membership.vue` — 接入 `useMembershipPlans` hook
+- `src/hooks/membership/use-membership-plans.ts`（新增）
+- `src/i18n/messages/*/membership.ts` — 删除硬编码的价格、额度、特性事实，只保留标题、CTA、营销叙事
+
+### 验收标准
+
+- `/pages/public/membership` 的套餐名、价格、额度和核心权益来自 `GET /api/membership/plans`。
+- 首页会员模块不再硬编码套餐事实，和公开会员页复用同一组 plan DTO / mapper。
+- `src/i18n/messages/*/membership.ts` 不再保存套餐名、价格、额度和 staff 优先级等业务事实。
+- `npm run type-check` 通过。
 - `npm run check:i18n` 通过。
 - `npm run build:h5` 通过。
 
@@ -1949,7 +1972,15 @@ feat(inbox): add inbox schema, mock service, and placeholder page
 
 ```text
 refactor(membership): centralize plan facts
-refactor(membership): use shared plan api
+refactor(membership): remove membership_entitlements table
+refactor(membership): replace MEMBERSHIP_BENEFITS with balance lookup
+```
+
+### Phase 5.7.2
+
+```text
+refactor(membership): drive public tiers from membership_plans API
+refactor(membership): remove hardcoded plan facts from i18n
 ```
 
 ### Phase 5.8

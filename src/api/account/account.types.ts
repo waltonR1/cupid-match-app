@@ -1,5 +1,5 @@
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
-export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
+export type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
@@ -126,8 +126,15 @@ export interface MembershipPlanDTO {
   priceCents?: number
   currency?: string
   billingPeriod?: string
+  privateIntroductionQuota: number
+  privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventPriorityEnabled: boolean
+  staffReviewEnabled: boolean
+  profileDetailAccessLevel: 'registered' | 'premium'
   conciergePriority: boolean
-  entitlements: EntitlementCode[]
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
+  sortOrder: number
+  featured: boolean
 }
 
 export interface AccountEntitlementBalanceDTO {

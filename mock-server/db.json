@@ -4092,7 +4092,8 @@
       "status": "active",
       "startedAt": "2026-01-18",
       "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
+      "updatedAt": "2026-01-18",
+      "planId": "plan-gold"
     }
   ],
   "event_agenda_items": [
@@ -4485,7 +4486,15 @@
       "conciergePriority": false,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "privateIntroductionQuota": 0,
+      "privateIntroductionPeriod": "monthly",
+      "eventPriorityEnabled": false,
+      "staffReviewEnabled": false,
+      "profileDetailAccessLevel": "registered",
+      "sortOrder": 1,
+      "featured": false,
+      "staffSupportLevel": "none"
     },
     {
       "id": "plan-silver",
@@ -4542,7 +4551,15 @@
       "conciergePriority": false,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "privateIntroductionQuota": 5,
+      "privateIntroductionPeriod": "monthly",
+      "eventPriorityEnabled": true,
+      "staffReviewEnabled": true,
+      "profileDetailAccessLevel": "registered",
+      "sortOrder": 2,
+      "featured": true,
+      "staffSupportLevel": "standard"
     },
     {
       "id": "plan-gold",
@@ -4599,7 +4616,15 @@
       "conciergePriority": true,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "privateIntroductionQuota": 15,
+      "privateIntroductionPeriod": "monthly",
+      "eventPriorityEnabled": true,
+      "staffReviewEnabled": true,
+      "profileDetailAccessLevel": "premium",
+      "sortOrder": 3,
+      "featured": true,
+      "staffSupportLevel": "priority"
     },
     {
       "id": "plan-diamond",
@@ -4656,108 +4681,15 @@
       "conciergePriority": true,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    }
-  ],
-  "membership_entitlements": [
-    {
-      "id": "ent-free-pi",
-      "planId": "plan-free",
-      "code": "private_introduction",
-      "quota": 1,
-      "period": "monthly",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-silver-pi",
-      "planId": "plan-silver",
-      "code": "private_introduction",
-      "quota": 3,
-      "period": "monthly",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-silver-ep",
-      "planId": "plan-silver",
-      "code": "event_priority",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-gold-pi",
-      "planId": "plan-gold",
-      "code": "private_introduction",
-      "quota": 10,
-      "period": "monthly",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-gold-ep",
-      "planId": "plan-gold",
-      "code": "event_priority",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-gold-ar",
-      "planId": "plan-gold",
-      "code": "advisor_review",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-gold-pda",
-      "planId": "plan-gold",
-      "code": "profile_detail_access",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-diamond-pi",
-      "planId": "plan-diamond",
-      "code": "private_introduction",
-      "quota": 30,
-      "period": "monthly",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-diamond-ep",
-      "planId": "plan-diamond",
-      "code": "event_priority",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-diamond-ar",
-      "planId": "plan-diamond",
-      "code": "advisor_review",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
-    },
-    {
-      "id": "ent-diamond-pda",
-      "planId": "plan-diamond",
-      "code": "profile_detail_access",
-      "quota": -1,
-      "period": "none",
-      "createdAt": "2026-01-01T00:00:00Z",
-      "updatedAt": "2026-01-01T00:00:00Z"
+      "updatedAt": "2026-01-01T00:00:00Z",
+      "privateIntroductionQuota": 30,
+      "privateIntroductionPeriod": "monthly",
+      "eventPriorityEnabled": true,
+      "staffReviewEnabled": true,
+      "profileDetailAccessLevel": "premium",
+      "sortOrder": 4,
+      "featured": true,
+      "staffSupportLevel": "concierge"
     }
   ],
   "user_entitlement_balances": [
@@ -4765,45 +4697,14 @@
       "id": "ueb-001",
       "userId": "u-001",
       "entitlementCode": "private_introduction",
-      "period": "monthly",
-      "quotaTotal": 10,
+      "quotaTotal": 15,
       "quotaUsed": 0,
-      "quotaRemaining": 10,
+      "quotaRemaining": 15,
       "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
-    },
-    {
-      "id": "ueb-002",
-      "userId": "u-001",
-      "entitlementCode": "event_priority",
-      "period": "none",
-      "quotaTotal": 0,
-      "quotaUsed": 0,
-      "quotaRemaining": 0,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
-    },
-    {
-      "id": "ueb-003",
-      "userId": "u-001",
-      "entitlementCode": "advisor_review",
-      "period": "none",
-      "quotaTotal": 0,
-      "quotaUsed": 0,
-      "quotaRemaining": 0,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
-    },
-    {
-      "id": "ueb-004",
-      "userId": "u-001",
-      "entitlementCode": "profile_detail_access",
-      "period": "none",
-      "quotaTotal": 0,
-      "quotaUsed": 0,
-      "quotaRemaining": 0,
-      "createdAt": "2026-01-18",
-      "updatedAt": "2026-01-18"
+      "updatedAt": "2026-01-18",
+      "membershipId": "user-membership-001",
+      "periodStartedAt": "2026-01-01",
+      "periodEndsAt": "2026-12-31"
     }
   ],
   "user_preferences": [
@@ -6197,7 +6098,7 @@
       "id": "inbox-thread-001",
       "userId": "u-001",
       "category": "system",
-"subjectType": "profile",
+      "subjectType": "profile",
       "subjectId": "p-001",
       "status": "open",
       "createdAt": "2026-05-20T09:00:00Z",

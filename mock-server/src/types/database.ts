@@ -146,6 +146,7 @@ export interface AuthIdentityRecord {
 export interface UserMembershipRecord {
     id: string
     userId: string
+    planId: string
     tier: MembershipLevel
     status: 'active' | 'expired' | 'cancelled' | 'paused'
     startedAt: string
@@ -228,36 +229,34 @@ export interface MembershipPlanRecord {
     priceCents?: number
     currency?: 'EUR' | 'USD' | 'CNY'
     billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+    privateIntroductionQuota: number
+    privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+    eventPriorityEnabled: boolean
+    staffReviewEnabled: boolean
+    profileDetailAccessLevel: 'registered' | 'premium'
     conciergePriority: boolean
+    staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
+    sortOrder: number
+    featured: boolean
     isActive: boolean
     createdAt: string
     updatedAt: string
 }
 
 /** 权益编码 */
-export type EntitlementCode = 'private_introduction' | 'event_priority' | 'advisor_review' | 'profile_detail_access'
-
-/** 套餐权益定义 */
-export interface MembershipEntitlementRecord {
-    id: string
-    planId: string
-    code: EntitlementCode
-    quota: number
-    period: 'none' | 'monthly' | 'quarterly' | 'yearly'
-    createdAt: string
-    updatedAt: string
-}
+export type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 
 /** 用户权益余额 */
 export interface UserEntitlementBalanceRecord {
     id: string
     userId: string
+    membershipId: string
     entitlementCode: EntitlementCode
-    period: string
+    periodStartedAt: string
+    periodEndsAt: string
     quotaTotal: number
     quotaUsed: number
     quotaRemaining: number
-    resetAt?: string
     createdAt: string
     updatedAt: string
 }
@@ -351,7 +350,6 @@ export interface Database {
     event_agenda_items: EventAgendaItemRecord[]
     event_registrations: EventRegistrationRecord[]
     membership_plans: MembershipPlanRecord[]
-    membership_entitlements: MembershipEntitlementRecord[]
     user_memberships: UserMembershipRecord[]
     user_entitlement_balances: UserEntitlementBalanceRecord[]
     user_preferences: UserPreferenceRecord[]

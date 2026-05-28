@@ -25,10 +25,10 @@ export function getProfileAccessDebugPreview(
     const privacyPreference = data.profile_privacy_preferences.find((item) => item.profileId === profile.id)
 
     if (profileType === 'family') {
-        return toFamilyProfileDetail(locale, profileView, userContext, data.private_introduction_requests, privacyPreference)
+        return toFamilyProfileDetail(locale, data, profileView, userContext, data.private_introduction_requests, privacyPreference)
     }
 
-    return toSelfProfileDetail(locale, profileView, userContext, data.private_introduction_requests, privacyPreference)
+    return toSelfProfileDetail(locale, data, profileView, userContext, data.private_introduction_requests, privacyPreference)
 }
 
 function resolvePreviewUserContext(

@@ -307,8 +307,8 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: 'Expiration',
     conciergePriority: 'Priorite concierge',
       status: { active: 'Actif', expired: 'Expire', cancelled: 'Annule', paused: 'En pause' },
-      entitlement: { private_introduction: 'Introductions privees', event_priority: 'Priorite evenement', advisor_review: 'Revue conseiller', profile_detail_access: 'Acces detail profil' },
-      entitlementState: { event_priority: 'Active', advisor_review: 'Inclus', profile_detail_access: 'Debloque' },
+      entitlement: { private_introduction: 'Introductions privees', event_priority: 'Priorite evenement', staff_review: 'Revue conseiller', profile_detail_access: 'Acces detail profil' },
+      entitlementState: { event_priority: 'Active', staff_review: 'Inclus', profile_detail_access: 'Debloque' },
       tierPositioning: {
         free: 'Pour decouvrir la plateforme et les services essentiels.',
         silver: 'Pour engager des introductions formelles plus regulieres.',
