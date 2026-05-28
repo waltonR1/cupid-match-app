@@ -1,7 +1,6 @@
 export interface InboxDebugThread {
   id: string
   userId: string
-  type: string
   subjectType?: string
   subjectId?: string
   status: string
@@ -12,9 +11,8 @@ export interface InboxDebugThread {
 
 export interface InboxNotifyPayload {
   userId?: string
-  type?: string
-  subjectType?: string
-  subjectId?: string
+  templateCode?: string
+  templateLocale?: 'zh' | 'en' | 'fr'
   body?: string
 }
 
@@ -22,5 +20,8 @@ export interface InboxNotifyResult {
   threadId: string
   messageId: string
   userId: string
+  templateCode: string
+  templateLocale: string
+  body: string
   createdAt: string
 }

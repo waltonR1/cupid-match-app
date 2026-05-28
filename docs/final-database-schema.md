@@ -118,7 +118,6 @@ type RecordStatus = 'active' | 'archived'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
-type InboxThreadType = 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
 type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
 type InboxMessageType = 'text' | 'system_notice' | 'status_update' | 'action_prompt'
 type StaffRole = 'admin' | 'operator' | 'reviewer' | 'event_manager' | 'support'
@@ -720,7 +719,7 @@ interface PrivateIntroductionRequestRecord {
 interface InboxThreadRecord {
   id: string
   userId: string
-  type: InboxThreadType
+  category: 'system' | 'chat'
   subjectType?: InboxSubjectType
   subjectId?: string
   status: 'open' | 'closed' | 'archived'

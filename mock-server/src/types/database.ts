@@ -304,7 +304,7 @@ export interface StaffTaskRecord {
 export interface InboxThreadRecord {
     id: string
     userId: string
-    type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+    category: 'system' | 'chat'
     subjectType?: string
     subjectId?: string
     status: 'open' | 'closed' | 'archived'

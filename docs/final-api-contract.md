@@ -563,8 +563,8 @@ Rules:
 ```ts
 interface InboxThreadSummaryDTO {
   threadId: string
-  type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
-  subjectType?: 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
+  category: 'system' | 'chat'
+  subjectType?: InboxSubjectType
   subjectId?: string
   title: string
   preview: string
@@ -611,8 +611,8 @@ interface InboxMessagePageDTO {
 
 Rules:
 
-- Phase 5.6 only needs `GET /api/inbox/threads` and `POST /api/inbox/threads/:id/read` for system-notification placeholders.
-- `GET /api/inbox/threads/:id/messages?before=&limit=` and `POST /api/inbox/threads/:id/messages` stay in the final contract for later message detail and controlled conversation work.
+- Phase 5.6 delivers `GET /api/inbox/threads`, `GET /api/inbox/threads/:id/messages?before=&limit=`, and `POST /api/inbox/threads/:id/read` for notification detail viewing.
+- `POST /api/inbox/threads/:id/messages` stays in the final contract for later controlled conversation work.
 - Accepted private introductions do not automatically create chat rooms in Phase 5.6; requester contact reveal is handled by `GET /api/account/private-introductions/:requestId/contact`.
 - Future user-visible event, profile review, legal document, membership, and staff notices should enter inbox threads/messages instead of a separate notifications table.
 

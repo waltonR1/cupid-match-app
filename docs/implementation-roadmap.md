@@ -1290,7 +1290,7 @@ interface StaffTaskRecord {
 - `membership_entitlements`：终态不保留；套餐权益进入 `membership_plans` 宽表。
 - `privacy_settings.title/desc`：不要在数据库存页面文案，改为 `user_preferences` 明确字段。
 - `message_threads`：替换为统一 `inbox_threads` / `inbox_messages` / `inbox_reads`。
-- `private_introduction_rooms` / `private_introduction_room_messages`：终态不保留；私人介绍 accepted 后进入 `inbox_threads(type = private_introduction)`。
+- `private_introduction_rooms` / `private_introduction_room_messages`：终态不保留；私人介绍 accepted 后进入 `inbox_threads(category = chat, subjectType = private_introduction_request)`。
 - account API 中 `realName / nickName` 这类临时字段应重命名。
 
 ### Account API 目标
@@ -1615,7 +1615,7 @@ membership：
 ### 设计决策
 
 - 私人介绍 accepted 后**不开启聊天/room**。改为展示对方联系方式（从 `profile_contacts` 读取），由独立 API 承接。
-- Inbox 当前只接系统通知，但 `inbox_threads.type` 保留 `private_introduction` 等后续类型，结构不降级。
+- Inbox 当前只接系统通知详情预览；`inbox_threads.category` 区分系统通知与受控沟通，`subjectType + subjectId` 关联资料、活动、会员或私人介绍等业务对象。
 - 旧的 `private_introduction_rooms` / `private_introduction_room_messages` 在 Phase 5.6 废弃，终态由 inbox 统一承接。
 
 ### 5.6a：联系方式展示
@@ -1640,26 +1640,28 @@ GET /api/account/private-introductions/:requestId/contact
 
 **数据库**（与 `docs/final-database-schema.md` 对齐）：
 ```
-inbox_threads   — type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+inbox_threads   — category: 'system' | 'chat', subjectType + subjectId 关联业务对象
 inbox_messages  — senderType: 'system' | 'staff' | 'user', messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt', body: string
 inbox_reads     — threadId + userId + lastReadAt
 ```
 
 **API**：
 ```
-GET  /api/inbox/threads                        — 线程列表（按 updatedAt 倒序）
+GET  /api/inbox/threads                        — 线程列表
+GET  /api/inbox/threads/:id/messages           — 消息详情（cursor 分页 ?before=&limit=）
 POST /api/inbox/threads/:id/read               — 标记已读
 ```
 
-`GET /api/inbox/threads/:id/messages?before=&limit=` 保留在 final contract 中，Phase 5.6 不作为验收项。
+`GET /api/inbox/threads/:id/messages?before=&limit=` 纳入 Phase 5.6 验收，用于系统通知详情分页预览；发送消息仍留到后续受控沟通阶段。
 
-**前端**：`/pages/messages/index` 占位页，展示线程列表和未读标记。消息详情页和发送消息留到后续。
+**前端**：`/pages/messages/index` 承接系统通知的线程列表和消息详情分页预览。发送消息留到后续。
 
 ### 验收标准
 
 - `GET /api/account/private-introductions/:requestId/contact` 返回联系方式，仅 accepted 且本人可访问。
 - `inbox_threads` / `inbox_messages` / `inbox_reads` 加入 mock db 和类型。
 - `GET /api/inbox/threads` 返回当前用户的系统通知线程。
+- `GET /api/inbox/threads/:id/messages?before=&limit=` 返回当前用户可访问线程的消息分页。
 - 未读状态来自 `inbox_reads`，不返回伪造 `unreadCount`。
 - `/pages/messages/index` 作为独立入口存在，不挂在 account center。
 - `npm run type-check` 通过。
@@ -1826,7 +1828,7 @@ private introduction 与 account：
 - 同一 requester 对同一 target profile 在 active 状态下不能重复申请。
 - quota 消耗规则在 Phase 6 明确执行，但额度来源必须来自 Phase 5.7 的 `user_entitlement_balances`，不再从会员等级常量即时推导。
 - debug 页面保留接受 / 拒绝工具，但生产页面不暴露审批操作。
-- `accepted` 后是否自动创建 `inbox_threads(type = private_introduction)` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / staff 跟进中”的状态。
+- `accepted` 后是否自动创建 `inbox_threads(category = chat, subjectType = private_introduction_request)` 在 Phase 6 中明确；如果不开放自由聊天，也要保证 account relationship 和消息中心能表达“平台已受理 / staff 跟进中”的状态。
 
 ### 后端建议
 

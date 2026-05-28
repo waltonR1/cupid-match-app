@@ -6196,8 +6196,8 @@
     {
       "id": "inbox-thread-001",
       "userId": "u-001",
-      "type": "system",
-      "subjectType": "profile_review",
+      "category": "system",
+"subjectType": "profile",
       "subjectId": "p-001",
       "status": "open",
       "createdAt": "2026-05-20T09:00:00Z",
@@ -6206,7 +6206,7 @@
     {
       "id": "inbox-thread-003",
       "userId": "u-001",
-      "type": "system",
+      "category": "system",
       "status": "open",
       "createdAt": "2026-05-28T06:00:00Z",
       "updatedAt": "2026-05-28T06:00:00Z"
@@ -6214,20 +6214,12 @@
     {
       "id": "inbox-thread-002",
       "userId": "u-001",
-      "type": "system",
+      "category": "system",
       "subjectType": "event",
       "subjectId": "e-001",
       "status": "open",
       "createdAt": "2026-05-25T14:00:00Z",
       "updatedAt": "2026-05-27T10:00:00Z"
-    },
-    {
-      "id": "inbox-1779927221830",
-      "userId": "u-001",
-      "type": "system",
-      "status": "open",
-      "createdAt": "2026-05-28T00:13:41.830Z",
-      "updatedAt": "2026-05-28T00:13:41.830Z"
     }
   ],
   "inbox_messages": [
@@ -6285,15 +6277,6 @@
       "templateLocale": "zh",
       "createdAt": "2026-05-28T06:00:00Z",
       "updatedAt": "2026-05-28T06:00:00Z"
-    },
-    {
-      "id": "msg-1779927221830",
-      "threadId": "inbox-1779927221830",
-      "senderType": "system",
-      "messageType": "text",
-      "body": "test notification",
-      "createdAt": "2026-05-28T00:13:41.830Z",
-      "updatedAt": "2026-05-28T00:13:41.830Z"
     }
   ],
   "inbox_reads": [

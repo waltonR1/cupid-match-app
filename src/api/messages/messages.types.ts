@@ -1,12 +1,31 @@
+export type InboxSenderType = 'system' | 'staff' | 'user'
+export type InboxMessageType = 'text' | 'system_notice' | 'status_update' | 'action_prompt'
+
+export type InboxThreadStatus = 'open' | 'closed' | 'archived'
+export type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
+
 export interface InboxThreadDTO {
   id: string
-  type: string
-  subjectType?: string
+  category: 'system' | 'chat'
+  subjectType?: InboxSubjectType
   subjectId?: string
-  status: string
+  status: InboxThreadStatus
   lastMessage?: string
   lastMessageAt?: string
   unread: boolean
   createdAt: string
   updatedAt: string
+}
+
+export interface InboxMessageDTO {
+  id: string
+  senderType: InboxSenderType
+  messageType: InboxMessageType
+  body: string
+  createdAt: string
+}
+
+export interface InboxMessagesPage {
+  items: InboxMessageDTO[]
+  page: { limit: number; hasMore: boolean; nextBefore?: string }
 }

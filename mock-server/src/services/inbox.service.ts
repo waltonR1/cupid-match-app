@@ -3,15 +3,28 @@ import { nextId } from '../utils/id.js'
 
 interface InboxThreadDTO {
   id: string
-  type: string
-  subjectType?: string
+  category: 'system' | 'chat'
+  subjectType?: 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
   subjectId?: string
-  status: string
+  status: 'open' | 'closed' | 'archived'
   lastMessage?: string
   lastMessageAt?: string
   unread: boolean
   createdAt: string
   updatedAt: string
+}
+
+interface InboxMessageDTO {
+  id: string
+  senderType: 'system' | 'staff' | 'user'
+  messageType: 'text' | 'system_notice' | 'status_update' | 'action_prompt'
+  body: string
+  createdAt: string
+}
+
+interface InboxMessagesPage {
+  items: InboxMessageDTO[]
+  page: { limit: number; hasMore: boolean; nextBefore?: string }
 }
 
 export function getInboxThreads(data: Database, userId: string): InboxThreadDTO[] {
@@ -26,8 +39,8 @@ export function getInboxThreads(data: Database, userId: string): InboxThreadDTO[
       const unread = lastMsg && (!read || lastMsg.createdAt > read.lastReadAt)
       return {
         id: t.id,
-        type: t.type,
-        subjectType: t.subjectType,
+        category: t.category,
+        subjectType: t.subjectType as InboxThreadDTO['subjectType'],
         subjectId: t.subjectId,
         status: t.status,
         lastMessage: lastMsg?.body?.slice(0, 120),
@@ -37,6 +50,40 @@ export function getInboxThreads(data: Database, userId: string): InboxThreadDTO[
         updatedAt: t.updatedAt,
       }
     })
+}
+
+export function getInboxMessages(
+  data: Database,
+  userId: string,
+  threadId: string,
+  before?: string,
+  limit = 20,
+): InboxMessagesPage | null {
+  const thread = data.inbox_threads.find((t) => t.id === threadId && t.userId === userId)
+  if (!thread) return null
+
+  const all = data.inbox_messages
+    .filter((m) => m.threadId === threadId)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+
+  const idx = before ? all.findIndex((m) => m.id === before) : -1
+  const start = idx >= 0 ? idx + 1 : 0
+  const slice = all.slice(start, start + limit)
+
+  return {
+    items: slice.map((m) => ({
+      id: m.id,
+      senderType: m.senderType,
+      messageType: m.messageType,
+      body: m.body,
+      createdAt: m.createdAt,
+    })),
+    page: {
+      limit,
+      hasMore: start + limit < all.length,
+      nextBefore: start + limit < all.length ? slice[slice.length - 1]?.id : undefined,
+    },
+  }
 }
 
 export function markInboxRead(data: Database, userId: string, threadId: string) {

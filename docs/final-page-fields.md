@@ -703,12 +703,12 @@ interface AccountIntroductionContactViewModel {
 
 ### Messages
 
-`/pages/account/relationship` 只承接收藏与私人介绍申请。私人介绍 accepted 后，relationship 通过独立 contact reveal API 展示对方联系方式，不开启聊天 room。消息中心是独立产品模块；Phase 5.6 先承接系统通知占位，后续受控沟通再进入 inbox。
+`/pages/account/relationship` 只承接收藏与私人介绍申请。私人介绍 accepted 后，relationship 通过独立 contact reveal API 展示对方联系方式，不开启聊天 room。消息中心是独立产品模块；Phase 5.6 承接系统通知：线程列表 + 消息详情分页。后续受控沟通再进入 inbox。
 
 ```ts
 interface InboxThreadViewModel {
   threadId: string
-  type: 'system' | 'private_introduction' | 'event' | 'profile_review' | 'membership' | 'staff'
+  category: 'system' | 'chat'
   title: string
   preview: string
   status: 'open' | 'closed' | 'archived'
@@ -746,7 +746,7 @@ interface InboxMessagePageViewModel {
 }
 ```
 
-Phase 5.6 的消息中心先用于系统通知和未读提示。消息详情、发送消息和私人介绍受控沟通留到后续阶段。
+Phase 5.6 承接系统通知的线程列表和消息详情分页。发送消息和私人介绍受控沟通留到后续阶段。
 
 ### Settings
 
