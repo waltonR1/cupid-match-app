@@ -11,5 +11,5 @@ export function getInboxMessages(threadId: string, before?: string): Promise<Inb
 }
 
 export function markInboxThreadRead(threadId: string): Promise<{ threadId: string; lastReadAt: string }> {
-  return requestJson<{ threadId: string; lastReadAt: string }>(`/inbox/threads/${threadId}/read`, { method: 'POST' })
+  return requestJson<{ threadId: string; lastReadAt: string }>(`/inbox/threads/${threadId}/read`, { method: 'POST', data: {} })
 }
