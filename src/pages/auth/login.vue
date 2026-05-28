@@ -134,8 +134,10 @@
     </view>
 
     <AgreementDialog
-      :open="agreementDialog !== null"
-      :kind="agreementDialog"
+      :document="agreementDocument"
+      :error="agreementError"
+      :loading="agreementLoading"
+      :open="agreementDialogOpen"
       @close="closeAgreementDialog"
     />
   </AppPageLayout>
@@ -148,6 +150,7 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
 import { useLogin } from '@/hooks/auth'
+import { useAgreementDialog } from '@/hooks/legal'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { validateIdentifier, validatePassword } from '@/utils/validate'
@@ -160,7 +163,14 @@ const identifier = ref('')
 const password = ref('')
 const loginError = ref('')
 const agreed = ref(false)
-const agreementDialog = ref<'terms' | 'privacy' | null>(null)
+const {
+  agreementDialogOpen,
+  agreementDocument,
+  agreementLoading,
+  agreementError,
+  openAgreementDialog,
+  closeAgreementDialog,
+} = useAgreementDialog()
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -237,15 +247,7 @@ function toggleAgreement() {
   }
 }
 
-function openAgreementDialog(kind: 'terms' | 'privacy') {
-  agreementDialog.value = kind
-}
-
 function handleForgotPassword() {
   uni.showToast({ title: '功能开发中', icon: 'none' })
-}
-
-function closeAgreementDialog() {
-  agreementDialog.value = null
 }
 </script>

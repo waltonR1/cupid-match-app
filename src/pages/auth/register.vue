@@ -154,8 +154,10 @@
     </view>
 
     <AgreementDialog
-      :open="agreementDialog !== null"
-      :kind="agreementDialog"
+      :document="agreementDocument"
+      :error="agreementError"
+      :loading="agreementLoading"
+      :open="agreementDialogOpen"
       @close="closeAgreementDialog"
     />
   </AppPageLayout>
@@ -168,6 +170,7 @@ import AppButton from '@/components/common/AppButton.vue'
 import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { isDuplicateRegistrationError, useRegister } from '@/hooks/auth'
+import { useAgreementDialog } from '@/hooks/legal'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { validateAccountName, validateIdentifier, validatePassword } from '@/utils/validate'
@@ -175,7 +178,6 @@ import { openLoginPage, redirectToRegistrationLanding } from '@/utils/navigation
 
 type OnboardingPath = 'self' | 'family'
 type AuthProvider = 'email' | 'phone'
-type AgreementDialogType = 'terms' | 'privacy' | null
 
 const { t, locale } = usePageI18n('register')
 const { t: tApp } = useAppI18n()
@@ -187,7 +189,14 @@ const password = ref('')
 const confirmPassword = ref('')
 const registerError = ref('')
 const agreed = ref(false)
-const agreementDialog = ref<AgreementDialogType>(null)
+const {
+  agreementDialogOpen,
+  agreementDocument,
+  agreementLoading,
+  agreementError,
+  openAgreementDialog,
+  closeAgreementDialog,
+} = useAgreementDialog()
 
 const labels = computed(() => ({
   eyebrow: t('hero.eyebrow'),
@@ -283,14 +292,6 @@ function toggleAgreement() {
   if (agreed.value) {
     registerError.value = ''
   }
-}
-
-function openAgreementDialog(kind: Exclude<AgreementDialogType, null>) {
-  agreementDialog.value = kind
-}
-
-function closeAgreementDialog() {
-  agreementDialog.value = null
 }
 
 function inferAuthProvider(value: string): AuthProvider {

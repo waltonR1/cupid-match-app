@@ -429,8 +429,10 @@
   </AccountShell>
 
   <AgreementDialog
-      :kind="agreementDialog"
-      :open="agreementDialog !== null"
+      :document="agreementDocument"
+      :error="agreementError"
+      :loading="agreementLoading"
+      :open="agreementDialogOpen"
       @close="closeAgreementDialog"
   />
 </template>
@@ -451,6 +453,7 @@ import { validatePassword } from '@/utils/validate'
 import { useAuthStore } from '@/stores/modules/auth'
 import type { AccountPreferenceCode } from '@/types/account/settings'
 import { openLoginPage } from '@/utils/navigation'
+import { useAgreementDialog } from '@/hooks/legal'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useI18n({ useScope: 'global' })
@@ -522,7 +525,14 @@ const servicePreferenceItems = computed(() => buildPreferenceItems([
 
 const privacyItems = computed(() => buildPreferenceItems(['analytics_consent_enabled']))
 
-const agreementDialog = ref<'terms' | 'privacy' | null>(null)
+const {
+  agreementDialogOpen,
+  agreementDocument,
+  agreementLoading,
+  agreementError,
+  openAgreementDialog,
+  closeAgreementDialog,
+} = useAgreementDialog()
 const booleanOptions = computed(() => [
   { label: t('common.yes'), value: true },
   { label: t('common.no'), value: false },
@@ -578,14 +588,6 @@ async function chooseAndUploadAvatar() {
 
 function cancelEditing() {
   editing.value = false
-}
-
-function openAgreementDialog(kind: 'terms' | 'privacy') {
-  agreementDialog.value = kind
-}
-
-function closeAgreementDialog() {
-  agreementDialog.value = null
 }
 
 function readPreference(code: string) {

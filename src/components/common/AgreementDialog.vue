@@ -70,15 +70,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { getLegalDocument, type LegalDocumentDTO } from '@/api/legal'
+import { computed } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
+import type { AgreementDocumentViewModel } from '@/types/legal/view'
 
-type AgreementKind = 'terms' | 'privacy'
-
-const props = defineProps<{
+defineProps<{
   open: boolean
-  kind: AgreementKind | null
+  document: AgreementDocumentViewModel | null
+  loading: boolean
+  error: boolean
 }>()
 
 defineEmits<{
@@ -91,37 +91,4 @@ const kicker = computed(() => t('kicker'))
 const closeText = computed(() => t('close'))
 const loadingText = computed(() => t('loading'))
 const errorText = computed(() => t('error'))
-
-const document = ref<LegalDocumentDTO | null>(null)
-const loading = ref(false)
-const error = ref(false)
-
-watch(
-  () => props.open,
-  (isOpen) => {
-    if (!isOpen) {
-      document.value = null
-      error.value = false
-      return
-    }
-
-    if (!props.kind) return
-
-    const requestedKind = props.kind
-    loading.value = true
-    error.value = false
-    void getLegalDocument(requestedKind).then((doc) => {
-      if (!props.open || props.kind !== requestedKind) return
-      document.value = doc
-      error.value = doc === null
-    }).catch(() => {
-      if (!props.open || props.kind !== requestedKind) return
-      document.value = null
-      error.value = true
-    }).finally(() => {
-      if (!props.open || props.kind !== requestedKind) return
-      loading.value = false
-    })
-  },
-)
 </script>
