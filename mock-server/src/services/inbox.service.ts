@@ -1,5 +1,21 @@
-import type { Database } from '../types/database.js'
+import type { Database, PrivateIntroductionRequestRecord } from '../types/database.js'
 import { nextId } from '../utils/id.js'
+
+type InboxLocale = 'zh' | 'en' | 'fr'
+type PrivateIntroductionNoticeResult = 'accepted' | 'declined'
+
+const privateIntroductionNoticeText: Record<PrivateIntroductionNoticeResult, Record<InboxLocale, string>> = {
+  accepted: {
+    zh: '对方已接受你的私人介绍申请。平台已开启受控沟通入口。',
+    en: 'The other party has accepted your private introduction request. A guided communication thread is now open.',
+    fr: 'L autre personne a accepte votre demande d introduction privee. Un espace de communication encadre est ouvert.',
+  },
+  declined: {
+    zh: '对方暂不接受私人介绍申请。平台已保留边界，并会避免重复打扰。',
+    en: 'The other party is not open to this private introduction for now. The platform will preserve the boundary.',
+    fr: 'L autre personne n accepte pas cette introduction privee pour le moment. La plateforme preserve cette limite.',
+  },
+}
 
 interface InboxThreadDTO {
   id: string
@@ -105,4 +121,60 @@ export function markInboxRead(data: Database, userId: string, threadId: string) 
     })
   }
   return { threadId, lastReadAt: now }
+}
+
+export function createPrivateIntroductionInboxNotice(
+  data: Database,
+  request: PrivateIntroductionRequestRecord,
+  result: PrivateIntroductionNoticeResult,
+  createdAt: string,
+) {
+  const requester = data.users.find((user) => user.id === request.requesterUserId)
+  const locale = normalizeInboxLocale(requester?.preferredLocale)
+  const category: 'system' | 'chat' = result === 'accepted' ? 'chat' : 'system'
+  const messageType: 'status_update' | 'system_notice' = result === 'accepted' ? 'status_update' : 'system_notice'
+  const templateCode = result === 'accepted' ? 'introduction_accepted' : 'introduction_declined'
+
+  let thread = data.inbox_threads.find((item) =>
+    item.userId === request.requesterUserId
+    && item.subjectType === 'private_introduction_request'
+    && item.subjectId === request.id
+  )
+
+  if (!thread) {
+    thread = {
+      id: nextId('inbox-thread', data.inbox_threads),
+      userId: request.requesterUserId,
+      category,
+      subjectType: 'private_introduction_request',
+      subjectId: request.id,
+      status: 'open',
+      createdAt,
+      updatedAt: createdAt,
+    }
+    data.inbox_threads.push(thread)
+  } else {
+    thread.category = category
+    thread.status = 'open'
+    thread.updatedAt = createdAt
+  }
+
+  const message = {
+    id: nextId('msg', data.inbox_messages),
+    threadId: thread.id,
+    senderType: 'system' as const,
+    messageType,
+    body: privateIntroductionNoticeText[result][locale],
+    templateCode,
+    templateLocale: locale,
+    createdAt,
+    updatedAt: createdAt,
+  }
+  data.inbox_messages.push(message)
+
+  return { thread, message }
+}
+
+function normalizeInboxLocale(value: string | undefined): InboxLocale {
+  return value === 'en' || value === 'fr' || value === 'zh' ? value : 'zh'
 }

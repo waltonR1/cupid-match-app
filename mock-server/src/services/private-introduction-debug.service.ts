@@ -2,6 +2,7 @@ import type {ApiLocale} from '../types/common.js'
 import type {Database, PrivateIntroductionRequestRecord, PrivateIntroductionStatus} from '../types/database.js'
 import {PRIVATE_INTRODUCTION_COOLDOWN_DAYS} from '../constants/membership.js'
 import {deriveProfileDisplayName} from '../utils/profile-derived.js'
+import {createPrivateIntroductionInboxNotice} from './inbox.service.js'
 
 export interface PrivateIntroductionDebugItemDTO {
     id: string
@@ -47,9 +48,12 @@ export function acceptPrivateIntroductionDebugRequest(
     if (!request) return {status: 'not_found'}
     if (request.status !== 'requested') return {status: 'invalid_status', item: toDebugItem(locale, data, request)}
 
+    const now = new Date().toISOString()
     request.status = 'accepted'
-    request.respondedAt = new Date().toISOString()
+    request.respondedAt = now
     delete request.cooldownUntil
+
+    createPrivateIntroductionInboxNotice(data, request, 'accepted', now)
 
     return {status: 'updated', item: toDebugItem(locale, data, request)}
 }
@@ -64,10 +68,12 @@ export function declinePrivateIntroductionDebugRequest(
     if (!request) return {status: 'not_found'}
     if (request.status !== 'requested') return {status: 'invalid_status', item: toDebugItem(locale, data, request)}
 
-    const now = Date.now()
+    const now = new Date()
     request.status = 'declined'
-    request.respondedAt = new Date(now).toISOString()
-    request.cooldownUntil = new Date(now + PRIVATE_INTRODUCTION_COOLDOWN_DAYS * 24 * 60 * 60 * 1000).toISOString()
+    request.respondedAt = now.toISOString()
+    request.cooldownUntil = new Date(now.getTime() + PRIVATE_INTRODUCTION_COOLDOWN_DAYS * 24 * 60 * 60 * 1000).toISOString()
+
+    createPrivateIntroductionInboxNotice(data, request, 'declined', now.toISOString())
 
     return {status: 'updated', item: toDebugItem(locale, data, request)}
 }
