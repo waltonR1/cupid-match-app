@@ -1,6 +1,10 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const membershipMessages: AppMessageSchema = {
+    free: { title: 'Gratuit' },
+    silver: { title: 'Argent' },
+    gold: { title: 'Or' },
+    diamond: { title: 'Diamant' },
     hero: {
       eyebrow: 'Abonnement',
       title: 'Formules',
