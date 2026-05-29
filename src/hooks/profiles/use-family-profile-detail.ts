@@ -5,62 +5,68 @@ import {
     type FamilyProfileDetail,
     type FormatLocale,
 } from '@/api/profiles'
-import {useLatestRequest} from '@/hooks/common/useLatestRequest'
-import type {Translate} from '@/i18n/types'
-import {toFamilyProfileDetailPageData} from '@/mappers/family-profile-detail-page'
+import { addFavorite, removeFavorite } from '@/api/account'
+import { useLatestRequest } from '@/hooks/common/useLatestRequest'
+import type { Translate } from '@/i18n/types'
+import { toFamilyProfileDetailPageData } from '@/mappers/family-profile-detail-page'
 
-/** 家庭资料详情数据 */
 export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>) {
     const latest = useLatestRequest()
     const profile = ref<FamilyProfileDetail | null>(null)
 
-    watch([profileId, locale], () => {
-        void load()
-    }, {immediate: true})
+    watch([profileId, locale], () => { void load() }, {immediate: true})
 
     const pageData = computed(() => toFamilyProfileDetailPageData({
-        profile: profile.value,
-        locale: locale.value,
-        t,
+        profile: profile.value, locale: locale.value, t,
     }))
+    const accessLevel = computed(() => pageData.value.accessLevel)
+    const favorite = computed(() => profile.value?.favorite ?? { isFavorite: false, canFavorite: false })
+    const favoriteLoading = ref(false)
+    const canFavorite = computed(() => favorite.value.canFavorite)
+
+    async function toggleFavorite() {
+        const id = profileId.value
+        if (!id || !profile.value || favoriteLoading.value) return
+        favoriteLoading.value = true
+        try {
+            if (favorite.value.isFavorite) {
+                await removeFavorite(id)
+                profile.value = { ...profile.value, favorite: { isFavorite: false, canFavorite: true } }
+            } else {
+                const result = await addFavorite(id)
+                if (result) {
+                    profile.value = { ...profile.value, favorite: { isFavorite: true, favoriteId: result.favoriteId, canFavorite: true } }
+                }
+            }
+        } catch {
+            uni.showToast({ title: t('actions.favoriteFailed'), icon: 'none' })
+        } finally {
+            favoriteLoading.value = false
+        }
+    }
 
     async function load() {
         const id = profileId.value
-        if (!id) {
-            profile.value = null
-            return
-        }
-
+        if (!id) { profile.value = null; return }
         const nextProfile = await latest.run(() => getFamilyProfileDetail(id))
-
         if (nextProfile === undefined) {
-            if (latest.error.value !== null) {
-                profile.value = null
-            }
+            if (latest.error.value !== null) profile.value = null
             return
         }
-
         profile.value = nextProfile
     }
 
     async function requestPrivateIntroduction() {
         const id = profileId.value
         if (!id) return
-
         const nextIntroduction = await latest.run(() => requestFamilyProfilePrivateIntroduction(id))
         if (!nextIntroduction || !profile.value) return
-
-        profile.value = {
-            ...profile.value,
-            privateIntroduction: nextIntroduction,
-        }
+        profile.value = { ...profile.value, privateIntroduction: nextIntroduction }
     }
 
     return {
-        loading: latest.loading,
-        error: latest.error,
-        accessLevel: computed(() => pageData.value.accessLevel),
-        heroData: computed(() => pageData.value.heroData),
+        loading: latest.loading, error: latest.error,
+        accessLevel, heroData: computed(() => pageData.value.heroData),
         snapshotFacts: computed(() => pageData.value.snapshotFacts),
         familyReviewFacts: computed(() => pageData.value.familyReviewFacts),
         relationshipFacts: computed(() => pageData.value.relationshipFacts),
@@ -69,7 +75,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         valueFacts: computed(() => pageData.value.valueFacts),
         familyIntroductionData: computed(() => pageData.value.familyIntroductionData),
         privateIntroductionData: computed(() => pageData.value.privateIntroductionData),
-        requestPrivateIntroduction,
-        refresh: load,
+        favorite, canFavorite, favoriteLoading, toggleFavorite,
+        requestPrivateIntroduction, refresh: load,
     }
 }

@@ -22,6 +22,7 @@ export const selfMessages: AppMessageSchema = {
       resultSuffix: '份资料',
       empty: '当前没有符合条件的资料。',
       pagePrefix: '当前显示',
+      favoriteFailed: '收藏状态更新失败',
     },
 
     filters: {

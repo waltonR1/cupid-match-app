@@ -1,4 +1,6 @@
 /** 卡片信息 */
+import type {ProfileFavoriteState} from '@/api/profiles'
+
 export interface ProfileCardFact {
     label: string
     value: string
@@ -9,6 +11,7 @@ export type Gender = 'male' | 'female'
 
 /** 资料卡片 */
 export interface ProfileCardViewModel {
+    favorite: ProfileFavoriteState
     avatarUrl: string
     displayName: string
     gender?: Gender

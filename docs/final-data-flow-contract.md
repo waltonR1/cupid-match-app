@@ -449,6 +449,8 @@ interface ProfileFieldLockDTO {
 interface FavoriteStateDTO {
   isFavorite: boolean
   favoriteId?: string
+  canFavorite: boolean
+  unavailableReason?: 'visitor' | 'own_profile'
 }
 
 interface ProfilePrivateIntroductionDTO {
@@ -1077,7 +1079,7 @@ Flow:
 profile card/detail favorite action
 -> POST/DELETE /api/favorites/:profileId
 -> favorite_profiles upsert/delete
--> return favorite state
+-> return favorite action result
 ```
 
 Database:

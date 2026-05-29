@@ -22,6 +22,7 @@ export const selfMessages: AppMessageSchema = {
       resultSuffix: 'profiles',
       empty: 'No profiles match the current filters.',
       pagePrefix: 'Showing',
+      favoriteFailed: 'Could not update favorite status.',
     },
 
     filters: {

@@ -5,7 +5,7 @@ export const familyDetailMessages: AppMessageSchema = {
     eyebrow: '家庭协作档案',
   },
   actions: {
-    backToFamily: '返回家庭筛选',
+    favorite: '收藏', unfavorite: '取消收藏', favoriteFailed: '操作失败', backToFamily: '返回家庭筛选',
     loginToDiscover: '登录后继续了解',
     becomeMember: '开通会员查看完整档案',
   },

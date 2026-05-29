@@ -1848,6 +1848,8 @@ DTO：
 interface ProfileFavoriteStateDTO {
   isFavorite: boolean
   favoriteId?: string
+  canFavorite: boolean
+  unavailableReason?: 'visitor' | 'own_profile'
 }
 ```
 

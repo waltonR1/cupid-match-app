@@ -21,12 +21,14 @@ export async function registerProfileRoutes(app: FastifyInstance): Promise<void>
 
   app.get(`/profiles/self`, async (request) => {
     const query = request.query as QueryRecord
-    return listSelfProfiles(resolveApiLocale(query.lang), getDb().data, query)
+    const userId = resolveUserIdHeader(request.headers['x-user-id'] as string) || undefined
+    return listSelfProfiles(resolveApiLocale(query.lang), getDb().data, query, userId)
   })
 
   app.get(`/profiles/family`, async (request) => {
     const query = request.query as QueryRecord
-    return listFamilyProfiles(resolveApiLocale(query.lang), getDb().data, query)
+    const userId = resolveUserIdHeader(request.headers['x-user-id'] as string) || undefined
+    return listFamilyProfiles(resolveApiLocale(query.lang), getDb().data, query, userId)
   })
 
   app.get(`/profiles/self/:id`, async (request, reply) => {

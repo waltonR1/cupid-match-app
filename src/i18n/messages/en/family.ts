@@ -22,6 +22,7 @@ export const familyMessages: AppMessageSchema = {
       resultSuffix: 'dossiers',
       empty: 'No family-facing dossiers match the current filters.',
       pagePrefix: 'Showing',
+      favoriteFailed: 'Could not update favorite status.',
     },
 
     filters: {

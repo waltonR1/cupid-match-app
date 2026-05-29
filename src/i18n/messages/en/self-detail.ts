@@ -5,7 +5,7 @@ export const selfDetailMessages: AppMessageSchema = {
       eyebrow: 'Member dossier',
     },
     actions: {
-      backToSelf: 'Back to member filtering',
+      favorite: 'Favorite', unfavorite: 'Unfavorite', favoriteFailed: 'Failed', backToSelf: 'Back to member filtering',
       backToFamily: 'Back to family participation',
       loginToDiscover: 'Login to discover more',
       becomeMember: 'Become a member',

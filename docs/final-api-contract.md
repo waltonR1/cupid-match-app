@@ -414,6 +414,8 @@ interface ProfilePhotoDTO {
 interface FavoriteStateDTO {
   isFavorite: boolean
   favoriteId?: string
+  canFavorite: boolean
+  unavailableReason?: 'visitor' | 'own_profile'
 }
 
 interface ProfilePrivateIntroductionDTO {
@@ -462,7 +464,8 @@ profiles.photos
 
 ```ts
 interface FavoriteActionResponseDTO {
-  favorite: FavoriteStateDTO
+  favoriteId: string
+  alreadyFavorited: boolean
 }
 ```
 

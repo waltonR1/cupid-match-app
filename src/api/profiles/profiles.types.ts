@@ -57,6 +57,14 @@ export type CommunicationStyleCode = 'direct' | 'indirect' | 'balanced'
 /** 会员等级 */
 export type MembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 
+/** 资料收藏状态 */
+export interface ProfileFavoriteState {
+    isFavorite: boolean
+    favoriteId?: string
+    canFavorite: boolean
+    unavailableReason?: 'visitor' | 'own_profile'
+}
+
 /** 私人介绍状态 */
 export type PrivateIntroductionStatus =
     | 'available'
@@ -118,6 +126,7 @@ export interface SelfProfileListItem {
     id: string
     displayName: string
     avatarUrl: string
+    favorite: ProfileFavoriteState
     gender: GenderCode
     age: number
     city: string
@@ -135,6 +144,7 @@ export interface FamilyProfileListItem {
     id: string
     displayName: string
     avatarUrl: string
+    favorite: ProfileFavoriteState
     gender: GenderCode
     age: number
     city: string
@@ -193,6 +203,7 @@ export interface SelfProfileDetail {
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroduction
+    favorite: ProfileFavoriteState
 }
 
 /** 家庭资料详情 */
@@ -240,6 +251,7 @@ export interface FamilyProfileDetail {
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroduction
+    favorite: ProfileFavoriteState
 }
 
 /** 分页信息 */

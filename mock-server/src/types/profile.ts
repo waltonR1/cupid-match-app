@@ -200,6 +200,13 @@ export interface PrivateIntroductionDTO {
 /** 受限字段 */
 type Restricted<T> = T | ProfileRestrictedFieldValue
 
+export interface ProfileFavoriteStateDTO {
+    isFavorite: boolean
+    favoriteId?: string
+    canFavorite: boolean
+    unavailableReason?: 'visitor' | 'own_profile'
+}
+
 /** 本人资料列表项 */
 export interface SelfProfileListItemDTO {
     id: string
@@ -215,6 +222,7 @@ export interface SelfProfileListItemDTO {
     summary: string
     languages: string[]
     tags: string[]
+    favorite: ProfileFavoriteStateDTO
 }
 
 /** 家庭资料列表项 */
@@ -234,6 +242,7 @@ export interface FamilyProfileListItemDTO {
     relationshipGoal: string
     residencePlan: string
     tags: string[]
+    favorite: ProfileFavoriteStateDTO
 }
 
 /** 本人资料详情 */
@@ -280,6 +289,7 @@ export interface SelfProfileDetailDTO {
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO
+    favorite: ProfileFavoriteStateDTO
 }
 
 /** 家庭资料详情 */
@@ -327,6 +337,7 @@ export interface FamilyProfileDetailDTO {
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO
+    favorite: ProfileFavoriteStateDTO
 }
 
 /** 目录筛选选项 */

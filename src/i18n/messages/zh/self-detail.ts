@@ -5,7 +5,7 @@ export const selfDetailMessages: AppMessageSchema = {
       eyebrow: '会员档案',
     },
     actions: {
-      backToSelf: '返回会员筛选',
+      favorite: '收藏', unfavorite: '取消收藏', favoriteFailed: '操作失败', backToSelf: '返回会员筛选',
       backToFamily: '返回家庭参与',
       loginToDiscover: '登录后继续了解',
       becomeMember: '开通会员',

@@ -4,7 +4,9 @@ import {
     type FamilyProfileDirectoryResponse,
     type FamilyProfileSortKey,
     type FormatLocale,
+    type ProfileFavoriteState,
 } from '@/api/profiles'
+import {addFavorite, removeFavorite} from '@/api/account'
 import {PROFILE_DIRECTORY_PAGE_SIZE, isFamilyProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
@@ -23,6 +25,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
     const sortKey = ref<FamilyProfileSortKey>(DEFAULT_FAMILY_PROFILE_SORT)
     const page = ref(1)
     const response = ref<FamilyProfileDirectoryResponse | null>(null)
+    const favoriteUpdatingIds = ref<string[]>([])
 
     /** 筛选、排序、分页或语言变化时重新加载目录 */
     watch([filters, sortKey, page, locale], () => {
@@ -100,6 +103,37 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         page.value = nextPage
     }
 
+    function updateFavoriteState(profileId: string, favorite: ProfileFavoriteState) {
+        if (!response.value) return
+
+        response.value = {
+            ...response.value,
+            items: response.value.items.map((item) => item.id === profileId ? {...item, favorite} : item),
+        }
+    }
+
+    /** 切换目录卡片收藏状态 */
+    async function toggleFavorite(profileId: string) {
+        const current = response.value?.items.find((item) => item.id === profileId)?.favorite
+        if (!current?.canFavorite || favoriteUpdatingIds.value.includes(profileId)) return
+
+        favoriteUpdatingIds.value = [...favoriteUpdatingIds.value, profileId]
+
+        try {
+            if (current.isFavorite) {
+                await removeFavorite(profileId)
+                updateFavoriteState(profileId, {isFavorite: false, canFavorite: true})
+            } else {
+                const result = await addFavorite(profileId)
+                updateFavoriteState(profileId, {isFavorite: true, favoriteId: result.favoriteId, canFavorite: true})
+            }
+        } catch {
+            uni.showToast({title: t('directory.favoriteFailed'), icon: 'none'})
+        } finally {
+            favoriteUpdatingIds.value = favoriteUpdatingIds.value.filter((id) => id !== profileId)
+        }
+    }
+
     return {
         loading: latest.loading,
         error: latest.error,
@@ -112,6 +146,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
         resetFilters,
         updateSort,
         changePage,
+        toggleFavorite,
         refresh: load,
     }
 }

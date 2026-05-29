@@ -37,6 +37,7 @@
               :key="item.id"
               :data="item.card"
               @select="openSelfDetail(item.id)"
+              @toggle-favorite="toggleFavorite(item.id)"
           />
         </view>
 
@@ -70,7 +71,7 @@ import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.v
 import ProfileDirectoryIntro from '@/components/profiles/directory/ProfileDirectoryIntro.vue'
 import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileDirectoryPagination.vue'
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
-import {useSelfProfileDirectory} from '@/hooks/profiles'
+import { useSelfProfileDirectory } from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import type {SelfSortKey} from '@/types/profiles/directory'
 import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/directory'
@@ -88,6 +89,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
+  toggleFavorite,
 } = useSelfProfileDirectory(t, locale)
 
 /** Hero 标签文案 */

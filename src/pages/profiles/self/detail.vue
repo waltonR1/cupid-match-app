@@ -23,6 +23,20 @@
         <text>{{ t('actions.backToSelf') }}</text>
       </view>
 
+      <view class="mb-5 flex items-center justify-between">
+        <view />
+
+        <view
+          v-if="canFavorite"
+          class="inline-flex cursor-pointer items-center gap-1 border border-semantic-border-default bg-semantic-surface-card px-3 py-2 text-[12px] tracking-[1.2px] transition-colors duration-200 hover:border-semantic-border-emphasis"
+          :class="[favorite.isFavorite ? 'text-semantic-state-danger border-semantic-state-danger' : 'text-semantic-text-muted', favoriteLoading ? 'pointer-events-none opacity-50' : '']"
+          @click="toggleFavorite"
+        >
+          <text>{{ favorite.isFavorite ? '♥' : '♡' }}</text>
+          <text>{{ favoriteLoading ? '...' : (favorite.isFavorite ? t('actions.unfavorite') : t('actions.favorite')) }}</text>
+        </view>
+      </view>
+
       <view v-if="heroData" class="space-y-6">
         <ProfileDetailHero
             :data="heroData"
@@ -212,6 +226,10 @@ const {
   valueFacts,
   lifestyleFacts,
   privateIntroductionData,
+  favorite,
+  canFavorite,
+  favoriteLoading,
+  toggleFavorite,
   requestPrivateIntroduction,
 } = useSelfProfileDetail(profileId, t, locale)
 

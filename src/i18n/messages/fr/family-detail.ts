@@ -5,7 +5,7 @@ export const familyDetailMessages: AppMessageSchema = {
     eyebrow: 'Dossier de coordination familiale',
   },
   actions: {
-    backToFamily: 'Retour a la recherche famille',
+    favorite: 'Favori', unfavorite: 'Retirer favori', favoriteFailed: 'Echec', backToFamily: 'Retour a la recherche famille',
     loginToDiscover: 'Se connecter pour en voir plus',
     becomeMember: 'Devenir membre',
   },

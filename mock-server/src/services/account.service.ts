@@ -1075,6 +1075,29 @@ export function getAccountEvents(data: Database, userId: string): AccountEventRe
 
 // -- Favorites -- //
 
+export function addFavorite(data: Database, userId: string, profileId: string) {
+  const profile = data.profiles.find((p) => p.id === profileId)
+  if (!profile || profile.archivedAt) return 'unavailable' as const
+
+  const ownProfile = data.profile_ownerships.some((o) => o.userId === userId && o.profileId === profileId && o.status === 'active')
+  if (ownProfile) return 'own_profile' as const
+
+  const existing = data.favorite_profiles.find((f) => f.userId === userId && f.profileId === profileId)
+  if (existing) return { favoriteId: existing.id, alreadyFavorited: true as const }
+
+  const now = new Date().toISOString()
+  const id = nextId('fav', data.favorite_profiles)
+  data.favorite_profiles.push({ id, userId, profileId, createdAt: now, updatedAt: now })
+  return { favoriteId: id, alreadyFavorited: false as const }
+}
+
+export function removeFavorite(data: Database, userId: string, profileId: string) {
+  const index = data.favorite_profiles.findIndex((f) => f.userId === userId && f.profileId === profileId)
+  if (index === -1) return { removed: false as const }
+  data.favorite_profiles.splice(index, 1)
+  return { removed: true as const }
+}
+
 export function getAccountFavorites(data: Database, userId: string): FavoriteProfileSummaryDTO[] {
   const locale = resolveUserLocale(data, userId)
   return data.favorite_profiles

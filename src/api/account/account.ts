@@ -2,6 +2,7 @@ import { requestJson } from '@/api/shared/http'
 import type {
   AccountDashboardDTO,
   AccountEventRegistrationDTO,
+  FavoriteActionResult,
   IntroductionContactDTO,
   IntroductionContactUnavailableDTO,
   AccountIntroductionSummaryDTO,
@@ -80,6 +81,14 @@ export function getAccountEvents(): Promise<AccountEventRegistrationDTO[]> {
 
 export function getAccountFavorites(): Promise<FavoriteProfileSummaryDTO[]> {
   return requestJson<FavoriteProfileSummaryDTO[]>('/account/favorites')
+}
+
+export function addFavorite(profileId: string): Promise<FavoriteActionResult> {
+  return requestJson<FavoriteActionResult>(`/favorites/${profileId}`, { method: 'POST', data: {} })
+}
+
+export function removeFavorite(profileId: string): Promise<{ removed: boolean }> {
+  return requestJson<{ removed: boolean }>(`/favorites/${profileId}`, { method: 'DELETE', data: {} })
 }
 
 export function getAccountIntroductions(): Promise<AccountIntroductionSummaryDTO[]> {

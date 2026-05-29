@@ -364,6 +364,11 @@ export interface IntroductionContactDTO {
   visibility: string
 }
 
+export interface FavoriteActionResult {
+  favoriteId: string
+  alreadyFavorited: boolean
+}
+
 export interface IntroductionContactUnavailableDTO {
   available: false
   reason: 'not_found' | 'forbidden' | 'not_accepted' | 'contact_unavailable' | 'visibility_restricted'

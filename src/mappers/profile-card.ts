@@ -25,6 +25,7 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
         ],
         tags: profile.tags.slice(0, 3),
         footer: t(resolveSelfFooterKey(profile.profileStatus)),
+        favorite: profile.favorite,
     }
 }
 
@@ -50,6 +51,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         ],
         tags: [...profile.tags, ...tagTexts].slice(0, 3),
         footer: t(resolveFamilyFooterKey(profile.profileStatus)),
+        favorite: profile.favorite,
     }
 }
 

@@ -23,10 +23,20 @@
         </view>
       </view>
 
-      <!-- 右上角徽标 -->
-      <view
-          class="rounded-full border border-component-directory-card-badge-border bg-component-directory-card-badge-background px-3 py-1 text-[12px] text-component-directory-card-badge-text">
-        {{ data.badge }}
+      <view class="flex items-center gap-2">
+        <view
+          v-if="data.favorite.canFavorite"
+          class="cursor-pointer text-[18px] leading-none transition-opacity hover:opacity-70"
+          :class="data.favorite.isFavorite ? 'text-semantic-state-danger' : 'text-semantic-text-muted'"
+          @click.stop="emit('toggleFavorite')"
+        >
+          {{ data.favorite.isFavorite ? '♥' : '♡' }}
+        </view>
+
+        <view
+            class="rounded-full border border-component-directory-card-badge-border bg-component-directory-card-badge-background px-3 py-1 text-[12px] text-component-directory-card-badge-text">
+          {{ data.badge }}
+        </view>
       </view>
     </view>
 
@@ -78,6 +88,7 @@ defineProps<{
 /** 卡片点击事件 */
 const emit = defineEmits<{
   (e: 'select'): void
+  (e: 'toggleFavorite'): void
 }>()
 
 /** 触发选中 */

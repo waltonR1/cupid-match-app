@@ -22,6 +22,7 @@ export const familyMessages: AppMessageSchema = {
       resultSuffix: 'dossiers',
       empty: 'Aucun dossier familial ne correspond aux criteres actuels.',
       pagePrefix: 'Affichage',
+      favoriteFailed: 'Impossible de mettre a jour le favori.',
     },
 
     filters: {
