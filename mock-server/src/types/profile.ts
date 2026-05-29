@@ -188,7 +188,7 @@ export interface LocalizedProfilePhotoDTO {
 
 /** 私人介绍状态 */
 export interface PrivateIntroductionDTO {
-    status: PrivateIntroductionStatus | 'available' | 'login_required' | 'membership_required' | 'quota_exhausted'
+    status: PrivateIntroductionStatus | 'available' | 'login_required' | 'membership_required' | 'quota_exhausted' | 'expired'
     membership: MembershipLevel | 'guest'
     quotaTotal: number
     quotaRemaining: number

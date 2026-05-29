@@ -108,6 +108,7 @@ export interface PrivateIntroductionRequestRecord {
     targetProfileId: string
     status: PrivateIntroductionStatus
     requestedAt: string
+    expiresAt?: string
     respondedAt?: string
     cooldownUntil?: string
 }

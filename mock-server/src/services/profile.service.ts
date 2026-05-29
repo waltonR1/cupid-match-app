@@ -301,6 +301,10 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
     if (!profile || !isBusinessActiveProfile(profile)) return {status: 'not_found' as const}
     if (!userContext) return {status: 'login_required' as const}
 
+    if (checkOwnerByUserId(data, userId, profileId)) {
+        return {status: 'blocked' as const, introduction: resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)}
+    }
+
     const introduction = resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)
 
     if (!introduction.canRequest) {
@@ -314,7 +318,17 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
         targetProfileId: profileId,
         status: 'requested',
         requestedAt: now,
+        expiresAt: new Date(Date.now() + 7 * 24 * 3600_000).toISOString(),
     })
+
+    const balance = data.user_entitlement_balances.find(
+        (b) => b.userId === userContext.userId && b.entitlementCode === 'private_introduction',
+    )
+    if (balance && balance.quotaRemaining > 0) {
+        balance.quotaRemaining = balance.quotaRemaining - 1
+        balance.quotaUsed = balance.quotaUsed + 1
+        balance.updatedAt = now
+    }
 
     return {
         status: 'created' as const,
@@ -677,7 +691,6 @@ function resolvePrivateIntroduction(
     const quotaRemaining = balance ? Math.max(0, balance.quotaRemaining) : 0
     const relatedRequests = requests.filter((item) => item.requesterUserId === userContext.userId)
     const profileRequest = latestProfileIntroductionRequest(relatedRequests, profileId)
-    const quotaUsed = balance ? balance.quotaUsed : 0
 
     if (profileRequest && isBlockingProfileIntroduction(profileRequest)) {
         const blockingRequest = profileRequest.status === 'declined'
@@ -716,13 +729,6 @@ function resolvePrivateIntroduction(
     }
 }
 
-/** 判断私人介绍是否占用额度 */
-function isQuotaConsumingIntroduction(request: PrivateIntroductionRequestRecord): boolean {
-    return request.status === 'requested'
-        || request.status === 'accepted'
-        || request.status === 'cooldown'
-}
-
 /** 获取当前资料最近一次私人介绍请求 */
 function latestProfileIntroductionRequest(
     requests: PrivateIntroductionRequestRecord[],
@@ -735,17 +741,9 @@ function latestProfileIntroductionRequest(
     return profileRequests[0] ?? null
 }
 
-/** 判断请求是否属于本月额度 */
-function isCurrentMonthIntroduction(request: PrivateIntroductionRequestRecord): boolean {
-    const requestedAt = new Date(request.requestedAt)
-    const now = new Date()
-
-    return requestedAt.getUTCFullYear() === now.getUTCFullYear()
-        && requestedAt.getUTCMonth() === now.getUTCMonth()
-}
-
 /** 判断资料请求是否阻止再次申请 */
 function isBlockingProfileIntroduction(request: PrivateIntroductionRequestRecord): boolean {
+    if (request.status === 'requested' && isIntroductionExpired(request)) return false
     if (request.status === 'requested' || request.status === 'accepted') return true
     if (request.status === 'cooldown') return !isCooldownExpired(request)
     if (request.status === 'declined') return !isCooldownExpired(resolveDeclinedCooldown(request))
@@ -753,8 +751,14 @@ function isBlockingProfileIntroduction(request: PrivateIntroductionRequestRecord
     return false
 }
 
+/** 判断 request 是否已过期 */
+function isIntroductionExpired(request: PrivateIntroductionRequestRecord): boolean {
+    return Boolean(request.expiresAt && new Date(request.expiresAt) < new Date())
+}
+
 /** 解析阻塞状态 */
 function resolveBlockingIntroductionStatus(request: PrivateIntroductionRequestRecord): SelfProfileDetailDTO['privateIntroduction']['status'] {
+    if (request.status === 'requested' && isIntroductionExpired(request)) return 'expired'
     if (request.status === 'declined') return 'cooldown'
     return request.status
 }
