@@ -32,6 +32,7 @@ export const familyDetailMessages: AppMessageSchema = {
     privateIntroductionStatusAccepted: 'Both sides have confirmed. The platform will arrange the next communication step.',
     privateIntroductionStatusDeclined: 'The other side is not opening further introduction for now.',
     privateIntroductionStatusCooldown: 'This profile is currently in cooldown.',
+    privateIntroductionStatusExpired: 'Request expired. You can submit again.',
     privateIntroductionStatusQuotaExhausted: 'This month’s introduction quota has been used.',
     privateIntroductionStatusLoginRequired: 'Log in to request family coordination.',
     privateIntroductionRequestButton: 'Request family coordination',

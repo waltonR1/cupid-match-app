@@ -283,6 +283,7 @@ const privateIntroductionStatusText = computed(() => {
   if (status === 'requested') return t('sections.privateIntroductionStatusRequested')
   if (status === 'accepted') return t('sections.privateIntroductionStatusAccepted')
   if (status === 'declined') return t('sections.privateIntroductionStatusDeclined')
+  if (status === 'expired') return t('sections.privateIntroductionStatusExpired')
   if (status === 'cooldown') return t('sections.privateIntroductionStatusCooldown')
   if (status === 'quota_exhausted') return t('sections.privateIntroductionStatusQuotaExhausted')
   if (status === 'login_required') return t('sections.privateIntroductionStatusLoginRequired')
@@ -295,6 +296,7 @@ const privateIntroductionActionLabel = computed(() => {
   if (status === 'declined' || status === 'cooldown') return t('sections.privateIntroductionCooldown')
   if (status === 'quota_exhausted') return t('sections.privateIntroductionQuotaUsed')
   if (status === 'requested') return t('sections.privateIntroductionRequested')
+  if (status === 'expired') return t('sections.privateIntroductionRequestButton')
   return t('sections.privateIntroductionUnavailable')
 })
 

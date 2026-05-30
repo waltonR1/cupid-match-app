@@ -32,6 +32,7 @@ export const familyDetailMessages: AppMessageSchema = {
     privateIntroductionStatusAccepted: '双方已确认。平台将安排后续沟通并继续跟进。',
     privateIntroductionStatusDeclined: '对方暂未开放进一步介绍。',
     privateIntroductionStatusCooldown: '该档案暂处于冷静期。',
+    privateIntroductionStatusExpired: '申请已过期，可重新提交。',
     privateIntroductionStatusQuotaExhausted: '本月介绍额度已用完。',
     privateIntroductionStatusLoginRequired: '登录后可申请家庭协作介绍。',
     privateIntroductionRequestButton: '申请家庭协作介绍',

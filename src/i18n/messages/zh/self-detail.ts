@@ -54,6 +54,7 @@ export const selfDetailMessages: AppMessageSchema = {
       privateIntroductionStatusAccepted: '双方已确认。平台将安排私人沟通渠道并继续跟进。',
       privateIntroductionStatusDeclined: '对方暂不开放。平台会保留节奏，并避免重复打扰。',
       privateIntroductionStatusCooldown: '当前处于冷静期，暂不可再次申请。',
+      privateIntroductionStatusExpired: '申请已过期，可重新提交。',
       privateIntroductionStatusQuotaExhausted: '本月私人介绍名额已用完。',
       privateIntroductionStatusLoginRequired: '登录后可申请私人介绍。',
       privateIntroductionStep1: '平台先记录你的申请，并预留本月名额。',

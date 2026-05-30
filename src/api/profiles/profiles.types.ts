@@ -74,6 +74,7 @@ export type PrivateIntroductionStatus =
     | 'requested'
     | 'accepted'
     | 'declined'
+    | 'expired'
     | 'cooldown'
 
 /** 仅会员可见 */

@@ -692,6 +692,17 @@ function resolvePrivateIntroduction(
     const relatedRequests = requests.filter((item) => item.requesterUserId === userContext.userId)
     const profileRequest = latestProfileIntroductionRequest(relatedRequests, profileId)
 
+    if (profileRequest?.status === 'requested' && isIntroductionExpired(profileRequest)) {
+        return {
+            status: 'expired',
+            membership: userContext.membership,
+            quotaTotal: balance?.quotaTotal ?? 0,
+            quotaRemaining,
+            alreadyRequested: true,
+            canRequest: quotaRemaining > 0,
+        }
+    }
+
     if (profileRequest && isBlockingProfileIntroduction(profileRequest)) {
         const blockingRequest = profileRequest.status === 'declined'
             ? resolveDeclinedCooldown(profileRequest)

@@ -54,6 +54,7 @@ export const selfDetailMessages: AppMessageSchema = {
       privateIntroductionStatusAccepted: 'Both sides have confirmed. The platform will arrange the private communication channel and follow up.',
       privateIntroductionStatusDeclined: 'The other member is not open for now. The platform will protect the pace and avoid repeated pressure.',
       privateIntroductionStatusCooldown: 'This profile is currently in cooldown and cannot be requested again yet.',
+      privateIntroductionStatusExpired: 'Request expired. You can submit again.',
       privateIntroductionStatusQuotaExhausted: 'This month’s private introduction quota has been used.',
       privateIntroductionStatusLoginRequired: 'Sign in to request a private introduction.',
       privateIntroductionStep1: 'The platform records your request and reserves one monthly quota.',

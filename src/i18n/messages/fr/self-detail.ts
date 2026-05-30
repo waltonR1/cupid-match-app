@@ -54,6 +54,7 @@ export const selfDetailMessages: AppMessageSchema = {
       privateIntroductionStatusAccepted: 'Les deux cotes ont confirme. La plateforme organisera le canal prive et assurera le suivi.',
       privateIntroductionStatusDeclined: 'L autre membre n est pas ouvert pour le moment. La plateforme preserve le rythme et evite la pression repetee.',
       privateIntroductionStatusCooldown: 'Ce profil est en periode de pause et ne peut pas encore etre redemande.',
+      privateIntroductionStatusExpired: 'Demande expiree. Vous pouvez soumettre a nouveau.',
       privateIntroductionStatusQuotaExhausted: 'Le quota d introductions privees du mois est utilise.',
       privateIntroductionStatusLoginRequired: 'Connectez-vous pour demander une introduction privee.',
       privateIntroductionStep1: 'La plateforme enregistre votre demande et reserve un quota mensuel.',

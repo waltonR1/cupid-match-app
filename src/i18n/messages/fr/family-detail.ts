@@ -32,6 +32,7 @@ export const familyDetailMessages: AppMessageSchema = {
     privateIntroductionStatusAccepted: 'Les deux cotes ont confirme. La plateforme organisera la prochaine etape.',
     privateIntroductionStatusDeclined: 'L autre cote n ouvre pas d introduction supplementaire pour le moment.',
     privateIntroductionStatusCooldown: 'Ce dossier est actuellement en periode d attente.',
+    privateIntroductionStatusExpired: 'Demande expiree. Vous pouvez soumettre a nouveau.',
     privateIntroductionStatusQuotaExhausted: 'Le quota mensuel d introductions est utilise.',
     privateIntroductionStatusLoginRequired: 'Connectez-vous pour demander une coordination familiale.',
     privateIntroductionRequestButton: 'Demander une coordination familiale',
