@@ -79,6 +79,8 @@ interface UserRecord {
 }
 ```
 
+Phase 7 目标态会将账户状态统一收敛为 `active | deactivated | suspended`；当前文件仍记录 mock-server 的现状，不提前改写为终态。
+
 `users` 不保存：
 
 - `city`

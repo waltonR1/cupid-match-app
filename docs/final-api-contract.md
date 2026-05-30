@@ -730,7 +730,7 @@ interface AccountUserDTO {
   accountName: string
   avatarUrl: string
   preferredLocale: LocaleCode
-  status: 'active' | 'paused' | 'banned'
+  status: 'active' | 'deactivated' | 'suspended'
 }
 ```
 
@@ -935,6 +935,7 @@ interface AccountSettingsDTO {
   }
   identities: AccountAuthIdentityDTO[]
   password: AccountPasswordSecurityDTO
+  mfa: AccountMfaStatusDTO
   preferences: AccountPreferencesDTO
 }
 
@@ -950,6 +951,38 @@ interface AccountPasswordSecurityDTO {
   lastChangedAt?: string
   canReset: boolean
   requiresMfa: boolean
+}
+
+interface AccountDeactivateResultDTO {
+  status: 'deactivated'
+  deactivatedAt: string
+}
+
+interface AccountExportResultDTO {
+  status: 'generated'
+  downloadUrl: string
+}
+
+interface AccountIdentityCreatePayload {
+  provider: 'email' | 'phone' | 'wechat'
+  identifier: string
+}
+
+interface AccountIdentityActionResultDTO {
+  identity: AccountAuthIdentityDTO
+}
+
+interface AccountIdentityDeleteResultDTO {
+  removed: boolean
+}
+
+interface AccountMfaStatusDTO {
+  enabled: boolean
+  method?: 'totp' | 'email' | 'sms'
+}
+
+interface AccountMfaUpdatePayload {
+  method: 'totp' | 'email' | 'sms'
 }
 
 interface AccountProfilePrivacyPreferencesDTO {
@@ -1037,6 +1070,11 @@ Write rules:
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
 - `POST /api/account/profiles/:profileId/privacy-preferences` 鍙洿鏂?profile 鎵€鏈変汉鍙帶鍒剁殑鍗婃晱鎰熷瓧娈甸殣钘忓亸濂斤紝骞惰繑鍥炴渶鏂板亸濂藉璞°€?- `POST /api/account/me` updates account display basics and the account default language preference; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
+- `POST /api/account/password/change` changes the current password through the account security form, writes `auth_identities.passwordHash`, and requires the frontend to log the user out after success.
+- `POST /api/account/deactivate` deactivates the current user, writes `users.status = 'deactivated'`, and returns `AccountDeactivateResultDTO`.
+- `POST /api/account/export` creates an account export request and returns a download URL; `GET /api/account/export/download` returns the generated JSON export for the current user.
+- `POST /api/account/identities` starts an identity binding flow; `DELETE /api/account/identities/:id` removes a bound identity after server-side safety checks.
+- `GET /api/account/mfa/status` reads MFA status from `user_security_settings`; `POST /api/account/mfa/enable` and `POST /api/account/mfa/disable` update that row.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
 
 绂佹鍦?account DTO 涓繑鍥炶繖浜?legacy 瀛楁锛?

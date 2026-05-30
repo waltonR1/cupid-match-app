@@ -25,6 +25,7 @@
 interface FinalDatabase {
   users: UserRecord[]
   auth_identities: AuthIdentityRecord[]
+  user_security_settings: UserSecuritySettingRecord[]
   user_preferences: UserPreferenceRecord[]
   legal_documents: LegalDocumentRecord[]
   legal_document_contents: LegalDocumentContentRecord[]
@@ -96,8 +97,9 @@ LocalizedValue 规则：
 ```ts
 type LocaleCode = 'zh' | 'fr' | 'en'
 type GenderCode = 'male' | 'female'
-type UserStatus = 'active' | 'paused' | 'banned'
+type UserStatus = 'active' | 'deactivated' | 'suspended'
 type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
+type MfaMethod = 'totp' | 'email' | 'sms'
 type LegalDocumentType = 'terms' | 'privacy'
 type LegalDocumentStatus = 'draft' | 'active' | 'archived'
 type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'hidden'
@@ -186,6 +188,11 @@ interface UserRecord {
 - 不保存 `displayName`。账户显示使用 `accountName`。
 - `accountName` 允许重名，不作为登录唯一键；登录唯一性由 `auth_identities(provider, identifier)` 保证。
 
+账户状态规则：
+- `active` 表示正常可用。
+- `deactivated` 表示用户主动停用。
+- `suspended` 表示平台风控或后台暂停。
+
 ### auth_identities
 
 登录身份。一个 user 可以绑定多个登录方式。
@@ -208,6 +215,26 @@ interface AuthIdentityRecord {
 - 唯一键：`provider + identifier`。
 - 开发阶段也使用 `passwordHash` 字段；如暂不接入真实哈希算法，可写入伪 hash，但不新增 `password` 字段。
 - email、phone、wechat 不重复存到 `users`。
+
+### user_security_settings
+
+账户安全设置。一用户一条，用于承接 MFA 等安全策略；不要把 MFA 状态塞进 `users` 或 `auth_identities`。
+
+```ts
+interface UserSecuritySettingRecord {
+  id: string
+  userId: string
+  mfaEnabled: boolean
+  mfaMethod?: MfaMethod
+  createdAt: string
+  updatedAt: string
+}
+```
+
+约束：
+- 唯一键：`userId`。
+- `auth_identities` 只负责登录身份与密码哈希；MFA 是否启用由本表决定。
+- 密码修改仍写入 `auth_identities.passwordHash`，不写入本表。
 
 ### user_preferences
 
@@ -879,6 +906,7 @@ interface ProfilePublicIdentityDTO {
 
 ```text
 auth_identities: unique(provider, identifier)
+user_security_settings: unique(userId)
 legal_documents: unique(type, version)
 legal_documents: unique(type) where status = 'active'
 legal_document_contents: unique(documentId, locale)

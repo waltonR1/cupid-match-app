@@ -440,7 +440,7 @@ interface AccountUserSummaryViewModel {
   accountName: string
   avatarUrl: string
   preferredLocale: 'zh' | 'fr' | 'en'
-  status: 'active' | 'paused' | 'banned'
+  status: 'active' | 'deactivated' | 'suspended'
 }
 ```
 
@@ -755,6 +755,7 @@ interface AccountSettingsPageData {
   account: AccountSettingsIdentityViewModel | null
   security: AccountSecurityIdentityViewModel[]
   password: AccountPasswordSecurityViewModel | null
+  mfa: AccountMfaSecurityViewModel | null
   notificationPreferences: AccountPreferenceViewModel[]
   servicePreferences: AccountPreferenceViewModel[]
   privacyPreferences: AccountPreferenceViewModel[]
@@ -785,6 +786,8 @@ interface AccountSecurityIdentityViewModel {
   providerLabel: string
   identifier: string
   verifiedText: string
+  bindAction?: PageActionViewModel
+  unbindAction?: PageActionViewModel
 }
 
 interface AccountPasswordSecurityViewModel {
@@ -792,12 +795,22 @@ interface AccountPasswordSecurityViewModel {
   lastChangedText: string
   canResetText: string
   requiresMfaText: string
+  changePasswordAction?: PageActionViewModel
+}
+
+interface AccountMfaSecurityViewModel {
+  enabledText: string
+  methodText?: string
+  enableAction?: PageActionViewModel
+  disableAction?: PageActionViewModel
 }
 
 interface AccountActionViewModel {
   key: 'exportData' | 'deactivateAccount'
   label: string
   hint: string
+  confirmTitle?: string
+  confirmDescription?: string
 }
 
 interface LegalDocumentLinkViewModel {

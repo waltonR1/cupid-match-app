@@ -573,7 +573,7 @@ interface UserRecord {
   accountName: string
   avatarUrl: string
   preferredLocale: 'zh' | 'fr' | 'en'
-  status: 'active' | 'paused' | 'banned'
+  status: 'active' | 'deactivated' | 'suspended'
   createdAt: string
   updatedAt: string
 }
@@ -1142,7 +1142,7 @@ interface UserRecord {
   accountName: string
   avatarUrl: string
   preferredLocale: 'zh' | 'fr' | 'en'
-  status: 'active' | 'paused' | 'banned'
+  status: 'active' | 'deactivated' | 'suspended'
   createdAt: string
   updatedAt: string
 }
@@ -2096,12 +2096,10 @@ refactor(account): align relationship status states
 ### Phase 7
 
 ```text
-feat(account): add account deactivation flow
 feat(account): add data export
+feat(account): add account deactivation flow
 feat(account): add identity binding / unbinding
 feat(account): add MFA setup and verification
-feat(settings): add password change UI
-feat(mock-server): add password change endpoint
 ```
 
 ## Phase 7：补齐账户安全与敏感操作
@@ -2115,18 +2113,29 @@ feat(mock-server): add password change endpoint
 | 项 | 当前状态 | 涉及 |
 |------|------|------|
 | 密码修改 | 已在 Phase 5.5 提前完成 | `POST /account/password/change` mock 路由 + 前端内联表单 + 改后登出；`mockHashPassword` 抽到 `mock-server/src/utils/password.ts` 共用 |
-| 账户停用 | 未实现 | `POST /account/deactivate` → `status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')` |
 | 数据导出 | 未实现 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回 JSON 下载 |
+| 账户停用 | 未实现 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')` |
 | 身份绑定/解绑 | 未实现 | `POST /account/identities` / `DELETE /account/identities/:id` / 验证码流程；当前安全区块只读展示 `auth_identities` 列表 + 未绑定占位 |
 | MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
+
+### Phase 7 拆分
+
+| 子阶段 | 范围 | 说明 |
+| --- | --- | --- |
+| 7.0 文档收敛 | `final-*` 文档与 roadmap | 明确密码修改已完成；统一账户状态为 `active / deactivated / suspended`；补齐 MFA source of truth。 |
+| 7.1 数据导出 | `POST /account/export`、`GET /account/export/download` | 从当前用户可访问的账户、资料、活动、收藏、介绍和消息数据生成 JSON 导出。 |
+| 7.2 账户停用 | `POST /account/deactivate` | 写入 `users.status = 'deactivated'`，停用后前端登出；公开链路不再允许该用户继续操作。 |
+| 7.3 身份绑定/解绑 | `auth_identities` | 增加绑定、验证和解绑；解绑必须防止删除最后一个可登录身份。 |
+| 7.4 MFA | `user_security_settings` | 增加 MFA 状态读取、启用、停用；后续敏感操作可读取该状态决定是否追加验证。 |
 
 ### DB 预留字段
 
 以下字段已在当前 schema 中预留，Phase 7 实现时直接使用：
 
 - `auth_identities` 表：`provider` / `identifier` / `passwordHash?` / `verifiedAt?` — 支持多身份绑定与验证
-- `AccountPasswordSecurityDTO.requiresMfa` — MFA 状态展示，mock 硬编码 `false`
-- `UserRecord.status` — 扩展为 `'active' | 'deactivated' | 'suspended'`（`suspended` 预留给平台风控）
+- `user_security_settings` 表：`mfaEnabled` / `mfaMethod?` — MFA 状态 source of truth
+- `AccountPasswordSecurityDTO.requiresMfa` — 敏感操作是否需要 MFA 的展示字段，最终由 `user_security_settings` 派生
+- `UserRecord.status` — 统一为 `'active' | 'deactivated' | 'suspended'`（`suspended` 预留给平台风控）
 
 ### 给接力 AI 的执行提示
 

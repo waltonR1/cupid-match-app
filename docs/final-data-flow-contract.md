@@ -33,6 +33,7 @@
 | Concern | Source of truth | DTO derived fields | Must not be source of truth |
 | --- | --- | --- | --- |
 | 登录账户 | `users`, `auth_identities` | `AuthSession.user.accountName` | `profiles`, `profiles.profileType` |
+| 账户安全 | `auth_identities`, `user_security_settings` | `AccountPasswordSecurityDTO`, `AccountMfaStatusDTO` | `users`, frontend-only flags |
 | 协议文本 | `legal_documents` | `LegalDocumentDTO` | frontend i18n only |
 | 协议确认记录 | `user_agreement_acceptances` | latest accepted agreement versions | frontend-managed version state |
 | profile 主资料 | `profiles` | `displayName`, `age`, `datingIntentionLabel` | `displayName`, `age`, `datingIntentionLabel` in DB |
@@ -753,6 +754,76 @@ Rules:
 - `preferredLocale` 是账户默认语言偏好。顶部语言切换仍负责当前浏览会话语言；保存 `preferredLocale` 不应强制当前页面立即切换语言。
 - `status` and auth identities are not mutated here.
 
+### Account security and sensitive actions
+
+Password change:
+
+```text
+/pages/account/settings
+-> password security form
+-> POST /api/account/password/change
+-> auth_identities.passwordHash write
+-> frontend logout + login redirect
+```
+
+Data export:
+
+```text
+/pages/account/settings
+-> export account data action
+-> POST /api/account/export
+-> AccountExportResultDTO.downloadUrl
+-> GET /api/account/export/download
+```
+
+Account deactivation:
+
+```text
+/pages/account/settings
+-> deactivate confirmation
+-> POST /api/account/deactivate
+-> users.status = 'deactivated'
+-> frontend logout + login redirect
+```
+
+Identity binding:
+
+```text
+/pages/account/settings
+-> identity binding form
+-> POST /api/account/identities
+-> auth_identities insert after verification
+-> AccountIdentityActionResultDTO
+
+/pages/account/settings
+-> unbind identity action
+-> DELETE /api/account/identities/:id
+-> auth_identities remove after safety checks
+```
+
+MFA:
+
+```text
+/pages/account/settings
+-> GET /api/account/mfa/status
+-> user_security_settings
+
+/pages/account/settings
+-> POST /api/account/mfa/enable
+-> user_security_settings.mfaEnabled = true
+
+/pages/account/settings
+-> POST /api/account/mfa/disable
+-> user_security_settings.mfaEnabled = false
+```
+
+Rules:
+
+- `auth_identities` is the source of truth for login identifiers and password hash.
+- `user_security_settings` is the source of truth for MFA state.
+- `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, while platform risk control may write `suspended`.
+- Identity unbind must reject removing the last usable login identity.
+
 ### Membership upgrade
 
 ```text
@@ -1001,7 +1072,7 @@ GET /api/account/private-introductions
 -> AccountIntroductionSummaryDTO[]
 
 GET /api/account/settings
--> users + auth_identities + user_preferences
+-> users + auth_identities + user_security_settings + user_preferences
 -> AccountSettingsDTO
 
 GET /api/account/inbox-summary
