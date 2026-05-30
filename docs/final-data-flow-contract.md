@@ -787,15 +787,13 @@ Account deactivation:
 -> frontend logout + login redirect
 ```
 
-Account reactivation:
+Account silent reactivation:
 
 ```text
 login page
 -> POST /api/auth/login
 -> auth identity verified
 -> user.status === 'deactivated'
--> reactivation confirmation page
--> POST /api/account/reactivate
 -> users.status = 'active'
 -> auth store enters normal account flow
 ```
@@ -835,7 +833,7 @@ Rules:
 
 - `auth_identities` is the source of truth for login identifiers and password hash.
 - `user_security_settings` is the source of truth for MFA state.
-- `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, account reactivation can restore only self-deactivated accounts to `active`, while platform risk control may write `suspended`.
+- `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, and the next successful login silently restores self-deactivated accounts to `active`, while platform risk control may write `suspended`.
 - `suspended` accounts must not self-reactivate; they require staff handling.
 - Identity unbind must reject removing the last usable login identity.
 

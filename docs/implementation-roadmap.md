@@ -2114,7 +2114,7 @@ feat(account): add MFA setup and verification
 |------|------|------|
 | 密码修改 | 已在 Phase 5.5 提前完成 | `POST /account/password/change` mock 路由 + 前端内联表单 + 改后登出；`mockHashPassword` 抽到 `mock-server/src/utils/password.ts` 共用 |
 | 数据导出 | 已完成 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回安全删减后的 JSON 下载 |
-| 账户停用 / 重新启用 | 未实现 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')`；用户再次登录时若状态为 `deactivated`，进入重新启用确认页，确认后调用 `POST /account/reactivate` 恢复为 `active` |
+| 账户停用 / 静默恢复 | 已完成 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')`；用户再次成功登录时若状态为 `deactivated`，后端静默恢复为 `active` 并返回正常 `AuthSession` |
 | 身份绑定/解绑 | 未实现 | `POST /account/identities` / `DELETE /account/identities/:id` / 验证码流程；当前安全区块只读展示 `auth_identities` 列表 + 未绑定占位 |
 | MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
 
@@ -2124,7 +2124,7 @@ feat(account): add MFA setup and verification
 | --- | --- | --- |
 | 7.0 文档收敛 | `final-*` 文档与 roadmap | 明确密码修改已完成；统一账户状态为 `active / deactivated / suspended`；补齐 MFA source of truth。 |
 | 7.1 数据导出 | `POST /account/export`、`GET /account/export/download` | 已完成。生成当前用户可导出的账户数据 JSON；导出范围按安全原则删减，不强制包含全部业务表。 |
-| 7.2 账户停用 / 重新启用 | `POST /account/deactivate`、`POST /account/reactivate` | 主动停用写入 `deactivated` 并登出；再次登录时可进入重新启用确认页，自助恢复为 `active`。 |
+| 7.2 账户停用 / 静默恢复 | `POST /account/deactivate`、`POST /auth/login` | 已完成。主动停用写入 `deactivated` 并登出；再次成功登录时后端静默恢复为 `active`。 |
 | 7.3 身份绑定/解绑 | `auth_identities` | 增加绑定、验证和解绑；解绑必须防止删除最后一个可登录身份。 |
 | 7.4 MFA | `user_security_settings` | 增加 MFA 状态读取、启用、停用；后续敏感操作可读取该状态决定是否追加验证。 |
 
@@ -2139,7 +2139,7 @@ feat(account): add MFA setup and verification
 
 ### 账户状态恢复规则
 
-- `deactivated`：用户主动停用。登录时允许完成身份校验，但不直接进入主站；前端展示重新启用确认页，确认后调用 `POST /account/reactivate`，后端写回 `users.status = 'active'` 并记录审计。
+- `deactivated`：用户主动停用。登录时允许完成身份校验；再次成功登录即视为用户主动恢复使用，后端静默写回 `users.status = 'active'` 并返回正常 `AuthSession`。
 - `suspended`：平台暂停或风控状态。登录时允许识别账号，但不能自助恢复；前端展示联系客服或等待审核提示，只有后台工作人员可以恢复为 `active`。
 - `active`：正常可用。公开浏览、account center、profile 管理、活动报名、私人介绍等业务链路只允许 active 用户继续写操作。
 

@@ -20,6 +20,7 @@ import type {
   AccountPreferenceUpdatePayload,
   AccountMembershipUpgradePayload,
   AccountMembershipUpgradeResultDTO,
+  AccountDeactivateResultDTO,
   AccountEntitlementBalanceDTO,
   AccountMeDTO,
   AccountProfilesDTO,
@@ -98,6 +99,10 @@ export function requestAccountExport(): Promise<AccountExportResultDTO> {
 
 export function requestAccountExportDownload(downloadUrl: string): Promise<unknown> {
   return requestJson<unknown>(downloadUrl)
+}
+
+export function deactivateAccount(): Promise<AccountDeactivateResultDTO> {
+  return requestJson<AccountDeactivateResultDTO>('/account/deactivate', { method: 'POST', data: {} })
 }
 
 export function getAccountIntroductions(): Promise<AccountIntroductionSummaryDTO[]> {

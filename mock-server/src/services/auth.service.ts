@@ -23,6 +23,7 @@ export interface AuthSession {
     accountName: string
     avatarUrl: string
     preferredLocale: PreferredLocale
+    status: UserRecord['status']
   }
   membership: {
     tier: UserMembershipRecord['tier']
@@ -51,6 +52,11 @@ export function login(data: Database, body: Record<string, unknown>): AuthSessio
 
   const user = data.users.find((item) => item.id === authIdentity.userId)
   if (!user) return null
+
+  if (user.status === 'deactivated') {
+    user.status = 'active'
+    user.updatedAt = new Date().toISOString()
+  }
 
   upsertAgreementAcceptances(data, user.id, new Date().toISOString())
   return buildSession(data, authIdentity, user)
@@ -175,6 +181,7 @@ function buildSession(data: Database, authIdentity: AuthIdentityRecord, user: Us
       accountName: user.accountName,
       avatarUrl: user.avatarUrl || '',
       preferredLocale: user.preferredLocale,
+      status: user.status,
     },
     membership: membership ? {
       tier: membership.tier,

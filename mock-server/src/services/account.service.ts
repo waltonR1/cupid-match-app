@@ -1243,6 +1243,16 @@ export function exportAccountData(data: Database, userId: string) {
   }
 }
 
+export function deactivateAccount(data: Database, userId: string) {
+  const user = findUser(data, userId)
+  if (!user) return 'not_found' as const
+  if (user.status !== 'active') return 'not_active' as const
+  const now = new Date().toISOString()
+  user.status = 'deactivated'
+  user.updatedAt = now
+  return { status: 'deactivated' as const, deactivatedAt: now }
+}
+
 export function getAccountSettings(data: Database, userId: string): AccountSettingsDTO | null {
   const user = findUser(data, userId)
   if (!user) return null

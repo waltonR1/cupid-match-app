@@ -310,6 +310,7 @@ export const accountCenterMessages: AppMessageSchema = {
       exportData: '申请导出平台保存的账户与资料数据。',
       deactivateAccount: '通过受控流程暂停账户访问与对外曝光。',
     },
+    deactivateConfirm: { title: '确认停用账户', description: '停用后你将退出登录，账户访问与对外曝光会暂停。再次成功登录将自动重新启用账户。', confirm: '确认停用', cancel: '取消' },
     placeholders: { preferredCity: '未设置' },
     passwordFields: { current: '当前密码', newPassword: '新密码', confirmNew: '确认新密码' },
     toasts: { saved: '已保存', saveFailed: '保存失败，请重试', comingSoon: '功能开发中', passwordChanged: '密码已修改', exportReady: '数据导出已生成' },

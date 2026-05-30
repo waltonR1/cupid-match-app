@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import {
   changeAccountPassword,
+  deactivateAccount as deactivateAccountApi,
   getAccountSettings,
   requestAccountExport,
   requestAccountExportDownload,
@@ -73,6 +74,11 @@ export function useAccountSettings() {
     return true
   }
 
+  async function deactivateAccount() {
+    const result = await latest.run(() => deactivateAccountApi())
+    return result ?? null
+  }
+
   return {
     loading: latest.loading,
     error: latest.error,
@@ -82,6 +88,7 @@ export function useAccountSettings() {
     savePreferences,
     uploadAvatar,
     changePassword,
+    deactivateAccount,
     exportData,
   }
 }

@@ -117,7 +117,7 @@ export interface PrivateIntroductionRequestRecord {
 export type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
 
 /** 用户状态 */
-export type UserStatus = 'active' | 'paused' | 'banned'
+export type UserStatus = 'active' | 'deactivated' | 'suspended'
 
 /** 用户记录 */
 export interface UserRecord {

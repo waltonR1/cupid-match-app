@@ -154,6 +154,7 @@ import { useAgreementDialog } from '@/hooks/legal'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { validateIdentifier, validatePassword } from '@/utils/validate'
+import { useAuthStore } from '@/stores/modules/auth'
 import { openRegisterPage, redirectToAuthLanding } from '@/utils/navigation'
 
 const { t } = usePageI18n('login')
@@ -234,6 +235,13 @@ async function handleSubmit() {
 
   if (!session) {
     loginError.value = t('form.error.invalid')
+    return
+  }
+
+  if (session.user.status === 'suspended') {
+    loginError.value = t('form.error.suspended')
+    const authStore = useAuthStore()
+    authStore.logout()
     return
   }
 

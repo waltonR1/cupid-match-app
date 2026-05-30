@@ -21,7 +21,7 @@ export const loginMessages: AppMessageSchema = {
       identifier: { label: '邮箱或手机号', placeholder: '邮箱或手机号' },
       password: { label: '密码', placeholder: '密码' },
       forgotPassword: '忘记密码？',
-      error: { invalid: '账号或密码错误，请重试', agreement: '请先同意平台服务条款和隐私说明。' },
+      error: { invalid: '账号或密码错误，请重试', agreement: '请先同意平台服务条款和隐私说明。', suspended: '您的账户已被暂停使用，请联系客服。' },
     },
     access: {
       account: { title: '账户总览', desc: '查看资料完善进度、顾问跟进节奏与当前状态。' },

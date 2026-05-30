@@ -5,6 +5,7 @@ import {
   addFavorite,
   archiveAccountProfile,
   changeAccountPassword,
+  deactivateAccount,
   exportAccountData,
   getAccountDashboard,
   getIntroductionContact,
@@ -39,7 +40,7 @@ function requireUser(request: any, reply: any) {
 export async function registerAccountRoutes(app: FastifyInstance): Promise<void> {
   app.get('/account/me', async (request, reply) => readAccount(request, reply, getAccountMe))
   app.post('/account/me', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const db = getDb()
     const result = updateAccountMe(db.data, userId, request.body as never)
@@ -51,7 +52,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.get('/account/dashboard', async (request, reply) => readAccount(request, reply, getAccountDashboard))
   app.get('/account/profiles', async (request, reply) => readAccount(request, reply, getAccountProfiles))
   app.post('/account/profiles/save', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const db = getDb()
     const result = saveAccountProfileDetail(db.data, userId, resolveApiLocale((request.query as QueryRecord).lang), request.body as never)
@@ -75,7 +76,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     return result
   })
   app.post('/account/profiles/:profileId/privacy-preferences', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const { profileId } = request.params as { profileId: string }
     const db = getDb()
@@ -86,7 +87,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     return result
   })
   app.post('/account/profiles/:profileId/archive', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const { profileId } = request.params as { profileId: string }
     const db = getDb()
@@ -131,7 +132,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.get('/account/events', async (request, reply) => readCollection(request, reply, getAccountEvents))
   app.get('/account/favorites', async (request, reply) => readCollection(request, reply, getAccountFavorites))
   app.post('/favorites/:profileId', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const { profileId } = request.params as { profileId: string }
     const db = getDb()
@@ -142,7 +143,7 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     return result
   })
   app.delete('/favorites/:profileId', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const { profileId } = request.params as { profileId: string }
     const db = getDb()
@@ -159,14 +160,14 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     return result
   })
   app.post('/account/export', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const result = exportAccountData(getDb().data, userId)
     if (!result) return reply.code(404).send({ error: 'Account not found' })
     return { status: 'generated', downloadUrl: '/account/export/download' }
   })
   app.get('/account/export/download', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const result = exportAccountData(getDb().data, userId)
     if (!result) return reply.code(404).send({ error: 'Account not found' })
@@ -179,13 +180,23 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.post('/account/settings/preferences', async (request, reply) => mutateAccount(request, reply, (db, userId) =>
     updateAccountPreferences(db.data, userId, request.body as never)))
   app.post('/account/password/change', async (request, reply) => {
-    const userId = requireUser(request, reply)
+    const userId = requireActiveUser(request, reply)
     if (!userId) return
     const db = getDb()
     const result = changeAccountPassword(db.data, userId, request.body as { currentPassword: string; newPassword: string })
     if (!result) return reply.code(404).send({ error: 'Account not found' })
     if (result === 'incorrect_current_password') return reply.code(400).send({ error: 'Current password is incorrect' })
     if (result === 'invalid_password') return reply.code(400).send({ error: 'Invalid new password' })
+    await db.write()
+    return result
+  })
+  app.post('/account/deactivate', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const db = getDb()
+    const result = deactivateAccount(db.data, userId)
+    if (result === 'not_found') return reply.code(404).send({ error: 'Account not found' })
+    if (result === 'not_active') return reply.code(400).send({ error: 'Account is not active' })
     await db.write()
     return result
   })
@@ -206,11 +217,29 @@ async function readCollection(request: any, reply: any, read: (data: any, userId
 }
 
 async function mutateAccount(request: any, reply: any, mutate: (db: ReturnType<typeof getDb>, userId: string) => unknown) {
-  const userId = requireUser(request, reply)
+  const userId = requireActiveUser(request, reply)
   if (!userId) return
   const db = getDb()
   const result = mutate(db, userId)
   if (!result) return reply.code(404).send({ error: 'Account not found' })
   await db.write()
   return result
+}
+
+function requireActiveUser(request: any, reply: any) {
+  const userId = requireUser(request, reply)
+  if (!userId) return null
+
+  const user = getDb().data.users.find((item) => item.id === userId)
+  if (!user) {
+    reply.code(404).send({ error: 'Account not found' })
+    return null
+  }
+
+  if (user.status !== 'active') {
+    reply.code(403).send({ error: 'Account is not active' })
+    return null
+  }
+
+  return userId
 }

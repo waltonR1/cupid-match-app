@@ -21,7 +21,7 @@ export const loginMessages: AppMessageSchema = {
       identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
       password: { label: 'Password', placeholder: 'Password' },
       forgotPassword: 'Forgot password?',
-      error: { invalid: 'Invalid account or password. Please try again.', agreement: 'Please accept the platform terms and privacy notice before logging in.' },
+      error: { invalid: 'Invalid account or password. Please try again.', agreement: 'Please accept the platform terms and privacy notice before logging in.', suspended: 'Your account has been suspended. Please contact customer support.' },
     },
     access: {
       account: { title: 'Account overview', desc: 'Review profile completion, advisor follow-up, and current journey status.' },

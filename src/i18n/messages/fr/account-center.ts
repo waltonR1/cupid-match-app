@@ -286,6 +286,7 @@ export const accountCenterMessages: AppMessageSchema = {
       exportData: 'Demander une copie des donnees de compte et de profil conservees.',
       deactivateAccount: 'Suspendre l acces au compte et l exposition publique via un parcours protege.',
     },
+    deactivateConfirm: { title: 'Desactiver le compte ?', description: 'Vous serez deconnecte et l acces au compte ainsi que l exposition publique seront suspendus. Une prochaine connexion reussie reactivera automatiquement le compte.', confirm: 'Desactiver', cancel: 'Annuler' },
     placeholders: { preferredCity: 'Non defini' },
     passwordFields: { current: 'Mot de passe actuel', newPassword: 'Nouveau mot de passe', confirmNew: 'Confirmer le mot de passe' },
     toasts: { saved: 'Enregistre', saveFailed: 'Echec de l enregistrement, veuillez reessayer', comingSoon: 'Bientot disponible', exportReady: 'Export pret', passwordChanged: 'Mot de passe modifie' },

@@ -286,6 +286,7 @@ export const accountCenterMessages: AppMessageSchema = {
       exportData: 'Request a copy of your stored account and profile data.',
       deactivateAccount: 'Pause account access and public exposure through a protected flow.',
     },
+    deactivateConfirm: { title: 'Deactivate account?', description: 'You will be signed out and account access plus public exposure will be paused. A successful future login will automatically reactivate the account.', confirm: 'Deactivate', cancel: 'Cancel' },
     placeholders: { preferredCity: 'Not set' },
     passwordFields: { current: 'Current password', newPassword: 'New password', confirmNew: 'Confirm new password' },
     toasts: { saved: 'Saved', saveFailed: 'Save failed, please try again', comingSoon: 'Coming soon', exportReady: 'Export ready', passwordChanged: 'Password changed' },

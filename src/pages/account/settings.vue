@@ -457,7 +457,7 @@ import { useAgreementDialog } from '@/hooks/legal'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useI18n({ useScope: 'global' })
-const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, exportData } = useAccountSettings()
+const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, exportData } = useAccountSettings()
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
@@ -629,8 +629,35 @@ async function handleExportData() {
   }
 }
 
-function handleDeactivateAccount() {
-  uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
+async function handleDeactivateAccount() {
+  const confirmed = await confirmDeactivateAccount()
+  if (!confirmed) return
+
+  try {
+    const result = await deactivateAccount()
+    if (!result) {
+      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      return
+    }
+    const authStore = useAuthStore()
+    authStore.logout()
+    uni.redirectTo({ url: '/pages/auth/login' })
+  } catch {
+    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+  }
+}
+
+function confirmDeactivateAccount() {
+  return new Promise<boolean>((resolve) => {
+    uni.showModal({
+      title: t('settings.deactivateConfirm.title'),
+      content: t('settings.deactivateConfirm.description'),
+      confirmText: t('settings.deactivateConfirm.confirm'),
+      cancelText: t('settings.deactivateConfirm.cancel'),
+      success: (result) => resolve(result.confirm),
+      fail: () => resolve(false),
+    })
+  })
 }
 
 function handleChangePassword() {

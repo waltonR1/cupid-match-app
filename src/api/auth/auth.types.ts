@@ -23,6 +23,7 @@ export interface AuthUser {
   accountName: string
   avatarUrl: string
   preferredLocale: AuthLocale
+  status: 'active' | 'deactivated' | 'suspended'
 }
 
 export interface AuthMembership {

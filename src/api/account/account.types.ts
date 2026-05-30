@@ -347,6 +347,11 @@ export interface AccountExportResultDTO {
   downloadUrl: string
 }
 
+export interface AccountDeactivateResultDTO {
+  status: 'deactivated'
+  deactivatedAt: string
+}
+
 export interface AccountEventRegistrationDTO {
   registrationId: string
   eventId: string

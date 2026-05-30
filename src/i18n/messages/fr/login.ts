@@ -21,7 +21,7 @@ export const loginMessages: AppMessageSchema = {
       identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
       password: { label: 'Mot de passe', placeholder: 'Mot de passe' },
       forgotPassword: 'Mot de passe oublie ?',
-      error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de vous connecter.' },
+      error: { invalid: 'Compte ou mot de passe incorrect. Veuillez reessayer.', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de vous connecter.', suspended: 'Votre compte a ete suspendu. Veuillez contacter le service client.' },
     },
     access: {
       account: { title: 'Vue compte', desc: 'Suivre l avancement du profil, le rythme conseiller et le statut courant.' },
