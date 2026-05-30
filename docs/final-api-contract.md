@@ -958,6 +958,11 @@ interface AccountDeactivateResultDTO {
   deactivatedAt: string
 }
 
+interface AccountReactivateResultDTO {
+  status: 'active'
+  reactivatedAt: string
+}
+
 interface AccountExportResultDTO {
   status: 'generated'
   downloadUrl: string
@@ -1072,6 +1077,7 @@ Write rules:
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
 - `POST /api/account/password/change` changes the current password through the account security form, writes `auth_identities.passwordHash`, and requires the frontend to log the user out after success.
 - `POST /api/account/deactivate` deactivates the current user, writes `users.status = 'deactivated'`, and returns `AccountDeactivateResultDTO`.
+- `POST /api/account/reactivate` reactivates a self-deactivated account after successful login confirmation, writes `users.status = 'active'`, and returns `AccountReactivateResultDTO`.
 - `POST /api/account/export` creates an account export request and returns a download URL; `GET /api/account/export/download` returns the generated JSON export for the current user.
 - `POST /api/account/identities` starts an identity binding flow; `DELETE /api/account/identities/:id` removes a bound identity after server-side safety checks.
 - `GET /api/account/mfa/status` reads MFA status from `user_security_settings`; `POST /api/account/mfa/enable` and `POST /api/account/mfa/disable` update that row.

@@ -2114,7 +2114,7 @@ feat(account): add MFA setup and verification
 |------|------|------|
 | 密码修改 | 已在 Phase 5.5 提前完成 | `POST /account/password/change` mock 路由 + 前端内联表单 + 改后登出；`mockHashPassword` 抽到 `mock-server/src/utils/password.ts` 共用 |
 | 数据导出 | 未实现 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回 JSON 下载 |
-| 账户停用 | 未实现 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')` |
+| 账户停用 / 重新启用 | 未实现 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')`；用户再次登录时若状态为 `deactivated`，进入重新启用确认页，确认后调用 `POST /account/reactivate` 恢复为 `active` |
 | 身份绑定/解绑 | 未实现 | `POST /account/identities` / `DELETE /account/identities/:id` / 验证码流程；当前安全区块只读展示 `auth_identities` 列表 + 未绑定占位 |
 | MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
 
@@ -2124,7 +2124,7 @@ feat(account): add MFA setup and verification
 | --- | --- | --- |
 | 7.0 文档收敛 | `final-*` 文档与 roadmap | 明确密码修改已完成；统一账户状态为 `active / deactivated / suspended`；补齐 MFA source of truth。 |
 | 7.1 数据导出 | `POST /account/export`、`GET /account/export/download` | 从当前用户可访问的账户、资料、活动、收藏、介绍和消息数据生成 JSON 导出。 |
-| 7.2 账户停用 | `POST /account/deactivate` | 写入 `users.status = 'deactivated'`，停用后前端登出；公开链路不再允许该用户继续操作。 |
+| 7.2 账户停用 / 重新启用 | `POST /account/deactivate`、`POST /account/reactivate` | 主动停用写入 `deactivated` 并登出；再次登录时可进入重新启用确认页，自助恢复为 `active`。 |
 | 7.3 身份绑定/解绑 | `auth_identities` | 增加绑定、验证和解绑；解绑必须防止删除最后一个可登录身份。 |
 | 7.4 MFA | `user_security_settings` | 增加 MFA 状态读取、启用、停用；后续敏感操作可读取该状态决定是否追加验证。 |
 
@@ -2136,6 +2136,12 @@ feat(account): add MFA setup and verification
 - `user_security_settings` 表：`mfaEnabled` / `mfaMethod?` — MFA 状态 source of truth
 - `AccountPasswordSecurityDTO.requiresMfa` — 敏感操作是否需要 MFA 的展示字段，最终由 `user_security_settings` 派生
 - `UserRecord.status` — 统一为 `'active' | 'deactivated' | 'suspended'`（`suspended` 预留给平台风控）
+
+### 账户状态恢复规则
+
+- `deactivated`：用户主动停用。登录时允许完成身份校验，但不直接进入主站；前端展示重新启用确认页，确认后调用 `POST /account/reactivate`，后端写回 `users.status = 'active'` 并记录审计。
+- `suspended`：平台暂停或风控状态。登录时允许识别账号，但不能自助恢复；前端展示联系客服或等待审核提示，只有后台工作人员可以恢复为 `active`。
+- `active`：正常可用。公开浏览、account center、profile 管理、活动报名、私人介绍等业务链路只允许 active 用户继续写操作。
 
 ### 给接力 AI 的执行提示
 
