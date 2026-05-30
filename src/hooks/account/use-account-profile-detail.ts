@@ -8,6 +8,7 @@ import {
   type AccountProfileDetailSavePayload,
   type AccountProfilePrivacyPreferencesUpdatePayload,
 } from '@/api/account'
+import { uploadImage } from '@/api/upload/upload'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { toAccountProfileDetailPageData } from '@/mappers/account-profile-detail'
 import { useAuthStore } from '@/stores/modules/auth'
@@ -79,6 +80,10 @@ export function useAccountProfileDetail(
     return Boolean(result)
   }
 
+  function uploadProfileImage(filePath: string) {
+    return uploadImage(filePath)
+  }
+
   const pageData = computed(() => toAccountProfileDetailPageData({
     payload: payload.value,
   }))
@@ -92,6 +97,7 @@ export function useAccountProfileDetail(
     saveDetail,
     savePrivacyPreferences,
     archive,
+    uploadProfileImage,
   }
 }
 

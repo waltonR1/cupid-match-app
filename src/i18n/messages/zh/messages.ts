@@ -15,10 +15,13 @@ export const messagesMessages: AppMessageSchema = {
     private_introduction_request: '私人介绍',
   },
   loadMore: '加载更多',
+  loading: '加载中...',
+  error: { title: '消息加载失败', description: '请稍后重试。' },
   detailPlaceholder: { title: '选择一条消息', description: '从左侧选择一个线程查看详情。' },
   time: { yesterday: '昨天' },
   empty: {
     title: '暂无通知',
+    messages: '暂无消息',
     description: '平台通知和系统提醒将在这里展示。',
     defaultMessage: '系统通知',
   },

@@ -15,10 +15,13 @@ export const messagesMessages: AppMessageSchema = {
     private_introduction_request: 'Introduction',
   },
   loadMore: 'Load more',
+  loading: 'Loading...',
+  error: { title: 'Unable to load messages', description: 'Please try again later.' },
   detailPlaceholder: { title: 'Select a message', description: 'Choose a thread from the left to view details.' },
   time: { yesterday: 'Yesterday' },
   empty: {
     title: 'No notifications',
+    messages: 'No messages yet',
     description: 'Platform notifications and system alerts will appear here.',
     defaultMessage: 'System notification',
   },
