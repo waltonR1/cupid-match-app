@@ -774,6 +774,7 @@ Data export:
 -> POST /api/account/export
 -> AccountExportResultDTO.downloadUrl
 -> GET /api/account/export/download
+-> hook triggers H5 JSON file download
 ```
 
 Account deactivation:

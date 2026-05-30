@@ -1139,6 +1139,110 @@ export function getAccountIntroductions(data: Database, userId: string): Account
 
 // -- Settings -- //
 
+function flattenLocalized(text: LocalizedText): { zh: string; fr: string; en: string } {
+  return { zh: text.zh.value, fr: text.fr.value, en: text.en.value }
+}
+
+function formatProfileExport(profile: ProfileRecord) {
+  return {
+    id: profile.id,
+    profileType: profile.profileType,
+    profileName: flattenLocalized(profile.profileName),
+    gender: profile.gender,
+    birthYear: profile.birthYear,
+    height: profile.height,
+    city: flattenLocalized(profile.city),
+    country: flattenLocalized(profile.country),
+    nationality: flattenLocalized(profile.nationality),
+    languages: profile.languages,
+    degreeLevel: profile.degreeLevel,
+    education: flattenLocalized(profile.education),
+    industry: flattenLocalized(profile.industry),
+    careerDirection: profile.careerDirection ? flattenLocalized(profile.careerDirection) : undefined,
+    maritalStatus: profile.maritalStatus,
+    hasChildren: profile.hasChildren,
+    childrenPlan: profile.childrenPlan,
+    acceptsLongDistance: profile.acceptsLongDistance,
+    datingIntentionCode: profile.datingIntentionCode,
+    relationshipGoal: flattenLocalized(profile.relationshipGoal),
+    residencePlan: flattenLocalized(profile.residencePlan),
+    relocation: profile.relocation,
+    relationshipValues: profile.relationshipValues,
+    preferredAgeMin: profile.preferredAgeMin,
+    preferredAgeMax: profile.preferredAgeMax,
+    preferredLocation: profile.preferredLocation,
+    preferredEducation: flattenLocalized(profile.preferredEducation),
+    familyLife: flattenLocalized(profile.familyLife),
+    dealBreakers: profile.dealBreakers.map((d) => flattenLocalized(d)),
+    smoking: profile.smoking,
+    drinking: profile.drinking,
+    exercise: flattenLocalized(profile.exercise),
+    activityLevel: profile.activityLevel,
+    weekendStyle: profile.weekendStyle,
+    pets: profile.pets,
+    personalityTraits: profile.personalityTraits.map((t) => flattenLocalized(t)),
+    interests: profile.interests.map((i) => flattenLocalized(i)),
+    communicationStyle: profile.communicationStyle,
+    summary: flattenLocalized(profile.summary),
+    tags: profile.tags.map((t) => flattenLocalized(t)),
+    createdAt: profile.createdAt,
+    updatedAt: profile.updatedAt,
+  }
+}
+
+export function exportAccountData(data: Database, userId: string) {
+  const user = findUser(data, userId)
+  if (!user) return null
+
+  const ownerships = data.profile_ownerships.filter((o) => o.userId === userId && o.status !== 'revoked')
+  const profileIds = ownerships.map((o) => o.profileId)
+  const profiles = data.profiles.filter((p) => profileIds.includes(p.id))
+  const photos = data.profile_photos.filter((p) => profileIds.includes(p.profileId))
+  const contacts = data.profile_contacts.filter((c) => profileIds.includes(c.profileId))
+  const preferences = data.user_preferences.find((p) => p.userId === userId)
+  const membership = data.user_memberships.find((m) => m.userId === userId && m.status === 'active')
+  const acceptances = data.user_agreement_acceptances.filter((a) => a.userId === userId)
+
+  const now = new Date().toISOString()
+  return {
+    exportedAt: now,
+    account: {
+      id: user.id,
+      accountName: user.accountName,
+      avatarUrl: user.avatarUrl,
+      preferredLocale: user.preferredLocale,
+      status: user.status,
+    },
+    profiles: profiles.map(formatProfileExport),
+    photos: photos.map((p) => ({
+      id: p.id,
+      url: p.url,
+      isPrimary: p.isPrimary,
+      sortOrder: p.sortOrder,
+      status: p.status,
+      createdAt: p.createdAt,
+    })),
+    contacts: contacts.map((c) => ({
+      id: c.id,
+      profileId: c.profileId,
+      phone: c.phone,
+      email: c.email,
+      wechat: c.wechat,
+      preferredChannel: c.preferredChannel,
+      visibility: c.visibility,
+    })),
+    preferences: preferences || null,
+    membership: membership
+      ? { id: membership.id, tier: membership.tier, status: membership.status, startedAt: membership.startedAt, expiresAt: membership.expiresAt }
+      : null,
+    agreementAcceptances: acceptances.map((a) => ({
+      documentType: a.documentType,
+      documentVersion: a.documentVersion,
+      acceptedAt: a.acceptedAt,
+    })),
+  }
+}
+
 export function getAccountSettings(data: Database, userId: string): AccountSettingsDTO | null {
   const user = findUser(data, userId)
   if (!user) return null

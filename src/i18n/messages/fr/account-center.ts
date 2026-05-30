@@ -288,7 +288,7 @@ export const accountCenterMessages: AppMessageSchema = {
     },
     placeholders: { preferredCity: 'Non defini' },
     passwordFields: { current: 'Mot de passe actuel', newPassword: 'Nouveau mot de passe', confirmNew: 'Confirmer le mot de passe' },
-    toasts: { saved: 'Enregistre', saveFailed: 'Echec de l enregistrement, veuillez reessayer', comingSoon: 'Bientot disponible', passwordChanged: 'Mot de passe modifie' },
+    toasts: { saved: 'Enregistre', saveFailed: 'Echec de l enregistrement, veuillez reessayer', comingSoon: 'Bientot disponible', exportReady: 'Export pret', passwordChanged: 'Mot de passe modifie' },
     validation: { accountNameRequired: 'Le nom du compte est requis', currentPasswordRequired: 'Le mot de passe actuel est requis', passwordsMismatch: 'Les mots de passe ne correspondent pas', incorrectPassword: 'Mot de passe actuel incorrect' },
     error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
     empty: {

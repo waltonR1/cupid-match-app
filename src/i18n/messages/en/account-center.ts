@@ -288,7 +288,7 @@ export const accountCenterMessages: AppMessageSchema = {
     },
     placeholders: { preferredCity: 'Not set' },
     passwordFields: { current: 'Current password', newPassword: 'New password', confirmNew: 'Confirm new password' },
-    toasts: { saved: 'Saved', saveFailed: 'Save failed, please try again', comingSoon: 'Coming soon', passwordChanged: 'Password changed' },
+    toasts: { saved: 'Saved', saveFailed: 'Save failed, please try again', comingSoon: 'Coming soon', exportReady: 'Export ready', passwordChanged: 'Password changed' },
     validation: { accountNameRequired: 'Account name is required', currentPasswordRequired: 'Current password is required', passwordsMismatch: 'Passwords do not match', incorrectPassword: 'Current password is incorrect' },
     error: { title: 'Failed to load', description: 'Check your connection and try again' },
     empty: {

@@ -457,7 +457,7 @@ import { useAgreementDialog } from '@/hooks/legal'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useI18n({ useScope: 'global' })
-const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword } = useAccountSettings()
+const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, exportData } = useAccountSettings()
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
@@ -616,8 +616,17 @@ const passwordForm = ref({ current: '', new: '', confirm: '' })
 const passwordError = ref('')
 const changingPassword = ref(false)
 
-function handleExportData() {
-  uni.showToast({ title: t('settings.toasts.comingSoon'), icon: 'none' })
+async function handleExportData() {
+  try {
+    const exported = await exportData()
+    if (!exported) {
+      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      return
+    }
+    uni.showToast({ title: t('settings.toasts.exportReady'), icon: 'success' })
+  } catch {
+    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+  }
 }
 
 function handleDeactivateAccount() {

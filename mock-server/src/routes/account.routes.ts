@@ -5,6 +5,7 @@ import {
   addFavorite,
   archiveAccountProfile,
   changeAccountPassword,
+  exportAccountData,
   getAccountDashboard,
   getIntroductionContact,
   removeFavorite,
@@ -156,6 +157,23 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const { requestId } = request.params as { requestId: string }
     const result = getIntroductionContact(getDb().data, userId, requestId)
     return result
+  })
+  app.post('/account/export', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+    const result = exportAccountData(getDb().data, userId)
+    if (!result) return reply.code(404).send({ error: 'Account not found' })
+    return { status: 'generated', downloadUrl: '/account/export/download' }
+  })
+  app.get('/account/export/download', async (request, reply) => {
+    const userId = requireUser(request, reply)
+    if (!userId) return
+    const result = exportAccountData(getDb().data, userId)
+    if (!result) return reply.code(404).send({ error: 'Account not found' })
+    return reply
+      .header('Content-Type', 'application/json')
+      .header('Content-Disposition', `attachment; filename="account-export.json"`)
+      .send(JSON.stringify(result, null, 2))
   })
   app.get('/account/settings', async (request, reply) => readAccount(request, reply, getAccountSettings))
   app.post('/account/settings/preferences', async (request, reply) => mutateAccount(request, reply, (db, userId) =>

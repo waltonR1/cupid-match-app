@@ -342,6 +342,11 @@ export interface AccountMembershipUpgradeResultDTO {
   requestedTier: 'free' | 'silver' | 'gold' | 'diamond'
 }
 
+export interface AccountExportResultDTO {
+  status: 'generated'
+  downloadUrl: string
+}
+
 export interface AccountEventRegistrationDTO {
   registrationId: string
   eventId: string

@@ -2,6 +2,8 @@ import { ref } from 'vue'
 import {
   changeAccountPassword,
   getAccountSettings,
+  requestAccountExport,
+  requestAccountExportDownload,
   updateAccountMe,
   updateAccountPreferences,
   type AccountPasswordChangePayload,
@@ -60,6 +62,17 @@ export function useAccountSettings() {
     return data ?? null
   }
 
+  async function exportData() {
+    const result = await latest.run(() => requestAccountExport())
+    if (!result?.downloadUrl) return false
+
+    const data = await latest.run(() => requestAccountExportDownload(result.downloadUrl))
+    if (!data) return false
+
+    downloadJsonFile('account-export.json', data)
+    return true
+  }
+
   return {
     loading: latest.loading,
     error: latest.error,
@@ -69,9 +82,27 @@ export function useAccountSettings() {
     savePreferences,
     uploadAvatar,
     changePassword,
+    exportData,
   }
 }
 
 function isAuthLocale(value: string): value is 'zh' | 'fr' | 'en' {
   return value === 'zh' || value === 'fr' || value === 'en'
+}
+
+function downloadJsonFile(filename: string, data: unknown) {
+  const documentRef = globalThis.document
+  if (!documentRef) {
+    throw new Error('Browser download is only available in H5 runtime.')
+  }
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = documentRef.createElement('a')
+  link.href = url
+  link.download = filename
+  documentRef.body.appendChild(link)
+  link.click()
+  documentRef.body.removeChild(link)
+  URL.revokeObjectURL(url)
 }
