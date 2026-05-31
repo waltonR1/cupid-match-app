@@ -248,65 +248,89 @@
               </view>
             </view>
 
-            <view class="pt-6">
-              <view class="flex items-center gap-3">
-                <view class="text-[13px] font-medium text-semantic-text-secondary">
-                  {{ t('settings.security.password') }}
+            <view class="mt-6 border-t border-semantic-border-soft pt-6">
+              <view class="flex flex-wrap items-center justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+                <view>
+                  <view class="text-[14px] font-medium text-semantic-text-primary">
+                    {{ t('settings.security.password') }}
+                  </view>
+                  <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
+                    {{ settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset') }}
+                    <text v-if="settings.password.lastChangedAt">
+                      · {{ t('settings.security.lastChangedAt') }} {{ formatLocalizedDateTime(locale, settings.password.lastChangedAt) }}
+                    </text>
+                  </view>
                 </view>
-                <view class="text-[12px] text-semantic-text-muted">{{ t('settings.security.passwordNote') }}</view>
-              </view>
-
-              <view class="mt-3 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
-                <view class="grid gap-2 border border-transparent px-3 py-4 text-[14px] transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-4">
-                  <text class="text-semantic-text-secondary">{{ t('settings.security.password') }}</text>
-                  <text class="font-medium text-semantic-text-primary">{{ settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset') }}</text>
-                </view>
-                <view class="grid gap-2 border border-transparent px-3 py-4 text-[14px] transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-4">
-                  <text class="text-semantic-text-secondary">{{ t('settings.security.lastChangedAt') }}</text>
-                  <text class="font-medium text-semantic-text-primary">{{ settings.password.lastChangedAt ? formatLocalizedDateTime(locale, settings.password.lastChangedAt) : t('settings.security.neverChanged') }}</text>
-                </view>
-                <view class="grid gap-2 border border-transparent px-3 py-4 text-[14px] transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-4">
-                  <text class="text-semantic-text-secondary">{{ t('settings.security.canReset') }}</text>
-                  <text class="font-medium text-semantic-text-primary">{{ settings.password.canReset ? t('common.yes') : t('common.no') }}</text>
-                </view>
-                <view class="grid gap-2 border border-transparent px-3 py-4 text-[14px] transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-4">
-                  <text class="text-semantic-text-secondary">{{ t('settings.security.requiresMfa') }}</text>
-                  <text class="font-medium text-semantic-text-primary">{{ settings.password.requiresMfa ? t('common.yes') : t('common.no') }}</text>
-                </view>
-              </view>
-
-              <view class="mt-4">
                 <view
                   v-if="!showPasswordForm"
-                  class="inline-flex cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
                   @click="handleChangePassword"
                 >
                   {{ t('settings.actions.changePassword') }}
                 </view>
+              </view>
 
-                <view v-else class="max-w-[400px] space-y-3">
-                  <input v-model="passwordForm.current" type="password"
-                    :placeholder="t('settings.passwordFields.current')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
-                  <input v-model="passwordForm.new" type="password"
-                    :placeholder="t('settings.passwordFields.newPassword')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
-                  <input v-model="passwordForm.confirm" type="password"
-                    :placeholder="t('settings.passwordFields.confirmNew')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
-                  <view v-if="passwordError" class="text-[13px] text-semantic-state-danger">{{ passwordError }}</view>
-                  <view class="flex gap-2">
-                    <view class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]" @click="cancelPasswordForm">
-                      {{ t('settings.actions.cancelEdit') }}
-                    </view>
-                    <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
-                      :class="changingPassword ? 'opacity-50 pointer-events-none' : ''" @click="confirmPasswordChange">
-                      {{ t('settings.actions.changePassword') }}
-                    </view>
+              <view v-if="showPasswordForm" class="mt-4 max-w-[400px] space-y-3 px-3">
+                <input v-model="passwordForm.current" type="password"
+                  :placeholder="t('settings.passwordFields.current')"
+                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
+                <input v-model="passwordForm.new" type="password"
+                  :placeholder="t('settings.passwordFields.newPassword')"
+                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
+                <input v-model="passwordForm.confirm" type="password"
+                  :placeholder="t('settings.passwordFields.confirmNew')"
+                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
+                <view v-if="passwordError" class="text-[13px] text-semantic-state-danger">{{ passwordError }}</view>
+                <view class="flex gap-2">
+                  <view class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]" @click="cancelPasswordForm">
+                    {{ t('settings.actions.cancelEdit') }}
+                  </view>
+                  <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                    :class="changingPassword ? 'opacity-50 pointer-events-none' : ''" @click="confirmPasswordChange">
+                    {{ t('settings.actions.changePassword') }}
                   </view>
                 </view>
               </view>
 
+              <view class="mt-5 border-t border-semantic-border-soft pt-5">
+                <view class="flex flex-wrap items-start justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+                  <view>
+                    <text class="text-[14px] font-medium text-semantic-text-primary">{{ t('settings.mfa.title') }}</text>
+                    <view class="mt-1 max-w-[560px] text-[13px] leading-6 text-semantic-text-secondary">{{ t('settings.sectionHints.mfa') }}</view>
+                    <view v-if="mfaStatus?.enabled && mfaStatus.identityLabel" class="mt-2 text-[13px] text-semantic-text-secondary">
+                      {{ t('settings.mfa.usingIdentity', { method: t(`settings.provider.${mfaStatus.method}`) }) }} {{ mfaStatus.identityLabel }}
+                    </view>
+                  </view>
+
+                  <view class="flex items-center gap-3">
+                    <view v-if="mfaStatus?.enabled" class="text-[12px] font-medium text-semantic-state-positive">
+                      {{ t('settings.mfa.enabled') }}
+                    </view>
+                    <view v-else class="text-[12px] font-medium text-semantic-text-muted">
+                      {{ t('settings.mfa.disabled') }}
+                    </view>
+                    <view
+                      v-if="!mfaStatus?.enabled"
+                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-1 text-[13px]"
+                      :class="!hasAvailableMfaMethod ? 'pointer-events-none opacity-50' : ''"
+                      @click="openMfaSetup"
+                    >
+                      {{ t('settings.mfa.enableMfa') }}
+                    </view>
+                    <view
+                      v-else
+                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                      @click="openMfaDisable"
+                    >
+                      {{ t('settings.mfa.disableMfa') }}
+                    </view>
+                  </view>
+                </view>
+
+                <view v-if="mfaStatus && !mfaStatus.enabled && !hasAvailableMfaMethod" class="px-3 pb-2 text-[13px] text-semantic-text-muted">
+                  {{ t('settings.mfa.noVerifiedIdentities') }}
+                </view>
+              </view>
             </view>
           </view>
 
@@ -515,6 +539,110 @@
     </view>
   </AccountShell>
 
+  <!-- MFA enable/disable modal -->
+  <view v-if="showMfaModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="closeMfaModal">
+    <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+      <view class="text-[18px] font-semibold text-semantic-text-primary">
+        {{ mfaModalAction === 'enable' ? t('settings.mfa.enableTitle') : t('settings.mfa.disableTitle') }}
+      </view>
+      <view class="mt-2 text-[13px] leading-6 text-semantic-text-secondary">
+        {{ mfaModalAction === 'enable' ? t('settings.mfa.enableDescription') : t('settings.mfa.disableDescription') }}
+      </view>
+
+      <view class="mt-6 space-y-4">
+        <view v-if="mfaModalAction === 'enable' && !mfaCodeRequested" class="space-y-2">
+          <view
+            v-for="item in mfaStatus?.availableMethods ?? []"
+            :key="item.identityId"
+            class="flex cursor-pointer items-center justify-between border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 transition-colors hover:bg-semantic-surface-soft"
+            @click="sendMfaCode(item.identityId, item.method)"
+          >
+            <view>
+              <text class="text-[13px] font-medium text-semantic-text-primary">{{ t(`settings.provider.${item.method}`) }}</text>
+              <text class="ml-2 text-[13px] text-semantic-text-secondary">{{ item.maskedIdentifier }}</text>
+            </view>
+            <text class="text-[12px] text-semantic-text-link">{{ t('settings.bindIdentity.sendCode') }}</text>
+          </view>
+        </view>
+
+        <view>
+          <view class="mb-2 text-[12px] font-medium text-semantic-text-secondary">
+            {{ t('settings.bindIdentity.code') }}
+          </view>
+          <input
+            v-model="mfaCode"
+            :disabled="mfaModalAction === 'enable' && !mfaCodeRequested"
+            class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+            :placeholder="t('settings.bindIdentity.codePlaceholder')"
+          />
+        </view>
+
+        <view v-if="mfaModalAction === 'disable' || mfaCodeRequested" class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
+          {{ t('settings.bindIdentity.codeHint') }}
+        </view>
+
+        <view v-if="mfaError" class="text-[13px] font-medium text-semantic-state-danger">
+          {{ mfaError }}
+        </view>
+      </view>
+
+      <view class="mt-7 flex justify-end gap-3 border-t border-semantic-border-soft pt-5">
+        <view class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary" @click="closeMfaModal">
+          {{ t('settings.actions.cancelBind') }}
+        </view>
+        <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity" :class="mfaSubmitting || (mfaModalAction === 'enable' && !mfaCodeRequested) ? 'opacity-50 pointer-events-none' : ''" @click="handleMfaSubmit">
+          {{ mfaSubmitting ? t('settings.actions.binding') : mfaModalAction === 'enable' ? t('settings.mfa.enableMfa') : t('settings.mfa.disableMfa') }}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Sensitive action verification modal -->
+  <view v-if="showChallengeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="closeChallengeModal">
+    <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+      <view class="text-[18px] font-semibold text-semantic-text-primary">
+        {{ t(`settings.mfa.challenge.${challengeAction}.title`) }}
+      </view>
+      <view class="mt-2 text-[13px] leading-6 text-semantic-text-secondary">
+        {{ t('settings.mfa.challenge.description', { target: challengeMaskedIdentifier }) }}
+      </view>
+
+      <view class="mt-6 space-y-4">
+        <view>
+          <view class="mb-2 text-[12px] font-medium text-semantic-text-secondary">
+            {{ t('settings.bindIdentity.code') }}
+          </view>
+          <input
+            v-model="challengeCode"
+            class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+            :placeholder="t('settings.bindIdentity.codePlaceholder')"
+          />
+        </view>
+
+        <view
+          class="inline-flex cursor-pointer text-[13px] text-semantic-text-link transition-colors hover:text-semantic-text-primary"
+          :class="challengeResendSeconds > 0 || challengeCodeSending ? 'pointer-events-none opacity-60' : ''"
+          @click="resendSecurityChallengeCode"
+        >
+          {{ challengeResendText }}
+        </view>
+
+        <view v-if="challengeError" class="text-[13px] font-medium text-semantic-state-danger">
+          {{ challengeError }}
+        </view>
+      </view>
+
+      <view class="mt-7 flex justify-end gap-3 border-t border-semantic-border-soft pt-5">
+        <view class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary" @click="closeChallengeModal">
+          {{ t('settings.actions.cancelBind') }}
+        </view>
+        <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity" :class="challengeSubmitting ? 'opacity-50 pointer-events-none' : ''" @click="submitSecurityChallenge">
+          {{ challengeSubmitting ? t('settings.actions.binding') : t('settings.mfa.verifyAction') }}
+        </view>
+      </view>
+    </view>
+  </view>
+
   <AgreementDialog
       :document="agreementDocument"
       :error="agreementError"
@@ -527,7 +655,7 @@
 <script lang="ts" setup>
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { AccountPreferencesDTO } from '@/api/account'
+import type { AccountPreferencesDTO, AccountSecurityChallengeAction } from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
@@ -544,7 +672,7 @@ import { useAgreementDialog } from '@/hooks/legal'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useI18n({ useScope: 'global' })
-const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, requestVerificationCode, bindIdentity, unbindIdentity, exportData } = useAccountSettings()
+const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, requestVerificationCode, bindIdentity, unbindIdentity, mfaStatus, requestMfaVerificationCode, enableMfa, disableMfa, requestSecurityChallenge, verifySensitiveAction, exportData } = useAccountSettings()
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
@@ -609,6 +737,8 @@ const securityAccountItems = computed<SecurityAccountItem[]>(() => {
   const providers = new Set(real.map((item) => item.provider))
   return [...real, ...previews.filter((item) => !providers.has(item.provider))]
 })
+
+const hasAvailableMfaMethod = computed(() => Boolean(mfaStatus.value?.availableMethods.length))
 
 const notificationItems = computed(() => buildPreferenceItems([
   'introduction_updates_enabled',
@@ -717,9 +847,111 @@ const passwordForm = ref({ current: '', new: '', confirm: '' })
 const passwordError = ref('')
 const changingPassword = ref(false)
 
+const showChallengeModal = ref(false)
+const challengeAction = ref<AccountSecurityChallengeAction>('change_password')
+const challengeCode = ref('')
+const challengeError = ref('')
+const challengeMaskedIdentifier = ref('')
+const challengeSubmitting = ref(false)
+const challengeCodeSending = ref(false)
+const challengeResendSeconds = ref(0)
+let challengeResolve: ((token: string | null) => void) | null = null
+let challengeResendTimer: ReturnType<typeof setInterval> | null = null
+
+const challengeResendText = computed(() =>
+  challengeResendSeconds.value > 0
+    ? t('settings.bindIdentity.resendCountdown', { seconds: challengeResendSeconds.value })
+    : t('settings.bindIdentity.resend'),
+)
+
+async function resolveSensitiveAction(action: AccountSecurityChallengeAction) {
+  if (!mfaStatus.value?.enabled) return ''
+  const request = await requestSecurityChallenge(action)
+  if (!request) return null
+
+  challengeAction.value = action
+  challengeCode.value = ''
+  challengeError.value = ''
+  challengeMaskedIdentifier.value = request.maskedIdentifier
+  showChallengeModal.value = true
+  startChallengeResendCountdown()
+
+  return new Promise<string | null>((resolve) => {
+    challengeResolve = resolve
+  })
+}
+
+function closeChallengeModal() {
+  showChallengeModal.value = false
+  resetChallengeResendCountdown()
+  challengeResolve?.(null)
+  challengeResolve = null
+}
+
+async function resendSecurityChallengeCode() {
+  challengeError.value = ''
+  challengeCodeSending.value = true
+  try {
+    const request = await requestSecurityChallenge(challengeAction.value)
+    if (!request) {
+      challengeError.value = t('settings.toasts.saveFailed')
+      return
+    }
+    challengeMaskedIdentifier.value = request.maskedIdentifier
+    startChallengeResendCountdown()
+  } catch {
+    challengeError.value = t('settings.toasts.saveFailed')
+  } finally {
+    challengeCodeSending.value = false
+  }
+}
+
+function startChallengeResendCountdown() {
+  resetChallengeResendCountdown()
+  challengeResendSeconds.value = 60
+  challengeResendTimer = setInterval(() => {
+    challengeResendSeconds.value -= 1
+    if (challengeResendSeconds.value <= 0) resetChallengeResendCountdown()
+  }, 1000)
+}
+
+function resetChallengeResendCountdown() {
+  challengeResendSeconds.value = 0
+  if (challengeResendTimer) {
+    clearInterval(challengeResendTimer)
+    challengeResendTimer = null
+  }
+}
+
+async function submitSecurityChallenge() {
+  challengeError.value = ''
+  if (!challengeCode.value.trim()) {
+    challengeError.value = t('settings.validation.codeRequired')
+    return
+  }
+  challengeSubmitting.value = true
+  try {
+    const result = await verifySensitiveAction(challengeAction.value, challengeCode.value.trim())
+    if (!result?.challengeToken) {
+      challengeError.value = t('settings.toasts.saveFailed')
+      return
+    }
+    const token = result.challengeToken
+    showChallengeModal.value = false
+    challengeResolve?.(token)
+    challengeResolve = null
+  } catch {
+    challengeError.value = t('settings.toasts.saveFailed')
+  } finally {
+    challengeSubmitting.value = false
+  }
+}
+
 async function handleExportData() {
   try {
-    const exported = await exportData()
+    const challengeToken = await resolveSensitiveAction('export_data')
+    if (challengeToken === null) return
+    const exported = await exportData(challengeToken)
     if (!exported) {
       uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
       return
@@ -735,7 +967,9 @@ async function handleDeactivateAccount() {
   if (!confirmed) return
 
   try {
-    const result = await deactivateAccount()
+    const challengeToken = await resolveSensitiveAction('deactivate_account')
+    if (challengeToken === null) return
+    const result = await deactivateAccount(challengeToken)
     if (!result) {
       uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
       return
@@ -774,6 +1008,7 @@ let resendTimer: ReturnType<typeof setInterval> | null = null
 
 onUnmounted(() => {
   resetBindResendCountdown()
+  resetChallengeResendCountdown()
 })
 
 const bindIdentityTitle = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.title`))
@@ -878,7 +1113,9 @@ function isValidBindIdentifier(provider: BindableIdentityProvider, value: string
 
 async function handleUnbindIdentity(id: string) {
   try {
-    const result = await unbindIdentity(id)
+    const challengeToken = await resolveSensitiveAction('unbind_identity')
+    if (challengeToken === null) return
+    const result = await unbindIdentity(id, challengeToken)
     if (result) {
       uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
     } else {
@@ -886,6 +1123,77 @@ async function handleUnbindIdentity(id: string) {
     }
   } catch {
     uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+  }
+}
+
+// MFA
+const showMfaModal = ref(false)
+const mfaModalAction = ref<'enable' | 'disable'>('enable')
+const mfaIdentityId = ref('')
+const mfaMethod = ref<'email' | 'phone'>('email')
+const mfaCode = ref('')
+const mfaCodeRequested = ref(false)
+const mfaSubmitting = ref(false)
+const mfaError = ref('')
+
+function openMfaSetup() {
+  mfaModalAction.value = 'enable'
+  mfaIdentityId.value = ''
+  mfaCode.value = ''
+  mfaCodeRequested.value = false
+  mfaError.value = ''
+  showMfaModal.value = true
+}
+
+async function sendMfaCode(identityId: string, method: 'email' | 'phone') {
+  mfaIdentityId.value = identityId
+  mfaMethod.value = method
+  mfaCode.value = ''
+  mfaError.value = ''
+  const result = await requestMfaVerificationCode({ identityId, method })
+  mfaCodeRequested.value = Boolean(result)
+  if (!result) mfaError.value = t('settings.toasts.saveFailed')
+}
+
+function openMfaDisable() {
+  mfaModalAction.value = 'disable'
+  mfaCode.value = ''
+  mfaCodeRequested.value = true
+  mfaError.value = ''
+  if (mfaStatus.value?.identityId && mfaStatus.value.method) {
+    mfaIdentityId.value = mfaStatus.value.identityId
+    mfaMethod.value = mfaStatus.value.method
+    void requestMfaVerificationCode({ identityId: mfaStatus.value.identityId, method: mfaStatus.value.method })
+  }
+  showMfaModal.value = true
+}
+
+function closeMfaModal() {
+  showMfaModal.value = false
+  mfaCodeRequested.value = false
+}
+
+async function handleMfaSubmit() {
+  mfaError.value = ''
+  if (!mfaCode.value.trim()) {
+    mfaError.value = t('settings.validation.codeRequired')
+    return
+  }
+  mfaSubmitting.value = true
+  try {
+    const result = mfaModalAction.value === 'enable'
+      ? await enableMfa({ method: mfaMethod.value, identityId: mfaIdentityId.value, code: mfaCode.value.trim() })
+      : await disableMfa({ code: mfaCode.value.trim() })
+    if (result) {
+      showMfaModal.value = false
+      uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+    } else {
+      mfaError.value = t('settings.toasts.saveFailed')
+    }
+  } catch {
+    mfaError.value = t('settings.toasts.saveFailed')
+  } finally {
+    mfaSubmitting.value = false
   }
 }
 
@@ -919,9 +1227,12 @@ async function confirmPasswordChange() {
 
   changingPassword.value = true
   try {
+    const challengeToken = await resolveSensitiveAction('change_password')
+    if (challengeToken === null) return
     const result = await changePassword({
       currentPassword: passwordForm.value.current,
       newPassword: passwordForm.value.new,
+      challengeToken,
     })
     if (result) {
       uni.showToast({ title: t('settings.toasts.passwordChanged'), icon: 'success' })

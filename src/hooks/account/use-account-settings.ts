@@ -3,16 +3,27 @@ import {
   bindIdentity as bindIdentityApi,
   changeAccountPassword,
   deactivateAccount as deactivateAccountApi,
+  enableAccountMfa,
+  disableAccountMfa,
+  getAccountMfaStatus,
   getAccountSettings,
+  requestAccountMfaVerificationCode,
   requestAccountExport,
   requestAccountExportDownload,
+  requestSecurityChallengeCode,
   requestVerificationCode as requestVerificationCodeApi,
   unbindIdentity as unbindIdentityApi,
   updateAccountMe,
   updateAccountPreferences,
+  verifySecurityChallenge,
   type AccountIdentityCreatePayload,
+  type AccountMfaEnablePayload,
+  type AccountMfaDisablePayload,
+  type AccountMfaVerificationCodePayload,
+  type AccountMfaStatusDTO,
   type AccountPasswordChangePayload,
   type AccountPreferenceUpdatePayload,
+  type AccountSecurityChallengeAction,
   type AccountSettingsDTO,
   type AccountMeUpdatePayload,
   type VerificationCodeRequestPayload,
@@ -24,8 +35,14 @@ import { useAuthStore } from '@/stores/modules/auth'
 export function useAccountSettings() {
   const latest = useLatestRequest()
   const settings = ref<AccountSettingsDTO | null>(null)
+  const mfaStatus = ref<AccountMfaStatusDTO | null>(null)
 
   void load()
+  void loadMfa()
+
+  async function loadMfa() {
+    try { mfaStatus.value = await getAccountMfaStatus() } catch { /* ignore */ }
+  }
 
   async function load() {
     const data = await latest.run(() => getAccountSettings())
@@ -68,8 +85,8 @@ export function useAccountSettings() {
     return data ?? null
   }
 
-  async function exportData() {
-    const result = await latest.run(() => requestAccountExport())
+  async function exportData(challengeToken?: string) {
+    const result = await latest.run(() => requestAccountExport({ challengeToken }))
     if (!result?.downloadUrl) return false
 
     const data = await latest.run(() => requestAccountExportDownload(result.downloadUrl))
@@ -79,8 +96,8 @@ export function useAccountSettings() {
     return true
   }
 
-  async function deactivateAccount() {
-    const result = await latest.run(() => deactivateAccountApi())
+  async function deactivateAccount(challengeToken?: string) {
+    const result = await latest.run(() => deactivateAccountApi({ challengeToken }))
     return result ?? null
   }
 
@@ -96,11 +113,38 @@ export function useAccountSettings() {
     return result
   }
 
-  async function unbindIdentity(identityId: string) {
-    const result = await latest.run(() => unbindIdentityApi(identityId))
+  async function unbindIdentity(identityId: string, challengeToken?: string) {
+    const result = await latest.run(() => unbindIdentityApi(identityId, { challengeToken }))
     if (!result) return null
     await load()
     return result
+  }
+
+  async function enableMfa(payload: AccountMfaEnablePayload) {
+    const result = await latest.run(() => enableAccountMfa(payload))
+    if (result) { mfaStatus.value = result; await load() }
+    return result ?? null
+  }
+
+  async function disableMfa(payload: AccountMfaDisablePayload) {
+    const result = await latest.run(() => disableAccountMfa(payload))
+    if (result) { mfaStatus.value = result; await load() }
+    return result ?? null
+  }
+
+  async function requestMfaVerificationCode(payload: AccountMfaVerificationCodePayload) {
+    const result = await latest.run(() => requestAccountMfaVerificationCode(payload))
+    return result ?? null
+  }
+
+  async function requestSecurityChallenge(action: AccountSecurityChallengeAction) {
+    const result = await latest.run(() => requestSecurityChallengeCode({ action }))
+    return result ?? null
+  }
+
+  async function verifySensitiveAction(action: AccountSecurityChallengeAction, code: string) {
+    const result = await latest.run(() => verifySecurityChallenge({ action, code }))
+    return result ?? null
   }
 
   return {
@@ -116,6 +160,12 @@ export function useAccountSettings() {
     requestVerificationCode,
     bindIdentity,
     unbindIdentity,
+    mfaStatus,
+    requestMfaVerificationCode,
+    enableMfa,
+    disableMfa,
+    requestSecurityChallenge,
+    verifySensitiveAction,
     exportData,
   }
 }

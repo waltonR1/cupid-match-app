@@ -28,6 +28,8 @@ const defaultData: Database = {
     inbox_threads: [],
     inbox_messages: [],
     inbox_reads: [],
+    user_security_settings: [],
+    user_security_challenges: [],
 }
 
 /** 数据库实例 */
@@ -64,6 +66,8 @@ export async function initDb(): Promise<void> {
     db.data.inbox_threads ??= []
     db.data.inbox_messages ??= []
     db.data.inbox_reads ??= []
+    db.data.user_security_settings ??= []
+    db.data.user_security_challenges ??= []
 }
 
 /** 获取数据库实例 */

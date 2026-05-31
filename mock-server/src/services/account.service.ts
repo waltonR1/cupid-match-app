@@ -6,6 +6,7 @@ import { buildProfileView } from './profile.service.js'
 import { nextId } from '../utils/id.js'
 import { mockHashPassword } from '../utils/password.js'
 import { generateCode, verifyAndConsume } from './verification-code.service.js'
+import { getMfaStatus } from './mfa.service.js'
 import { mergeManualLocalizedText, mergeTranslatedText } from './translation.service.js'
 
 // -- DTOs -- //
@@ -1298,6 +1299,10 @@ export function unbindIdentity(data: Database, userId: string, identityId: strin
   const index = data.auth_identities.findIndex((item) => item.id === identityId && item.userId === userId)
   if (index === -1) return 'not_found' as const
   const target = data.auth_identities[index]
+  const securitySettings = data.user_security_settings.find((item) => item.userId === userId)
+  if (securitySettings?.mfaEnabled && securitySettings.mfaIdentityId === identityId) {
+    return 'mfa_identity' as const
+  }
   const userIdentities = data.auth_identities.filter((item) => item.userId === userId)
   const usableLoginIdentities = userIdentities.filter((item) => Boolean(item.passwordHash))
   if (Boolean(target.passwordHash) && usableLoginIdentities.length <= 1) {
@@ -1342,7 +1347,7 @@ export function getAccountSettings(data: Database, userId: string): AccountSetti
       isSet: Boolean(passwordIdentity),
       lastChangedAt: passwordIdentity?.updatedAt,
       canReset: identities.some((item) => item.provider === 'email' || item.provider === 'phone'),
-      requiresMfa: false,
+      requiresMfa: getMfaStatus(data, userId).enabled,
     },
     preferences: toAccountPreferencesDto(ensureUserPreferences(data, userId)),
   }

@@ -6147,5 +6147,56 @@
       "createdAt": "2026-05-28T00:13:32.750Z",
       "updatedAt": "2026-05-28T00:13:32.750Z"
     }
+  ],
+  "user_security_settings": [
+    {
+      "id": "mfa-setting-001",
+      "userId": "u-001",
+      "mfaEnabled": true,
+      "createdAt": "2026-05-31T14:39:34.763Z",
+      "updatedAt": "2026-05-31T14:41:05.499Z",
+      "mfaMethod": "email",
+      "mfaIdentityId": "auth-001",
+      "mfaEnabledAt": "2026-05-31T14:39:34.763Z",
+      "lastChallengeAt": "2026-05-31T14:41:05.499Z"
+    }
+  ],
+  "user_security_challenges": [
+    {
+      "id": "security-challenge-001",
+      "userId": "u-001",
+      "action": "export_data",
+      "method": "email",
+      "identityId": "auth-001",
+      "status": "consumed",
+      "expiresAt": "2026-05-31T14:44:54.772Z",
+      "createdAt": "2026-05-31T14:39:39.844Z",
+      "updatedAt": "2026-05-31T14:39:54.780Z",
+      "challengeToken": "challenge-security-token-001-1780238394772",
+      "verifiedAt": "2026-05-31T14:39:54.772Z",
+      "consumedAt": "2026-05-31T14:39:54.780Z"
+    },
+    {
+      "id": "security-challenge-002",
+      "userId": "u-001",
+      "action": "export_data",
+      "method": "email",
+      "identityId": "auth-001",
+      "status": "pending",
+      "expiresAt": "2026-05-31T14:45:04.186Z",
+      "createdAt": "2026-05-31T14:40:04.186Z",
+      "updatedAt": "2026-05-31T14:40:04.186Z"
+    },
+    {
+      "id": "security-challenge-003",
+      "userId": "u-001",
+      "action": "export_data",
+      "method": "email",
+      "identityId": "auth-001",
+      "status": "pending",
+      "expiresAt": "2026-05-31T14:46:05.499Z",
+      "createdAt": "2026-05-31T14:41:05.499Z",
+      "updatedAt": "2026-05-31T14:41:05.499Z"
+    }
   ]
 }

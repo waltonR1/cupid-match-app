@@ -323,6 +323,7 @@ export interface AccountMeUpdatePayload {
 export interface AccountPasswordChangePayload {
   currentPassword: string
   newPassword: string
+  challengeToken?: string
 }
 
 export interface AccountPasswordChangeResultDTO {
@@ -347,9 +348,64 @@ export interface AccountExportResultDTO {
   downloadUrl: string
 }
 
+export interface AccountSensitiveActionPayload {
+  challengeToken?: string
+}
+
 export interface AccountDeactivateResultDTO {
   status: 'deactivated'
   deactivatedAt: string
+}
+
+export interface AccountMfaStatusDTO {
+  enabled: boolean
+  method?: 'email' | 'phone'
+  identityId?: string
+  identityLabel?: string
+  enabledAt?: string
+  availableMethods: Array<{
+    method: 'email' | 'phone'
+    identityId: string
+    maskedIdentifier: string
+    label: string
+  }>
+}
+
+export interface AccountMfaVerificationCodePayload {
+  method: 'email' | 'phone'
+  identityId: string
+}
+
+export interface AccountMfaEnablePayload {
+  method: 'email' | 'phone'
+  identityId: string
+  code: string
+}
+
+export interface AccountMfaDisablePayload {
+  code: string
+}
+
+export interface AccountSecurityChallengeCodeResultDTO {
+  id: string
+  expiresAt: string
+  maskedIdentifier: string
+}
+
+export type AccountSecurityChallengeAction = 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+
+export interface AccountSecurityChallengeCodePayload {
+  action: AccountSecurityChallengeAction
+}
+
+export interface AccountSecurityChallengeVerifyPayload {
+  action: AccountSecurityChallengeAction
+  code: string
+}
+
+export interface AccountSecurityChallengeResultDTO {
+  challengeToken: string
+  expiresAt: string
 }
 
 export interface AccountIdentityCreatePayload {

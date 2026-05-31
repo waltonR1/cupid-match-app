@@ -337,6 +337,36 @@ export interface InboxReadRecord {
     updatedAt: string
 }
 
+export interface UserSecuritySettingRecord {
+  id: string
+  userId: string
+  mfaEnabled: boolean
+  mfaMethod?: 'email' | 'phone'
+  mfaIdentityId?: string
+  mfaEnabledAt?: string
+  lastChallengeAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type SecurityChallengeAction = 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+export type SecurityChallengeStatus = 'pending' | 'verified' | 'expired' | 'consumed'
+
+export interface UserSecurityChallengeRecord {
+  id: string
+  userId: string
+  action: SecurityChallengeAction
+  method: 'email' | 'phone'
+  identityId: string
+  status: SecurityChallengeStatus
+  challengeToken?: string
+  expiresAt: string
+  verifiedAt?: string
+  consumedAt?: string
+  createdAt: string
+  updatedAt: string
+}
+
 /** 数据库结构 */
 export interface Database {
     profiles: ProfileRecord[]
@@ -365,4 +395,6 @@ export interface Database {
     inbox_threads: InboxThreadRecord[]
     inbox_messages: InboxMessageRecord[]
     inbox_reads: InboxReadRecord[]
+  user_security_settings: UserSecuritySettingRecord[]
+  user_security_challenges: UserSecurityChallengeRecord[]
 }

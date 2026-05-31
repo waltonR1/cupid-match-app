@@ -22,6 +22,15 @@ import type {
   AccountMembershipUpgradeResultDTO,
   AccountDeactivateResultDTO,
   AccountIdentityActionResultDTO,
+  AccountMfaStatusDTO,
+  AccountMfaEnablePayload,
+  AccountMfaDisablePayload,
+  AccountMfaVerificationCodePayload,
+  AccountSecurityChallengeCodeResultDTO,
+  AccountSecurityChallengeCodePayload,
+  AccountSecurityChallengeVerifyPayload,
+  AccountSecurityChallengeResultDTO,
+  AccountSensitiveActionPayload,
   AccountIdentityCreatePayload,
   AccountIdentityDeleteResultDTO,
   VerificationCodeRequestPayload,
@@ -98,16 +107,16 @@ export function removeFavorite(profileId: string): Promise<{ removed: boolean }>
   return requestJson<{ removed: boolean }>(`/favorites/${profileId}`, { method: 'DELETE', data: {} })
 }
 
-export function requestAccountExport(): Promise<AccountExportResultDTO> {
-  return requestJson<AccountExportResultDTO>('/account/export', { method: 'POST', data: {} })
+export function requestAccountExport(payload: AccountSensitiveActionPayload = {}): Promise<AccountExportResultDTO> {
+  return requestJson<AccountExportResultDTO>('/account/export', { method: 'POST', data: payload })
 }
 
 export function requestAccountExportDownload(downloadUrl: string): Promise<unknown> {
   return requestJson<unknown>(downloadUrl)
 }
 
-export function deactivateAccount(): Promise<AccountDeactivateResultDTO> {
-  return requestJson<AccountDeactivateResultDTO>('/account/deactivate', { method: 'POST', data: {} })
+export function deactivateAccount(payload: AccountSensitiveActionPayload = {}): Promise<AccountDeactivateResultDTO> {
+  return requestJson<AccountDeactivateResultDTO>('/account/deactivate', { method: 'POST', data: payload })
 }
 
 export function requestVerificationCode(payload: VerificationCodeRequestPayload): Promise<VerificationCodeRequestResultDTO> {
@@ -118,8 +127,32 @@ export function bindIdentity(payload: AccountIdentityCreatePayload): Promise<Acc
   return requestJson<AccountIdentityActionResultDTO>('/account/identities', { method: 'POST', data: payload })
 }
 
-export function unbindIdentity(identityId: string): Promise<AccountIdentityDeleteResultDTO> {
-  return requestJson<AccountIdentityDeleteResultDTO>(`/account/identities/${identityId}`, { method: 'DELETE', data: {} })
+export function unbindIdentity(identityId: string, payload: AccountSensitiveActionPayload = {}): Promise<AccountIdentityDeleteResultDTO> {
+  return requestJson<AccountIdentityDeleteResultDTO>(`/account/identities/${identityId}`, { method: 'DELETE', data: payload })
+}
+
+export function getAccountMfaStatus(): Promise<AccountMfaStatusDTO> {
+  return requestJson<AccountMfaStatusDTO>('/account/mfa/status')
+}
+
+export function enableAccountMfa(payload: AccountMfaEnablePayload): Promise<AccountMfaStatusDTO> {
+  return requestJson<AccountMfaStatusDTO>('/account/mfa/enable', { method: 'POST', data: payload })
+}
+
+export function requestAccountMfaVerificationCode(payload: AccountMfaVerificationCodePayload): Promise<VerificationCodeRequestResultDTO> {
+  return requestJson<VerificationCodeRequestResultDTO>('/account/mfa/verification-code', { method: 'POST', data: payload })
+}
+
+export function disableAccountMfa(payload: AccountMfaDisablePayload): Promise<AccountMfaStatusDTO> {
+  return requestJson<AccountMfaStatusDTO>('/account/mfa/disable', { method: 'POST', data: payload })
+}
+
+export function requestSecurityChallengeCode(payload: AccountSecurityChallengeCodePayload): Promise<AccountSecurityChallengeCodeResultDTO> {
+  return requestJson<AccountSecurityChallengeCodeResultDTO>('/account/security/challenge-code', { method: 'POST', data: payload })
+}
+
+export function verifySecurityChallenge(payload: AccountSecurityChallengeVerifyPayload): Promise<AccountSecurityChallengeResultDTO> {
+  return requestJson<AccountSecurityChallengeResultDTO>('/account/security/challenge', { method: 'POST', data: payload })
 }
 
 export function getAccountIntroductions(): Promise<AccountIntroductionSummaryDTO[]> {

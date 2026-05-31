@@ -27,6 +27,15 @@ import {
   requestAccountMembershipUpgrade,
   requestIdentityVerificationCode,
 } from '../services/account.service.js'
+import {
+  consumeSecurityChallenge,
+  disableMfa,
+  enableMfa,
+  getMfaStatus,
+  requestMfaVerificationCode,
+  requestSecurityChallengeCode,
+  verifySecurityChallenge,
+} from '../services/mfa.service.js'
 import type { QueryRecord } from '../types/common.js'
 import { resolveApiLocale } from '../utils/localized.js'
 import { resolveUserIdHeader } from '../utils/request.js'
@@ -38,6 +47,10 @@ function requireUser(request: any, reply: any) {
     return null
   }
   return userId
+}
+
+function isSecurityChallengeAction(value: unknown): value is 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity' {
+  return value === 'change_password' || value === 'deactivate_account' || value === 'export_data' || value === 'unbind_identity'
 }
 
 export async function registerAccountRoutes(app: FastifyInstance): Promise<void> {
@@ -165,8 +178,14 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
   app.post('/account/export', async (request, reply) => {
     const userId = requireActiveUser(request, reply)
     if (!userId) return
-    const result = exportAccountData(getDb().data, userId)
+    const { challengeToken } = (request.body || {}) as { challengeToken?: string }
+    const db = getDb()
+    const challenge = consumeSecurityChallenge(db.data, userId, 'export_data', challengeToken)
+    if (challenge === 'challenge_required') return reply.code(403).send({ error: 'Security challenge is required' })
+    if (challenge === 'invalid_challenge') return reply.code(403).send({ error: 'Security challenge is invalid or expired' })
+    const result = exportAccountData(db.data, userId)
     if (!result) return reply.code(404).send({ error: 'Account not found' })
+    await db.write()
     return { status: 'generated', downloadUrl: '/account/export/download' }
   })
   app.get('/account/export/download', async (request, reply) => {
@@ -186,6 +205,10 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const userId = requireActiveUser(request, reply)
     if (!userId) return
     const db = getDb()
+    const { challengeToken } = (request.body || {}) as { challengeToken?: string }
+    const challenge = consumeSecurityChallenge(db.data, userId, 'change_password', challengeToken)
+    if (challenge === 'challenge_required') return reply.code(403).send({ error: 'Security challenge is required' })
+    if (challenge === 'invalid_challenge') return reply.code(403).send({ error: 'Security challenge is invalid or expired' })
     const result = changeAccountPassword(db.data, userId, request.body as { currentPassword: string; newPassword: string })
     if (!result) return reply.code(404).send({ error: 'Account not found' })
     if (result === 'incorrect_current_password') return reply.code(400).send({ error: 'Current password is incorrect' })
@@ -197,6 +220,10 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const userId = requireActiveUser(request, reply)
     if (!userId) return
     const db = getDb()
+    const { challengeToken } = (request.body || {}) as { challengeToken?: string }
+    const challenge = consumeSecurityChallenge(db.data, userId, 'deactivate_account', challengeToken)
+    if (challenge === 'challenge_required') return reply.code(403).send({ error: 'Security challenge is required' })
+    if (challenge === 'invalid_challenge') return reply.code(403).send({ error: 'Security challenge is invalid or expired' })
     const result = deactivateAccount(db.data, userId)
     if (result === 'not_found') return reply.code(404).send({ error: 'Account not found' })
     if (result === 'not_active') return reply.code(400).send({ error: 'Account is not active' })
@@ -233,9 +260,81 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     if (!userId) return
     const { id } = request.params as { id: string }
     const db = getDb()
+    const { challengeToken } = (request.body || {}) as { challengeToken?: string }
+    const challenge = consumeSecurityChallenge(db.data, userId, 'unbind_identity', challengeToken)
+    if (challenge === 'challenge_required') return reply.code(403).send({ error: 'Security challenge is required' })
+    if (challenge === 'invalid_challenge') return reply.code(403).send({ error: 'Security challenge is invalid or expired' })
     const result = unbindIdentity(db.data, userId, id)
     if (result === 'not_found') return reply.code(404).send({ error: 'Identity not found' })
     if (result === 'last_identity') return reply.code(400).send({ error: 'Cannot remove the last identity' })
+    if (result === 'mfa_identity') return reply.code(400).send({ error: 'Cannot remove the current MFA identity' })
+    await db.write()
+    return result
+  })
+  app.get('/account/mfa/status', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    return getMfaStatus(getDb().data, userId)
+  })
+  app.post('/account/mfa/enable', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { method, identityId, code } = (request.body || {}) as { method?: 'email' | 'phone'; identityId?: string; code?: string }
+    const db = getDb()
+    const result = enableMfa(db.data, userId, method || 'email', identityId || '', code || '')
+    if (result === 'already_enabled') return reply.code(409).send({ error: 'MFA is already enabled' })
+    if (result === 'invalid_identity') return reply.code(400).send({ error: 'Invalid or unverified identity' })
+    if (result === 'invalid_code') return reply.code(400).send({ error: 'Invalid verification code' })
+    await db.write()
+    return result
+  })
+  app.post('/account/mfa/verification-code', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { method, identityId } = (request.body || {}) as { method?: 'email' | 'phone'; identityId?: string }
+    const result = requestMfaVerificationCode(getDb().data, userId, method || 'email', identityId || '')
+    if (result === 'invalid_identity') return reply.code(400).send({ error: 'Invalid or unverified identity' })
+    if (result === 'invalid_provider') return reply.code(400).send({ error: 'Invalid provider' })
+    if (result === 'invalid_identifier') return reply.code(400).send({ error: 'Invalid identifier' })
+    return result
+  })
+  app.post('/account/mfa/disable', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { code } = (request.body || {}) as { code?: string }
+    const db = getDb()
+    const result = disableMfa(db.data, userId, code || '')
+    if (result === 'not_enabled') return reply.code(400).send({ error: 'MFA is not enabled' })
+    if (result === 'mfa_not_configured') return reply.code(400).send({ error: 'MFA is not configured' })
+    if (result === 'identity_gone') return reply.code(400).send({ error: 'MFA identity no longer exists' })
+    if (result === 'invalid_code') return reply.code(400).send({ error: 'Invalid verification code' })
+    await db.write()
+    return result
+  })
+  app.post('/account/security/challenge-code', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { action } = (request.body || {}) as { action?: unknown }
+    if (!isSecurityChallengeAction(action)) return reply.code(400).send({ error: 'Invalid security challenge action' })
+    const db = getDb()
+    const result = requestSecurityChallengeCode(db.data, userId, action)
+    if (result === 'mfa_not_configured') return reply.code(400).send({ error: 'MFA is not configured' })
+    if (result === 'identity_gone') return reply.code(400).send({ error: 'MFA identity no longer exists' })
+    if (result === 'invalid_provider') return reply.code(400).send({ error: 'Invalid provider' })
+    if (result === 'invalid_identifier') return reply.code(400).send({ error: 'Invalid identifier' })
+    await db.write()
+    return result
+  })
+  app.post('/account/security/challenge', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { action, code } = (request.body || {}) as { action?: unknown; code?: string }
+    if (!isSecurityChallengeAction(action)) return reply.code(400).send({ error: 'Invalid security challenge action' })
+    const db = getDb()
+    const result = verifySecurityChallenge(db.data, userId, action, code || '')
+    if (result === 'mfa_not_configured') return reply.code(400).send({ error: 'MFA is not configured' })
+    if (result === 'identity_gone') return reply.code(400).send({ error: 'MFA identity no longer exists' })
+    if (result === 'invalid_code') return reply.code(400).send({ error: 'Invalid verification code' })
     await db.write()
     return result
   })
