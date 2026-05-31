@@ -1,13 +1,13 @@
 # Final Database Schema
 
-本文描述项目最终目标数据库形态。`mock-server/db.json` 后续应按本文逐步收敛；当前实现状态仍以 `docs/project-database-fields.md` 为准。
+本文描述项目目标数据库形态和 source of truth。`mock-server/db.json` 是当前 mock 实现，当前字段快照见 `docs/project-database-fields.md`。
 
 配套文档：
 
 - `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
 - `docs/final-page-fields.md`：最终页面 ViewModel 字段。
 - `docs/final-data-flow-contract.md`：最终数据流动和 source of truth。
-- `docs/implementation-roadmap.md`：分阶段执行顺序。
+- `docs/deployment-guide.md`：部署前检查和运行边界。
 
 本文描述最终领域数据库形态，不代表当前 Node.js + TypeScript `mock-server` 已具备生产级安全、事务、审计、部署等能力。当前 `mock-server` 只用于验证未来 Java 后端可复刻的数据边界和领域模型；数据结构应贴近最终 Java 后端目标，实现能力可保持 prototype 级别。
 
@@ -242,7 +242,7 @@ interface UserSecuritySettingRecord {
 - `auth_identities` 只负责登录身份与密码哈希；MFA 是否启用由本表决定。
 - 密码修改仍写入 `auth_identities.passwordHash`，不写入本表。
 - `mfaIdentityId` 必须指向同一用户已验证的 `auth_identities`，且 provider 只能是 `email` 或 `phone`。
-- Phase 7.4 不引入 TOTP；先使用已验证邮箱或手机号作为二次验证方式。
+- 当前 mock 不引入 TOTP；先使用已验证邮箱或手机号作为二次验证方式。
 
 ### user_security_challenges
 

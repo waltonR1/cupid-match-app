@@ -57,27 +57,22 @@ npm run mock:build
 - 默认值：`http://127.0.0.1:52173/api`
 - 可通过 `VITE_API_BASE_URL` 覆盖
 
-## 接口
+## 接口范围
 
-- `GET /api/ping`
-- `POST /api/auth/login`
-- `POST /api/auth/register`
-- `GET /api/profiles/featured`
-- `GET /api/profiles/self`
-- `GET /api/profiles/family`
-- `GET /api/profiles/self/:id`
-- `GET /api/profiles/family/:id`
-- `POST /api/profiles/self/:id/private-introduction`
-- `POST /api/profiles/family/:id/private-introduction`
-- `GET /api/events`
-- `GET /api/events/:id`
-- `GET /api/account/dashboard`
-- `GET /api/account/me`
-- `GET /api/account/membership`
-- `GET /api/debug/profile-access-preview/:profileType/:id`
-- `GET /api/debug/private-introductions`
-- `POST /api/debug/private-introductions/:id/accept`
-- `POST /api/debug/private-introductions/:id/decline`
+接口契约以 [final-api-contract.md](./final-api-contract.md) 为准。当前 mock-server 已覆盖这些业务域：
+
+- `ping`
+- `auth`
+- `legal`
+- `profiles`
+- `events`
+- `account`
+- `membership`
+- `favorites`
+- `private introductions`
+- `inbox`
+- `upload`
+- `debug`
 
 ## Auth 行为
 
@@ -91,6 +86,8 @@ npm run mock:build
 - `users`
 - `auth_identities`
 - `user_memberships`
+- `user_preferences`
+- `user_agreement_acceptances`
 
 注册不会创建 profile，不写 profile 字段，也不写 account city。`preferredLocale` 由前端当前语言自动传入，不是注册页手动字段。
 
@@ -105,8 +102,12 @@ npm run mock:build
 ## 调试页面
 
 - `/pages/debug/index`：调试工具总入口。
+- `/pages/debug/events`：活动数据和报名状态调试。
+- `/pages/debug/inbox`：消息中心数据调试。
 - `/pages/debug/private-introductions`：模拟私人介绍请求的接受与拒绝。
 - `/pages/debug/profile-access-preview`：预览 self / family detail 在 Backend、Guest、Free、Member 下的字段展示差异。
+- `/pages/debug/profile-photos`：profile 照片审核状态调试。
+- `/pages/debug/profile-verifications`：profile 认证审核调试。
 
 ## 最小回归范围
 
@@ -124,6 +125,10 @@ npm run mock:build
 - `GET /api/events`
 - `GET /api/events/:id`
 - `GET /api/account/dashboard`
+- `GET /api/account/settings`
+- `POST /api/account/security/challenge-code`
+- `POST /api/account/security/challenge`
+- `GET /api/inbox/threads`
 
 ## 与静态托管的关系
 

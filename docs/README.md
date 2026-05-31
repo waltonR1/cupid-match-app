@@ -4,37 +4,37 @@
 
 ## 推荐阅读顺序
 
-### 当前实现
+### 部署与验收
 
-1. [project-map.md](./project-map.md)
+1. [deployment-guide.md](./deployment-guide.md)
+   部署边界、环境变量、构建命令、部署前检查和冒烟路径。
+2. [project-map.md](./project-map.md)
    产品路径、页面范围、技术链路和项目事实。
-2. [project-introduction.md](./project-introduction.md)
+3. [project-introduction.md](./project-introduction.md)
    项目背景、产品定位和核心判断。
-3. [project-structure.md](./project-structure.md)
+4. [project-structure.md](./project-structure.md)
    代码分层、目录职责和工程约定。
-4. [page-relationships.md](./page-relationships.md)
+5. [page-relationships.md](./page-relationships.md)
    页面清单、导航关系和跳转入口。
-5. [mock-server-guide.md](./mock-server-guide.md)
+6. [mock-server-guide.md](./mock-server-guide.md)
    mock-server 的结构、启动方式和接口边界。
-6. [token-usage-guide.md](./token-usage-guide.md)
+7. [token-usage-guide.md](./token-usage-guide.md)
    设计 token 使用规则。
-7. [git-commit-convention.md](./git-commit-convention.md)
+8. [git-commit-convention.md](./git-commit-convention.md)
    Git 提交规范。
-8. [project-database-fields.md](./project-database-fields.md)
-   项目数据库字段规范。
 
-### 最终目标
+### 数据与接口契约
 
 1. [final-database-schema.md](./final-database-schema.md)
-   最终数据库字段和 source of truth。
+   目标数据库字段和 source of truth。
 2. [final-api-contract.md](./final-api-contract.md)
-   最终 API endpoint、payload、query 和 DTO。
+   目标 API endpoint、payload、query 和 DTO。
 3. [final-page-fields.md](./final-page-fields.md)
-   最终页面 ViewModel 字段。
+   目标页面 ViewModel 字段。
 4. [final-data-flow-contract.md](./final-data-flow-contract.md)
    数据库、API、mapper、页面之间的数据流动。
-5. [implementation-roadmap.md](./implementation-roadmap.md)
-   从当前实现迁移到最终目标的分阶段计划。
+5. [project-database-fields.md](./project-database-fields.md)
+   当前 mock 数据库字段快照。
 
 ## 按问题查找
 
@@ -55,6 +55,10 @@
 
 - [mock-server-guide.md](./mock-server-guide.md)
 
+### 想知道怎么部署或验收
+
+- [deployment-guide.md](./deployment-guide.md)
+
 ### 想知道 token 怎么使用
 
 - [token-usage-guide.md](./token-usage-guide.md)
@@ -67,18 +71,17 @@
 
 - [project-database-fields.md](./project-database-fields.md)
 
-### 想知道最终数据库 / API / 页面字段怎么定义
+### 想知道目标数据库 / API / 页面字段怎么定义
 
 - [final-database-schema.md](./final-database-schema.md)
 - [final-api-contract.md](./final-api-contract.md)
 - [final-page-fields.md](./final-page-fields.md)
 - [final-data-flow-contract.md](./final-data-flow-contract.md)
-- [implementation-roadmap.md](./implementation-roadmap.md)
 
 ## 文档维护约定
 
 - `project-*` 文档描述当前状态
-- `final-*` 文档描述最终目标状态
+- `final-*` 文档描述目标契约
 - 不记录过程性说明和阶段性备注
 - 新增页面时同步更新 `page-relationships.md`
 - 调整结构时同步更新 `project-structure.md`

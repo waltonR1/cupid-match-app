@@ -7,7 +7,7 @@
 - `docs/final-database-schema.md`：最终数据库字段。
 - `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
 - `docs/final-data-flow-contract.md`：数据库、API、mapper、页面之间的数据流动。
-- `docs/implementation-roadmap.md`：分阶段执行顺序。
+- `docs/deployment-guide.md`：部署前检查和运行边界。
 
 ## Global Rules
 
@@ -703,7 +703,7 @@ interface AccountIntroductionContactViewModel {
 
 ### Messages
 
-`/pages/account/relationship` 只承接收藏与私人介绍申请。私人介绍 accepted 后，relationship 通过独立 contact reveal API 展示对方联系方式，不开启聊天 room。消息中心是独立产品模块；Phase 5.6 承接系统通知：线程列表 + 消息详情分页。后续受控沟通再进入 inbox。
+`/pages/account/relationship` 只承接收藏与私人介绍申请。私人介绍 accepted 后，relationship 通过独立 contact reveal API 展示对方联系方式，不开启聊天 room。消息中心是独立产品模块，承接系统通知的线程列表和消息详情分页。后续受控沟通再进入 inbox。
 
 ```ts
 interface InboxThreadViewModel {
@@ -746,7 +746,7 @@ interface InboxMessagePageViewModel {
 }
 ```
 
-Phase 5.6 承接系统通知的线程列表和消息详情分页。发送消息和私人介绍受控沟通留到后续阶段。
+消息中心承接系统通知的线程列表和消息详情分页。当前不开放发送消息；私人介绍受控沟通留到后续产品能力。
 
 ### Settings
 
@@ -887,7 +887,7 @@ profile.compatibilityDimensions
 profile.photos as embedded DB field
 privacy_settings.title
 privacy_settings.desc
-message_threads as final account messages source
+message_threads as final account messages source; use inbox threads/messages instead
 ```
 
 如页面确实需要对应展示，应从最终 source of truth 派生：

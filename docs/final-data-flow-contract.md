@@ -9,7 +9,7 @@
 - `docs/final-database-schema.md`：最终数据库形态。
 - `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
 - `docs/final-page-fields.md`：最终页面 ViewModel 字段。
-- `docs/implementation-roadmap.md`：分阶段执行顺序。
+- `docs/deployment-guide.md`：部署前检查和运行边界。
 - `docs/project-database-fields.md`：当前实现状态。
 
 本文描述最终目标，不描述当前代码已经完成的状态。
@@ -862,7 +862,7 @@ Rules:
 
 - `auth_identities` is the source of truth for login identifiers and password hash.
 - `user_security_settings` is the source of truth for MFA state.
-- MFA method in Phase 7.4 is limited to verified `email` or `phone` identities; no TOTP implementation yet.
+- MFA method is limited to verified `email` or `phone` identities in the current mock implementation; no TOTP implementation yet.
 - The platform does have an `AuthSession.token`, but current mock requests still use `X-User-Id`. `challengeToken` is a separate short-lived sensitive-action token and must not be treated as the login token.
 - Password change, identity unbind, account deactivation, and data export must request a challenge token when MFA is enabled.
 - Identity unbind must reject removing the identity currently used as the MFA method unless MFA is disabled or moved to another verified identity first.
@@ -878,13 +878,13 @@ Rules:
 /pages/account/membership
 -> choose target plan
 -> POST /api/account/membership/upgrade
--> return placeholder external-flow acknowledgement
+-> return external-flow acknowledgement
 -> return AccountMembershipUpgradeResultDTO
 ```
 
 Rules:
 
-- Phase 5.5 only reserves the upgrade entry point.
+- Current implementation only reserves the upgrade entry point.
 - Formal payment or staff confirmation is introduced later before membership state changes.
 - The page contract stays stable even if the execution path later becomes asynchronous.
 - Membership tier is never written into `users`.
@@ -1052,7 +1052,7 @@ Forbidden:
 
 ## Account Chain
 
-Phase 1 account is frozen. Final account is rebuilt after profile, auth, and events are stable.
+Account center owns account-facing orchestration only. It must not reintroduce legacy profile fields or make profile schema decisions.
 
 Home flow:
 
@@ -1378,7 +1378,7 @@ Rules:
 - `cooldown` is derived from `status = 'declined'` plus `cooldownUntil`; do not use `cooldown` as a persisted request status.
 - `expired` is derived from `status = 'requested'` plus `expiresAt < now`; do not use `expired` as a persisted request status.
 - `quota_exhausted` is a DTO state returned by the create action when entitlement balance is insufficient; it is not persisted as request status.
-- Phase 5.6 does not open chat rooms after acceptance. If later controlled conversation is enabled, inbox messages use cursor pagination and must not return the full message history by default.
+- Current private introduction acceptance does not open chat rooms. If later controlled conversation is enabled, inbox messages use cursor pagination and must not return the full message history by default.
 
 ## Field Migration Summary
 

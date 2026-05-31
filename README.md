@@ -87,6 +87,17 @@ http://127.0.0.1:52173/api
 GET /api/ping
 ```
 
+## 部署前检查
+
+```bash
+npm run type-check
+npm run mock:build
+npm run check:i18n
+npm run build:h5
+```
+
+部署说明见 [docs/deployment-guide.md](./docs/deployment-guide.md)。
+
 ## 常用脚本
 
 ```bash
@@ -101,13 +112,14 @@ npm run build:h5
 ## 文档入口
 
 1. [docs/README.md](./docs/README.md)
-2. [docs/project-map.md](./docs/project-map.md)
-3. [docs/project-introduction.md](./docs/project-introduction.md)
-4. [docs/project-structure.md](./docs/project-structure.md)
-5. [docs/page-relationships.md](./docs/page-relationships.md)
-6. [docs/mock-server-guide.md](./docs/mock-server-guide.md)
-7. [docs/token-usage-guide.md](./docs/token-usage-guide.md)
-8. [docs/git-commit-convention.md](./docs/git-commit-convention.md)
+2. [docs/deployment-guide.md](./docs/deployment-guide.md)
+3. [docs/project-map.md](./docs/project-map.md)
+4. [docs/project-introduction.md](./docs/project-introduction.md)
+5. [docs/project-structure.md](./docs/project-structure.md)
+6. [docs/page-relationships.md](./docs/page-relationships.md)
+7. [docs/mock-server-guide.md](./docs/mock-server-guide.md)
+8. [docs/token-usage-guide.md](./docs/token-usage-guide.md)
+9. [docs/git-commit-convention.md](./docs/git-commit-convention.md)
 
 ## 协作入口
 

@@ -5,7 +5,7 @@
 - `docs/final-database-schema.md`：最终数据库字段。
 - `docs/final-page-fields.md`：最终页面 ViewModel 字段。
 - `docs/final-data-flow-contract.md`：数据库、API、mapper、页面之间的数据流动。
-- `docs/implementation-roadmap.md`：分阶段执行顺序。
+- `docs/deployment-guide.md`：部署前检查和运行边界。
 
 ## Global Rules
 
@@ -84,14 +84,14 @@ interface ApiErrorDTO {
 
 | Domain | Method | Endpoint | Purpose |
 | --- | --- | --- | --- |
-| Auth | `POST` | `/api/auth/register` | 鍒涘缓璐︽埛锛屾敞鍐屽叆鍙ｈ矾寰勫彧鐢ㄤ簬鍓嶇娉ㄥ唽鍚庤惤鐐广€?|
+| Auth | `POST` | `/api/auth/register` | 创建账户；注册入口路径只用于前端注册成功后的落点。 |
 | Auth | `POST` | `/api/auth/verification-code` | Request registration verification code metadata. Product response does not include the code. |
-| Auth | `POST` | `/api/auth/login` | 鐧诲綍骞惰繑鍥?session銆?|
-| Legal | `GET` | `/api/legal/documents/:type` | 鑾峰彇褰撳墠鐢熸晥鏈嶅姟鏉℃鎴栭殣绉佽鏄庛€?|
-| Profiles | `GET` | `/api/profiles/self` | self 璧勬枡鐩綍銆?|
-| Profiles | `GET` | `/api/profiles/family` | family 璧勬枡鐩綍銆?|
-| Profiles | `GET` | `/api/profiles/self/:id` | self 璧勬枡璇︽儏銆?|
-| Profiles | `GET` | `/api/profiles/family/:id` | family 璧勬枡璇︽儏銆?|
+| Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
+| Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
+| Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |
+| Profiles | `GET` | `/api/profiles/family` | family 资料目录。 |
+| Profiles | `GET` | `/api/profiles/self/:id` | self 资料详情。 |
+| Profiles | `GET` | `/api/profiles/family/:id` | family 资料详情。 |
 | Profiles | `POST` | `/api/profiles/self` | 创建 self profile。 |
 | Profiles | `POST` | `/api/profiles/family` | 创建 family profile。 |
 | Profiles | `POST` | `/api/profiles/self/:id` | 更新 self profile。 |
@@ -184,7 +184,14 @@ interface AuthUserDTO {
 
 ```
 
-- 娉ㄥ唽 payload 涓嶅寘鍚?`city`銆?- 娉ㄥ唽涓嶅垱寤?profile銆?- `RegisterPayload.path` 鍙〃绀烘湰娆℃敞鍐屽叆鍙ｏ紝鐢ㄤ簬鍓嶇娉ㄥ唽鎴愬姛鍚庤烦杞?self 鎴?family 鐩綍锛涘悗绔笉鎸佷箙鍖?onboarding 鐘舵€併€?- 鎴愬姛娉ㄥ唽 / 鎴愬姛鐧诲綍鍗宠〃绀虹敤鎴锋帴鍙楀綋鍓?active 鏈嶅姟鏉℃涓庨殣绉佽鏄庯紱鍚庣鑷姩鍐欏叆 `user_agreement_acceptances`锛坲psert by userId + documentType锛夛紝鐗堟湰涓嶅彉鍒欒烦杩囥€?- 娉ㄥ唽椤典笉灞曠ず `preferredLocale` 鎵嬪姩閫夋嫨鍣紱鍓嶇鐢ㄥ綋鍓嶉〉闈?locale 鑷姩濉厖 `RegisterPayload.preferredLocale`銆?- 鐧诲綍鍜屾敞鍐岄兘杩斿洖 `AuthUserDTO.preferredLocale`锛涘墠绔櫥褰曟垚鍔熷悗鐢ㄥ畠鍚屾 locale store锛岀‘淇濊法璁惧鐧诲綍鏃朵娇鐢ㄨ处鎴烽粯璁よ瑷€銆?- 褰撳墠娉ㄥ唽鍙紑鏀?`email`銆乣phone`锛沗wechat`銆乣google` 鏄渶缁?`auth_identities` 棰勭暀 provider銆?- `token` 褰撳墠鍙互浣滀负 mock 鍗犱綅锛涙寮?Authorization 琛屼负鍚庣画鍗曠嫭瀹氫箟銆?
+- 注册 payload 不包含 `city`。
+- 注册不创建 profile。
+- `RegisterPayload.path` 只表示本次注册入口，用于前端注册成功后跳转 self 或 family 目录；后端不持久化 onboarding 状态。
+- 成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`，版本不变则跳过。
+- 注册页不展示 `preferredLocale` 手动选择器；前端用当前页面 locale 自动填充 `RegisterPayload.preferredLocale`。
+- 登录和注册都返回 `AuthUserDTO.preferredLocale`；前端登录成功后用它同步 locale store。
+- 当前注册只开放 `email`、`phone`；`wechat`、`google` 是最终 `auth_identities` 预留 provider。
+- `token` 当前可以作为 mock 占位；正式 Authorization 行为后续单独定义。
 ### Login
 
 ```ts
@@ -194,7 +201,7 @@ interface LoginPayload {
 }
 ```
 
-杩斿洖 `AuthSessionDTO`銆?
+返回 `AuthSessionDTO`。
 ## Legal API
 
 ### Get Legal Document
@@ -203,8 +210,9 @@ interface LoginPayload {
 GET /api/legal/documents/:type?lang=zh
 ```
 
-`:type` 涓?`terms` 鎴?`privacy`銆?
-鑻ョ洰鏍?`lang` 鏆傛棤 active 鏂囨。锛宮ock 鍚庣鍙洖閫€鍒?`zh` active 鏂囨。锛屾寮忓簱搴旇ˉ榻愪笁璇█鐗堟湰銆?
+`:type` 为 `terms` 或 `privacy`。
+
+若目标 `lang` 暂无 active 文档，mock 后端可回退到 `zh` active 文档；正式库应补齐三语言协议版本。
 ```ts
 interface LegalDocumentDTO {
   type: LegalDocumentType
@@ -226,12 +234,14 @@ interface LegalDocumentClauseDTO {
 }
 ```
 
-- 杩斿洖褰撳墠 locale 涓?active 鐨勬寚瀹氱被鍨嬫枃妗ｃ€?- 鍓嶇 `AgreementDialog` 鎵撳紑鏃舵寜闇€璋冪敤锛屼笉棰勫姞杞姐€?- `sections` 涓哄崗璁鏂囩粨鏋勶紱鍓嶇鎸?section heading 涓?clause 瀛楁娓叉煋锛屼笉瑙ｆ瀽 Markdown銆?
+- 返回当前 locale 下 active 的指定类型文档。
+- 前端 `AgreementDialog` 打开时按需调用，不预加载。
+- `sections` 为协议正文结构；前端按 section heading 与 clause 字段渲染，不解析 Markdown。
 ## Profiles API
 
 ### Profile Directory
 
-Profile 鐩綍 API 褰撳墠鎸夊叆鍙ｆ媶鍒嗭紝涓嶄娇鐢?`view` query锛?
+Profile 目录 API 当前按入口拆分，不使用 `view` query：
 ```text
 GET /api/profiles/self
 GET /api/profiles/family
@@ -343,7 +353,7 @@ interface ProfileIntentFacetDTO {
 
 ### Profile Detail
 
-Profile detail API 褰撳墠鎸夊叆鍙ｆ媶鍒嗭紝涓嶄娇鐢ㄧ粺涓€鐨?`/api/profiles/:id`锛?
+Profile detail API 当前按入口拆分，不使用统一的 `/api/profiles/:id`：
 ```text
 GET /api/profiles/self/:id
 GET /api/profiles/family/:id
@@ -449,8 +459,11 @@ interface ProfilePrivateIntroductionDTO {
 }
 ```
 
-- `ProfileDetailBaseDTO` / `SelfProfileDetailDTO` / `FamilyProfileDetailDTO` 淇濇寔鎵佸钩瀛楁锛涢〉闈?section 鐢卞墠绔?mapper 缁勮銆?- 鍙楅檺瀛楁杩斿洖 `ProfileFieldLockCode`锛屽墠绔笉鏍规嵁浼氬憳鐘舵€佽嚜琛屽垽鏂師濮嬪瓧娈垫槸鍚﹀彲瑙併€?- `privateIntroduction` 鍙〃杈剧敵璇风姸鎬佸拰棰濆害锛屼笉鍖呭惈 phone / email / wechat銆?
-绂佹杩斿洖锛?
+- `ProfileDetailBaseDTO` / `SelfProfileDetailDTO` / `FamilyProfileDetailDTO` 保持扁平字段；页面 section 由前端 mapper 组装。
+- 受限字段返回 `ProfileFieldLockCode`；前端不根据会员状态自行判断原始字段是否可见。
+- `privateIntroduction` 只表达申请状态和额度，不包含 phone / email / wechat。
+
+禁止返回：
 ```text
 ProfileRecord
 phone
@@ -539,7 +552,10 @@ interface ProfileMutationResponseDTO {
 
 ```
 
-- 鍒涘缓 / 鏇存柊 payload 浣跨敤鍓嶇杈撳叆鍊硷紱鍚庣璐熻矗淇濆瓨涓烘渶缁堟暟鎹簱缁撴瀯鍜屾湰鍦板寲瀛楁銆?- `ProfileCreatePayload` / `ProfileUpdatePayload` 涓殑鍗曡瑷€瀛楃涓叉寜璇锋眰 locale 鍐欏叆 `LocalizedText` 鐨勫搴旇瑷€锛涘綋鍓?locale 淇濆瓨涓?`manual / human / ready`锛屽叾浠栭潪浜哄伐 locale 淇濆瓨涓虹┖瀛楃涓?`machine / null / pending`锛岀敱鍚庡彴銆乻taff 鎴栧悗缁炕璇戞祦绋嬭ˉ榻愩€?- public profile API 浣跨敤甯?fallback 鐨勬湰鍦板寲瑙ｆ瀽锛岃烦杩囩┖瀛楃涓插拰 pending 鍊硷紱account profile detail 缂栬緫 API 浣跨敤褰撳墠 `lang` 妲戒綅鍘熷€硷紝涓嶅仛 fallback銆?- 鍒涘缓 profile 鏃跺悓姝ュ垱寤烘垨鏇存柊 `profile_ownerships`銆?
+- 创建 / 更新 payload 使用前端输入值；后端负责保存为目标数据库结构和本地化字段。
+- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言；当前 locale 保存为 `manual / human / ready`，其他非人工 locale 保存为空字符串 `machine / null / pending`，由后台、staff 或后续翻译流程补齐。
+- public profile API 使用带 fallback 的本地化解析，跳过空字符串和 pending 值；account profile detail 编辑 API 使用当前 `lang` 槽位原值，不做 fallback。
+- 创建 profile 时同步创建或更新 `profile_ownerships`。
 ## Private Introduction API
 
 ```ts
@@ -557,7 +573,12 @@ interface PrivateIntroductionDTO {
 }
 ```
 
-- self/family detail 缁х画浣跨敤鍒嗗紑鐨勭敵璇峰叆鍙ｏ細`POST /api/profiles/self/:id/private-introduction` 鍜?`POST /api/profiles/family/:id/private-introduction`銆?- `:id` 灏辨槸 target profile id锛屽墠绔笉鍦?body 閲岄噸澶嶄紶 `targetProfileId`銆?- 鍚庣妫€鏌?ownership銆乵embership entitlement銆乹uota 鍜?cooldown銆?- `cooldown` 鏄?DTO 娲剧敓鐘舵€侊紝鏁版嵁搴撲娇鐢?`declined + cooldownUntil`銆?- `expired` 鏄?DTO 娲剧敓鐘舵€侊紝鏁版嵁搴撲娇鐢?`requested + expiresAt < now`锛涜繃鏈熷悗鏄惁杩涘叆 cooldown 鐢辨湇鍔＄瓥鐣ュ喅瀹氥€?- 棰濆害涓嶈冻鏃惰繑鍥?`quota_exhausted` 鐘舵€侊紝涓嶈姹傚墠绔妸鏅€氶敊璇浆鎹㈡垚涓氬姟鐘舵€併€?
+- self/family detail 继续使用分开的申请入口：`POST /api/profiles/self/:id/private-introduction` 和 `POST /api/profiles/family/:id/private-introduction`。
+- `:id` 就是 target profile id，前端不在 body 里重复传 `targetProfileId`。
+- 后端检查 ownership、membership entitlement、quota 和 cooldown。
+- `cooldown` 是 DTO 派生状态，数据库使用 `declined + cooldownUntil`。
+- `expired` 是 DTO 派生状态，数据库使用 `requested + expiresAt < now`；过期后是否进入 cooldown 由服务策略决定。
+- 额度不足时返回 `quota_exhausted` 状态，不要求前端把普通错误转换成业务状态。
 ### Contact Reveal After Accepted Introduction
 
 ```ts
@@ -632,10 +653,10 @@ interface InboxMessagePageDTO {
 
 Rules:
 
-- Phase 5.6 delivers `GET /api/inbox/threads`, `GET /api/inbox/threads/:id/messages?before=&limit=`, and `POST /api/inbox/threads/:id/read` for notification detail viewing.
-- `POST /api/inbox/threads/:id/messages` stays in the final contract for later controlled conversation work.
-- Accepted private introductions do not automatically create chat rooms in Phase 5.6; requester contact reveal is handled by `GET /api/account/private-introductions/:requestId/contact`.
-- Future user-visible event, profile review, legal document, membership, and staff notices should enter inbox threads/messages instead of a separate notifications table.
+- `GET /api/inbox/threads`, `GET /api/inbox/threads/:id/messages?before=&limit=`, and `POST /api/inbox/threads/:id/read` provide notification detail viewing.
+- `POST /api/inbox/threads/:id/messages` stays in the contract for controlled conversation work, but current UI does not expose message sending.
+- Accepted private introductions do not automatically create chat rooms; requester contact reveal is handled by `GET /api/account/private-introductions/:requestId/contact`.
+- User-visible event, profile review, legal document, membership, and staff notices should enter inbox threads/messages instead of a separate notifications table.
 
 ## Events API
 
@@ -693,7 +714,7 @@ interface EventFacetOptionDTO {
 }
 ```
 
-`memberOnly` 鐢?`visibility === 'member'` 娲剧敓銆?
+`memberOnly` 由 `visibility === 'member'` 派生。
 ### Event Detail
 
 ```ts
@@ -721,7 +742,7 @@ interface EventRegistrationStateDTO {
 }
 ```
 
-`venue` 鏄彲鍏紑灞曠ず鐨勫湴鐐瑰悕绉帮紱`address` 鏄簿纭湴鍧€锛屽彧鍦ㄥ悗绔垽鏂綋鍓?viewer 婊¤冻鍦板潃鍙瑙勫垯鏃惰繑鍥炪€傛椿鍔ㄥ垪琛ㄤ笉杩斿洖绮剧‘鍦板潃锛岄伩鍏嶆湭鐧诲綍鐢ㄦ埛浠庡垪琛ㄤ竴娆℃€х湅鍒扮嚎涓嬪湴鍧€銆?
+`venue` 是可公开展示的地点名称；`address` 是精确地址，只在后端判断当前 viewer 满足地址可见规则时返回。活动列表不返回精确地址，避免未登录用户从列表一次性看到线下地址。
 ### Event Registration
 
 ```ts
@@ -735,7 +756,7 @@ interface EventRegistrationResponseDTO {
 
 ## Account API
 
-Account API 涓嶅簲缁х画鐢ㄤ竴涓繃澶х殑 legacy overview 鍙嶅悜鍐冲畾鏁版嵁搴撶粨鏋勩€傚彲浠ヤ繚鐣?`dashboard` 浣滀负椤甸潰鑱氬悎 DTO锛屼絾 source of truth 鏉ヨ嚜鐙珛闆嗗悎銆?
+Account API 不应继续用一个过大的 legacy overview 反向决定数据库结构。可以保留 `dashboard` 作为页面聚合 DTO，但 source of truth 来自独立集合。
 ### Account Me
 
 ```ts
@@ -791,7 +812,8 @@ interface AccountProfileDetailDTO {
   localizedMeta: AccountProfileLocalizedMetaDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
-  // 鍏朵綑涓氬姟瀛楁涓庡綋鍓?profile 涓昏〃瀛楁淇濇寔鎵佸钩涓€鑷?}
+  // 其余业务字段与当前 profile 主表字段保持扁平一致。
+}
 
 interface AccountProfileLocalizedMetaDTO {
   editLocale: 'zh' | 'fr' | 'en'
@@ -1138,7 +1160,8 @@ Write rules:
 
 - `POST /api/account/profiles/save` is the primary owner-side save boundary for profile detail. It upserts the managed profile, writes user-editable profile fields, updates owner relation defaults, upserts `profile_contacts`, reconciles `profile_photos`, updates user-submitted `profile_verifications.legalName/dateOfBirth`, and returns the rebuilt detail DTO.
 - `POST /api/account/profiles/:profileId/archive` is owner-only, rejects unsafe archive when active formal flows still exist, and returns a typed archive result.
-- `POST /api/account/profiles/:profileId/privacy-preferences` 鍙洿鏂?profile 鎵€鏈変汉鍙帶鍒剁殑鍗婃晱鎰熷瓧娈甸殣钘忓亸濂斤紝骞惰繑鍥炴渶鏂板亸濂藉璞°€?- `POST /api/account/me` updates account display basics and the account default language preference; auth identities and status are out of scope.
+- `POST /api/account/profiles/:profileId/privacy-preferences` 只更新 profile 所有人可控制的半敏感字段隐藏偏好，并返回最新偏好对象。
+- `POST /api/account/me` updates account display basics and the account default language preference; auth identities and status are out of scope.
 - `POST /api/account/settings/preferences` updates the single typed `user_preferences` row for the current user.
 - `POST /api/account/password/change` changes the current password through the account security form, writes `auth_identities.passwordHash`, and requires the frontend to log the user out after success.
 - `POST /api/account/deactivate` deactivates the current user, writes `users.status = 'deactivated'`, and returns `AccountDeactivateResultDTO`.
@@ -1154,9 +1177,9 @@ Write rules:
 - `POST /api/account/security/challenge-code` starts a short-lived step-up verification for one sensitive action.
 - `POST /api/account/security/challenge` verifies the code and returns a short-lived `challengeToken`; sensitive endpoints consume this token through their payload when MFA is enabled.
 - Sensitive account write endpoints that can expose or change account access, including password change, identity unbind, account deactivation, and data export, accept `challengeToken?: string` as a step-up verification field. This field is not the login token and must be consumed once by the target operation.
-- `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
+- `POST /api/account/membership/upgrade` is an external-flow entry point; formal payment or staff confirmation happens before membership state changes.
 
-绂佹鍦?account DTO 涓繑鍥炶繖浜?legacy 瀛楁锛?
+禁止在 account DTO 中返回这些 legacy 字段：
 ```text
 realName
 nickName
@@ -1164,12 +1187,12 @@ profileType as profile identity
 completion
 profile phone/email/wechat
 privacy setting title/desc from DB
-message_threads as final source
+message_threads as final source; use inbox threads/messages instead
 ```
 
 ## Debug API
 
-Debug API 鍙湇鍔℃湰鍦伴獙璇侊紝涓嶄綔涓烘寮忓墠绔骇鍝佸叆鍙ｃ€?
+Debug API 只服务本地验证，不作为正式前端产品入口。
 ```ts
 interface DebugPrivateIntroductionItemDTO {
   requestId: string
@@ -1181,4 +1204,4 @@ interface DebugPrivateIntroductionItemDTO {
 }
 ```
 
-Debug 椤甸潰鍙互璋冪敤 accept / decline 宸ュ叿锛屼絾鐢熶骇 account / profile 椤甸潰鍙兘娑堣垂姝ｅ紡 private introduction 鐘舵€併€?
+Debug 页面可以调用 accept / decline 工具，但生产 account / profile 页面只能消费正式 private introduction 状态。
