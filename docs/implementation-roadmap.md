@@ -2116,7 +2116,7 @@ feat(account): add MFA setup and verification
 | 数据导出 | 已完成 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回安全删减后的 JSON 下载 |
 | 账户停用 / 静默恢复 | 已完成 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')`；用户再次成功登录时若状态为 `deactivated`，后端静默恢复为 `active` 并返回正常 `AuthSession` |
 | 身份绑定/解绑 | 已完成 | `POST /account/identities/verification-code` + `POST /account/identities` + `DELETE /account/identities/:id`；绑定需要验证码，解绑必须防止删除最后一个可登录身份。 |
-| MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
+| MFA / 二次验证 | 未实现 | Phase 7.4 改为 step-up verification：读取 MFA 状态、用已验证邮箱/手机号开启或关闭 MFA，并在密码修改、身份解绑、账户停用、数据导出前发起短期 challenge。 |
 
 ### Phase 7 拆分
 
@@ -2126,15 +2126,17 @@ feat(account): add MFA setup and verification
 | 7.1 数据导出 | `POST /account/export`、`GET /account/export/download` | 已完成。生成当前用户可导出的账户数据 JSON；导出范围按安全原则删减，不强制包含全部业务表。 |
 | 7.2 账户停用 / 静默恢复 | `POST /account/deactivate`、`POST /auth/login` | 已完成。主动停用写入 `deactivated` 并登出；再次成功登录时后端静默恢复为 `active`。 |
 | 7.3 身份绑定/解绑 | `auth_identities` | 增加绑定、验证和解绑；解绑必须防止删除最后一个可登录身份。 |
-| 7.4 MFA | `user_security_settings` | 增加 MFA 状态读取、启用、停用；后续敏感操作可读取该状态决定是否追加验证。 |
+| 7.4 MFA / 二次验证 | `user_security_settings`, `user_security_challenges` | 增加 MFA 状态读取、可用验证方式、启用/停用验证码流程，并为敏感操作提供短期 `challengeToken`。第一版只支持已验证 email / phone，不做 TOTP。 |
 
 ### DB 预留字段
 
 以下字段已在当前 schema 中预留，Phase 7 实现时直接使用：
 
 - `auth_identities` 表：`provider` / `identifier` / `passwordHash?` / `verifiedAt?` — 支持多身份绑定与验证
-- `user_security_settings` 表：`mfaEnabled` / `mfaMethod?` — MFA 状态 source of truth
-- `AccountPasswordSecurityDTO.requiresMfa` — 敏感操作是否需要 MFA 的展示字段，最终由 `user_security_settings` 派生
+- `user_security_settings` 表：`mfaEnabled` / `mfaMethod?` / `mfaIdentityId?` / `mfaEnabledAt?` 是 MFA 状态 source of truth。
+- `user_security_challenges` 表：敏感操作前的短期二次验证挑战，不是登录 token。
+- `AccountMfaStatusDTO` 返回当前 MFA 状态和可用的已验证 email / phone 身份。
+- `AccountPasswordSecurityDTO.requiresMfa` 只作为敏感操作是否需要二次验证的派生展示字段，不作为 MFA source of truth。
 - `UserRecord.status` — 统一为 `'active' | 'deactivated' | 'suspended'`（`suspended` 预留给平台风控）
 
 ### 账户状态恢复规则

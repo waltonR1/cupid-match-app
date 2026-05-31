@@ -128,6 +128,12 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/profiles/:profileId/privacy-preferences` | 更新可管理 profile 的半敏感字段隐藏偏好。 |
 | Account | `POST` | `/api/account/me` | 更新账户基础信息。 |
 | Account | `POST` | `/api/account/settings/preferences` | 更新账户偏好。 |
+| Account | `GET` | `/api/account/mfa/status` | 读取二次验证状态与可用验证方式。 |
+| Account | `POST` | `/api/account/mfa/verification-code` | 为开启或关闭二次验证发送验证码。 |
+| Account | `POST` | `/api/account/mfa/enable` | 验证后开启二次验证。 |
+| Account | `POST` | `/api/account/mfa/disable` | 验证后关闭二次验证。 |
+| Account | `POST` | `/api/account/security/challenge-code` | 为敏感操作发送二次验证验证码。 |
+| Account | `POST` | `/api/account/security/challenge` | 校验敏感操作验证码并返回短期 challenge token。 |
 | Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
@@ -1001,11 +1007,52 @@ interface AccountIdentityDeleteResultDTO {
 
 interface AccountMfaStatusDTO {
   enabled: boolean
-  method?: 'totp' | 'email' | 'sms'
+  method?: 'email' | 'phone'
+  identityId?: string
+  identityLabel?: string
+  enabledAt?: string
+  availableMethods: AccountMfaMethodOptionDTO[]
 }
 
-interface AccountMfaUpdatePayload {
-  method: 'totp' | 'email' | 'sms'
+interface AccountMfaMethodOptionDTO {
+  method: 'email' | 'phone'
+  identityId: string
+  maskedIdentifier: string
+  label: string
+}
+
+interface AccountMfaVerificationCodePayload {
+  method: 'email' | 'phone'
+  identityId: string
+}
+
+interface AccountMfaEnablePayload {
+  method: 'email' | 'phone'
+  identityId: string
+  code: string
+}
+
+interface AccountMfaDisablePayload {
+  code: string
+}
+
+interface AccountSecurityChallengeCodePayload {
+  action: 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+  identityId?: string
+}
+
+interface AccountSecurityChallengeVerifyPayload {
+  action: 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+  code: string
+}
+
+interface AccountSecurityChallengeResultDTO {
+  challengeToken: string
+  expiresAt: string
+}
+
+interface AccountSensitiveActionPayload {
+  challengeToken?: string
 }
 
 interface AccountProfilePrivacyPreferencesDTO {
@@ -1100,7 +1147,13 @@ Write rules:
 - `POST /api/auth/verification-code` starts registration email or phone verification and returns only `{ id, expiresAt }`; the product API never returns the verification code.
 - `POST /api/account/identities/verification-code` starts the identity verification step for email or phone binding and returns only `{ id, expiresAt }`; product pages must call the account endpoint.
 - `POST /api/account/identities` binds a verified email or phone identity using a verification code; `DELETE /api/account/identities/:id` removes a bound identity after server-side safety checks.
-- `GET /api/account/mfa/status` reads MFA status from `user_security_settings`; `POST /api/account/mfa/enable` and `POST /api/account/mfa/disable` update that row.
+- `GET /api/account/mfa/status` reads MFA status from `user_security_settings` and returns available verified email/phone identities.
+- `POST /api/account/mfa/verification-code` sends a code to the selected verified identity before enabling or disabling MFA; product response returns only `{ id, expiresAt }`.
+- `POST /api/account/mfa/enable` verifies the code and writes `user_security_settings.mfaEnabled = true`, `mfaMethod`, `mfaIdentityId`, and `mfaEnabledAt`.
+- `POST /api/account/mfa/disable` verifies the code through the current MFA identity and writes `user_security_settings.mfaEnabled = false`.
+- `POST /api/account/security/challenge-code` starts a short-lived step-up verification for one sensitive action.
+- `POST /api/account/security/challenge` verifies the code and returns a short-lived `challengeToken`; sensitive endpoints consume this token through their payload when MFA is enabled.
+- Sensitive account write endpoints that can expose or change account access, including password change, identity unbind, account deactivation, and data export, accept `challengeToken?: string` as a step-up verification field. This field is not the login token and must be consumed once by the target operation.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
 
 绂佹鍦?account DTO 涓繑鍥炶繖浜?legacy 瀛楁锛?

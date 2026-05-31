@@ -820,26 +820,52 @@ Identity binding:
 -> auth_identities remove after safety checks
 ```
 
-MFA:
+MFA settings:
 
 ```text
 /pages/account/settings
 -> GET /api/account/mfa/status
--> user_security_settings
+-> user_security_settings + verified auth_identities
+-> AccountMfaStatusDTO
 
 /pages/account/settings
+-> choose verified email or phone identity
+-> POST /api/account/mfa/verification-code
+-> product response returns id + expiresAt only
 -> POST /api/account/mfa/enable
+-> verify code
 -> user_security_settings.mfaEnabled = true
+-> user_security_settings.mfaMethod / mfaIdentityId / mfaEnabledAt
 
 /pages/account/settings
+-> POST /api/account/mfa/verification-code
 -> POST /api/account/mfa/disable
+-> verify code through current MFA identity
 -> user_security_settings.mfaEnabled = false
+```
+
+Step-up verification for sensitive actions:
+
+```text
+sensitive action button
+-> read AccountMfaStatusDTO
+-> if MFA disabled: execute original action
+-> if MFA enabled: POST /api/account/security/challenge-code
+-> user enters code
+-> POST /api/account/security/challenge
+-> AccountSecurityChallengeResultDTO.challengeToken
+-> original sensitive endpoint consumes challengeToken
+-> challenge status = consumed
 ```
 
 Rules:
 
 - `auth_identities` is the source of truth for login identifiers and password hash.
 - `user_security_settings` is the source of truth for MFA state.
+- MFA method in Phase 7.4 is limited to verified `email` or `phone` identities; no TOTP implementation yet.
+- The platform does have an `AuthSession.token`, but current mock requests still use `X-User-Id`. `challengeToken` is a separate short-lived sensitive-action token and must not be treated as the login token.
+- Password change, identity unbind, account deactivation, and data export must request a challenge token when MFA is enabled.
+- Identity unbind must reject removing the identity currently used as the MFA method unless MFA is disabled or moved to another verified identity first.
 - `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, and the next successful login silently restores self-deactivated accounts to `active`, while platform risk control may write `suspended`.
 - `suspended` accounts must not self-reactivate; they require staff handling.
 - Product pages request identity verification codes through account APIs, not debug APIs.

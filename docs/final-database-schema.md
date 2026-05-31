@@ -26,6 +26,7 @@ interface FinalDatabase {
   users: UserRecord[]
   auth_identities: AuthIdentityRecord[]
   user_security_settings: UserSecuritySettingRecord[]
+  user_security_challenges: UserSecurityChallengeRecord[]
   user_preferences: UserPreferenceRecord[]
   legal_documents: LegalDocumentRecord[]
   legal_document_contents: LegalDocumentContentRecord[]
@@ -99,7 +100,9 @@ type LocaleCode = 'zh' | 'fr' | 'en'
 type GenderCode = 'male' | 'female'
 type UserStatus = 'active' | 'deactivated' | 'suspended'
 type AuthProvider = 'email' | 'phone' | 'wechat' | 'google'
-type MfaMethod = 'totp' | 'email' | 'sms'
+type MfaMethod = 'email' | 'phone'
+type SecurityChallengeAction = 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+type SecurityChallengeStatus = 'pending' | 'verified' | 'expired' | 'consumed'
 type LegalDocumentType = 'terms' | 'privacy'
 type LegalDocumentStatus = 'draft' | 'active' | 'archived'
 type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'hidden'
@@ -226,6 +229,9 @@ interface UserSecuritySettingRecord {
   userId: string
   mfaEnabled: boolean
   mfaMethod?: MfaMethod
+  mfaIdentityId?: string
+  mfaEnabledAt?: string
+  lastChallengeAt?: string
   createdAt: string
   updatedAt: string
 }
@@ -235,6 +241,35 @@ interface UserSecuritySettingRecord {
 - 唯一键：`userId`。
 - `auth_identities` 只负责登录身份与密码哈希；MFA 是否启用由本表决定。
 - 密码修改仍写入 `auth_identities.passwordHash`，不写入本表。
+- `mfaIdentityId` 必须指向同一用户已验证的 `auth_identities`，且 provider 只能是 `email` 或 `phone`。
+- Phase 7.4 不引入 TOTP；先使用已验证邮箱或手机号作为二次验证方式。
+
+### user_security_challenges
+
+敏感操作前的短期二次验证挑战。它不是登录 token，也不是长期会话；只用于一次敏感操作确认。
+
+```ts
+interface UserSecurityChallengeRecord {
+  id: string
+  userId: string
+  action: SecurityChallengeAction
+  method: MfaMethod
+  identityId: string
+  status: SecurityChallengeStatus
+  challengeToken?: string
+  expiresAt: string
+  verifiedAt?: string
+  consumedAt?: string
+  createdAt: string
+  updatedAt: string
+}
+```
+
+约束：
+- `challengeToken` 只在 `status = 'verified'` 后短期有效。
+- 敏感操作消费 token 后必须写 `consumedAt` 并置为 `consumed`。
+- 过期 challenge 由后端读写时派生为 `expired`，不允许继续用于敏感操作。
+- 验证码本身不进入本表；开发阶段可以复用验证码服务，正式实现应使用独立安全通道。
 
 ### user_preferences
 
@@ -907,6 +942,7 @@ interface ProfilePublicIdentityDTO {
 ```text
 auth_identities: unique(provider, identifier)
 user_security_settings: unique(userId)
+user_security_challenges: index(userId), index(challengeToken)
 legal_documents: unique(type, version)
 legal_documents: unique(type) where status = 'active'
 legal_document_contents: unique(documentId, locale)

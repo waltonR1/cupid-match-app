@@ -799,10 +799,33 @@ interface AccountPasswordSecurityViewModel {
 }
 
 interface AccountMfaSecurityViewModel {
+  title: string
+  description: string
+  enabled: boolean
   enabledText: string
-  methodText?: string
+  methodText: string
+  availableMethods: AccountMfaMethodOptionViewModel[]
   enableAction?: PageActionViewModel
   disableAction?: PageActionViewModel
+  changeMethodAction?: PageActionViewModel
+}
+
+interface AccountMfaMethodOptionViewModel {
+  method: 'email' | 'phone'
+  identityId: string
+  label: string
+  maskedIdentifier: string
+  selected: boolean
+}
+
+interface AccountSecurityChallengeDialogViewModel {
+  action: 'change_password' | 'deactivate_account' | 'export_data' | 'unbind_identity'
+  title: string
+  description: string
+  methodText: string
+  sendCodeAction: PageActionViewModel
+  verifyAction: PageActionViewModel
+  cancelAction: PageActionViewModel
 }
 
 interface AccountActionViewModel {
