@@ -4,28 +4,28 @@
       <!-- 个人资料目录介绍区 -->
       <ProfileDirectoryIntro
           :eyebrow="t('hero.eyebrow')"
-          :title="t('hero.title')"
           :subtitle="t('hero.subtitle')"
           :tags="heroTags"
+          :title="t('hero.title')"
       />
 
       <!-- 个人资料筛选工具栏 -->
       <ProfileFilterToolbar
-          :title="t('directory.title')"
-          :reset-text="t('filters.clear')"
-          :expand-text="t('filters.expand')"
-          :collapse-text="t('filters.collapse')"
-          :items="pageData.filters"
           :active-filters="pageData.activeFilters"
+          :collapse-text="t('filters.collapse')"
+          :expand-text="t('filters.expand')"
+          :items="pageData.filters"
+          :reset-text="t('filters.clear')"
+          :title="t('directory.title')"
+          @reset="resetFilters"
           @update:filter="updateFilter"
           @remove-filter="removeFilter"
-          @reset="resetFilters"
       />
 
       <!-- 结果统计与排序工具栏 -->
       <ProfileResultToolbar
-          :summary="resultSummary"
           :sort="resultSort"
+          :summary="resultSummary"
           @update:sort-key="updateSort"
       />
 
@@ -37,32 +37,31 @@
               :key="item.id"
               :data="item.card"
               @select="openSelfDetail(item.id)"
-              @toggle-favorite="toggleFavorite(item.id)"
           />
         </view>
 
         <EmptyStatePanel
             v-else
-            :title="t('directory.empty')"
             :primary-text="pageData.activeFilters.length > 0 ? t('filters.clear') : ''"
+            :title="t('directory.empty')"
             @primary="resetFilters"
         />
       </view>
 
       <!-- 个人资料分页器 -->
       <ProfileDirectoryPagination
+          :next-text="t('pagination.next')"
           :page="pageData.page"
           :page-size="pageData.pageSize"
-          :total="pageData.total"
           :prev-text="t('pagination.prev')"
-          :next-text="t('pagination.next')"
+          :total="pageData.total"
           @change="changePage"
       />
     </view>
   </AppPageLayout>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {computed} from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
@@ -71,7 +70,7 @@ import ProfileCardFrame from '@/components/profiles/directory/ProfileCardFrame.v
 import ProfileDirectoryIntro from '@/components/profiles/directory/ProfileDirectoryIntro.vue'
 import ProfileDirectoryPagination from '@/components/profiles/directory/ProfileDirectoryPagination.vue'
 import ProfileResultToolbar from '@/components/profiles/directory/ProfileResultToolbar.vue'
-import { useSelfProfileDirectory } from '@/hooks/profiles'
+import {useSelfProfileDirectory} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import type {SelfSortKey} from '@/types/profiles/directory'
 import type {DirectoryResultSummary, DirectorySortControl} from '@/types/profiles/directory'
@@ -89,7 +88,6 @@ const {
   resetFilters,
   updateSort,
   changePage,
-  toggleFavorite,
 } = useSelfProfileDirectory(t, locale)
 
 /** Hero 标签文案 */

@@ -193,11 +193,7 @@ export function listSelfProfiles(locale: ApiLocale, data: Database, query: Query
     const sorted = sortSelfProfiles(filtered, normalizedQuery.sort)
 
     return {
-        items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => {
-            const item = toSelfProfileListItem(locale, profile)
-            item.favorite = resolveFavoriteState(data, userId, profile.id, checkOwnerByUserId(data, userId, profile.id))
-            return item
-        }),
+        items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toSelfProfileListItem(locale, profile)),
         pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
         facets: buildSelfDirectoryFacets(locale, source),
     }
@@ -218,11 +214,7 @@ export function listFamilyProfiles(locale: ApiLocale, data: Database, query: Que
     const sorted = sortFamilyProfiles(filtered, normalizedQuery.sort)
 
     return {
-        items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => {
-            const item = toFamilyProfileListItem(locale, profile)
-            item.favorite = resolveFavoriteState(data, userId, profile.id, checkOwnerByUserId(data, userId, profile.id))
-            return item
-        }),
+        items: paginate(sorted, normalizedQuery.page, normalizedQuery.pageSize).map((profile) => toFamilyProfileListItem(locale, profile)),
         pagination: buildPagination(sorted.length, normalizedQuery.page, normalizedQuery.pageSize),
         facets: buildFamilyDirectoryFacets(locale, source),
     }
@@ -234,7 +226,7 @@ export function resolveUserContext(data: Database, userId?: string): UserContext
     const user = data.users.find((item) => item.id === userId)
     if (!user) return null
     const membership = data.user_memberships.find((item) => item.userId === userId && item.status === 'active')?.tier ?? 'free'
-    return { userId: user.id, membership }
+    return {userId: user.id, membership}
 }
 
 /** 组装资料 DTO 所需的派生字段 */
@@ -302,7 +294,10 @@ export function requestPrivateIntroduction(data: Database, profileId: string, us
     if (!userContext) return {status: 'login_required' as const}
 
     if (checkOwnerByUserId(data, userId, profileId)) {
-        return {status: 'blocked' as const, introduction: resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)}
+        return {
+            status: 'blocked' as const,
+            introduction: resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)
+        }
     }
 
     const introduction = resolvePrivateIntroduction(data, userContext, profileId, data.private_introduction_requests)
@@ -371,7 +366,6 @@ export function toSelfProfileListItem(locale: ApiLocale, profile: ProfileWithDis
         summary: resolveLocalizedText(locale, profile.summary),
         languages: profile.languages,
         tags: resolveLocalizedTexts(locale, profile.tags),
-        favorite: { isFavorite: false, canFavorite: false },
     }
 }
 
@@ -393,7 +387,6 @@ export function toFamilyProfileListItem(locale: ApiLocale, profile: ProfileWithD
         relationshipGoal: resolveLocalizedText(locale, profile.relationshipGoal),
         residencePlan: resolveLocalizedText(locale, profile.residencePlan),
         tags: resolveLocalizedTexts(locale, profile.tags),
-        favorite: { isFavorite: false, canFavorite: false },
     }
 }
 
@@ -645,21 +638,21 @@ function resolveSelfProfileAccessLevel(userContext: UserContext | null): SelfPro
 }
 
 function checkOwner(data: Database, userContext: UserContext | null, profileId: string) {
-  return checkOwnerByUserId(data, userContext?.userId, profileId)
+    return checkOwnerByUserId(data, userContext?.userId, profileId)
 }
 
 function checkOwnerByUserId(data: Database, userId: string | undefined, profileId: string) {
-  if (!userId) return false
-  return data.profile_ownerships.some((o) => o.userId === userId && o.profileId === profileId && o.status === 'active')
+    if (!userId) return false
+    return data.profile_ownerships.some((o) => o.userId === userId && o.profileId === profileId && o.status === 'active')
 }
 
 function resolveFavoriteState(data: Database, userId: string | undefined, profileId: string, isOwner = false) {
-  if (!userId) return { isFavorite: false, canFavorite: false, unavailableReason: 'visitor' as const }
-  if (isOwner) return { isFavorite: false, canFavorite: false, unavailableReason: 'own_profile' as const }
-  const fav = data.favorite_profiles.find((f) => f.userId === userId && f.profileId === profileId)
-  return fav
-    ? { isFavorite: true, favoriteId: fav.id, canFavorite: true }
-    : { isFavorite: false, canFavorite: true }
+    if (!userId) return {isFavorite: false, canFavorite: false, unavailableReason: 'visitor' as const}
+    if (isOwner) return {isFavorite: false, canFavorite: false, unavailableReason: 'own_profile' as const}
+    const fav = data.favorite_profiles.find((f) => f.userId === userId && f.profileId === profileId)
+    return fav
+        ? {isFavorite: true, favoriteId: fav.id, canFavorite: true}
+        : {isFavorite: false, canFavorite: true}
 }
 
 function resolveProfileAccessLevel(userContext: UserContext | null): ProfileAccessLevel {

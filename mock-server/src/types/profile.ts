@@ -22,20 +22,20 @@ export type RelocationCode = 'willing' | 'unwilling' | 'open_to_discuss'
 export type LocationScopeCode = 'local' | 'regional' | 'national' | 'international'
 
 export type RelationshipValueCode =
-  | 'honesty'
-  | 'trust'
-  | 'communication'
-  | 'respect'
-  | 'loyalty'
-  | 'family'
-  | 'growth'
-  | 'support'
-  | 'humor'
-  | 'ambition'
-  | 'kindness'
-  | 'independence'
-  | 'romance'
-  | 'stability'
+    | 'honesty'
+    | 'trust'
+    | 'communication'
+    | 'respect'
+    | 'loyalty'
+    | 'family'
+    | 'growth'
+    | 'support'
+    | 'humor'
+    | 'ambition'
+    | 'kindness'
+    | 'independence'
+    | 'romance'
+    | 'stability'
 
 export type ActivityLevelCode = 'low' | 'moderate' | 'high'
 
@@ -222,7 +222,6 @@ export interface SelfProfileListItemDTO {
     summary: string
     languages: string[]
     tags: string[]
-    favorite: ProfileFavoriteStateDTO
 }
 
 /** 家庭资料列表项 */
@@ -242,7 +241,6 @@ export interface FamilyProfileListItemDTO {
     relationshipGoal: string
     residencePlan: string
     tags: string[]
-    favorite: ProfileFavoriteStateDTO
 }
 
 /** 本人资料详情 */

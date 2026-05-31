@@ -6,7 +6,7 @@
     <!-- 头部信息 -->
     <view class="flex items-start justify-between gap-4">
       <view class="flex min-w-0 items-center gap-4">
-        <AppAvatar :value="data.avatarUrl" :fallback="data.displayName"/>
+        <AppAvatar :fallback="data.displayName" :value="data.avatarUrl"/>
 
         <view class="min-w-0">
           <view class="flex items-center gap-2">
@@ -23,16 +23,7 @@
         </view>
       </view>
 
-      <view class="flex items-center gap-2">
-        <view
-          v-if="data.favorite.canFavorite"
-          class="cursor-pointer text-[18px] leading-none transition-opacity hover:opacity-70"
-          :class="data.favorite.isFavorite ? 'text-semantic-state-danger' : 'text-semantic-text-muted'"
-          @click.stop="emit('toggleFavorite')"
-        >
-          {{ data.favorite.isFavorite ? '♥' : '♡' }}
-        </view>
-
+      <view v-if="showBadge" class="flex items-center gap-2">
         <view
             class="rounded-full border border-component-directory-card-badge-border bg-component-directory-card-badge-background px-3 py-1 text-[12px] text-component-directory-card-badge-text">
           {{ data.badge }}
@@ -75,20 +66,22 @@
   </view>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import AppAvatar from '@/components/common/AppAvatar.vue'
 import AppGenderBadge from '@/components/common/AppGenderBadge.vue'
 import type {ProfileCardViewModel} from '@/types/profiles/card'
 
 /** 卡片数据 */
-defineProps<{
+withDefaults(defineProps<{
   data: ProfileCardViewModel
-}>()
+  showBadge?: boolean
+}>(), {
+  showBadge: true,
+})
 
 /** 卡片点击事件 */
 const emit = defineEmits<{
   (e: 'select'): void
-  (e: 'toggleFavorite'): void
 }>()
 
 /** 触发选中 */

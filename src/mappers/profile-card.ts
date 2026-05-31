@@ -25,14 +25,12 @@ export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale:
         ],
         tags: profile.tags.slice(0, 3),
         footer: t(resolveSelfFooterKey(profile.profileStatus)),
-        favorite: profile.favorite,
     }
 }
 
 /** 转换家庭资料卡片 */
 export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, locale: FormatLocale, t: Translate): ProfileCardViewModel {
     const tagTexts = [
-        t(resolveMaritalStatusTagKey(profile.maritalStatus)),
         profile.acceptsLongDistance ? t('tags.longDistanceYes') : '',
         profile.hasChildren ? t('tags.childrenYes') : t('tags.childrenNo'),
     ].filter(Boolean)
@@ -42,7 +40,7 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         displayName: profile.displayName,
         gender: profile.gender,
         meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
-        badge: t('modes.contextOnly'),
+        badge: t(resolveMaritalStatusTagKey(profile.maritalStatus)),
         summary: profile.relationshipGoal,
         facts: [
             {label: t('fields.city'), value: profile.city},
@@ -51,7 +49,6 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         ],
         tags: [...profile.tags, ...tagTexts].slice(0, 3),
         footer: t(resolveFamilyFooterKey(profile.profileStatus)),
-        favorite: profile.favorite,
     }
 }
 

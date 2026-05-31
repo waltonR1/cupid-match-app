@@ -27,20 +27,20 @@ export type LocationScopeCode = 'local' | 'regional' | 'national' | 'internation
 
 /** 关系价值观 */
 export type RelationshipValueCode =
-  | 'honesty'
-  | 'trust'
-  | 'communication'
-  | 'respect'
-  | 'loyalty'
-  | 'family'
-  | 'growth'
-  | 'support'
-  | 'humor'
-  | 'ambition'
-  | 'kindness'
-  | 'independence'
-  | 'romance'
-  | 'stability'
+    | 'honesty'
+    | 'trust'
+    | 'communication'
+    | 'respect'
+    | 'loyalty'
+    | 'family'
+    | 'growth'
+    | 'support'
+    | 'humor'
+    | 'ambition'
+    | 'kindness'
+    | 'independence'
+    | 'romance'
+    | 'stability'
 
 /** 活跃程度 */
 export type ActivityLevelCode = 'low' | 'moderate' | 'high'
@@ -127,7 +127,6 @@ export interface SelfProfileListItem {
     id: string
     displayName: string
     avatarUrl: string
-    favorite: ProfileFavoriteState
     gender: GenderCode
     age: number
     city: string
@@ -145,7 +144,6 @@ export interface FamilyProfileListItem {
     id: string
     displayName: string
     avatarUrl: string
-    favorite: ProfileFavoriteState
     gender: GenderCode
     age: number
     city: string
