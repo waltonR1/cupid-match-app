@@ -7,7 +7,7 @@ export const registerMessages: AppMessageSchema = {
     subtitle: '先完成基础账号注册，再根据你的身份进入本人路径或家庭路径。更完整的资料和后续步骤可以在注册后继续补充。',
     formTitle: '账号设置',
     panelTitle: '创建你的账号',
-    panelHint: '请使用常用邮箱或手机号，设置登录密码，并填写开通账号所需的基础信息，以便继续进入对应身份路径。',
+    panelHint: '请使用常用邮箱或手机号，设置登录密码，并选择你要开始的路径。',
     submit: '创建账号',
     loading: '创建账号中...',
     agreementPrefix: '我已阅读并同意',
@@ -33,8 +33,22 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: '你的名字', placeholder: '你的名字' },
     identifier: { label: '邮箱或手机号', placeholder: '邮箱或手机号' },
+    code: {
+      label: '验证码',
+      placeholder: '6位验证码',
+      send: '发送验证码',
+      sending: '发送中...',
+      resend: '重新发送',
+      resendCountdown: '{seconds} 秒后可重发',
+    },
     password: { label: '密码', placeholder: '设置密码' },
     confirmPassword: { label: '确认密码', placeholder: '再次输入密码' },
-    error: { duplicate: '该账号已存在，请直接登录', mismatch: '两次输入的密码不一致', agreement: '请先同意平台服务条款和隐私说明。', server: '注册暂时无法完成，请稍后重试。' },
+    error: {
+      duplicate: '该账号已存在，请直接登录',
+      mismatch: '两次输入的密码不一致',
+      codeRequired: '请输入验证码',
+      agreement: '请先同意平台服务条款和隐私说明。',
+      server: '注册暂时无法完成，请稍后重试。',
+    },
   },
 }

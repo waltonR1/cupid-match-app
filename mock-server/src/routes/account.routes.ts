@@ -4,6 +4,7 @@ import { getDb } from '../db.js'
 import {
   addFavorite,
   archiveAccountProfile,
+  bindIdentity,
   changeAccountPassword,
   deactivateAccount,
   exportAccountData,
@@ -19,10 +20,12 @@ import {
   getAccountProfiles,
   getAccountSettings,
   saveAccountProfileDetail,
+  unbindIdentity,
   updateAccountMe,
   updateAccountPreferences,
   updateAccountProfilePrivacyPreferences,
   requestAccountMembershipUpgrade,
+  requestIdentityVerificationCode,
 } from '../services/account.service.js'
 import type { QueryRecord } from '../types/common.js'
 import { resolveApiLocale } from '../utils/localized.js'
@@ -197,6 +200,42 @@ export async function registerAccountRoutes(app: FastifyInstance): Promise<void>
     const result = deactivateAccount(db.data, userId)
     if (result === 'not_found') return reply.code(404).send({ error: 'Account not found' })
     if (result === 'not_active') return reply.code(400).send({ error: 'Account is not active' })
+    await db.write()
+    return result
+  })
+  app.post('/account/identities/verification-code', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { provider, identifier } = (request.body || {}) as { provider?: string; identifier?: string }
+    const result = requestIdentityVerificationCode(getDb().data, userId, provider || '', identifier || '')
+    if (result === 'invalid_provider') return reply.code(400).send({ error: 'Invalid provider' })
+    if (result === 'invalid_identifier') return reply.code(400).send({ error: 'Invalid identifier' })
+    if (result === 'duplicate') return reply.code(409).send({ error: 'Identity already exists' })
+    if (result === 'no_login_identity') return reply.code(400).send({ error: 'No usable login identity' })
+    return result
+  })
+  app.post('/account/identities', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { provider, identifier, code } = (request.body || {}) as { provider?: string; identifier?: string; code?: string }
+    const db = getDb()
+    const result = bindIdentity(db.data, userId, provider || '', identifier || '', code || '')
+    if (result === 'invalid_provider') return reply.code(400).send({ error: 'Invalid provider' })
+    if (result === 'invalid_identifier') return reply.code(400).send({ error: 'Invalid identifier' })
+    if (result === 'invalid_code') return reply.code(400).send({ error: 'Invalid or expired verification code' })
+    if (result === 'duplicate') return reply.code(409).send({ error: 'Identity already exists' })
+    if (result === 'no_login_identity') return reply.code(400).send({ error: 'No usable login identity' })
+    await db.write()
+    return reply.code(201).send(result)
+  })
+  app.delete('/account/identities/:id', async (request, reply) => {
+    const userId = requireActiveUser(request, reply)
+    if (!userId) return
+    const { id } = request.params as { id: string }
+    const db = getDb()
+    const result = unbindIdentity(db.data, userId, id)
+    if (result === 'not_found') return reply.code(404).send({ error: 'Identity not found' })
+    if (result === 'last_identity') return reply.code(400).send({ error: 'Cannot remove the last identity' })
     await db.write()
     return result
   })

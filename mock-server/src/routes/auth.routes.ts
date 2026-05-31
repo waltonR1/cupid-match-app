@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 
 import { getDb } from '../db.js'
-import { login, register } from '../services/auth.service.js'
+import { login, register, requestRegistrationVerificationCode } from '../services/auth.service.js'
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   app.post(`/auth/login`, async (request, reply) => {
@@ -20,6 +20,12 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   app.post(`/auth/register`, async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>
     const result = await register(getDb(), body)
+    return reply.code(result.statusCode).send(result.body)
+  })
+
+  app.post(`/auth/verification-code`, async (request, reply) => {
+    const body = (request.body ?? {}) as Record<string, unknown>
+    const result = requestRegistrationVerificationCode(getDb().data, body)
     return reply.code(result.statusCode).send(result.body)
   })
 }

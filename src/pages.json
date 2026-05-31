@@ -197,6 +197,13 @@
       }
     },
     {
+      "path": "pages/debug/verification-codes",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "验证码调试"
+      }
+    },
+    {
       "path": "pages/not-found",
       "style": {
         "navigationStyle": "custom",

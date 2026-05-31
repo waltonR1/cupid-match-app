@@ -13,9 +13,20 @@ export interface RegisterPayload {
   path: AuthPath
   provider: AuthProvider
   identifier: string
+  code: string
   password: string
   accountName: string
   preferredLocale: AuthLocale
+}
+
+export interface AuthVerificationCodeRequestPayload {
+  provider: AuthProvider
+  identifier: string
+}
+
+export interface AuthVerificationCodeRequestResult {
+  id: string
+  expiresAt: string
 }
 
 export interface AuthUser {

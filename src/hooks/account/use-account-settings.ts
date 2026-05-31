@@ -1,16 +1,21 @@
 import { ref } from 'vue'
 import {
+  bindIdentity as bindIdentityApi,
   changeAccountPassword,
   deactivateAccount as deactivateAccountApi,
   getAccountSettings,
   requestAccountExport,
   requestAccountExportDownload,
+  requestVerificationCode as requestVerificationCodeApi,
+  unbindIdentity as unbindIdentityApi,
   updateAccountMe,
   updateAccountPreferences,
+  type AccountIdentityCreatePayload,
   type AccountPasswordChangePayload,
   type AccountPreferenceUpdatePayload,
   type AccountSettingsDTO,
   type AccountMeUpdatePayload,
+  type VerificationCodeRequestPayload,
 } from '@/api/account'
 import { uploadImage } from '@/api/upload/upload'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
@@ -79,6 +84,25 @@ export function useAccountSettings() {
     return result ?? null
   }
 
+  async function requestVerificationCode(payload: VerificationCodeRequestPayload) {
+    const result = await latest.run(() => requestVerificationCodeApi(payload))
+    return result ?? null
+  }
+
+  async function bindIdentity(payload: AccountIdentityCreatePayload) {
+    const result = await latest.run(() => bindIdentityApi(payload))
+    if (!result) return null
+    await load()
+    return result
+  }
+
+  async function unbindIdentity(identityId: string) {
+    const result = await latest.run(() => unbindIdentityApi(identityId))
+    if (!result) return null
+    await load()
+    return result
+  }
+
   return {
     loading: latest.loading,
     error: latest.error,
@@ -89,6 +113,9 @@ export function useAccountSettings() {
     uploadAvatar,
     changePassword,
     deactivateAccount,
+    requestVerificationCode,
+    bindIdentity,
+    unbindIdentity,
     exportData,
   }
 }

@@ -2115,7 +2115,7 @@ feat(account): add MFA setup and verification
 | 密码修改 | 已在 Phase 5.5 提前完成 | `POST /account/password/change` mock 路由 + 前端内联表单 + 改后登出；`mockHashPassword` 抽到 `mock-server/src/utils/password.ts` 共用 |
 | 数据导出 | 已完成 | `POST /account/export` + `GET /account/export/download`（userId 从请求头解析），mock 返回安全删减后的 JSON 下载 |
 | 账户停用 / 静默恢复 | 已完成 | `POST /account/deactivate` → `users.status = 'deactivated'` → 确认弹窗 → `authStore.logout()` + `redirectTo('/pages/auth/login')`；用户再次成功登录时若状态为 `deactivated`，后端静默恢复为 `active` 并返回正常 `AuthSession` |
-| 身份绑定/解绑 | 未实现 | `POST /account/identities` / `DELETE /account/identities/:id` / 验证码流程；当前安全区块只读展示 `auth_identities` 列表 + 未绑定占位 |
+| 身份绑定/解绑 | 已完成 | `POST /account/identities/verification-code` + `POST /account/identities` + `DELETE /account/identities/:id`；绑定需要验证码，解绑必须防止删除最后一个可登录身份。 |
 | MFA | 未实现 | `GET /account/mfa/status` / `POST /account/mfa/enable` / `POST /account/mfa/disable`；敏感操作（密码修改、账户停用）上线后需 MFA 验证；`AccountPasswordSecurityDTO.requiresMfa` 当前硬编码 `false` |
 
 ### Phase 7 拆分

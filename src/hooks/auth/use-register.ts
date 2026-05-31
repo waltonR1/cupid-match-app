@@ -1,5 +1,10 @@
 import { isApiStatusError } from '@/api/shared/http'
-import { register as registerApi, type RegisterPayload } from '@/api/auth'
+import {
+  register as registerApi,
+  requestAuthVerificationCode,
+  type AuthVerificationCodeRequestPayload,
+  type RegisterPayload,
+} from '@/api/auth'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
@@ -8,10 +13,11 @@ import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 export function useRegister() {
   const auth = useAuthStore()
   const locale = useLocaleStore()
-  const latest = useLatestRequest()
+  const registerLatest = useLatestRequest()
+  const codeLatest = useLatestRequest()
 
   async function register(payload: RegisterPayload) {
-    const session = await latest.run(() => registerApi(payload))
+    const session = await registerLatest.run(() => registerApi(payload))
     if (!session) return undefined
 
     auth.login(session)
@@ -19,10 +25,17 @@ export function useRegister() {
     return session
   }
 
+  async function requestVerificationCode(payload: AuthVerificationCodeRequestPayload) {
+    const result = await codeLatest.run(() => requestAuthVerificationCode(payload))
+    return result ?? null
+  }
+
   return {
-    loading: latest.loading,
-    error: latest.error,
+    loading: registerLatest.loading,
+    error: registerLatest.error,
+    verificationError: codeLatest.error,
     register,
+    requestVerificationCode,
   }
 }
 

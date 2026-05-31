@@ -5,6 +5,7 @@ import { emptyManualLocalizedText, resolveEditableLocalizedText, resolveLocalize
 import { buildProfileView } from './profile.service.js'
 import { nextId } from '../utils/id.js'
 import { mockHashPassword } from '../utils/password.js'
+import { generateCode, verifyAndConsume } from './verification-code.service.js'
 import { mergeManualLocalizedText, mergeTranslatedText } from './translation.service.js'
 
 // -- DTOs -- //
@@ -1251,6 +1252,65 @@ export function deactivateAccount(data: Database, userId: string) {
   user.status = 'deactivated'
   user.updatedAt = now
   return { status: 'deactivated' as const, deactivatedAt: now }
+}
+
+export function requestIdentityVerificationCode(data: Database, userId: string, provider: string, identifier: string) {
+  if (!['email', 'phone'].includes(provider)) return 'invalid_provider' as const
+  const trimmed = (identifier || '').trim()
+  if (!trimmed) return 'invalid_identifier' as const
+  if (!isValidIdentityIdentifier(provider, trimmed)) return 'invalid_identifier' as const
+  const duplicate = data.auth_identities.find((item) => item.provider === provider && item.identifier === trimmed)
+  if (duplicate) return 'duplicate' as const
+  const passwordIdentity = data.auth_identities.find((item) => item.userId === userId && Boolean(item.passwordHash))
+  if (!passwordIdentity) return 'no_login_identity' as const
+  return generateCode(provider, trimmed)
+}
+
+export function bindIdentity(data: Database, userId: string, provider: string, identifier: string, code: string) {
+  if (!['email', 'phone'].includes(provider)) return 'invalid_provider' as const
+  const trimmed = (identifier || '').trim()
+  if (!trimmed) return 'invalid_identifier' as const
+  if (!isValidIdentityIdentifier(provider, trimmed)) return 'invalid_identifier' as const
+  if (!code || !code.trim()) return 'invalid_code' as const
+  const duplicate = data.auth_identities.find((item) => item.provider === provider && item.identifier === trimmed)
+  if (duplicate) return 'duplicate' as const
+  if (!verifyAndConsume(provider, trimmed, code)) return 'invalid_code' as const
+  const passwordIdentity = data.auth_identities.find((item) => item.userId === userId && Boolean(item.passwordHash))
+  if (!passwordIdentity?.passwordHash) return 'no_login_identity' as const
+  const now = new Date().toISOString()
+  const record = {
+    id: nextId('auth', data.auth_identities),
+    userId,
+    provider: provider as 'email' | 'phone',
+    identifier: trimmed,
+    passwordHash: passwordIdentity.passwordHash,
+    verifiedAt: now,
+    createdAt: now,
+    updatedAt: now,
+  }
+  data.auth_identities.push(record)
+  return {
+    identity: { id: record.id, provider: record.provider, identifier: record.identifier, verifiedAt: record.verifiedAt },
+  }
+}
+
+export function unbindIdentity(data: Database, userId: string, identityId: string) {
+  const index = data.auth_identities.findIndex((item) => item.id === identityId && item.userId === userId)
+  if (index === -1) return 'not_found' as const
+  const target = data.auth_identities[index]
+  const userIdentities = data.auth_identities.filter((item) => item.userId === userId)
+  const usableLoginIdentities = userIdentities.filter((item) => Boolean(item.passwordHash))
+  if (Boolean(target.passwordHash) && usableLoginIdentities.length <= 1) {
+    return 'last_identity' as const
+  }
+  data.auth_identities.splice(index, 1)
+  return { removed: true }
+}
+
+function isValidIdentityIdentifier(provider: string, value: string): boolean {
+  return provider === 'email'
+    ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
+    : /^\+?[1-9]\d{6,14}$/.test(value.trim().replace(/[\s-]/g, ''))
 }
 
 export function getAccountSettings(data: Database, userId: string): AccountSettingsDTO | null {

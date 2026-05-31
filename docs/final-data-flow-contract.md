@@ -58,6 +58,8 @@ Flow:
 ```text
 register page
 -> use auth hook / auth api
+-> POST /api/auth/verification-code
+-> verification code generated for email or phone; product response returns id + expiresAt only
 -> POST /api/auth/register
 -> mock-server auth service
 -> users + auth_identities + default membership records + user_agreement_acceptances
@@ -103,6 +105,7 @@ Register payload:
 interface RegisterPayload {
   provider: 'email' | 'phone'
   identifier: string
+  code: string
   password: string
   accountName: string
   preferredLocale: 'zh' | 'fr' | 'en'
@@ -113,6 +116,7 @@ interface RegisterPayload {
 说明：
 
 - 当前注册表单只开放 `email` 和 `phone`。
+- 注册必须先完成邮箱或手机号验证码校验；产品 API 不返回验证码本身，本地调试工具可以查看当前生成的验证码。
 - 注册页不展示 `preferredLocale` 手动选择器；前端读取当前页面 locale 后自动填充 `RegisterPayload.preferredLocale`。
 - 成功注册 / 成功登录即表示用户接受当前 active 服务条款与隐私说明；后端自动写入 `user_agreement_acceptances`（upsert by userId + documentType），版本不变则跳过。
 - `wechat`、`google` 是 `auth_identities` 的最终预留登录方式，后续通过绑定身份或第三方登录链路接入，不进入当前注册 payload。
@@ -803,6 +807,9 @@ Identity binding:
 ```text
 /pages/account/settings
 -> identity binding form
+-> POST /api/account/identities/verification-code
+-> verification code generated for email or phone; product response returns id + expiresAt only
+-> local debug page may read current generated codes for testing
 -> POST /api/account/identities
 -> auth_identities insert after verification
 -> AccountIdentityActionResultDTO
@@ -835,6 +842,8 @@ Rules:
 - `user_security_settings` is the source of truth for MFA state.
 - `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, and the next successful login silently restores self-deactivated accounts to `active`, while platform risk control may write `suspended`.
 - `suspended` accounts must not self-reactivate; they require staff handling.
+- Product pages request identity verification codes through account APIs, not debug APIs.
+- Newly bound email or phone identities reuse the user's current password hash in the mock server, so they are usable login identities immediately after verification.
 - Identity unbind must reject removing the last usable login identity.
 
 ### Membership upgrade

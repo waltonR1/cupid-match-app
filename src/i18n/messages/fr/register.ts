@@ -33,8 +33,9 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: 'Votre nom', placeholder: 'Votre nom' },
     identifier: { label: 'Email ou telephone', placeholder: 'Email ou telephone' },
+    code: { label: 'Code de verification', placeholder: 'Code a 6 chiffres', send: 'Envoyer le code', sending: 'Envoi...', resend: 'Renvoyer', resendCountdown: 'Renvoyer dans {seconds}s' },
     password: { label: 'Mot de passe', placeholder: 'Definir le mot de passe' },
     confirmPassword: { label: 'Confirmation', placeholder: 'Saisissez a nouveau le mot de passe' },
-    error: { duplicate: 'Ce compte existe deja. Veuillez vous connecter.', mismatch: 'Les mots de passe ne correspondent pas', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de creer votre compte.', server: 'Inscription temporairement indisponible. Veuillez reessayer plus tard.' },
+    error: { duplicate: 'Ce compte existe deja. Veuillez vous connecter.', mismatch: 'Les mots de passe ne correspondent pas', codeRequired: 'Veuillez saisir le code de verification.', agreement: 'Veuillez accepter les conditions de la plateforme et la politique de confidentialite avant de creer votre compte.', server: 'Inscription temporairement indisponible. Veuillez reessayer plus tard.' },
   },
 }

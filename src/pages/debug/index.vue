@@ -9,7 +9,7 @@
           调试工具
         </view>
         <view class="mt-3 text-[15px] leading-7 text-semantic-text-muted">
-          本页只用于本地 mock 调试，集中进入临时工具页面。
+          本页只用于本地调试，集中进入临时工具页面。
         </view>
       </view>
 
@@ -42,13 +42,13 @@
 <script lang="ts" setup>
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import {openPage} from '@/utils/navigation'
+import { openPage } from '@/utils/navigation'
 
 const debugItems = [
   {
     label: 'Private Introduction',
-    title: '私人介绍请求',
-    description: '查看 mock 私人介绍请求，并模拟对方接受或拒绝。self 与 family 的申请都会出现在这里。',
+    title: '私人介绍申请',
+    description: '查看私人介绍申请，并模拟对方接受或拒绝。self 与 family 的申请都会出现在这里。',
     path: '/pages/debug/private-introductions',
   },
   {
@@ -60,7 +60,7 @@ const debugItems = [
   {
     label: 'Event Review',
     title: '活动申请审核',
-    description: '查看 mock 活动申请，并模拟平台确认席位、转入候补或拒绝。',
+    description: '查看活动申请，并模拟平台确认席位、转入候补或拒绝。',
     path: '/pages/debug/event-registrations',
   },
   {
@@ -84,8 +84,14 @@ const debugItems = [
   {
     label: 'Inbox',
     title: '通知调试',
-    description: '查看 mock 通知线程，并发送测试系统通知。',
+    description: '查看通知线程，并发送测试系统通知。',
     path: '/pages/debug/inbox',
+  },
+  {
+    label: 'Verification Codes',
+    title: '验证码调试',
+    description: '查看本地开发环境生成的邮箱或手机号验证码。',
+    path: '/pages/debug/verification-codes',
   },
 ]
 </script>

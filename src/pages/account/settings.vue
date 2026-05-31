@@ -150,13 +150,100 @@
                     {{ item.providerLabel }}
                   </text>
 
-                  <text class="text-[12px] leading-5 text-semantic-text-secondary">
-                    {{ item.verifiedText }}
-                  </text>
+                  <view class="flex items-center gap-3">
+                    <text class="text-[12px] leading-5 text-semantic-text-secondary">
+                      {{ item.verifiedText }}
+                    </text>
+                    <view
+                      v-if="item.canUnbind"
+                      class="cursor-pointer text-[13px] text-semantic-text-link"
+                      @click="handleUnbindIdentity(item.id)"
+                    >
+                      {{ t('settings.actions.unbind') }}
+                    </view>
+                    <view
+                      v-if="item.canBind"
+                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                      @click="openBindForm(item.provider)"
+                    >
+                      {{ t('settings.actions.bind') }}
+                    </view>
+                  </view>
                 </view>
 
                 <view class="mt-2 break-words text-[15px] font-medium leading-6 text-semantic-text-primary">
                   {{ item.identifier }}
+                </view>
+              </view>
+            </view>
+
+            <view v-if="showBindForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="cancelBindForm">
+              <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+                <view class="text-[18px] font-semibold text-semantic-text-primary">
+                  {{ bindIdentityTitle }}
+                </view>
+                <view class="mt-2 text-[13px] leading-6 text-semantic-text-secondary">
+                  {{ bindIdentityDescription }}
+                </view>
+
+                <view class="mt-6 space-y-4">
+                  <view>
+                    <view class="mb-2 text-[12px] font-medium text-semantic-text-secondary">
+                      {{ bindIdentityIdentifierLabel }}
+                    </view>
+                    <input
+                      v-model="bindForm.identifier"
+                      :disabled="codeRequested"
+                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary disabled:opacity-50"
+                      :placeholder="bindIdentityIdentifierPlaceholder"
+                    />
+                  </view>
+
+                  <view v-if="codeRequested" class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
+                    {{ t('settings.bindIdentity.codeHint') }}
+                  </view>
+
+                  <view>
+                    <view
+                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-center text-[13px]"
+                      :class="codeSending || resendSeconds > 0 ? 'pointer-events-none opacity-60' : ''"
+                      @click="handleSendCode"
+                    >
+                      {{ bindSendCodeText }}
+                    </view>
+                  </view>
+
+                  <view v-if="codeRequested">
+                    <view class="mb-2 text-[12px] font-medium text-semantic-text-secondary">
+                      {{ t('settings.bindIdentity.code') }}
+                    </view>
+                    <input
+                      v-model="bindForm.code"
+                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                      :placeholder="t('settings.bindIdentity.codePlaceholder')"
+                    />
+                  </view>
+
+                  <view v-if="bindError" class="text-[13px] font-medium text-semantic-state-danger">
+                    {{ bindError }}
+                  </view>
+                </view>
+
+                <view class="mt-7 flex justify-end gap-3">
+                  <view
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[13px]"
+                    @click="cancelBindForm"
+                  >
+                    {{ t('settings.actions.cancelBind') }}
+                  </view>
+                  <view
+                    v-if="codeRequested"
+                    class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-[13px]"
+                    :class="binding ? 'opacity-50 pointer-events-none' : ''"
+                    @click="handleBindIdentity"
+                  >
+                    {{ binding ? t('settings.actions.binding') : t('settings.actions.bind') }}
+                  </view>
                 </view>
               </view>
             </view>
@@ -438,7 +525,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { AccountPreferencesDTO } from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
@@ -457,7 +544,7 @@ import { useAgreementDialog } from '@/hooks/legal'
 
 const { t, locale } = usePageI18n('accountCenter')
 const { t: globalT } = useI18n({ useScope: 'global' })
-const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, exportData } = useAccountSettings()
+const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, requestVerificationCode, bindIdentity, unbindIdentity, exportData } = useAccountSettings()
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
@@ -492,21 +579,35 @@ function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
   return String(value ?? '')
 }
 
-const securityAccountItems = computed(() => {
-  const real = (settings.value?.identities ?? [])
-    .filter((item) => item.provider !== 'google')
-    .map((item) => ({
+type BindableIdentityProvider = 'email' | 'phone'
+type SecurityAccountItem = {
+  id: string
+  provider: 'email' | 'phone'
+  providerLabel: string
+  identifier: string
+  verifiedText: string
+  canBind: boolean
+  canUnbind: boolean
+}
+
+const securityAccountItems = computed<SecurityAccountItem[]>(() => {
+  const identities = (settings.value?.identities ?? []).filter((item) => item.provider === 'email' || item.provider === 'phone')
+  const real = identities
+    .map((item, _index, list) => ({
     id: item.id,
+    provider: item.provider as 'email' | 'phone',
     providerLabel: t(`settings.provider.${item.provider}`),
     identifier: maskIdentifier(item.identifier, item.provider),
     verifiedText: item.verifiedAt ? t('settings.security.verified') : t('settings.security.unverified'),
+    canBind: false,
+    canUnbind: list.length > 1,
   }))
   const previews = [
-    { id: 'phone-preview', providerLabel: t('settings.provider.phone'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified') },
-    { id: 'wechat-preview', providerLabel: t('settings.provider.wechat'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified') },
+    { id: 'email-preview', provider: 'email' as const, providerLabel: t('settings.provider.email'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified'), canBind: true, canUnbind: false },
+    { id: 'phone-preview', provider: 'phone' as const, providerLabel: t('settings.provider.phone'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified'), canBind: true, canUnbind: false },
   ]
-  const providers = new Set(real.map((item) => item.providerLabel))
-  return [...real, ...previews.filter((item) => !providers.has(item.providerLabel))]
+  const providers = new Set(real.map((item) => item.provider))
+  return [...real, ...previews.filter((item) => !providers.has(item.provider))]
 })
 
 const notificationItems = computed(() => buildPreferenceItems([
@@ -658,6 +759,134 @@ function confirmDeactivateAccount() {
       fail: () => resolve(false),
     })
   })
+}
+
+// identity bind/unbind
+const showBindForm = ref(false)
+const bindForm = ref({ provider: 'phone' as BindableIdentityProvider, identifier: '', code: '' })
+const binding = ref(false)
+const bindError = ref('')
+const codeSending = ref(false)
+const codeRequested = ref(false)
+const codeExpiresAt = ref('')
+const resendSeconds = ref(0)
+let resendTimer: ReturnType<typeof setInterval> | null = null
+
+onUnmounted(() => {
+  resetBindResendCountdown()
+})
+
+const bindIdentityTitle = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.title`))
+const bindIdentityDescription = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.description`))
+const bindIdentityIdentifierLabel = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.identifier`))
+const bindIdentityIdentifierPlaceholder = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.identifierPlaceholder`))
+const bindSendCodeText = computed(() => {
+  if (codeSending.value) return t('settings.bindIdentity.sending')
+  if (resendSeconds.value > 0) return t('settings.bindIdentity.resendCountdown', { seconds: resendSeconds.value })
+  return codeRequested.value ? t('settings.bindIdentity.resend') : t('settings.bindIdentity.sendCode')
+})
+
+function openBindForm(provider: BindableIdentityProvider) {
+  bindForm.value = { provider, identifier: '', code: '' }
+  bindError.value = ''
+  codeRequested.value = false
+  codeExpiresAt.value = ''
+  resetBindResendCountdown()
+  showBindForm.value = true
+}
+
+function cancelBindForm() {
+  showBindForm.value = false
+  bindError.value = ''
+  resetBindResendCountdown()
+}
+
+async function handleSendCode() {
+  bindError.value = ''
+  if (!bindForm.value.identifier.trim()) {
+    bindError.value = t('settings.validation.identifierRequired')
+    return
+  }
+  if (!isValidBindIdentifier(bindForm.value.provider, bindForm.value.identifier)) {
+    bindError.value = t('settings.validation.identifierInvalid')
+    return
+  }
+  codeSending.value = true
+  try {
+    const result = await requestVerificationCode({ provider: bindForm.value.provider, identifier: bindForm.value.identifier.trim() })
+    if (result) {
+      codeRequested.value = true
+      codeExpiresAt.value = result.expiresAt
+      startBindResendCountdown()
+    }
+  } catch {
+    bindError.value = t('settings.toasts.saveFailed')
+  } finally {
+    codeSending.value = false
+  }
+}
+
+async function handleBindIdentity() {
+  bindError.value = ''
+  if (!isValidBindIdentifier(bindForm.value.provider, bindForm.value.identifier)) {
+    bindError.value = t('settings.validation.identifierInvalid')
+    return
+  }
+  if (!bindForm.value.code.trim()) {
+    bindError.value = t('settings.validation.codeRequired')
+    return
+  }
+  binding.value = true
+  try {
+    const result = await bindIdentity(bindForm.value)
+    if (!result) { bindError.value = t('settings.toasts.saveFailed'); return }
+    showBindForm.value = false
+    resetBindResendCountdown()
+    uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+  } catch {
+    bindError.value = t('settings.toasts.saveFailed')
+  } finally {
+    binding.value = false
+  }
+}
+
+function startBindResendCountdown() {
+  resetBindResendCountdown()
+  resendSeconds.value = 60
+  resendTimer = setInterval(() => {
+    resendSeconds.value -= 1
+    if (resendSeconds.value <= 0) {
+      resetBindResendCountdown()
+    }
+  }, 1000)
+}
+
+function resetBindResendCountdown() {
+  resendSeconds.value = 0
+  if (resendTimer) {
+    clearInterval(resendTimer)
+    resendTimer = null
+  }
+}
+
+function isValidBindIdentifier(provider: BindableIdentityProvider, value: string) {
+  const trimmed = value.trim()
+  return provider === 'email'
+    ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
+    : /^\+?[1-9]\d{6,14}$/.test(trimmed.replace(/[\s-]/g, ''))
+}
+
+async function handleUnbindIdentity(id: string) {
+  try {
+    const result = await unbindIdentity(id)
+    if (result) {
+      uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+    } else {
+      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+    }
+  } catch {
+    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+  }
 }
 
 function handleChangePassword() {

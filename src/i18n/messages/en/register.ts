@@ -33,8 +33,9 @@ export const registerMessages: AppMessageSchema = {
   form: {
     accountName: { label: 'Your name', placeholder: 'Your name' },
     identifier: { label: 'Email or phone', placeholder: 'Email or phone' },
+    code: { label: 'Verification code', placeholder: '6-digit code', send: 'Send code', sending: 'Sending...', resend: 'Resend', resendCountdown: 'Resend in {seconds}s' },
     password: { label: 'Password', placeholder: 'Set password' },
     confirmPassword: { label: 'Confirm password', placeholder: 'Enter password again' },
-    error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', agreement: 'Please accept the platform terms and privacy notice before creating your account.', server: 'Registration is temporarily unavailable. Please try again later.' },
+    error: { duplicate: 'Account already exists. Please log in instead.', mismatch: 'Passwords do not match', codeRequired: 'Please enter the verification code.', agreement: 'Please accept the platform terms and privacy notice before creating your account.', server: 'Registration is temporarily unavailable. Please try again later.' },
   },
 }

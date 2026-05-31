@@ -9,6 +9,7 @@ import {nextId} from '../utils/id.js'
 import {mockHashPassword} from '../utils/password.js'
 import {getString} from '../utils/string.js'
 import {upsertAgreementAcceptances} from './legal.service.js'
+import {generateCode, verifyAndConsume} from './verification-code.service.js'
 
 const PASSWORD_MIN = 8
 
@@ -41,6 +42,46 @@ export interface ServiceErrorResult {
   body: { error: string }
 }
 
+export function requestRegistrationVerificationCode(data: Database, body: Record<string, unknown>) {
+  const provider = getString(body.provider)
+  const identifier = getString(body.identifier).trim()
+
+  if (!isRegisterProvider(provider) || !identifier) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid verification request' },
+    } as const
+  }
+
+  if (!isValidIdentifierForProvider(provider, identifier)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid identifier format' },
+    } as const
+  }
+
+  const duplicate = data.auth_identities.find((item) => item.provider === provider && item.identifier === identifier)
+  if (duplicate) {
+    return {
+      statusCode: 409,
+      body: { error: 'Account already exists' },
+    } as const
+  }
+
+  const result = generateCode(provider, identifier)
+  if (result === 'invalid_provider' || result === 'invalid_identifier') {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid verification request' },
+    } as const
+  }
+
+  return {
+    statusCode: 200,
+    body: result,
+  } as const
+}
+
 export function login(data: Database, body: Record<string, unknown>): AuthSession | null {
   const identifier = getString(body.identifier).trim()
   const password = getString(body.password)
@@ -69,11 +110,12 @@ export async function register(
   const path = getString(body.path)
   const provider = getString(body.provider)
   const identifier = getString(body.identifier).trim()
+  const code = getString(body.code)
   const password = getString(body.password)
   const accountName = getString(body.accountName)
   const preferredLocale = getString(body.preferredLocale)
 
-  if (!isOnboardingPath(path) || !isRegisterProvider(provider) || !identifier || !password || !accountName || !isPreferredLocale(preferredLocale)) {
+  if (!isOnboardingPath(path) || !isRegisterProvider(provider) || !identifier || !code || !password || !accountName || !isPreferredLocale(preferredLocale)) {
     return {
       statusCode: 400,
       body: { error: 'Missing required registration fields' },
@@ -109,6 +151,13 @@ export async function register(
     }
   }
 
+  if (!verifyAndConsume(provider, identifier, code)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid or expired verification code' },
+    }
+  }
+
   const userId = nextId('u', db.data.users)
   const now = new Date().toISOString()
 
@@ -129,6 +178,7 @@ export async function register(
     provider,
     identifier,
     passwordHash: mockHashPassword(password),
+    verifiedAt: now,
     createdAt: now,
     updatedAt: now,
   }

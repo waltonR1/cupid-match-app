@@ -3757,6 +3757,7 @@
       "identifier": "lin@example.com",
       "createdAt": "2026-01-18",
       "passwordHash": "mock-sha256:cGFzc3dvcmQxMjM=",
+      "verifiedAt": "2026-01-18T00:00:00.000Z",
       "updatedAt": "2026-01-18"
     }
   ],

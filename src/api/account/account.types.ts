@@ -352,6 +352,30 @@ export interface AccountDeactivateResultDTO {
   deactivatedAt: string
 }
 
+export interface AccountIdentityCreatePayload {
+  provider: 'email' | 'phone'
+  identifier: string
+  code: string
+}
+
+export interface VerificationCodeRequestPayload {
+  provider: 'email' | 'phone'
+  identifier: string
+}
+
+export interface VerificationCodeRequestResultDTO {
+  id: string
+  expiresAt: string
+}
+
+export interface AccountIdentityActionResultDTO {
+  identity: AccountAuthIdentityDTO
+}
+
+export interface AccountIdentityDeleteResultDTO {
+  removed: boolean
+}
+
 export interface AccountEventRegistrationDTO {
   registrationId: string
   eventId: string

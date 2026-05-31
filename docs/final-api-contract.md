@@ -85,6 +85,7 @@ interface ApiErrorDTO {
 | Domain | Method | Endpoint | Purpose |
 | --- | --- | --- | --- |
 | Auth | `POST` | `/api/auth/register` | 鍒涘缓璐︽埛锛屾敞鍐屽叆鍙ｈ矾寰勫彧鐢ㄤ簬鍓嶇娉ㄥ唽鍚庤惤鐐广€?|
+| Auth | `POST` | `/api/auth/verification-code` | Request registration verification code metadata. Product response does not include the code. |
 | Auth | `POST` | `/api/auth/login` | 鐧诲綍骞惰繑鍥?session銆?|
 | Legal | `GET` | `/api/legal/documents/:type` | 鑾峰彇褰撳墠鐢熸晥鏈嶅姟鏉℃鎴栭殣绉佽鏄庛€?|
 | Profiles | `GET` | `/api/profiles/self` | self 璧勬枡鐩綍銆?|
@@ -141,9 +142,20 @@ interface RegisterPayload {
   path: RegisterPath
   provider: RegisterProvider
   identifier: string
+  code: string
   password: string
   accountName: string
   preferredLocale: LocaleCode
+}
+
+interface AuthVerificationCodeRequestPayload {
+  provider: RegisterProvider
+  identifier: string
+}
+
+interface AuthVerificationCodeRequestResultDTO {
+  id: string
+  expiresAt: string
 }
 
 interface AuthSessionDTO {
@@ -964,8 +976,19 @@ interface AccountExportResultDTO {
 }
 
 interface AccountIdentityCreatePayload {
-  provider: 'email' | 'phone' | 'wechat'
+  provider: 'email' | 'phone'
   identifier: string
+  code: string
+}
+
+interface VerificationCodeRequestPayload {
+  provider: 'email' | 'phone'
+  identifier: string
+}
+
+interface VerificationCodeRequestResultDTO {
+  id: string
+  expiresAt: string
 }
 
 interface AccountIdentityActionResultDTO {
@@ -1074,7 +1097,9 @@ Write rules:
 - `POST /api/account/deactivate` deactivates the current user, writes `users.status = 'deactivated'`, and returns `AccountDeactivateResultDTO`.
 - A successful login for a self-deactivated account silently writes `users.status = 'active'` and returns the normal `AuthSession`; suspended accounts must not self-reactivate.
 - `POST /api/account/export` creates an account export request and returns a download URL; `GET /api/account/export/download` returns the generated JSON export for the current user.
-- `POST /api/account/identities` starts an identity binding flow; `DELETE /api/account/identities/:id` removes a bound identity after server-side safety checks.
+- `POST /api/auth/verification-code` starts registration email or phone verification and returns only `{ id, expiresAt }`; the product API never returns the verification code.
+- `POST /api/account/identities/verification-code` starts the identity verification step for email or phone binding and returns only `{ id, expiresAt }`; product pages must call the account endpoint.
+- `POST /api/account/identities` binds a verified email or phone identity using a verification code; `DELETE /api/account/identities/:id` removes a bound identity after server-side safety checks.
 - `GET /api/account/mfa/status` reads MFA status from `user_security_settings`; `POST /api/account/mfa/enable` and `POST /api/account/mfa/disable` update that row.
 - `POST /api/account/membership/upgrade` is a placeholder entry point; formal payment or staff confirmation happens before future membership state changes.
 

@@ -30,6 +30,7 @@ import {
     reviewProfilePhotoDebugItem,
     type ProfilePhotoDebugStatus,
 } from '../services/profile-photo-debug.service.js'
+import { listCodes as getVerificationCodes } from '../services/verification-code.service.js'
 import {
     listProfileVerificationDebugItems,
     reviewProfileVerificationDebugItem,
@@ -270,6 +271,18 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
         if (result.status === 'invalid_status') return reply.code(400).send({ error: 'Invalid status' })
         await getDb().write()
         return result.item
+    })
+    app.post('/debug/identities/:id/verify', async (request, reply) => {
+        const { id } = request.params as { id: string }
+        const identity = getDb().data.auth_identities.find((item) => item.id === id)
+        if (!identity) return reply.code(404).send({ error: 'Identity not found' })
+        identity.verifiedAt = new Date().toISOString()
+        identity.updatedAt = new Date().toISOString()
+        await getDb().write()
+        return { id: identity.id, verifiedAt: identity.verifiedAt }
+    })
+    app.get('/debug/verification-codes', async (_request, reply) => {
+        return getVerificationCodes()
     })
 }
 

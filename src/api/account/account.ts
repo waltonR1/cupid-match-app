@@ -21,6 +21,11 @@ import type {
   AccountMembershipUpgradePayload,
   AccountMembershipUpgradeResultDTO,
   AccountDeactivateResultDTO,
+  AccountIdentityActionResultDTO,
+  AccountIdentityCreatePayload,
+  AccountIdentityDeleteResultDTO,
+  VerificationCodeRequestPayload,
+  VerificationCodeRequestResultDTO,
   AccountEntitlementBalanceDTO,
   AccountMeDTO,
   AccountProfilesDTO,
@@ -103,6 +108,18 @@ export function requestAccountExportDownload(downloadUrl: string): Promise<unkno
 
 export function deactivateAccount(): Promise<AccountDeactivateResultDTO> {
   return requestJson<AccountDeactivateResultDTO>('/account/deactivate', { method: 'POST', data: {} })
+}
+
+export function requestVerificationCode(payload: VerificationCodeRequestPayload): Promise<VerificationCodeRequestResultDTO> {
+  return requestJson<VerificationCodeRequestResultDTO>('/account/identities/verification-code', { method: 'POST', data: payload })
+}
+
+export function bindIdentity(payload: AccountIdentityCreatePayload): Promise<AccountIdentityActionResultDTO> {
+  return requestJson<AccountIdentityActionResultDTO>('/account/identities', { method: 'POST', data: payload })
+}
+
+export function unbindIdentity(identityId: string): Promise<AccountIdentityDeleteResultDTO> {
+  return requestJson<AccountIdentityDeleteResultDTO>(`/account/identities/${identityId}`, { method: 'DELETE', data: {} })
 }
 
 export function getAccountIntroductions(): Promise<AccountIntroductionSummaryDTO[]> {

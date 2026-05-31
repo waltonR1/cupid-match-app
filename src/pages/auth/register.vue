@@ -87,6 +87,27 @@
                   >
                 </view>
 
+                <view class="border border-semantic-border-hero bg-component-auth-overlay-background-soft px-4 py-3">
+                  <view class="flex items-center justify-between gap-3">
+                    <view class="text-[11px] uppercase tracking-[3px] text-semantic-text-card-label">
+                      {{ formLabels.code }}
+                    </view>
+                    <view
+                      class="cursor-pointer text-[12px] text-semantic-text-link"
+                      :class="codeSending || resendSeconds > 0 ? 'pointer-events-none opacity-60' : ''"
+                      @click="handleSendCode"
+                    >
+                      {{ sendCodeText }}
+                    </view>
+                  </view>
+                  <input
+                    v-model="verificationCode"
+                    class="mt-1 h-10 w-full bg-transparent px-0 text-[15px] text-semantic-text-inverse placeholder:text-semantic-text-hero-secondary"
+                    :placeholder="formPlaceholders.code"
+                    placeholder-class="text-semantic-text-hero-secondary"
+                  >
+                </view>
+
                 <AuthPasswordField
                   v-model="password"
                   :label="formLabels.password"
@@ -164,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
@@ -185,10 +206,14 @@ const registerAction = useRegister()
 const path = ref<OnboardingPath>('self')
 const accountName = ref('')
 const identifier = ref('')
+const verificationCode = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const registerError = ref('')
+const codeSending = ref(false)
+const resendSeconds = ref(0)
 const agreed = ref(false)
+let resendTimer: ReturnType<typeof setInterval> | null = null
 const {
   agreementDialogOpen,
   agreementDocument,
@@ -226,6 +251,7 @@ const pathOptions = computed(() => [
 const formLabels = computed(() => ({
   accountName: t('form.accountName.label'),
   identifier: t('form.identifier.label'),
+  code: t('form.code.label'),
   password: t('form.password.label'),
   confirmPassword: t('form.confirmPassword.label'),
 }))
@@ -233,14 +259,29 @@ const formLabels = computed(() => ({
 const formPlaceholders = computed(() => ({
   accountName: t('form.accountName.placeholder'),
   identifier: t('form.identifier.placeholder'),
+  code: t('form.code.placeholder'),
   password: t('form.password.placeholder'),
   confirmPassword: t('form.confirmPassword.placeholder'),
 }))
 
 const submitting = computed(() => registerAction.loading.value)
+const sendCodeText = computed(() => {
+  if (codeSending.value) return t('form.code.sending')
+  if (resendSeconds.value > 0) return t('form.code.resendCountdown', { seconds: resendSeconds.value })
+  return verificationCode.value ? t('form.code.resend') : t('form.code.send')
+})
 
-watch([accountName, identifier, password, confirmPassword], () => {
+watch([accountName, identifier, verificationCode, password, confirmPassword], () => {
   registerError.value = ''
+})
+
+watch(identifier, () => {
+  verificationCode.value = ''
+  resetResendCountdown()
+})
+
+onUnmounted(() => {
+  resetResendCountdown()
 })
 
 function selectPath(nextPath: OnboardingPath) {
@@ -255,6 +296,11 @@ async function handleSubmit() {
 
   const idErr = validateIdentifier(identifier.value)
   if (idErr) { registerError.value = tApp(idErr); return }
+
+  if (!verificationCode.value.trim()) {
+    registerError.value = t('form.error.codeRequired')
+    return
+  }
 
   const pwErr = validatePassword(password.value)
   if (pwErr) { registerError.value = tApp(pwErr); return }
@@ -273,6 +319,7 @@ async function handleSubmit() {
     path: path.value,
     provider: inferAuthProvider(identifier.value),
     identifier: identifier.value.trim(),
+    code: verificationCode.value.trim(),
     password: password.value,
     accountName: accountName.value.trim(),
     preferredLocale: locale.value,
@@ -281,9 +328,53 @@ async function handleSubmit() {
   if (session) {
     redirectToRegistrationLanding(path.value)
   } else {
+    registerError.value = isDuplicateRegistrationError(registerAction.verificationError.value)
+      ? t('form.error.duplicate')
+      : t('form.error.server')
+  }
+}
+
+async function handleSendCode() {
+  registerError.value = ''
+
+  const idErr = validateIdentifier(identifier.value)
+  if (idErr) { registerError.value = tApp(idErr); return }
+
+  codeSending.value = true
+  try {
+    const result = await registerAction.requestVerificationCode({
+      provider: inferAuthProvider(identifier.value),
+      identifier: identifier.value.trim(),
+    })
+    if (result) {
+      startResendCountdown()
+      return
+    }
+
     registerError.value = isDuplicateRegistrationError(registerAction.error.value)
       ? t('form.error.duplicate')
       : t('form.error.server')
+  } finally {
+    codeSending.value = false
+  }
+}
+
+function startResendCountdown() {
+  resetResendCountdown()
+  resendSeconds.value = 60
+  resendTimer = setInterval(() => {
+    resendSeconds.value -= 1
+    if (resendSeconds.value <= 0) {
+      resetResendCountdown()
+    }
+  }, 1000)
+}
+
+function resetResendCountdown() {
+  resendSeconds.value = 0
+  if (resendTimer) {
+    clearInterval(resendTimer)
+    resendTimer = null
   }
 }
 
