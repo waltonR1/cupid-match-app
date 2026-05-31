@@ -15,12 +15,24 @@
 
 ## 环境变量
 
+环境文件位于项目根目录：
+
+| 文件 | 用途 |
+| --- | --- |
+| `.env.development` | 本地开发，默认连接本地 mock-server，允许 debug。 |
+| `.env.staging` | 测试部署，默认关闭 API 日志，允许 debug。 |
+| `.env.production` | 商用部署，关闭 API 日志并禁用 debug。 |
+
+需要本机私有覆盖时使用 `.env.local` 或对应 mode 的 local 文件；`*.local` 已被 `.gitignore` 忽略。
+
 前端：
 
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `VITE_API_BASE_URL` | `http://127.0.0.1:52173/api` | 前端 API 基地址。 |
-| `VITE_API_ENABLE_LOGGING` | `true` | 是否在前端 console 输出 API 日志。部署演示环境建议设为 `false`。 |
+| `VITE_API_ENABLE_LOGGING` | `false` | 是否在前端 console 输出 API 日志。开发排查时可显式设为 `true`。 |
+| `VITE_APP_ENV` | dev 时为 `development`，build 时为 `production` | 应用运行环境，可显式设置为 `development` / `staging` / `production`。 |
+| `VITE_ENABLE_DEBUG` | 非 production 默认开启，production 默认关闭 | 是否允许访问 `/pages/debug/*`。商用环境必须为 `false`。 |
 
 mock-server：
 
@@ -130,6 +142,28 @@ npm run generate:token-docs
 - 上传文件由 mock-server 本地目录托管，不是对象存储。
 - 会员升级是流程占位，不接真实支付。
 - LowDB 不提供生产级事务、并发控制、审计、备份和权限隔离。
+
+## 前端生产开关
+
+商用部署建议：
+
+```text
+VITE_APP_ENV=production
+VITE_API_BASE_URL=https://api.example.com/api
+VITE_API_ENABLE_LOGGING=false
+VITE_ENABLE_DEBUG=false
+```
+
+测试部署可以保留 debug：
+
+```text
+VITE_APP_ENV=staging
+VITE_API_BASE_URL=http://127.0.0.1:52173/api
+VITE_API_ENABLE_LOGGING=false
+VITE_ENABLE_DEBUG=true
+```
+
+`/pages/debug/*` 即使仍保留在 `pages.json`，生产环境也会被 route guard 拦截到 404。
 
 ## 文档入口
 

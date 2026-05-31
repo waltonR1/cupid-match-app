@@ -65,13 +65,15 @@ src/api/
     events.ts
     events.types.ts
     index.ts
+  legal/
+  messages/
   profiles/
     profiles.ts
     profiles.types.ts
     index.ts
   shared/
-    config.ts
     http.ts
+  upload/
 ```
 
 约定：
@@ -80,6 +82,7 @@ src/api/
 - `*.ts` 放域 API 方法
 - `index.ts` 放模块统一出口
 - `src/api/shared/http.ts` 负责统一请求、错误处理和日志
+- `src/config/app.ts` 负责前端环境变量、API 地址、日志和 debug 开关
 
 ## Mock Server 事实
 
@@ -89,21 +92,14 @@ mock 层通过独立的 HTTP 服务提供接口：
 - `mock-server/src/server.ts` 提供 `/api/...` 路由
 - `mock-server/db.json` 提供事实数据
 
-前端通过 HTTP 访问：
+前端通过 HTTP 访问 mock-server。接口契约以 [final-api-contract.md](./final-api-contract.md) 为准；mock-server 运行方式以 [mock-server-guide.md](./mock-server-guide.md) 为准。
 
-- `GET /api/ping`
-- `GET /api/profiles/featured`
-- `GET /api/profiles/self`
-- `GET /api/profiles/family`
-- `GET /api/profiles/self/:id`
-- `POST /api/profiles/self/:id/private-introduction`
-- `GET /api/profiles/family/:id`
-- `POST /api/profiles/family/:id/private-introduction`
-- `GET /api/debug/profile-access-preview/:profileType/:id`
-- `GET /api/events`
-- `GET /api/events/:id`
-- `GET /api/account/dashboard`
-- `GET /api/account/me`
-- `GET /api/account/membership`
-- `POST /api/auth/login`
-- `POST /api/auth/register`
+当前主要业务域：
+
+- auth / legal
+- profiles / favorites / private introductions
+- events / event registrations
+- account / membership / settings
+- messages / inbox
+- upload
+- debug

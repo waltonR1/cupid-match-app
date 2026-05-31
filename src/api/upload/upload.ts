@@ -1,4 +1,4 @@
-import {resolveApiBaseUrl} from '@/api/shared/config'
+import {resolveApiBaseUrl} from '@/config/app'
 
 function resolveUploadBaseUrl(): string {
   const apiBase = resolveApiBaseUrl()

@@ -27,8 +27,6 @@ function restoreLocaleState(state: unknown): { locale: AppLocale } | null {
 
 /** 多语言状态 Store */
 export const useLocaleStore = defineStore('locale', () => {
-  console.log('[locale-store] defineStore evaluated')
-
   /** 当前语言 */
   const locale = ref<AppLocale>(DEFAULT_LOCALE)
 

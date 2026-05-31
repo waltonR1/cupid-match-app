@@ -41,20 +41,25 @@
 
 ### 账户页
 
-- `/pages/account/profile`
-  我的资料，账户主入口。
-- `/pages/account/verification`
-  认证中心。
-- `/pages/account/connections`
-  我的缘分。
-- `/pages/account/messages`
-  消息。
-- `/pages/account/safety`
-  隐私与安全。
+- `/pages/account/index`
+  账户首页，聚合下一步动作、资料、活动、关系机会和账户摘要。
+- `/pages/account/profiles`
+  我的资料列表，管理本人或亲属资料。
+- `/pages/account/profile-detail`
+  账户中心统一档案详情与编辑页，通过 `?id=` 或 `?mode=create` 进入。
+- `/pages/account/relationship`
+  关系进展，承接收藏和私人介绍申请。
 - `/pages/account/membership`
-  会员与服务。
-- `/pages/account/activity`
+  会员与权益。
+- `/pages/account/settings`
+  账户设置、安全、身份绑定和服务偏好。
+- `/pages/account/events`
   我的活动。
+
+### 消息页
+
+- `/pages/messages/index`
+  消息中心，承接系统通知与通知详情。
 
 ### 活动页
 
@@ -67,6 +72,13 @@
 
 - `/pages/not-found`
   404 页面。
+
+### 调试页
+
+- `/pages/debug/index`
+  调试工具入口。
+- `/pages/debug/*`
+  只用于开发和测试环境。生产环境通过 route guard 禁用。
 
 ## 全局导航
 
@@ -88,13 +100,15 @@
 - `openSelfDetail(id)` -> `/pages/profiles/self/detail?id=...`
 - `openFamilyProfileDetail(id)` -> `/pages/profiles/family/detail?id=...`
 - `openEventDetail(id)` -> `/pages/events/detail?id=...`
-- `openAccountPage()` -> `/pages/account/profile`
-- `openMyProfilePage()` -> `/pages/account/profile`
-- `openActivityPage()` -> `/pages/account/activity`
-- `openMessagesPage()` -> `/pages/account/messages`
-- `openVerificationPage()` -> `/pages/account/verification`
-- `openConnectionsPage()` -> `/pages/account/connections`
-- `openSafetyPage()` -> `/pages/account/safety`
+- `openAccountPage()` -> `/pages/account/index`
+- `openMyProfilePage()` -> `/pages/account/profiles`
+- `openAccountProfileDetail(id)` -> `/pages/account/profile-detail?id=...`
+- `openAccountProfileCreate()` -> `/pages/account/profile-detail?mode=create`
+- `openAccountEventsPage()` -> `/pages/account/events`
+- `openMessagesPage()` -> `/pages/messages/index`
+- `openVerificationPage()` -> `/pages/account/profiles`
+- `openConnectionsPage()` -> `/pages/account/relationship`
+- `openAccountSettingsPage()` -> `/pages/account/settings`
 - `openMembershipPage()` -> `/pages/account/membership`
 
 ## 核心路径
@@ -128,14 +142,23 @@
 
 ### 账户维护
 
-1. 进入 `/pages/account/profile`
-2. 按需进入认证、缘分、消息、安全、会员或活动页面
-3. 围绕资料质量、信任认证、关系机会、沟通和安全边界完成维护
+1. 进入 `/pages/account/index`
+2. 按需进入我的资料、关系、我的活动、会员或设置页面
+3. 围绕资料质量、信任认证、关系机会、活动参与、会员权益和安全边界完成维护
+
+### 消息查看
+
+1. 进入 `/pages/messages/index`
+2. 浏览通知线程
+3. 查看线程详情并标记已读
 
 ## 路由一致性要求
 
-- 账户入口统一使用 `/pages/account/profile`
-- 账户活动页统一使用 `/pages/account/activity`
-- 账户关系机会页统一使用 `/pages/account/connections`
-- 账户安全页统一使用 `/pages/account/safety`
+- 账户入口统一使用 `/pages/account/index`
+- 账户资料页统一使用 `/pages/account/profiles`
+- 账户活动页统一使用 `/pages/account/events`
+- 账户关系机会页统一使用 `/pages/account/relationship`
+- 账户设置页统一使用 `/pages/account/settings`
+- 消息中心统一使用 `/pages/messages/index`
+- debug 页面只允许开发或测试环境访问
 - 新增页面时先更新 `src/pages.json`，再补导航或跳转函数，最后同步本文档

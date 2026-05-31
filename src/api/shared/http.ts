@@ -1,4 +1,4 @@
-import {resolveApiBaseUrl, resolveApiLoggingEnabled} from './config'
+import {resolveApiBaseUrl, resolveApiLoggingEnabled} from '@/config/app'
 import {useAuthStore} from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 

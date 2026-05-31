@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
-import { onHide, onLaunch, onPageNotFound, onShow } from '@dcloudio/uni-app'
+import { onLaunch, onPageNotFound } from '@dcloudio/uni-app'
 import { useThemeStore } from '@/stores/modules/theme'
 import { installRouteGuard } from '@/utils/route-guard'
 
@@ -16,15 +16,6 @@ watchEffect(() => {
 
 onLaunch(() => {
   installRouteGuard()
-  console.log('App Launch')
-})
-
-onShow(() => {
-  console.log('App Show')
-})
-
-onHide(() => {
-  console.log('App Hide')
 })
 
 onPageNotFound(({ path }) => {

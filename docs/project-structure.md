@@ -35,6 +35,7 @@ cupid-match/
 ```text
 src/
   api/
+  config/
   components/
   constants/
   hooks/
@@ -52,14 +53,27 @@ src/
 ```text
 src/api/
   account/
+    account.ts
+    account.types.ts
     index.ts
   auth/
+    auth.ts
+    auth.types.ts
     index.ts
+  debug/
   events/
+    events.ts
+    events.types.ts
     index.ts
+  legal/
+  messages/
   profiles/
+    profiles.ts
+    profiles.types.ts
     index.ts
   shared/
+    http.ts
+  upload/
 ```
 
 约定：
@@ -68,7 +82,7 @@ src/api/
 - `*.ts` 放域请求方法
 - `index.ts` 放模块统一出口，外部优先从 `@/api/<domain>` 导入
 - `shared/http.ts` 放统一请求行为
-- `shared/config.ts` 放 API 基础配置
+- `src/config/app.ts` 放前端运行环境、API 地址、日志和 debug 开关
 
 ## hooks
 
@@ -78,6 +92,9 @@ src/hooks/
   auth/
   common/
   events/
+  legal/
+  membership/
+  messages/
   profiles/
 ```
 
