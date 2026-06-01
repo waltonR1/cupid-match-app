@@ -1,10 +1,16 @@
 /// <reference types="node" />
 import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 
 import {parseEnvBoolean} from './utils/string.js'
 
-/** 项目根目录 */
-const rootDir = path.resolve(process.cwd(), 'mock-server')
+/** mock-server 根目录 */
+const mockServerDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+
+/** 数据目录 */
+const rootDir = process.env.MOCK_DATA_DIR
+  ? path.resolve(process.env.MOCK_DATA_DIR)
+  : mockServerDir
 
 /** 默认配置 */
 const DEFAULT = {

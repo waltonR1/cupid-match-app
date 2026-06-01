@@ -1,4 +1,4 @@
-import Fastify from 'fastify'
+import {fastify} from 'fastify'
 
 import {config} from './config.js'
 import {initDb} from './db.js'
@@ -14,7 +14,7 @@ import {registerProfileRoutes} from './routes/profiles.routes.js'
 
 /** 创建服务实例 */
 export async function createServer() {
-    const app = Fastify({
+    const app = fastify({
         logger: config.enableRequestLogging,
     })
 
