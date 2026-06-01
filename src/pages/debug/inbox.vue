@@ -66,6 +66,8 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { listInboxDebugThreads, sendInboxDebugNotification } from '@/api/debug/inbox'
 import type { InboxDebugThread } from '@/api/debug/inbox.types'
 
+useDebugGuard()
+
 const threads = ref<InboxDebugThread[]>([])
 const sending = ref(false)
 const form = ref({
