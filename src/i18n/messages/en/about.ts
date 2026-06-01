@@ -5,7 +5,7 @@ export const aboutMessages: AppMessageSchema = {
       eyebrow: 'About Us',
       title: 'About',
       titleAccent: 'Us',
-      description: 'Rencontre a Paris is a Paris-rooted relationship and social demo platform designed for highly educated singles around the world.',
+      description: 'Rencontre a Paris is a Paris-rooted serious relationship platform designed for highly educated singles around the world.',
       secondaryDescription: 'We are not building a low-threshold social product. We want something more sincere, refined, and meaningful.',
       card1: 'Starting from Paris, we connect high-quality encounters worldwide.',
       card2: 'Digital connection begins online, while Paris and Europe make real encounters possible.',

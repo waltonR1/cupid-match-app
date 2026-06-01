@@ -337,7 +337,7 @@ export const accountCenterMessages: AppMessageSchema = {
       verifyAction: 'Verify',
     },
     validation: { accountNameRequired: 'Account name is required', currentPasswordRequired: 'Current password is required', passwordsMismatch: 'Passwords do not match', incorrectPassword: 'Current password is incorrect', identifierRequired: 'Identifier is required', identifierInvalid: 'Enter a valid email or phone number', codeRequired: 'Verification code is required' },
-    toasts: { saved: 'Saved', saveFailed: 'Save failed, please try again', comingSoon: 'Coming soon', exportReady: 'Export ready', passwordChanged: 'Password changed' },
+    toasts: { saved: 'Saved', saveFailed: 'Save failed, please try again', comingSoon: 'This service is not available yet', exportReady: 'Export ready', passwordChanged: 'Password changed' },
     error: { title: 'Failed to load', description: 'Check your connection and try again' },
     empty: {
       title: 'Sign in to view settings',

@@ -5,7 +5,7 @@ export const aboutMessages: AppMessageSchema = {
       eyebrow: 'About Us',
       title: 'A propos',
       titleAccent: 'de nous',
-      description: 'Rencontre a Paris est une plateforme demo de rencontres pensee depuis Paris pour des celibataires diplomes a l echelle internationale.',
+      description: 'Rencontre a Paris est une plateforme de relations serieuses pensee depuis Paris pour des celibataires diplomes a l echelle internationale.',
       secondaryDescription: 'Nous ne voulons pas un espace rapide et superficiel, mais un lieu plus sincere, plus elegant et plus qualitatif.',
       card1: 'Depuis Paris, nous relions des rencontres de qualite a l echelle mondiale.',
       card2: 'Le numerique connecte, Paris et l Europe rendent la rencontre reelle.',

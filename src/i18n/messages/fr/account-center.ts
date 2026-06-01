@@ -336,7 +336,7 @@ export const accountCenterMessages: AppMessageSchema = {
       },
       verifyAction: 'Verifier',
     },
-    toasts: { saved: 'Enregistre', saveFailed: 'Echec de l enregistrement, veuillez reessayer', comingSoon: 'Bientot disponible', exportReady: 'Export pret', passwordChanged: 'Mot de passe modifie' },
+    toasts: { saved: 'Enregistre', saveFailed: 'Echec de l enregistrement, veuillez reessayer', comingSoon: 'Ce service n est pas encore disponible', exportReady: 'Export pret', passwordChanged: 'Mot de passe modifie' },
     validation: { accountNameRequired: 'Le nom du compte est requis', currentPasswordRequired: 'Le mot de passe actuel est requis', passwordsMismatch: 'Les mots de passe ne correspondent pas', incorrectPassword: 'Mot de passe actuel incorrect', identifierRequired: 'L identifiant est requis', identifierInvalid: 'Saisissez un email ou telephone valide', codeRequired: 'Le code de verification est requis' },
     error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
     empty: {

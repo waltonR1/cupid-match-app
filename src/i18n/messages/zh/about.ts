@@ -5,7 +5,7 @@ export const aboutMessages: AppMessageSchema = {
       eyebrow: 'About Us',
       title: '关于我们',
       titleAccent: 'A propos',
-      description: '相约巴黎是一套以巴黎为起点、面向全球高学历单身人群的相亲与社交演示站。',
+      description: '相约巴黎是一套以巴黎为起点、面向全球高学历单身人群的严肃关系服务平台。',
       secondaryDescription: '我们想呈现的不是快消式社交，而是更真诚、更体面、更有品质的相识空间。',
       card1: '以巴黎为品牌起点，连接全球高质量的相遇。',
       card2: '线上连接世界，线下在巴黎与欧洲落地真实相遇。',

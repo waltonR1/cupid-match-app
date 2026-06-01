@@ -354,7 +354,7 @@ export const accountCenterMessages: AppMessageSchema = {
       },
       verifyAction: '验证',
     },
-    toasts: { saved: '已保存', saveFailed: '保存失败，请重试', comingSoon: '功能开发中', passwordChanged: '密码已修改', exportReady: '数据导出已生成' },
+    toasts: { saved: '已保存', saveFailed: '保存失败，请重试', comingSoon: '该服务暂未开放', passwordChanged: '密码已修改', exportReady: '数据导出已生成' },
     validation: { accountNameRequired: '请输入账户名称', currentPasswordRequired: '请输入当前密码', passwordsMismatch: '两次密码不一致', incorrectPassword: '当前密码错误', identifierRequired: '请输入账号标识', identifierInvalid: '请输入有效的邮箱或手机号', codeRequired: '请输入验证码' },
     error: { title: '加载失败', description: '请检查网络后重试' },
     empty: {
