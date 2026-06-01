@@ -1,4 +1,4 @@
-import {requestJson} from '@/api/shared/http'
+import {apiRequest} from '@/api/shared/http'
 import type {
   ProfileAccessPreviewDetail,
   ProfileAccessPreviewMode,
@@ -10,7 +10,7 @@ export function getProfileAccessPreview(params: {
   profileId: string
   mode: ProfileAccessPreviewMode
 }): Promise<ProfileAccessPreviewDetail> {
-  return requestJson<ProfileAccessPreviewDetail>(
+  return apiRequest<ProfileAccessPreviewDetail>(
     `/debug/profile-access-preview/${params.profileType}/${params.profileId}`,
     {query: {mode: params.mode}},
   )

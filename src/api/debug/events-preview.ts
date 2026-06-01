@@ -1,9 +1,9 @@
-import {isApiStatusError, requestJson} from '@/api/shared/http'
+import {isApiStatusError, apiRequest} from '@/api/shared/http'
 import type {EventPreviewActionResponse, EventPreviewDetail, EventPreviewQuery} from './events-preview.types'
 
 export async function getEventPreview(params: EventPreviewQuery): Promise<EventPreviewDetail | null> {
   try {
-    return await requestJson<EventPreviewDetail>(`/debug/events-preview/${params.eventId}`, {
+    return await apiRequest<EventPreviewDetail>(`/debug/events-preview/${params.eventId}`, {
       query: {mode: params.mode},
     })
   } catch (error) {
@@ -14,7 +14,7 @@ export async function getEventPreview(params: EventPreviewQuery): Promise<EventP
 
 export async function registerEventPreview(params: EventPreviewQuery): Promise<EventPreviewActionResponse> {
   try {
-    return await requestJson<EventPreviewActionResponse>(`/debug/events-preview/${params.eventId}/register`, {
+    return await apiRequest<EventPreviewActionResponse>(`/debug/events-preview/${params.eventId}/register`, {
       method: 'POST',
       query: {mode: params.mode},
       data: {},
@@ -32,7 +32,7 @@ export async function registerEventPreview(params: EventPreviewQuery): Promise<E
 
 export async function cancelEventPreview(params: EventPreviewQuery): Promise<EventPreviewActionResponse> {
   try {
-    return await requestJson<EventPreviewActionResponse>(`/debug/events-preview/${params.eventId}/cancel`, {
+    return await apiRequest<EventPreviewActionResponse>(`/debug/events-preview/${params.eventId}/cancel`, {
       method: 'POST',
       query: {mode: params.mode},
       data: {},

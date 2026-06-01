@@ -1,13 +1,13 @@
-import { isApiStatusError, requestJson } from '@/api/shared/http'
+import { isApiStatusError, apiRequest } from '@/api/shared/http'
 import type { EventDetail, EventDirectoryQuery, EventRegistrationResponse, EventsListResponse } from './events.types'
 
 export function listEvents(query: EventDirectoryQuery = {}): Promise<EventsListResponse> {
-  return requestJson<EventsListResponse>('/events', { query })
+  return apiRequest<EventsListResponse>('/events', { query })
 }
 
 export async function getEventDetail(id: string): Promise<EventDetail | null> {
   try {
-    return await requestJson<EventDetail>(`/events/${id}`)
+    return await apiRequest<EventDetail>(`/events/${id}`)
   } catch (error) {
     if (isApiStatusError(error, 404)) return null
     throw error
@@ -16,7 +16,7 @@ export async function getEventDetail(id: string): Promise<EventDetail | null> {
 
 export async function registerForEvent(id: string): Promise<EventRegistrationResponse> {
   try {
-    return await requestJson<EventRegistrationResponse>(`/events/${id}/register`, {
+    return await apiRequest<EventRegistrationResponse>(`/events/${id}/register`, {
       method: 'POST',
       data: {},
     })
@@ -33,7 +33,7 @@ export async function registerForEvent(id: string): Promise<EventRegistrationRes
 
 export async function cancelEventRegistration(id: string): Promise<EventRegistrationResponse> {
   try {
-    return await requestJson<EventRegistrationResponse>(`/events/${id}/cancel`, {
+    return await apiRequest<EventRegistrationResponse>(`/events/${id}/cancel`, {
       method: 'POST',
       data: {},
     })

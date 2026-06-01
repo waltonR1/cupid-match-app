@@ -1,4 +1,4 @@
-import {isApiStatusError, requestJson} from '@/api/shared/http'
+import {isApiStatusError, apiRequest} from '@/api/shared/http'
 import type {
     FamilyProfileDetail,
     FamilyProfileDirectoryQuery,
@@ -11,20 +11,20 @@ import type {
 } from './profiles.types'
 
 export function getSelfProfileDirectory(query: SelfProfileDirectoryQuery): Promise<SelfProfileDirectoryResponse> {
-    return requestJson<SelfProfileDirectoryResponse>('/profiles/self', {query})
+    return apiRequest<SelfProfileDirectoryResponse>('/profiles/self', {query})
 }
 
 export function getFeaturedSelfProfiles(pageSize = 3): Promise<FeaturedSelfProfilesResponse> {
-    return requestJson<FeaturedSelfProfilesResponse>('/profiles/featured', {query: {pageSize}})
+    return apiRequest<FeaturedSelfProfilesResponse>('/profiles/featured', {query: {pageSize}})
 }
 
 export function getFamilyProfileDirectory(query: FamilyProfileDirectoryQuery): Promise<FamilyProfileDirectoryResponse> {
-    return requestJson<FamilyProfileDirectoryResponse>('/profiles/family', {query})
+    return apiRequest<FamilyProfileDirectoryResponse>('/profiles/family', {query})
 }
 
 export async function getSelfProfileDetail(profileId: string): Promise<SelfProfileDetail | null> {
     try {
-        return await requestJson<SelfProfileDetail>(`/profiles/self/${profileId}`)
+        return await apiRequest<SelfProfileDetail>(`/profiles/self/${profileId}`)
     } catch (error) {
         if (isApiStatusError(error, 404)) return null
         throw error
@@ -33,7 +33,7 @@ export async function getSelfProfileDetail(profileId: string): Promise<SelfProfi
 
 export async function requestSelfProfilePrivateIntroduction(profileId: string): Promise<PrivateIntroduction> {
     try {
-        return await requestJson<PrivateIntroduction>(`/profiles/self/${profileId}/private-introduction`, {
+        return await apiRequest<PrivateIntroduction>(`/profiles/self/${profileId}/private-introduction`, {
             method: 'POST',
             data: {},
         })
@@ -47,7 +47,7 @@ export async function requestSelfProfilePrivateIntroduction(profileId: string): 
 
 export async function requestFamilyProfilePrivateIntroduction(profileId: string): Promise<PrivateIntroduction> {
     try {
-        return await requestJson<PrivateIntroduction>(`/profiles/family/${profileId}/private-introduction`, {
+        return await apiRequest<PrivateIntroduction>(`/profiles/family/${profileId}/private-introduction`, {
             method: 'POST',
             data: {},
         })
@@ -61,7 +61,7 @@ export async function requestFamilyProfilePrivateIntroduction(profileId: string)
 
 export async function getFamilyProfileDetail(id: string): Promise<FamilyProfileDetail | null> {
     try {
-        return await requestJson<FamilyProfileDetail>(`/profiles/family/${id}`)
+        return await apiRequest<FamilyProfileDetail>(`/profiles/family/${id}`)
     } catch (error) {
         if (isApiStatusError(error, 404)) return null
         throw error

@@ -15,7 +15,7 @@ interface RequestOptions {
     data?: string | ArrayBuffer | object
 }
 
-export async function requestJson<T>(path: string, options: RequestOptions = {}): Promise<T> {
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const url = buildUrl(path, options.query)
     const method = options.method ?? 'GET'
     const startedAt = Date.now()

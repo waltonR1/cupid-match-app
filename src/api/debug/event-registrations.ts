@@ -1,4 +1,4 @@
-import {requestJson} from '@/api/shared/http'
+import {apiRequest} from '@/api/shared/http'
 import type {
   EventRegistrationDebugItem,
   EventRegistrationDebugResponse,
@@ -6,14 +6,14 @@ import type {
 } from './event-registrations.types'
 
 export function getEventRegistrationDebugItems(): Promise<EventRegistrationDebugResponse> {
-  return requestJson<EventRegistrationDebugResponse>('/debug/event-registrations')
+  return apiRequest<EventRegistrationDebugResponse>('/debug/event-registrations')
 }
 
 export function reviewEventRegistrationDebugItem(
   id: string,
   status: EventRegistrationDebugReviewStatus,
 ): Promise<EventRegistrationDebugItem> {
-  return requestJson<EventRegistrationDebugItem>(`/debug/event-registrations/${id}/review/${status}`, {
+  return apiRequest<EventRegistrationDebugItem>(`/debug/event-registrations/${id}/review/${status}`, {
     method: 'POST',
     data: {},
   })

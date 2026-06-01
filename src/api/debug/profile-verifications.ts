@@ -1,4 +1,4 @@
-import {requestJson} from '@/api/shared/http'
+import {apiRequest} from '@/api/shared/http'
 import type {
   ProfileVerificationDebugField,
   ProfileVerificationDebugItem,
@@ -7,7 +7,7 @@ import type {
 } from './profile-verifications.types'
 
 export function getProfileVerificationDebugItems(profileId?: string): Promise<ProfileVerificationDebugResponse> {
-  return requestJson<ProfileVerificationDebugResponse>('/debug/profile-verifications', {
+  return apiRequest<ProfileVerificationDebugResponse>('/debug/profile-verifications', {
     query: profileId ? {profileId} : undefined,
   })
 }
@@ -17,7 +17,7 @@ export function reviewProfileVerificationDebugItem(
   field: ProfileVerificationDebugField,
   status: ProfileVerificationDebugStatus,
 ): Promise<ProfileVerificationDebugItem> {
-  return requestJson<ProfileVerificationDebugItem>(`/debug/profile-verifications/${profileId}/${field}/${status}`, {
+  return apiRequest<ProfileVerificationDebugItem>(`/debug/profile-verifications/${profileId}/${field}/${status}`, {
     method: 'POST',
     data: {},
   })
