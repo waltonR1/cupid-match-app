@@ -38,7 +38,6 @@
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
     "mock:dev": "tsx watch mock-server/src/server.ts",
     "mock:start": "tsx mock-server/src/server.ts",
-    "start:render": "npm --prefix mock-server run start:render",
     "mock:build": "tsc -p mock-server/tsconfig.json",
     "check:i18n": "node scripts/check-i18n-keys.js",
     "generate:token-docs": "node scripts/generate-token-docs.js",
