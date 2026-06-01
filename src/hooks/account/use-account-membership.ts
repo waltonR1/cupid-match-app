@@ -1,34 +1,48 @@
-import { ref } from 'vue'
+import {ref} from 'vue'
 import {
-  getAccountMembership,
-  requestAccountMembershipUpgrade,
-  type AccountEntitlementBalanceDTO,
-  type AccountMembershipDTO,
-  type AccountMembershipUpgradePayload,
-  type MembershipPlanDTO,
+    getAccountMembership,
+    requestAccountMembershipUpgrade,
+    type AccountEntitlementBalanceDTO,
+    type AccountMembershipDTO,
+    type AccountMembershipUpgradePayload,
+    type MembershipPlanDTO,
 } from '@/api/account'
-import { useLatestRequest } from '@/hooks/common/useLatestRequest'
+import {useLatestRequest} from '@/hooks/common/useLatestRequest'
+import {useAuthStore} from '@/stores/modules/auth'
 
 export function useAccountMembership() {
-  const latest = useLatestRequest()
-  const membership = ref<AccountMembershipDTO | null>(null)
-  const entitlements = ref<AccountEntitlementBalanceDTO[]>([])
-  const availablePlans = ref<MembershipPlanDTO[]>([])
+    const authStore = useAuthStore()
+    const latest = useLatestRequest()
+    const membership = ref<AccountMembershipDTO | null>(null)
+    const entitlements = ref<AccountEntitlementBalanceDTO[]>([])
+    const availablePlans = ref<MembershipPlanDTO[]>([])
 
-  void load()
+    void load()
 
-  async function load() {
-    const data = await latest.run(() => getAccountMembership())
-    if (data) {
-      membership.value = data.membership
-      entitlements.value = data.entitlements
-      availablePlans.value = data.availablePlans
+    async function load() {
+        if (!authStore.isLoggedIn) return
+
+        const data = await latest.run(() => getAccountMembership())
+        if (data) {
+            membership.value = data.membership
+            entitlements.value = data.entitlements
+            availablePlans.value = data.availablePlans
+        }
     }
-  }
 
-  async function requestUpgrade(tier: AccountMembershipUpgradePayload['tier']) {
-    return latest.run(() => requestAccountMembershipUpgrade({ tier }))
-  }
+    async function requestUpgrade(tier: AccountMembershipUpgradePayload['tier']) {
+        if (!authStore.isLoggedIn) return undefined
 
-  return { loading: latest.loading, error: latest.error, membership, entitlements, availablePlans, refresh: load, requestUpgrade }
+        return latest.run(() => requestAccountMembershipUpgrade({tier}))
+    }
+
+    return {
+        loading: latest.loading,
+        error: latest.error,
+        membership,
+        entitlements,
+        availablePlans,
+        refresh: load,
+        requestUpgrade
+    }
 }

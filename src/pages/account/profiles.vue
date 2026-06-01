@@ -106,30 +106,36 @@
 </template>
 
 <script lang="ts" setup>
+import {useRequireAuth} from '@/hooks/common/use-require-auth'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import { computed, watch } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
-import { useAccountProfiles } from '@/hooks/account'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openAccountProfileCreate, openAccountProfileDetail } from '@/utils/navigation'
-import { formatLocalizedAge } from '@/utils/profile-format'
-import type { AccountProfileVerificationDTO, ManagedProfileSummaryDTO } from '@/api/account'
-import { computeVerificationRatio, resolveVerificationDescriptionKey } from '@/mappers/account-profiles'
+import {computed, watch} from 'vue'
+import {onShow} from '@dcloudio/uni-app'
+import {useAccountProfiles} from '@/hooks/account'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {openAccountProfileCreate, openAccountProfileDetail} from '@/utils/navigation'
+import {formatLocalizedAge} from '@/utils/profile-format'
+import type {AccountProfileVerificationDTO, ManagedProfileSummaryDTO} from '@/api/account'
+import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account-profiles'
 
-const { t, locale } = usePageI18n('accountCenter')
-const { loading, error, payload, refresh } = useAccountProfiles()
-watch(locale, () => { void refresh() })
-onShow(() => { void refresh() })
+useRequireAuth()
+const {t, locale} = usePageI18n('accountCenter')
+const {loading, error, payload, refresh} = useAccountProfiles()
+watch(locale, () => {
+  void refresh()
+})
+onShow(() => {
+  void refresh()
+})
 
 const hasSelfProfile = computed(() =>
-  (payload.value?.profiles ?? []).some((p) => p.relationshipToProfile === 'self'),
+    (payload.value?.profiles ?? []).some((p) => p.relationshipToProfile === 'self'),
 )
 
 function getProfileBadges(profile: ManagedProfileSummaryDTO) {
   const badges: Array<{ key: string; i18nKey: string }> = []
-  badges.push({ key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}` })
+  badges.push({key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}`})
   return badges
 }
 

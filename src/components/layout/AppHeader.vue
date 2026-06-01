@@ -260,6 +260,7 @@ function handleSettings() {
 function handleLogout() {
   auth.logout()
   closeAllDropdowns()
+  uni.redirectTo({ url: '/pages/auth/login' })
 }
 
 function toggleLocaleDropdown() {

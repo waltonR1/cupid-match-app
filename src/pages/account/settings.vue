@@ -13,9 +13,9 @@
           <view class="border border-semantic-border-default bg-semantic-surface-card px-7 py-7 shadow-panel">
             <view class="flex flex-wrap items-start gap-5">
               <view
-                class="shrink-0"
-                :class="editing ? 'cursor-pointer' : ''"
-                @click="editing && chooseAndUploadAvatar()"
+                  :class="editing ? 'cursor-pointer' : ''"
+                  class="shrink-0"
+                  @click="editing && chooseAndUploadAvatar()"
               >
                 <view class="relative h-[72px] w-[72px]">
                   <image
@@ -23,8 +23,8 @@
                       class="h-[72px] w-[72px] rounded-full border border-semantic-border-soft object-cover"
                   />
                   <view
-                    v-if="editing"
-                    class="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 opacity-0 transition-opacity hover:opacity-100"
+                      v-if="editing"
+                      class="absolute inset-0 flex items-center justify-center rounded-full bg-black/30 opacity-0 transition-opacity hover:opacity-100"
                   >
                     <text class="text-[11px] text-white">{{ t('settings.actions.changeAvatar') }}</text>
                   </view>
@@ -54,16 +54,16 @@
 
               <view class="ml-auto flex flex-wrap gap-2">
                 <view
-                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]"
-                  @click="editing ? cancelEditing() : startEditing()"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]"
+                    @click="editing ? cancelEditing() : startEditing()"
                 >
                   {{ editing ? t('settings.actions.cancelEdit') : t('settings.actions.edit') }}
                 </view>
                 <view
-                  v-if="editing"
-                  class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
-                  :class="saving ? 'opacity-50 pointer-events-none' : ''"
-                  @click="saveSettings"
+                    v-if="editing"
+                    :class="saving ? 'opacity-50 pointer-events-none' : ''"
+                    class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                    @click="saveSettings"
                 >
                   {{ t('settings.actions.save') }}
                 </view>
@@ -76,9 +76,9 @@
                   {{ t('settings.accountFields.accountName') }}
                 </view>
                 <input
-                  v-if="editing"
-                  v-model="accountDraft.accountName"
-                  class="mt-1 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                    v-if="editing"
+                    v-model="accountDraft.accountName"
+                    class="mt-1 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                 />
                 <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
                   {{ settings.account.accountName }}
@@ -109,12 +109,13 @@
                 </view>
                 <view v-if="editing" class="mt-1 flex flex-wrap gap-2">
                   <view v-for="loc in localeOptions" :key="loc.value"
-                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
-                    :class="accountDraft.preferredLocale === loc.value
+                        :class="accountDraft.preferredLocale === loc.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
                       : 'border-semantic-border-soft bg-semantic-surface-panel'"
-                    @click="accountDraft.preferredLocale = loc.value"
-                  >{{ loc.label }}</view>
+                        class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                        @click="accountDraft.preferredLocale = loc.value"
+                  >{{ loc.label }}
+                  </view>
                 </view>
                 <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
                   {{ t(`settings.locale.${settings.account.preferredLocale}`) }}
@@ -155,16 +156,16 @@
                       {{ item.verifiedText }}
                     </text>
                     <view
-                      v-if="item.canUnbind"
-                      class="cursor-pointer text-[13px] text-semantic-text-link"
-                      @click="handleUnbindIdentity(item.id)"
+                        v-if="item.canUnbind"
+                        class="cursor-pointer text-[13px] text-semantic-text-link"
+                        @click="handleUnbindIdentity(item.id)"
                     >
                       {{ t('settings.actions.unbind') }}
                     </view>
                     <view
-                      v-if="item.canBind"
-                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
-                      @click="openBindForm(item.provider)"
+                        v-if="item.canBind"
+                        class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                        @click="openBindForm(item.provider)"
                     >
                       {{ t('settings.actions.bind') }}
                     </view>
@@ -177,8 +178,11 @@
               </view>
             </view>
 
-            <view v-if="showBindForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="cancelBindForm">
-              <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+            <view v-if="showBindForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+                  @click="cancelBindForm">
+              <view
+                  class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel"
+                  @click.stop>
                 <view class="text-[18px] font-semibold text-semantic-text-primary">
                   {{ bindIdentityTitle }}
                 </view>
@@ -192,22 +196,23 @@
                       {{ bindIdentityIdentifierLabel }}
                     </view>
                     <input
-                      v-model="bindForm.identifier"
-                      :disabled="codeRequested"
-                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary disabled:opacity-50"
-                      :placeholder="bindIdentityIdentifierPlaceholder"
+                        v-model="bindForm.identifier"
+                        :disabled="codeRequested"
+                        :placeholder="bindIdentityIdentifierPlaceholder"
+                        class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary disabled:opacity-50"
                     />
                   </view>
 
-                  <view v-if="codeRequested" class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
+                  <view v-if="codeRequested"
+                        class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
                     {{ t('settings.bindIdentity.codeHint') }}
                   </view>
 
                   <view>
                     <view
-                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-center text-[13px]"
-                      :class="codeSending || resendSeconds > 0 ? 'pointer-events-none opacity-60' : ''"
-                      @click="handleSendCode"
+                        :class="codeSending || resendSeconds > 0 ? 'pointer-events-none opacity-60' : ''"
+                        class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-center text-[13px]"
+                        @click="handleSendCode"
                     >
                       {{ bindSendCodeText }}
                     </view>
@@ -218,9 +223,9 @@
                       {{ t('settings.bindIdentity.code') }}
                     </view>
                     <input
-                      v-model="bindForm.code"
-                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                      :placeholder="t('settings.bindIdentity.codePlaceholder')"
+                        v-model="bindForm.code"
+                        :placeholder="t('settings.bindIdentity.codePlaceholder')"
+                        class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
                     />
                   </view>
 
@@ -231,16 +236,16 @@
 
                 <view class="mt-7 flex justify-end gap-3">
                   <view
-                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[13px]"
-                    @click="cancelBindForm"
+                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[13px]"
+                      @click="cancelBindForm"
                   >
                     {{ t('settings.actions.cancelBind') }}
                   </view>
                   <view
-                    v-if="codeRequested"
-                    class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-[13px]"
-                    :class="binding ? 'opacity-50 pointer-events-none' : ''"
-                    @click="handleBindIdentity"
+                      v-if="codeRequested"
+                      :class="binding ? 'opacity-50 pointer-events-none' : ''"
+                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2 text-[13px]"
+                      @click="handleBindIdentity"
                   >
                     {{ binding ? t('settings.actions.binding') : t('settings.actions.bind') }}
                   </view>
@@ -249,56 +254,72 @@
             </view>
 
             <view class="mt-6 border-t border-semantic-border-soft pt-6">
-              <view class="flex flex-wrap items-center justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+              <view
+                  class="flex flex-wrap items-center justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
                 <view>
                   <view class="text-[14px] font-medium text-semantic-text-primary">
                     {{ t('settings.security.password') }}
                   </view>
                   <view class="mt-1 text-[13px] leading-6 text-semantic-text-secondary">
-                    {{ settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset') }}
+                    {{
+                      settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset')
+                    }}
                     <text v-if="settings.password.lastChangedAt">
-                      · {{ t('settings.security.lastChangedAt') }} {{ formatLocalizedDateTime(locale, settings.password.lastChangedAt) }}
+                      · {{ t('settings.security.lastChangedAt') }}
+                      {{ formatLocalizedDateTime(locale, settings.password.lastChangedAt) }}
                     </text>
                   </view>
                 </view>
                 <view
-                  v-if="!showPasswordForm"
-                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
-                  @click="handleChangePassword"
+                    v-if="!showPasswordForm"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                    @click="handleChangePassword"
                 >
                   {{ t('settings.actions.changePassword') }}
                 </view>
               </view>
 
               <view v-if="showPasswordForm" class="mt-4 max-w-[400px] space-y-3 px-3">
-                <input v-model="passwordForm.current" type="password"
-                  :placeholder="t('settings.passwordFields.current')"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
-                <input v-model="passwordForm.new" type="password"
-                  :placeholder="t('settings.passwordFields.newPassword')"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
-                <input v-model="passwordForm.confirm" type="password"
-                  :placeholder="t('settings.passwordFields.confirmNew')"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary" />
+                <input v-model="passwordForm.current" :placeholder="t('settings.passwordFields.current')"
+                       class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                       type="password"/>
+                <input v-model="passwordForm.new" :placeholder="t('settings.passwordFields.newPassword')"
+                       class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                       type="password"/>
+                <input v-model="passwordForm.confirm" :placeholder="t('settings.passwordFields.confirmNew')"
+                       class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                       type="password"/>
                 <view v-if="passwordError" class="text-[13px] text-semantic-state-danger">{{ passwordError }}</view>
                 <view class="flex gap-2">
-                  <view class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]" @click="cancelPasswordForm">
+                  <view
+                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[13px]"
+                      @click="cancelPasswordForm">
                     {{ t('settings.actions.cancelEdit') }}
                   </view>
-                  <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
-                    :class="changingPassword ? 'opacity-50 pointer-events-none' : ''" @click="confirmPasswordChange">
+                  <view
+                      :class="changingPassword ? 'opacity-50 pointer-events-none' : ''"
+                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-[13px]"
+                      @click="confirmPasswordChange">
                     {{ t('settings.actions.changePassword') }}
                   </view>
                 </view>
               </view>
 
               <view class="mt-5 border-t border-semantic-border-soft pt-5">
-                <view class="flex flex-wrap items-start justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+                <view
+                    class="flex flex-wrap items-start justify-between gap-4 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
                   <view>
-                    <text class="text-[14px] font-medium text-semantic-text-primary">{{ t('settings.mfa.title') }}</text>
-                    <view class="mt-1 max-w-[560px] text-[13px] leading-6 text-semantic-text-secondary">{{ t('settings.sectionHints.mfa') }}</view>
-                    <view v-if="mfaStatus?.enabled && mfaStatus.identityLabel" class="mt-2 text-[13px] text-semantic-text-secondary">
-                      {{ t('settings.mfa.usingIdentity', { method: t(`settings.provider.${mfaStatus.method}`) }) }} {{ mfaStatus.identityLabel }}
+                    <text class="text-[14px] font-medium text-semantic-text-primary">{{
+                        t('settings.mfa.title')
+                      }}
+                    </text>
+                    <view class="mt-1 max-w-[560px] text-[13px] leading-6 text-semantic-text-secondary">
+                      {{ t('settings.sectionHints.mfa') }}
+                    </view>
+                    <view v-if="mfaStatus?.enabled && mfaStatus.identityLabel"
+                          class="mt-2 text-[13px] text-semantic-text-secondary">
+                      {{ t('settings.mfa.usingIdentity', {method: t(`settings.provider.${mfaStatus.method}`)}) }}
+                      {{ mfaStatus.identityLabel }}
                     </view>
                   </view>
 
@@ -310,24 +331,25 @@
                       {{ t('settings.mfa.disabled') }}
                     </view>
                     <view
-                      v-if="!mfaStatus?.enabled"
-                      class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-1 text-[13px]"
-                      :class="!hasAvailableMfaMethod ? 'pointer-events-none opacity-50' : ''"
-                      @click="openMfaSetup"
+                        v-if="!mfaStatus?.enabled"
+                        :class="!hasAvailableMfaMethod ? 'pointer-events-none opacity-50' : ''"
+                        class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-1 text-[13px]"
+                        @click="openMfaSetup"
                     >
                       {{ t('settings.mfa.enableMfa') }}
                     </view>
                     <view
-                      v-else
-                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
-                      @click="openMfaDisable"
+                        v-else
+                        class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                        @click="openMfaDisable"
                     >
                       {{ t('settings.mfa.disableMfa') }}
                     </view>
                   </view>
                 </view>
 
-                <view v-if="mfaStatus && !mfaStatus.enabled && !hasAvailableMfaMethod" class="px-3 pb-2 text-[13px] text-semantic-text-muted">
+                <view v-if="mfaStatus && !mfaStatus.enabled && !hasAvailableMfaMethod"
+                      class="px-3 pb-2 text-[13px] text-semantic-text-muted">
                   {{ t('settings.mfa.noVerifiedIdentities') }}
                 </view>
               </view>
@@ -340,7 +362,10 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.notifications') }}
               </view>
-              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.notifications') }}</view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{
+                  t('settings.sectionHints.notifications')
+                }}
+              </view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
@@ -353,13 +378,13 @@
 
                 <view v-if="editing" class="flex flex-wrap gap-2">
                   <view
-                    v-for="option in booleanOptions"
-                    :key="String(option.value)"
-                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
-                    :class="readPreference(item.code) === option.value
+                      v-for="option in booleanOptions"
+                      :key="String(option.value)"
+                      :class="readPreference(item.code) === option.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
                       : 'border-semantic-border-soft bg-semantic-surface-panel'"
-                    @click="writePreference(item.code, option.value)"
+                      class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                      @click="writePreference(item.code, option.value)"
                   >
                     {{ option.label }}
                   </view>
@@ -375,7 +400,10 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.servicePreferences') }}
               </view>
-              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.servicePreferences') }}</view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{
+                  t('settings.sectionHints.servicePreferences')
+                }}
+              </view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
@@ -387,33 +415,33 @@
                 <text class="text-semantic-text-secondary">{{ item.label }}</text>
 
                 <input
-                  v-if="editing && item.code === 'preferred_city'"
-                  :value="String(readPreference(item.code) ?? '')"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                  @input="(e: any) => writePreference(item.code, e.detail.value)"
+                    v-if="editing && item.code === 'preferred_city'"
+                    :value="String(readPreference(item.code) ?? '')"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
+                    @input="(e: any) => writePreference(item.code, e.detail.value)"
                 />
                 <view v-else-if="editing && item.code === 'preferred_contact_channel'" class="flex flex-wrap gap-2">
                   <view
-                    v-for="ch in contactChannelOptions"
-                    :key="ch.value"
-                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
-                    :class="readPreference(item.code) === ch.value
+                      v-for="ch in contactChannelOptions"
+                      :key="ch.value"
+                      :class="readPreference(item.code) === ch.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
                       : 'border-semantic-border-soft bg-semantic-surface-panel'"
-                    @click="writePreference(item.code, ch.value)"
+                      class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                      @click="writePreference(item.code, ch.value)"
                   >
                     {{ ch.label }}
                   </view>
                 </view>
                 <view v-else-if="editing" class="flex flex-wrap gap-2">
                   <view
-                    v-for="option in booleanOptions"
-                    :key="String(option.value)"
-                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
-                    :class="readPreference(item.code) === option.value
+                      v-for="option in booleanOptions"
+                      :key="String(option.value)"
+                      :class="readPreference(item.code) === option.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
                       : 'border-semantic-border-soft bg-semantic-surface-panel'"
-                    @click="writePreference(item.code, option.value)"
+                      class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                      @click="writePreference(item.code, option.value)"
                   >
                     {{ option.label }}
                   </view>
@@ -442,13 +470,13 @@
 
                 <view v-if="editing" class="flex flex-wrap gap-2">
                   <view
-                    v-for="option in booleanOptions"
-                    :key="String(option.value)"
-                    class="cursor-pointer border px-3 py-1.5 text-[13px]"
-                    :class="readPreference(item.code) === option.value
+                      v-for="option in booleanOptions"
+                      :key="String(option.value)"
+                      :class="readPreference(item.code) === option.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
                       : 'border-semantic-border-soft bg-semantic-surface-panel'"
-                    @click="writePreference(item.code, option.value)"
+                      class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                      @click="writePreference(item.code, option.value)"
                   >
                     {{ option.label }}
                   </view>
@@ -464,11 +492,15 @@
               <view class="text-[16px] font-semibold text-semantic-text-primary">
                 {{ t('settings.accountActions') }}
               </view>
-              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{ t('settings.sectionHints.accountActions') }}</view>
+              <view class="mt-0.5 text-[13px] text-semantic-text-muted">{{
+                  t('settings.sectionHints.accountActions')
+                }}
+              </view>
             </view>
 
             <view class="divide-y divide-semantic-border-soft">
-              <view class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+              <view
+                  class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
                 <view>
                   <view class="text-[14px] font-medium text-semantic-text-primary">
                     {{ t('settings.actions.exportData') }}
@@ -478,13 +510,14 @@
                   </view>
                 </view>
                 <view
-                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
-                  @click="handleExportData"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                    @click="handleExportData"
                 >
                   {{ t('settings.actions.exportData') }}
                 </view>
               </view>
-              <view class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
+              <view
+                  class="flex flex-wrap items-center justify-between gap-3 border border-transparent px-3 py-4 transition-all duration-200 hover:-translate-y-[1px] hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-soft">
                 <view>
                   <view class="text-[14px] font-medium text-semantic-text-primary">
                     {{ t('settings.actions.deactivateAccount') }}
@@ -494,8 +527,8 @@
                   </view>
                 </view>
                 <view
-                  class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
-                  @click="handleDeactivateAccount"
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[13px] transition-colors hover:bg-semantic-surface-soft"
+                    @click="handleDeactivateAccount"
                 >
                   {{ t('settings.actions.deactivateAccount') }}
                 </view>
@@ -540,8 +573,11 @@
   </AccountShell>
 
   <!-- MFA enable/disable modal -->
-  <view v-if="showMfaModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="closeMfaModal">
-    <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+  <view v-if="showMfaModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+        @click="closeMfaModal">
+    <view
+        class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel"
+        @click.stop>
       <view class="text-[18px] font-semibold text-semantic-text-primary">
         {{ mfaModalAction === 'enable' ? t('settings.mfa.enableTitle') : t('settings.mfa.disableTitle') }}
       </view>
@@ -552,13 +588,16 @@
       <view class="mt-6 space-y-4">
         <view v-if="mfaModalAction === 'enable' && !mfaCodeRequested" class="space-y-2">
           <view
-            v-for="item in mfaStatus?.availableMethods ?? []"
-            :key="item.identityId"
-            class="flex cursor-pointer items-center justify-between border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 transition-colors hover:bg-semantic-surface-soft"
-            @click="sendMfaCode(item.identityId, item.method)"
+              v-for="item in mfaStatus?.availableMethods ?? []"
+              :key="item.identityId"
+              class="flex cursor-pointer items-center justify-between border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 transition-colors hover:bg-semantic-surface-soft"
+              @click="sendMfaCode(item.identityId, item.method)"
           >
             <view>
-              <text class="text-[13px] font-medium text-semantic-text-primary">{{ t(`settings.provider.${item.method}`) }}</text>
+              <text class="text-[13px] font-medium text-semantic-text-primary">{{
+                  t(`settings.provider.${item.method}`)
+                }}
+              </text>
               <text class="ml-2 text-[13px] text-semantic-text-secondary">{{ item.maskedIdentifier }}</text>
             </view>
             <text class="text-[12px] text-semantic-text-link">{{ t('settings.bindIdentity.sendCode') }}</text>
@@ -570,14 +609,15 @@
             {{ t('settings.bindIdentity.code') }}
           </view>
           <input
-            v-model="mfaCode"
-            :disabled="mfaModalAction === 'enable' && !mfaCodeRequested"
-            class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-            :placeholder="t('settings.bindIdentity.codePlaceholder')"
+              v-model="mfaCode"
+              :disabled="mfaModalAction === 'enable' && !mfaCodeRequested"
+              :placeholder="t('settings.bindIdentity.codePlaceholder')"
+              class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
           />
         </view>
 
-        <view v-if="mfaModalAction === 'disable' || mfaCodeRequested" class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
+        <view v-if="mfaModalAction === 'disable' || mfaCodeRequested"
+              class="border-l-2 border-semantic-border-emphasis bg-semantic-surface-soft px-4 py-3 text-[13px] leading-6 text-semantic-text-secondary">
           {{ t('settings.bindIdentity.codeHint') }}
         </view>
 
@@ -587,24 +627,34 @@
       </view>
 
       <view class="mt-7 flex justify-end gap-3 border-t border-semantic-border-soft pt-5">
-        <view class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary" @click="closeMfaModal">
+        <view
+            class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary"
+            @click="closeMfaModal">
           {{ t('settings.actions.cancelBind') }}
         </view>
-        <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity" :class="mfaSubmitting || (mfaModalAction === 'enable' && !mfaCodeRequested) ? 'opacity-50 pointer-events-none' : ''" @click="handleMfaSubmit">
-          {{ mfaSubmitting ? t('settings.actions.binding') : mfaModalAction === 'enable' ? t('settings.mfa.enableMfa') : t('settings.mfa.disableMfa') }}
+        <view
+            :class="mfaSubmitting || (mfaModalAction === 'enable' && !mfaCodeRequested) ? 'opacity-50 pointer-events-none' : ''"
+            class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity"
+            @click="handleMfaSubmit">
+          {{
+            mfaSubmitting ? t('settings.actions.binding') : mfaModalAction === 'enable' ? t('settings.mfa.enableMfa') : t('settings.mfa.disableMfa')
+          }}
         </view>
       </view>
     </view>
   </view>
 
   <!-- Sensitive action verification modal -->
-  <view v-if="showChallengeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4" @click="closeChallengeModal">
-    <view class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel" @click.stop>
+  <view v-if="showChallengeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+        @click="closeChallengeModal">
+    <view
+        class="w-full max-w-[420px] border border-semantic-border-default bg-semantic-surface-card px-7 py-8 shadow-panel"
+        @click.stop>
       <view class="text-[18px] font-semibold text-semantic-text-primary">
         {{ t(`settings.mfa.challenge.${challengeAction}.title`) }}
       </view>
       <view class="mt-2 text-[13px] leading-6 text-semantic-text-secondary">
-        {{ t('settings.mfa.challenge.description', { target: challengeMaskedIdentifier }) }}
+        {{ t('settings.mfa.challenge.description', {target: challengeMaskedIdentifier}) }}
       </view>
 
       <view class="mt-6 space-y-4">
@@ -613,16 +663,16 @@
             {{ t('settings.bindIdentity.code') }}
           </view>
           <input
-            v-model="challengeCode"
-            class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-            :placeholder="t('settings.bindIdentity.codePlaceholder')"
+              v-model="challengeCode"
+              :placeholder="t('settings.bindIdentity.codePlaceholder')"
+              class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
           />
         </view>
 
         <view
-          class="inline-flex cursor-pointer text-[13px] text-semantic-text-link transition-colors hover:text-semantic-text-primary"
-          :class="challengeResendSeconds > 0 || challengeCodeSending ? 'pointer-events-none opacity-60' : ''"
-          @click="resendSecurityChallengeCode"
+            :class="challengeResendSeconds > 0 || challengeCodeSending ? 'pointer-events-none opacity-60' : ''"
+            class="inline-flex cursor-pointer text-[13px] text-semantic-text-link transition-colors hover:text-semantic-text-primary"
+            @click="resendSecurityChallengeCode"
         >
           {{ challengeResendText }}
         </view>
@@ -633,10 +683,15 @@
       </view>
 
       <view class="mt-7 flex justify-end gap-3 border-t border-semantic-border-soft pt-5">
-        <view class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary" @click="closeChallengeModal">
+        <view
+            class="cursor-pointer px-4 py-2 text-[13px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary"
+            @click="closeChallengeModal">
           {{ t('settings.actions.cancelBind') }}
         </view>
-        <view class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity" :class="challengeSubmitting ? 'opacity-50 pointer-events-none' : ''" @click="submitSecurityChallenge">
+        <view
+            :class="challengeSubmitting ? 'opacity-50 pointer-events-none' : ''"
+            class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-5 py-2 text-[13px] font-medium text-semantic-text-inverse transition-opacity"
+            @click="submitSecurityChallenge">
           {{ challengeSubmitting ? t('settings.actions.binding') : t('settings.mfa.verifyAction') }}
         </view>
       </view>
@@ -652,41 +707,67 @@
   />
 
   <ConfirmDialog
-    :open="confirmOpen"
-    :title="confirmTitle"
-    :description="confirmDescription"
-    :confirm-label="confirmActionLabel"
-    :cancel-label="t('common.cancel')"
-    :destructive="true"
-    :loading="confirmLoading"
-    @confirm="handleConfirm"
-    @cancel="confirmOpen = false"
+      :cancel-label="t('common.cancel')"
+      :confirm-label="confirmActionLabel"
+      :description="confirmDescription"
+      :destructive="true"
+      :loading="confirmLoading"
+      :open="confirmOpen"
+      :title="confirmTitle"
+      @cancel="confirmOpen = false"
+      @confirm="handleConfirm"
   />
 </template>
 
 <script lang="ts" setup>
-import { computed, onUnmounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { AccountPreferencesDTO, AccountSecurityChallengeAction } from '@/api/account'
+import {useRequireAuth} from '@/hooks/common/use-require-auth'
+import {computed, onUnmounted, ref, watch} from 'vue'
+import {useI18n} from 'vue-i18n'
+import type {AccountPreferencesDTO, AccountSecurityChallengeAction} from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
-import { useAccountSettings } from '@/hooks/account'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { formatLocalizedDateTime } from '@/utils/locale-format'
-import { maskIdentifier } from '@/mappers/account-settings'
-import { validatePassword } from '@/utils/validate'
-import { useAuthStore } from '@/stores/modules/auth'
-import type { AccountPreferenceCode } from '@/types/account/settings'
-import { openLoginPage } from '@/utils/navigation'
-import { useAgreementDialog } from '@/hooks/legal'
+import {useAccountSettings} from '@/hooks/account'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {formatLocalizedDateTime} from '@/utils/locale-format'
+import {maskIdentifier} from '@/mappers/account-settings'
+import {validatePassword} from '@/utils/validate'
+import {useAuthStore} from '@/stores/modules/auth'
+import type {AccountPreferenceCode} from '@/types/account/settings'
+import {openLoginPage} from '@/utils/navigation'
+import {useAgreementDialog} from '@/hooks/legal'
 
-const { t, locale } = usePageI18n('accountCenter')
-const { t: globalT } = useI18n({ useScope: 'global' })
-const { loading, error, settings, refresh, saveAccount, savePreferences, uploadAvatar, changePassword, deactivateAccount, requestVerificationCode, bindIdentity, unbindIdentity, mfaStatus, requestMfaVerificationCode, enableMfa, disableMfa, requestSecurityChallenge, verifySensitiveAction, exportData } = useAccountSettings()
-watch(locale, () => { if (!editing.value) { void refresh() } })
+useRequireAuth()
+const {t, locale} = usePageI18n('accountCenter')
+const {t: globalT} = useI18n({useScope: 'global'})
+const {
+  loading,
+  error,
+  settings,
+  refresh,
+  saveAccount,
+  savePreferences,
+  uploadAvatar,
+  changePassword,
+  deactivateAccount,
+  requestVerificationCode,
+  bindIdentity,
+  unbindIdentity,
+  mfaStatus,
+  requestMfaVerificationCode,
+  enableMfa,
+  disableMfa,
+  requestSecurityChallenge,
+  verifySensitiveAction,
+  exportData
+} = useAccountSettings()
+watch(locale, () => {
+  if (!editing.value) {
+    void refresh()
+  }
+})
 const editing = ref(false)
 const saving = ref(false)
 
@@ -709,11 +790,19 @@ function openConfirm(title: string, description: string, label: string, action: 
 async function handleConfirm() {
   if (!confirmAction) return
   confirmLoading.value = true
-  try { await confirmAction() }
-  finally { confirmLoading.value = false; confirmOpen.value = false }
+  try {
+    await confirmAction()
+  } finally {
+    confirmLoading.value = false;
+    confirmOpen.value = false
+  }
 }
 
-const accountDraft = ref<{ accountName: string; avatarUrl: string; preferredLocale: 'zh' | 'en' | 'fr' }>({ accountName: '', avatarUrl: '', preferredLocale: 'zh' })
+const accountDraft = ref<{
+  accountName: string;
+  avatarUrl: string;
+  preferredLocale: 'zh' | 'en' | 'fr'
+}>({accountName: '', avatarUrl: '', preferredLocale: 'zh'})
 const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="58" text-anchor="middle" fill="%239ca3af" font-size="40">?</text></svg>'
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
 
@@ -732,7 +821,11 @@ const PREFERENCE_CODE_TO_KEY = {
 function buildPreferenceItems(codes: AccountPreferenceCode[]) {
   return codes.map((code) => {
     const key = PREFERENCE_CODE_TO_KEY[code]
-    return { code, label: t(`settings.preference.${code}`), displayValue: formatPreferenceDisplay(code, settings.value?.preferences?.[key]) }
+    return {
+      code,
+      label: t(`settings.preference.${code}`),
+      displayValue: formatPreferenceDisplay(code, settings.value?.preferences?.[key])
+    }
   })
 }
 
@@ -758,18 +851,34 @@ type SecurityAccountItem = {
 const securityAccountItems = computed<SecurityAccountItem[]>(() => {
   const identities = (settings.value?.identities ?? []).filter((item) => item.provider === 'email' || item.provider === 'phone')
   const real = identities
-    .map((item, _index, list) => ({
-    id: item.id,
-    provider: item.provider as 'email' | 'phone',
-    providerLabel: t(`settings.provider.${item.provider}`),
-    identifier: maskIdentifier(item.identifier, item.provider),
-    verifiedText: item.verifiedAt ? t('settings.security.verified') : t('settings.security.unverified'),
-    canBind: false,
-    canUnbind: list.length > 1,
-  }))
+      .map((item, _index, list) => ({
+        id: item.id,
+        provider: item.provider as 'email' | 'phone',
+        providerLabel: t(`settings.provider.${item.provider}`),
+        identifier: maskIdentifier(item.identifier, item.provider),
+        verifiedText: item.verifiedAt ? t('settings.security.verified') : t('settings.security.unverified'),
+        canBind: false,
+        canUnbind: list.length > 1,
+      }))
   const previews = [
-    { id: 'email-preview', provider: 'email' as const, providerLabel: t('settings.provider.email'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified'), canBind: true, canUnbind: false },
-    { id: 'phone-preview', provider: 'phone' as const, providerLabel: t('settings.provider.phone'), identifier: t('settings.security.unbound'), verifiedText: t('settings.security.unverified'), canBind: true, canUnbind: false },
+    {
+      id: 'email-preview',
+      provider: 'email' as const,
+      providerLabel: t('settings.provider.email'),
+      identifier: t('settings.security.unbound'),
+      verifiedText: t('settings.security.unverified'),
+      canBind: true,
+      canUnbind: false
+    },
+    {
+      id: 'phone-preview',
+      provider: 'phone' as const,
+      providerLabel: t('settings.provider.phone'),
+      identifier: t('settings.security.unbound'),
+      verifiedText: t('settings.security.unverified'),
+      canBind: true,
+      canUnbind: false
+    },
   ]
   const providers = new Set(real.map((item) => item.provider))
   return [...real, ...previews.filter((item) => !providers.has(item.provider))]
@@ -802,8 +911,8 @@ const {
   closeAgreementDialog,
 } = useAgreementDialog()
 const booleanOptions = computed(() => [
-  { label: t('common.yes'), value: true },
-  { label: t('common.no'), value: false },
+  {label: t('common.yes'), value: true},
+  {label: t('common.no'), value: false},
 ])
 
 watch(settings, (value) => {
@@ -814,11 +923,11 @@ watch(settings, (value) => {
     preferredLocale: (value.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
   preferenceDraft.value = Object.fromEntries(
-    Object.entries(PREFERENCE_CODE_TO_KEY)
-      .filter(([, key]) => value.preferences[key] !== undefined)
-      .map(([code, key]) => [code, value.preferences[key]]),
+      Object.entries(PREFERENCE_CODE_TO_KEY)
+          .filter(([, key]) => value.preferences[key] !== undefined)
+          .map(([code, key]) => [code, value.preferences[key]]),
   ) as Record<string, string | boolean | number | string[]>
-}, { immediate: true })
+}, {immediate: true})
 
 function startEditing() {
   accountDraft.value = {
@@ -827,9 +936,9 @@ function startEditing() {
     preferredLocale: (settings.value?.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
   preferenceDraft.value = Object.fromEntries(
-    Object.entries(PREFERENCE_CODE_TO_KEY)
-      .filter(([, key]) => settings.value?.preferences[key] !== undefined)
-      .map(([code, key]) => [code, settings.value?.preferences[key]]),
+      Object.entries(PREFERENCE_CODE_TO_KEY)
+          .filter(([, key]) => settings.value?.preferences[key] !== undefined)
+          .map(([code, key]) => [code, settings.value?.preferences[key]]),
   ) as Record<string, string | boolean | number | string[]>
   editing.value = true
 }
@@ -850,7 +959,7 @@ async function chooseAndUploadAvatar() {
     const url = await uploadAvatar(path)
     accountDraft.value.avatarUrl = url
   } catch {
-    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
   }
 }
 
@@ -867,20 +976,20 @@ function writePreference(code: string, value: string | boolean | number | string
 }
 
 const localeOptions = computed(() => [
-  { label: t('settings.locale.zh'), value: 'zh' as const },
-  { label: t('settings.locale.en'), value: 'en' as const },
-  { label: t('settings.locale.fr'), value: 'fr' as const },
+  {label: t('settings.locale.zh'), value: 'zh' as const},
+  {label: t('settings.locale.en'), value: 'en' as const},
+  {label: t('settings.locale.fr'), value: 'fr' as const},
 ])
 
 const contactChannelOptions = computed(() => [
-  { label: t('settings.contactChannel.email'), value: 'email' },
-  { label: t('settings.contactChannel.phone'), value: 'phone' },
-  { label: t('settings.contactChannel.wechat'), value: 'wechat' },
+  {label: t('settings.contactChannel.email'), value: 'email'},
+  {label: t('settings.contactChannel.phone'), value: 'phone'},
+  {label: t('settings.contactChannel.wechat'), value: 'wechat'},
 ])
 
 // password change
 const showPasswordForm = ref(false)
-const passwordForm = ref({ current: '', new: '', confirm: '' })
+const passwordForm = ref({current: '', new: '', confirm: ''})
 const passwordError = ref('')
 const changingPassword = ref(false)
 
@@ -896,9 +1005,9 @@ let challengeResolve: ((token: string | null) => void) | null = null
 let challengeResendTimer: ReturnType<typeof setInterval> | null = null
 
 const challengeResendText = computed(() =>
-  challengeResendSeconds.value > 0
-    ? t('settings.bindIdentity.resendCountdown', { seconds: challengeResendSeconds.value })
-    : t('settings.bindIdentity.resend'),
+    challengeResendSeconds.value > 0
+        ? t('settings.bindIdentity.resendCountdown', {seconds: challengeResendSeconds.value})
+        : t('settings.bindIdentity.resend'),
 )
 
 async function resolveSensitiveAction(action: AccountSecurityChallengeAction) {
@@ -990,42 +1099,42 @@ async function handleExportData() {
     if (challengeToken === null) return
     const exported = await exportData(challengeToken)
     if (!exported) {
-      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
       return
     }
-    uni.showToast({ title: t('settings.toasts.exportReady'), icon: 'success' })
+    uni.showToast({title: t('settings.toasts.exportReady'), icon: 'success'})
   } catch {
-    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
   }
 }
 
 async function handleDeactivateAccount() {
   openConfirm(
-    t('settings.deactivateConfirm.title'),
-    t('settings.deactivateConfirm.description'),
-    t('settings.deactivateConfirm.confirm'),
-    async () => {
-      try {
-        const challengeToken = await resolveSensitiveAction('deactivate_account')
-        if (challengeToken === null) return
-        const result = await deactivateAccount(challengeToken)
-        if (!result) {
-          uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-          return
+      t('settings.deactivateConfirm.title'),
+      t('settings.deactivateConfirm.description'),
+      t('settings.deactivateConfirm.confirm'),
+      async () => {
+        try {
+          const challengeToken = await resolveSensitiveAction('deactivate_account')
+          if (challengeToken === null) return
+          const result = await deactivateAccount(challengeToken)
+          if (!result) {
+            uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+            return
+          }
+          const authStore = useAuthStore()
+          authStore.logout()
+          uni.redirectTo({url: '/pages/auth/login'})
+        } catch {
+          uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
         }
-        const authStore = useAuthStore()
-        authStore.logout()
-        uni.redirectTo({ url: '/pages/auth/login' })
-      } catch {
-        uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-      }
-    },
+      },
   )
 }
 
 // identity bind/unbind
 const showBindForm = ref(false)
-const bindForm = ref({ provider: 'phone' as BindableIdentityProvider, identifier: '', code: '' })
+const bindForm = ref({provider: 'phone' as BindableIdentityProvider, identifier: '', code: ''})
 const binding = ref(false)
 const bindError = ref('')
 const codeSending = ref(false)
@@ -1045,12 +1154,12 @@ const bindIdentityIdentifierLabel = computed(() => t(`settings.bindIdentity.${bi
 const bindIdentityIdentifierPlaceholder = computed(() => t(`settings.bindIdentity.${bindForm.value.provider}.identifierPlaceholder`))
 const bindSendCodeText = computed(() => {
   if (codeSending.value) return t('settings.bindIdentity.sending')
-  if (resendSeconds.value > 0) return t('settings.bindIdentity.resendCountdown', { seconds: resendSeconds.value })
+  if (resendSeconds.value > 0) return t('settings.bindIdentity.resendCountdown', {seconds: resendSeconds.value})
   return codeRequested.value ? t('settings.bindIdentity.resend') : t('settings.bindIdentity.sendCode')
 })
 
 function openBindForm(provider: BindableIdentityProvider) {
-  bindForm.value = { provider, identifier: '', code: '' }
+  bindForm.value = {provider, identifier: '', code: ''}
   bindError.value = ''
   codeRequested.value = false
   codeExpiresAt.value = ''
@@ -1076,7 +1185,10 @@ async function handleSendCode() {
   }
   codeSending.value = true
   try {
-    const result = await requestVerificationCode({ provider: bindForm.value.provider, identifier: bindForm.value.identifier.trim() })
+    const result = await requestVerificationCode({
+      provider: bindForm.value.provider,
+      identifier: bindForm.value.identifier.trim()
+    })
     if (result) {
       codeRequested.value = true
       codeExpiresAt.value = result.expiresAt
@@ -1102,10 +1214,13 @@ async function handleBindIdentity() {
   binding.value = true
   try {
     const result = await bindIdentity(bindForm.value)
-    if (!result) { bindError.value = t('settings.toasts.saveFailed'); return }
+    if (!result) {
+      bindError.value = t('settings.toasts.saveFailed');
+      return
+    }
     showBindForm.value = false
     resetBindResendCountdown()
-    uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+    uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
   } catch {
     bindError.value = t('settings.toasts.saveFailed')
   } finally {
@@ -1135,29 +1250,29 @@ function resetBindResendCountdown() {
 function isValidBindIdentifier(provider: BindableIdentityProvider, value: string) {
   const trimmed = value.trim()
   return provider === 'email'
-    ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
-    : /^\+?[1-9]\d{6,14}$/.test(trimmed.replace(/[\s-]/g, ''))
+      ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
+      : /^\+?[1-9]\d{6,14}$/.test(trimmed.replace(/[\s-]/g, ''))
 }
 
 async function handleUnbindIdentity(id: string) {
   openConfirm(
-    t('settings.unbindConfirm.title'),
-    t('settings.unbindConfirm.description'),
-    t('settings.unbindConfirm.confirm'),
-    async () => {
-      try {
-        const challengeToken = await resolveSensitiveAction('unbind_identity')
-        if (challengeToken === null) return
-        const result = await unbindIdentity(id, challengeToken)
-        if (result) {
-          uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
-        } else {
-          uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      t('settings.unbindConfirm.title'),
+      t('settings.unbindConfirm.description'),
+      t('settings.unbindConfirm.confirm'),
+      async () => {
+        try {
+          const challengeToken = await resolveSensitiveAction('unbind_identity')
+          if (challengeToken === null) return
+          const result = await unbindIdentity(id, challengeToken)
+          if (result) {
+            uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+          } else {
+            uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+          }
+        } catch {
+          uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
         }
-      } catch {
-        uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-      }
-    },
+      },
   )
 }
 
@@ -1185,7 +1300,7 @@ async function sendMfaCode(identityId: string, method: 'email' | 'phone') {
   mfaMethod.value = method
   mfaCode.value = ''
   mfaError.value = ''
-  const result = await requestMfaVerificationCode({ identityId, method })
+  const result = await requestMfaVerificationCode({identityId, method})
   mfaCodeRequested.value = Boolean(result)
   if (!result) mfaError.value = t('settings.toasts.saveFailed')
 }
@@ -1198,7 +1313,7 @@ function openMfaDisable() {
   if (mfaStatus.value?.identityId && mfaStatus.value.method) {
     mfaIdentityId.value = mfaStatus.value.identityId
     mfaMethod.value = mfaStatus.value.method
-    void requestMfaVerificationCode({ identityId: mfaStatus.value.identityId, method: mfaStatus.value.method })
+    void requestMfaVerificationCode({identityId: mfaStatus.value.identityId, method: mfaStatus.value.method})
   }
   showMfaModal.value = true
 }
@@ -1217,11 +1332,11 @@ async function handleMfaSubmit() {
   mfaSubmitting.value = true
   try {
     const result = mfaModalAction.value === 'enable'
-      ? await enableMfa({ method: mfaMethod.value, identityId: mfaIdentityId.value, code: mfaCode.value.trim() })
-      : await disableMfa({ code: mfaCode.value.trim() })
+        ? await enableMfa({method: mfaMethod.value, identityId: mfaIdentityId.value, code: mfaCode.value.trim()})
+        : await disableMfa({code: mfaCode.value.trim()})
     if (result) {
       showMfaModal.value = false
-      uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+      uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
     } else {
       mfaError.value = t('settings.toasts.saveFailed')
     }
@@ -1233,7 +1348,7 @@ async function handleMfaSubmit() {
 }
 
 function handleChangePassword() {
-  passwordForm.value = { current: '', new: '', confirm: '' }
+  passwordForm.value = {current: '', new: '', confirm: ''}
   passwordError.value = ''
   showPasswordForm.value = true
 }
@@ -1270,7 +1385,7 @@ async function confirmPasswordChange() {
       challengeToken,
     })
     if (result) {
-      uni.showToast({ title: t('settings.toasts.passwordChanged'), icon: 'success' })
+      uni.showToast({title: t('settings.toasts.passwordChanged'), icon: 'success'})
       const authStore = useAuthStore()
       authStore.logout()
       openLoginPage()
@@ -1279,8 +1394,8 @@ async function confirmPasswordChange() {
     }
   } catch (err: any) {
     passwordError.value = err?.statusCode === 400
-      ? t('settings.validation.incorrectPassword')
-      : t('settings.toasts.saveFailed')
+        ? t('settings.validation.incorrectPassword')
+        : t('settings.toasts.saveFailed')
   } finally {
     changingPassword.value = false
   }
@@ -1288,7 +1403,7 @@ async function confirmPasswordChange() {
 
 async function saveSettings() {
   if (!accountDraft.value.accountName.trim()) {
-    uni.showToast({ title: t('settings.validation.accountNameRequired'), icon: 'none' })
+    uni.showToast({title: t('settings.validation.accountNameRequired'), icon: 'none'})
     return
   }
 
@@ -1302,17 +1417,17 @@ async function saveSettings() {
   try {
     const accountOk = await saveAccount(accountPayload)
     if (!accountOk) {
-      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
       return
     }
 
-    const prefsOk = await savePreferences({ preferences: prefsPayload })
+    const prefsOk = await savePreferences({preferences: prefsPayload})
     if (!prefsOk) {
-      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
       return
     }
 
-    uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+    uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
     editing.value = false
   } finally {
     saving.value = false
@@ -1321,9 +1436,9 @@ async function saveSettings() {
 
 function toPreferencePayload(values: Record<string, string | boolean | number | string[]>): Partial<AccountPreferencesDTO> {
   return Object.fromEntries(
-    Object.entries(PREFERENCE_CODE_TO_KEY)
-      .filter(([code]) => values[code] !== undefined)
-      .map(([code, key]) => [key, values[code]]),
+      Object.entries(PREFERENCE_CODE_TO_KEY)
+          .filter(([code]) => values[code] !== undefined)
+          .map(([code, key]) => [key, values[code]]),
   ) as Partial<AccountPreferencesDTO>
 }
 </script>

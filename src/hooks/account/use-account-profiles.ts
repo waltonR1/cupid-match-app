@@ -1,17 +1,21 @@
-import { ref } from 'vue'
-import { getAccountProfiles, type AccountProfilesDTO } from '@/api/account'
-import { useLatestRequest } from '@/hooks/common/useLatestRequest'
+import {ref} from 'vue'
+import {getAccountProfiles, type AccountProfilesDTO} from '@/api/account'
+import {useLatestRequest} from '@/hooks/common/useLatestRequest'
+import {useAuthStore} from '@/stores/modules/auth'
 
 export function useAccountProfiles() {
-  const latest = useLatestRequest()
-  const payload = ref<AccountProfilesDTO | null>(null)
+    const authStore = useAuthStore()
+    const latest = useLatestRequest()
+    const payload = ref<AccountProfilesDTO | null>(null)
 
-  void load()
+    void load()
 
-  async function load() {
-    const data = await latest.run(() => getAccountProfiles())
-    if (data) payload.value = data
-  }
+    async function load() {
+        if (!authStore.isLoggedIn) return
 
-  return { loading: latest.loading, error: latest.error, payload, refresh: load }
+        const data = await latest.run(() => getAccountProfiles())
+        if (data) payload.value = data
+    }
+
+    return {loading: latest.loading, error: latest.error, payload, refresh: load}
 }

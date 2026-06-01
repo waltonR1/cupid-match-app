@@ -2,56 +2,56 @@
   <AccountShell active-page="profiles">
     <view v-if="pageData" class="grid gap-6">
       <view
-        class="inline-flex w-fit cursor-pointer items-center gap-2 text-[14px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary"
-        @click="goBack"
+          class="inline-flex w-fit cursor-pointer items-center gap-2 text-[14px] text-semantic-text-secondary transition-colors hover:text-semantic-text-primary"
+          @click="goBack"
       >
         <text>&lt;</text>
         <text>{{ t('profiles.detail.back') }}</text>
       </view>
 
       <AccountSubPageHeader
-        :label="t('profiles.title')"
-        :title="pageData.profileTitle || resolveProfileTitleText()"
-        :description="t('profiles.detail.subtitle')"
+          :description="t('profiles.detail.subtitle')"
+          :label="t('profiles.title')"
+          :title="pageData.profileTitle || resolveProfileTitleText()"
       />
 
       <view class="flex flex-wrap items-center gap-2 text-[13px] text-semantic-text-secondary">
         <view>{{ t('profiles.detail.editLocale') }}</view>
         <view
-          v-for="item in locales"
-          :key="item"
-          class="cursor-pointer border px-3 py-1.5 transition-colors"
-          :class="editLocale === item
+            v-for="item in locales"
+            :key="item"
+            :class="editLocale === item
             ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary'
             : 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary hover:text-semantic-text-primary'"
-          @click="requestEditLocaleChange(item)"
+            class="cursor-pointer border px-3 py-1.5 transition-colors"
+            @click="requestEditLocaleChange(item)"
         >
           {{ t(`profiles.detail.values.language.${item}`) }}
         </view>
       </view>
       <view
-        v-if="localeSwitchPromptOpen"
-        class="flex flex-wrap items-center justify-between gap-4 border border-semantic-border-emphasis bg-semantic-surface-card px-4 py-3 text-[14px] shadow-panel"
+          v-if="localeSwitchPromptOpen"
+          class="flex flex-wrap items-center justify-between gap-4 border border-semantic-border-emphasis bg-semantic-surface-card px-4 py-3 text-[14px] shadow-panel"
       >
         <view class="text-semantic-text-secondary">
           {{ t('profiles.detail.switchLocaleNotice') }}
         </view>
         <view class="flex flex-wrap gap-2">
           <view
-            class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-semantic-text-primary"
-            @click="saveAndSwitchLocale"
+              class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-semantic-text-primary"
+              @click="saveAndSwitchLocale"
           >
             {{ t('profiles.actions.saveBeforeSwitch') }}
           </view>
           <view
-            class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-semantic-text-secondary"
-            @click="discardAndSwitchLocale"
+              class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-semantic-text-secondary"
+              @click="discardAndSwitchLocale"
           >
             {{ t('profiles.actions.discardBeforeSwitch') }}
           </view>
           <view
-            class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-semantic-text-secondary"
-            @click="cancelLocaleSwitch"
+              class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-semantic-text-secondary"
+              @click="cancelLocaleSwitch"
           >
             {{ t('common.cancel') }}
           </view>
@@ -60,22 +60,22 @@
 
       <view class="flex flex-wrap gap-3">
         <view
-          class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px]"
-          @click="toggleEditing"
+            class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px]"
+            @click="toggleEditing"
         >
           {{ editing ? t('profiles.actions.cancelEdit') : t('profiles.actions.edit') }}
         </view>
         <view
-          v-if="editing"
-          class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px]"
-          @click="saveDraft"
+            v-if="editing"
+            class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px]"
+            @click="saveDraft"
         >
           {{ t('profiles.actions.save') }}
         </view>
         <view
-          v-if="!createMode"
-          class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px]"
-          @click="archiveProfile"
+            v-if="!createMode"
+            class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px]"
+            @click="archiveProfile"
         >
           {{ t('profiles.actions.archive') }}
         </view>
@@ -83,16 +83,16 @@
 
       <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
         <view class="flex flex-wrap items-center gap-4">
-          <image :src="pageData.avatarUrl" class="h-16 w-16 rounded-full object-cover" />
+          <image :src="pageData.avatarUrl" class="h-16 w-16 rounded-full object-cover"/>
           <view>
             <view class="text-[20px] font-semibold">{{ pageData.profileTitle || resolveProfileTitleText() }}</view>
             <view class="mt-1 text-[14px] text-semantic-text-secondary">{{ pageData.city || '-' }}</view>
           </view>
           <view class="flex flex-wrap gap-2">
             <view
-              v-for="badge in pageData.ownershipBadgeKeys"
-              :key="badge"
-              class="border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-secondary"
+                v-for="badge in pageData.ownershipBadgeKeys"
+                :key="badge"
+                class="border border-semantic-border-soft bg-semantic-surface-panel px-3 py-1.5 text-[12px] text-semantic-text-secondary"
             >
               {{ t(badge) }}
             </view>
@@ -101,9 +101,9 @@
 
         <view class="mt-6 grid border-t border-semantic-border-soft pt-5 sm:grid-cols-3">
           <view
-            v-for="entry in pageData.statusItems"
-            :key="entry.labelKey"
-            class="border-b border-semantic-border-soft py-4 sm:border-r sm:px-4 xl:border-b-0 first:sm:pl-0 last:sm:border-r-0"
+              v-for="entry in pageData.statusItems"
+              :key="entry.labelKey"
+              class="border-b border-semantic-border-soft py-4 sm:border-r sm:px-4 xl:border-b-0 first:sm:pl-0 last:sm:border-r-0"
           >
             <view class="text-[12px] text-semantic-text-card-label">{{ t(entry.labelKey) }}</view>
             <view class="mt-2 text-[14px] text-semantic-text-primary">{{ formatStatusValue(entry) }}</view>
@@ -114,36 +114,41 @@
           <view class="text-[16px] font-semibold">{{ t('profiles.detail.sections.ownership') }}</view>
           <view class="mt-4 grid gap-4 md:grid-cols-3">
             <view>
-              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.detail.fields.relationshipToProfile') }}</view>
+              <view class="text-[13px] text-semantic-text-secondary">
+                {{ t('profiles.detail.fields.relationshipToProfile') }}
+              </view>
               <view v-if="editing" class="mt-2 max-w-[280px]">
                 <view class="relative">
                   <view
-                    class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
-                    @click="toggleSelect('relationshipToProfile')"
+                      class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
+                      @click="toggleSelect('relationshipToProfile')"
                   >
                     <text>{{ selectedRelationshipLabel }}</text>
-                    <text class="text-semantic-text-muted">{{ openSelectKey === 'relationshipToProfile' ? '^' : 'v' }}</text>
+                    <text class="text-semantic-text-muted">{{
+                        openSelectKey === 'relationshipToProfile' ? '^' : 'v'
+                      }}
+                    </text>
                   </view>
                   <view
-                    v-if="openSelectKey === 'relationshipToProfile'"
-                    class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
+                      v-if="openSelectKey === 'relationshipToProfile'"
+                      class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
                   >
                     <view
-                      v-for="option in relationshipOptions"
-                      :key="option.value"
-                      class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
-                      :class="option.value === draftOwnership.relationshipToProfile
+                        v-for="option in relationshipOptions"
+                        :key="option.value"
+                        :class="option.value === draftOwnership.relationshipToProfile
                         ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
                         : 'text-semantic-text-secondary hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
-                      @click="selectRelationship(option.value)"
+                        class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
+                        @click="selectRelationship(option.value)"
                     >
                       {{ option.label }}
                     </view>
                   </view>
                 </view>
+              </view>
+              <view v-else class="mt-2 text-[15px]">{{ selectedRelationshipLabel }}</view>
             </view>
-            <view v-else class="mt-2 text-[15px]">{{ selectedRelationshipLabel }}</view>
-          </view>
           </view>
         </view>
       </view>
@@ -154,11 +159,11 @@
             <view class="text-[16px] font-semibold">{{ t('profiles.detail.sections.photos') }}</view>
             <view class="mt-5 grid gap-4">
               <view
-                v-for="photo in visiblePhotoDrafts"
-                :key="photo.clientId"
-                class="grid gap-4 border border-semantic-border-soft bg-semantic-surface-panel p-4 md:grid-cols-[120px_minmax(0,1fr)]"
+                  v-for="photo in visiblePhotoDrafts"
+                  :key="photo.clientId"
+                  class="grid gap-4 border border-semantic-border-soft bg-semantic-surface-panel p-4 md:grid-cols-[120px_minmax(0,1fr)]"
               >
-                <image :src="photo.url" class="h-[120px] w-full object-cover" />
+                <image :src="photo.url" class="h-[120px] w-full object-cover"/>
                 <view class="grid gap-3">
                   <view v-if="!editing" class="text-[14px] text-semantic-text-secondary">
                     {{ photoStatusLabel(photo.status) }}
@@ -167,22 +172,28 @@
                     <view class="text-[13px] text-semantic-text-muted">
                       {{ photoStatusLabel(photo.status) }}
                     </view>
-                    <view class="w-fit cursor-pointer border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[13px]" @click="chooseDraftPhoto(photo.clientId)">
+                    <view
+                        class="w-fit cursor-pointer border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[13px]"
+                        @click="chooseDraftPhoto(photo.clientId)">
                       {{ t('profiles.detail.choosePhoto') }}
                     </view>
                   </view>
                   <view v-if="editing" class="flex flex-wrap gap-2">
-                    <view class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-[13px]" @click="markPrimaryPhoto(photo.clientId)">
+                    <view class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-[13px]"
+                          @click="markPrimaryPhoto(photo.clientId)">
                       {{ photo.isPrimary ? t('profiles.detail.photoPrimary') : t('profiles.detail.setPrimary') }}
                     </view>
-                    <view class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-[13px]" @click="removePhotoDraft(photo.clientId)">
+                    <view class="cursor-pointer border border-semantic-border-soft px-3 py-2 text-[13px]"
+                          @click="removePhotoDraft(photo.clientId)">
                       {{ t('profiles.actions.remove') }}
                     </view>
                   </view>
                 </view>
               </view>
               <view v-if="editing" class="grid gap-3 border border-semantic-border-soft bg-semantic-surface-panel p-4">
-                <view class="w-fit cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2.5 text-[14px]" @click="addDraftPhoto">
+                <view
+                    class="w-fit cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-2.5 text-[14px]"
+                    @click="addDraftPhoto">
                   {{ t('profiles.detail.addPhoto') }}
                 </view>
               </view>
@@ -190,18 +201,18 @@
           </view>
 
           <view
-            v-for="section in pageData.profileSections"
-            :key="section.key"
-            class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel"
+              v-for="section in pageData.profileSections"
+              :key="section.key"
+              class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel"
           >
             <view class="flex items-center justify-between gap-4">
               <view class="text-[16px] font-semibold">{{ t(section.titleKey) }}</view>
             </view>
             <view class="mt-5 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
               <view
-                v-for="entry in section.items"
-                :key="entry.labelKey"
-                class="grid gap-2 py-4 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-start"
+                  v-for="entry in section.items"
+                  :key="entry.labelKey"
+                  class="grid gap-2 py-4 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-start"
               >
                 <view class="text-[13px] text-semantic-text-secondary">
                   {{ t(entry.labelKey) }}
@@ -210,9 +221,9 @@
                 <view v-if="!editing || !entry.fieldKey" class="min-h-[24px] text-[15px]">
                   <view v-if="entry.editor === 'list'" class="flex flex-wrap gap-2">
                     <view
-                      v-for="item in displayListItems(entry)"
-                      :key="item"
-                      class="border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
+                        v-for="item in displayListItems(entry)"
+                        :key="item"
+                        class="border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
                     >
                       {{ item }}
                     </view>
@@ -221,13 +232,13 @@
                 </view>
                 <view v-else-if="entry.editor === 'boolean'" class="flex flex-wrap gap-2">
                   <view
-                    v-for="option in booleanOptions"
-                    :key="String(option.value)"
-                    class="cursor-pointer border px-3 py-2 text-[14px]"
-                    :class="readBooleanDraft(entry.fieldKey) === option.value
+                      v-for="option in booleanOptions"
+                      :key="String(option.value)"
+                      :class="readBooleanDraft(entry.fieldKey) === option.value
                       ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary'
                       : 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary'"
-                    @click="writeBooleanDraft(entry.fieldKey, option.value)"
+                      class="cursor-pointer border px-3 py-2 text-[14px]"
+                      @click="writeBooleanDraft(entry.fieldKey, option.value)"
                   >
                     {{ option.label }}
                   </view>
@@ -235,37 +246,38 @@
                 <view v-else-if="entry.editor === 'enum'" class="max-w-[360px]">
                   <view class="relative">
                     <view
-                      class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
-                      @click="toggleSelect(entry.fieldKey)"
+                        class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
+                        @click="toggleSelect(entry.fieldKey)"
                     >
                       <text>{{ selectedEnumLabel(entry.fieldKey) }}</text>
                       <text class="text-semantic-text-muted">{{ openSelectKey === entry.fieldKey ? '^' : 'v' }}</text>
                     </view>
                     <view
-                      v-if="openSelectKey === entry.fieldKey"
-                      class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
+                        v-if="openSelectKey === entry.fieldKey"
+                        class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
                     >
                       <view
-                        v-for="option in enumOptions(entry.fieldKey)"
-                        :key="option.value"
-                        class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
-                        :class="option.value === readDraft(entry.fieldKey)
+                          v-for="option in enumOptions(entry.fieldKey)"
+                          :key="option.value"
+                          :class="option.value === readDraft(entry.fieldKey)
                           ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
                           : 'text-semantic-text-secondary hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
-                        @click="selectEnum(entry.fieldKey, option.value)"
+                          class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
+                          @click="selectEnum(entry.fieldKey, option.value)"
                       >
                         {{ option.label }}
                       </view>
                     </view>
                   </view>
                 </view>
-                <view v-else-if="entry.editor === 'list' && entry.fieldKey === 'relationshipValues'" class="flex flex-wrap gap-2">
+                <view v-else-if="entry.editor === 'list' && entry.fieldKey === 'relationshipValues'"
+                      class="flex flex-wrap gap-2">
                   <view
-                    v-for="option in relationshipValueOptions"
-                    :key="option.value"
-                    class="cursor-pointer rounded-full border px-3 py-1.5 text-[13px] transition-colors"
-                    :class="selectionChipClass(readListDraft(entry.fieldKey).includes(option.value))"
-                    @click="toggleListDraft(entry.fieldKey, option.value)"
+                      v-for="option in relationshipValueOptions"
+                      :key="option.value"
+                      :class="selectionChipClass(readListDraft(entry.fieldKey).includes(option.value))"
+                      class="cursor-pointer rounded-full border px-3 py-1.5 text-[13px] transition-colors"
+                      @click="toggleListDraft(entry.fieldKey, option.value)"
                   >
                     {{ option.label }}
                   </view>
@@ -273,24 +285,26 @@
                 <view v-else-if="entry.editor === 'list'" class="grid gap-3">
                   <view class="flex flex-wrap gap-2">
                     <view
-                      v-for="item in readListDraft(entry.fieldKey)"
-                      :key="item"
-                      class="flex items-center gap-2 border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
+                        v-for="item in readListDraft(entry.fieldKey)"
+                        :key="item"
+                        class="flex items-center gap-2 border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
                     >
                       <text>{{ displayTagDraft(entry.fieldKey, item) }}</text>
-                      <text class="cursor-pointer text-semantic-text-muted" @click="removeListDraft(entry.fieldKey, item)">x</text>
+                      <text class="cursor-pointer text-semantic-text-muted"
+                            @click="removeListDraft(entry.fieldKey, item)">x
+                      </text>
                     </view>
                   </view>
                   <view class="flex flex-wrap gap-2">
                     <input
-                      :value="readTagInput(entry.fieldKey)"
-                      class="box-border min-h-[40px] min-w-[220px] flex-1 border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                      :placeholder="t('profiles.detail.tagPlaceholder')"
-                      @input="writeTagInput(entry.fieldKey, getInputValue($event))"
+                        :placeholder="t('profiles.detail.tagPlaceholder')"
+                        :value="readTagInput(entry.fieldKey)"
+                        class="box-border min-h-[40px] min-w-[220px] flex-1 border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+                        @input="writeTagInput(entry.fieldKey, getInputValue($event))"
                     />
                     <view
-                      class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[14px]"
-                      @click="addListDraft(entry.fieldKey)"
+                        class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[14px]"
+                        @click="addListDraft(entry.fieldKey)"
                     >
                       {{ t('profiles.actions.add') }}
                     </view>
@@ -298,24 +312,24 @@
                 </view>
                 <view v-else-if="entry.editor === 'ageRange'" class="grid gap-3 sm:grid-cols-2">
                   <input
-                    :value="readDraft('preferredAgeMin')"
-                    type="number"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
-                    @input="writeDraft('preferredAgeMin', getInputValue($event))"
+                      :value="readDraft('preferredAgeMin')"
+                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                      type="number"
+                      @input="writeDraft('preferredAgeMin', getInputValue($event))"
                   />
                   <input
-                    :value="readDraft('preferredAgeMax')"
-                    type="number"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
-                    @input="writeDraft('preferredAgeMax', getInputValue($event))"
+                      :value="readDraft('preferredAgeMax')"
+                      class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                      type="number"
+                      @input="writeDraft('preferredAgeMax', getInputValue($event))"
                   />
                 </view>
                 <input
-                  v-else
-                  :value="readDraft(entry.fieldKey)"
-                  :type="entry.editor === 'number' ? 'number' : 'text'"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
-                  @input="writeDraft(entry.fieldKey, getInputValue($event))"
+                    v-else
+                    :type="entry.editor === 'number' ? 'number' : 'text'"
+                    :value="readDraft(entry.fieldKey)"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                    @input="writeDraft(entry.fieldKey, getInputValue($event))"
                 />
               </view>
             </view>
@@ -325,9 +339,9 @@
             <view class="text-[16px] font-semibold">{{ t(pageData.contactSection.titleKey) }}</view>
             <view class="mt-5 divide-y divide-semantic-border-soft border-y border-semantic-border-soft">
               <view
-                v-for="entry in pageData.contactSection.items"
-                :key="entry.labelKey"
-                class="grid gap-2 py-4 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-start"
+                  v-for="entry in pageData.contactSection.items"
+                  :key="entry.labelKey"
+                  class="grid gap-2 py-4 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-start"
               >
                 <view class="text-[13px] text-semantic-text-secondary">{{ t(entry.labelKey) }}</view>
                 <view v-if="!editing || !entry.fieldKey" class="min-h-[24px] text-[15px]">
@@ -336,24 +350,24 @@
                 <view v-else-if="entry.editor === 'enum'" class="max-w-[360px]">
                   <view class="relative">
                     <view
-                      class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
-                      @click="toggleSelect(entry.fieldKey)"
+                        class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
+                        @click="toggleSelect(entry.fieldKey)"
                     >
                       <text>{{ selectedEnumLabel(entry.fieldKey) }}</text>
                       <text class="text-semantic-text-muted">{{ openSelectKey === entry.fieldKey ? '^' : 'v' }}</text>
                     </view>
                     <view
-                      v-if="openSelectKey === entry.fieldKey"
-                      class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
+                        v-if="openSelectKey === entry.fieldKey"
+                        class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
                     >
                       <view
-                        v-for="option in enumOptions(entry.fieldKey)"
-                        :key="option.value"
-                        class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
-                        :class="option.value === readDraft(entry.fieldKey)
+                          v-for="option in enumOptions(entry.fieldKey)"
+                          :key="option.value"
+                          :class="option.value === readDraft(entry.fieldKey)
                           ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
                           : 'text-semantic-text-secondary hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
-                        @click="selectEnum(entry.fieldKey, option.value)"
+                          class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
+                          @click="selectEnum(entry.fieldKey, option.value)"
                       >
                         {{ option.label }}
                       </view>
@@ -361,10 +375,10 @@
                   </view>
                 </view>
                 <input
-                  v-else
-                  :value="readDraft(entry.fieldKey)"
-                  class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
-                  @input="writeDraft(entry.fieldKey, getInputValue($event))"
+                    v-else
+                    :value="readDraft(entry.fieldKey)"
+                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                    @input="writeDraft(entry.fieldKey, getInputValue($event))"
                 />
               </view>
             </view>
@@ -379,32 +393,35 @@
             </view>
             <view class="mt-4 grid gap-3">
               <view
-                v-for="item in pageData.verificationItems"
-                :key="item.key"
-                class="flex items-center justify-between gap-3 border-t border-semantic-border-soft pt-3"
+                  v-for="item in pageData.verificationItems"
+                  :key="item.key"
+                  class="flex items-center justify-between gap-3 border-t border-semantic-border-soft pt-3"
               >
                 <view class="text-[14px] text-semantic-text-secondary">{{ t(item.labelKey) }}</view>
                 <view
-                  class="cursor-pointer border px-2.5 py-1 text-[12px] transition-colors hover:bg-semantic-surface-soft"
-                  :class="verificationToneClass(item.tone)"
-                  @click="openVerificationPanel(item.key)"
+                    :class="verificationToneClass(item.tone)"
+                    class="cursor-pointer border px-2.5 py-1 text-[12px] transition-colors hover:bg-semantic-surface-soft"
+                    @click="openVerificationPanel(item.key)"
                 >
                   {{ t(item.valueKey) }}
                 </view>
               </view>
             </view>
             <view
-              v-if="verificationPanelKey"
-              class="mt-4 grid gap-3 border border-semantic-border-soft bg-semantic-surface-panel p-3"
+                v-if="verificationPanelKey"
+                class="mt-4 grid gap-3 border border-semantic-border-soft bg-semantic-surface-panel p-3"
             >
               <view class="flex items-center justify-between gap-3">
                 <view class="text-[14px] font-semibold">{{ selectedVerificationTitle }}</view>
-                <view class="cursor-pointer text-[12px] text-semantic-text-secondary" @click="verificationPanelKey = null">
+                <view class="cursor-pointer text-[12px] text-semantic-text-secondary"
+                      @click="verificationPanelKey = null">
                   {{ t('common.cancel') }}
                 </view>
               </view>
               <template v-if="verificationPanelKey === 'identity' && isIdentityVerified">
-                <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verificationPanel.verifiedIdentityHint') }}</view>
+                <view class="text-[13px] text-semantic-text-secondary">
+                  {{ t('profiles.verificationPanel.verifiedIdentityHint') }}
+                </view>
                 <view class="grid gap-2 text-[13px]">
                   <view>{{ t('profiles.verification.legalName') }}: {{ maskedIdentityName || '-' }}</view>
                   <view>{{ t('profiles.verification.dateOfBirth') }}: {{ maskedIdentityDate || '-' }}</view>
@@ -412,28 +429,42 @@
               </template>
               <template v-else-if="verificationPanelKey === 'identity'">
                 <view class="text-[13px] text-semantic-text-secondary">
-                  {{ editing ? t('profiles.verificationPanel.identityEditHint') : t('profiles.verificationPanel.identityReadOnlyHint') }}
+                  {{
+                    editing ? t('profiles.verificationPanel.identityEditHint') : t('profiles.verificationPanel.identityReadOnlyHint')
+                  }}
                 </view>
                 <view>
-                  <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verification.legalName') }}</view>
+                  <view class="text-[13px] text-semantic-text-secondary">{{
+                      t('profiles.verification.legalName')
+                    }}
+                  </view>
                   <input
-                    v-if="editing"
-                    :value="readDraft('legalName')"
-                    class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                    @input="writeDraft('legalName', getInputValue($event))"
+                      v-if="editing"
+                      :value="readDraft('legalName')"
+                      class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+                      @input="writeDraft('legalName', getInputValue($event))"
                   />
-                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{ maskedIdentityName || '-' }}</view>
+                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{
+                      maskedIdentityName || '-'
+                    }}
+                  </view>
                 </view>
                 <view>
-                  <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verification.dateOfBirth') }}</view>
+                  <view class="text-[13px] text-semantic-text-secondary">{{
+                      t('profiles.verification.dateOfBirth')
+                    }}
+                  </view>
                   <input
-                    v-if="editing"
-                    :value="readDraft('dateOfBirth')"
-                    class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                    placeholder="YYYY-MM-DD"
-                    @input="writeDraft('dateOfBirth', getInputValue($event))"
+                      v-if="editing"
+                      :value="readDraft('dateOfBirth')"
+                      class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+                      placeholder="YYYY-MM-DD"
+                      @input="writeDraft('dateOfBirth', getInputValue($event))"
                   />
-                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{ maskedIdentityDate || '-' }}</view>
+                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{
+                      maskedIdentityDate || '-'
+                    }}
+                  </view>
                 </view>
               </template>
               <template v-else>
@@ -451,20 +482,20 @@
             </view>
             <view class="mt-4 grid gap-3">
               <view
-                v-for="item in pageData.privacyPreferenceItems"
-                :key="item.key"
-                class="flex items-center justify-between gap-3 border-t border-semantic-border-soft pt-3"
+                  v-for="item in pageData.privacyPreferenceItems"
+                  :key="item.key"
+                  class="flex items-center justify-between gap-3 border-t border-semantic-border-soft pt-3"
               >
                 <view>
                   <view class="text-[14px]">{{ t(item.labelKey) }}</view>
                   <view class="mt-1 text-[12px] text-semantic-text-secondary">{{ t(item.statusKey) }}</view>
                 </view>
                 <view
-                  class="cursor-pointer border px-3 py-1.5 text-[12px]"
-                  :class="item.hidden
+                    :class="item.hidden
                     ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary'
                     : 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary'"
-                  @click="togglePrivacyPreference(item.key, !item.hidden)"
+                    class="cursor-pointer border px-3 py-1.5 text-[12px]"
+                    @click="togglePrivacyPreference(item.key, !item.hidden)"
                 >
                   {{ item.hidden ? t('profiles.privacyPreferences.hidden') : t('profiles.privacyPreferences.default') }}
                 </view>
@@ -476,32 +507,34 @@
     </view>
 
     <ConfirmDialog
-      :open="confirmOpen"
-      :title="confirmTitle"
-      :description="confirmDescription"
-      :confirm-label="confirmActionLabel"
-      :cancel-label="t('common.cancel')"
-      :destructive="true"
-      :loading="confirmLoading"
-      @confirm="handleConfirm"
-      @cancel="confirmOpen = false"
+        :cancel-label="t('common.cancel')"
+        :confirm-label="confirmActionLabel"
+        :description="confirmDescription"
+        :destructive="true"
+        :loading="confirmLoading"
+        :open="confirmOpen"
+        :title="confirmTitle"
+        @cancel="confirmOpen = false"
+        @confirm="handleConfirm"
     />
   </AccountShell>
 </template>
 
-<script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+<script lang="ts" setup>
+import {useRequireAuth} from '@/hooks/common/use-require-auth'
+import {computed, ref, watch} from 'vue'
+import {onLoad} from '@dcloudio/uni-app'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
-import { useAccountProfileDetail } from '@/hooks/account'
-import { usePageI18n } from '@/i18n/composables/use-page-i18n'
-import { openMyProfilePage } from '@/utils/navigation'
-import { formatLocalizedDateTime } from '@/utils/locale-format'
-import type { ProfileDetailPageData } from '@/mappers/account-profile-detail'
+import {useAccountProfileDetail} from '@/hooks/account'
+import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {openMyProfilePage} from '@/utils/navigation'
+import {formatLocalizedDateTime} from '@/utils/locale-format'
+import type {ProfileDetailPageData} from '@/mappers/account-profile-detail'
 
-const { t, locale, locales } = usePageI18n('accountCenter')
+useRequireAuth()
+const {t, locale, locales} = usePageI18n('accountCenter')
 const profileId = ref('')
 const createMode = ref(false)
 const editLocale = ref(locale.value)
@@ -553,13 +586,17 @@ function openConfirm(title: string, description: string, label: string, action: 
 async function handleConfirm() {
   if (!confirmAction) return
   confirmLoading.value = true
-  try { await confirmAction() }
-  finally { confirmLoading.value = false; confirmOpen.value = false }
+  try {
+    await confirmAction()
+  } finally {
+    confirmLoading.value = false;
+    confirmOpen.value = false
+  }
 }
 
 const visiblePhotoDrafts = computed(() => photoDrafts.value
-  .filter((photo) => !photo.delete)
-  .sort((a, b) => a.sortOrder - b.sortOrder))
+    .filter((photo) => !photo.delete)
+    .sort((a, b) => a.sortOrder - b.sortOrder))
 const isIdentityVerified = computed(() => payload.value?.verification.identityStatus === 'verified')
 const maskedIdentityName = computed(() => maskName(payload.value?.verification.legalName))
 const maskedIdentityDate = computed(() => maskDate(payload.value?.verification.dateOfBirth))
@@ -588,7 +625,7 @@ onLoad((query) => {
 watch(payload, (value) => {
   if (!value) return
   hydrateDraft(value)
-}, { immediate: true })
+}, {immediate: true})
 
 function hydrateDraft(value: NonNullable<typeof payload.value>) {
   draft.value = {
@@ -693,7 +730,7 @@ function formatStatusValue(entry: ProfileDetailPageData['statusItems'][number]) 
 
 function goBack() {
   if (getCurrentPages().length > 1) {
-    uni.navigateBack({ delta: 1 })
+    uni.navigateBack({delta: 1})
     return
   }
   openMyProfilePage()
@@ -791,7 +828,7 @@ async function saveDraft() {
   if (!payload.value) return false
   const validationMessage = validateProfileDraft()
   if (validationMessage) {
-    uni.showToast({ title: validationMessage, icon: 'none' })
+    uni.showToast({title: validationMessage, icon: 'none'})
     return false
   }
   const profilePayload = buildProfilePayload()
@@ -817,7 +854,7 @@ async function saveDraft() {
   if (detail && createMode.value) {
     createMode.value = false
     profileId.value = detail.profileId
-    uni.redirectTo({ url: `/pages/account/profile-detail?id=${encodeURIComponent(detail.profileId)}` })
+    uni.redirectTo({url: `/pages/account/profile-detail?id=${encodeURIComponent(detail.profileId)}`})
   }
   editing.value = false
   return true
@@ -870,12 +907,12 @@ function buildProfilePayload() {
 
 const relationshipOptions = computed(() => {
   const all: Array<{ label: string; value: typeof draftOwnership.value.relationshipToProfile }> = [
-    { label: t('profiles.relationship.father'), value: 'father' },
-    { label: t('profiles.relationship.mother'), value: 'mother' },
-    { label: t('profiles.relationship.relative'), value: 'relative' },
+    {label: t('profiles.relationship.father'), value: 'father'},
+    {label: t('profiles.relationship.mother'), value: 'mother'},
+    {label: t('profiles.relationship.relative'), value: 'relative'},
   ]
   if (!hasSelfProfile.value) {
-    all.unshift({ label: t('profiles.relationship.self'), value: 'self' })
+    all.unshift({label: t('profiles.relationship.self'), value: 'self'})
   }
   return all
 })
@@ -886,8 +923,8 @@ const selectedRelationshipLabel = computed(() => {
 
 function selectionChipClass(active: boolean) {
   return active
-    ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary'
-    : 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary hover:text-semantic-text-primary'
+      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis text-semantic-text-primary'
+      : 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary hover:text-semantic-text-primary'
 }
 
 function toggleSelect(key: string) {
@@ -931,8 +968,8 @@ function readListDraft(fieldKey: string) {
 function toggleListDraft(fieldKey: string, value: string) {
   const values = readListDraft(fieldKey)
   const nextValues = values.includes(value)
-    ? values.filter((item) => item !== value)
-    : [...values, value]
+      ? values.filter((item) => item !== value)
+      : [...values, value]
   writeDraft(fieldKey, nextValues.join(' / '))
 }
 
@@ -1000,12 +1037,12 @@ function enumOptions(fieldKey: string) {
   }[fieldKey] ?? []
 
   const keyPrefix = fieldKey === 'smoking' || fieldKey === 'drinking'
-    ? 'profiles.detail.values.habit'
-    : fieldKey === 'preferredChannel'
-      ? 'profiles.detail.values.contactChannel'
-      : fieldKey === 'contactVisibility'
-        ? 'profiles.detail.values.contactVisibility'
-        : `profiles.detail.values.${fieldKey}`
+      ? 'profiles.detail.values.habit'
+      : fieldKey === 'preferredChannel'
+          ? 'profiles.detail.values.contactChannel'
+          : fieldKey === 'contactVisibility'
+              ? 'profiles.detail.values.contactVisibility'
+              : `profiles.detail.values.${fieldKey}`
 
   return options.map((value) => ({
     label: t(`${keyPrefix}.${value}`),
@@ -1034,13 +1071,13 @@ function openVerificationPanel(key: string) {
 
 function archiveProfile() {
   openConfirm(
-    t('profiles.archiveDialog.title'),
-    t('profiles.archiveDialog.description'),
-    t('profiles.actions.archive'),
-    async () => {
-      const archived = await archive()
-      if (archived) openMyProfilePage()
-    },
+      t('profiles.archiveDialog.title'),
+      t('profiles.archiveDialog.description'),
+      t('profiles.actions.archive'),
+      async () => {
+        const archived = await archive()
+        if (archived) openMyProfilePage()
+      },
   )
 }
 
@@ -1081,7 +1118,7 @@ async function chooseAndUploadImage() {
   try {
     return await uploadProfileImage(tempPath)
   } catch {
-    uni.showToast({ title: t('profiles.detail.uploadFailed'), icon: 'none' })
+    uni.showToast({title: t('profiles.detail.uploadFailed'), icon: 'none'})
     return null
   }
 }
@@ -1109,14 +1146,14 @@ function markPrimaryPhoto(clientId: string) {
 }
 
 function writePhotoDraft(clientId: string, value: string) {
-  photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId ? { ...photo, url: value } : photo)
+  photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId ? {...photo, url: value} : photo)
 }
 
 function removePhotoDraft(clientId: string) {
   const target = photoDrafts.value.find((photo) => photo.clientId === clientId)
   if (!target) return
   if (target.id) {
-    photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId ? { ...photo, delete: true } : photo)
+    photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId ? {...photo, delete: true} : photo)
   } else {
     photoDrafts.value = photoDrafts.value.filter((photo) => photo.clientId !== clientId)
   }
