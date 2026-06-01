@@ -23,9 +23,20 @@ export function resolveAppEnvironment(): AppEnvironment {
 /** API base URL used by the frontend request adapter. */
 export function resolveApiBaseUrl() {
   const envBaseUrl = import.meta.env.VITE_API_BASE_URL
-  return typeof envBaseUrl === 'string' && envBaseUrl.trim()
-    ? envBaseUrl.trim()
-    : DEFAULT_API_BASE_URL
+  if (typeof envBaseUrl === 'string' && envBaseUrl.trim()) {
+    const baseUrl = envBaseUrl.trim()
+    if (resolveAppEnvironment() === 'production' && baseUrl.includes('api.example.com')) {
+      throw new Error('Replace VITE_API_BASE_URL before production deployment.')
+    }
+
+    return baseUrl
+  }
+
+  if (resolveAppEnvironment() === 'production') {
+    throw new Error('VITE_API_BASE_URL is required for production builds.')
+  }
+
+  return DEFAULT_API_BASE_URL
 }
 
 /** API console logging. Keep disabled by default for deployable builds. */
