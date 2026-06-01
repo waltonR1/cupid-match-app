@@ -72,6 +72,8 @@ export const accountCenterMessages: AppMessageSchema = {
   profiles: {
     title: 'My profiles',
     subtitle: 'Manage your matchmaking profiles.',
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again' },
     presentationTitle: 'Public profile',
     statusLabel: 'Profile status',
     verificationSummary: 'Verification progress',
@@ -172,6 +174,8 @@ export const accountCenterMessages: AppMessageSchema = {
   events: {
     title: 'My events',
     subtitle: 'Review the events you have registered for.',
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again' },
     attention: {
       title: 'Needs attention',
       description: 'Review pending, confirmed, or waitlisted events first.',
@@ -187,6 +191,8 @@ export const accountCenterMessages: AppMessageSchema = {
   relationship: {
     title: 'Relationship progress',
     subtitle: 'Follow the formal path from saved profiles to private introductions.',
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again' },
     tabs: { favorites: 'Favorites', introductions: 'My requests' },
     overview: { favorites: 'Saved profiles', introductions: 'Active requests' },
     stageDescription: {
@@ -292,6 +298,7 @@ export const accountCenterMessages: AppMessageSchema = {
       deactivateAccount: 'Pause account access and public exposure through a protected flow.',
     },
     deactivateConfirm: { title: 'Deactivate account?', description: 'You will be signed out and account access plus public exposure will be paused. A successful future login will automatically reactivate the account.', confirm: 'Deactivate', cancel: 'Cancel' },
+    unbindConfirm: { title: 'Unbind identity?', description: 'You will no longer receive verification code notifications through this identity. Continue?', confirm: 'Unbind', cancel: 'Cancel' },
     placeholders: { preferredCity: 'Not set' },
     passwordFields: { current: 'Current password', newPassword: 'New password', confirmNew: 'Confirm new password' },
     bindIdentity: {
@@ -340,6 +347,8 @@ export const accountCenterMessages: AppMessageSchema = {
   membership: {
     title: 'Membership',
     subtitle: 'Review your service plan, entitlements, and quotas.',
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again' },
       currentPlan: 'Current plan',
       coreQuota: 'Core quota',
       featuredDescription: 'Private introductions are the core concierge quota used to begin a formal next step.',
@@ -360,6 +369,6 @@ export const accountCenterMessages: AppMessageSchema = {
       actions: { upgrade: 'Upgrade membership', viewSystem: 'View membership system' },
   },
   introduction: { status: { requested: 'Requested', accepted: 'Accepted', declined: 'Declined', cancelled: 'Cancelled', expired: 'Expired', cooldown: 'Cooldown' } },
-  common: { open: 'Open', manage: 'Manage', edit: 'Edit', cancel: 'Cancel', yes: 'Yes', no: 'No' },
+  common: { open: 'Open', manage: 'Manage', edit: 'Edit', cancel: 'Cancel', retry: 'Retry', yes: 'Yes', no: 'No' },
   subPageHeader: { back: 'Back to account home' },
 }

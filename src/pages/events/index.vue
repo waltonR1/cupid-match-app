@@ -10,7 +10,20 @@
       @open="openEventDetail"
     />
 
-    <template v-if="pageData.scheduleEventCards.length > 0">
+    <view v-if="loading" class="mx-auto max-w-[960px] px-5 py-12 text-[13px] text-semantic-text-muted">
+      {{ t('loading') }}
+    </view>
+
+    <EmptyStatePanel
+      v-else-if="error"
+      size="page"
+      :title="t('error.title')"
+      :subtitle="t('error.description')"
+      :primary-text="t('error.retry')"
+      @primary="refresh"
+    />
+
+    <template v-else-if="pageData.scheduleEventCards.length > 0">
       <EventsFeaturedGrid
         :eyebrow="t('featured.eyebrow')"
         :title="t('featured.title')"
@@ -31,7 +44,7 @@
     </template>
 
     <view v-else class="mx-auto max-w-[960px] px-8 py-24">
-      <EmptyStatePanel :title="t('empty.title')" :description="t('empty.description')" />
+      <EmptyStatePanel :title="t('empty.title')" :subtitle="t('empty.description')" />
     </view>
   </AppPageLayout>
 </template>
@@ -47,5 +60,5 @@ import { useEventsDirectory } from '@/hooks/events'
 import { openEventDetail } from '@/utils/navigation'
 
 const { t, locale } = usePageI18n('events')
-const { pageData } = useEventsDirectory(t, locale)
+const { loading, error, pageData, refresh } = useEventsDirectory(t, locale)
 </script>

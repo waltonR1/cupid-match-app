@@ -16,6 +16,7 @@ import { agreementsMessages } from '@/i18n/messages/en/agreements'
 import { contactMessages } from '@/i18n/messages/en/contact'
 import { notFoundMessages } from '@/i18n/messages/en/not-found'
 import { messagesMessages } from '@/i18n/messages/en/messages'
+import { forgotPasswordMessages } from '@/i18n/messages/en/forgotPassword'
 
 export const en: AppMessages['en'] = {
   common: commonMessages,
@@ -35,4 +36,5 @@ export const en: AppMessages['en'] = {
   contact: contactMessages,
   notFound: notFoundMessages,
   messages: messagesMessages,
+  forgotPassword: forgotPasswordMessages,
 }

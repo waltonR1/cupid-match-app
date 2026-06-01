@@ -96,6 +96,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useDebugGuard } from '@/hooks/common/use-debug-guard'
+useDebugGuard()
 import {computed, onMounted, ref} from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import DebugPageHeader from '@/components/debug/DebugPageHeader.vue'

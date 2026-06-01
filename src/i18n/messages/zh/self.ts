@@ -16,6 +16,8 @@ export const selfMessages: AppMessageSchema = {
       sortLabel: '排序',
     },
 
+    loading: '加载中...',
+    error: { title: '加载失败', description: '请检查网络后重试', retry: '重试' },
     directory: {
       title: '会员筛选',
       resultPrefix: '当前共找到',

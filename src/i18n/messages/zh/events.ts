@@ -40,6 +40,8 @@ export const eventsMessages: AppMessageSchema = {
     title: '完整活动清单',
     note: '活动地址会根据登录与报名状态逐步开放，平台会继续控制节奏与参与门槛。',
   },
+  loading: '加载中...',
+  error: { title: '加载失败', description: '请检查网络后重试', retry: '重试' },
   empty: {
     title: '暂无开放活动',
     description: '平台正在筛选下一批线下活动，请稍后再查看。',

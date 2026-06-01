@@ -16,6 +16,8 @@ export const selfMessages: AppMessageSchema = {
       sortLabel: 'Sort',
     },
 
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again', retry: 'Retry' },
     directory: {
       title: 'Directory',
       resultPrefix: 'Current result:',

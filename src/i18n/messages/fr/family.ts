@@ -16,6 +16,8 @@ export const familyMessages: AppMessageSchema = {
       sortLabel: 'Tri',
     },
 
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez', retry: 'Reessayer' },
     directory: {
       title: 'Filtrage famille',
       resultPrefix: 'Selection actuelle :',

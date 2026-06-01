@@ -7,7 +7,20 @@
         :description="t('relationship.subtitle')"
       />
 
-      <view class="grid gap-6">
+      <view v-if="loading" class="px-5 py-8 text-[13px] text-semantic-text-muted">
+        {{ t('relationship.loading') }}
+      </view>
+
+      <EmptyStatePanel
+        v-else-if="error"
+        size="page"
+        :title="t('relationship.error.title')"
+        :subtitle="t('relationship.error.description')"
+        :primary-text="t('common.retry')"
+        @primary="refresh"
+      />
+
+      <view v-else class="grid gap-6">
         <view class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
           <view class="grid gap-4 lg:grid-cols-2">
             <view class="border-b border-semantic-border-soft pb-4 lg:border-b-0 lg:border-r lg:pr-5">
@@ -183,7 +196,7 @@ import { formatLocalizedDate } from '@/utils/locale-format'
 import { formatLocalizedAge } from '@/utils/profile-format'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { favorites, introductions, contactMap, contactLoading, refresh, revealContact } = useAccountRelationship()
+const { loading, error, favorites, introductions, contactMap, contactLoading, refresh, revealContact } = useAccountRelationship()
 const activeTab = ref<'favorites' | 'introductions'>('favorites')
 const introSplit = computed(() => splitIntroductions(introductions.value))
 

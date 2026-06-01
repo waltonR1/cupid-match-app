@@ -22,41 +22,57 @@
           @remove-filter="removeFilter"
       />
 
-      <!-- 结果统计与排序工具栏 -->
-      <ProfileResultToolbar
-          :sort="resultSort"
-          :summary="resultSummary"
-          @update:sort-key="updateSort"
-      />
+      <view v-if="loading" class="px-5 py-8 text-[13px] text-semantic-text-muted">
+        {{ t('loading') }}
+      </view>
 
-      <!-- 个人资料卡片结果列表 -->
-      <view class="mt-5">
-        <view v-if="pageData.items.length" class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          <ProfileCardFrame
-              v-for="item in pageData.items"
-              :key="item.id"
-              :data="item.card"
-              @select="openSelfDetail(item.id)"
+      <template v-else-if="error">
+        <EmptyStatePanel
+          size="page"
+          :title="t('error.title')"
+          :subtitle="t('error.description')"
+          :primary-text="t('error.retry')"
+          @primary="refresh"
+        />
+      </template>
+
+      <template v-else>
+        <!-- 结果统计与排序工具栏 -->
+        <ProfileResultToolbar
+            :sort="resultSort"
+            :summary="resultSummary"
+            @update:sort-key="updateSort"
+        />
+
+        <!-- 个人资料卡片结果列表 -->
+        <view class="mt-5">
+          <view v-if="pageData.items.length" class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            <ProfileCardFrame
+                v-for="item in pageData.items"
+                :key="item.id"
+                :data="item.card"
+                @select="openSelfDetail(item.id)"
+            />
+          </view>
+
+          <EmptyStatePanel
+              v-else
+              :primary-text="pageData.activeFilters.length > 0 ? t('filters.clear') : ''"
+              :title="t('directory.empty')"
+              @primary="resetFilters"
           />
         </view>
 
-        <EmptyStatePanel
-            v-else
-            :primary-text="pageData.activeFilters.length > 0 ? t('filters.clear') : ''"
-            :title="t('directory.empty')"
-            @primary="resetFilters"
+        <!-- 个人资料分页器 -->
+        <ProfileDirectoryPagination
+            :next-text="t('pagination.next')"
+            :page="pageData.page"
+            :page-size="pageData.pageSize"
+            :prev-text="t('pagination.prev')"
+            :total="pageData.total"
+            @change="changePage"
         />
-      </view>
-
-      <!-- 个人资料分页器 -->
-      <ProfileDirectoryPagination
-          :next-text="t('pagination.next')"
-          :page="pageData.page"
-          :page-size="pageData.pageSize"
-          :prev-text="t('pagination.prev')"
-          :total="pageData.total"
-          @change="changePage"
-      />
+      </template>
     </view>
   </AppPageLayout>
 </template>
@@ -81,6 +97,8 @@ const {t, locale} = usePageI18n('self')
 
 /** 个人资料目录状态与操作 */
 const {
+  loading,
+  error,
   pageData,
   sortKey,
   updateFilter,
@@ -88,6 +106,7 @@ const {
   resetFilters,
   updateSort,
   changePage,
+  refresh,
 } = useSelfProfileDirectory(t, locale)
 
 /** Hero 标签文案 */

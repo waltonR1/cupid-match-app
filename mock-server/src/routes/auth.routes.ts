@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 
 import { getDb } from '../db.js'
-import { login, register, requestRegistrationVerificationCode } from '../services/auth.service.js'
+import { login, register, requestPasswordResetCode, requestRegistrationVerificationCode, resetPassword } from '../services/auth.service.js'
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   app.post(`/auth/login`, async (request, reply) => {
@@ -26,6 +26,22 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   app.post(`/auth/verification-code`, async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>
     const result = requestRegistrationVerificationCode(getDb().data, body)
+    return reply.code(result.statusCode).send(result.body)
+  })
+
+  app.post(`/auth/password-reset-code`, async (request, reply) => {
+    const body = (request.body ?? {}) as Record<string, unknown>
+    const result = requestPasswordResetCode(getDb().data, body)
+    return reply.code(result.statusCode).send(result.body)
+  })
+
+  app.post(`/auth/password/reset`, async (request, reply) => {
+    const body = (request.body ?? {}) as Record<string, unknown>
+    const db = getDb()
+    const result = resetPassword(db.data, body)
+    if (result.statusCode === 200) {
+      await db.write()
+    }
     return reply.code(result.statusCode).send(result.body)
   })
 }

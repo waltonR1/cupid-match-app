@@ -474,6 +474,18 @@
         </aside>
       </view>
     </view>
+
+    <ConfirmDialog
+      :open="confirmOpen"
+      :title="confirmTitle"
+      :description="confirmDescription"
+      :confirm-label="confirmActionLabel"
+      :cancel-label="t('common.cancel')"
+      :destructive="true"
+      :loading="confirmLoading"
+      @confirm="handleConfirm"
+      @cancel="confirmOpen = false"
+    />
   </AccountShell>
 </template>
 
@@ -482,6 +494,7 @@ import { computed, ref, watch } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import { useAccountProfileDetail } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openMyProfilePage } from '@/utils/navigation'
@@ -520,6 +533,29 @@ const openSelectKey = ref<string | null>(null)
 const pendingEditLocale = ref<typeof editLocale.value | null>(null)
 const localeSwitchPromptOpen = ref(false)
 const verificationPanelKey = ref<string | null>(null)
+
+// confirm dialog
+const confirmOpen = ref(false)
+const confirmTitle = ref('')
+const confirmDescription = ref('')
+const confirmActionLabel = ref('')
+const confirmLoading = ref(false)
+let confirmAction: (() => Promise<void>) | null = null
+
+function openConfirm(title: string, description: string, label: string, action: () => Promise<void>) {
+  confirmTitle.value = title
+  confirmDescription.value = description
+  confirmActionLabel.value = label
+  confirmAction = action
+  confirmOpen.value = true
+}
+
+async function handleConfirm() {
+  if (!confirmAction) return
+  confirmLoading.value = true
+  try { await confirmAction() }
+  finally { confirmLoading.value = false; confirmOpen.value = false }
+}
 
 const visiblePhotoDrafts = computed(() => photoDrafts.value
   .filter((photo) => !photo.delete)
@@ -997,17 +1033,15 @@ function openVerificationPanel(key: string) {
 }
 
 function archiveProfile() {
-  uni.showModal({
-    title: t('profiles.archiveDialog.title'),
-    content: t('profiles.archiveDialog.description'),
-    success: ({confirm}) => {
-      if (confirm) {
-        void archive().then((archived) => {
-          if (archived) openMyProfilePage()
-        })
-      }
+  openConfirm(
+    t('profiles.archiveDialog.title'),
+    t('profiles.archiveDialog.description'),
+    t('profiles.actions.archive'),
+    async () => {
+      const archived = await archive()
+      if (archived) openMyProfilePage()
     },
-  })
+  )
 }
 
 function maskName(value?: string) {

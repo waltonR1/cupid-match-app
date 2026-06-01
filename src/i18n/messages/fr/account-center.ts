@@ -72,6 +72,8 @@ export const accountCenterMessages: AppMessageSchema = {
   profiles: {
     title: 'Mes profils',
     subtitle: 'Gerer vos profils.',
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
     presentationTitle: 'Profil public',
     statusLabel: 'Statut du profil',
     verificationSummary: 'Progression de verification',
@@ -172,6 +174,8 @@ export const accountCenterMessages: AppMessageSchema = {
   events: {
     title: 'Mes evenements',
     subtitle: 'Consultez les evenements auxquels vous etes inscrit.',
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
     attention: {
       title: 'A suivre',
       description: 'Consultez d abord les demandes en attente, confirmees ou en liste d attente.',
@@ -187,6 +191,8 @@ export const accountCenterMessages: AppMessageSchema = {
   relationship: {
     title: 'Suivi relationnel',
     subtitle: 'Suivez le parcours formel depuis les favoris jusqu aux introductions privees.',
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
     tabs: { favorites: 'Favoris', introductions: 'Mes demandes' },
     overview: { favorites: 'Profils en favoris', introductions: 'Demandes actives' },
     stageDescription: {
@@ -292,6 +298,7 @@ export const accountCenterMessages: AppMessageSchema = {
       deactivateAccount: 'Suspendre l acces au compte et l exposition publique via un parcours protege.',
     },
     deactivateConfirm: { title: 'Desactiver le compte ?', description: 'Vous serez deconnecte et l acces au compte ainsi que l exposition publique seront suspendus. Une prochaine connexion reussie reactivera automatiquement le compte.', confirm: 'Desactiver', cancel: 'Annuler' },
+    unbindConfirm: { title: 'Dissocier l identite ?', description: 'Vous ne recevrez plus de notifications de code de verification via cette identite. Continuer ?', confirm: 'Dissocier', cancel: 'Annuler' },
     placeholders: { preferredCity: 'Non defini' },
     passwordFields: { current: 'Mot de passe actuel', newPassword: 'Nouveau mot de passe', confirmNew: 'Confirmer le mot de passe' },
     bindIdentity: {
@@ -340,6 +347,8 @@ export const accountCenterMessages: AppMessageSchema = {
   membership: {
     title: 'Abonnement',
     subtitle: 'Consultez votre offre, vos avantages et vos quotas.',
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez' },
       currentPlan: 'Offre actuelle',
       coreQuota: 'Quota principal',
       featuredDescription: 'Les introductions privees constituent le quota central du service de conciergerie.',
@@ -360,6 +369,6 @@ export const accountCenterMessages: AppMessageSchema = {
       actions: { upgrade: 'Passer a cette formule', viewSystem: 'Voir le systeme d abonnement' },
   },
   introduction: { status: { requested: 'Demande', accepted: 'Accepte', declined: 'Refuse', cancelled: 'Annule', expired: 'Expire', cooldown: 'Attente' } },
-  common: { open: 'Ouvrir', manage: 'Gerer', edit: 'Modifier', cancel: 'Annuler', yes: 'Oui', no: 'Non' },
+  common: { open: 'Ouvrir', manage: 'Gerer', edit: 'Modifier', cancel: 'Annuler', retry: 'Reessayer', yes: 'Oui', no: 'Non' },
   subPageHeader: { back: 'Retour au centre du compte' },
 }

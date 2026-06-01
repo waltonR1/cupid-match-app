@@ -4,6 +4,8 @@ import type {
   AuthVerificationCodeRequestPayload,
   AuthVerificationCodeRequestResult,
   LoginPayload,
+  PasswordResetCodePayload,
+  PasswordResetPayload,
   RegisterPayload,
 } from './auth.types'
 
@@ -23,6 +25,20 @@ export function register(payload: RegisterPayload): Promise<AuthSession> {
 
 export function requestAuthVerificationCode(payload: AuthVerificationCodeRequestPayload): Promise<AuthVerificationCodeRequestResult> {
   return requestJson<AuthVerificationCodeRequestResult>('/auth/verification-code', {
+    method: 'POST',
+    data: payload,
+  })
+}
+
+export function requestPasswordResetCode(payload: PasswordResetCodePayload): Promise<AuthVerificationCodeRequestResult> {
+  return requestJson<AuthVerificationCodeRequestResult>('/auth/password-reset-code', {
+    method: 'POST',
+    data: payload,
+  })
+}
+
+export function resetPassword(payload: PasswordResetPayload): Promise<{ success: boolean }> {
+  return requestJson<{ success: boolean }>('/auth/password/reset', {
     method: 'POST',
     data: payload,
   })

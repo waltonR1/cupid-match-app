@@ -40,6 +40,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useDebugGuard } from '@/hooks/common/use-debug-guard'
+useDebugGuard()
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { openPage } from '@/utils/navigation'

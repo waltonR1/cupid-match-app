@@ -7,7 +7,20 @@
         :description="t('events.subtitle')"
       />
 
-      <view class="grid gap-4">
+      <view v-if="loading" class="px-5 py-8 text-[13px] text-semantic-text-muted">
+        {{ t('events.loading') }}
+      </view>
+
+      <EmptyStatePanel
+        v-else-if="error"
+        size="page"
+        :title="t('events.error.title')"
+        :subtitle="t('events.error.description')"
+        :primary-text="t('common.retry')"
+        @primary="refresh"
+      />
+
+      <view v-else class="grid gap-4">
         <view
           v-if="grouped.attention.length > 0"
           class="border border-semantic-border-default bg-semantic-surface-card shadow-panel"
@@ -88,7 +101,7 @@
             v-if="grouped.attention.length === 0 && grouped.history.length === 0"
             size="page"
             :title="t('events.empty.title')"
-            :description="t('events.empty.description')"
+            :subtitle="t('events.empty.description')"
           />
         </view>
 
@@ -110,7 +123,7 @@ import { formatLocalizedDate } from '@/utils/locale-format'
 import { toBadgeStatus, groupRegistrations } from '@/mappers/account-events'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { registrations, refresh } = useAccountEvents()
+const { loading, error, registrations, refresh } = useAccountEvents()
 watch(locale, () => { void refresh() })
 
 const grouped = computed(() => groupRegistrations(registrations.value))

@@ -15,7 +15,7 @@
           <EmptyStatePanel
             size="compact"
             :title="t('error.title')"
-            :description="t('error.description')"
+            :subtitle="t('error.description')"
           />
         </view>
 
@@ -64,7 +64,7 @@
               v-else-if="detailError"
               size="compact"
               :title="t('error.title')"
-              :description="t('error.description')"
+              :subtitle="t('error.description')"
             />
 
             <template v-else>
@@ -97,7 +97,7 @@
           v-else
           size="compact"
           :title="t('detailPlaceholder.title')"
-          :description="t('detailPlaceholder.description')"
+          :subtitle="t('detailPlaceholder.description')"
         />
       </view>
     </view>

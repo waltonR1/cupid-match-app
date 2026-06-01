@@ -186,6 +186,7 @@
 
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
@@ -195,7 +196,15 @@ import { useAgreementDialog } from '@/hooks/legal'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { validateAccountName, validateIdentifier, validatePassword } from '@/utils/validate'
+import { useAuthStore } from '@/stores/modules/auth'
 import { openLoginPage, redirectToRegistrationLanding } from '@/utils/navigation'
+
+const authStore = useAuthStore()
+onShow(() => {
+  if (authStore.isLoggedIn) {
+    uni.redirectTo({ url: '/pages/account/index' })
+  }
+})
 
 type OnboardingPath = 'self' | 'family'
 type AuthProvider = 'email' | 'phone'

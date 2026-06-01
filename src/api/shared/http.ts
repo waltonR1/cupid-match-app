@@ -1,4 +1,4 @@
-import {resolveApiBaseUrl, resolveApiLoggingEnabled} from '@/config/app'
+import {resolveApiBaseUrl, resolveApiLoggingEnabled, resolveAppEnvironment} from '@/config/app'
 import {useAuthStore} from '@/stores/modules/auth'
 import { useLocaleStore } from '@/stores/modules/locale'
 
@@ -62,7 +62,15 @@ export async function requestJson<T>(path: string, options: RequestOptions = {})
                     payload: response.data,
                 })
 
-                reject(createApiRequestError(`Request failed with status ${statusCode}`, statusCode, response.data))
+                const requestError = createApiRequestError(`Request failed with status ${statusCode}`, statusCode, response.data)
+
+                if (statusCode === 401 && !isAuthPage(path)) {
+                    handleSessionExpired()
+                    reject(requestError)
+                    return
+                }
+
+                reject(requestError)
             },
             fail(error) {
                 const durationMs = Date.now() - startedAt
@@ -224,19 +232,29 @@ function logApiFail(
 }
 
 function buildRequestContextHeaders(): Record<string, string> {
-    const userId = resolveRequestUserId()
+    if (resolveAppEnvironment() === 'production') {
+        const token = resolveRequestToken()
+        return token ? { Authorization: `Bearer ${token}` } : {}
+    }
 
-    return userId ? {'X-User-Id': userId} : {}
+    const userId = resolveRequestUserId()
+    return userId ? { 'X-User-Id': userId } : {}
 }
 
 function resolveRequestUserId(): string {
+    const auth = readAuthStore()
+    return auth.user?.id || ''
+}
+
+function resolveRequestToken(): string {
+    const auth = readAuthStore()
+    return auth.token || ''
+}
+
+function readAuthStore() {
     try {
         const authStore = useAuthStore()
-        const userId = authStore.user?.id
-
-        if (userId) {
-            return userId
-        }
+        if (authStore.user?.id) return { user: authStore.user, token: authStore.token }
     } catch {
         // ignore pinia not ready
     }
@@ -244,14 +262,23 @@ function resolveRequestUserId(): string {
     try {
         const persisted = uni.getStorageSync('pinia:auth')
         const state = typeof persisted === 'string' ? JSON.parse(persisted) : persisted
-        const userId = state?.user?.id
-
-        if (typeof userId === 'string') {
-            return userId
-        }
+        return { user: state?.user || null, token: state?.token || '' }
     } catch {
-        // ignore invalid auth cache
+        return { user: null, token: '' }
     }
+}
 
-    return ''
+function isAuthPage(path: string): boolean {
+    return path.startsWith('/auth/')
+}
+
+function handleSessionExpired() {
+    try {
+        const authStore = useAuthStore()
+        authStore.logout()
+    } catch {
+        // ignore
+    }
+    uni.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
+    uni.redirectTo({ url: '/pages/auth/login' })
 }

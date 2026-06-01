@@ -7,7 +7,20 @@
         :description="t('membership.subtitle')"
       />
 
-      <view class="grid gap-6 xl:grid-cols-2">
+      <view v-if="loading" class="px-5 py-8 text-[13px] text-semantic-text-muted">
+        {{ t('membership.loading') }}
+      </view>
+
+      <EmptyStatePanel
+        v-else-if="error"
+        size="page"
+        :title="t('membership.error.title')"
+        :subtitle="t('membership.error.description')"
+        :primary-text="t('common.retry')"
+        @primary="refresh"
+      />
+
+      <view v-else class="grid gap-6 xl:grid-cols-2">
         <view
           v-if="membership"
           class="px-7 py-7"
@@ -131,6 +144,7 @@
 import { computed, watch } from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
+import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountMembership } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { openPage } from '@/utils/navigation'
@@ -138,7 +152,7 @@ import { formatLocalizedDate } from '@/utils/locale-format'
 import { findNextPlan } from '@/mappers/account-membership'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { membership, entitlements, availablePlans, refresh, requestUpgrade } = useAccountMembership()
+const { loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade } = useAccountMembership()
 watch(locale, () => { void refresh() })
 
 const featuredEntitlement = computed(() => entitlements.value.find((item) => item.code === 'private_introduction'))

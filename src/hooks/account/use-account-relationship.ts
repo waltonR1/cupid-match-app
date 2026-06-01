@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import {
   getAccountFavorites,
   getAccountIntroductions,
@@ -41,5 +41,14 @@ export function useAccountRelationship() {
     }
   }
 
-  return { favorites, introductions, contactMap, contactLoading, refresh: load, revealContact }
+  return {
+    loading: computed(() => fav.loading.value || intro.loading.value),
+    error: computed(() => fav.error.value || intro.error.value),
+    favorites,
+    introductions,
+    contactMap,
+    contactLoading,
+    refresh: load,
+    revealContact,
+  }
 }

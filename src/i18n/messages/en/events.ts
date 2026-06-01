@@ -40,6 +40,8 @@ export const eventsMessages: AppMessageSchema = {
     title: 'Complete event calendar',
     note: 'Exact addresses open according to login and registration status while the platform keeps participation paced.',
   },
+  loading: 'Loading...',
+  error: { title: 'Failed to load', description: 'Check your connection and try again', retry: 'Retry' },
   empty: {
     title: 'No open events',
     description: 'The platform is curating the next offline events. Please check back later.',

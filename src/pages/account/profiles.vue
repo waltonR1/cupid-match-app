@@ -7,7 +7,20 @@
           :title="t('profiles.title')"
       />
 
-      <view v-if="payload" class="grid gap-6">
+      <view v-if="loading" class="px-5 py-8 text-[13px] text-semantic-text-muted">
+        {{ t('profiles.loading') }}
+      </view>
+
+      <EmptyStatePanel
+          v-else-if="error"
+          :primary-text="t('common.retry')"
+          :subtitle="t('profiles.error.description')"
+          :title="t('profiles.error.title')"
+          size="page"
+          @primary="refresh"
+      />
+
+      <view v-else-if="payload" class="grid gap-6">
         <view class="border border-semantic-border-default bg-semantic-surface-card shadow-panel">
           <view
               v-for="profile in payload.profiles"
@@ -67,7 +80,7 @@
 
       <EmptyStatePanel
           v-else-if="!loading"
-          :description="t('profiles.empty.description')"
+          :subtitle="t('profiles.empty.description')"
           :title="t('profiles.empty.title')"
           size="page"
       />
@@ -106,7 +119,7 @@ import type { AccountProfileVerificationDTO, ManagedProfileSummaryDTO } from '@/
 import { computeVerificationRatio, resolveVerificationDescriptionKey } from '@/mappers/account-profiles'
 
 const { t, locale } = usePageI18n('accountCenter')
-const { loading, payload, refresh } = useAccountProfiles()
+const { loading, error, payload, refresh } = useAccountProfiles()
 watch(locale, () => { void refresh() })
 onShow(() => { void refresh() })
 

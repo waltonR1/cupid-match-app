@@ -16,6 +16,8 @@ export const selfMessages: AppMessageSchema = {
       sortLabel: 'Tri',
     },
 
+    loading: 'Chargement...',
+    error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez', retry: 'Reessayer' },
     directory: {
       title: 'Repertoire',
       resultPrefix: 'Resultat actuel :',

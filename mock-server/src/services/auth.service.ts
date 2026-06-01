@@ -269,6 +269,94 @@ function isValidPassword(value: string): boolean {
   return value.length >= PASSWORD_MIN && /[a-zA-Z]/.test(value) && /[0-9]/.test(value)
 }
 
+export function requestPasswordResetCode(data: Database, body: Record<string, unknown>) {
+  const provider = getString(body.provider)
+  const identifier = getString(body.identifier).trim()
+
+  if (!isRegisterProvider(provider) || !identifier) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid verification request' },
+    } as const
+  }
+
+  if (!isValidIdentifierForProvider(provider, identifier)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid identifier format' },
+    } as const
+  }
+
+  const identity = data.auth_identities.find(
+    (item) => item.provider === provider && item.identifier === identifier,
+  )
+  if (!identity) {
+    return {
+      statusCode: 404,
+      body: { error: 'Identity not found' },
+    } as const
+  }
+
+  const result = generateCode(provider, identifier)
+  if (result === 'invalid_provider' || result === 'invalid_identifier') {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid verification request' },
+    } as const
+  }
+
+  return {
+    statusCode: 200,
+    body: result,
+  } as const
+}
+
+export function resetPassword(data: Database, body: Record<string, unknown>) {
+  const provider = getString(body.provider)
+  const identifier = getString(body.identifier).trim()
+  const code = getString(body.code)
+  const newPassword = getString(body.newPassword)
+
+  if (!isRegisterProvider(provider) || !identifier || !code || !newPassword) {
+    return {
+      statusCode: 400,
+      body: { error: 'Missing required fields' },
+    } as const
+  }
+
+  if (!isValidPassword(newPassword)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Password must be at least 8 characters with letters and digits' },
+    } as const
+  }
+
+  const identity = data.auth_identities.find(
+    (item) => item.provider === provider && item.identifier === identifier,
+  )
+  if (!identity) {
+    return {
+      statusCode: 404,
+      body: { error: 'Identity not found' },
+    } as const
+  }
+
+  if (!verifyAndConsume(provider, identifier, code)) {
+    return {
+      statusCode: 400,
+      body: { error: 'Invalid or expired verification code' },
+    } as const
+  }
+
+  identity.passwordHash = mockHashPassword(newPassword)
+  identity.updatedAt = new Date().toISOString()
+
+  return {
+    statusCode: 200,
+    body: { success: true },
+  } as const
+}
+
 function isPreferredLocale(value: string): value is PreferredLocale {
   return value === 'zh' || value === 'fr' || value === 'en'
 }

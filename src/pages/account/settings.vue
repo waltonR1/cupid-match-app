@@ -650,6 +650,18 @@
       :open="agreementDialogOpen"
       @close="closeAgreementDialog"
   />
+
+  <ConfirmDialog
+    :open="confirmOpen"
+    :title="confirmTitle"
+    :description="confirmDescription"
+    :confirm-label="confirmActionLabel"
+    :cancel-label="t('common.cancel')"
+    :destructive="true"
+    :loading="confirmLoading"
+    @confirm="handleConfirm"
+    @cancel="confirmOpen = false"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -659,6 +671,7 @@ import type { AccountPreferencesDTO, AccountSecurityChallengeAction } from '@/ap
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import { useAccountSettings } from '@/hooks/account'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
@@ -676,6 +689,30 @@ const { loading, error, settings, refresh, saveAccount, savePreferences, uploadA
 watch(locale, () => { if (!editing.value) { void refresh() } })
 const editing = ref(false)
 const saving = ref(false)
+
+// confirm dialog
+const confirmOpen = ref(false)
+const confirmTitle = ref('')
+const confirmDescription = ref('')
+const confirmActionLabel = ref('')
+const confirmLoading = ref(false)
+let confirmAction: (() => Promise<void>) | null = null
+
+function openConfirm(title: string, description: string, label: string, action: () => Promise<void>) {
+  confirmTitle.value = title
+  confirmDescription.value = description
+  confirmActionLabel.value = label
+  confirmAction = action
+  confirmOpen.value = true
+}
+
+async function handleConfirm() {
+  if (!confirmAction) return
+  confirmLoading.value = true
+  try { await confirmAction() }
+  finally { confirmLoading.value = false; confirmOpen.value = false }
+}
+
 const accountDraft = ref<{ accountName: string; avatarUrl: string; preferredLocale: 'zh' | 'en' | 'fr' }>({ accountName: '', avatarUrl: '', preferredLocale: 'zh' })
 const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="58" text-anchor="middle" fill="%239ca3af" font-size="40">?</text></svg>'
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
@@ -963,36 +1000,27 @@ async function handleExportData() {
 }
 
 async function handleDeactivateAccount() {
-  const confirmed = await confirmDeactivateAccount()
-  if (!confirmed) return
-
-  try {
-    const challengeToken = await resolveSensitiveAction('deactivate_account')
-    if (challengeToken === null) return
-    const result = await deactivateAccount(challengeToken)
-    if (!result) {
-      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-      return
-    }
-    const authStore = useAuthStore()
-    authStore.logout()
-    uni.redirectTo({ url: '/pages/auth/login' })
-  } catch {
-    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-  }
-}
-
-function confirmDeactivateAccount() {
-  return new Promise<boolean>((resolve) => {
-    uni.showModal({
-      title: t('settings.deactivateConfirm.title'),
-      content: t('settings.deactivateConfirm.description'),
-      confirmText: t('settings.deactivateConfirm.confirm'),
-      cancelText: t('settings.deactivateConfirm.cancel'),
-      success: (result) => resolve(result.confirm),
-      fail: () => resolve(false),
-    })
-  })
+  openConfirm(
+    t('settings.deactivateConfirm.title'),
+    t('settings.deactivateConfirm.description'),
+    t('settings.deactivateConfirm.confirm'),
+    async () => {
+      try {
+        const challengeToken = await resolveSensitiveAction('deactivate_account')
+        if (challengeToken === null) return
+        const result = await deactivateAccount(challengeToken)
+        if (!result) {
+          uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+          return
+        }
+        const authStore = useAuthStore()
+        authStore.logout()
+        uni.redirectTo({ url: '/pages/auth/login' })
+      } catch {
+        uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      }
+    },
+  )
 }
 
 // identity bind/unbind
@@ -1112,18 +1140,25 @@ function isValidBindIdentifier(provider: BindableIdentityProvider, value: string
 }
 
 async function handleUnbindIdentity(id: string) {
-  try {
-    const challengeToken = await resolveSensitiveAction('unbind_identity')
-    if (challengeToken === null) return
-    const result = await unbindIdentity(id, challengeToken)
-    if (result) {
-      uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
-    } else {
-      uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-    }
-  } catch {
-    uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
-  }
+  openConfirm(
+    t('settings.unbindConfirm.title'),
+    t('settings.unbindConfirm.description'),
+    t('settings.unbindConfirm.confirm'),
+    async () => {
+      try {
+        const challengeToken = await resolveSensitiveAction('unbind_identity')
+        if (challengeToken === null) return
+        const result = await unbindIdentity(id, challengeToken)
+        if (result) {
+          uni.showToast({ title: t('settings.toasts.saved'), icon: 'success' })
+        } else {
+          uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+        }
+      } catch {
+        uni.showToast({ title: t('settings.toasts.saveFailed'), icon: 'none' })
+      }
+    },
+  )
 }
 
 // MFA

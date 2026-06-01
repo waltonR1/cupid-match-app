@@ -47,3 +47,15 @@ export interface AuthSession {
   user: AuthUser
   membership: AuthMembership | null
 }
+
+export interface PasswordResetCodePayload {
+  provider: AuthProvider
+  identifier: string
+}
+
+export interface PasswordResetPayload {
+  provider: AuthProvider
+  identifier: string
+  code: string
+  newPassword: string
+}

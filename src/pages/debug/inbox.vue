@@ -57,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebugGuard } from '@/hooks/common/use-debug-guard'
 import { ref } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'

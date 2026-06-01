@@ -145,6 +145,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AppButton from '@/components/common/AppButton.vue'
@@ -156,6 +157,13 @@ import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import { validateIdentifier, validatePassword } from '@/utils/validate'
 import { useAuthStore } from '@/stores/modules/auth'
 import { openRegisterPage, redirectToAuthLanding } from '@/utils/navigation'
+
+const authStore = useAuthStore()
+onShow(() => {
+  if (authStore.isLoggedIn) {
+    uni.redirectTo({ url: '/pages/account/index' })
+  }
+})
 
 const { t } = usePageI18n('login')
 const { t: tApp } = useAppI18n()
@@ -256,6 +264,6 @@ function toggleAgreement() {
 }
 
 function handleForgotPassword() {
-  uni.showToast({ title: '功能开发中', icon: 'none' })
+  uni.navigateTo({ url: '/pages/auth/forgot-password' })
 }
 </script>

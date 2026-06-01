@@ -3759,6 +3759,16 @@
       "passwordHash": "mock-sha256:cGFzc3dvcmQxMjM=",
       "verifiedAt": "2026-01-18T00:00:00.000Z",
       "updatedAt": "2026-01-18"
+    },
+    {
+      "id": "auth-002",
+      "userId": "u-001",
+      "provider": "phone",
+      "identifier": "13333333333",
+      "passwordHash": "mock-sha256:cGFzc3dvcmQxMjM=",
+      "verifiedAt": "2026-06-01T12:16:53.381Z",
+      "createdAt": "2026-06-01T12:16:53.381Z",
+      "updatedAt": "2026-06-01T12:16:53.381Z"
     }
   ],
   "profile_ownerships": [
@@ -6154,11 +6164,11 @@
       "userId": "u-001",
       "mfaEnabled": true,
       "createdAt": "2026-05-31T14:39:34.763Z",
-      "updatedAt": "2026-05-31T14:41:05.499Z",
+      "updatedAt": "2026-06-01T12:50:47.764Z",
       "mfaMethod": "email",
       "mfaIdentityId": "auth-001",
       "mfaEnabledAt": "2026-05-31T14:39:34.763Z",
-      "lastChallengeAt": "2026-05-31T14:41:05.499Z"
+      "lastChallengeAt": "2026-06-01T12:50:47.764Z"
     }
   ],
   "user_security_challenges": [
@@ -6197,6 +6207,17 @@
       "expiresAt": "2026-05-31T14:46:05.499Z",
       "createdAt": "2026-05-31T14:41:05.499Z",
       "updatedAt": "2026-05-31T14:41:05.499Z"
+    },
+    {
+      "id": "security-challenge-004",
+      "userId": "u-001",
+      "action": "export_data",
+      "method": "email",
+      "identityId": "auth-001",
+      "status": "pending",
+      "expiresAt": "2026-06-01T12:55:47.764Z",
+      "createdAt": "2026-06-01T12:50:47.764Z",
+      "updatedAt": "2026-06-01T12:50:47.764Z"
     }
   ]
 }

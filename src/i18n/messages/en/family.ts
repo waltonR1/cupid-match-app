@@ -16,6 +16,8 @@ export const familyMessages: AppMessageSchema = {
       sortLabel: 'Sort',
     },
 
+    loading: 'Loading...',
+    error: { title: 'Failed to load', description: 'Check your connection and try again', retry: 'Retry' },
     directory: {
       title: 'Family screening',
       resultPrefix: 'Current shortlist:',

@@ -43,6 +43,13 @@
       }
     },
     {
+      "path": "pages/auth/forgot-password",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "重置密码"
+      }
+    },
+    {
       "path": "pages/profiles/self/index",
       "style": {
         "navigationStyle": "custom",

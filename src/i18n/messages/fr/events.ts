@@ -40,6 +40,8 @@ export const eventsMessages: AppMessageSchema = {
     title: 'Calendrier complet',
     note: 'Les adresses exactes sont ouvertes selon la connexion et la confirmation, avec un rythme controle par la plateforme.',
   },
+  loading: 'Chargement...',
+  error: { title: 'Echec du chargement', description: 'Verifiez votre connexion et reessayez', retry: 'Reessayer' },
   empty: {
     title: 'Aucun evenement ouvert',
     description: 'La plateforme prepare les prochains evenements hors ligne. Merci de revenir plus tard.',

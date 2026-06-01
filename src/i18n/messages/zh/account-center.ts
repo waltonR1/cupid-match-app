@@ -62,6 +62,8 @@ export const accountCenterMessages: AppMessageSchema = {
   profiles: {
     title: '我的资料',
     subtitle: '管理你创建或代管的相亲资料。',
+    loading: '加载中...',
+    error: { title: '加载失败', description: '请检查网络后重试' },
     presentationTitle: '对外资料',
     statusLabel: '资料状态',
     verificationSummary: '认证进度',
@@ -196,6 +198,8 @@ export const accountCenterMessages: AppMessageSchema = {
   events: {
     title: '我的活动',
     subtitle: '查看你已报名的活动记录。',
+    loading: '加载中...',
+    error: { title: '加载失败', description: '请检查网络后重试' },
     attention: {
       title: '需要关注',
       description: '优先查看待确认、已确认或候补中的活动。',
@@ -218,6 +222,8 @@ export const accountCenterMessages: AppMessageSchema = {
   relationship: {
     title: '关系进展',
     subtitle: '从收藏到私人介绍，查看关系推进的正式阶段。',
+    loading: '加载中...',
+    error: { title: '加载失败', description: '请检查网络后重试' },
     tabs: { favorites: '收藏', introductions: '我的申请' },
     overview: { favorites: '已收藏', introductions: '进行中的申请' },
     stageDescription: {
@@ -312,6 +318,7 @@ export const accountCenterMessages: AppMessageSchema = {
       deactivateAccount: '通过受控流程暂停账户访问与对外曝光。',
     },
     deactivateConfirm: { title: '确认停用账户', description: '停用后你将退出登录，账户访问与对外曝光会暂停。再次成功登录将自动重新启用账户。', confirm: '确认停用', cancel: '取消' },
+    unbindConfirm: { title: '确认解绑身份', description: '解绑后你将无法通过该身份接收验证码通知，确认继续吗？', confirm: '确认解绑', cancel: '取消' },
     placeholders: { preferredCity: '未设置' },
     passwordFields: { current: '当前密码', newPassword: '新密码', confirmNew: '确认新密码' },
     bindIdentity: {
@@ -358,6 +365,8 @@ export const accountCenterMessages: AppMessageSchema = {
   membership: {
     title: '会员',
     subtitle: '查看你的会员服务、权益和额度。',
+    loading: '加载中...',
+    error: { title: '加载失败', description: '请检查网络后重试' },
       currentPlan: '当前套餐',
       coreQuota: '核心额度',
       featuredDescription: '私人介绍是平台最核心的撮合服务额度，用于发起正式的进一步认识。',
@@ -391,7 +400,7 @@ export const accountCenterMessages: AppMessageSchema = {
       },
       actions: { upgrade: '升级会员', viewSystem: '查看会员体系' },
   },
-  common: { open: '查看', manage: '管理', edit: '编辑', cancel: '取消', yes: '是', no: '否' },
+  common: { open: '查看', manage: '管理', edit: '编辑', cancel: '取消', retry: '重试', yes: '是', no: '否' },
   subPageHeader: { back: '返回账户首页' },
   introduction: {
     status: {
