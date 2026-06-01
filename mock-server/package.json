@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts"
+    "start": "tsx src/server.ts",
+    "start:render": "tsx src/server.ts --render"
   },
   "dependencies": {
     "fastify": "4.0.0",

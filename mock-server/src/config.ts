@@ -16,9 +16,13 @@ const rootDir = process.env.MOCK_DATA_DIR
 const DEFAULT = {
     apiPrefix: '/api',
     host: '127.0.0.1',
+    renderHost: '0.0.0.0',
     port: 52173,
     enableRequestLogging: true,
+    renderRequestLogging: false,
 } as const
+
+const isRenderTarget = process.env.MOCK_SERVER_TARGET === 'render' || process.argv.includes('--render')
 
 /** 解析端口 */
 function parsePort(value?: string) {
@@ -31,9 +35,12 @@ function parsePort(value?: string) {
 /** 服务配置 */
 export const config = {
     apiPrefix: DEFAULT.apiPrefix,
-    host: process.env.HOST || DEFAULT.host,
+    host: process.env.HOST || (isRenderTarget ? DEFAULT.renderHost : DEFAULT.host),
     port: parsePort(process.env.PORT),
-    enableRequestLogging: parseEnvBoolean(process.env.ENABLE_REQUEST_LOGGING, DEFAULT.enableRequestLogging),
+    enableRequestLogging: parseEnvBoolean(
+        process.env.ENABLE_REQUEST_LOGGING,
+        isRenderTarget ? DEFAULT.renderRequestLogging : DEFAULT.enableRequestLogging,
+    ),
     dbPath: path.join(rootDir, 'db.json'),
     uploadsDir: path.join(rootDir, 'uploads'),
 }
