@@ -352,13 +352,11 @@ export const accountCenterMessages: AppMessageSchema = {
       currentPlan: 'Offre actuelle',
       coreQuota: 'Quota principal',
       featuredDescription: 'Les introductions privees constituent le quota central du service de conciergerie.',
-      enabledServices: 'Services actives',
     startedAt: 'Debut',
     expiresAt: 'Expiration',
     conciergePriority: 'Priorite concierge',
       status: { active: 'Actif', expired: 'Expire', cancelled: 'Annule', paused: 'En pause' },
       entitlement: { private_introduction: 'Introductions privees', event_priority: 'Priorite evenement', staff_review: 'Revue conseiller', profile_detail_access: 'Acces detail profil' },
-      entitlementState: { event_priority: 'Active', staff_review: 'Inclus', profile_detail_access: 'Debloque' },
       tierPositioning: {
         free: 'Pour decouvrir la plateforme et les services essentiels.',
         silver: 'Pour engager des introductions formelles plus regulieres.',

@@ -370,7 +370,6 @@ export const accountCenterMessages: AppMessageSchema = {
       currentPlan: '当前套餐',
       coreQuota: '核心额度',
       featuredDescription: '私人介绍是平台最核心的撮合服务额度，用于发起正式的进一步认识。',
-      enabledServices: '已启用服务',
     startedAt: '开始时间',
     expiresAt: '到期时间',
     conciergePriority: '顾问优先级',
@@ -380,11 +379,6 @@ export const accountCenterMessages: AppMessageSchema = {
         event_priority: '活动优先报名',
         staff_review: '顾问审核',
         profile_detail_access: '资料详情查看',
-      },
-      entitlementState: {
-        event_priority: '已开通',
-        staff_review: '已包含',
-        profile_detail_access: '已解锁',
       },
       tierPositioning: {
         free: '适合先了解平台与基础服务。',

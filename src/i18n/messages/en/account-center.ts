@@ -352,13 +352,11 @@ export const accountCenterMessages: AppMessageSchema = {
       currentPlan: 'Current plan',
       coreQuota: 'Core quota',
       featuredDescription: 'Private introductions are the core concierge quota used to begin a formal next step.',
-      enabledServices: 'Enabled services',
     startedAt: 'Started at',
     expiresAt: 'Expires at',
     conciergePriority: 'Concierge priority',
       status: { active: 'Active', expired: 'Expired', cancelled: 'Cancelled', paused: 'Paused' },
       entitlement: { private_introduction: 'Private introductions', event_priority: 'Event priority', staff_review: 'Advisor review', profile_detail_access: 'Profile detail access' },
-      entitlementState: { event_priority: 'Enabled', staff_review: 'Included', profile_detail_access: 'Unlocked' },
       tierPositioning: {
         free: 'Best for exploring the platform and core services.',
         silver: 'Built for starting steadier formal introductions.',

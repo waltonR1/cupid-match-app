@@ -101,27 +101,6 @@
           </view>
         </view>
 
-        <view
-            class="border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel xl:col-span-2">
-          <view class="text-[16px] font-semibold">{{ t('membership.enabledServices') }}</view>
-          <view class="mt-4 grid gap-3 md:grid-cols-3">
-            <view
-                v-for="item in secondaryEntitlements"
-                :key="item.code"
-                class="border border-semantic-border-soft bg-semantic-surface-panel px-4 py-4"
-            >
-              <view class="text-[13px] text-semantic-text-secondary">{{
-                  t(`membership.entitlement.${item.code}`)
-                }}
-              </view>
-              <view class="mt-3 text-[18px] font-semibold">
-                {{
-                  item.quotaTotal > 0 ? `${item.quotaRemaining} / ${item.quotaTotal}` : t(`membership.entitlementState.${item.code}`)
-                }}
-              </view>
-            </view>
-          </view>
-        </view>
       </view>
 
       <view class="mt-6 border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
@@ -174,7 +153,6 @@ watch(locale, () => {
 })
 
 const featuredEntitlement = computed(() => entitlements.value.find((item) => item.code === 'private_introduction'))
-const secondaryEntitlements = computed(() => entitlements.value.filter((item) => item.code !== 'private_introduction'))
 const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
 
 function openMembershipSystemPage() {
