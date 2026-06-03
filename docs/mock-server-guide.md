@@ -66,7 +66,7 @@ npm run mock:build
 
 ## 前端连接方式
 
-前端默认 API 基地址位于 [app.ts](/D:/uniapp/cupid-match/src/config/app.ts)：
+前端默认 API 基地址位于 [app.ts](../src/config/app.ts)：
 
 - 默认值：`http://127.0.0.1:52173/api`
 - 可通过 `VITE_API_BASE_URL` 覆盖

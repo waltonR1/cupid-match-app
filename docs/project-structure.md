@@ -20,7 +20,7 @@ hook -> mapper
 ## 根目录
 
 ```text
-cupid-match/
+cupid-match-app/
   docs/
   mock-server/
   scripts/

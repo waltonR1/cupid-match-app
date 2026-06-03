@@ -1,6 +1,6 @@
 # Contributing
 
-本文档说明 `cupid-match` 仓库的协作约定、开发顺序和交付检查项。
+本文档说明 `cupid-match-app` 仓库的协作约定、开发顺序和交付检查项。
 
 ## 先读哪些文档
 

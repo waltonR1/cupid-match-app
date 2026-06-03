@@ -1,4 +1,4 @@
-# cupid-match
+# cupid-match-app
 
 一个面向长期关系与真实相亲流程的婚恋平台前台原型。
 

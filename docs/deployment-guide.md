@@ -25,7 +25,7 @@
 
 ## 前端配置
 
-统一入口：[src/config/app.ts](/D:/uniapp/cupid-match/src/config/app.ts)
+统一入口：[src/config/app.ts](../src/config/app.ts)
 
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
