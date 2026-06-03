@@ -99,7 +99,7 @@ export type PrivateIntroductionStatus =
     | 'requested'
     | 'accepted'
     | 'declined'
-    | 'cooldown'
+    | 'cancelled'
 
 /** 私人介绍请求记录 */
 export interface PrivateIntroductionRequestRecord {
@@ -300,11 +300,13 @@ export interface StaffTaskRecord {
 }
 
 /** Inbox 线程 */
+export type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
+
 export interface InboxThreadRecord {
     id: string
     userId: string
     category: 'system' | 'chat'
-    subjectType?: string
+    subjectType?: InboxSubjectType
     subjectId?: string
     status: 'open' | 'closed' | 'archived'
     createdAt: string

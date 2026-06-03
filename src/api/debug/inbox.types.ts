@@ -1,7 +1,9 @@
+import type { InboxSubjectType } from '@/api/messages'
+
 export interface InboxDebugThread {
   id: string
   userId: string
-  subjectType?: string
+  subjectType?: InboxSubjectType
   subjectId?: string
   status: string
   messageCount: number

@@ -1,6 +1,6 @@
 import type {LocalizedText} from './common.js'
 import type {ProfileRestrictedFieldValue} from '../constants/profile-access.js'
-import type {MembershipLevel, PrivateIntroductionStatus} from './database.js'
+import type {MembershipLevel} from './database.js'
 
 export type ProfileStatus = 'draft' | 'review' | 'open' | 'paused' | 'hidden'
 
@@ -188,7 +188,16 @@ export interface LocalizedProfilePhotoDTO {
 
 /** 私人介绍状态 */
 export interface PrivateIntroductionDTO {
-    status: PrivateIntroductionStatus | 'available' | 'login_required' | 'membership_required' | 'quota_exhausted' | 'expired'
+    status:
+        | 'available'
+        | 'login_required'
+        | 'membership_required'
+        | 'quota_exhausted'
+        | 'requested'
+        | 'accepted'
+        | 'declined'
+        | 'expired'
+        | 'cooldown'
     membership: MembershipLevel | 'guest'
     quotaTotal: number
     quotaRemaining: number

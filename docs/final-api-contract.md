@@ -15,7 +15,7 @@
 - DTO 可以包含派生字段，例如 `displayName`、`avatarUrl`、`age`、`memberOnly`、`registeredCount`。
 - DTO 不返回数据库 Record。
 - DTO 不返回 profile 联系方式值；联系方式只允许通过 private introduction / inbox flow 的独立接口开放。
-- `X-User-Id` 只作为 mock request context；正式鉴权 token 策略后续单独定义。
+- `X-User-Id` 只作为 development / staging 的 mock request context；production 前端使用 `Authorization: Bearer <token>`。RuoYi 后端应在登录 / 注册返回可校验 JWT 或同等 Bearer token。
 - 所有列表接口统一返回 `items + pagination + facets?`。
 - 所有写操作返回变更后的领域状态 DTO，不要求前端自行拼状态。
 ## Common Types
@@ -191,7 +191,7 @@ interface AuthUserDTO {
 - 注册页不展示 `preferredLocale` 手动选择器；前端用当前页面 locale 自动填充 `RegisterPayload.preferredLocale`。
 - 登录和注册都返回 `AuthUserDTO.preferredLocale`；前端登录成功后用它同步 locale store。
 - 当前注册只开放 `email`、`phone`；`wechat`、`google` 是最终 `auth_identities` 预留 provider。
-- `token` 当前可以作为 mock 占位；正式 Authorization 行为后续单独定义。
+- `AuthSessionDTO.token` 是前端持久化并在 production 请求中作为 `Authorization: Bearer <token>` 发送的登录凭证。mock 可继续返回 `mock-token-*`，RuoYi 后端应返回 JWT 或同等可校验 token。
 ### Login
 
 ```ts

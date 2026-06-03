@@ -18,7 +18,7 @@
 
 - 数据链路保持 `page -> hook -> api -> mock-server`。
 - 当前 `mock-server` 用于验证 DTO、业务状态、数据链路和前端消费稳定性，不代表生产级后端安全实现。
-- 当前 `X-User-Id` 只允许作为 mock request context。
+- `X-User-Id` 只允许作为 development / staging 的 mock request context；production 前端使用 `Authorization: Bearer <token>`。
 - 本 contract 的目标是让前端消费稳定，并为未来 Java 后端复刻领域模型。
 - 页面只消费 API DTO / ViewModel，不直接依赖数据库 Record。
 - Database Record、API DTO、Frontend ViewModel 必须分层。
@@ -165,8 +165,8 @@ Rules:
 - Login returns account identity and lightweight membership state for app shell display.
 - Login returns `user.preferredLocale`; frontend syncs locale store from it after successful login.
 - Login 成功即表示用户接受当前 active 服务条款与隐私说明；后端自动 upsert `user_agreement_acceptances`（版本不变则跳过），前端无须传版本。
-- `X-User-Id` is mock request context only.
-- Future Authorization token behavior must be explicit; do not half-use token in some calls.
+- `X-User-Id` is development / staging mock request context only.
+- Production requests must use `Authorization: Bearer <token>` consistently. The RuoYi backend should return a verifiable JWT or equivalent bearer token from login / registration.
 
 ### Legal Document Fetch
 
@@ -863,7 +863,7 @@ Rules:
 - `auth_identities` is the source of truth for login identifiers and password hash.
 - `user_security_settings` is the source of truth for MFA state.
 - MFA method is limited to verified `email` or `phone` identities in the current mock implementation; no TOTP implementation yet.
-- The platform does have an `AuthSession.token`, but current mock requests still use `X-User-Id`. `challengeToken` is a separate short-lived sensitive-action token and must not be treated as the login token.
+- `AuthSession.token` is the login token persisted by the frontend. development / staging mock requests may still use `X-User-Id`; production requests send `Authorization: Bearer <token>`. `challengeToken` is a separate short-lived sensitive-action token and must not be treated as the login token.
 - Password change, identity unbind, account deactivation, and data export must request a challenge token when MFA is enabled.
 - Identity unbind must reject removing the identity currently used as the MFA method unless MFA is disabled or moved to another verified identity first.
 - `users.status` uses `active | deactivated | suspended`; account deactivation writes `deactivated`, and the next successful login silently restores self-deactivated accounts to `active`, while platform risk control may write `suspended`.

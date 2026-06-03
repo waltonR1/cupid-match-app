@@ -81,7 +81,7 @@ interface UserRecord {
     accountName: string
     avatarUrl: string
     preferredLocale: 'zh' | 'fr' | 'en'
-    status: 'active' | 'paused' | 'banned'
+    status: 'active' | 'deactivated' | 'suspended'
     createdAt: string
     updatedAt: string
 }
@@ -112,7 +112,7 @@ interface AuthIdentityRecord {
 
 当前 mock 使用 `mock-sha256:<base64>` 形式的伪 hash。它只用于本地 mock，不是正式密码哈希方案。
 
-登录 / 注册返回的 onboarding 信息来自该集合，不来自 `users`。
+登录 / 注册返回 `AuthSession.token`、`user` 和当前 `membership`，不返回 onboarding 状态。
 
 ### user_memberships
 
@@ -120,8 +120,9 @@ interface AuthIdentityRecord {
 interface UserMembershipRecord {
     id: string
     userId: string
+    planId: string
     tier: 'free' | 'silver' | 'gold' | 'diamond'
-    status: 'active' | 'expired' | 'cancelled'
+    status: 'active' | 'expired' | 'cancelled' | 'paused'
     startedAt: string
     expiresAt?: string
     createdAt: string
@@ -158,13 +159,14 @@ interface RegisterPayload {
     path: 'self' | 'family'
     provider: 'email' | 'phone'
     identifier: string
+    code: string
     password: string
     accountName: string
     preferredLocale: 'zh' | 'fr' | 'en'
 }
 ```
 
-注册只创建账户、登录身份、onboarding 状态和默认 active free 会员状态，不创建 profile，也不写 profile 字段。`preferredLocale` 由前端当前页面语言自动传入，注册页不提供手动语言选择。
+注册只创建账户、登录身份、默认 user preference、默认 active free 会员状态和协议确认记录，不创建 profile，也不写 profile 字段。`RegisterPayload.path` 只表示本次注册入口，用于前端跳转，不持久化 onboarding 状态。`preferredLocale` 由前端当前页面语言自动传入，注册页不提供手动语言选择。
 
 ### POST /api/auth/login
 
@@ -187,16 +189,16 @@ interface AuthSession {
         accountName: string
         avatarUrl: string
         preferredLocale: 'zh' | 'fr' | 'en'
+        status: 'active' | 'deactivated' | 'suspended'
     }
-    onboarding: {
-        path: 'self' | 'family'
-        step: 'create_profile' | 'review_profile' | 'browse'
-        profileId?: string
-    }
+    membership: {
+        tier: 'free' | 'silver' | 'gold' | 'diamond'
+        status: 'active' | 'expired' | 'cancelled' | 'paused'
+    } | null
 }
 ```
 
-前端会持久化 `token`，但当前请求鉴权仍使用 mock request context：`X-User-Id`。`token` 是为后续 Authorization 预留的 mock placeholder。
+前端会持久化 `token`。当前前端在 development / staging 环境使用 `X-User-Id` 作为 mock request context；production 环境会把 `token` 作为 `Authorization: Bearer <token>` 发送。RuoYi 后端应返回可校验 JWT 或同等 Bearer token。
 
 ## Profile 主链路
 
@@ -338,4 +340,4 @@ interface EventRegistrationRecord {
 
 - `mock-server/db.json` 是演示数据源，不是生产数据库迁移脚本。
 - `mock-server` 使用 LowDB 验证业务规则和 DTO，不提供生产级事务、审计、备份和并发控制。
-- 当前请求上下文仍使用 `X-User-Id`；正式 Authorization 策略不在本文件定义。
+- development / staging 当前请求上下文使用 `X-User-Id`；production 前端发送 `Authorization: Bearer <token>`。正式 RuoYi 后端应实现 token 校验、过期处理和权限解析。

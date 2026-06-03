@@ -33,7 +33,7 @@ const noticeTemplates: Record<TemplateCode, Record<'zh' | 'en' | 'fr', string>> 
 export interface InboxDebugThread {
     id: string
     userId: string
-    subjectType?: string
+    subjectType?: Database['inbox_threads'][number]['subjectType']
     subjectId?: string
     status: string
     messageCount: number

@@ -255,7 +255,7 @@ function buildProfileViews(data: Database, profiles: ProfileRecord[]): ProfileWi
 
 /** 是否仍参与新的公开业务流 */
 export function isBusinessActiveProfile(profile: ProfileRecord): boolean {
-    return !profile.archivedAt
+    return !profile.archivedAt && (profile.profileStatus === 'open' || profile.profileStatus === 'review')
 }
 
 function resolveProfilePrivacyPreference(data: Database, profileId: string): ProfilePrivacyPreferenceRecord | undefined {
@@ -749,7 +749,6 @@ function latestProfileIntroductionRequest(
 function isBlockingProfileIntroduction(request: PrivateIntroductionRequestRecord): boolean {
     if (request.status === 'requested' && isIntroductionExpired(request)) return false
     if (request.status === 'requested' || request.status === 'accepted') return true
-    if (request.status === 'cooldown') return !isCooldownExpired(request)
     if (request.status === 'declined') return !isCooldownExpired(resolveDeclinedCooldown(request))
 
     return false
@@ -764,7 +763,8 @@ function isIntroductionExpired(request: PrivateIntroductionRequestRecord): boole
 function resolveBlockingIntroductionStatus(request: PrivateIntroductionRequestRecord): SelfProfileDetailDTO['privateIntroduction']['status'] {
     if (request.status === 'requested' && isIntroductionExpired(request)) return 'expired'
     if (request.status === 'declined') return 'cooldown'
-    return request.status
+    if (request.status === 'requested' || request.status === 'accepted') return request.status
+    return 'declined'
 }
 
 /** 为拒绝状态补齐 90 天冷静期 */

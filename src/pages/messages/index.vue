@@ -113,9 +113,10 @@ import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {useMessagesInbox} from '@/hooks/messages/use-messages-inbox'
+import type {InboxSubjectType} from '@/api/messages'
 
 type MessageThread = {
-  subjectType?: string
+  subjectType?: InboxSubjectType
 }
 
 useRequireAuth()

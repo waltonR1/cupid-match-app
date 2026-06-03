@@ -60,11 +60,35 @@ VITE_ENABLE_DEBUG=true
 | `PORT` | `52173` | mock-server 监听端口。 |
 | `ENABLE_REQUEST_LOGGING` | `true` | 是否输出请求日志。 |
 
+Render 演示后端使用启动参数切换监听策略：
+
+```bash
+npm run start:render
+```
+
+`start:render` 会通过 `--render` 让 `mock-server/src/config.ts` 使用 `0.0.0.0`，并默认关闭 request logging。Render 会注入 `PORT`，不需要手动写死端口。
+
 默认健康检查：
 
 ```text
 GET http://127.0.0.1:52173/api/ping
 ```
+
+## Render 演示后端
+
+当前 `mock-server` 可以部署为 Render Node Web Service，用于演示和前端联调。
+
+Render 配置：
+
+| 配置项 | 值 |
+| --- | --- |
+| Root Directory | `mock-server` |
+| Build Command | `npm install` |
+| Start Command | `npm run start:render` |
+
+注意：Start Command 必须是 `npm run start:render`，不是 `npm start:render`。
+
+Render 演示后端仍然属于 mock 边界：LowDB、mock token、本地上传、验证码、支付占位都不能视为生产后端能力。
 
 ## 本地开发
 
@@ -173,8 +197,8 @@ VITE_ENABLE_DEBUG=true
 
 以下能力仍属于 prototype / mock 边界，不能视为生产实现：
 
-- `X-User-Id` 是 mock request context，不是正式鉴权。
-- `AuthSession.token` 是占位 token，不是生产 Authorization 策略。
+- development / staging 可继续使用 `X-User-Id` 作为 mock request context；production 前端发送 `Authorization: Bearer <token>`。
+- mock `AuthSession.token` 不是生产 JWT；RuoYi 后端应返回可校验 JWT 或同等 Bearer token。
 - password hash 是 mock hash，不是生产密码哈希方案。
 - 验证码只用于本地链路验证，不接真实邮件、短信或微信。
 - 上传文件由 mock-server 本地目录托管，不是对象存储。

@@ -2,7 +2,7 @@ export type PrivateIntroductionDebugStatus =
   | 'requested'
   | 'accepted'
   | 'declined'
-  | 'cooldown'
+  | 'cancelled'
 
 export interface PrivateIntroductionDebugItem {
   id: string

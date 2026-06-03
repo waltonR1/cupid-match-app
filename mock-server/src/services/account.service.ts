@@ -243,7 +243,7 @@ interface AccountIntroductionSummaryDTO {
   targetProfileId: string
   targetDisplayName: string
   targetAvatarUrl: string
-  status: string
+  status: Database['private_introduction_requests'][number]['status'] | 'expired' | 'cooldown'
   requestedAt: string
   expiresAt?: string
   respondedAt?: string
@@ -1633,9 +1633,17 @@ function toIntroductionSummary(
     targetProfileId,
     targetDisplayName: view?.displayName ?? '',
     targetAvatarUrl: view?.avatarUrl ?? '',
-    status: req.status,
+    status: resolveAccountIntroductionStatus(req),
     requestedAt: req.requestedAt,
     respondedAt: req.respondedAt,
     cooldownUntil: req.cooldownUntil,
   }
+}
+
+function resolveAccountIntroductionStatus(
+  req: Database['private_introduction_requests'][number],
+): AccountIntroductionSummaryDTO['status'] {
+  if (req.status === 'requested' && req.expiresAt && Date.parse(req.expiresAt) < Date.now()) return 'expired'
+  if (req.status === 'declined' && req.cooldownUntil && Date.parse(req.cooldownUntil) > Date.now()) return 'cooldown'
+  return req.status
 }

@@ -30,6 +30,8 @@ port = 52173
 - `PORT`
 - `ENABLE_REQUEST_LOGGING`
 
+Render 演示后端可使用 `--render` 启动参数切换到 `0.0.0.0` 监听，并默认关闭 request logging。
+
 ## 启动方式
 
 开发模式：
@@ -43,6 +45,18 @@ npm run mock:dev
 ```bash
 npm run mock:start
 ```
+
+Render Node Web Service 启动：
+
+```bash
+npm run start:render
+```
+
+Render 配置时使用：
+
+- Root Directory: `mock-server`
+- Build Command: `npm install`
+- Start Command: `npm run start:render`
 
 构建检查：
 
@@ -91,7 +105,7 @@ npm run mock:build
 
 注册不会创建 profile，不写 profile 字段，也不写 account city。`preferredLocale` 由前端当前语言自动传入，不是注册页手动字段。
 
-当前 mock 请求上下文仍使用 `X-User-Id`。`AuthSession.token` 会返回并由前端保存，但暂时只是为后续 Authorization 预留的 mock placeholder。
+development / staging mock 请求上下文仍可使用 `X-User-Id`。production 前端会把 `AuthSession.token` 作为 `Authorization: Bearer <token>` 发送。当前 mock token 不是安全 JWT；RuoYi 后端应替换为可校验 JWT 或同等 Bearer token，并实现过期、刷新和权限解析。
 
 ## Profile 行为
 

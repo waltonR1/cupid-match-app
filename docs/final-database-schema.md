@@ -899,7 +899,7 @@ interface OrderRecord {
 interface PaymentRecord {
   id: string
   orderId: string
-  provider: 'stripe' | 'manual' | 'mock'
+  provider: 'stripe' | 'manual'
   providerPaymentId?: string
   status: PaymentStatus
   amountCents: number
@@ -909,6 +909,8 @@ interface PaymentRecord {
   updatedAt: string
 }
 ```
+
+本地演示支付可以在 mock 路由中返回占位结果，但最终数据库不保留 `mock` payment provider。
 
 ## Derived DTO Fields
 
