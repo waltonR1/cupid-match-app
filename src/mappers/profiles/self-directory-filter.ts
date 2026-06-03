@@ -17,7 +17,7 @@ import {
     toDirectoryOptions,
     toIntentOptions,
     toStaticOptions,
-} from '@/mappers/profile-directory-filter'
+} from '@/mappers/profiles/directory-filter'
 import type {SelfDirectoryFilterItem, SelfDirectoryFilters} from '@/types/profiles/directory'
 import {formatProfileLanguages} from '@/utils/profile-format'
 

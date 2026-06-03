@@ -143,7 +143,7 @@ import {useAccountMembership} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openPage} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
-import {findNextPlan} from '@/mappers/account-membership'
+import {findNextPlan} from '@/mappers/account/membership'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

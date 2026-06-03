@@ -8,12 +8,12 @@ import {
 import {PROFILE_DIRECTORY_PAGE_SIZE, isFamilyProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
-import {toFamilyProfileDirectoryPageData} from '@/mappers/family-profile-directory-page'
+import {toFamilyProfileDirectoryPageData} from '@/mappers/profiles/family-directory-page'
 import {
     buildFamilyProfileDirectoryQuery,
     DEFAULT_FAMILY_DIRECTORY_FILTERS,
     DEFAULT_FAMILY_PROFILE_SORT,
-} from '@/mappers/family-profile-directory-query'
+} from '@/mappers/profiles/family-directory-query'
 import type {DirectoryFilterUpdatePayload, FamilyDirectoryFilters} from '@/types/profiles/directory'
 
 /** 家庭资料目录数据 */

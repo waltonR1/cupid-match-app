@@ -118,7 +118,7 @@ import {
 } from '@/api/debug'
 import type {FormatLocale} from '@/api/events'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {toEventDetailPageData} from '@/mappers/event-detail'
+import {toEventDetailPageData} from '@/mappers/events/detail'
 import {openLoginPage, openMembershipPage} from '@/utils/navigation'
 
 const events = ref<EventDebugItem[]>([])

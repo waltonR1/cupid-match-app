@@ -196,8 +196,8 @@ import {
 } from '@/api/debug'
 import type {FamilyProfileDetail, FormatLocale, SelfProfileDetail} from '@/api/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {toFamilyProfileDetailPageData} from '@/mappers/family-profile-detail-page'
-import {toSelfProfileDetailPageData} from '@/mappers/self-profile-detail-page'
+import {toFamilyProfileDetailPageData} from '@/mappers/profiles/family-detail-page'
+import {toSelfProfileDetailPageData} from '@/mappers/profiles/self-detail-page'
 
 const profileTypes: Array<{ label: string, value: ProfileAccessPreviewType }> = [
   {label: 'Self', value: 'self'},

@@ -6,7 +6,7 @@ import {
   DEFAULT_EVENT_DIRECTORY_FILTERS,
   EVENT_DIRECTORY_PAGE_SIZE,
   toEventDirectoryPageData,
-} from '@/mappers/event-directory'
+} from '@/mappers/events/directory'
 import type { Translate } from '@/i18n/types'
 import type { EventDirectoryFilters } from '@/types/events/directory'
 

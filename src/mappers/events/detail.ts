@@ -2,7 +2,7 @@ import type { EventDetail, EventRegistrationResponse, FormatLocale } from '@/api
 import type { Translate } from '@/i18n/types'
 import type { EventAgendaItem, EventDetailHeroViewModel, EventNoteItem, EventRegistrationViewModel } from '@/types/events/detail'
 import { formatEventDetailDate } from '@/utils/locale-format'
-import { toEventOverviewItem } from './event-directory'
+import { toEventOverviewItem } from './directory'
 
 export function toEventDetailPageData(params: {
   event: EventDetail | null

@@ -117,7 +117,7 @@ import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openAccountProfileCreate, openAccountProfileDetail} from '@/utils/navigation'
 import {formatLocalizedAge} from '@/utils/profile-format'
 import type {AccountProfileVerificationDTO, ManagedProfileSummaryDTO} from '@/api/account'
-import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account-profiles'
+import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account/profiles'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

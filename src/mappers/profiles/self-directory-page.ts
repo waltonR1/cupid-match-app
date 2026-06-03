@@ -1,21 +1,22 @@
-import type {FamilyProfileDirectoryResponse, FormatLocale} from '@/api/profiles'
+import type {FormatLocale, SelfProfileDirectoryResponse} from '@/api/profiles'
 import {PROFILE_DIRECTORY_PAGE_SIZE} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
-import {toFamilyProfileCardViewModel} from '@/mappers/profile-card'
-import {buildFamilyDirectoryFilterItems} from '@/mappers/family-profile-directory-filter'
-import type {FamilyDirectoryFilters, FamilyProfileDirectoryPageData} from '@/types/profiles/directory'
+import {toSelfProfileCardViewModel} from '@/mappers/profiles/card'
+import {buildSelfDirectoryFilterItems} from '@/mappers/profiles/self-directory-filter'
+import type {SelfDirectoryFilters, SelfProfileDirectoryPageData} from '@/types/profiles/directory'
 import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
 
-/** 转换家庭资料目录页面数据 */
-export function toFamilyProfileDirectoryPageData(params: {
-    response: FamilyProfileDirectoryResponse | null
-    filters: FamilyDirectoryFilters
+/** 转换个人资料目录页面数据 */
+export function toSelfProfileDirectoryPageData(params: {
+    response: SelfProfileDirectoryResponse | null
+    filters: SelfDirectoryFilters
     locale: FormatLocale
     t: Translate
-}): FamilyProfileDirectoryPageData {
-    const filterItems = buildFamilyDirectoryFilterItems(
+}): SelfProfileDirectoryPageData {
+    const filterItems = buildSelfDirectoryFilterItems(
         params.response?.facets ?? null,
         params.filters,
+        params.locale,
         params.t,
     )
     const pagination = params.response?.pagination ?? {
@@ -28,7 +29,7 @@ export function toFamilyProfileDirectoryPageData(params: {
     return {
         items: (params.response?.items ?? []).map(item => ({
             id: item.id,
-            card: toFamilyProfileCardViewModel(item, params.locale, params.t),
+            card: toSelfProfileCardViewModel(item, params.locale, params.t),
         })),
         filters: filterItems,
         activeFilters: buildActiveDirectoryFilterChips(filterItems, params.filters),

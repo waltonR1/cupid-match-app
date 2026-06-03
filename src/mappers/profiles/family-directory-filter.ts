@@ -12,7 +12,7 @@ import {
     toDirectoryOptions,
     toIntentOptions,
     toStaticOptions,
-} from '@/mappers/profile-directory-filter'
+} from '@/mappers/profiles/directory-filter'
 import type {FamilyDirectoryFilterItem, FamilyDirectoryFilters} from '@/types/profiles/directory'
 
 /** 构建家庭资料目录筛选项 */

@@ -8,12 +8,12 @@ import {
 import {PROFILE_DIRECTORY_PAGE_SIZE, isSelfProfileSortKey} from '@/constants/profiles'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import type {Translate} from '@/i18n/types'
-import {toSelfProfileDirectoryPageData} from '@/mappers/self-profile-directory-page'
+import {toSelfProfileDirectoryPageData} from '@/mappers/profiles/self-directory-page'
 import {
     buildSelfProfileDirectoryQuery,
     DEFAULT_SELF_DIRECTORY_FILTERS,
     DEFAULT_SELF_PROFILE_SORT,
-} from '@/mappers/self-profile-directory-query'
+} from '@/mappers/profiles/self-directory-query'
 import type {DirectoryFilterUpdatePayload, SelfDirectoryFilters} from '@/types/profiles/directory'
 
 /** 个人资料目录数据 */

@@ -121,7 +121,7 @@ import {useAccountEvents} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openEventDetail} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
-import {toBadgeStatus, groupRegistrations} from '@/mappers/account-events'
+import {toBadgeStatus, groupRegistrations} from '@/mappers/account/events'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

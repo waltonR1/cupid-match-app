@@ -1,7 +1,7 @@
 import { computed, ref, watch } from 'vue'
 import { listEvents, type EventDirectoryItem, type FormatLocale } from '@/api/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { toEventOverviewItem } from '@/mappers/event-directory'
+import { toEventOverviewItem } from '@/mappers/events/directory'
 import type { Translate } from '@/i18n/types'
 import type { EventPreviewSectionViewModel } from '@/types/events/card'
 

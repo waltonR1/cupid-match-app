@@ -206,7 +206,7 @@ import {
   openRelationshipPage,
   openSelfDirectoryPage
 } from '@/utils/navigation'
-import {resolvePrimaryAction} from '@/mappers/account-home'
+import {resolvePrimaryAction} from '@/mappers/account/home'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

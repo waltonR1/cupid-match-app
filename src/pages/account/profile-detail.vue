@@ -531,7 +531,7 @@ import {useAccountProfileDetail} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openMyProfilePage} from '@/utils/navigation'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
-import type {ProfileDetailPageData} from '@/mappers/account-profile-detail'
+import type {ProfileDetailPageData} from '@/mappers/account/profile-detail'
 
 useRequireAuth()
 const {t, locale, locales} = usePageI18n('accountCenter')

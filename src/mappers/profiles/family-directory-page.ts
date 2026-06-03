@@ -1,22 +1,21 @@
-import type {FormatLocale, SelfProfileDirectoryResponse} from '@/api/profiles'
+import type {FamilyProfileDirectoryResponse, FormatLocale} from '@/api/profiles'
 import {PROFILE_DIRECTORY_PAGE_SIZE} from '@/constants/profiles'
 import type {Translate} from '@/i18n/types'
-import {toSelfProfileCardViewModel} from '@/mappers/profile-card'
-import {buildSelfDirectoryFilterItems} from '@/mappers/self-profile-directory-filter'
-import type {SelfDirectoryFilters, SelfProfileDirectoryPageData} from '@/types/profiles/directory'
+import {toFamilyProfileCardViewModel} from '@/mappers/profiles/card'
+import {buildFamilyDirectoryFilterItems} from '@/mappers/profiles/family-directory-filter'
+import type {FamilyDirectoryFilters, FamilyProfileDirectoryPageData} from '@/types/profiles/directory'
 import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
 
-/** 转换个人资料目录页面数据 */
-export function toSelfProfileDirectoryPageData(params: {
-    response: SelfProfileDirectoryResponse | null
-    filters: SelfDirectoryFilters
+/** 转换家庭资料目录页面数据 */
+export function toFamilyProfileDirectoryPageData(params: {
+    response: FamilyProfileDirectoryResponse | null
+    filters: FamilyDirectoryFilters
     locale: FormatLocale
     t: Translate
-}): SelfProfileDirectoryPageData {
-    const filterItems = buildSelfDirectoryFilterItems(
+}): FamilyProfileDirectoryPageData {
+    const filterItems = buildFamilyDirectoryFilterItems(
         params.response?.facets ?? null,
         params.filters,
-        params.locale,
         params.t,
     )
     const pagination = params.response?.pagination ?? {
@@ -29,7 +28,7 @@ export function toSelfProfileDirectoryPageData(params: {
     return {
         items: (params.response?.items ?? []).map(item => ({
             id: item.id,
-            card: toSelfProfileCardViewModel(item, params.locale, params.t),
+            card: toFamilyProfileCardViewModel(item, params.locale, params.t),
         })),
         filters: filterItems,
         activeFilters: buildActiveDirectoryFilterChips(filterItems, params.filters),

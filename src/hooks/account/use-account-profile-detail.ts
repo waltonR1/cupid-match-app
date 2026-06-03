@@ -10,7 +10,7 @@ import {
 } from '@/api/account'
 import {uploadImage} from '@/api/upload/upload'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
-import {toAccountProfileDetailPageData} from '@/mappers/account-profile-detail'
+import {toAccountProfileDetailPageData} from '@/mappers/account/profile-detail'
 import {useAuthStore} from '@/stores/modules/auth'
 import type {FormatLocale} from '@/utils/locale-format'
 

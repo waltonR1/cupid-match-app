@@ -8,7 +8,7 @@ import {
 import { addFavorite, removeFavorite } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { Translate } from '@/i18n/types'
-import { toSelfProfileDetailPageData } from '@/mappers/self-profile-detail-page'
+import { toSelfProfileDetailPageData } from '@/mappers/profiles/self-detail-page'
 
 export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>) {
     const latest = useLatestRequest()

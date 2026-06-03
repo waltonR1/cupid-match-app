@@ -8,7 +8,7 @@ import {
 import { addFavorite, removeFavorite } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { Translate } from '@/i18n/types'
-import { toFamilyProfileDetailPageData } from '@/mappers/family-profile-detail-page'
+import { toFamilyProfileDetailPageData } from '@/mappers/profiles/family-detail-page'
 
 export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>) {
     const latest = useLatestRequest()

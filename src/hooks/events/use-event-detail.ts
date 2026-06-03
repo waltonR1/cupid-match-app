@@ -7,7 +7,7 @@ import {
   type FormatLocale,
 } from '@/api/events'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
-import { mergeEventRegistration, toEventDetailPageData } from '@/mappers/event-detail'
+import { mergeEventRegistration, toEventDetailPageData } from '@/mappers/events/detail'
 import type { Translate } from '@/i18n/types'
 
 export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
