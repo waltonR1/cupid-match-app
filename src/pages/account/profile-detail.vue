@@ -531,7 +531,10 @@ import {useAccountProfileDetail} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openMyProfilePage} from '@/utils/navigation'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
-import type {ProfileDetailPageData} from '@/mappers/account/profile-detail'
+import type {
+  AccountProfileDetailPageData,
+  AccountProfilePhotoDraft,
+} from '@/types/account/profile-detail'
 
 useRequireAuth()
 const {t, locale, locales} = usePageI18n('accountCenter')
@@ -548,16 +551,7 @@ const {
 } = useAccountProfileDetail(() => profileId.value, () => editLocale.value, () => createMode.value)
 const editing = ref(false)
 const draft = ref<Record<string, string>>({})
-type PhotoDraft = {
-  id?: string
-  clientId: string
-  url: string
-  isPrimary: boolean
-  sortOrder: number
-  status: NonNullable<typeof payload.value>['photos'][number]['status']
-  delete?: boolean
-}
-const photoDrafts = ref<PhotoDraft[]>([])
+const photoDrafts = ref<AccountProfilePhotoDraft[]>([])
 const draftOwnership = ref({
   relationshipToProfile: 'relative' as 'self' | 'father' | 'mother' | 'relative',
 })
@@ -698,7 +692,7 @@ function resolveProfileTitleText() {
   return t(pageData.value.profileTitleKey!)
 }
 
-function formatDisplayValue(entry: ProfileDetailPageData['profileSections'][number]['items'][number]) {
+function formatDisplayValue(entry: AccountProfileDetailPageData['profileSections'][number]['items'][number]) {
   const v = entry.rawValue
   if (v === null || v === undefined) return '-'
   if (entry.editor === 'enum') return t(entry.valueKey!)
@@ -708,7 +702,7 @@ function formatDisplayValue(entry: ProfileDetailPageData['profileSections'][numb
   return String(v) || '-'
 }
 
-function displayListItems(entry: ProfileDetailPageData['profileSections'][number]['items'][number]) {
+function displayListItems(entry: AccountProfileDetailPageData['profileSections'][number]['items'][number]) {
   const values = Array.isArray(entry.rawValue) ? entry.rawValue : []
   if (values.length === 0) return ['-']
   if (entry.fieldKey === 'languages') {
@@ -720,7 +714,7 @@ function displayListItems(entry: ProfileDetailPageData['profileSections'][number
   return values.map(String)
 }
 
-function formatStatusValue(entry: ProfileDetailPageData['statusItems'][number]) {
+function formatStatusValue(entry: AccountProfileDetailPageData['statusItems'][number]) {
   const v = entry.rawValue
   if (typeof v !== 'string') return String(v)
   if (v.startsWith('profiles.')) return t(v)

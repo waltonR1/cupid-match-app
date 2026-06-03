@@ -1,37 +1,12 @@
 import type { AccountProfileDetailDTO } from '@/api/account'
+import type {
+  AccountProfileDetailPageData,
+  AccountProfileDetailPrivacyPreferenceItem,
+  AccountProfileDetailSection,
+  AccountProfileDetailVerificationItem,
+} from '@/types/account/profile-detail'
 
-interface SectionItem {
-  fieldKey: string
-  labelKey: string
-  rawValue: unknown
-  editor: 'text' | 'number' | 'boolean' | 'enum' | 'list' | 'ageRange'
-  valueKey?: string
-  required?: boolean
-}
-
-interface Section {
-  key: string
-  titleKey: string
-  items: SectionItem[]
-}
-
-export interface ProfileDetailPageData {
-  profileTitle: string | null
-  profileTitleKey: string | undefined
-  profileTitleRelation: string | undefined
-  avatarUrl: string
-  city: string
-  ownershipBadgeKeys: string[]
-  statusItems: Array<{ labelKey: string; rawValue: unknown }>
-  profileSections: Section[]
-  contactSection: Section
-  photos: AccountProfileDetailDTO['photos']
-  verification: AccountProfileDetailDTO['verification']
-  verificationItems: Array<{ key: string; labelKey: string; valueKey: string; valueRaw?: string; tone: string }>
-  privacyPreferenceItems: Array<{ key: string; labelKey: string; statusKey: string; hidden: boolean }>
-}
-
-export function toAccountProfileDetailPageData(params: { payload: AccountProfileDetailDTO | null }): ProfileDetailPageData | null {
+export function toAccountProfileDetailPageData(params: { payload: AccountProfileDetailDTO | null }): AccountProfileDetailPageData | null {
   const { payload } = params
   if (!payload) return null
 
@@ -71,7 +46,7 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
   }
 }
 
-function buildProfileSections(payload: AccountProfileDetailDTO): Section[] {
+function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileDetailSection[] {
   const blank = payload.isBlankDraft
   return [
     {
@@ -151,7 +126,7 @@ function buildProfileSections(payload: AccountProfileDetailDTO): Section[] {
   ]
 }
 
-function buildContactSection(payload: AccountProfileDetailDTO): Section {
+function buildContactSection(payload: AccountProfileDetailDTO): AccountProfileDetailSection {
   return {
     key: 'contact',
     titleKey: 'profiles.detail.sections.contact',
@@ -165,7 +140,7 @@ function buildContactSection(payload: AccountProfileDetailDTO): Section {
   }
 }
 
-function buildVerificationItems(verification: AccountProfileDetailDTO['verification']) {
+function buildVerificationItems(verification: AccountProfileDetailDTO['verification']): AccountProfileDetailVerificationItem[] {
   return [
     { key: 'identity', labelKey: 'profiles.verification.identity', valueKey: `profiles.verificationStatus.${verification.identityStatus}`, tone: resolveTone(verification.identityStatus) },
     { key: 'education', labelKey: 'profiles.verification.education', valueKey: `profiles.verificationStatus.${verification.educationStatus}`, tone: resolveTone(verification.educationStatus) },
@@ -181,7 +156,7 @@ function resolveTone(status: string) {
   return 'pending'
 }
 
-function buildPrivacyPreferenceItems(preferences: AccountProfileDetailDTO['privacyPreferences']) {
+function buildPrivacyPreferenceItems(preferences: AccountProfileDetailDTO['privacyPreferences']): AccountProfileDetailPrivacyPreferenceItem[] {
   const fields = ['hideMaritalStatus', 'hideHasChildren', 'hideChildrenPlan', 'hideAcceptsLongDistance', 'hideSmoking', 'hideDrinking'] as const
   return fields.map((key) => ({
     key,

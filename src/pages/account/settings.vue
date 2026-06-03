@@ -735,7 +735,11 @@ import {formatLocalizedDateTime} from '@/utils/locale-format'
 import {maskIdentifier} from '@/mappers/account/settings'
 import {validatePassword} from '@/utils/validate'
 import {useAuthStore} from '@/stores/modules/auth'
-import type {AccountPreferenceCode} from '@/types/account/settings'
+import type {
+  AccountPreferenceCode,
+  AccountSecurityIdentityViewModel,
+  BindableIdentityProvider,
+} from '@/types/account/settings'
 import {openLoginPage} from '@/utils/navigation'
 import {useAgreementDialog} from '@/hooks/legal'
 
@@ -837,18 +841,7 @@ function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
   return String(value ?? '')
 }
 
-type BindableIdentityProvider = 'email' | 'phone'
-type SecurityAccountItem = {
-  id: string
-  provider: 'email' | 'phone'
-  providerLabel: string
-  identifier: string
-  verifiedText: string
-  canBind: boolean
-  canUnbind: boolean
-}
-
-const securityAccountItems = computed<SecurityAccountItem[]>(() => {
+const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => {
   const identities = (settings.value?.identities ?? []).filter((item) => item.provider === 'email' || item.provider === 'phone')
   const real = identities
       .map((item, _index, list) => ({

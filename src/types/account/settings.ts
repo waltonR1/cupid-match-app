@@ -8,3 +8,15 @@ export type AccountPreferenceCode =
   | 'service_announcements_enabled'
   | 'marketing_emails_enabled'
   | 'analytics_consent_enabled'
+
+export type BindableIdentityProvider = 'email' | 'phone'
+
+export interface AccountSecurityIdentityViewModel {
+  id: string
+  provider: BindableIdentityProvider
+  providerLabel: string
+  identifier: string
+  verifiedText: string
+  canBind: boolean
+  canUnbind: boolean
+}
