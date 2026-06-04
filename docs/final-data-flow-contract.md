@@ -1305,7 +1305,7 @@ accepted private introduction
 future controlled conversation
 -> create or open inbox_threads where type = private_introduction and subjectId = requestId
 -> create inbox_messages status update
--> GET /api/inbox/threads/:id?before=&limit=
+-> GET /api/inbox/threads/:id/messages?before=&limit=
 -> viewer thread ownership check
 -> inbox_messages cursor page
 -> InboxThreadDetailDTO

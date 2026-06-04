@@ -82,32 +82,34 @@ interface ApiErrorDTO {
 
 ## Endpoint Overview
 
+Endpoint status rules:
+
+- This table lists final product API boundaries, including endpoints already used by the current frontend and endpoints reserved for final backend work.
+- Current mock-server routes are behavior samples for implemented frontend paths; they are not the complete final endpoint list.
+- Owner-side profile create/update/photo draft writes go through `POST /api/account/profiles/save`. The older public profile mutation endpoints are not final product endpoints.
+- Debug endpoints are local-only and must not be treated as production API.
+
 | Domain | Method | Endpoint | Purpose |
 | --- | --- | --- | --- |
 | Auth | `POST` | `/api/auth/register` | 创建账户；注册入口路径只用于前端注册成功后的落点。 |
 | Auth | `POST` | `/api/auth/verification-code` | Request registration verification code metadata. Product response does not include the code. |
+| Auth | `POST` | `/api/auth/password-reset-code` | Request password reset verification code metadata. Product response does not include the code. |
+| Auth | `POST` | `/api/auth/password/reset` | Reset password with a verified reset code. |
 | Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
 | Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
+| Profiles | `GET` | `/api/profiles/featured` | 首页精选 self profiles。 |
 | Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |
 | Profiles | `GET` | `/api/profiles/family` | family 资料目录。 |
 | Profiles | `GET` | `/api/profiles/self/:id` | self 资料详情。 |
 | Profiles | `GET` | `/api/profiles/family/:id` | family 资料详情。 |
-| Profiles | `POST` | `/api/profiles/self` | 创建 self profile。 |
-| Profiles | `POST` | `/api/profiles/family` | 创建 family profile。 |
-| Profiles | `POST` | `/api/profiles/self/:id` | 更新 self profile。 |
-| Profiles | `POST` | `/api/profiles/family/:id` | 更新 family profile。 |
-| Profiles | `POST` | `/api/profiles/self/:id/photos` | 新增 self profile 照片。 |
-| Profiles | `POST` | `/api/profiles/family/:id/photos` | 新增 family profile 照片。 |
-| Profiles | `POST` | `/api/profiles/self/:id/photos/:photoId` | 更新 self profile 照片。 |
-| Profiles | `POST` | `/api/profiles/family/:id/photos/:photoId` | 更新 family profile 照片。 |
 | Favorites | `POST` | `/api/favorites/:profileId` | 收藏 profile。 |
 | Favorites | `DELETE` | `/api/favorites/:profileId` | 取消收藏。 |
 | Private Introductions | `POST` | `/api/profiles/self/:id/private-introduction` | 从 self detail 申请私人介绍。 |
 | Private Introductions | `POST` | `/api/profiles/family/:id/private-introduction` | 从 family detail 申请私人介绍。 |
 | Inbox | `GET` | `/api/inbox/threads` | 消息中心线程列表。 |
-| Inbox | `GET` | `/api/inbox/threads/:id` | 查看消息中心线程详情。 |
-| Inbox | `POST` | `/api/inbox/threads/:id/messages` | 在允许的受控线程中发送消息。 |
+| Inbox | `GET` | `/api/inbox/threads/:id/messages` | 查看线程消息分页，支持 `before` 和 `limit`。 |
 | Inbox | `POST` | `/api/inbox/threads/:id/read` | 标记线程已读。 |
+| Inbox | `POST` | `/api/inbox/threads/:id/messages` | 在允许的受控线程中发送消息；当前 UI 尚未开放。 |
 | Events | `GET` | `/api/events` | 活动目录。 |
 | Events | `GET` | `/api/events/:id` | 活动详情。 |
 | Events | `POST` | `/api/events/:id/register` | 报名活动。 |
@@ -121,7 +123,7 @@ interface ApiErrorDTO {
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introductions/:requestId/contact` | accepted 私人介绍后的联系方式开放。 |
-| Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要。 |
+| Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要；final backend TODO，current frontend/mock 尚未实现。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `POST` | `/api/account/profiles/save` | 新建或保存可管理 profile 的主体字段、归属关系、受控联系方式和照片草稿。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
@@ -134,7 +136,15 @@ interface ApiErrorDTO {
 | Account | `POST` | `/api/account/mfa/disable` | 验证后关闭二次验证。 |
 | Account | `POST` | `/api/account/security/challenge-code` | 为敏感操作发送二次验证验证码。 |
 | Account | `POST` | `/api/account/security/challenge` | 校验敏感操作验证码并返回短期 challenge token。 |
+| Account | `POST` | `/api/account/password/change` | 修改当前登录账户密码。 |
+| Account | `POST` | `/api/account/export` | 生成当前账户数据导出。 |
+| Account | `GET` | `/api/account/export/download` | 下载当前账户导出结果。 |
+| Account | `POST` | `/api/account/deactivate` | 停用当前账户。 |
+| Account | `POST` | `/api/account/identities/verification-code` | 为绑定 email / phone 身份发送验证码。 |
+| Account | `POST` | `/api/account/identities` | 绑定已验证 email / phone 身份。 |
+| Account | `DELETE` | `/api/account/identities/:id` | 解绑账户身份。 |
 | Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
+| Upload | `POST` | `/api/upload` | 上传图片并返回公开 asset URL。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 调试拒绝申请。 |
@@ -500,62 +510,29 @@ interface FavoriteActionResponseDTO {
 }
 ```
 
-### Profile Create / Update
+### Profile Mutation Boundary
 
-```ts
-interface ProfileCreatePayload {
-  gender: 'male' | 'female'
-  birthYear: number
-  height: number
-  city: string
-  country: string
-  nationality: string
-  languages: string[]
-  degreeLevel: 'bachelor' | 'master' | 'phd'
-  education: string
-  industry: string
-  careerDirection?: string
-  maritalStatus: 'never_married' | 'divorced' | 'widowed'
-  hasChildren: boolean
-  childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
-  acceptsLongDistance: boolean
-  datingIntentionCode: string
-  relationshipGoal: string
-  residencePlan: string
-  relocation: RelocationCode
-  relationshipValues: RelationshipValueCode[]
-  preferredAgeMin: number
-  preferredAgeMax: number
-  preferredLocation: LocationScopeCode
-  preferredEducation: string
-  familyLife: string
-  dealBreakers: string[]
-  smoking: 'never' | 'social' | 'often'
-  drinking: 'never' | 'social' | 'often'
-  exercise: string
-  activityLevel: ActivityLevelCode
-  weekendStyle: WeekendStyleCode
-  pets: PetCode
-  personalityTraits: string[]
-  interests: string[]
-  communicationStyle: CommunicationStyleCode
-  summary: string
-  tags: string[]
-  familyVisible: boolean
-}
+Final owner-side profile create, update, contact draft, verification draft and photo draft writes use `POST /api/account/profiles/save`.
 
-type ProfileUpdatePayload = Partial<ProfileCreatePayload>
+The following older endpoints are legacy contract residue and must not be implemented as final product APIs:
 
-interface ProfileMutationResponseDTO {
-  profile: SelfProfileDetailDTO | FamilyProfileDetailDTO
-}
+| Legacy endpoint | Final replacement |
+| --- | --- |
+| `POST /api/profiles/self` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/family` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/self/:id` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/family/:id` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/self/:id/photos` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/family/:id/photos` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/self/:id/photos/:photoId` | `POST /api/account/profiles/save` |
+| `POST /api/profiles/family/:id/photos/:photoId` | `POST /api/account/profiles/save` |
 
-```
+Rules:
 
-- 创建 / 更新 payload 使用前端输入值；后端负责保存为目标数据库结构和本地化字段。
-- `ProfileCreatePayload` / `ProfileUpdatePayload` 中的单语言字符串按请求 locale 写入 `LocalizedText` 的对应语言；当前 locale 保存为 `manual / human / ready`，其他非人工 locale 保存为空字符串 `machine / null / pending`，由后台、staff 或后续翻译流程补齐。
-- public profile API 使用带 fallback 的本地化解析，跳过空字符串和 pending 值；account profile detail 编辑 API 使用当前 `lang` 槽位原值，不做 fallback。
-- 创建 profile 时同步创建或更新 `profile_ownerships`。
+- Public profile read APIs use localized fallback strings and skip empty or pending localized values.
+- Account profile detail edit APIs use the current `lang` slot raw values without fallback.
+- `POST /api/account/profiles/save` synchronizes `profiles`, `profile_ownerships`, `profile_contacts`, `profile_verifications` and `profile_photos`.
+
 ## Private Introduction API
 
 ```ts
@@ -654,6 +631,7 @@ interface InboxMessagePageDTO {
 Rules:
 
 - `GET /api/inbox/threads`, `GET /api/inbox/threads/:id/messages?before=&limit=`, and `POST /api/inbox/threads/:id/read` provide notification detail viewing.
+- `GET /api/inbox/threads/:id` is not a final endpoint; use the message-page endpoint above for thread detail content.
 - `POST /api/inbox/threads/:id/messages` stays in the contract for controlled conversation work, but current UI does not expose message sending.
 - Accepted private introductions do not automatically create chat rooms; requester contact reveal is handled by `GET /api/account/private-introductions/:requestId/contact`.
 - User-visible event, profile review, legal document, membership, and staff notices should enter inbox threads/messages instead of a separate notifications table.
