@@ -1122,11 +1122,6 @@ GET /api/account/settings
 -> users + auth_identities + user_security_settings + user_preferences
 -> AccountSettingsDTO
 
-GET /api/account/inbox-summary
--> inbox_threads
--> inbox_messages latest summary
--> inbox_reads
--> AccountInboxSummaryDTO
 ```
 
 Rules:

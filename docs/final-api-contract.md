@@ -123,7 +123,6 @@ Endpoint status rules:
 | Account | `GET` | `/api/account/events` | 活动报名。 |
 | Account | `GET` | `/api/account/private-introductions` | 私人介绍申请。 |
 | Account | `GET` | `/api/account/private-introductions/:requestId/contact` | accepted 私人介绍后的联系方式开放。 |
-| Account | `GET` | `/api/account/inbox-summary` | 账户入口使用的消息中心摘要；final backend TODO，current frontend/mock 尚未实现。 |
 | Account | `GET` | `/api/account/settings` | 账户偏好设置。 |
 | Account | `POST` | `/api/account/profiles/save` | 新建或保存可管理 profile 的主体字段、归属关系、受控联系方式和照片草稿。 |
 | Account | `POST` | `/api/account/profiles/:profileId/archive` | 将满足规则的可管理 profile 归档退出业务。 |
@@ -918,10 +917,6 @@ interface AccountIntroductionSummaryDTO {
   cooldownUntil?: string
 }
 
-interface AccountInboxSummaryDTO {
-  unreadCount: number
-  latestThreads: InboxThreadSummaryDTO[]
-}
 ```
 
 ### Account Preferences
