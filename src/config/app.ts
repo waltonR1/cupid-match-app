@@ -5,9 +5,6 @@
  * to audit before staging or production releases.
  */
 
-const DEFAULT_API_BASE_URL = 'http://127.0.0.1:52173/api'
-const DEFAULT_ENABLE_API_LOGGING = false
-
 export type AppEnvironment = 'development' | 'staging' | 'production'
 
 /** Current application environment. Defaults to Vite mode semantics. */
@@ -24,7 +21,7 @@ export function resolveAppEnvironment(): AppEnvironment {
 export function resolveApiBaseUrl() {
   const envBaseUrl = import.meta.env.VITE_API_BASE_URL
   if (typeof envBaseUrl === 'string' && envBaseUrl.trim()) {
-    const baseUrl = envBaseUrl.trim()
+    const baseUrl = trimTrailingSlash(envBaseUrl.trim())
     if (resolveAppEnvironment() === 'production' && baseUrl.includes('api.example.com')) {
       throw new Error('Replace VITE_API_BASE_URL before production deployment.')
     }
@@ -32,11 +29,31 @@ export function resolveApiBaseUrl() {
     return baseUrl
   }
 
-  if (resolveAppEnvironment() === 'production') {
-    throw new Error('VITE_API_BASE_URL is required for production builds.')
+  throw new Error('VITE_API_BASE_URL is required.')
+}
+
+/** Public asset base URL used for uploaded images and files. */
+export function resolveAssetBaseUrl() {
+  const envBaseUrl = import.meta.env.VITE_ASSET_BASE_URL
+  if (typeof envBaseUrl === 'string' && envBaseUrl.trim()) {
+    const baseUrl = trimTrailingSlash(envBaseUrl.trim())
+    if (resolveAppEnvironment() === 'production' && baseUrl.includes('static.example.com')) {
+      throw new Error('Replace VITE_ASSET_BASE_URL before production deployment.')
+    }
+
+    return baseUrl
   }
 
-  return DEFAULT_API_BASE_URL
+  throw new Error('VITE_ASSET_BASE_URL is required.')
+}
+
+export function resolveAssetUrl(pathOrUrl: string) {
+  if (/^https?:\/\//.test(pathOrUrl) || pathOrUrl.startsWith('data:') || pathOrUrl.startsWith('blob:')) {
+    return pathOrUrl
+  }
+
+  const normalizedPath = pathOrUrl.startsWith('/') ? pathOrUrl : `/${pathOrUrl}`
+  return `${resolveAssetBaseUrl()}${normalizedPath}`
 }
 
 /** API console logging. Keep disabled by default for deployable builds. */
@@ -44,7 +61,7 @@ export function resolveApiLoggingEnabled() {
   const envValue = import.meta.env.VITE_API_ENABLE_LOGGING
   if (envValue === 'true') return true
   if (envValue === 'false') return false
-  return DEFAULT_ENABLE_API_LOGGING
+  throw new Error('VITE_API_ENABLE_LOGGING must be true or false.')
 }
 
 /** Debug pages are available by default outside production only. */
@@ -53,4 +70,8 @@ export function resolveDebugEnabled() {
   if (envValue === 'true') return true
   if (envValue === 'false') return false
   return resolveAppEnvironment() !== 'production'
+}
+
+function trimTrailingSlash(value: string) {
+  return value.endsWith('/') ? value.slice(0, -1) : value
 }

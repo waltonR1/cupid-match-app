@@ -70,6 +70,8 @@ npm run mock:build
 
 - 默认值：`http://127.0.0.1:52173/api`
 - 可通过 `VITE_API_BASE_URL` 覆盖
+- 上传图片等公开资源默认位于 `http://127.0.0.1:52173/uploads/...`
+- 可通过 `VITE_ASSET_BASE_URL` 覆盖资源基地址
 
 ## 接口范围
 

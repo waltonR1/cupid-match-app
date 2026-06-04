@@ -1,4 +1,5 @@
 import {apiRequest} from '@/api/shared/http'
+import {resolveAssetUrl} from '@/config/app'
 
 interface UploadResponse {
   url: string
@@ -10,7 +11,7 @@ export function uploadImage(filePath: string): Promise<string> {
       method: 'POST',
       data: {fileName, data},
     })
-      .then((result) => result.url)
+      .then((result) => resolveAssetUrl(result.url))
   ))
 }
 

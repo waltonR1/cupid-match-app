@@ -30,8 +30,9 @@
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `VITE_APP_ENV` | dev 为 `development`，build 为 `production` | 应用运行环境：`development` / `staging` / `production`。 |
-| `VITE_API_BASE_URL` | `http://127.0.0.1:52173/api` | 前端 API 基地址。 |
-| `VITE_API_ENABLE_LOGGING` | `false` | 是否在前端 console 输出 API 日志。 |
+| `VITE_API_BASE_URL` | 必填，开发示例 `http://127.0.0.1:52173/api` | 前端 API 基地址。 |
+| `VITE_ASSET_BASE_URL` | 必填，开发示例 `http://127.0.0.1:52173` | 图片、上传文件等公开资源基地址。 |
+| `VITE_API_ENABLE_LOGGING` | 必填：`true` / `false` | 是否在前端 console 输出 API 日志。 |
 | `VITE_ENABLE_DEBUG` | 非 production 默认开启 | 是否允许访问 `/pages/debug/*`。商用环境必须为 `false`。 |
 
 生产示例：
@@ -169,6 +170,7 @@ npm run generate:token-docs
 发布前逐项确认：
 
 - `.env.production` 中的 `VITE_API_BASE_URL` 已替换为真实生产 API 域名，不是 `https://api.example.com/api`。
+- `.env.production` 中的 `VITE_ASSET_BASE_URL` 已替换为真实生产资源域名，不是 `https://static.example.com`。
 - `.env.production` 中 `VITE_ENABLE_DEBUG=false`。
 - `.env.production` 中 `VITE_API_ENABLE_LOGGING=false`。
 - `npm run build:h5:production` 构建成功。
@@ -181,7 +183,8 @@ npm run generate:token-docs
 
 - Debug 页面代码可能仍以异步 chunk 形式存在于 H5 构建产物中；生产环境依赖 route guard 阻止访问。
 - API 日志代码字符串可能仍存在于构建产物中；生产环境依赖 `VITE_API_ENABLE_LOGGING=false` 阻止执行输出。
-- `src/config/app.ts` 会在 production 环境阻止缺失或仍使用 `api.example.com` 占位的 API 地址。
+- `src/config/app.ts` 会阻止缺失的 API 地址，并在 production 环境阻止仍使用 `api.example.com` 占位的 API 地址。
+- `src/config/app.ts` 会阻止缺失的资源地址，并在 production 环境阻止仍使用 `static.example.com` 占位的资源地址。
 
 ## Debug 页面
 

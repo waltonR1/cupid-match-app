@@ -35,7 +35,7 @@ export async function registerUploadRoutes(app: FastifyInstance): Promise<void> 
         const buffer = decodeBase64(data)
         await fs.promises.writeFile(filePath, buffer)
 
-        const url = `${resolveRequestOrigin(request)}/uploads/${filename}`
+        const url = `/uploads/${filename}`
         return reply.send({url})
     })
 
@@ -63,11 +63,6 @@ export async function registerUploadedAssetRoutes(app: FastifyInstance): Promise
 
         return reply.header('Content-Type', contentType).send(buffer)
     })
-}
-
-function resolveRequestOrigin(request: { protocol: string; headers: { host?: string } }): string {
-    const host = request.headers.host || `${config.host}:${config.port}`
-    return `${request.protocol}://${host}`
 }
 
 function resolveExtension(fileName: string, data: string): string {
