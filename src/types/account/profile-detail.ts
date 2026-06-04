@@ -39,6 +39,7 @@ export interface AccountProfilePhotoDraft {
   id?: string
   clientId: string
   url: string
+  localPath?: string
   isPrimary: boolean
   sortOrder: number
   status: AccountProfileDetailDTO['photos'][number]['status']

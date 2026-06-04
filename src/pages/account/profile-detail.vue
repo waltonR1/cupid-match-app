@@ -833,18 +833,24 @@ async function saveDraft() {
     preferredChannel: draft.value.preferredChannel as NonNullable<typeof payload.value.contact.preferredChannel>,
     visibility: draft.value.contactVisibility as typeof payload.value.contact.visibility,
   }
-  const detail = await saveDetail({
-    profileId: createMode.value ? undefined : profileId.value,
-    profileType: draftOwnership.value.relationshipToProfile === 'self' ? 'self' : 'family',
-    ownership: draftOwnership.value,
-    profile: profilePayload,
-    contact: contactPayload,
-    verification: {
-      legalName: draft.value.legalName ?? '',
-      dateOfBirth: draft.value.dateOfBirth ?? '',
-    },
-    photos: buildPhotoPayload(),
-  })
+  let detail: Awaited<ReturnType<typeof saveDetail>>
+  try {
+    detail = await saveDetail({
+      profileId: createMode.value ? undefined : profileId.value,
+      profileType: draftOwnership.value.relationshipToProfile === 'self' ? 'self' : 'family',
+      ownership: draftOwnership.value,
+      profile: profilePayload,
+      contact: contactPayload,
+      verification: {
+        legalName: draft.value.legalName ?? '',
+        dateOfBirth: draft.value.dateOfBirth ?? '',
+      },
+      photos: await buildPhotoPayload(),
+    })
+  } catch {
+    uni.showToast({title: t('profiles.detail.uploadFailed'), icon: 'none'})
+    return false
+  }
   if (detail && createMode.value) {
     createMode.value = false
     profileId.value = detail.profileId
@@ -1087,12 +1093,13 @@ function maskDate(value?: string) {
 }
 
 async function addDraftPhoto() {
-  const url = await chooseAndUploadImage()
-  if (!url) return
+  const localPath = await chooseLocalImage()
+  if (!localPath) return
   const nextOrder = visiblePhotoDrafts.value.length + 1
   photoDrafts.value.push({
     clientId: `new-${Date.now()}-${nextOrder}`,
-    url,
+    url: localPath,
+    localPath,
     isPrimary: visiblePhotoDrafts.value.length === 0,
     sortOrder: nextOrder,
     status: 'review',
@@ -1100,21 +1107,9 @@ async function addDraftPhoto() {
 }
 
 async function chooseDraftPhoto(clientId: string) {
-  const url = await chooseAndUploadImage()
-  if (!url) return
-  writePhotoDraft(clientId, url)
-}
-
-async function chooseAndUploadImage() {
-  const tempPath = await chooseLocalImage()
-  if (!tempPath) return null
-
-  try {
-    return await uploadProfileImage(tempPath)
-  } catch {
-    uni.showToast({title: t('profiles.detail.uploadFailed'), icon: 'none'})
-    return null
-  }
+  const localPath = await chooseLocalImage()
+  if (!localPath) return
+  writePhotoDraft(clientId, localPath, localPath)
 }
 
 function chooseLocalImage() {
@@ -1139,8 +1134,10 @@ function markPrimaryPhoto(clientId: string) {
   }))
 }
 
-function writePhotoDraft(clientId: string, value: string) {
-  photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId ? {...photo, url: value} : photo)
+function writePhotoDraft(clientId: string, value: string, localPath?: string) {
+  photoDrafts.value = photoDrafts.value.map((photo) => photo.clientId === clientId
+      ? {...photo, url: value, localPath, status: localPath ? 'review' : photo.status}
+      : photo)
 }
 
 function removePhotoDraft(clientId: string) {
@@ -1164,15 +1161,23 @@ function ensurePhotoPrimary() {
   }))
 }
 
-function buildPhotoPayload() {
+async function buildPhotoPayload() {
   ensurePhotoPrimary()
-  return photoDrafts.value.map((photo, index) => ({
-    id: photo.id,
-    url: photo.url,
-    isPrimary: photo.isPrimary,
-    sortOrder: index + 1,
-    delete: photo.delete,
+  const photos = await Promise.all(photoDrafts.value.map(async (photo, index) => {
+    const url = photo.localPath && !photo.delete
+        ? await uploadProfileImage(photo.localPath)
+        : photo.url
+
+    return {
+      id: photo.id,
+      url,
+      isPrimary: photo.isPrimary,
+      sortOrder: index + 1,
+      delete: photo.delete,
+    }
   }))
+
+  return photos
 }
 
 function photoStatusLabel(status: NonNullable<typeof payload.value>['photos'][number]['status']) {

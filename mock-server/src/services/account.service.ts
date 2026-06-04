@@ -724,12 +724,13 @@ export function saveAccountProfileDetail(data: Database, userId: string, locale:
   if (!profile || profile.archivedAt) return null
 
   const now = new Date().toISOString()
-  Object.assign(profile, toStoredProfilePayload(payload.profile, locale, profile))
-  profile.updatedAt = now
+  if (assignChangedFields(profile, toStoredProfilePayload(payload.profile, locale, profile))) {
+    profile.updatedAt = now
+  }
 
   if (permission === 'owner' && payload.ownership) {
     const ownership = data.profile_ownerships.find((item) => item.userId === userId && item.profileId === payload.profileId && item.status === 'active')
-    if (ownership) {
+    if (ownership && ownership.relationshipToProfile !== payload.ownership.relationshipToProfile) {
       ownership.relationshipToProfile = payload.ownership.relationshipToProfile
       ownership.updatedAt = now
     }
@@ -756,20 +757,23 @@ export function updateAccountProfilePrivacyPreferences(data: Database, userId: s
   if (!canManageProfile(permission)) return 'forbidden' as const
   const now = new Date().toISOString()
   const preferences = ensureProfilePrivacyPreferences(data, profileId, now)
-  Object.assign(preferences, sanitizeProfilePrivacyPreferencesPatch(payload))
-  preferences.updatedAt = now
+  if (assignChangedFields(preferences, sanitizeProfilePrivacyPreferencesPatch(payload))) {
+    preferences.updatedAt = now
+  }
   return toPrivacyPreferencesDto(preferences)
 }
 
 function upsertProfileContact(data: Database, profileId: string, payload: AccountProfileContactUpdatePayload, now: string) {
   const existing = findContact(data, profileId)
   if (existing) {
-    existing.phone = normalizeOptionalString(payload.phone)
-    existing.email = normalizeOptionalString(payload.email)
-    existing.wechat = normalizeOptionalString(payload.wechat)
-    existing.preferredChannel = payload.preferredChannel
-    existing.visibility = payload.visibility ?? existing.visibility
-    existing.updatedAt = now
+    const changed = assignChangedFields(existing, {
+      phone: normalizeOptionalString(payload.phone),
+      email: normalizeOptionalString(payload.email),
+      wechat: normalizeOptionalString(payload.wechat),
+      preferredChannel: payload.preferredChannel,
+      visibility: payload.visibility ?? existing.visibility,
+    })
+    if (changed) existing.updatedAt = now
     return
   }
 
@@ -798,13 +802,13 @@ function upsertProfileVerification(
 
   if (existing) {
     const identityChanged = existing.legalName !== legalName || existing.dateOfBirth !== dateOfBirth
+    if (!identityChanged) return
+
     existing.legalName = legalName
     existing.dateOfBirth = dateOfBirth
-    if (identityChanged) {
-      existing.identityStatus = legalName || dateOfBirth ? 'pending' : 'unverified'
-      delete existing.verifiedAt
-      delete existing.verifiedByUserId
-    }
+    existing.identityStatus = legalName || dateOfBirth ? 'pending' : 'unverified'
+    delete existing.verifiedAt
+    delete existing.verifiedByUserId
     existing.updatedAt = now
     return
   }
@@ -847,11 +851,13 @@ function reconcileAccountProfilePhotos(
 
     if (existing) {
       const urlChanged = existing.url !== photo.url
-      existing.url = photo.url
-      existing.isPrimary = photo.isPrimary
-      existing.sortOrder = photo.sortOrder
-      existing.status = urlChanged ? 'review' : existing.status
-      existing.updatedAt = now
+      const changed = assignChangedFields(existing, {
+        url: photo.url,
+        isPrimary: photo.isPrimary,
+        sortOrder: photo.sortOrder,
+        status: urlChanged ? 'review' : existing.status,
+      })
+      if (changed) existing.updatedAt = now
       return
     }
 
@@ -872,14 +878,13 @@ function reconcileAccountProfilePhotos(
     .sort((a, b) => a.sortOrder - b.sortOrder)
   if (profilePhotos.length === 0) return
 
-  if (!profilePhotos.some((item) => item.isPrimary)) {
-    profilePhotos[0].isPrimary = true
-  }
-
-  const primaryPhoto = profilePhotos.find((item) => item.isPrimary)
+  const primaryPhoto = profilePhotos.find((item) => item.isPrimary) ?? profilePhotos[0]
   profilePhotos.forEach((item, index) => {
-    item.sortOrder = index + 1
-    item.isPrimary = primaryPhoto ? item.id === primaryPhoto.id : index === 0
+    const changed = assignChangedFields(item, {
+      sortOrder: index + 1,
+      isPrimary: item.id === primaryPhoto.id,
+    })
+    if (changed) item.updatedAt = now
   })
 }
 
@@ -890,14 +895,16 @@ export function updateAccountMe(data: Database, userId: string, payload: Account
   if (payload.accountName !== undefined) {
     const accountName = payload.accountName.trim()
     if (!accountName || accountName.length > 30) return 'invalid_payload' as const
-    user.accountName = accountName
   }
-  if (payload.avatarUrl !== undefined) user.avatarUrl = payload.avatarUrl.trim()
+
+  const patch: Partial<typeof user> = {}
+  if (payload.accountName !== undefined) patch.accountName = payload.accountName.trim()
+  if (payload.avatarUrl !== undefined) patch.avatarUrl = payload.avatarUrl.trim()
   if (payload.preferredLocale !== undefined) {
     if (!isAccountLocale(payload.preferredLocale)) return 'invalid_payload' as const
-    user.preferredLocale = payload.preferredLocale
+    patch.preferredLocale = payload.preferredLocale
   }
-  user.updatedAt = new Date().toISOString()
+  if (assignChangedFields(user, patch)) user.updatedAt = new Date().toISOString()
   return getAccountMe(data, userId)
 }
 
@@ -915,8 +922,9 @@ export function updateAccountPreferences(data: Database, userId: string, payload
     data.user_preferences.push(preferences)
   }
   const now = new Date().toISOString()
-  Object.assign(preferences, sanitizePreferencePatch(payload.preferences))
-  preferences.updatedAt = now
+  if (assignChangedFields(preferences, sanitizePreferencePatch(payload.preferences))) {
+    preferences.updatedAt = now
+  }
   return getAccountSettings(data, userId)
 }
 
@@ -1457,6 +1465,24 @@ function sanitizeProfilePrivacyPreferencesPatch(payload: AccountProfilePrivacyPr
     ...(payload.hideSmoking !== undefined ? { hideSmoking: Boolean(payload.hideSmoking) } : {}),
     ...(payload.hideDrinking !== undefined ? { hideDrinking: Boolean(payload.hideDrinking) } : {}),
   }
+}
+
+function assignChangedFields<T extends object>(target: T, patch: Partial<T>): boolean {
+  let changed = false
+
+  Object.entries(patch).forEach(([key, value]) => {
+    const current = (target as Record<string, unknown>)[key]
+    if (areEqualValues(current, value)) return
+
+    ;(target as Record<string, unknown>)[key] = value
+    changed = true
+  })
+
+  return changed
+}
+
+function areEqualValues(left: unknown, right: unknown): boolean {
+  return JSON.stringify(left) === JSON.stringify(right)
 }
 
 function toPrivacyPreferencesDto(preferences?: Database['profile_privacy_preferences'][number]): AccountProfilePrivacyPreferencesDTO {

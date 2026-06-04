@@ -774,6 +774,7 @@ watch(locale, () => {
 })
 const editing = ref(false)
 const saving = ref(false)
+const avatarLocalPath = ref('')
 
 // confirm dialog
 const confirmOpen = ref(false)
@@ -915,6 +916,7 @@ watch(settings, (value) => {
     avatarUrl: value.account.avatarUrl,
     preferredLocale: (value.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
+  avatarLocalPath.value = ''
   preferenceDraft.value = Object.fromEntries(
       Object.entries(PREFERENCE_CODE_TO_KEY)
           .filter(([, key]) => value.preferences[key] !== undefined)
@@ -928,6 +930,7 @@ function startEditing() {
     avatarUrl: settings.value?.account.avatarUrl ?? '',
     preferredLocale: (settings.value?.account.preferredLocale ?? 'zh') as 'zh' | 'en' | 'fr',
   }
+  avatarLocalPath.value = ''
   preferenceDraft.value = Object.fromEntries(
       Object.entries(PREFERENCE_CODE_TO_KEY)
           .filter(([, key]) => settings.value?.preferences[key] !== undefined)
@@ -948,15 +951,12 @@ async function chooseAndUploadAvatar() {
   })
   if (!path) return
 
-  try {
-    const url = await uploadAvatar(path)
-    accountDraft.value.avatarUrl = url
-  } catch {
-    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
-  }
+  avatarLocalPath.value = path
+  accountDraft.value.avatarUrl = path
 }
 
 function cancelEditing() {
+  avatarLocalPath.value = ''
   editing.value = false
 }
 
@@ -1401,13 +1401,18 @@ async function saveSettings() {
   }
 
   saving.value = true
-  const accountPayload = {
-    accountName: accountDraft.value.accountName.trim(),
-    avatarUrl: accountDraft.value.avatarUrl.trim(),
-    preferredLocale: accountDraft.value.preferredLocale,
-  }
-  const prefsPayload = toPreferencePayload(preferenceDraft.value)
   try {
+    let avatarUrl = accountDraft.value.avatarUrl.trim()
+    if (avatarLocalPath.value) {
+      avatarUrl = await uploadAvatar(avatarLocalPath.value)
+    }
+
+    const accountPayload = {
+      accountName: accountDraft.value.accountName.trim(),
+      avatarUrl,
+      preferredLocale: accountDraft.value.preferredLocale,
+    }
+    const prefsPayload = toPreferencePayload(preferenceDraft.value)
     const accountOk = await saveAccount(accountPayload)
     if (!accountOk) {
       uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
@@ -1421,7 +1426,10 @@ async function saveSettings() {
     }
 
     uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+    avatarLocalPath.value = ''
     editing.value = false
+  } catch {
+    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
   } finally {
     saving.value = false
   }

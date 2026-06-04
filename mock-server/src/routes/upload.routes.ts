@@ -35,11 +35,14 @@ export async function registerUploadRoutes(app: FastifyInstance): Promise<void> 
         const buffer = decodeBase64(data)
         await fs.promises.writeFile(filePath, buffer)
 
-        const url = `/uploads/${filename}`
+        const url = `${resolveRequestOrigin(request)}/uploads/${filename}`
         return reply.send({url})
     })
 
-    // GET /uploads/:filename — serve uploaded files
+}
+
+export async function registerUploadedAssetRoutes(app: FastifyInstance): Promise<void> {
+    // Serve uploaded files outside the API prefix so returned asset URLs stay stable.
     app.get('/uploads/:filename', async (request, reply) => {
         const {filename} = request.params as { filename: string }
 
@@ -60,6 +63,11 @@ export async function registerUploadRoutes(app: FastifyInstance): Promise<void> 
 
         return reply.header('Content-Type', contentType).send(buffer)
     })
+}
+
+function resolveRequestOrigin(request: { protocol: string; headers: { host?: string } }): string {
+    const host = request.headers.host || `${config.host}:${config.port}`
+    return `${request.protocol}://${host}`
 }
 
 function resolveExtension(fileName: string, data: string): string {

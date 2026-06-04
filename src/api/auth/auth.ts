@@ -1,4 +1,4 @@
-import { apiRequest } from '@/api/shared/http'
+import { apiRequest, isApiStatusError } from '@/api/shared/http'
 import type {
   AuthSession,
   AuthVerificationCodeRequestPayload,
@@ -42,4 +42,8 @@ export function resetPassword(payload: PasswordResetPayload): Promise<{ success:
     method: 'POST',
     data: payload,
   })
+}
+
+export function isDuplicateRegistrationError(error: unknown) {
+  return isApiStatusError(error, 409)
 }

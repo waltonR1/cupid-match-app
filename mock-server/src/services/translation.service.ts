@@ -5,6 +5,8 @@ const SUPPORTED_LOCALES: ApiLocale[] = ['zh', 'fr', 'en']
 
 /** Merge one edited locale while preserving manually authored translations. */
 export function mergeTranslatedText(current: LocalizedText | undefined, locale: ApiLocale, value: string): LocalizedText {
+    if (current?.[locale]?.value === value) return current
+
     const now = new Date().toISOString()
     const next: LocalizedText = current
         ? {...current}
@@ -28,6 +30,8 @@ export function mergeTranslatedText(current: LocalizedText | undefined, locale: 
 
 /** Merge a user-authored multilingual label without scheduling machine translation. */
 export function mergeManualLocalizedText(current: LocalizedText | undefined, locale: ApiLocale, value: string): LocalizedText {
+    if (current?.[locale]?.value === value) return current
+
     const next = current ? {...current} : emptyManualLocalizedText()
     next[locale] = manualValue(value)
     return next

@@ -1,5 +1,5 @@
-import { isApiStatusError } from '@/api/shared/http'
 import {
+  isDuplicateRegistrationError as isDuplicateRegistrationApiError,
   register as registerApi,
   requestAuthVerificationCode,
   type AuthVerificationCodeRequestPayload,
@@ -40,5 +40,5 @@ export function useRegister() {
 }
 
 export function isDuplicateRegistrationError(error: unknown) {
-  return isApiStatusError(error, 409)
+  return isDuplicateRegistrationApiError(error)
 }

@@ -9,7 +9,7 @@ import {registerEventRoutes} from './routes/events.routes.js'
 import {registerInboxRoutes} from './routes/inbox.routes.js'
 import {registerLegalRoutes} from './routes/legal.routes.js'
 import {registerPingRoutes} from './routes/ping.routes.js'
-import {registerUploadRoutes} from './routes/upload.routes.js'
+import {registerUploadedAssetRoutes, registerUploadRoutes} from './routes/upload.routes.js'
 import {registerProfileRoutes} from './routes/profiles.routes.js'
 
 /** 创建服务实例 */
@@ -44,7 +44,8 @@ export async function createServer() {
     await app.register(registerLegalRoutes, {prefix: config.apiPrefix})
     await app.register(registerDebugRoutes, {prefix: config.apiPrefix})
     await app.register(registerInboxRoutes, {prefix: config.apiPrefix})
-    await app.register(registerUploadRoutes)
+    await app.register(registerUploadRoutes, {prefix: config.apiPrefix})
+    await app.register(registerUploadedAssetRoutes)
 
     return app
 }
