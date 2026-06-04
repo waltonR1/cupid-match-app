@@ -10,7 +10,6 @@
 - `docs/final-api-contract.md`：最终 API endpoint 和 DTO。
 - `docs/final-page-fields.md`：最终页面 ViewModel 字段。
 - `docs/deployment-guide.md`：部署前检查和运行边界。
-- `docs/project-database-fields.md`：当前实现状态。
 
 本文描述最终目标，不描述当前代码已经完成的状态。
 
@@ -1459,4 +1458,4 @@ Before generating or changing code for any chain:
 5. Put permission and masking in backend service.
 6. Keep page code on hooks and DTOs only.
 7. Reject any implementation that adds removed fields back to `users`, `profiles`, or `events`.
-8. Update `docs/project-database-fields.md` after implementation changes current schema.
+8. Keep `mock-server/db.json` and `mock-server/src/types/*` aligned after implementation changes current schema.

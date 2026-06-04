@@ -33,8 +33,6 @@
    目标页面 ViewModel 字段。
 4. [final-data-flow-contract.md](./final-data-flow-contract.md)
    数据库、API、mapper、页面之间的数据流动。
-5. [project-database-fields.md](./project-database-fields.md)
-   当前 mock 数据库字段快照。
 
 ## 按问题查找
 
@@ -66,10 +64,6 @@
 ### 想知道 commit 怎么写
 
 - [git-commit-convention.md](./git-commit-convention.md)
-
-### 想知道数据库字段怎么定义
-
-- [project-database-fields.md](./project-database-fields.md)
 
 ### 想知道目标数据库 / API / 页面字段怎么定义
 

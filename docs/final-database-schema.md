@@ -1,6 +1,6 @@
 # Final Database Schema
 
-本文描述项目目标数据库形态和 source of truth。`mock-server/db.json` 是当前 mock 实现，当前字段快照见 `docs/project-database-fields.md`。
+本文描述项目目标数据库形态和 source of truth。`mock-server/db.json` 与 `mock-server/src/types/*` 是当前 mock 实现参考。
 
 配套文档：
 
@@ -975,4 +975,4 @@ payments: index(orderId)
 - `profiles.displayName` 从数据库移除；所有前端 DTO 的 displayName 由后端派生。
 - `profiles.datingIntentionLabel` 从数据库移除；所有前端 DTO 的 datingIntentionLabel 由后端派生。
 - 所有主表和关系表保留 `createdAt` 和 `updatedAt`。
-- `project-database-fields.md` 继续记录当前实现；本文记录最终形态。
+- 当前 mock 实现以 `mock-server/db.json` 与 `mock-server/src/types/*` 为准；本文记录最终形态。
