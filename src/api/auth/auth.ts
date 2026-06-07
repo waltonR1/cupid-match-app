@@ -16,6 +16,13 @@ export function login(payload: LoginPayload): Promise<AuthSession> {
   })
 }
 
+export function logoutSession(): Promise<void> {
+  return apiRequest<void>('/auth/logout', {
+    method: 'POST',
+    data: {},
+  })
+}
+
 export function register(payload: RegisterPayload): Promise<AuthSession> {
   return apiRequest<AuthSession>('/auth/register', {
     method: 'POST',

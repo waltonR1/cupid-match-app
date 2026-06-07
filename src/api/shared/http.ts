@@ -6,7 +6,14 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'HEAD'
 
 export interface ApiRequestError extends Error {
     statusCode?: number
+    code?: number
     payload?: unknown
+}
+
+interface ApiResponse<T> {
+    code: number
+    msg: string
+    data?: T
 }
 
 interface RequestOptions {
@@ -40,6 +47,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
             success(response) {
                 const statusCode = response.statusCode ?? 0
                 const durationMs = Date.now() - startedAt
+                const envelope = resolveApiResponse<T>(response.data)
 
                 if (statusCode >= 200 && statusCode < 300) {
                     logApiResponse(loggingEnabled, {
@@ -50,7 +58,28 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
                         data: response.data,
                     })
 
-                    resolve(response.data as T)
+                    if (!envelope) {
+                        resolve(response.data as T)
+                        return
+                    }
+
+                    if (envelope.code === 200) {
+                        resolve(envelope.data as T)
+                        return
+                    }
+
+                    const requestError = createApiRequestError(
+                        envelope.msg || `Request failed with code ${envelope.code}`,
+                        statusCode,
+                        response.data,
+                        envelope.code,
+                    )
+
+                    if (envelope.code === 401 && !isAuthPage(path)) {
+                        handleSessionExpired()
+                    }
+
+                    reject(requestError)
                     return
                 }
 
@@ -62,7 +91,12 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
                     payload: response.data,
                 })
 
-                const requestError = createApiRequestError(`Request failed with status ${statusCode}`, statusCode, response.data)
+                const requestError = createApiRequestError(
+                    envelope?.msg || `Request failed with status ${statusCode}`,
+                    statusCode,
+                    response.data,
+                    envelope?.code,
+                )
 
                 if (statusCode === 401 && !isAuthPage(path)) {
                     handleSessionExpired()
@@ -143,9 +177,25 @@ function resolveRequestLocale(): 'zh' | 'fr' | 'en' {
     return 'zh'
 }
 
-function createApiRequestError(message: string, statusCode?: number, payload?: unknown): ApiRequestError {
+function resolveApiResponse<T>(payload: unknown): ApiResponse<T> | null {
+    if (
+        payload === null
+        || typeof payload !== 'object'
+        || !('code' in payload)
+        || !('msg' in payload)
+        || typeof payload.code !== 'number'
+        || typeof payload.msg !== 'string'
+    ) {
+        return null
+    }
+
+    return payload as ApiResponse<T>
+}
+
+function createApiRequestError(message: string, statusCode?: number, payload?: unknown, code?: number): ApiRequestError {
     const error = new Error(message) as ApiRequestError
     error.statusCode = statusCode
+    error.code = code
     error.payload = payload
     return error
 }
@@ -232,10 +282,10 @@ function logApiFail(
 }
 
 function buildRequestContextHeaders(): Record<string, string> {
-    if (resolveAppEnvironment() === 'production') {
-        const token = resolveRequestToken()
-        return token ? { Authorization: `Bearer ${token}` } : {}
-    }
+    const token = resolveRequestToken()
+    if (token) return { Authorization: `Bearer ${token}` }
+
+    if (resolveAppEnvironment() === 'production') return {}
 
     const userId = resolveRequestUserId()
     return userId ? { 'X-User-Id': userId } : {}

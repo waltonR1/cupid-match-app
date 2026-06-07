@@ -78,7 +78,7 @@ npm run mock:dev
 默认 API 地址：
 
 ```text
-http://127.0.0.1:52173/api
+http://127.0.0.1:8080/api
 ```
 
 健康检查入口：

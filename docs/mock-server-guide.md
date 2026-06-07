@@ -21,7 +21,7 @@ page -> hook -> api -> mock-server
 ```text
 apiPrefix = /api
 host = 127.0.0.1
-port = 52173
+port = 8080
 ```
 
 支持环境变量覆盖：
@@ -68,9 +68,9 @@ npm run mock:build
 
 前端默认 API 基地址位于 [app.ts](../src/config/app.ts)：
 
-- 默认值：`http://127.0.0.1:52173/api`
+- 默认值：`http://127.0.0.1:8080/api`
 - 可通过 `VITE_API_BASE_URL` 覆盖
-- 上传图片等公开资源默认位于 `http://127.0.0.1:52173/uploads/...`
+- 上传图片等公开资源默认位于 `http://127.0.0.1:8080/uploads/...`
 - 可通过 `VITE_ASSET_BASE_URL` 覆盖资源基地址
 
 ## 接口范围
@@ -129,6 +129,7 @@ development / staging mock 请求上下文仍可使用 `X-User-Id`。production 
 
 - `GET /api/ping`
 - `POST /api/auth/login`
+- `POST /api/auth/logout`
 - `POST /api/auth/register`
 - `GET /api/profiles/self`
 - `GET /api/profiles/family`

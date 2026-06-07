@@ -173,6 +173,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppButton from '@/components/common/AppButton.vue'
+import { logoutSession } from '@/api/auth'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 import type { AppLocale } from '@/i18n/types'
 import { openAccountPage, openAccountSettingsPage, openHomePage, openLoginPage, openMessagesPage, openMyProfilePage } from '@/utils/navigation'
@@ -257,10 +258,15 @@ function handleSettings() {
   openAccountSettingsPage()
 }
 
-function handleLogout() {
-  auth.logout()
-  closeAllDropdowns()
-  uni.redirectTo({ url: '/pages/auth/login' })
+async function handleLogout() {
+  try {
+    await logoutSession()
+  } finally {
+    // Network failures must not keep the local session signed in.
+    auth.logout()
+    closeAllDropdowns()
+    uni.redirectTo({ url: '/pages/auth/login' })
+  }
 }
 
 function toggleLocaleDropdown() {

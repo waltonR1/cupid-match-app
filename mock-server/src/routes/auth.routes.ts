@@ -17,6 +17,10 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     return session
   })
 
+  app.post('/auth/logout', async () => {
+    return {}
+  })
+
   app.post(`/auth/register`, async (request, reply) => {
     const body = (request.body ?? {}) as Record<string, unknown>
     const result = await register(getDb(), body)

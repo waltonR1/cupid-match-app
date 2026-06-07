@@ -17,7 +17,7 @@ const DEFAULT = {
     apiPrefix: '/api',
     host: '127.0.0.1',
     renderHost: '0.0.0.0',
-    port: 52173,
+    port: 8080,
     enableRequestLogging: true,
     renderRequestLogging: false,
 } as const

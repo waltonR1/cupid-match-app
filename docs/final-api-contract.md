@@ -16,6 +16,8 @@
 - DTO 不返回数据库 Record。
 - DTO 不返回 profile 联系方式值；联系方式只允许通过 private introduction / inbox flow 的独立接口开放。
 - `X-User-Id` 只作为 development / staging 的 mock request context；production 前端使用 `Authorization: Bearer <token>`。RuoYi 后端应在登录 / 注册返回可校验 JWT 或同等 Bearer token。
+- Java 产品 API 的传输层响应统一使用 `code + msg + data?`；`src/api/shared/http.ts` 负责解包，业务 API、hooks 和页面仍直接使用领域 DTO。
+- `code = 200` 表示成功；失败响应使用对应错误码和 `msg`，HTTP 状态码仍表达认证、权限、参数和服务端错误。
 - 所有列表接口统一返回 `items + pagination + facets?`。
 - 所有写操作返回变更后的领域状态 DTO，不要求前端自行拼状态。
 ## Common Types
@@ -74,9 +76,10 @@ interface PaginationDTO {
   totalPages: number
 }
 
-interface ApiErrorDTO {
-  code: string
-  message: string
+interface ApiResponse<T> {
+  code: number
+  msg: string
+  data?: T
 }
 ```
 
@@ -96,6 +99,7 @@ Endpoint status rules:
 | Auth | `POST` | `/api/auth/password-reset-code` | Request password reset verification code metadata. Product response does not include the code. |
 | Auth | `POST` | `/api/auth/password/reset` | Reset password with a verified reset code. |
 | Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
+| Auth | `POST` | `/api/auth/logout` | 删除当前 Redis session，使当前 JWT 立即失效。 |
 | Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
 | Profiles | `GET` | `/api/profiles/featured` | 首页精选 self profiles。 |
 | Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |

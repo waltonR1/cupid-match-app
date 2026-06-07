@@ -30,8 +30,8 @@
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `VITE_APP_ENV` | dev 为 `development`，build 为 `production` | 应用运行环境：`development` / `staging` / `production`。 |
-| `VITE_API_BASE_URL` | 必填，开发示例 `http://127.0.0.1:52173/api` | 前端 API 基地址。 |
-| `VITE_ASSET_BASE_URL` | 必填，开发示例 `http://127.0.0.1:52173` | 图片、上传文件等公开资源基地址。 |
+| `VITE_API_BASE_URL` | 必填，开发示例 `http://127.0.0.1:8080/api` | 前端 API 基地址。 |
+| `VITE_ASSET_BASE_URL` | 必填，开发示例 `http://127.0.0.1:8080` | 图片、上传文件等公开资源基地址。 |
 | `VITE_API_ENABLE_LOGGING` | 必填：`true` / `false` | 是否在前端 console 输出 API 日志。 |
 | `VITE_ENABLE_DEBUG` | 非 production 默认开启 | 是否允许访问 `/pages/debug/*`。商用环境必须为 `false`。 |
 
@@ -48,7 +48,7 @@ VITE_ENABLE_DEBUG=false
 
 ```env
 VITE_APP_ENV=staging
-VITE_API_BASE_URL=http://127.0.0.1:52173/api
+VITE_API_BASE_URL=http://127.0.0.1:8080/api
 VITE_API_ENABLE_LOGGING=false
 VITE_ENABLE_DEBUG=true
 ```
@@ -58,7 +58,7 @@ VITE_ENABLE_DEBUG=true
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `HOST` | `127.0.0.1` | mock-server 监听地址。 |
-| `PORT` | `52173` | mock-server 监听端口。 |
+| `PORT` | `8080` | mock-server 监听端口。 |
 | `ENABLE_REQUEST_LOGGING` | `true` | 是否输出请求日志。 |
 
 Render 演示后端使用启动参数切换监听策略：
@@ -72,7 +72,7 @@ npm run start:render
 默认健康检查：
 
 ```text
-GET http://127.0.0.1:52173/api/ping
+GET http://127.0.0.1:8080/api/ping
 ```
 
 ## Render 演示后端
@@ -174,7 +174,7 @@ npm run generate:token-docs
 - `.env.production` 中 `VITE_ENABLE_DEBUG=false`。
 - `.env.production` 中 `VITE_API_ENABLE_LOGGING=false`。
 - `npm run build:h5:production` 构建成功。
-- 构建产物中不应包含本地 mock API 地址 `http://127.0.0.1:52173/api`。
+- 构建产物中不应包含本地 mock API 地址 `http://127.0.0.1:8080/api`。
 - 生产环境访问 `/pages/debug/*` 会进入 not-found。
 - 生产环境浏览器 console 不输出 `[API]` 请求日志。
 - 生产后端已实现当前前端调用的 API contract。
