@@ -87,10 +87,6 @@ export function getAccountMembership(): Promise<{
   return apiRequest('/account/membership')
 }
 
-export function getMembershipPlans(): Promise<MembershipPlanDTO[]> {
-  return apiRequest<MembershipPlanDTO[]>('/membership/plans')
-}
-
 export function getAccountEvents(): Promise<AccountEventRegistrationDTO[]> {
   return apiRequest<AccountEventRegistrationDTO[]>('/account/events')
 }
