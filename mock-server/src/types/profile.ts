@@ -276,23 +276,23 @@ export interface SelfProfileDetailDTO {
     datingIntentionLabel: string
     relationshipGoal: Restricted<string>
     residencePlan: Restricted<string>
-    relocation: RelocationCode
-    relationshipValues: RelationshipValueCode[]
+    relocation: Restricted<RelocationCode>
+    relationshipValues: Restricted<RelationshipValueCode[]>
     preferredAgeMin: Restricted<number>
     preferredAgeMax: Restricted<number>
-    preferredLocation: LocationScopeCode
+    preferredLocation: Restricted<LocationScopeCode>
     preferredEducation: Restricted<string>
     familyLife: Restricted<string>
     dealBreakers: Restricted<string[]>
     smoking: Restricted<HabitCode>
     drinking: Restricted<HabitCode>
     exercise: Restricted<string>
-    activityLevel: ActivityLevelCode
-    weekendStyle: WeekendStyleCode
-    pets: PetCode
+    activityLevel: Restricted<ActivityLevelCode>
+    weekendStyle: Restricted<WeekendStyleCode>
+    pets: Restricted<PetCode>
     personalityTraits: Restricted<string[]>
     interests: Restricted<string[]>
-    communicationStyle: CommunicationStyleCode
+    communicationStyle: Restricted<CommunicationStyleCode>
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO
@@ -325,22 +325,22 @@ export interface FamilyProfileDetailDTO {
     datingIntentionLabel: string
     relationshipGoal: Restricted<string>
     residencePlan: Restricted<string>
-    relocation: RelocationCode
-    relationshipValues: RelationshipValueCode[]
+    relocation: Restricted<RelocationCode>
+    relationshipValues: Restricted<RelationshipValueCode[]>
     preferredAgeMin: Restricted<number>
     preferredAgeMax: Restricted<number>
-    preferredLocation: LocationScopeCode
+    preferredLocation: Restricted<LocationScopeCode>
     preferredEducation: Restricted<string>
     familyLife: Restricted<string>
     dealBreakers: Restricted<string[]>
     smoking: Restricted<HabitCode>
     drinking: Restricted<HabitCode>
     exercise: Restricted<string>
-    activityLevel: ActivityLevelCode
-    weekendStyle: WeekendStyleCode
-    pets: PetCode
+    activityLevel: Restricted<ActivityLevelCode>
+    weekendStyle: Restricted<WeekendStyleCode>
+    pets: Restricted<PetCode>
     personalityTraits: Restricted<string[]>
-    communicationStyle: CommunicationStyleCode
+    communicationStyle: Restricted<CommunicationStyleCode>
     summary: string
     tags: string[]
     privateIntroduction: PrivateIntroductionDTO

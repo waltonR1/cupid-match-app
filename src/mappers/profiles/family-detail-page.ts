@@ -308,13 +308,19 @@ function joinRestrictedList(value: RestrictedProfileField<string[]>): Restricted
 }
 
 /** Format an enum code through the detail i18n value group. */
-function formatEnumValue(group: string, value: string, t: Translate): string {
-    return t(`${group}.${value}`)
+function formatEnumValue(group: string, value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
+    return isRestrictedValue(value) ? value : t(`${group}.${value}`)
 }
 
 /** Join enum code arrays through the detail i18n value group. */
-function joinEnumValues(group: string, values: string[], t: Translate): string {
-    return values.map(value => formatEnumValue(group, value, t)).join(' / ')
+function joinEnumValues(
+    group: string,
+    values: RestrictedProfileField<string[]>,
+    t: Translate,
+): RestrictedProfileField<string> {
+    return isRestrictedValue(values)
+        ? values
+        : values.map(value => formatEnumValue(group, value, t)).join(' / ')
 }
 
 /** 判断是否为受限值 */

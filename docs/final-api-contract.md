@@ -399,23 +399,23 @@ interface ProfileDetailBaseDTO {
   datingIntentionLabel: string
   relationshipGoal: RestrictedProfileField<string>
   residencePlan: RestrictedProfileField<string>
-  relocation: RelocationCode
-  relationshipValues: RelationshipValueCode[]
+  relocation: RestrictedProfileField<RelocationCode>
+  relationshipValues: RestrictedProfileField<RelationshipValueCode[]>
   preferredAgeMin: RestrictedProfileField<number>
   preferredAgeMax: RestrictedProfileField<number>
-  preferredLocation: LocationScopeCode
+  preferredLocation: RestrictedProfileField<LocationScopeCode>
   preferredEducation: RestrictedProfileField<string>
   familyLife: RestrictedProfileField<string>
   dealBreakers: RestrictedProfileField<string[]>
   smoking: RestrictedProfileField<'never' | 'social' | 'often'>
   drinking: RestrictedProfileField<'never' | 'social' | 'often'>
   exercise: RestrictedProfileField<string>
-  activityLevel: ActivityLevelCode
-  weekendStyle: WeekendStyleCode
-  pets: PetCode
+  activityLevel: RestrictedProfileField<ActivityLevelCode>
+  weekendStyle: RestrictedProfileField<WeekendStyleCode>
+  pets: RestrictedProfileField<PetCode>
   personalityTraits: RestrictedProfileField<string[]>
   interests: RestrictedProfileField<string[]>
-  communicationStyle: CommunicationStyleCode
+  communicationStyle: RestrictedProfileField<CommunicationStyleCode>
   summary: string
   tags: string[]
   familyVisible: boolean
