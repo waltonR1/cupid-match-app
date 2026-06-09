@@ -92,6 +92,7 @@ function buildAccessLabel(accessLevel: FamilyProfileDetailAccessLevel, t: Transl
 
 /** 构建头图相册 */
 function buildHeroPhotos(profile: FamilyProfileDetail, accessLevel: FamilyProfileDetailAccessLevel): string[] {
+    if (isRestrictedValue(profile.photos)) return []
     const photos = profile.photos.map(photo => photo.url)
     if (accessLevel === 'visitor') return photos.slice(0, 2)
     if (accessLevel === 'registered') return photos.slice(0, 3)
@@ -100,8 +101,12 @@ function buildHeroPhotos(profile: FamilyProfileDetail, accessLevel: FamilyProfil
 
 /** 构建锁定相册提示 */
 function buildGalleryLockedText(profile: FamilyProfileDetail, accessLevel: FamilyProfileDetailAccessLevel, t: Translate): string {
-    const visibleCount = buildHeroPhotos(profile, accessLevel).length
-    const hiddenCount = Math.max(0, profile.photos.length - visibleCount)
+    if (profile.photos === PROFILE_FIELD_HIDDEN) return ''
+
+    const visibleCount = isRestrictedValue(profile.photos)
+        ? Math.min(profile.photoCount, 1)
+        : buildHeroPhotos(profile, accessLevel).length
+    const hiddenCount = Math.max(0, profile.photoCount - visibleCount)
 
     if (hiddenCount <= 0) return ''
 

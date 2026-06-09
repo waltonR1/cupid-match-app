@@ -8,6 +8,7 @@ export type ProfileRestrictedFieldValue =
     | typeof PROFILE_FIELD_HIDDEN
 
 export const SELF_PROFILE_LOGIN_REQUIRED_FIELDS = [
+    'photos',
     'country',
     'languages',
     'maritalStatus',
@@ -44,6 +45,7 @@ export const SELF_PROFILE_GUEST_REQUIRED_FIELDS = [
 ] as const
 
 export const FAMILY_PROFILE_LOGIN_REQUIRED_FIELDS = [
+    'photos',
     'country',
     'nationality',
     'languages',

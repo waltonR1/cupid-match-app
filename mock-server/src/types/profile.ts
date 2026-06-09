@@ -257,7 +257,8 @@ export interface SelfProfileDetailDTO {
     id: string
     displayName: string
     avatarUrl: string
-    photos: LocalizedProfilePhotoDTO[]
+    photos: Restricted<LocalizedProfilePhotoDTO[]>
+    photoCount: number
     gender: GenderCode
     age: Restricted<number>
     height: number
@@ -304,7 +305,8 @@ export interface FamilyProfileDetailDTO {
     id: string
     displayName: string
     avatarUrl: string
-    photos: LocalizedProfilePhotoDTO[]
+    photos: Restricted<LocalizedProfilePhotoDTO[]>
+    photoCount: number
     gender: GenderCode
     age: number
     height: number

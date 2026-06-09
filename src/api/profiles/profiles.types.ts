@@ -163,7 +163,8 @@ export interface SelfProfileDetail {
     id: string
     displayName: string
     avatarUrl: string
-    photos: ProfilePhoto[]
+    photos: RestrictedProfileField<ProfilePhoto[]>
+    photoCount: number
     gender: GenderCode
     age: RestrictedProfileField<number>
     height: number
@@ -210,7 +211,8 @@ export interface FamilyProfileDetail {
     id: string
     displayName: string
     avatarUrl: string
-    photos: ProfilePhoto[]
+    photos: RestrictedProfileField<ProfilePhoto[]>
+    photoCount: number
     gender: GenderCode
     age: number
     height: number

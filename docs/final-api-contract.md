@@ -378,6 +378,7 @@ interface ProfileDetailBaseDTO {
   displayName: string
   avatarUrl: string
   photos: RestrictedProfileField<ProfilePhotoDTO[]>
+  photoCount: number
   gender: 'male' | 'female'
   age: RestrictedProfileField<number>
   height: number
