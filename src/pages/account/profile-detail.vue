@@ -26,7 +26,7 @@
             class="cursor-pointer border px-3 py-1.5 transition-colors"
             @click="requestEditLocaleChange(item)"
         >
-          {{ t(`profiles.detail.values.language.${item}`) }}
+          {{ t(`profiles.detail.values.language.${item.toUpperCase()}`) }}
         </view>
       </view>
       <view
@@ -280,6 +280,61 @@
                       @click="toggleListDraft(entry.fieldKey, option.value)"
                   >
                     {{ option.label }}
+                  </view>
+                </view>
+                <view v-else-if="entry.editor === 'list' && entry.fieldKey === 'languages'" class="grid gap-3">
+                  <view class="flex flex-wrap gap-2">
+                    <view
+                        v-for="item in readListDraft(entry.fieldKey)"
+                        :key="item"
+                        class="flex items-center gap-2 border border-component-directory-card-tag-border bg-component-directory-card-tag-background px-3 py-1.5 text-[12px] text-semantic-text-secondary"
+                    >
+                      <text>{{ displayTagDraft(entry.fieldKey, item) }}</text>
+                      <text class="cursor-pointer text-semantic-text-muted"
+                            @click="removeListDraft(entry.fieldKey, item)">x
+                      </text>
+                    </view>
+                  </view>
+                  <view class="flex flex-wrap gap-2">
+                    <view class="relative min-w-[220px] flex-1">
+                      <view
+                          class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
+                          @click="toggleListSelect(entry.fieldKey)"
+                      >
+                        <text :class="listSelectedOption[entry.fieldKey] ? 'text-semantic-text-primary' : 'text-semantic-text-muted'">
+                          {{ selectedListOptionLabel(entry.fieldKey) || t('profiles.detail.selectPlaceholder') }}
+                        </text>
+                        <text class="text-semantic-text-muted">{{ listOpenSelectKey === entry.fieldKey ? '^' : 'v' }}</text>
+                      </view>
+                      <view
+                          v-if="listOpenSelectKey === entry.fieldKey"
+                          class="absolute left-0 top-[calc(100%+6px)] z-30 max-h-[280px] w-full overflow-y-auto border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
+                      >
+                        <view
+                            v-for="option in availableListOptions(entry.fieldKey)"
+                            :key="option.value"
+                            :class="listSelectedOption[entry.fieldKey] === option.value
+                            ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
+                            : 'text-semantic-text-secondary hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
+                            class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
+                            @click="selectListOption(entry.fieldKey, option.value)"
+                        >
+                          {{ option.label }}
+                        </view>
+                        <view
+                            v-if="availableListOptions(entry.fieldKey).length === 0"
+                            class="px-3 py-2 text-[14px] text-semantic-text-muted"
+                        >
+                          {{ t('profiles.detail.noMoreOptions') }}
+                        </view>
+                      </view>
+                    </view>
+                    <view
+                        class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2 text-[14px]"
+                        @click="addSelectedListOption(entry.fieldKey)"
+                    >
+                      {{ t('profiles.actions.add') }}
+                    </view>
                   </view>
                 </view>
                 <view v-else-if="entry.editor === 'list'" class="grid gap-3">
@@ -540,7 +595,7 @@ useRequireAuth()
 const {t, locale, locales} = usePageI18n('accountCenter')
 const profileId = ref('')
 const createMode = ref(false)
-const editLocale = ref(locale.value)
+const editLocale = computed(() => locale.value)
 const {
   payload,
   pageData,
@@ -555,8 +610,10 @@ const photoDrafts = ref<AccountProfilePhotoDraft[]>([])
 const draftOwnership = ref({
   relationshipToProfile: 'relative' as 'self' | 'father' | 'mother' | 'relative',
 })
-const tagInputs = ref<Record<string, string>>({})
 const openSelectKey = ref<string | null>(null)
+const listOpenSelectKey = ref<string | null>(null)
+const listSelectedOption = ref<Record<string, string>>({})
+const tagInputs = ref<Record<string, string>>({})
 const pendingEditLocale = ref<typeof editLocale.value | null>(null)
 const localeSwitchPromptOpen = ref(false)
 const verificationPanelKey = ref<string | null>(null)
@@ -630,7 +687,7 @@ function hydrateDraft(value: NonNullable<typeof payload.value>) {
     city: value.city,
     country: value.country,
     nationality: value.nationality,
-    languages: value.languages.join(' / '),
+    languages: value.languages.map((v) => v.toUpperCase()).join(' / '),
     degreeLevel: value.degreeLevel,
     education: value.education,
     industry: value.industry,
@@ -681,6 +738,7 @@ function hydrateDraft(value: NonNullable<typeof payload.value>) {
   draftOwnership.value = {
     relationshipToProfile: value.ownership.relationshipToProfile,
   }
+  listSelectedOption.value = {}
   tagInputs.value = {}
 }
 
@@ -706,7 +764,7 @@ function displayListItems(entry: AccountProfileDetailPageData['profileSections']
   const values = Array.isArray(entry.rawValue) ? entry.rawValue : []
   if (values.length === 0) return ['-']
   if (entry.fieldKey === 'languages') {
-    return values.map((value) => t(`profiles.detail.values.language.${value.toLowerCase()}`))
+    return values.map((value) => t(`profiles.detail.values.language.${value.toUpperCase()}`))
   }
   if (entry.fieldKey === 'relationshipValues') {
     return values.map((value) => t(`profiles.detail.values.relationshipValues.${value}`))
@@ -750,7 +808,7 @@ function toggleEditing() {
 function requestEditLocaleChange(nextLocale: typeof editLocale.value) {
   if (nextLocale === editLocale.value) return
   if (!editing.value) {
-    editLocale.value = nextLocale
+    locale.value = nextLocale
     return
   }
   pendingEditLocale.value = nextLocale
@@ -766,7 +824,7 @@ function saveAndSwitchLocale() {
   if (!pendingEditLocale.value) return
   void saveDraft().then((saved) => {
     if (!saved || !pendingEditLocale.value) return
-    editLocale.value = pendingEditLocale.value
+    locale.value = pendingEditLocale.value
     cancelLocaleSwitch()
   })
 }
@@ -775,7 +833,7 @@ function discardAndSwitchLocale() {
   if (!pendingEditLocale.value) return
   if (payload.value) hydrateDraft(payload.value)
   editing.value = false
-  editLocale.value = pendingEditLocale.value
+  locale.value = pendingEditLocale.value
   cancelLocaleSwitch()
 }
 
@@ -936,7 +994,16 @@ function selectRelationship(value: typeof draftOwnership.value.relationshipToPro
   openSelectKey.value = null
 }
 
-const languageOptions = computed(() => ['zh', 'fr', 'en'].map((value) => ({
+const languageOptions = computed(() => [
+  'ZH', 'EN', 'FR', 'ES', 'AR', 'PT', 'RU', 'DE', 'JA', 'KO',
+  'HI', 'IT', 'NL', 'TR', 'VI', 'TH', 'PL', 'SV', 'EL', 'HE',
+  'ID', 'MS', 'BN', 'FA', 'UR', 'YUE', 'TA', 'TE', 'MR', 'GU',
+  'PA', 'TL', 'KM', 'MY', 'LO', 'MN', 'NE', 'SI', 'AM', 'SW',
+  'RO', 'HU', 'CS', 'SK', 'BG', 'SR', 'HR', 'UK', 'NO', 'DA',
+  'FI', 'LT', 'LV', 'ET', 'SL', 'IS', 'CA', 'HY', 'KA', 'AZ',
+  'KK', 'UZ', 'KY', 'PS', 'KU', 'HT', 'MT', 'GA', 'CY', 'ML',
+  'KN', 'OR', 'FIL', 'AF', 'MI', 'MG', 'SO', 'SM', 'SD', 'TK',
+].map((value) => ({
   label: t(`profiles.detail.values.language.${value}`),
   value,
 })))
@@ -960,6 +1027,47 @@ const relationshipValueOptions = computed(() => [
   label: t(`profiles.detail.values.relationshipValues.${value}`),
   value,
 })))
+
+function listFieldOptions(fieldKey: string) {
+  if (fieldKey === 'languages') return languageOptions.value
+  return []
+}
+
+function toggleListSelect(fieldKey: string) {
+  listOpenSelectKey.value = listOpenSelectKey.value === fieldKey ? null : fieldKey
+  if (listOpenSelectKey.value) {
+    openSelectKey.value = null
+  }
+}
+
+function selectListOption(fieldKey: string, value: string) {
+  listSelectedOption.value = { ...listSelectedOption.value, [fieldKey]: value }
+  listOpenSelectKey.value = null
+}
+
+function selectedListOptionLabel(fieldKey: string) {
+  const selected = listSelectedOption.value[fieldKey]
+  if (!selected) return ''
+  return listFieldOptions(fieldKey).find((o) => o.value === selected)?.label ?? selected
+}
+
+function addSelectedListOption(fieldKey: string) {
+  const selected = (listSelectedOption.value[fieldKey] ?? '').trim()
+  if (!selected) return
+  const values = readListDraft(fieldKey)
+  const normalized = fieldKey === 'languages' ? selected.toUpperCase() : selected
+  if (!values.some((v) => v.toUpperCase() === normalized.toUpperCase())) {
+    writeDraft(fieldKey, [...values, normalized].join(' / '))
+  }
+  const next = { ...listSelectedOption.value }
+  delete next[fieldKey]
+  listSelectedOption.value = next
+}
+
+function availableListOptions(fieldKey: string) {
+  const selected = new Set(readListDraft(fieldKey).map((v) => v.toUpperCase()))
+  return listFieldOptions(fieldKey).filter((o) => !selected.has(o.value.toUpperCase()))
+}
 
 function readListDraft(fieldKey: string) {
   return toList(readDraft(fieldKey))
@@ -997,6 +1105,7 @@ function removeListDraft(fieldKey: string, value: string) {
 
 function displayTagDraft(fieldKey: string, value: string) {
   if (fieldKey === 'relationshipValues') return t(`profiles.detail.values.relationshipValues.${value}`)
+  if (fieldKey === 'languages') return t(`profiles.detail.values.language.${value.toUpperCase()}`)
   return value
 }
 
