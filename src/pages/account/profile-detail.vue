@@ -584,6 +584,7 @@ import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import {useAccountProfileDetail} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import {ALLOWED_PHOTO_EXTENSIONS, MAX_PHOTO_COUNT, MAX_PHOTO_SIZE} from '@/config/upload'
 import {openMyProfilePage} from '@/utils/navigation'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
 import type {
@@ -1202,6 +1203,10 @@ function maskDate(value?: string) {
 }
 
 async function addDraftPhoto() {
+  if (visiblePhotoDrafts.value.length >= MAX_PHOTO_COUNT) {
+    uni.showToast({title: t('profiles.detail.photoMaxCount'), icon: 'none'})
+    return
+  }
   const localPath = await chooseLocalImage()
   if (!localPath) return
   const nextOrder = visiblePhotoDrafts.value.length + 1
@@ -1229,7 +1234,24 @@ function chooseLocalImage() {
       sourceType: ['album', 'camera'],
       success: (result) => {
         const [path] = result.tempFilePaths
-        resolve(path ?? null)
+        if (!path) { resolve(null); return }
+
+        const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
+        if (!ALLOWED_PHOTO_EXTENSIONS.includes(ext)) {
+          uni.showToast({title: t('profiles.detail.photoUnsupportedFormat'), icon: 'none'})
+          resolve(null)
+          return
+        }
+
+        const files = Array.isArray(result.tempFiles) ? result.tempFiles : [result.tempFiles]
+        const size = files[0]?.size
+        if (size && size > MAX_PHOTO_SIZE) {
+          uni.showToast({title: t('profiles.detail.photoTooLarge'), icon: 'none'})
+          resolve(null)
+          return
+        }
+
+        resolve(path)
       },
       fail: () => resolve(null),
     })

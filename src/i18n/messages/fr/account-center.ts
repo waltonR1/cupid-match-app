@@ -125,6 +125,9 @@ export const accountCenterMessages: AppMessageSchema = {
       choosePhoto: 'Remplacer la photo',
       addPhoto: 'Importer une photo',
       uploadFailed: 'Échec du téléchargement, veuillez réessayer',
+      photoTooLarge: 'Photo dépasse la limite de 10 Mo',
+      photoUnsupportedFormat: 'Formats acceptés : JPG, PNG',
+      photoMaxCount: 'Maximum 9 photos',
       photoStatus: {
         review: 'En verification',
         approved: 'Approuvee',

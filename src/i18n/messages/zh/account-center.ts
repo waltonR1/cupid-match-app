@@ -138,6 +138,9 @@ export const accountCenterMessages: AppMessageSchema = {
       choosePhoto: '更换照片',
       addPhoto: '上传照片',
       uploadFailed: '上传失败，请重试',
+      photoTooLarge: '图片过大，单张不超过 10MB',
+      photoUnsupportedFormat: '仅支持 JPG、PNG 格式',
+      photoMaxCount: '最多上传 9 张照片',
       photoStatus: {
         review: '待审核',
         approved: '已通过',
