@@ -131,6 +131,12 @@
         </view>
       </view>
     </view>
+    <Toast
+        :message="toast.message.value"
+        :type="toast.type.value"
+        :visible="toast.visible.value"
+        @close="toast.hide"
+    />
   </AccountShell>
 </template>
 
@@ -138,6 +144,8 @@
 import {useRequireAuth} from '@/hooks/common/use-require-auth'
 import {computed, watch} from 'vue'
 import AccountShell from '@/components/account/AccountShell.vue'
+import Toast from '@/components/common/Toast.vue'
+import {useToast} from '@/hooks/common/use-toast'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountMembership} from '@/hooks/account'
@@ -147,6 +155,7 @@ import {formatLocalizedDate} from '@/utils/locale-format'
 import {findNextPlan} from '@/mappers/account/membership'
 
 useRequireAuth()
+const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
 const {loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade} = useAccountMembership()
 watch(locale, () => {
@@ -166,7 +175,7 @@ async function requestNextUpgrade() {
   if (!nextPlan.value) return
   const result = await requestUpgrade(nextPlan.value.tier)
   if (result?.status === 'pending_external_flow') {
-    uni.showToast({title: t('membership.upgrade.pending'), icon: 'none'})
+    toast.show(t('membership.upgrade.pending'), 'info')
   }
 }
 

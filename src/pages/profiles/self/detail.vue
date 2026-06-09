@@ -187,6 +187,12 @@
       />
     </view>
   </AppPageLayout>
+    <Toast
+        :message="toast.message.value"
+        :type="toast.type.value"
+        :visible="toast.visible.value"
+        @close="toast.hide"
+    />
 </template>
 
 <script lang="ts" setup>
@@ -198,12 +204,15 @@ import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import ProfileDetailHero from '@/components/profiles/detail/ProfileDetailHero.vue'
 import ProfileDetailSection from '@/components/profiles/detail/ProfileDetailSection.vue'
 import ProfilePrivateIntroductionPanel from '@/components/profiles/detail/ProfilePrivateIntroductionPanel.vue'
+import Toast from '@/components/common/Toast.vue'
+import {useToast} from '@/hooks/common/use-toast'
 import {useSelfProfileDetail} from '@/hooks/profiles'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import type {PrivateIntroductionPanelText} from '@/types/profiles/detail'
 import {openLoginPage, openMembershipPage, openMessagesPage} from '@/utils/navigation'
 
 /** 页面文案 */
+const toast = useToast()
 const {t, locale} = usePageI18n('selfDetail')
 /** 当前资料 ID */
 const profileId = ref('')
@@ -231,7 +240,7 @@ const {
   favoriteLoading,
   toggleFavorite,
   requestPrivateIntroduction,
-} = useSelfProfileDetail(profileId, t, locale)
+} = useSelfProfileDetail(profileId, t, locale, toast.show)
 
 type VisitorRevealStep = {
   title: string

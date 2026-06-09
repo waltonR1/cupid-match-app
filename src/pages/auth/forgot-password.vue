@@ -157,6 +157,12 @@
       </view>
     </view>
   </AppPageLayout>
+    <Toast
+        :message="toast.message.value"
+        :type="toast.type.value"
+        :visible="toast.visible.value"
+        @close="toast.hide"
+    />
 </template>
 
 <script setup lang="ts">
@@ -164,6 +170,8 @@ import { computed, ref, watch } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import AppButton from '@/components/common/AppButton.vue'
+import Toast from '@/components/common/Toast.vue'
+import {useToast} from '@/hooks/common/use-toast'
 import AuthPasswordField from '@/components/auth/AuthPasswordField.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
@@ -174,6 +182,7 @@ import { useForgotPassword } from '@/hooks/auth'
 
 type AuthProvider = 'email' | 'phone'
 
+const toast = useToast()
 const authStore = useAuthStore()
 onShow(() => {
   if (authStore.isLoggedIn) {
@@ -248,7 +257,7 @@ async function handleSendCode() {
       identifier: identifier.value.trim(),
     })
     if (result) {
-      uni.showToast({ title: t('toasts.codeSent'), icon: 'none', duration: 3000 })
+      toast.show(t('toasts.codeSent'), 'info')
       step.value = 2
       return
     }
@@ -283,7 +292,7 @@ async function handleResetPassword() {
       newPassword: newPassword.value,
     })
     if (result) {
-      uni.showToast({ title: t('toasts.passwordReset'), icon: 'success', duration: 2000 })
+      toast.show(t('toasts.passwordReset'), 'success')
       setTimeout(() => {
         uni.redirectTo({ url: '/pages/auth/login' })
       }, 1500)

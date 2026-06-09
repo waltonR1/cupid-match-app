@@ -717,6 +717,12 @@
       @cancel="confirmOpen = false"
       @confirm="handleConfirm"
   />
+    <Toast
+        :message="toast.message.value"
+        :type="toast.type.value"
+        :visible="toast.visible.value"
+        @close="toast.hide"
+    />
 </template>
 
 <script lang="ts" setup>
@@ -728,6 +734,8 @@ import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import Toast from '@/components/common/Toast.vue'
+import {useToast} from '@/hooks/common/use-toast'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountSettings} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
@@ -744,6 +752,7 @@ import {openLoginPage} from '@/utils/navigation'
 import {useAgreementDialog} from '@/hooks/legal'
 
 useRequireAuth()
+const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
 const {t: globalT} = useI18n({useScope: 'global'})
 const {
@@ -1092,12 +1101,12 @@ async function handleExportData() {
     if (challengeToken === null) return
     const exported = await exportData(challengeToken)
     if (!exported) {
-      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+      toast.show(t('settings.toasts.saveFailed'), 'error')
       return
     }
-    uni.showToast({title: t('settings.toasts.exportReady'), icon: 'success'})
+    toast.show(t('settings.toasts.exportReady'), 'success')
   } catch {
-    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+    toast.show(t('settings.toasts.saveFailed'), 'error')
   }
 }
 
@@ -1112,14 +1121,14 @@ async function handleDeactivateAccount() {
           if (challengeToken === null) return
           const result = await deactivateAccount(challengeToken)
           if (!result) {
-            uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+            toast.show(t('settings.toasts.saveFailed'), 'error')
             return
           }
           const authStore = useAuthStore()
           authStore.logout()
           uni.redirectTo({url: '/pages/auth/login'})
         } catch {
-          uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+          toast.show(t('settings.toasts.saveFailed'), 'error')
         }
       },
   )
@@ -1213,7 +1222,7 @@ async function handleBindIdentity() {
     }
     showBindForm.value = false
     resetBindResendCountdown()
-    uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+    toast.show(t('settings.toasts.saved'), 'success')
   } catch {
     bindError.value = t('settings.toasts.saveFailed')
   } finally {
@@ -1258,12 +1267,12 @@ async function handleUnbindIdentity(id: string) {
           if (challengeToken === null) return
           const result = await unbindIdentity(id, challengeToken)
           if (result) {
-            uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+            toast.show(t('settings.toasts.saved'), 'success')
           } else {
-            uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+            toast.show(t('settings.toasts.saveFailed'), 'error')
           }
         } catch {
-          uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+          toast.show(t('settings.toasts.saveFailed'), 'error')
         }
       },
   )
@@ -1329,7 +1338,7 @@ async function handleMfaSubmit() {
         : await disableMfa({code: mfaCode.value.trim()})
     if (result) {
       showMfaModal.value = false
-      uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+      toast.show(t('settings.toasts.saved'), 'success')
     } else {
       mfaError.value = t('settings.toasts.saveFailed')
     }
@@ -1378,7 +1387,7 @@ async function confirmPasswordChange() {
       challengeToken,
     })
     if (result) {
-      uni.showToast({title: t('settings.toasts.passwordChanged'), icon: 'success'})
+      toast.show(t('settings.toasts.passwordChanged'), 'success')
       const authStore = useAuthStore()
       authStore.logout()
       openLoginPage()
@@ -1396,7 +1405,7 @@ async function confirmPasswordChange() {
 
 async function saveSettings() {
   if (!accountDraft.value.accountName.trim()) {
-    uni.showToast({title: t('settings.validation.accountNameRequired'), icon: 'none'})
+    toast.show(t('settings.validation.accountNameRequired'), 'error')
     return
   }
 
@@ -1415,21 +1424,21 @@ async function saveSettings() {
     const prefsPayload = toPreferencePayload(preferenceDraft.value)
     const accountOk = await saveAccount(accountPayload)
     if (!accountOk) {
-      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+      toast.show(t('settings.toasts.saveFailed'), 'error')
       return
     }
 
     const prefsOk = await savePreferences({preferences: prefsPayload})
     if (!prefsOk) {
-      uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+      toast.show(t('settings.toasts.saveFailed'), 'error')
       return
     }
 
-    uni.showToast({title: t('settings.toasts.saved'), icon: 'success'})
+    toast.show(t('settings.toasts.saved'), 'success')
     avatarLocalPath.value = ''
     editing.value = false
   } catch {
-    uni.showToast({title: t('settings.toasts.saveFailed'), icon: 'none'})
+    toast.show(t('settings.toasts.saveFailed'), 'error')
   } finally {
     saving.value = false
   }

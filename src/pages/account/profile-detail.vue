@@ -572,6 +572,12 @@
         @cancel="confirmOpen = false"
         @confirm="handleConfirm"
     />
+    <Toast
+        :message="toast.message.value"
+        :type="toast.type.value"
+        :visible="toast.visible.value"
+        @close="toast.hide"
+    />
   </AccountShell>
 </template>
 
@@ -582,6 +588,8 @@ import {onLoad} from '@dcloudio/uni-app'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import Toast from '@/components/common/Toast.vue'
+import {useToast} from '@/hooks/common/use-toast'
 import {useAccountProfileDetail} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {ALLOWED_PHOTO_EXTENSIONS, MAX_PHOTO_COUNT, MAX_PHOTO_SIZE} from '@/config/upload'
@@ -593,6 +601,7 @@ import type {
 } from '@/types/account/profile-detail'
 
 useRequireAuth()
+const toast = useToast()
 const {t, locale, locales} = usePageI18n('accountCenter')
 const profileId = ref('')
 const createMode = ref(false)
@@ -881,7 +890,7 @@ async function saveDraft() {
   if (!payload.value) return false
   const validationMessage = validateProfileDraft()
   if (validationMessage) {
-    uni.showToast({title: validationMessage, icon: 'none'})
+    toast.show(validationMessage, 'info')
     return false
   }
   const profilePayload = buildProfilePayload()
@@ -907,7 +916,7 @@ async function saveDraft() {
       photos: await buildPhotoPayload(),
     })
   } catch {
-    uni.showToast({title: t('profiles.detail.uploadFailed'), icon: 'none'})
+    toast.show(t('profiles.detail.uploadFailed'), 'error')
     return false
   }
   if (detail && createMode.value) {
@@ -1204,7 +1213,7 @@ function maskDate(value?: string) {
 
 async function addDraftPhoto() {
   if (visiblePhotoDrafts.value.length >= MAX_PHOTO_COUNT) {
-    uni.showToast({title: t('profiles.detail.photoMaxCount'), icon: 'none'})
+    toast.show(t('profiles.detail.photoMaxCount'), 'info')
     return
   }
   const localPath = await chooseLocalImage()
@@ -1238,7 +1247,7 @@ function chooseLocalImage() {
 
         const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
         if (!ALLOWED_PHOTO_EXTENSIONS.includes(ext)) {
-          uni.showToast({title: t('profiles.detail.photoUnsupportedFormat'), icon: 'none'})
+          toast.show(t('profiles.detail.photoUnsupportedFormat'), 'error')
           resolve(null)
           return
         }
@@ -1246,7 +1255,7 @@ function chooseLocalImage() {
         const files = Array.isArray(result.tempFiles) ? result.tempFiles : [result.tempFiles]
         const size = files[0]?.size
         if (size && size > MAX_PHOTO_SIZE) {
-          uni.showToast({title: t('profiles.detail.photoTooLarge'), icon: 'none'})
+          toast.show(t('profiles.detail.photoTooLarge'), 'error')
           resolve(null)
           return
         }

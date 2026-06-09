@@ -10,7 +10,7 @@ import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { Translate } from '@/i18n/types'
 import { toFamilyProfileDetailPageData } from '@/mappers/profiles/family-detail-page'
 
-export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>) {
+export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>, showToast?: (msg: string, type?: 'success' | 'error' | 'info') => void) {
     const latest = useLatestRequest()
     const profile = ref<FamilyProfileDetail | null>(null)
 
@@ -39,7 +39,7 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
                 }
             }
         } catch {
-            uni.showToast({ title: t('actions.favoriteFailed'), icon: 'none' })
+            showToast?.(t('actions.favoriteFailed'), 'error')
         } finally {
             favoriteLoading.value = false
         }
