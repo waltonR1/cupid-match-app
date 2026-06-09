@@ -79,25 +79,26 @@
         </view>
 
         <view
-            v-if="featuredEntitlement"
+            v-for="entitlement in quotaEntitlements"
+            :key="entitlement.code"
             class="border border-semantic-border-default bg-semantic-surface-card px-7 py-7 shadow-panel"
         >
           <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-card-label">
             {{ t('membership.coreQuota') }}
           </view>
           <view class="mt-4 text-[20px] font-semibold">{{
-              t(`membership.entitlement.${featuredEntitlement.code}`)
+              t(`membership.entitlement.${entitlement.code}`)
             }}
           </view>
           <view class="mt-5 text-[42px] font-semibold leading-none">
-            {{ featuredEntitlement.quotaRemaining }}
+            {{ entitlement.quotaRemaining }}
             <text class="text-[18px] font-normal text-semantic-text-secondary">/ {{
-                featuredEntitlement.quotaTotal
+                entitlement.quotaTotal
               }}
             </text>
           </view>
           <view class="mt-5 max-w-[480px] text-[14px] leading-7 text-semantic-text-secondary">
-            {{ t('membership.featuredDescription') }}
+            {{ t(`membership.entitlementDescription.${entitlement.code}`) }}
           </view>
         </view>
 
@@ -152,7 +153,9 @@ watch(locale, () => {
   void refresh()
 })
 
-const featuredEntitlement = computed(() => entitlements.value.find((item) => item.code === 'private_introduction'))
+const quotaEntitlements = computed(() => entitlements.value.filter(
+    (item) => item.code === 'private_introduction' || item.code === 'event_registration',
+))
 const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
 
 function openMembershipSystemPage() {

@@ -1,6 +1,14 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const membershipMessages: AppMessageSchema = {
+    catalog: {
+      validityMonths: 'Valid for {count} months',
+      noFixedValidity: 'No fixed validity period',
+      privateIntroductions: '{count} private introductions per month',
+      noPrivateIntroductions: 'No private introduction quota',
+      events: '{count} offline events',
+      noEvents: 'No included event quota',
+    },
     hero: {
       eyebrow: 'Membership',
       title: 'Membership',
@@ -20,11 +28,6 @@ export const membershipMessages: AppMessageSchema = {
     },
     free: {
       badge: 'Free',
-      price: 'EUR 0',
-      priceNote: '/ free',
-      title: 'Free Member',
-      f1: 'Free registration and basic profile setup',
-      f2: 'Browse selected public profiles',
       f3: 'Access event and platform information',
       f4: 'Can upgrade to VIP later',
       cta: 'Join for Free',
@@ -43,32 +46,14 @@ export const membershipMessages: AppMessageSchema = {
     },
     silver: {
       badge: 'Silver VIP',
-      price: 'EUR 65',
-      priceNote: '/ RMB 499',
-      title: 'Silver VIP',
-      period: 'Valid for one year',
-      f1: '5 private introduction quotas per month',
-      f2: '12 offline events',
       f3: 'Private channels open after platform confirmation',
     },
     gold: {
       badge: 'Gold VIP',
-      price: 'EUR 100',
-      priceNote: '/ RMB 770',
-      title: 'Gold VIP',
-      period: 'Valid for six months',
-      f1: '15 private introduction quotas per month',
-      f2: '20 offline events',
       f3: 'Private channels open after platform confirmation',
     },
     diamond: {
       badge: 'Diamond VIP',
-      price: 'EUR 150',
-      priceNote: '/ RMB 1155',
-      title: 'Diamond VIP',
-      period: 'Valid for one year',
-      f1: '30 private introduction quotas per month',
-      f2: '24 offline events',
       f3: 'Priority advisor follow-up for introductions',
     },
     rules: {

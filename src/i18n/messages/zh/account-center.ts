@@ -56,7 +56,7 @@ export const accountCenterMessages: AppMessageSchema = {
       events: '活动',
     },
     functional: { noMembership: '暂无会员' },
-    membership: { tier: { free: '免费会员', silver: '银卡会员', gold: '金卡会员', diamond: '钻石会员' } },
+      membership: { tier: { free: '免费会员', silver: '白银会员', gold: '黄金会员', diamond: '钻石会员' } },
     empty: { title: '暂无账户数据', profile: '登录后可查看账户概览、资料、关系与活动记录。' },
   },
   profiles: {
@@ -376,9 +376,14 @@ export const accountCenterMessages: AppMessageSchema = {
     status: { active: '生效中', expired: '已到期', cancelled: '已取消', paused: '已暂停' },
       entitlement: {
         private_introduction: '私人介绍额度',
+        event_registration: '活动额度',
         event_priority: '活动优先报名',
         staff_review: '顾问审核',
         profile_detail_access: '资料详情查看',
+      },
+      entitlementDescription: {
+        private_introduction: '用于发起正式的进一步认识申请。',
+        event_registration: '用于参加受会员套餐额度控制的线下活动。',
       },
       tierPositioning: {
         free: '适合先了解平台与基础服务。',

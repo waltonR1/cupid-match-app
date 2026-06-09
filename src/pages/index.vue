@@ -11,7 +11,7 @@
 
     <HomeFeatures/>
     <HomeAudience/>
-    <HomeMembership/>
+    <HomeMembership :plans="membershipPlans"/>
   </AppPageLayout>
 </template>
 
@@ -28,10 +28,13 @@ import HomeVision from '@/components/home/HomeVision.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {useHomeEvents} from '@/hooks/events'
 import {useHomeSelfProfiles} from '@/hooks/profiles'
+import {useMembershipCatalog} from '@/hooks/membership'
 
 const {t: profileT, locale} = usePageI18n('self')
 const {t: eventsT} = usePageI18n('events')
+const {t: membershipT} = usePageI18n('membership')
 const {featuredProfiles: profiles} = useHomeSelfProfiles(profileT, locale)
 const {viewModel: eventsPreview} = useHomeEvents(eventsT, locale)
+const {plans: membershipPlans} = useMembershipCatalog(membershipT, locale)
 
 </script>

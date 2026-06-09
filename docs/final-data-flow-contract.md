@@ -1041,6 +1041,7 @@ Event settlement
 POST /api/events/:id/cancel
 -> viewer context
 -> update event_registrations.status = cancelled
+-> if the registration consumed event quota and was not attended, restore 1 event_registration balance
 -> return EventRegistrationStateDTO + derived counts
 ```
 
@@ -1226,6 +1227,16 @@ account membership page or guarded action
 -> MembershipDTO / EntitlementDTO
 ```
 
+Public catalog flow:
+
+```text
+home or public membership page
+-> GET /api/membership/catalog
+-> membership_plans
+-> shared membership plan mapper
+-> MembershipPlanDTO[]
+```
+
 Database:
 
 ```text
@@ -1235,9 +1246,13 @@ membership_plans:
   description
   priceCents
   currency
+  cnyPriceCents
+  billingType
   billingPeriod
+  validityMonths
   privateIntroductionQuota
   privateIntroductionPeriod
+  eventQuota
   eventPriorityEnabled
   staffReviewEnabled
   profileDetailAccessLevel
@@ -1271,6 +1286,8 @@ Rules:
 - User tier is not stored directly on `users`.
 - Quota is not derived ad hoc from a string tier in page code.
 - Private introduction permission reads entitlement result from backend DTO.
+- Activity confirmation consumes the `event_registration` balance only when `events.consumesMembershipQuota = true`.
+- Activity cancellation restores a consumed quota before attendance; registration consumption/release timestamps make the mutation idempotent.
 - `profile_detail_access` means paid viewer access to additional restricted profile detail fields. It does not control a user's own profile exposure or ranking; those remain under default profile access, `profile_privacy_preferences`, and staff policy.
 
 ## Private Introduction Chain

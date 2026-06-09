@@ -76,34 +76,34 @@
               <view
                   class="border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-4 py-4 text-semantic-text-primary shadow-panel">
                 <view class="text-[12px] uppercase tracking-[3px] text-component-membership-tier-silver-badge-label">
-                  {{ t('heroCards.silverLabel') }}
+                  {{ plan('silver')?.name }}
                 </view>
-                <view class="mt-3 text-[26px] font-semibold">{{ t('silver.price') }}</view>
-                <view class="mt-2 text-[13px] leading-6 text-semantic-text-muted">{{ t('silver.period') }}</view>
+                <view class="mt-3 text-[26px] font-semibold">{{ plan('silver')?.euroPrice }}</view>
+                <view class="mt-2 text-[13px] leading-6 text-semantic-text-muted">{{ plan('silver')?.validity }}</view>
               </view>
 
               <view
                   class="border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-4 py-4 text-semantic-text-inverse shadow-panel">
                 <view class="flex items-center justify-between gap-2">
                   <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-inverse-subtle">
-                    {{ t('heroCards.goldLabel') }}
+                    {{ plan('gold')?.name }}
                   </view>
                   <view
                       class="rounded-full border border-component-membership-tier-gold-border px-2 py-1 text-[10px] uppercase tracking-[2px] text-component-membership-tier-gold-badge-label">
                     {{ t('tiers.popular') }}
                   </view>
                 </view>
-                <view class="mt-3 text-[26px] font-semibold">{{ t('gold.price') }}</view>
-                <view class="mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ t('gold.period') }}</view>
+                <view class="mt-3 text-[26px] font-semibold">{{ plan('gold')?.euroPrice }}</view>
+                <view class="mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ plan('gold')?.validity }}</view>
               </view>
 
               <view
                   class="border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-4 py-4 text-semantic-text-inverse shadow-luxe">
                 <view class="text-[12px] uppercase tracking-[3px] text-component-membership-tier-diamond-badge-label">
-                  {{ t('heroCards.diamondLabel') }}
+                  {{ plan('diamond')?.name }}
                 </view>
-                <view class="mt-3 text-[26px] font-semibold">{{ t('diamond.price') }}</view>
-                <view class="mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ t('diamond.period') }}</view>
+                <view class="mt-3 text-[26px] font-semibold">{{ plan('diamond')?.euroPrice }}</view>
+                <view class="mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ plan('diamond')?.validity }}</view>
               </view>
             </view>
           </view>
@@ -122,6 +122,11 @@
 <script setup lang="ts">
 import AppButton from '@/components/common/AppButton.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import type {MembershipPlanViewModel} from '@/types/membership/catalog'
+
+const props = defineProps<{
+  plans: MembershipPlanViewModel[]
+}>()
 
 /** Membership Hero 操作事件 */
 const emit = defineEmits<{
@@ -131,4 +136,8 @@ const emit = defineEmits<{
 
 /** Membership 页面命名空间文案 */
 const {t} = usePageI18n('membership')
+
+function plan(tier: MembershipPlanViewModel['tier']) {
+  return props.plans.find((item) => item.tier === tier)
+}
 </script>

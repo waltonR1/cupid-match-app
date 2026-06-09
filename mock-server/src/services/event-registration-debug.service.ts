@@ -1,6 +1,7 @@
 import type {ApiLocale} from '../types/common.js'
 import type {Database, EventRegistrationRecord} from '../types/database.js'
 import {resolveLocalizedText} from '../utils/localized.js'
+import {consumeEventQuota} from './event.service.js'
 
 export type EventRegistrationReviewStatus = 'confirmed' | 'declined' | 'waitlist'
 
@@ -15,6 +16,8 @@ export interface EventRegistrationDebugItemDTO {
     confirmedAt?: string
     declinedAt?: string
     cancelledAt?: string
+    eventQuotaConsumedAt?: string
+    eventQuotaReleasedAt?: string
 }
 
 export interface EventRegistrationDebugResponseDTO {
@@ -22,7 +25,7 @@ export interface EventRegistrationDebugResponseDTO {
 }
 
 export interface EventRegistrationDebugMutationResult {
-    status: 'not_found' | 'invalid_status' | 'updated'
+    status: 'not_found' | 'invalid_status' | 'quota_exhausted' | 'updated'
     item?: EventRegistrationDebugItemDTO
 }
 
@@ -51,6 +54,10 @@ export function reviewEventRegistrationDebugItem(
     if (registration.status !== 'requested') return {status: 'invalid_status', item: toDebugItem(locale, data, registration)}
 
     const now = new Date().toISOString()
+    if (nextStatus === 'confirmed' && consumeEventQuota(data, registration, now) === 'quota_exhausted') {
+        return {status: 'quota_exhausted', item: toDebugItem(locale, data, registration)}
+    }
+
     registration.status = nextStatus
     registration.confirmedAt = nextStatus === 'confirmed' ? now : undefined
     registration.declinedAt = nextStatus === 'declined' ? now : undefined
@@ -80,5 +87,7 @@ function toDebugItem(
         confirmedAt: registration.confirmedAt,
         declinedAt: registration.declinedAt,
         cancelledAt: registration.cancelledAt,
+        eventQuotaConsumedAt: registration.eventQuotaConsumedAt,
+        eventQuotaReleasedAt: registration.eventQuotaReleasedAt,
     }
 }

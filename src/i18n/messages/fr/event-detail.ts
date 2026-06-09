@@ -35,6 +35,9 @@ export const eventDetailMessages: AppMessageSchema = {
     remaining: '{count} places restantes',
     waitlist: '{count} en attente',
   },
+  quota: {
+    remaining: 'Il reste {count} participations incluses pour cette periode.',
+  },
   registration: {
     guest: {
       title: 'Connexion requise',
@@ -71,6 +74,10 @@ export const eventDetailMessages: AppMessageSchema = {
     member_required: {
       title: 'Reserve aux membres',
       description: 'Cet evenement est ouvert aux membres. Consultez les acces avant de demander une place.',
+    },
+    event_quota_exhausted: {
+      title: 'Quota evenement utilise',
+      description: 'Toutes les participations incluses sont utilisees. Consultez les autres offres ou contactez un conseiller.',
     },
   },
   sections: {

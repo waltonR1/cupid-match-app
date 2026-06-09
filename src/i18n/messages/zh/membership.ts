@@ -1,6 +1,14 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const membershipMessages: AppMessageSchema = {
+    catalog: {
+      validityMonths: '有效期 {count} 个月',
+      noFixedValidity: '无固定期限',
+      privateIntroductions: '每月 {count} 次私人介绍',
+      noPrivateIntroductions: '无私人介绍额度',
+      events: '{count} 次线下活动',
+      noEvents: '无套餐活动额度',
+    },
     hero: {
       eyebrow: 'Membership',
       title: '会员体系',
@@ -20,11 +28,6 @@ export const membershipMessages: AppMessageSchema = {
     },
     free: {
       badge: 'Free',
-      price: '€0',
-      priceNote: '/ 免费',
-      title: '免费会员',
-      f1: '免费注册与基础资料填写',
-      f2: '浏览部分公开资料',
       f3: '查看活动信息与平台介绍',
       f4: '后续可升级为 VIP 服务',
       cta: '免费注册',
@@ -35,7 +38,7 @@ export const membershipMessages: AppMessageSchema = {
       titleAccent: 'VIP 方案',
       subtitle: '白银、黄金、钻石三档方案，对应不同的关系推进节奏、活动承接能力与服务深度。',
       cta: '咨询升级',
-      popular: 'Popular',
+      popular: '推荐',
       cardCta: '选择此方案',
       silverFit: '适合刚开始认真筛选、希望低压力接触的人。',
       goldFit: '适合希望平衡活动参与与顾问支持的主流用户。',
@@ -43,32 +46,14 @@ export const membershipMessages: AppMessageSchema = {
     },
     silver: {
       badge: 'Silver VIP',
-      price: '€65',
-      priceNote: '/ ¥499',
-      title: '白银会员',
-      period: '一年有效',
-      f1: '每月 5 次私人介绍名额',
-      f2: '12 次线下活动',
       f3: '平台确认后开放私人沟通渠道',
     },
     gold: {
       badge: 'Gold VIP',
-      price: '€100',
-      priceNote: '/ ¥770',
-      title: '黄金会员',
-      period: '半年有效',
-      f1: '每月 15 次私人介绍名额',
-      f2: '20 次线下活动',
       f3: '平台确认后开放私人沟通渠道',
     },
     diamond: {
       badge: 'Diamond VIP',
-      price: '€150',
-      priceNote: '/ ¥1155',
-      title: '钻石会员',
-      period: '一年有效',
-      f1: '每月 30 次私人介绍名额',
-      f2: '24 次线下活动',
       f3: '顾问优先跟进私人介绍',
     },
     rules: {

@@ -8,6 +8,7 @@ import { mockHashPassword } from '../utils/password.js'
 import { generateCode, verifyAndConsume } from './verification-code.service.js'
 import { getMfaStatus } from './mfa.service.js'
 import { mergeManualLocalizedText, mergeTranslatedText } from './translation.service.js'
+import {toMembershipPlanDTO, type MembershipPlanDTO} from './membership.service.js'
 
 // -- DTOs -- //
 
@@ -99,25 +100,6 @@ interface AccountMembershipDTO {
   startedAt: string
   expiresAt?: string
   conciergePriority: boolean
-}
-
-interface MembershipPlanDTO {
-  id: string
-  tier: MembershipLevel
-  name: string
-  description: string
-  priceCents?: number
-  currency?: string
-  billingPeriod?: string
-  conciergePriority: boolean
-  staffSupportLevel: string
-  sortOrder: number
-  featured: boolean
-  privateIntroductionQuota: number
-  privateIntroductionPeriod: string
-  eventPriorityEnabled: boolean
-  staffReviewEnabled: boolean
-  profileDetailAccessLevel: string
 }
 
 interface AccountEntitlementBalanceDTO {
@@ -1023,24 +1005,7 @@ export function getAccountMembership(data: Database, userId: string): {
     availablePlans: data.membership_plans
       .filter((item) => item.isActive)
       .sort((a, b) => a.sortOrder - b.sortOrder)
-      .map((item) => ({
-        id: item.id,
-        tier: item.tier,
-        name: resolveLocalizedText(locale, item.name),
-        description: resolveLocalizedText(locale, item.description),
-        priceCents: item.priceCents,
-        currency: item.currency,
-        billingPeriod: item.billingPeriod,
-        privateIntroductionQuota: item.privateIntroductionQuota,
-        privateIntroductionPeriod: item.privateIntroductionPeriod,
-        eventPriorityEnabled: item.eventPriorityEnabled,
-        staffReviewEnabled: item.staffReviewEnabled,
-        profileDetailAccessLevel: item.profileDetailAccessLevel,
-        conciergePriority: item.conciergePriority,
-        staffSupportLevel: item.staffSupportLevel,
-        sortOrder: item.sortOrder,
-        featured: item.featured,
-      })),
+      .map((item) => toMembershipPlanDTO(locale, item)),
   }
 }
 

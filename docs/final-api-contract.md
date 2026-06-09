@@ -33,7 +33,7 @@ type IntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 
 type ProfileAccessLevel = 'visitor' | 'registered' | 'premium' | 'owner' | 'staff'
 type ProfileFieldLockCode = '__LOGIN_REQUIRED__' | '__MEMBER_ONLY__' | '__INTRODUCTION_REQUIRED__' | '__HIDDEN__'
 type RestrictedProfileField<T> = T | ProfileFieldLockCode
-type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+type EntitlementCode = 'private_introduction' | 'event_registration' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 type PreferredContactChannel = 'email' | 'phone' | 'wechat'
@@ -708,6 +708,8 @@ interface EventDetailDTO extends EventDirectoryItemDTO {
   curatorNote: string
   agendaItems: EventAgendaItemDTO[]
   registration: EventRegistrationStateDTO
+  consumesMembershipQuota: boolean
+  eventEntitlement: EventEntitlementSummaryDTO
 }
 
 interface EventAgendaItemDTO {
@@ -719,8 +721,17 @@ interface EventAgendaItemDTO {
 }
 
 interface EventRegistrationStateDTO {
-  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended' | 'closed' | 'member_required'
+  status: 'guest' | 'available' | 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended' | 'closed' | 'member_required' | 'event_quota_exhausted'
   registrationId?: string
+}
+
+interface EventEntitlementSummaryDTO {
+  code: 'event_registration'
+  quotaTotal: number
+  quotaUsed: number
+  quotaRemaining: number
+  periodStartedAt?: string
+  periodEndsAt?: string
 }
 ```
 
@@ -733,6 +744,7 @@ interface EventRegistrationResponseDTO {
   registeredCount: number
   waitlistCount: number
   remainingSeats: number
+  eventEntitlement: EventEntitlementSummaryDTO
 }
 ```
 
@@ -855,11 +867,15 @@ interface MembershipPlanDTO {
   tier: MembershipTier
   name: string
   description: string
-  priceCents?: number
-  currency?: string
-  billingPeriod?: string
+  priceCents: number
+  currency: 'EUR'
+  cnyPriceCents: number
+  billingType: 'free' | 'one_time' | 'recurring'
+  billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+  validityMonths?: number
   privateIntroductionQuota: number
   privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventQuota: number
   eventPriorityEnabled: boolean
   staffReviewEnabled: boolean
   profileDetailAccessLevel: 'registered' | 'premium'
@@ -878,6 +894,14 @@ interface AccountEntitlementBalanceDTO {
   periodEndsAt: string
 }
 ```
+
+公共套餐接口：
+
+```text
+GET /api/membership/catalog
+```
+
+返回所有启用套餐的 `MembershipPlanDTO[]`。公共 catalog 与账户会员接口必须使用同一套餐 mapper。
 
 ### Account Lists
 

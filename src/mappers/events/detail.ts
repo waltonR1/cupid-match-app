@@ -29,7 +29,13 @@ export function toEventDetailPageData(params: {
     facts: buildEventFacts(event, params.t),
     noteItems: buildEventNoteItems(event, params.t),
     agendaItems: event.agendaItems.map(toAgendaItem),
-    registration: buildRegistrationViewModel(event.registration.status, params.t, params.actionLoading),
+    registration: buildRegistrationViewModel(
+      event.registration.status,
+      event.consumesMembershipQuota,
+      event.eventEntitlement.quotaRemaining,
+      params.t,
+      params.actionLoading,
+    ),
   }
 }
 
@@ -40,6 +46,7 @@ export function mergeEventRegistration(event: EventDetail, response: EventRegist
     waitlistCount: response.waitlistCount,
     remainingSeats: response.remainingSeats,
     registration: response.registration,
+    eventEntitlement: response.eventEntitlement,
   }
 }
 
@@ -74,6 +81,8 @@ function buildEventNoteItems(event: EventDetail, t: Translate): EventNoteItem[] 
 
 function buildRegistrationViewModel(
   status: EventRegistrationViewModel['status'],
+  consumesMembershipQuota: boolean,
+  quotaRemaining: number,
   t: Translate,
   loading: boolean,
 ): EventRegistrationViewModel {
@@ -82,7 +91,9 @@ function buildRegistrationViewModel(
   return {
     status,
     title: t(`registration.${status}.title`),
-    description: t(`registration.${status}.description`),
+    description: consumesMembershipQuota && status !== 'guest'
+      ? `${t(`registration.${status}.description`)} ${t('quota.remaining', {count: quotaRemaining})}`
+      : t(`registration.${status}.description`),
     action,
   }
 }
@@ -101,6 +112,10 @@ function buildRegistrationAction(status: EventRegistrationViewModel['status'], t
   }
 
   if (status === 'member_required') {
+    return { key: 'membership', label: t('actions.membership'), disabled: false }
+  }
+
+  if (status === 'event_quota_exhausted') {
     return { key: 'membership', label: t('actions.membership'), disabled: false }
   }
 

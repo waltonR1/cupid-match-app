@@ -1,6 +1,14 @@
 import type { AppMessageSchema } from '@/i18n/types'
 
 export const membershipMessages: AppMessageSchema = {
+    catalog: {
+      validityMonths: 'Valable {count} mois',
+      noFixedValidity: 'Sans duree fixe',
+      privateIntroductions: '{count} introductions privees par mois',
+      noPrivateIntroductions: 'Aucun quota d introduction privee',
+      events: '{count} evenements hors ligne',
+      noEvents: 'Aucun quota evenement inclus',
+    },
     hero: {
       eyebrow: 'Membership',
       title: 'Adhesion',
@@ -20,11 +28,6 @@ export const membershipMessages: AppMessageSchema = {
     },
     free: {
       badge: 'Free',
-      price: 'EUR 0',
-      priceNote: '/ gratuit',
-      title: 'Membre gratuit',
-      f1: 'Inscription gratuite et profil de base',
-      f2: 'Consultation de certains profils publics',
       f3: 'Acces aux informations sur les evenements et la plateforme',
       f4: 'Possibilite d evoluer plus tard vers le VIP',
       cta: 'Inscription gratuite',
@@ -43,32 +46,14 @@ export const membershipMessages: AppMessageSchema = {
     },
     silver: {
       badge: 'Silver VIP',
-      price: 'EUR 65',
-      priceNote: '/ RMB 499',
-      title: 'VIP Argent',
-      period: 'Valable un an',
-      f1: '5 introductions privees par mois',
-      f2: '12 evenements hors ligne',
       f3: 'Canaux prives ouverts apres confirmation plateforme',
     },
     gold: {
       badge: 'Gold VIP',
-      price: 'EUR 100',
-      priceNote: '/ RMB 770',
-      title: 'VIP Or',
-      period: 'Valable six mois',
-      f1: '15 introductions privees par mois',
-      f2: '20 evenements hors ligne',
       f3: 'Canaux prives ouverts apres confirmation plateforme',
     },
     diamond: {
       badge: 'Diamond VIP',
-      price: 'EUR 150',
-      priceNote: '/ RMB 1155',
-      title: 'VIP Diamant',
-      period: 'Valable un an',
-      f1: '30 introductions privees par mois',
-      f2: '24 evenements hors ligne',
       f3: 'Suivi conseiller prioritaire pour les introductions',
     },
     rules: {

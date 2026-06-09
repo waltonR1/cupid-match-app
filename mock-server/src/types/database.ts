@@ -27,6 +27,7 @@ export interface EventRecord {
     slug: string
     status: EventStatus
     visibility: EventVisibility
+    consumesMembershipQuota: boolean
     title: LocalizedText
     summary: LocalizedText
     city: LocalizedText
@@ -71,6 +72,8 @@ export interface EventRegistrationRecord {
     cancelledAt?: string
     waitlistedAt?: string
     attendedAt?: string
+    eventQuotaConsumedAt?: string
+    eventQuotaReleasedAt?: string
     createdAt: string
     updatedAt: string
 }
@@ -226,11 +229,15 @@ export interface MembershipPlanRecord {
     tier: MembershipLevel
     name: LocalizedText
     description: LocalizedText
-    priceCents?: number
-    currency?: 'EUR' | 'USD' | 'CNY'
+    priceCents: number
+    currency: 'EUR'
+    cnyPriceCents: number
+    billingType: 'free' | 'one_time' | 'recurring'
     billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+    validityMonths?: number
     privateIntroductionQuota: number
     privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+    eventQuota: number
     eventPriorityEnabled: boolean
     staffReviewEnabled: boolean
     profileDetailAccessLevel: 'registered' | 'premium'
@@ -244,7 +251,12 @@ export interface MembershipPlanRecord {
 }
 
 /** 权益编码 */
-export type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+export type EntitlementCode =
+    | 'private_introduction'
+    | 'event_registration'
+    | 'event_priority'
+    | 'staff_review'
+    | 'profile_detail_access'
 
 /** 用户权益余额 */
 export interface UserEntitlementBalanceRecord {

@@ -46,7 +46,7 @@
 
           <view
               class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-primary lg:text-[32px]">
-            {{ t('membership.vip.silver.name') }}
+            {{ plan('silver')?.name }}
           </view>
 
           <view class="relative mt-3 text-[13px] leading-6 text-semantic-text-secondary">
@@ -55,13 +55,13 @@
 
           <view class="relative mt-6">
             <view class="text-[36px] font-semibold leading-none text-semantic-text-primary">
-              {{ t('membership.vip.silver.price') }}
+              {{ plan('silver')?.euroPrice }}
             </view>
             <view class="mt-2 text-[12px] leading-5 text-semantic-text-muted">
-              {{ t('membership.vip.silver.priceNote') }}
+              {{ plan('silver')?.cnyPrice }}
             </view>
             <view class="mt-1 text-[12px] italic leading-5 text-semantic-text-muted">
-              {{ t('membership.vip.silver.period') }}
+              {{ plan('silver')?.validity }}
             </view>
           </view>
 
@@ -70,11 +70,11 @@
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-secondary">
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.silver.f1') }}</text>
+              <text>{{ plan('silver')?.privateIntroduction }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.silver.f2') }}</text>
+              <text>{{ plan('silver')?.eventAllowance }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
@@ -106,7 +106,7 @@
 
           <view
               class="relative mt-5 text-[28px] font-semibold leading-[1.12] text-semantic-text-inverse lg:text-[32px]">
-            {{ t('membership.vip.gold.name') }}
+            {{ plan('gold')?.name }}
           </view>
 
           <view class="relative mt-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
@@ -115,13 +115,13 @@
 
           <view class="relative mt-6">
             <view class="text-[36px] font-semibold leading-none text-semantic-text-inverse">
-              {{ t('membership.vip.gold.price') }}
+              {{ plan('gold')?.euroPrice }}
             </view>
             <view class="mt-2 text-[12px] leading-5 text-semantic-text-inverse-subtle">
-              {{ t('membership.vip.gold.priceNote') }}
+              {{ plan('gold')?.cnyPrice }}
             </view>
             <view class="mt-1 text-[12px] italic leading-5 text-semantic-text-inverse-subtle">
-              {{ t('membership.vip.gold.period') }}
+              {{ plan('gold')?.validity }}
             </view>
           </view>
 
@@ -130,11 +130,11 @@
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.gold.f1') }}</text>
+              <text>{{ plan('gold')?.privateIntroduction }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.gold.f2') }}</text>
+              <text>{{ plan('gold')?.eventAllowance }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
@@ -167,7 +167,7 @@
           <view class="relative mt-4 h-px w-12 bg-component-membership-tier-diamond-accent-line"/>
 
           <view class="relative mt-5 text-[30px] font-semibold leading-[1.1] text-semantic-text-inverse lg:text-[34px]">
-            {{ t('membership.vip.diamond.name') }}
+            {{ plan('diamond')?.name }}
           </view>
 
           <view class="relative mt-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
@@ -176,13 +176,13 @@
 
           <view class="relative mt-6">
             <view class="text-[40px] font-semibold leading-none text-semantic-text-inverse">
-              {{ t('membership.vip.diamond.price') }}
+              {{ plan('diamond')?.euroPrice }}
             </view>
             <view class="mt-2 text-[12px] leading-5 text-semantic-text-inverse-subtle">
-              {{ t('membership.vip.diamond.priceNote') }}
+              {{ plan('diamond')?.cnyPrice }}
             </view>
             <view class="mt-1 text-[12px] italic leading-5 text-semantic-text-inverse-subtle">
-              {{ t('membership.vip.diamond.period') }}
+              {{ plan('diamond')?.validity }}
             </view>
           </view>
 
@@ -191,11 +191,11 @@
           <view class="relative mt-6 space-y-3 text-[13px] leading-6 text-semantic-text-inverse-muted">
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.diamond.f1') }}</text>
+              <text>{{ plan('diamond')?.privateIntroduction }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.vip.diamond.f2') }}</text>
+              <text>{{ plan('diamond')?.eventAllowance }}</text>
             </view>
             <view class="flex gap-3">
               <text class="text-component-membership-feature-bullet">-</text>
@@ -228,7 +228,7 @@
               {{ t('membership.free.badge') }}
             </view>
             <view class="mt-2 text-[24px] font-semibold leading-[1.14] text-semantic-text-primary">
-              {{ t('membership.free.name') }}
+              {{ plan('free')?.name }}
             </view>
             <view class="mt-2 text-[12px] leading-6 text-semantic-text-secondary">
               {{ t('membership.free.description') }}
@@ -237,24 +237,24 @@
 
           <view>
             <view class="text-[30px] font-semibold leading-none text-semantic-text-primary">
-              {{ t('membership.free.price') }}
+              {{ plan('free')?.euroPrice }}
             </view>
             <view class="mt-2 text-[12px] leading-5 text-semantic-text-muted">
-              {{ t('membership.free.priceNote') }}
+              {{ plan('free')?.cnyPrice }}
             </view>
             <view class="mt-1 text-[12px] italic leading-5 text-semantic-text-muted">
-              {{ t('membership.free.period') }}
+              {{ plan('free')?.validity }}
             </view>
           </view>
 
           <view class="grid gap-2 text-[12px] leading-6 text-semantic-text-secondary lg:grid-cols-3 lg:gap-4">
             <view class="flex gap-2">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.free.f1') }}</text>
+              <text>{{ plan('free')?.privateIntroduction }}</text>
             </view>
             <view class="flex gap-2">
               <text class="text-component-membership-feature-bullet">-</text>
-              <text>{{ t('membership.free.f2') }}</text>
+              <text>{{ plan('free')?.eventAllowance }}</text>
             </view>
             <view class="flex gap-2">
               <text class="text-component-membership-feature-bullet">-</text>
@@ -278,9 +278,18 @@
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openRegisterPage} from '@/utils/navigation'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
+import type {MembershipPlanViewModel} from '@/types/membership/catalog'
+
+const props = defineProps<{
+  plans: MembershipPlanViewModel[]
+}>()
 
 /** 首页文案 */
 const {t} = usePageI18n('home')
+
+function plan(tier: MembershipPlanViewModel['tier']) {
+  return props.plans.find((item) => item.tier === tier)
+}
 </script>
 
 

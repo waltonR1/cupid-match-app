@@ -35,6 +35,9 @@ export const eventDetailMessages: AppMessageSchema = {
     remaining: '剩余 {count} 席',
     waitlist: '候补 {count} 人',
   },
+  quota: {
+    remaining: '本会员有效期内还可参加 {count} 次活动。',
+  },
   registration: {
     guest: {
       title: '登录后申请席位',
@@ -71,6 +74,10 @@ export const eventDetailMessages: AppMessageSchema = {
     member_required: {
       title: '会员专属活动',
       description: '本场活动面向会员开放，可先查看会员权益后再决定是否申请。',
+    },
+    event_quota_exhausted: {
+      title: '活动名额已用完',
+      description: '本次会员的活动名额已全部使用，可查看其他会员方案或联系顾问。',
     },
   },
   sections: {

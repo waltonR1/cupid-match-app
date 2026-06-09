@@ -44,25 +44,25 @@
                     t('free.badge')
                   }}
                 </view>
-                <view class="mt-4 text-[32px] font-semibold text-semantic-text-primary">{{ t('free.title') }}</view>
+                <view class="mt-4 text-[32px] font-semibold text-semantic-text-primary">{{ plan('free')?.name }}</view>
               </view>
 
               <view class="text-right">
                 <view class="text-[26px] font-semibold text-semantic-text-primary">
-                  {{ t('free.price') }}
+                  {{ plan('free')?.euroPrice }}
                 </view>
-                <view class="mt-1 text-[14px] italic text-semantic-text-muted">{{ t('free.priceNote') }}</view>
+                <view class="mt-1 text-[14px] italic text-semantic-text-muted">{{ plan('free')?.cnyPrice }} · {{ plan('free')?.validity }}</view>
               </view>
             </view>
 
             <view class="mt-6 grid gap-3 md:grid-cols-2">
               <view
                   class="border border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
-                {{ t('free.f1') }}
+                {{ plan('free')?.privateIntroduction }}
               </view>
               <view
                   class="border border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
-                {{ t('free.f2') }}
+                {{ plan('free')?.eventAllowance }}
               </view>
               <view
                   class="border border-component-membership-tier-free-feature-border bg-component-membership-tier-free-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
@@ -89,25 +89,25 @@
             <view class="text-[13px] uppercase tracking-[5px] text-component-membership-tier-silver-badge-label">
               {{ t('silver.badge') }}
             </view>
-            <view class="mt-5 text-[40px] font-semibold">{{ t('silver.title') }}</view>
+            <view class="mt-5 text-[40px] font-semibold">{{ plan('silver')?.name }}</view>
             <view class="mt-3 max-w-[460px] text-[15px] italic leading-7 text-semantic-text-secondary">
               {{ t('tiers.silverFit') }}
             </view>
 
             <view class="mt-8 text-[34px] font-semibold">
-              {{ t('silver.price') }}
-              <text class="text-[18px] font-normal text-semantic-text-muted"> {{ t('silver.priceNote') }}</text>
+              {{ plan('silver')?.euroPrice }}
+              <text class="text-[18px] font-normal text-semantic-text-muted"> / {{ plan('silver')?.cnyPrice }}</text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-muted">{{ t('silver.period') }}</view>
+            <view class="mt-2 text-[15px] italic text-semantic-text-muted">{{ plan('silver')?.validity }}</view>
 
             <view class="mt-8 grid gap-3 md:grid-cols-3">
               <view
                   class="border border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
-                {{ t('silver.f1') }}
+                {{ plan('silver')?.privateIntroduction }}
               </view>
               <view
                   class="border border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
-                {{ t('silver.f2') }}
+                {{ plan('silver')?.eventAllowance }}
               </view>
               <view
                   class="border border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
@@ -133,7 +133,7 @@
                     t('gold.badge')
                   }}
                 </view>
-                <view class="mt-5 text-[40px] font-semibold">{{ t('gold.title') }}</view>
+                <view class="mt-5 text-[40px] font-semibold">{{ plan('gold')?.name }}</view>
                 <view class="mt-3 max-w-[500px] text-[15px] italic leading-7 text-semantic-text-inverse-muted">
                   {{ t('tiers.goldFit') }}
                 </view>
@@ -146,19 +146,19 @@
             </view>
 
             <view class="mt-8 text-[34px] font-semibold">
-              {{ t('gold.price') }}
-              <text class="text-[18px] font-normal text-semantic-text-inverse-subtle"> {{ t('gold.priceNote') }}</text>
+              {{ plan('gold')?.euroPrice }}
+              <text class="text-[18px] font-normal text-semantic-text-inverse-subtle"> / {{ plan('gold')?.cnyPrice }}</text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-subtle">{{ t('gold.period') }}</view>
+            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-subtle">{{ plan('gold')?.validity }}</view>
 
             <view class="mt-8 grid gap-3 md:grid-cols-3">
               <view
                   class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
-                {{ t('gold.f1') }}
+                {{ plan('gold')?.privateIntroduction }}
               </view>
               <view
                   class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
-                {{ t('gold.f2') }}
+                {{ plan('gold')?.eventAllowance }}
               </view>
               <view
                   class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
@@ -181,28 +181,28 @@
             <view class="text-[13px] uppercase tracking-[5px] text-component-membership-tier-diamond-badge-label">
               {{ t('diamond.badge') }}
             </view>
-            <view class="mt-5 text-[40px] font-semibold text-semantic-text-inverse">{{ t('diamond.title') }}</view>
+            <view class="mt-5 text-[40px] font-semibold text-semantic-text-inverse">{{ plan('diamond')?.name }}</view>
             <view class="mt-3 max-w-[520px] text-[15px] italic leading-7 text-semantic-text-inverse-muted">
               {{ t('tiers.diamondFit') }}
             </view>
 
             <view class="mt-8 text-[34px] font-semibold text-semantic-text-inverse">
-              {{ t('diamond.price') }}
+              {{ plan('diamond')?.euroPrice }}
               <text class="text-[18px] font-normal text-semantic-text-inverse-muted"> {{
-                  t('diamond.priceNote')
+                  plan('diamond')?.cnyPrice
                 }}
               </text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-muted">{{ t('diamond.period') }}</view>
+            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-muted">{{ plan('diamond')?.validity }}</view>
 
             <view class="mt-8 grid gap-3 md:grid-cols-3">
               <view
                   class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
-                {{ t('diamond.f1') }}
+                {{ plan('diamond')?.privateIntroduction }}
               </view>
               <view
                   class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
-                {{ t('diamond.f2') }}
+                {{ plan('diamond')?.eventAllowance }}
               </view>
               <view
                   class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
@@ -228,6 +228,11 @@
 import AppButton from '@/components/common/AppButton.vue'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
+import type {MembershipPlanViewModel} from '@/types/membership/catalog'
+
+const props = defineProps<{
+  plans: MembershipPlanViewModel[]
+}>()
 
 /** Membership Tiers 操作事件 */
 const emit = defineEmits<{
@@ -236,4 +241,8 @@ const emit = defineEmits<{
 
 /** Membership 页面命名空间文案 */
 const {t} = usePageI18n('membership')
+
+function plan(tier: MembershipPlanViewModel['tier']) {
+  return props.plans.find((item) => item.tier === tier)
+}
 </script>

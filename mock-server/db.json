@@ -2990,6 +2990,7 @@
       "slug": "event-001",
       "status": "open",
       "visibility": "registered",
+      "consumesMembershipQuota": false,
       "title": {
         "zh": {
           "value": "春季双语沙龙",
@@ -3241,6 +3242,7 @@
       "slug": "event-002",
       "status": "waitlist",
       "visibility": "member",
+      "consumesMembershipQuota": true,
       "title": {
         "zh": {
           "value": "左岸晚餐局",
@@ -3492,6 +3494,7 @@
       "slug": "event-003",
       "status": "open",
       "visibility": "registered",
+      "consumesMembershipQuota": true,
       "title": {
         "zh": {
           "value": "文化散步与咖啡交流",
@@ -4096,6 +4099,7 @@
       "tier": "gold",
       "status": "active",
       "startedAt": "2026-01-18",
+      "expiresAt": "2026-07-18",
       "createdAt": "2026-01-18",
       "updatedAt": "2026-01-18",
       "planId": "plan-gold"
@@ -4442,13 +4446,15 @@
       },
       "priceCents": 0,
       "currency": "EUR",
-      "billingPeriod": "monthly",
+      "cnyPriceCents": 0,
+      "billingType": "free",
       "conciergePriority": false,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z",
       "privateIntroductionQuota": 0,
       "privateIntroductionPeriod": "monthly",
+      "eventQuota": 0,
       "eventPriorityEnabled": false,
       "staffReviewEnabled": false,
       "profileDetailAccessLevel": "registered",
@@ -4461,7 +4467,7 @@
       "tier": "silver",
       "name": {
         "zh": {
-          "value": "银卡会员",
+          "value": "白银会员",
           "source": "manual",
           "provider": "human",
           "status": "ready",
@@ -4484,41 +4490,44 @@
       },
       "description": {
         "zh": {
-          "value": "更多介绍额度和优先活动报名",
+          "value": "基础顾问支持与稳定的正式接触节奏",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "fr": {
-          "value": "Plus de quotas et priorite evenements",
+          "value": "Accompagnement standard et rythme relationnel regulier",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "More introduction quota and priority event registration",
+          "value": "Standard advisor support and a steady relationship pace",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "priceCents": 2999,
+      "priceCents": 6500,
       "currency": "EUR",
-      "billingPeriod": "monthly",
+      "cnyPriceCents": 49900,
+      "billingType": "one_time",
+      "validityMonths": 12,
       "conciergePriority": false,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z",
       "privateIntroductionQuota": 5,
       "privateIntroductionPeriod": "monthly",
-      "eventPriorityEnabled": true,
+      "eventQuota": 12,
+      "eventPriorityEnabled": false,
       "staffReviewEnabled": true,
       "profileDetailAccessLevel": "registered",
       "sortOrder": 2,
-      "featured": true,
+      "featured": false,
       "staffSupportLevel": "standard"
     },
     {
@@ -4526,7 +4535,7 @@
       "tier": "gold",
       "name": {
         "zh": {
-          "value": "金卡会员",
+          "value": "黄金会员",
           "source": "manual",
           "provider": "human",
           "status": "ready",
@@ -4570,15 +4579,18 @@
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "priceCents": 7999,
+      "priceCents": 10000,
       "currency": "EUR",
-      "billingPeriod": "monthly",
+      "cnyPriceCents": 77000,
+      "billingType": "one_time",
+      "validityMonths": 6,
       "conciergePriority": true,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z",
       "privateIntroductionQuota": 15,
       "privateIntroductionPeriod": "monthly",
+      "eventQuota": 20,
       "eventPriorityEnabled": true,
       "staffReviewEnabled": true,
       "profileDetailAccessLevel": "premium",
@@ -4614,41 +4626,44 @@
       },
       "description": {
         "zh": {
-          "value": "顶级服务和无限介绍额度",
+          "value": "深度顾问服务和每月 30 次私人介绍",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "fr": {
-          "value": "Service premium et quotas illimites",
+          "value": "Service de conciergerie et 30 introductions privees par mois",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         },
         "en": {
-          "value": "Premium service and unlimited introductions",
+          "value": "Concierge service and 30 private introductions per month",
           "source": "manual",
           "provider": "human",
           "status": "ready",
           "updatedAt": "2026-05-18T12:07:20.986Z"
         }
       },
-      "priceCents": 14999,
+      "priceCents": 15000,
       "currency": "EUR",
-      "billingPeriod": "monthly",
+      "cnyPriceCents": 115500,
+      "billingType": "one_time",
+      "validityMonths": 12,
       "conciergePriority": true,
       "isActive": true,
       "createdAt": "2026-01-01T00:00:00Z",
       "updatedAt": "2026-01-01T00:00:00Z",
       "privateIntroductionQuota": 30,
       "privateIntroductionPeriod": "monthly",
+      "eventQuota": 24,
       "eventPriorityEnabled": true,
       "staffReviewEnabled": true,
       "profileDetailAccessLevel": "premium",
       "sortOrder": 4,
-      "featured": true,
+      "featured": false,
       "staffSupportLevel": "concierge"
     }
   ],
@@ -4663,8 +4678,21 @@
       "createdAt": "2026-01-18",
       "updatedAt": "2026-01-18",
       "membershipId": "user-membership-001",
-      "periodStartedAt": "2026-01-01",
-      "periodEndsAt": "2026-12-31"
+      "periodStartedAt": "2026-06-01",
+      "periodEndsAt": "2026-06-30"
+    },
+    {
+      "id": "ueb-002",
+      "userId": "u-001",
+      "entitlementCode": "event_registration",
+      "quotaTotal": 20,
+      "quotaUsed": 0,
+      "quotaRemaining": 20,
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-01-18",
+      "membershipId": "user-membership-001",
+      "periodStartedAt": "2026-01-18",
+      "periodEndsAt": "2026-07-18"
     }
   ],
   "user_preferences": [

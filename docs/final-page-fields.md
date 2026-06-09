@@ -589,7 +589,11 @@ interface MembershipPlanViewModel {
   tier: 'free' | 'silver' | 'gold' | 'diamond'
   name: string
   description: string
-  priceText?: string
+  euroPrice: string
+  cnyPrice: string
+  validity: string
+  privateIntroduction: string
+  eventAllowance: string
   conciergePriority: boolean
   entitlements: string[]
   action?: PageActionViewModel
@@ -605,7 +609,7 @@ interface AccountMembershipSummaryViewModel {
 }
 
 interface AccountEntitlementBalanceViewModel {
-  code: 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+  code: 'private_introduction' | 'event_registration' | 'event_priority' | 'staff_review' | 'profile_detail_access'
   label: string
   quotaTotal: number
   quotaUsed: number

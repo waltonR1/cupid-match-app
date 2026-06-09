@@ -19,6 +19,8 @@ export interface EventRegistrationDebugItem {
   confirmedAt?: string
   declinedAt?: string
   cancelledAt?: string
+  eventQuotaConsumedAt?: string
+  eventQuotaReleasedAt?: string
 }
 
 export interface EventRegistrationDebugResponse {

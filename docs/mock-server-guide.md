@@ -115,6 +115,15 @@ development / staging mock 请求上下文仍可使用 `X-User-Id`。production 
 - `displayName`、`avatarUrl`、`age`、`isVerified`、`datingIntentionLabel` 由 mock-server 派生后进入 DTO。
 - detail 权限遮罩默认来自 `mock-server/src/constants/profile-access.ts`，`profile_privacy_preferences` 只在默认规则之上继续隐藏半敏感字段。
 
+## Membership 与活动额度
+
+- `GET /api/membership/catalog` 返回统一套餐目录。
+- 套餐同时保存欧元价格 `priceCents` 和人民币价格 `cnyPriceCents`，前端不做汇率换算。
+- `eventQuota` 是套餐承诺，用户实际余额保存在 `user_entitlement_balances` 的 `event_registration` 记录中。
+- 仅 `consumesMembershipQuota = true` 的活动消耗额度。
+- 报名提交不扣额度；mock 后台确认时扣减；参加前取消时返还。
+- `eventQuotaConsumedAt` 与 `eventQuotaReleasedAt` 防止重复确认或取消造成重复变更。
+
 ## 调试页面
 
 - `/pages/debug/index`：调试工具总入口。
@@ -141,6 +150,8 @@ development / staging mock 请求上下文仍可使用 `X-User-Id`。production 
 - `GET /api/debug/private-introductions`
 - `GET /api/events`
 - `GET /api/events/:id`
+- `GET /api/membership/catalog`
+- `GET /api/account/membership`
 - `GET /api/account/dashboard`
 - `GET /api/account/settings`
 - `POST /api/account/security/challenge-code`

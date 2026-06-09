@@ -192,6 +192,10 @@ export async function registerDebugRoutes(app: FastifyInstance): Promise<void> {
             return reply.code(409).send(result.item)
         }
 
+        if (result.status === 'quota_exhausted') {
+            return reply.code(409).send({error: 'Event membership quota is exhausted', item: result.item})
+        }
+
         await db.write()
         return result.item
     })

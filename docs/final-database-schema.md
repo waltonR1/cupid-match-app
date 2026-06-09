@@ -122,7 +122,7 @@ type MembershipTier = 'free' | 'silver' | 'gold' | 'diamond'
 type RecordStatus = 'active' | 'archived'
 type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
-type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+type EntitlementCode = 'private_introduction' | 'event_registration' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
 type InboxMessageType = 'text' | 'system_notice' | 'status_update' | 'action_prompt'
 type StaffRole = 'admin' | 'operator' | 'reviewer' | 'event_manager' | 'support'
@@ -614,11 +614,15 @@ interface MembershipPlanRecord {
   tier: MembershipTier
   name: LocalizedText
   description: LocalizedText
-  priceCents?: number
-  currency?: 'EUR' | 'USD' | 'CNY'
+  priceCents: number
+  currency: 'EUR'
+  cnyPriceCents: number
+  billingType: 'free' | 'one_time' | 'recurring'
   billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+  validityMonths?: number
   privateIntroductionQuota: number
   privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventQuota: number
   eventPriorityEnabled: boolean
   staffReviewEnabled: boolean
   profileDetailAccessLevel: 'registered' | 'premium'
@@ -676,6 +680,7 @@ interface EventRecord {
   slug: string
   status: 'draft' | 'open' | 'waitlist' | 'closed' | 'completed'
   visibility: 'public' | 'registered' | 'member'
+  consumesMembershipQuota: boolean
   title: LocalizedText
   summary: LocalizedText
   city: LocalizedText
@@ -730,10 +735,14 @@ interface EventRegistrationRecord {
   waitlistedAt?: string
   cancelledAt?: string
   attendedAt?: string
+  eventQuotaConsumedAt?: string
+  eventQuotaReleasedAt?: string
   createdAt: string
   updatedAt: string
 }
 ```
+
+只有 `events.consumesMembershipQuota = true` 的活动才使用 `event_registration` 余额。确认报名时扣减，参加前取消时返还；两个时间戳用于保证重复审核和取消操作幂等。
 
 ## Relationship Actions
 

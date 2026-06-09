@@ -35,6 +35,9 @@ export const eventDetailMessages: AppMessageSchema = {
     remaining: '{count} seats left',
     waitlist: '{count} on waitlist',
   },
+  quota: {
+    remaining: '{count} included event places remain in this membership period.',
+  },
   registration: {
     guest: {
       title: 'Log in before requesting a seat',
@@ -71,6 +74,10 @@ export const eventDetailMessages: AppMessageSchema = {
     member_required: {
       title: 'Member-only event',
       description: 'This event is open to members. Review membership access before requesting a seat.',
+    },
+    event_quota_exhausted: {
+      title: 'Event quota used',
+      description: 'All included event places for this membership period have been used. Review other plans or contact an advisor.',
     },
   },
   sections: {

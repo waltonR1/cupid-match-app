@@ -15,6 +15,7 @@ export type EventRegistrationStatus =
   | 'attended'
   | 'closed'
   | 'member_required'
+  | 'event_quota_exhausted'
 
 export interface Pagination {
   page: number
@@ -51,6 +52,7 @@ export interface EventDirectoryItem {
   waitlistCount: number
   remainingSeats: number
   memberOnly: boolean
+  consumesMembershipQuota: boolean
   coverImageUrl: string
 }
 
@@ -94,6 +96,16 @@ export interface EventDetail extends EventDirectoryItem {
   curatorNote: string
   agendaItems: EventAgendaItem[]
   registration: EventRegistrationState
+  eventEntitlement: EventEntitlementSummary
+}
+
+export interface EventEntitlementSummary {
+  code: 'event_registration'
+  quotaTotal: number
+  quotaUsed: number
+  quotaRemaining: number
+  periodStartedAt?: string
+  periodEndsAt?: string
 }
 
 export interface EventRegistrationResponse {
@@ -101,4 +113,5 @@ export interface EventRegistrationResponse {
   registeredCount: number
   waitlistCount: number
   remainingSeats: number
+  eventEntitlement: EventEntitlementSummary
 }

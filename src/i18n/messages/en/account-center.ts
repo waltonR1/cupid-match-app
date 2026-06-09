@@ -356,7 +356,8 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: 'Expires at',
     conciergePriority: 'Concierge priority',
       status: { active: 'Active', expired: 'Expired', cancelled: 'Cancelled', paused: 'Paused' },
-      entitlement: { private_introduction: 'Private introductions', event_priority: 'Event priority', staff_review: 'Advisor review', profile_detail_access: 'Profile detail access' },
+      entitlement: { private_introduction: 'Private introductions', event_registration: 'Event quota', event_priority: 'Event priority', staff_review: 'Advisor review', profile_detail_access: 'Profile detail access' },
+      entitlementDescription: { private_introduction: 'Used to start a formal next-step introduction request.', event_registration: 'Used for offline events controlled by the membership plan quota.' },
       tierPositioning: {
         free: 'Best for exploring the platform and core services.',
         silver: 'Built for starting steadier formal introductions.',

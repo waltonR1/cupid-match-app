@@ -13,6 +13,7 @@ type EventRegistrationStatus =
   | 'attended'
   | 'closed'
   | 'member_required'
+  | 'event_quota_exhausted'
 
 interface EventDirectoryQuery {
   page: number
@@ -33,6 +34,16 @@ interface EventRegistrationResponse {
   registeredCount: number
   waitlistCount: number
   remainingSeats: number
+  eventEntitlement: EventEntitlementSummary
+}
+
+interface EventEntitlementSummary {
+  code: 'event_registration'
+  quotaTotal: number
+  quotaUsed: number
+  quotaRemaining: number
+  periodStartedAt?: string
+  periodEndsAt?: string
 }
 
 type EventActionResult =
@@ -88,6 +99,7 @@ export function eventDetail(locale: ApiLocale, data: Database, id: string, userI
         sortOrder: item.sortOrder,
       })),
     registration,
+    eventEntitlement: resolveEventEntitlement(data, userId),
   }
 }
 
@@ -96,18 +108,18 @@ export function registerForEvent(data: Database, eventId: string, userId: string
   if (!event) return { status: 'not_found' }
 
   if (!userId) {
-    return { status: 'login_required', payload: buildRegistrationResponse(data, event, { status: 'guest' }) }
+    return { status: 'login_required', payload: buildRegistrationResponse(data, event, { status: 'guest' }, '') }
   }
 
   const currentState = resolveRegistrationState(data, event, userId)
   if (currentState.status === 'member_required' || currentState.status === 'closed' || currentState.status === 'cancelled') {
-    return { status: 'blocked', payload: buildRegistrationResponse(data, event, currentState) }
+    return { status: 'blocked', payload: buildRegistrationResponse(data, event, currentState, userId) }
   }
 
   // Mock storage is in-memory JSON; the structured database should enforce unique(userId, eventId).
   const existing = data.event_registrations.find((item) => item.userId === userId && item.eventId === eventId)
   if (existing && existing.status !== 'cancelled' && existing.status !== 'declined') {
-    return { status: 'success', payload: buildRegistrationResponse(data, event, currentState) }
+    return { status: 'success', payload: buildRegistrationResponse(data, event, currentState, userId) }
   }
 
   const now = new Date().toISOString()
@@ -140,7 +152,7 @@ export function registerForEvent(data: Database, eventId: string, userId: string
     payload: buildRegistrationResponse(data, event, {
       status: nextStatus,
       registrationId: nextRecord.id,
-    }),
+    }, userId),
   }
 }
 
@@ -149,22 +161,23 @@ export function cancelEventRegistration(data: Database, eventId: string, userId:
   if (!event) return { status: 'not_found' }
 
   if (!userId) {
-    return { status: 'login_required', payload: buildRegistrationResponse(data, event, { status: 'guest' }) }
+    return { status: 'login_required', payload: buildRegistrationResponse(data, event, { status: 'guest' }, '') }
   }
 
   const existing = data.event_registrations.find((item) => item.userId === userId && item.eventId === eventId)
   if (!existing) {
-    return { status: 'blocked', payload: buildRegistrationResponse(data, event, resolveRegistrationState(data, event, userId)) }
+    return { status: 'blocked', payload: buildRegistrationResponse(data, event, resolveRegistrationState(data, event, userId), userId) }
   }
 
   const now = new Date().toISOString()
   existing.status = 'cancelled'
   existing.cancelledAt = now
   existing.updatedAt = now
+  releaseEventQuota(data, existing, now)
 
   return {
     status: 'success',
-    payload: buildRegistrationResponse(data, event, resolveRegistrationState(data, event, userId)),
+    payload: buildRegistrationResponse(data, event, resolveRegistrationState(data, event, userId), userId),
   }
 }
 
@@ -191,6 +204,7 @@ function toDirectoryItem(locale: ApiLocale, data: Database, event: EventRecord) 
     waitlistCount,
     remainingSeats: Math.max(event.capacity - registeredCount, 0),
     memberOnly: event.visibility === 'member',
+    consumesMembershipQuota: event.consumesMembershipQuota,
     coverImageUrl: event.coverImageUrl,
   }
 }
@@ -215,6 +229,10 @@ function resolveRegistrationState(data: Database, event: EventRecord, userId: st
 
   if (event.visibility === 'member' && !hasActivePaidMembership(data, userId)) {
     return { status: 'member_required' }
+  }
+
+  if (event.consumesMembershipQuota && resolveEventEntitlement(data, userId).quotaRemaining <= 0) {
+    return { status: 'event_quota_exhausted' }
   }
 
   if (event.status === 'closed' || event.status === 'completed' || event.status === 'draft') {
@@ -256,6 +274,7 @@ function buildRegistrationResponse(
   data: Database,
   event: EventRecord,
   registration: EventRegistrationState,
+  userId: string,
 ): EventRegistrationResponse {
   const registeredCount = countRegistrations(data, event.id, 'confirmed')
   const waitlistCount = countRegistrations(data, event.id, 'waitlist')
@@ -265,6 +284,52 @@ function buildRegistrationResponse(
     registeredCount,
     waitlistCount,
     remainingSeats: Math.max(event.capacity - registeredCount, 0),
+    eventEntitlement: resolveEventEntitlement(data, userId),
+  }
+}
+
+export function consumeEventQuota(data: Database, registration: EventRegistrationRecord, now: string) {
+  const event = data.events.find((item) => item.id === registration.eventId)
+  if (!event?.consumesMembershipQuota || registration.eventQuotaConsumedAt) return 'not_required' as const
+
+  const balance = findEventEntitlementBalance(data, registration.userId)
+  if (!balance || balance.quotaRemaining <= 0) return 'quota_exhausted' as const
+
+  balance.quotaUsed += 1
+  balance.quotaRemaining -= 1
+  balance.updatedAt = now
+  registration.eventQuotaConsumedAt = now
+  registration.eventQuotaReleasedAt = undefined
+  return 'consumed' as const
+}
+
+function releaseEventQuota(data: Database, registration: EventRegistrationRecord, now: string) {
+  if (!registration.eventQuotaConsumedAt || registration.eventQuotaReleasedAt || registration.attendedAt) return
+
+  const balance = findEventEntitlementBalance(data, registration.userId)
+  if (!balance) return
+
+  balance.quotaUsed = Math.max(0, balance.quotaUsed - 1)
+  balance.quotaRemaining = Math.min(balance.quotaTotal, balance.quotaRemaining + 1)
+  balance.updatedAt = now
+  registration.eventQuotaReleasedAt = now
+}
+
+function findEventEntitlementBalance(data: Database, userId: string) {
+  return data.user_entitlement_balances.find(
+    (item) => item.userId === userId && item.entitlementCode === 'event_registration',
+  )
+}
+
+function resolveEventEntitlement(data: Database, userId: string): EventEntitlementSummary {
+  const balance = findEventEntitlementBalance(data, userId)
+  return {
+    code: 'event_registration',
+    quotaTotal: balance?.quotaTotal ?? 0,
+    quotaUsed: balance?.quotaUsed ?? 0,
+    quotaRemaining: balance?.quotaRemaining ?? 0,
+    periodStartedAt: balance?.periodStartedAt,
+    periodEndsAt: balance?.periodEndsAt,
   }
 }
 

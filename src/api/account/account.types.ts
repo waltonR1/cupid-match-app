@@ -1,5 +1,5 @@
 export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
-export type EntitlementCode = 'private_introduction' | 'event_priority' | 'staff_review' | 'profile_detail_access'
+export type EntitlementCode = 'private_introduction' | 'event_registration' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
 export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
@@ -123,11 +123,15 @@ export interface MembershipPlanDTO {
   tier: AccountMembershipLevel
   name: string
   description: string
-  priceCents?: number
-  currency?: string
-  billingPeriod?: string
+  priceCents: number
+  currency: 'EUR'
+  cnyPriceCents: number
+  billingType: 'free' | 'one_time' | 'recurring'
+  billingPeriod?: 'monthly' | 'quarterly' | 'yearly'
+  validityMonths?: number
   privateIntroductionQuota: number
   privateIntroductionPeriod: 'monthly' | 'quarterly' | 'yearly'
+  eventQuota: number
   eventPriorityEnabled: boolean
   staffReviewEnabled: boolean
   profileDetailAccessLevel: 'registered' | 'premium'

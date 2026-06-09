@@ -41,7 +41,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
-import { useLocaleBridge } from '@/i18n/composables/use-locale-bridge'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAuthStore } from '@/stores/modules/auth'
 import {
@@ -61,8 +60,10 @@ defineProps<{
 
 const auth = useAuthStore()
 const { t } = usePageI18n('accountCenter')
-const { t: globalT } = useLocaleBridge()
-const membershipName = computed(() => globalT(`membership.${auth.membershipTier}.title`))
+const membershipName = computed(() => {
+  const tier = auth.membershipTier
+  return tier ? t(`home.membership.tier.${tier}`) : t('home.functional.noMembership')
+})
 const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [
   { key: 'home', label: t('nav.home') },
   { key: 'profiles', label: t('nav.profiles') },
