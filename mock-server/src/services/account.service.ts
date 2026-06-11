@@ -99,6 +99,7 @@ interface AccountMembershipDTO {
   status: Database['user_memberships'][number]['status']
   startedAt: string
   expiresAt?: string
+  staffSupportLevel: MembershipPlanDTO['staffSupportLevel']
   conciergePriority: boolean
 }
 
@@ -107,7 +108,8 @@ interface AccountEntitlementBalanceDTO {
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
-  resetAt?: string
+  periodStartedAt: string
+  periodEndsAt: string
 }
 
 interface AccountSettingsDTO {
@@ -362,7 +364,12 @@ function findUser(data: Database, userId: string) {
 }
 
 function findActiveMembership(data: Database, userId: string) {
-  return data.user_memberships.find((m) => m.userId === userId && m.status === 'active')
+  const now = Date.now()
+  return data.user_memberships.find((membership) =>
+    membership.userId === userId
+    && membership.status === 'active'
+    && (!membership.expiresAt || new Date(membership.expiresAt).getTime() > now),
+  )
 }
 
 function findActivePlan(data: Database, tier: MembershipLevel) {
@@ -414,7 +421,9 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
     return toManagedProfileSummary(data, o, profile, locale)
   }).filter((p): p is ManagedProfileSummaryDTO => p !== null)
 
-  const entitlements = getEntitlementBalances(data, userId)
+  const entitlements = membership
+    ? getEntitlementBalances(data, userId, membership.id)
+    : []
 
   const eventRegs = data.event_registrations
     .filter((r) => r.userId === userId && (r.status === 'requested' || r.status === 'confirmed' || r.status === 'waitlist'))
@@ -445,6 +454,7 @@ export function getAccountDashboard(data: Database, userId: string): AccountDash
       status: membership?.status ?? 'active',
       startedAt: membership?.startedAt ?? user.createdAt,
       expiresAt: membership?.expiresAt,
+      staffSupportLevel: plan.staffSupportLevel,
       conciergePriority: plan.conciergePriority,
     } : null,
     entitlements,
@@ -999,9 +1009,10 @@ export function getAccountMembership(data: Database, userId: string): {
       status: membership?.status ?? 'active',
       startedAt: membership?.startedAt ?? user.createdAt,
       expiresAt: membership?.expiresAt,
+      staffSupportLevel: plan.staffSupportLevel,
       conciergePriority: plan.conciergePriority,
     } : null,
-    entitlements: getEntitlementBalances(data, userId),
+    entitlements: membership ? getEntitlementBalances(data, userId, membership.id) : [],
     availablePlans: data.membership_plans
       .filter((item) => item.isActive)
       .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -1583,15 +1594,26 @@ function hasLocalizedDisplayValue(text: LocalizedText) {
   return Boolean(resolveLocalizedText('zh', text) || resolveLocalizedText('fr', text) || resolveLocalizedText('en', text))
 }
 
-function getEntitlementBalances(data: Database, userId: string): AccountEntitlementBalanceDTO[] {
+function getEntitlementBalances(
+  data: Database,
+  userId: string,
+  membershipId: string,
+): AccountEntitlementBalanceDTO[] {
+  const now = Date.now()
   return data.user_entitlement_balances
-    .filter((b) => b.userId === userId)
-    .map((b) => ({
-      code: b.entitlementCode,
-      quotaTotal: b.quotaTotal,
-      quotaUsed: b.quotaUsed,
-      quotaRemaining: b.quotaRemaining,
-      resetAt: b.periodEndsAt,
+    .filter((balance) =>
+      balance.userId === userId
+      && balance.membershipId === membershipId
+      && new Date(balance.periodStartedAt).getTime() <= now
+      && new Date(balance.periodEndsAt).getTime() > now,
+    )
+    .map((balance) => ({
+      code: balance.entitlementCode,
+      quotaTotal: balance.quotaTotal,
+      quotaUsed: balance.quotaUsed,
+      quotaRemaining: balance.quotaRemaining,
+      periodStartedAt: balance.periodStartedAt,
+      periodEndsAt: balance.periodEndsAt,
     }))
 }
 

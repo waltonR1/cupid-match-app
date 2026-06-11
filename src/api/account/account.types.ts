@@ -115,6 +115,7 @@ export interface AccountMembershipDTO {
   status: 'active' | 'expired' | 'cancelled' | 'paused'
   startedAt: string
   expiresAt?: string
+  staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
 }
 
@@ -146,7 +147,8 @@ export interface AccountEntitlementBalanceDTO {
   quotaTotal: number
   quotaUsed: number
   quotaRemaining: number
-  resetAt?: string
+  periodStartedAt: string
+  periodEndsAt: string
 }
 
 export interface AccountSettingsDTO {
