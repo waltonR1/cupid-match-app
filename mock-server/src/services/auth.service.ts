@@ -202,7 +202,7 @@ export async function register(
     userId,
     preferredCity: '',
     preferredContactChannel: 'email',
-    advisorContactEnabled: true,
+    staffContactEnabled: true,
     familyAssistEnabled: true,
     introductionUpdatesEnabled: true,
     eventRemindersEnabled: true,

@@ -294,7 +294,7 @@ export const accountCenterMessages: AppMessageSchema = {
     preference: {
       preferred_city: 'Ville preferee',
       preferred_contact_channel: 'Canal de contact prefere',
-      advisor_contact_enabled: 'Contact conseiller',
+      staff_contact_enabled: 'Contact equipe',
       family_assist_enabled: 'Aide familiale',
       introduction_updates_enabled: 'Suivi des introductions',
       event_reminders_enabled: 'Rappels d evenement',

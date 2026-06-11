@@ -181,7 +181,7 @@ export interface AccountPasswordSecurityDTO {
 export interface AccountPreferencesDTO {
   preferredCity?: string
   preferredContactChannel?: PreferredContactChannel
-  advisorContactEnabled: boolean
+  staffContactEnabled: boolean
   familyAssistEnabled: boolean
   introductionUpdatesEnabled: boolean
   eventRemindersEnabled: boolean

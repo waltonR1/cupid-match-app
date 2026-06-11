@@ -282,7 +282,7 @@ export interface UserPreferenceRecord {
     userId: string
     preferredCity?: string
     preferredContactChannel?: PreferredContactChannel
-    advisorContactEnabled: boolean
+    staffContactEnabled: boolean
     familyAssistEnabled: boolean
     introductionUpdatesEnabled: boolean
     eventRemindersEnabled: boolean

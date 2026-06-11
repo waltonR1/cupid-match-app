@@ -823,7 +823,7 @@ const preferenceDraft = ref<Record<string, string | boolean | number | string[]>
 const PREFERENCE_CODE_TO_KEY = {
   preferred_city: 'preferredCity',
   preferred_contact_channel: 'preferredContactChannel',
-  advisor_contact_enabled: 'advisorContactEnabled',
+  staff_contact_enabled: 'staffContactEnabled',
   family_assist_enabled: 'familyAssistEnabled',
   introduction_updates_enabled: 'introductionUpdatesEnabled',
   event_reminders_enabled: 'eventRemindersEnabled',
@@ -899,7 +899,7 @@ const notificationItems = computed(() => buildPreferenceItems([
 const servicePreferenceItems = computed(() => buildPreferenceItems([
   'preferred_city',
   'preferred_contact_channel',
-  'advisor_contact_enabled',
+  'staff_contact_enabled',
   'family_assist_enabled',
 ]))
 

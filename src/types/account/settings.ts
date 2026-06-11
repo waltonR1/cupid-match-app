@@ -1,7 +1,7 @@
 export type AccountPreferenceCode =
   | 'preferred_city'
   | 'preferred_contact_channel'
-  | 'advisor_contact_enabled'
+  | 'staff_contact_enabled'
   | 'family_assist_enabled'
   | 'introduction_updates_enabled'
   | 'event_reminders_enabled'

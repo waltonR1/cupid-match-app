@@ -4701,7 +4701,7 @@
       "userId": "u-001",
       "preferredCity": "Paris",
       "preferredContactChannel": "email",
-      "advisorContactEnabled": true,
+      "staffContactEnabled": true,
       "familyAssistEnabled": true,
       "introductionUpdatesEnabled": true,
       "eventRemindersEnabled": true,

@@ -329,7 +329,7 @@ export const accountCenterMessages: AppMessageSchema = {
     preference: {
       preferred_city: '偏好城市',
       preferred_contact_channel: '首选联系方式',
-      advisor_contact_enabled: '允许顾问联系',
+      staff_contact_enabled: '允许工作人员联系',
       family_assist_enabled: '启用家庭协助',
       introduction_updates_enabled: '介绍进展通知',
       event_reminders_enabled: '活动提醒',

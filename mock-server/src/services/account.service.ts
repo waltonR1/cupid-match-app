@@ -156,7 +156,7 @@ interface AccountPasswordSecurityDTO {
 interface AccountPreferencesDTO {
   preferredCity?: string
   preferredContactChannel?: Database['user_preferences'][number]['preferredContactChannel']
-  advisorContactEnabled: boolean
+  staffContactEnabled: boolean
   familyAssistEnabled: boolean
   introductionUpdatesEnabled: boolean
   eventRemindersEnabled: boolean
@@ -942,7 +942,7 @@ function defaultAccountPreferences(): AccountPreferencesDTO {
   return {
     preferredCity: '',
     preferredContactChannel: 'email',
-    advisorContactEnabled: true,
+    staffContactEnabled: true,
     familyAssistEnabled: true,
     introductionUpdatesEnabled: true,
     eventRemindersEnabled: true,
@@ -956,7 +956,7 @@ function sanitizePreferencePatch(payload: Partial<AccountPreferencesDTO> = {}): 
   return {
     ...(payload.preferredCity !== undefined ? { preferredCity: String(payload.preferredCity) } : {}),
     ...(isPreferredContactChannel(payload.preferredContactChannel) ? { preferredContactChannel: payload.preferredContactChannel } : {}),
-    ...(payload.advisorContactEnabled !== undefined ? { advisorContactEnabled: Boolean(payload.advisorContactEnabled) } : {}),
+    ...(payload.staffContactEnabled !== undefined ? { staffContactEnabled: Boolean(payload.staffContactEnabled) } : {}),
     ...(payload.familyAssistEnabled !== undefined ? { familyAssistEnabled: Boolean(payload.familyAssistEnabled) } : {}),
     ...(payload.introductionUpdatesEnabled !== undefined ? { introductionUpdatesEnabled: Boolean(payload.introductionUpdatesEnabled) } : {}),
     ...(payload.eventRemindersEnabled !== undefined ? { eventRemindersEnabled: Boolean(payload.eventRemindersEnabled) } : {}),
@@ -1331,7 +1331,7 @@ function toAccountPreferencesDto(preferences: Database['user_preferences'][numbe
   return {
     preferredCity: preferences.preferredCity,
     preferredContactChannel: preferences.preferredContactChannel,
-    advisorContactEnabled: preferences.advisorContactEnabled,
+    staffContactEnabled: preferences.staffContactEnabled,
     familyAssistEnabled: preferences.familyAssistEnabled,
     introductionUpdatesEnabled: preferences.introductionUpdatesEnabled,
     eventRemindersEnabled: preferences.eventRemindersEnabled,
