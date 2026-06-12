@@ -122,6 +122,78 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     })
 }
 
+export async function apiUploadFile<T>(path: string, filePath: string, name = 'file'): Promise<T> {
+    const url = buildUrl(path)
+    const startedAt = Date.now()
+    const loggingEnabled = resolveApiLoggingEnabled()
+
+    logApiRequest(loggingEnabled, {
+        method: 'POST',
+        url,
+        data: {filePath, name},
+    })
+
+    return new Promise<T>((resolve, reject) => {
+        uni.uploadFile({
+            url,
+            filePath,
+            name,
+            header: buildRequestContextHeaders(),
+            success(response) {
+                const statusCode = response.statusCode ?? 0
+                const durationMs = Date.now() - startedAt
+                const payload = parseUploadResponse(response.data)
+                const envelope = resolveApiResponse<T>(payload)
+
+                if (statusCode >= 200 && statusCode < 300 && envelope?.code === 200) {
+                    logApiResponse(loggingEnabled, {
+                        method: 'POST',
+                        url,
+                        statusCode,
+                        durationMs,
+                        data: payload,
+                    })
+                    resolve(envelope.data as T)
+                    return
+                }
+
+                logApiError(loggingEnabled, {
+                    method: 'POST',
+                    url,
+                    statusCode,
+                    durationMs,
+                    payload,
+                })
+
+                const requestError = createApiRequestError(
+                    envelope?.msg || `Upload failed with status ${statusCode}`,
+                    statusCode,
+                    payload,
+                    envelope?.code,
+                )
+
+                if ((statusCode === 401 || envelope?.code === 401) && !isAuthPage(path)) {
+                    handleSessionExpired()
+                }
+
+                reject(requestError)
+            },
+            fail(error) {
+                const durationMs = Date.now() - startedAt
+
+                logApiFail(loggingEnabled, {
+                    method: 'POST',
+                    url,
+                    durationMs,
+                    error: error.errMsg || 'Upload failed',
+                })
+
+                reject(createApiRequestError(error.errMsg || 'Upload failed'))
+            },
+        })
+    })
+}
+
 export function isApiStatusError(error: unknown, statusCode: number) {
     return (
         error !== null
@@ -129,6 +201,14 @@ export function isApiStatusError(error: unknown, statusCode: number) {
         && 'statusCode' in error
         && error.statusCode === statusCode
     )
+}
+
+function parseUploadResponse(payload: string): unknown {
+    try {
+        return JSON.parse(payload)
+    } catch {
+        return payload
+    }
 }
 
 function buildUrl(path: string, query?: RequestOptions['query']) {
