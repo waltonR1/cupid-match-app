@@ -3,9 +3,12 @@ import {
     archiveAccountProfile,
     getAccountProfileDetail,
     saveAccountProfileDetail,
+    submitAccountProfileReview,
+    submitAccountProfileVerificationMaterial,
     updateAccountProfilePrivacyPreferences,
     type AccountProfileDetailDTO,
     type AccountProfileDetailSavePayload,
+    type AccountProfileVerificationMaterialPayload,
     type AccountProfilePrivacyPreferencesUpdatePayload,
 } from '@/api/account'
 import {uploadImage} from '@/api/upload/upload'
@@ -81,6 +84,30 @@ export function useAccountProfileDetail(
         if (privacyPreferences && payload.value) payload.value = {...payload.value, privacyPreferences}
     }
 
+    async function submitReview() {
+        if (!authStore.isLoggedIn) return undefined
+        if (!profileId()) return undefined
+
+        const data = await latest.run(() => submitAccountProfileReview(profileId(), editLocale()))
+        if (data) payload.value = data
+        return data
+    }
+
+    async function submitVerificationMaterial(next: AccountProfileVerificationMaterialPayload) {
+        if (!authStore.isLoggedIn) return undefined
+        if (!profileId()) return undefined
+
+        const result = await latest.run(() => submitAccountProfileVerificationMaterial(profileId(), next))
+        if (result && payload.value) {
+            payload.value = {
+                ...payload.value,
+                verification: result.verification,
+                verificationMaterials: result.materials,
+            }
+        }
+        return result
+    }
+
     async function archive() {
         if (!authStore.isLoggedIn) return false
         if (!profileId()) return
@@ -105,6 +132,8 @@ export function useAccountProfileDetail(
         refresh: load,
         saveDetail,
         savePrivacyPreferences,
+        submitReview,
+        submitVerificationMaterial,
         archive,
         uploadProfileImage,
     }
@@ -135,6 +164,7 @@ function createDraftProfileDetail(
             maritalStatus: 'unverified',
             reviewStatus: 'unreviewed',
         },
+        verificationMaterials: [],
         privacyPreferences: {
             hideMaritalStatus: false,
             hideHasChildren: false,

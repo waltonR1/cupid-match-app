@@ -729,7 +729,6 @@
 import {useRequireAuth} from '@/hooks/common/use-require-auth'
 import {computed, onUnmounted, ref, watch} from 'vue'
 import {useI18n} from 'vue-i18n'
-import type {AccountPreferencesDTO, AccountSecurityChallengeAction} from '@/api/account'
 import AccountShell from '@/components/account/AccountShell.vue'
 import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import AgreementDialog from '@/components/common/AgreementDialog.vue'
@@ -744,7 +743,9 @@ import {maskIdentifier} from '@/mappers/account/settings'
 import {validatePassword} from '@/utils/validate'
 import {useAuthStore} from '@/stores/modules/auth'
 import type {
+  AccountPreferences,
   AccountPreferenceCode,
+  AccountSecurityChallengeAction,
   AccountSecurityIdentityViewModel,
   BindableIdentityProvider,
 } from '@/types/account/settings'
@@ -830,7 +831,7 @@ const PREFERENCE_CODE_TO_KEY = {
   service_announcements_enabled: 'serviceAnnouncementsEnabled',
   marketing_emails_enabled: 'marketingEmailsEnabled',
   analytics_consent_enabled: 'analyticsConsentEnabled',
-} satisfies Record<AccountPreferenceCode, keyof AccountPreferencesDTO>
+} satisfies Record<AccountPreferenceCode, keyof AccountPreferences>
 
 function buildPreferenceItems(codes: AccountPreferenceCode[]) {
   return codes.map((code) => {
@@ -1444,11 +1445,11 @@ async function saveSettings() {
   }
 }
 
-function toPreferencePayload(values: Record<string, string | boolean | number | string[]>): Partial<AccountPreferencesDTO> {
+function toPreferencePayload(values: Record<string, string | boolean | number | string[]>): Partial<AccountPreferences> {
   return Object.fromEntries(
       Object.entries(PREFERENCE_CODE_TO_KEY)
           .filter(([code]) => values[code] !== undefined)
           .map(([code, key]) => [key, values[code]]),
-  ) as Partial<AccountPreferencesDTO>
+  ) as Partial<AccountPreferences>
 }
 </script>

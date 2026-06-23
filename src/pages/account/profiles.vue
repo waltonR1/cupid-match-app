@@ -116,7 +116,6 @@ import {useAccountProfiles} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openAccountProfileCreate, openAccountProfileDetail} from '@/utils/navigation'
 import {formatLocalizedAge} from '@/utils/profile-format'
-import type {AccountProfileVerificationDTO, ManagedProfileSummaryDTO} from '@/api/account'
 import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account/profiles'
 
 useRequireAuth()
@@ -133,19 +132,24 @@ const hasSelfProfile = computed(() =>
     (payload.value?.profiles ?? []).some((p) => p.relationshipToProfile === 'self'),
 )
 
-function getProfileBadges(profile: ManagedProfileSummaryDTO) {
+type ManagedProfileSummary = NonNullable<typeof payload.value>['profiles'][number]
+type AccountProfileVerification = ManagedProfileSummary['verification']
+
+function getProfileBadges(profile: ManagedProfileSummary) {
   const badges: Array<{ key: string; i18nKey: string }> = []
   badges.push({key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}`})
   return badges
 }
 
-function verificationDescription(v: AccountProfileVerificationDTO) {
-  const r = computeVerificationRatio(v)
+function verificationDescription(v: AccountProfileVerification) {
+  const profile = payload.value?.profiles.find((item) => item.verification === v)
+  const r = computeVerificationRatio(v, profile?.profileStatus)
   return t(`profiles.verificationDescription.${resolveVerificationDescriptionKey(r.verified, r.total)}`)
 }
 
-function verificationRatioText(v: AccountProfileVerificationDTO) {
-  const r = computeVerificationRatio(v)
+function verificationRatioText(v: AccountProfileVerification) {
+  const profile = payload.value?.profiles.find((item) => item.verification === v)
+  const r = computeVerificationRatio(v, profile?.profileStatus)
   return `${r.verified}/${r.total}`
 }
 </script>

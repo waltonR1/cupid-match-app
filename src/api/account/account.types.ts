@@ -47,6 +47,7 @@ export interface AccountProfileDetailDTO {
     revokedAt?: string
   }
   verification: AccountProfileVerificationDTO
+  verificationMaterials?: AccountProfileVerificationMaterialDTO[]
   privacyPreferences: AccountProfilePrivacyPreferencesDTO
   localizedMeta: AccountProfileLocalizedMetaDTO
   contact: AccountProfileContactDTO
@@ -217,6 +218,25 @@ export interface AccountProfileVerificationDTO {
   verifiedByUserId?: string
 }
 
+export type AccountProfileVerificationMaterialType = 'identity' | 'education' | 'income' | 'marital'
+
+export type AccountProfileVerificationMaterialStatus = 'pending' | 'approved' | 'rejected'
+
+export interface AccountProfileVerificationMaterialDTO {
+  materialId: string
+  profileId: string
+  materialType: AccountProfileVerificationMaterialType
+  status: AccountProfileVerificationMaterialStatus
+  legalName?: string
+  dateOfBirth?: string
+  materialName?: string
+  materialUrl?: string
+  reviewNote?: string
+  submittedAt?: string
+  reviewedAt?: string
+  rejectionReason?: string
+}
+
 export interface AccountProfilePrivacyPreferencesDTO {
   hideMaritalStatus: boolean
   hideHasChildren: boolean
@@ -302,6 +322,15 @@ export interface AccountProfileVerificationUpdatePayload {
   dateOfBirth?: string
 }
 
+export interface AccountProfileVerificationMaterialPayload {
+  materialType: AccountProfileVerificationMaterialType
+  legalName?: string
+  dateOfBirth?: string
+  materialName?: string
+  materialUrl?: string
+  reviewNote?: string
+}
+
 export interface AccountProfilePhotoSavePayload {
   id?: string
   url: string
@@ -316,7 +345,7 @@ export interface AccountProfileDetailSavePayload {
   ownership: AccountProfileOwnershipUpdatePayload
   profile: AccountProfileUpdatePayload
   contact: AccountProfileContactUpdatePayload
-  verification: AccountProfileVerificationUpdatePayload
+  verification?: AccountProfileVerificationUpdatePayload
   photos: AccountProfilePhotoSavePayload[]
 }
 

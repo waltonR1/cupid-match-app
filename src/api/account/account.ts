@@ -14,6 +14,7 @@ import type {
   AccountProfileDetailDTO,
   AccountProfileArchiveResultDTO,
   AccountProfileDetailSavePayload,
+  AccountProfileVerificationMaterialPayload,
   AccountProfilePrivacyPreferencesDTO,
   AccountProfilePrivacyPreferencesUpdatePayload,
   AccountMeUpdatePayload,
@@ -72,11 +73,29 @@ export function archiveAccountProfile(profileId: string): Promise<AccountProfile
   })
 }
 
+export function submitAccountProfileReview(
+  profileId: string,
+  lang?: 'zh' | 'fr' | 'en',
+): Promise<AccountProfileDetailDTO> {
+  return apiRequest<AccountProfileDetailDTO>(`/account/profiles/${profileId}/submit-review`, {
+    method: 'POST',
+    query: {lang},
+    data: {},
+  })
+}
+
 export function updateAccountProfilePrivacyPreferences(
   profileId: string,
   payload: AccountProfilePrivacyPreferencesUpdatePayload,
 ): Promise<AccountProfilePrivacyPreferencesDTO> {
   return apiRequest<AccountProfilePrivacyPreferencesDTO>(`/account/profiles/${profileId}/privacy-preferences`, { method: 'POST', data: payload })
+}
+
+export function submitAccountProfileVerificationMaterial(
+  profileId: string,
+  payload: AccountProfileVerificationMaterialPayload,
+): Promise<{ profileId: string; verification: AccountProfileDetailDTO['verification']; materials: AccountProfileDetailDTO['verificationMaterials'] }> {
+  return apiRequest(`/account/profiles/${profileId}/verification/materials`, { method: 'POST', data: payload })
 }
 
 export function getAccountMembership(): Promise<{

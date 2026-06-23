@@ -99,7 +99,7 @@ export const accountCenterMessages: AppMessageSchema = {
       rejected: '未通过',
     },
     reviewStatus: { unreviewed: '未审核', pending: '审核中', approved: '已通过', rejected: '未通过' },
-    verificationPanel: { title: '资料认证', description: '由平台工作人员审核的信任状态。编辑资料字段不会直接改变这些状态。', identityAction: '查看身份认证', identityEditHint: '填写后保存资料，将进入审核中。', identityReadOnlyHint: '进入编辑后可提交身份认证资料。', verifiedIdentityHint: '身份已认证，仅展示脱敏信息。', staffManagedHint: '该认证由平台工作人员审核与维护。' },
+    verificationPanel: { title: '资料认证', description: '由平台工作人员审核的信任状态。编辑资料字段不会直接改变这些状态。', identityAction: '查看身份认证', verifiedHint: '该认证已通过，仅展示必要信息。', pendingHint: '材料已提交，正在等待平台审核。', rejectedHint: '上次提交未通过，可以补充材料后重新提交。', submitHint: '提交材料后将进入审核中。', platformHint: '平台审核来自资料发布状态。修改资料内容后，资料会重新进入发布审核流程。', materialName: '材料名称', materialUrl: '材料文件地址', materialUrlPlaceholder: '仅支持 PDF、JPG、PNG、WEBP', allowedMaterialTypes: '支持 PDF 或图片材料，请勿提交无关网页链接。', invalidMaterialType: '材料文件仅支持 PDF、JPG、PNG 或 WEBP。', reviewNote: '补充说明', submittedAt: '提交时间', submit: '提交材料', submitting: '提交中...', submitSuccess: '材料已提交', submitFailed: '提交失败，请稍后重试。' },
     privacyPreferences: {
       title: '敏感信息公开设置',
       description: '你可以选择这些敏感字段在公开资料中开放或隐藏。',
@@ -120,7 +120,7 @@ export const accountCenterMessages: AppMessageSchema = {
       title: '删除资料',
       description: '删除后，这份资料将退出正常业务流，但历史记录会保留。确认继续吗？',
     },
-    actions: { edit: '编辑资料', cancelEdit: '取消编辑', view: '查看详情', save: '保存资料', archive: '删除资料', create: '新建资料', add: '新增', remove: '移除', saveBeforeSwitch: '保存后切换', discardBeforeSwitch: '放弃编辑并切换' },
+    actions: { edit: '编辑资料', cancelEdit: '取消编辑', view: '查看详情', save: '保存资料', publishNow: '立即发布', republish: '再次发布', submittingReview: '提交中...', submitReviewSuccess: '已提交资料审核', submitReviewFailed: '提交审核失败，请稍后重试。', saveBeforeSubmitReview: '请先保存资料后再提交审核。', archive: '删除资料', create: '新建资料', add: '新增', remove: '移除', saveBeforeSwitch: '保存后切换', discardBeforeSwitch: '放弃编辑并切换' },
     detail: {
       createTitle: '新建资料',
       subtitle: '维护档案字段、联系方式、媒体内容与可见范围。',

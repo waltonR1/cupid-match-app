@@ -1,5 +1,8 @@
 import type { AccountProfileDetailDTO } from '@/api/account'
 
+export type AccountProfileVerificationMaterialType = 'identity' | 'education' | 'income' | 'marital'
+export type AccountProfileVerificationPanelKey = AccountProfileVerificationMaterialType | 'review'
+
 export interface AccountProfileDetailSectionItem {
   fieldKey: string
   labelKey: string
@@ -21,7 +24,7 @@ export interface AccountProfileDetailStatusItem {
 }
 
 export interface AccountProfileDetailVerificationItem {
-  key: string
+  key: AccountProfileVerificationPanelKey
   labelKey: string
   valueKey: string
   valueRaw?: string

@@ -73,6 +73,13 @@
           {{ t('profiles.actions.save') }}
         </view>
         <view
+            v-if="canSubmitProfileReview"
+            class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px]"
+            @click="submitProfileReview"
+        >
+          {{ profileReviewSubmitting ? t('profiles.actions.submittingReview') : profileSubmitReviewLabel }}
+        </view>
+        <view
             v-if="!createMode"
             class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px]"
             @click="archiveProfile"
@@ -462,72 +469,6 @@
                 </view>
               </view>
             </view>
-            <view
-                v-if="verificationPanelKey"
-                class="mt-4 grid gap-3 border border-semantic-border-soft bg-semantic-surface-panel p-3"
-            >
-              <view class="flex items-center justify-between gap-3">
-                <view class="text-[14px] font-semibold">{{ selectedVerificationTitle }}</view>
-                <view class="cursor-pointer text-[12px] text-semantic-text-secondary"
-                      @click="verificationPanelKey = null">
-                  {{ t('common.cancel') }}
-                </view>
-              </view>
-              <template v-if="verificationPanelKey === 'identity' && isIdentityVerified">
-                <view class="text-[13px] text-semantic-text-secondary">
-                  {{ t('profiles.verificationPanel.verifiedIdentityHint') }}
-                </view>
-                <view class="grid gap-2 text-[13px]">
-                  <view>{{ t('profiles.verification.legalName') }}: {{ maskedIdentityName || '-' }}</view>
-                  <view>{{ t('profiles.verification.dateOfBirth') }}: {{ maskedIdentityDate || '-' }}</view>
-                </view>
-              </template>
-              <template v-else-if="verificationPanelKey === 'identity'">
-                <view class="text-[13px] text-semantic-text-secondary">
-                  {{
-                    editing ? t('profiles.verificationPanel.identityEditHint') : t('profiles.verificationPanel.identityReadOnlyHint')
-                  }}
-                </view>
-                <view>
-                  <view class="text-[13px] text-semantic-text-secondary">{{
-                      t('profiles.verification.legalName')
-                    }}
-                  </view>
-                  <input
-                      v-if="editing"
-                      :value="readDraft('legalName')"
-                      class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                      @input="writeDraft('legalName', getInputValue($event))"
-                  />
-                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{
-                      maskedIdentityName || '-'
-                    }}
-                  </view>
-                </view>
-                <view>
-                  <view class="text-[13px] text-semantic-text-secondary">{{
-                      t('profiles.verification.dateOfBirth')
-                    }}
-                  </view>
-                  <input
-                      v-if="editing"
-                      :value="readDraft('dateOfBirth')"
-                      class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                      placeholder="YYYY-MM-DD"
-                      @input="writeDraft('dateOfBirth', getInputValue($event))"
-                  />
-                  <view v-else class="mt-2 text-[14px] text-semantic-text-primary">{{
-                      maskedIdentityDate || '-'
-                    }}
-                  </view>
-                </view>
-              </template>
-              <template v-else>
-                <view class="text-[13px] leading-6 text-semantic-text-secondary">
-                  {{ t('profiles.verificationPanel.staffManagedHint') }}
-                </view>
-              </template>
-            </view>
           </view>
 
           <view class="border border-semantic-border-default bg-semantic-surface-card px-5 py-5 shadow-panel">
@@ -558,6 +499,107 @@
             </view>
           </view>
         </aside>
+      </view>
+    </view>
+
+    <view
+        v-if="verificationPanelKey"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 py-8"
+        @click="closeVerificationPanel"
+    >
+      <view
+          class="max-h-full w-full max-w-[520px] overflow-y-auto border border-semantic-border-default bg-semantic-surface-card p-5 shadow-panel"
+          @click.stop
+      >
+        <view class="flex items-start justify-between gap-4">
+          <view>
+            <view class="text-[16px] font-semibold">{{ selectedVerificationTitle }}</view>
+            <view class="mt-1 text-[12px] text-semantic-text-muted">
+              {{ t('profiles.verificationPanel.title') }}
+            </view>
+          </view>
+          <view
+                aria-label="Close"
+                class="flex h-8 w-8 cursor-pointer items-center justify-center border border-semantic-border-soft text-[18px] leading-none text-semantic-text-secondary transition-colors hover:bg-semantic-surface-soft hover:text-semantic-text-primary"
+                @click="closeVerificationPanel">
+            ×
+          </view>
+        </view>
+
+        <view class="mt-4 grid gap-3">
+          <template v-if="verificationPanelKey === 'review'">
+            <view class="text-[13px] leading-6 text-semantic-text-secondary">
+              {{ t('profiles.verificationPanel.platformHint') }}
+            </view>
+          </template>
+          <template v-else-if="selectedVerificationStatus === 'verified'">
+            <view class="text-[13px] leading-6 text-semantic-text-secondary">
+              {{ t('profiles.verificationPanel.verifiedHint') }}
+            </view>
+            <view v-if="verificationPanelKey === 'identity'" class="grid gap-2 text-[13px]">
+              <view>{{ t('profiles.verification.legalName') }}: {{ maskedIdentityName || '-' }}</view>
+              <view>{{ t('profiles.verification.dateOfBirth') }}: {{ maskedIdentityDate || '-' }}</view>
+            </view>
+          </template>
+          <template v-else-if="selectedVerificationStatus === 'pending'">
+            <view class="text-[13px] leading-6 text-semantic-text-secondary">
+              {{ t('profiles.verificationPanel.pendingHint') }}
+            </view>
+            <view v-if="selectedVerificationMaterial" class="grid gap-2 text-[13px]">
+              <view>{{ t('profiles.verificationPanel.materialName') }}: {{ selectedVerificationMaterial.materialName || selectedVerificationMaterial.legalName || '-' }}</view>
+              <view>{{ t('profiles.verificationPanel.submittedAt') }}: {{ selectedVerificationMaterial.submittedAt ? formatLocalizedDateTime(locale, selectedVerificationMaterial.submittedAt) : '-' }}</view>
+            </view>
+          </template>
+          <template v-else>
+            <view class="text-[13px] leading-6 text-semantic-text-secondary">
+              {{ selectedVerificationStatus === 'rejected' ? t('profiles.verificationPanel.rejectedHint') : t('profiles.verificationPanel.submitHint') }}
+            </view>
+            <view v-if="verificationPanelKey === 'identity'">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verification.legalName') }}</view>
+              <input
+                  v-model="verificationDraft.legalName"
+                  class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+              />
+            </view>
+            <view v-if="verificationPanelKey === 'identity'">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verification.dateOfBirth') }}</view>
+              <input
+                  v-model="verificationDraft.dateOfBirth"
+                  class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+                  placeholder="YYYY-MM-DD"
+              />
+            </view>
+            <view v-if="verificationPanelKey !== 'identity'">
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verificationPanel.materialName') }}</view>
+              <input
+                  v-model="verificationDraft.materialName"
+                  class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+              />
+            </view>
+            <view>
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verificationPanel.materialUrl') }}</view>
+              <input
+                  v-model="verificationDraft.materialUrl"
+                  class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+                  :placeholder="t('profiles.verificationPanel.materialUrlPlaceholder')"
+              />
+              <view class="mt-1 text-[12px] leading-5 text-semantic-text-muted">{{ t('profiles.verificationPanel.allowedMaterialTypes') }}</view>
+            </view>
+            <view>
+              <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verificationPanel.reviewNote') }}</view>
+              <textarea
+                  v-model="verificationDraft.reviewNote"
+                  class="mt-2 box-border min-h-[92px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
+              />
+            </view>
+            <view
+                class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-3 py-2 text-center text-[14px] text-semantic-text-primary"
+                @click="submitVerification"
+            >
+              {{ verificationSubmitting ? t('profiles.verificationPanel.submitting') : t('profiles.verificationPanel.submit') }}
+            </view>
+          </template>
+        </view>
       </view>
     </view>
 
@@ -598,6 +640,8 @@ import {formatLocalizedDateTime} from '@/utils/locale-format'
 import type {
   AccountProfileDetailPageData,
   AccountProfilePhotoDraft,
+  AccountProfileVerificationMaterialType,
+  AccountProfileVerificationPanelKey,
 } from '@/types/account/profile-detail'
 
 useRequireAuth()
@@ -611,6 +655,9 @@ const {
   pageData,
   saveDetail,
   savePrivacyPreferences,
+  submitReview,
+  submitVerificationMaterial,
+  refresh,
   archive,
   uploadProfileImage,
 } = useAccountProfileDetail(() => profileId.value, () => editLocale.value, () => createMode.value)
@@ -626,7 +673,17 @@ const listSelectedOption = ref<Record<string, string>>({})
 const tagInputs = ref<Record<string, string>>({})
 const pendingEditLocale = ref<typeof editLocale.value | null>(null)
 const localeSwitchPromptOpen = ref(false)
-const verificationPanelKey = ref<string | null>(null)
+const profileReviewSubmitting = ref(false)
+const verificationPanelKey = ref<AccountProfileVerificationPanelKey | null>(null)
+const verificationSubmitting = ref(false)
+const verificationDraft = ref({
+  legalName: '',
+  dateOfBirth: '',
+  materialName: '',
+  materialUrl: '',
+  reviewNote: '',
+})
+const allowedVerificationMaterialPattern = /\.(pdf|jpe?g|png|webp)(?:[?#].*)?$/i
 
 // confirm dialog
 const confirmOpen = ref(false)
@@ -658,12 +715,33 @@ async function handleConfirm() {
 const visiblePhotoDrafts = computed(() => photoDrafts.value
     .filter((photo) => !photo.delete)
     .sort((a, b) => a.sortOrder - b.sortOrder))
-const isIdentityVerified = computed(() => payload.value?.verification.identityStatus === 'verified')
+const canSubmitProfileReview = computed(() => {
+  if (createMode.value || !profileId.value || !payload.value) return false
+  return payload.value.profileStatus === 'draft' || payload.value.profileStatus === 'hidden'
+})
+const profileSubmitReviewLabel = computed(() => {
+  return payload.value?.profileStatus === 'hidden'
+      ? t('profiles.actions.republish')
+      : t('profiles.actions.publishNow')
+})
 const maskedIdentityName = computed(() => maskName(payload.value?.verification.legalName))
 const maskedIdentityDate = computed(() => maskDate(payload.value?.verification.dateOfBirth))
 const selectedVerificationTitle = computed(() => {
   const item = pageData.value?.verificationItems.find((entry) => entry.key === verificationPanelKey.value)
   return item ? t(item.labelKey) : ''
+})
+const selectedVerificationStatus = computed(() => {
+  if (!payload.value || !verificationPanelKey.value) return 'unverified'
+  const verification = payload.value.verification
+  if (verificationPanelKey.value === 'identity') return verification.identityStatus
+  if (verificationPanelKey.value === 'education') return verification.educationStatus
+  if (verificationPanelKey.value === 'income') return verification.incomeStatus
+  if (verificationPanelKey.value === 'marital') return verification.maritalStatus
+  return 'unverified'
+})
+const selectedVerificationMaterial = computed(() => {
+  if (!payload.value || !verificationPanelKey.value) return null
+  return payload.value.verificationMaterials?.find((item) => item.materialType === verificationPanelKey.value) ?? null
 })
 
 const hasSelfProfile = ref(false)
@@ -890,7 +968,7 @@ async function saveDraft() {
   if (!payload.value) return false
   const validationMessage = validateProfileDraft()
   if (validationMessage) {
-    toast.show(validationMessage, 'info')
+    toast.show(validationMessage, 'error')
     return false
   }
   const profilePayload = buildProfilePayload()
@@ -909,10 +987,6 @@ async function saveDraft() {
       ownership: draftOwnership.value,
       profile: profilePayload,
       contact: contactPayload,
-      verification: {
-        legalName: draft.value.legalName ?? '',
-        dateOfBirth: draft.value.dateOfBirth ?? '',
-      },
       photos: await buildPhotoPayload(),
     })
   } catch {
@@ -1184,8 +1258,72 @@ function togglePrivacyPreference(key: string, hidden: boolean) {
   } as Partial<NonNullable<typeof payload.value>['privacyPreferences']>)
 }
 
-function openVerificationPanel(key: string) {
-  verificationPanelKey.value = verificationPanelKey.value === key ? null : key
+function openVerificationPanel(key: AccountProfileVerificationPanelKey) {
+  verificationPanelKey.value = key
+  const material = selectedVerificationMaterial.value
+  verificationDraft.value = {
+    legalName: payload.value?.verification.legalName ?? material?.legalName ?? '',
+    dateOfBirth: payload.value?.verification.dateOfBirth ?? material?.dateOfBirth ?? '',
+    materialName: material?.materialName ?? '',
+    materialUrl: material?.materialUrl ?? '',
+    reviewNote: material?.reviewNote ?? '',
+  }
+}
+
+function closeVerificationPanel() {
+  if (verificationSubmitting.value) return
+  verificationPanelKey.value = null
+}
+
+async function submitVerification() {
+  if (!profileId.value || !verificationPanelKey.value) return
+  if (verificationPanelKey.value === 'review') return
+  if (verificationSubmitting.value) return
+  if (!isAllowedVerificationMaterial(verificationDraft.value.materialUrl)) {
+    toast.show(t('profiles.verificationPanel.invalidMaterialType'), 'error')
+    return
+  }
+  verificationSubmitting.value = true
+  try {
+    await submitVerificationMaterial({
+      materialType: verificationPanelKey.value as AccountProfileVerificationMaterialType,
+      legalName: verificationDraft.value.legalName,
+      dateOfBirth: verificationDraft.value.dateOfBirth,
+      materialName: verificationDraft.value.materialName,
+      materialUrl: verificationDraft.value.materialUrl,
+      reviewNote: verificationDraft.value.reviewNote,
+    })
+    toast.show(t('profiles.verificationPanel.submitSuccess'), 'success')
+    await refresh()
+    closeVerificationPanel()
+  } catch {
+    toast.show(t('profiles.verificationPanel.submitFailed'), 'error')
+  } finally {
+    verificationSubmitting.value = false
+  }
+}
+
+function isAllowedVerificationMaterial(value: string) {
+  return allowedVerificationMaterialPattern.test(value.trim())
+}
+
+async function submitProfileReview() {
+  if (!canSubmitProfileReview.value || profileReviewSubmitting.value) return
+  if (editing.value) {
+    toast.show(t('profiles.actions.saveBeforeSubmitReview'), 'error')
+    return
+  }
+  profileReviewSubmitting.value = true
+  try {
+    const detail = await submitReview()
+    if (detail) {
+      toast.show(t('profiles.actions.submitReviewSuccess'), 'success')
+    }
+  } catch {
+    toast.show(t('profiles.actions.submitReviewFailed'), 'error')
+  } finally {
+    profileReviewSubmitting.value = false
+  }
 }
 
 function archiveProfile() {

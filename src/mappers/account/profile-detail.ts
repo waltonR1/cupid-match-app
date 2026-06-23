@@ -41,7 +41,7 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
     contactSection: buildContactSection(payload),
     photos: payload.photos,
     verification: payload.verification,
-    verificationItems: buildVerificationItems(payload.verification),
+    verificationItems: buildVerificationItems(payload),
     privacyPreferenceItems: buildPrivacyPreferenceItems(payload.privacyPreferences),
   }
 }
@@ -140,14 +140,23 @@ function buildContactSection(payload: AccountProfileDetailDTO): AccountProfileDe
   }
 }
 
-function buildVerificationItems(verification: AccountProfileDetailDTO['verification']): AccountProfileDetailVerificationItem[] {
+function buildVerificationItems(payload: AccountProfileDetailDTO): AccountProfileDetailVerificationItem[] {
+  const verification = payload.verification
+  const platformStatus = resolvePlatformReviewStatus(payload.profileStatus)
   return [
     { key: 'identity', labelKey: 'profiles.verification.identity', valueKey: `profiles.verificationStatus.${verification.identityStatus}`, tone: resolveTone(verification.identityStatus) },
     { key: 'education', labelKey: 'profiles.verification.education', valueKey: `profiles.verificationStatus.${verification.educationStatus}`, tone: resolveTone(verification.educationStatus) },
     { key: 'income', labelKey: 'profiles.verification.income', valueKey: `profiles.verificationStatus.${verification.incomeStatus}`, tone: resolveTone(verification.incomeStatus) },
     { key: 'marital', labelKey: 'profiles.verification.marital', valueKey: `profiles.verificationStatus.${verification.maritalStatus}`, tone: resolveTone(verification.maritalStatus) },
-    { key: 'review', labelKey: 'profiles.verification.platformReview', valueKey: `profiles.reviewStatus.${verification.reviewStatus}`, tone: resolveTone(verification.reviewStatus) },
+    { key: 'review', labelKey: 'profiles.verification.platformReview', valueKey: `profiles.reviewStatus.${platformStatus}`, tone: resolveTone(platformStatus) },
   ]
+}
+
+function resolvePlatformReviewStatus(profileStatus: AccountProfileDetailDTO['profileStatus']) {
+  if (profileStatus === 'review') return 'pending'
+  if (profileStatus === 'open' || profileStatus === 'paused') return 'approved'
+  if (profileStatus === 'hidden') return 'rejected'
+  return 'unreviewed'
 }
 
 function resolveTone(status: string) {
