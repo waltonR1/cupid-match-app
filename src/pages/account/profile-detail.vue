@@ -170,7 +170,12 @@
                   :key="photo.clientId"
                   class="grid gap-4 border border-semantic-border-soft bg-semantic-surface-panel p-4 md:grid-cols-[120px_minmax(0,1fr)]"
               >
-                <image :src="photo.url" class="h-[120px] w-full object-cover"/>
+                <image
+                    :src="photo.url"
+                    class="h-[120px] w-full cursor-pointer object-cover transition-opacity hover:opacity-90"
+                    mode="aspectFill"
+                    @click="openPhotoPreview(photo.url)"
+                />
                 <view class="grid gap-3">
                   <view v-if="!editing" class="text-[14px] text-semantic-text-secondary">
                     {{ photoStatusLabel(photo.status) }}
@@ -503,6 +508,27 @@
     </view>
 
     <view
+        v-if="photoPreviewUrl"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/92"
+        @click="closePhotoPreview"
+    >
+      <image
+          :src="photoPreviewUrl"
+          class="h-full w-full"
+          mode="aspectFit"
+          @load="handlePhotoPreviewLoad"
+          @click.stop="handlePhotoPreviewImageClick"
+      />
+      <view
+          aria-label="Close"
+          class="fixed right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center text-[28px] leading-none text-white/30 transition-opacity duration-200 hover:text-white/60"
+          @click.stop="closePhotoPreview"
+      >
+        ×
+      </view>
+    </view>
+
+    <view
         v-if="verificationPanelKey"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 py-8"
         @click="closeVerificationPanel"
@@ -578,11 +604,17 @@
             </view>
             <view>
               <view class="text-[13px] text-semantic-text-secondary">{{ t('profiles.verificationPanel.materialUrl') }}</view>
-              <input
-                  v-model="verificationDraft.materialUrl"
-                  class="mt-2 box-border min-h-[42px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary"
-                  :placeholder="t('profiles.verificationPanel.materialUrlPlaceholder')"
-              />
+              <view class="mt-2 flex flex-wrap items-center gap-2">
+                <view class="min-h-[42px] flex-1 border border-semantic-border-soft bg-semantic-surface-panel px-3 py-2 text-[14px] leading-6 text-semantic-text-primary">
+                  {{ verificationDraft.materialFilename || t('profiles.verificationPanel.noMaterialSelected') }}
+                </view>
+                <view
+                    class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-card px-3 py-2 text-[14px] text-semantic-text-primary"
+                    @click="chooseAndUploadVerificationMaterial"
+                >
+                  {{ verificationUploading ? t('profiles.verificationPanel.uploadingMaterial') : t('profiles.verificationPanel.uploadMaterial') }}
+                </view>
+              </view>
               <view class="mt-1 text-[12px] leading-5 text-semantic-text-muted">{{ t('profiles.verificationPanel.allowedMaterialTypes') }}</view>
             </view>
             <view>
@@ -634,7 +666,13 @@ import Toast from '@/components/common/Toast.vue'
 import {useToast} from '@/hooks/common/use-toast'
 import {useAccountProfileDetail} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {ALLOWED_PHOTO_EXTENSIONS, MAX_PHOTO_COUNT, MAX_PHOTO_SIZE} from '@/config/upload'
+import {
+  ALLOWED_PHOTO_EXTENSIONS,
+  ALLOWED_VERIFICATION_MATERIAL_EXTENSIONS,
+  MAX_PHOTO_COUNT,
+  MAX_PHOTO_SIZE,
+  MAX_VERIFICATION_MATERIAL_SIZE,
+} from '@/config/upload'
 import {openMyProfilePage} from '@/utils/navigation'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
 import type {
@@ -660,10 +698,13 @@ const {
   refresh,
   archive,
   uploadProfileImage,
+  uploadVerificationMaterial,
 } = useAccountProfileDetail(() => profileId.value, () => editLocale.value, () => createMode.value)
 const editing = ref(false)
 const draft = ref<Record<string, string>>({})
 const photoDrafts = ref<AccountProfilePhotoDraft[]>([])
+const photoPreviewUrl = ref('')
+const photoPreviewSize = ref({width: 0, height: 0})
 const draftOwnership = ref({
   relationshipToProfile: 'relative' as 'self' | 'father' | 'mother' | 'relative',
 })
@@ -676,11 +717,14 @@ const localeSwitchPromptOpen = ref(false)
 const profileReviewSubmitting = ref(false)
 const verificationPanelKey = ref<AccountProfileVerificationPanelKey | null>(null)
 const verificationSubmitting = ref(false)
+const verificationUploading = ref(false)
 const verificationDraft = ref({
   legalName: '',
   dateOfBirth: '',
   materialName: '',
   materialUrl: '',
+  materialLocalPath: '',
+  materialFilename: '',
   reviewNote: '',
 })
 const allowedVerificationMaterialPattern = /\.(pdf|jpe?g|png|webp)(?:[?#].*)?$/i
@@ -1266,6 +1310,8 @@ function openVerificationPanel(key: AccountProfileVerificationPanelKey) {
     dateOfBirth: payload.value?.verification.dateOfBirth ?? material?.dateOfBirth ?? '',
     materialName: material?.materialName ?? '',
     materialUrl: material?.materialUrl ?? '',
+    materialLocalPath: '',
+    materialFilename: material?.materialName ?? materialFilenameFromUrl(material?.materialUrl ?? ''),
     reviewNote: material?.reviewNote ?? '',
   }
 }
@@ -1279,32 +1325,151 @@ async function submitVerification() {
   if (!profileId.value || !verificationPanelKey.value) return
   if (verificationPanelKey.value === 'review') return
   if (verificationSubmitting.value) return
-  if (!isAllowedVerificationMaterial(verificationDraft.value.materialUrl)) {
+  if (!verificationDraft.value.materialUrl && !verificationDraft.value.materialLocalPath) {
     toast.show(t('profiles.verificationPanel.invalidMaterialType'), 'error')
     return
   }
   verificationSubmitting.value = true
+  let stage: 'upload' | 'submit' = 'submit'
   try {
+    let materialUrl = verificationDraft.value.materialUrl
+    if (verificationDraft.value.materialLocalPath) {
+      stage = 'upload'
+      verificationUploading.value = true
+      const result = await uploadVerificationMaterial(verificationDraft.value.materialLocalPath)
+      if (!result) {
+        throw new Error('upload_failed')
+      }
+      materialUrl = result.materialUrl
+      verificationDraft.value.materialUrl = result.materialUrl
+      verificationDraft.value.materialLocalPath = ''
+      verificationDraft.value.materialFilename = result.originalFilename || verificationDraft.value.materialFilename || materialFilenameFromUrl(result.materialUrl)
+      if (!verificationDraft.value.materialName) {
+        verificationDraft.value.materialName = verificationDraft.value.materialFilename
+      }
+      verificationUploading.value = false
+      stage = 'submit'
+    }
+    if (!isAllowedVerificationMaterial(materialUrl)) {
+      toast.show(t('profiles.verificationPanel.invalidMaterialType'), 'error')
+      return
+    }
     await submitVerificationMaterial({
       materialType: verificationPanelKey.value as AccountProfileVerificationMaterialType,
       legalName: verificationDraft.value.legalName,
       dateOfBirth: verificationDraft.value.dateOfBirth,
       materialName: verificationDraft.value.materialName,
-      materialUrl: verificationDraft.value.materialUrl,
+      materialUrl,
       reviewNote: verificationDraft.value.reviewNote,
     })
     toast.show(t('profiles.verificationPanel.submitSuccess'), 'success')
     await refresh()
     closeVerificationPanel()
   } catch {
-    toast.show(t('profiles.verificationPanel.submitFailed'), 'error')
+    toast.show(stage === 'upload' ? t('profiles.verificationPanel.uploadFailed') : t('profiles.verificationPanel.submitFailed'), 'error')
   } finally {
+    verificationUploading.value = false
     verificationSubmitting.value = false
   }
 }
 
 function isAllowedVerificationMaterial(value: string) {
   return allowedVerificationMaterialPattern.test(value.trim())
+}
+
+async function chooseAndUploadVerificationMaterial() {
+  if (!profileId.value || verificationUploading.value) return
+  try {
+    const file = await chooseVerificationMaterialFile()
+    if (!isAllowedSelectedVerificationMaterial(file)) {
+      toast.show(t('profiles.verificationPanel.invalidMaterialType'), 'error')
+      return
+    }
+    if (file.size && file.size > MAX_VERIFICATION_MATERIAL_SIZE) {
+      toast.show(t('profiles.detail.photoTooLarge'), 'error')
+      return
+    }
+    verificationDraft.value.materialUrl = ''
+    verificationDraft.value.materialLocalPath = file.path
+    verificationDraft.value.materialFilename = file.name || materialFilenameFromUrl(file.path)
+    if (!verificationDraft.value.materialName) {
+      verificationDraft.value.materialName = verificationDraft.value.materialFilename
+    }
+  } catch {
+    toast.show(t('profiles.verificationPanel.uploadFailed'), 'error')
+  }
+}
+
+function isAllowedSelectedVerificationMaterial(file: SelectedLocalFile) {
+  const ext = resolveSelectedFileExtension(file)
+  return !ext || ALLOWED_VERIFICATION_MATERIAL_EXTENSIONS.includes(ext)
+}
+
+interface SelectedLocalFile {
+  path: string
+  name: string
+  type?: string
+  size?: number
+}
+
+function chooseVerificationMaterialFile(): Promise<SelectedLocalFile> {
+  return new Promise((resolve, reject) => {
+    const chooseFile = (uni as any).chooseFile
+    if (typeof chooseFile === 'function') {
+      chooseFile({
+        count: 1,
+        extension: ALLOWED_VERIFICATION_MATERIAL_EXTENSIONS,
+        success(res: any) {
+          const file = res.tempFiles?.[0]
+          const path = file?.path || res.tempFilePaths?.[0]
+          if (path) {
+            resolve({
+              path,
+              name: file?.name || materialFilenameFromUrl(path),
+              type: file?.type,
+              size: file?.size,
+            })
+            return
+          }
+          reject(new Error('empty_file'))
+        },
+        fail: reject,
+      })
+      return
+    }
+    uni.chooseImage({
+      count: 1,
+      success(res) {
+        const path = res.tempFilePaths[0]
+        const files = Array.isArray(res.tempFiles) ? res.tempFiles : [res.tempFiles]
+        const file = files[0] as { name?: string; path?: string; type?: string; size?: number } | undefined
+        resolve({
+          path,
+          name: file?.name || materialFilenameFromUrl(path),
+          type: file?.type,
+          size: file?.size,
+        })
+      },
+      fail: reject,
+    })
+  })
+}
+
+function resolveSelectedFileExtension(file: { name?: string; path?: string; type?: string }) {
+  const fromName = extensionOf(file.name)
+  if (fromName) return fromName
+  const fromPath = extensionOf(file.path)
+  if (fromPath) return fromPath
+  if (file.type === 'application/pdf') return '.pdf'
+  if (file.type === 'image/jpeg' || file.type === 'image/jpg') return '.jpg'
+  if (file.type === 'image/png') return '.png'
+  if (file.type === 'image/webp') return '.webp'
+  return ''
+}
+
+function materialFilenameFromUrl(value: string) {
+  if (!value) return ''
+  return decodeURIComponent(value.split('/').pop() || value)
 }
 
 async function submitProfileReview() {
@@ -1367,6 +1532,65 @@ async function addDraftPhoto() {
   })
 }
 
+function openPhotoPreview(url?: string) {
+  if (!url) return
+  photoPreviewSize.value = {width: 0, height: 0}
+  photoPreviewUrl.value = url
+}
+
+function closePhotoPreview() {
+  photoPreviewUrl.value = ''
+  photoPreviewSize.value = {width: 0, height: 0}
+}
+
+function handlePhotoPreviewLoad(event: Event) {
+  const detail = (event as unknown as { detail?: { width?: number; height?: number } }).detail
+  photoPreviewSize.value = {
+    width: Number(detail?.width) || 0,
+    height: Number(detail?.height) || 0,
+  }
+}
+
+function handlePhotoPreviewImageClick(event: Event) {
+  if (!isPointInsidePreviewImage(event)) {
+    closePhotoPreview()
+  }
+}
+
+function isPointInsidePreviewImage(event: Event) {
+  const {width, height} = photoPreviewSize.value
+  if (!width || !height) return true
+  const point = eventPoint(event)
+  if (!point) return true
+
+  const viewportWidth = uni.getSystemInfoSync().windowWidth
+  const viewportHeight = uni.getSystemInfoSync().windowHeight
+  const scale = Math.min(viewportWidth / width, viewportHeight / height)
+  const renderedWidth = width * scale
+  const renderedHeight = height * scale
+  const left = (viewportWidth - renderedWidth) / 2
+  const top = (viewportHeight - renderedHeight) / 2
+
+  return point.x >= left
+      && point.x <= left + renderedWidth
+      && point.y >= top
+      && point.y <= top + renderedHeight
+}
+
+function eventPoint(event: Event) {
+  const anyEvent = event as unknown as {
+    clientX?: number
+    clientY?: number
+    detail?: { x?: number; y?: number }
+    touches?: Array<{ clientX?: number; clientY?: number }>
+    changedTouches?: Array<{ clientX?: number; clientY?: number }>
+  }
+  const touch = anyEvent.touches?.[0] || anyEvent.changedTouches?.[0]
+  const x = anyEvent.clientX ?? anyEvent.detail?.x ?? touch?.clientX
+  const y = anyEvent.clientY ?? anyEvent.detail?.y ?? touch?.clientY
+  return typeof x === 'number' && typeof y === 'number' ? {x, y} : null
+}
+
 async function chooseDraftPhoto(clientId: string) {
   const localPath = await chooseLocalImage()
   if (!localPath) return
@@ -1383,15 +1607,16 @@ function chooseLocalImage() {
         const [path] = result.tempFilePaths
         if (!path) { resolve(null); return }
 
-        const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
-        if (!ALLOWED_PHOTO_EXTENSIONS.includes(ext)) {
+        const files = Array.isArray(result.tempFiles) ? result.tempFiles : [result.tempFiles]
+        const file = files[0] as { name?: string; path?: string; type?: string; size?: number } | undefined
+        const ext = resolveSelectedPhotoExtension(file, path)
+        if (ext && !ALLOWED_PHOTO_EXTENSIONS.includes(ext)) {
           toast.show(t('profiles.detail.photoUnsupportedFormat'), 'error')
           resolve(null)
           return
         }
 
-        const files = Array.isArray(result.tempFiles) ? result.tempFiles : [result.tempFiles]
-        const size = files[0]?.size
+        const size = file?.size
         if (size && size > MAX_PHOTO_SIZE) {
           toast.show(t('profiles.detail.photoTooLarge'), 'error')
           resolve(null)
@@ -1403,6 +1628,25 @@ function chooseLocalImage() {
       fail: () => resolve(null),
     })
   })
+}
+
+function resolveSelectedPhotoExtension(file: { name?: string; path?: string; type?: string } | undefined, path: string) {
+  const fromName = extensionOf(file?.name)
+  if (fromName) return fromName
+  const fromPath = extensionOf(file?.path || path)
+  if (fromPath) return fromPath
+  if (file?.type === 'image/jpeg' || file?.type === 'image/jpg') return '.jpg'
+  if (file?.type === 'image/png') return '.png'
+  if (file?.type === 'image/webp') return '.webp'
+  return ''
+}
+
+function extensionOf(value?: string) {
+  if (!value) return ''
+  const clean = value.split(/[?#]/)[0]
+  const slash = Math.max(clean.lastIndexOf('/'), clean.lastIndexOf('\\'))
+  const dot = clean.lastIndexOf('.')
+  return dot > slash ? clean.slice(dot).toLowerCase() : ''
 }
 
 function markPrimaryPhoto(clientId: string) {

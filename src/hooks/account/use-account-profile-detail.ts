@@ -12,6 +12,7 @@ import {
     type AccountProfilePrivacyPreferencesUpdatePayload,
 } from '@/api/account'
 import {uploadImage} from '@/api/upload/upload'
+import {uploadVerificationMaterial as uploadVerificationMaterialFile} from '@/api/upload/upload'
 import {useLatestRequest} from '@/hooks/common/useLatestRequest'
 import {toAccountProfileDetailPageData} from '@/mappers/account/profile-detail'
 import {useAuthStore} from '@/stores/modules/auth'
@@ -120,6 +121,11 @@ export function useAccountProfileDetail(
         return uploadImage(filePath)
     }
 
+    function uploadVerificationMaterial(filePath: string) {
+        if (!profileId()) return undefined
+        return uploadVerificationMaterialFile(profileId(), filePath)
+    }
+
     const pageData = computed(() => toAccountProfileDetailPageData({
         payload: payload.value,
     }))
@@ -136,6 +142,7 @@ export function useAccountProfileDetail(
         submitVerificationMaterial,
         archive,
         uploadProfileImage,
+        uploadVerificationMaterial,
     }
 }
 

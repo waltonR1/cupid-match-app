@@ -99,7 +99,7 @@ export const accountCenterMessages: AppMessageSchema = {
       rejected: '未通过',
     },
     reviewStatus: { unreviewed: '未审核', pending: '审核中', approved: '已通过', rejected: '未通过' },
-    verificationPanel: { title: '资料认证', description: '由平台工作人员审核的信任状态。编辑资料字段不会直接改变这些状态。', identityAction: '查看身份认证', verifiedHint: '该认证已通过，仅展示必要信息。', pendingHint: '材料已提交，正在等待平台审核。', rejectedHint: '上次提交未通过，可以补充材料后重新提交。', submitHint: '提交材料后将进入审核中。', platformHint: '平台审核来自资料发布状态。修改资料内容后，资料会重新进入发布审核流程。', materialName: '材料名称', materialUrl: '材料文件地址', materialUrlPlaceholder: '仅支持 PDF、JPG、PNG、WEBP', allowedMaterialTypes: '支持 PDF 或图片材料，请勿提交无关网页链接。', invalidMaterialType: '材料文件仅支持 PDF、JPG、PNG 或 WEBP。', reviewNote: '补充说明', submittedAt: '提交时间', submit: '提交材料', submitting: '提交中...', submitSuccess: '材料已提交', submitFailed: '提交失败，请稍后重试。' },
+    verificationPanel: { title: '资料认证', description: '由平台工作人员审核的信任状态。编辑资料字段不会直接改变这些状态。', identityAction: '查看身份认证', verifiedHint: '该认证已通过，仅展示必要信息。', pendingHint: '材料已提交，正在等待平台审核。', rejectedHint: '上次提交未通过，可以补充材料后重新提交。', submitHint: '提交材料后将进入审核中。', platformHint: '平台审核来自资料发布状态。修改资料内容后，资料会重新进入发布审核流程。', materialName: '材料名称', materialUrl: '材料文件', materialUrlPlaceholder: '仅支持 PDF、JPG、PNG、WEBP', noMaterialSelected: '尚未选择材料', uploadMaterial: '选择材料', uploadingMaterial: '上传中...', uploadFailed: '材料上传失败，请稍后重试。', allowedMaterialTypes: '支持 PDF 或图片材料。', invalidMaterialType: '材料文件仅支持 PDF、JPG、PNG 或 WEBP。', reviewNote: '补充说明', submittedAt: '提交时间', submit: '提交材料', submitting: '提交中...', submitSuccess: '材料已提交', submitFailed: '提交失败，请稍后重试。' },
     privacyPreferences: {
       title: '敏感信息公开设置',
       description: '你可以选择这些敏感字段在公开资料中开放或隐藏。',
