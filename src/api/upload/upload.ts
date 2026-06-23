@@ -10,6 +10,8 @@ interface VerificationMaterialUploadResponse {
   originalFilename?: string
   contentType?: string
   size?: number
+  scanStatus?: string
+  scanMessage?: string
 }
 
 export function uploadImage(filePath: string): Promise<string> {
