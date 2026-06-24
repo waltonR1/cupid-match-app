@@ -672,7 +672,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import Toast from '@/components/common/Toast.vue'
 import {useToast} from '@/hooks/common/use-toast'
 import {useAccountProfileDetail} from '@/hooks/account'
-import {useProfileOptionsStore} from '@/stores/modules/profile-options'
+import {useOptionsStore} from '@/stores/modules/options'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {
   ALLOWED_PHOTO_EXTENSIONS,
@@ -693,7 +693,7 @@ import type {
 useRequireAuth()
 const toast = useToast()
 const {t, locale, locales} = usePageI18n('accountCenter')
-const profileOptionsStore = useProfileOptionsStore()
+const optionsStore = useOptionsStore()
 const profileId = ref('')
 const createMode = ref(false)
 const editLocale = computed(() => locale.value)
@@ -825,7 +825,7 @@ watch(payload, (value) => {
 }, {immediate: true})
 
 watch(editLocale, (value) => {
-  void profileOptionsStore.ensureOptions(value)
+  void optionsStore.ensureOptions(value)
 }, {immediate: true})
 
 function hydrateDraft(value: NonNullable<typeof payload.value>) {
@@ -1287,7 +1287,7 @@ const booleanOptions = computed(() => [
 ])
 
 function enumOptions(fieldKey: string): Array<{ label: string; value: string; requiresExtraText?: boolean }> {
-  const backendOptions = profileOptionsStore.optionsFor(editLocale.value, fieldKey)
+  const backendOptions = optionsStore.optionsFor(editLocale.value, fieldKey)
   if (backendOptions.length > 0) return backendOptions
 
   const options = {

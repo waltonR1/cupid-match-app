@@ -1,19 +1,5 @@
 ﻿/** 格式化语言 */
 export type FormatLocale = 'zh' | 'fr' | 'en'
-export interface ProfileOptionDTO {
-    value: string
-    label: string
-    requiresExtraText?: boolean
-}
-
-export type ProfileOptionsGroup = Record<string, ProfileOptionDTO[]>
-
-export interface ProfileOptionsResponse {
-    version: string
-    unchanged: boolean
-    groups?: ProfileOptionsGroup
-}
-
 /** 性别编码 */
 export type GenderCode = 'male' | 'female'
 

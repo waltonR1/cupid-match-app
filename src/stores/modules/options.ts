@@ -1,17 +1,17 @@
 ﻿import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getProfileOptions } from '@/api/profiles/profiles'
-import type { ProfileOptionDTO, ProfileOptionsGroup } from '@/api/profiles/profiles.types'
+import { getCommonOptions } from '@/api/common/options'
+import type { CommonOptionDTO, CommonOptionsGroup } from '@/api/common/options.types'
 import type { FormatLocale } from '@/utils/locale-format'
 
 interface CachedProfileOptions {
   version: string
-  groups: ProfileOptionsGroup
+  groups: CommonOptionsGroup
 }
 
 type LocaleOptionsCache = Partial<Record<FormatLocale, CachedProfileOptions>>
 
-export const useProfileOptionsStore = defineStore('profileOptions', () => {
+export const useOptionsStore = defineStore('options', () => {
   const cache = ref<LocaleOptionsCache>({})
   const loading = ref(false)
   const error = ref<unknown>(null)
@@ -21,7 +21,7 @@ export const useProfileOptionsStore = defineStore('profileOptions', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await getProfileOptions(locale, current?.version)
+      const response = await getCommonOptions('profile', current?.version)
       if (!response.unchanged && response.groups) {
         cache.value = {
           ...cache.value,
@@ -40,7 +40,7 @@ export const useProfileOptionsStore = defineStore('profileOptions', () => {
     }
   }
 
-  function optionsFor(locale: FormatLocale, group: string): ProfileOptionDTO[] {
+  function optionsFor(locale: FormatLocale, group: string): CommonOptionDTO[] {
     return cache.value[locale]?.groups[group] ?? []
   }
 

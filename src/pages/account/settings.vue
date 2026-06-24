@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AccountShell active-page="settings">
     <view>
       <AccountSubPageHeader
@@ -265,7 +265,7 @@
                       settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset')
                     }}
                     <text v-if="settings.password.lastChangedAt">
-                      · {{ t('settings.security.lastChangedAt') }}
+                      路 {{ t('settings.security.lastChangedAt') }}
                       {{ formatLocalizedDateTime(locale, settings.password.lastChangedAt) }}
                     </text>
                   </view>
@@ -744,7 +744,7 @@ import Toast from '@/components/common/Toast.vue'
 import {useToast} from '@/hooks/common/use-toast'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountSettings} from '@/hooks/account'
-import {useProfileOptionsStore} from '@/stores/modules/profile-options'
+import {useOptionsStore} from '@/stores/modules/options'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
 import {maskIdentifier} from '@/mappers/account/settings'
@@ -763,7 +763,7 @@ import {useAgreementDialog} from '@/hooks/legal'
 useRequireAuth()
 const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
-const profileOptionsStore = useProfileOptionsStore()
+const optionsStore = useOptionsStore()
 const {t: globalT} = useI18n({useScope: 'global'})
 const {
   loading,
@@ -787,14 +787,14 @@ const {
   exportData
 } = useAccountSettings()
 watch(locale, () => {
-  void profileOptionsStore.ensureOptions(locale.value)
+  void optionsStore.ensureOptions(locale.value)
   if (!editing.value) {
     void refresh()
   }
 })
 
 watch(locale, (value) => {
-  void profileOptionsStore.ensureOptions(value)
+  void optionsStore.ensureOptions(value)
 }, {immediate: true})
 const editing = ref(false)
 const saving = ref(false)
@@ -934,7 +934,7 @@ const booleanOptions = computed(() => [
   {label: t('common.no'), value: false},
 ])
 
-const cityOptions = computed(() => profileOptionsStore.optionsFor(locale.value, 'city'))
+const cityOptions = computed(() => optionsStore.optionsFor(locale.value, 'city'))
 
 function cityOptionLabel(value: string) {
   return cityOptions.value.find((option) => option.value === value)?.label ?? value
