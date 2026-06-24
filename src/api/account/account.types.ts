@@ -1,4 +1,4 @@
-export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
+﻿export type AccountMembershipLevel = 'free' | 'silver' | 'gold' | 'diamond'
 export type EntitlementCode = 'private_introduction' | 'event_registration' | 'event_priority' | 'staff_review' | 'profile_detail_access'
 export type ProfileVerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected'
 export type ProfileReviewStatus = 'unreviewed' | 'pending' | 'approved' | 'rejected'
@@ -13,6 +13,15 @@ export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
 export type EditableLocalizedSource = 'manual' | 'machine'
 export type EditableLocalizedProvider = 'human' | 'translation_api' | null
 export type EditableLocalizedStatus = 'ready' | 'pending' | 'failed' | 'stale' | 'missing'
+export interface AccountProfileOptionExtraTextsDTO {
+  education?: string
+  industry?: string
+  relationshipGoal?: string
+  residencePlan?: string
+  preferredEducation?: string
+  familyLife?: string
+  exercise?: string
+}
 
 export interface AccountMeDTO {
   user: { id: string; accountName: string; avatarUrl: string; preferredLocale: string; status: string }
@@ -50,40 +59,41 @@ export interface AccountProfileDetailDTO {
   verificationMaterials?: AccountProfileVerificationMaterialDTO[]
   privacyPreferences: AccountProfilePrivacyPreferencesDTO
   localizedMeta: AccountProfileLocalizedMetaDTO
+  optionExtraTexts?: AccountProfileOptionExtraTextsDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
   gender: 'male' | 'female'
   birthYear: number
   height: number
-  city: string
-  country: string
-  nationality: string
+  cityCode: string
+  countryCode: string
+  nationalityCode: string
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   lastActiveAt: string
   familyVisible: boolean
   degreeLevel: 'bachelor' | 'master' | 'phd'
-  education: string
-  industry: string
+  educationCode: string
+  industryCode: string
   careerDirection?: string
   maritalStatus: 'never_married' | 'divorced' | 'widowed'
   hasChildren: boolean
   childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
   acceptsLongDistance: boolean
   datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-  relationshipGoal: string
-  residencePlan: string
+  relationshipGoalCode: string
+  residencePlanCode: string
   relocation: 'willing' | 'unwilling' | 'open_to_discuss'
   relationshipValues: ('honesty' | 'trust' | 'communication' | 'respect' | 'loyalty' | 'family' | 'growth' | 'support' | 'humor' | 'ambition' | 'kindness' | 'independence' | 'romance' | 'stability')[]
   preferredAgeMin: number
   preferredAgeMax: number
   preferredLocation: 'local' | 'regional' | 'national' | 'international'
-  preferredEducation: string
-  familyLife: string
+  preferredEducationCode: string
+  familyLifeCode: string
   dealBreakers: string[]
   smoking: 'never' | 'social' | 'often'
   drinking: 'never' | 'social' | 'often'
-  exercise: string
+  exerciseCode: string
   activityLevel: 'low' | 'moderate' | 'high'
   weekendStyle: 'outdoors' | 'indoors' | 'social' | 'flexible'
   pets: 'has' | 'none' | 'likes'
@@ -264,32 +274,32 @@ export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
   | 'gender'
   | 'birthYear'
   | 'height'
-  | 'city'
-  | 'country'
-  | 'nationality'
+  | 'cityCode'
+  | 'countryCode'
+  | 'nationalityCode'
   | 'languages'
   | 'degreeLevel'
-  | 'education'
-  | 'industry'
+  | 'educationCode'
+  | 'industryCode'
   | 'careerDirection'
   | 'maritalStatus'
   | 'hasChildren'
   | 'childrenPlan'
   | 'acceptsLongDistance'
   | 'datingIntentionCode'
-  | 'relationshipGoal'
-  | 'residencePlan'
+  | 'relationshipGoalCode'
+  | 'residencePlanCode'
   | 'relocation'
   | 'relationshipValues'
   | 'preferredAgeMin'
   | 'preferredAgeMax'
   | 'preferredLocation'
-  | 'preferredEducation'
-  | 'familyLife'
+  | 'preferredEducationCode'
+  | 'familyLifeCode'
   | 'dealBreakers'
   | 'smoking'
   | 'drinking'
-  | 'exercise'
+  | 'exerciseCode'
   | 'activityLevel'
   | 'weekendStyle'
   | 'pets'
@@ -299,6 +309,7 @@ export type AccountProfileMutablePayload = Pick<AccountProfileDetailDTO,
   | 'summary'
   | 'tags'
   | 'familyVisible'
+  | 'optionExtraTexts'
 >
 
 export type AccountProfileUpdatePayload = AccountProfileMutablePayload
@@ -520,8 +531,11 @@ export interface FavoriteProfileSummaryDTO {
   age: number
   city: string
   education: string
+  educationCode: string
   industry: string
+  industryCode: string
   summary: string
   tags: string[]
   createdAt: string
 }
+

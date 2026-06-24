@@ -9,6 +9,7 @@ export interface AccountProfileDetailSectionItem {
   rawValue: unknown
   editor: 'text' | 'number' | 'boolean' | 'enum' | 'list' | 'ageRange'
   valueKey?: string
+  extraText?: string
   required?: boolean
 }
 

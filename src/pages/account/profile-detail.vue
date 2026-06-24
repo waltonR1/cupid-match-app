@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <AccountShell active-page="profiles">
     <view v-if="pageData" class="grid gap-6">
       <view
@@ -93,7 +93,7 @@
           <image :src="pageData.avatarUrl" class="h-16 w-16 rounded-full object-cover"/>
           <view>
             <view class="text-[20px] font-semibold">{{ pageData.profileTitle || resolveProfileTitleText() }}</view>
-            <view class="mt-1 text-[14px] text-semantic-text-secondary">{{ pageData.city || '-' }}</view>
+            <view class="mt-1 text-[14px] text-semantic-text-secondary">{{ profileCityLabel }}</view>
           </view>
           <view class="flex flex-wrap gap-2">
             <view
@@ -280,6 +280,13 @@
                         {{ option.label }}
                       </view>
                     </view>
+                  <input
+                      v-if="enumRequiresExtraText(entry.fieldKey)"
+                      :placeholder="t('profiles.detail.tagPlaceholder')"
+                      :value="readDraft(extraTextDraftKey(entry.fieldKey))"
+                      class="mt-3 box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                      @input="writeDraft(extraTextDraftKey(entry.fieldKey), getInputValue($event))"
+                  />
                   </view>
                 </view>
                 <view v-else-if="entry.editor === 'list' && entry.fieldKey === 'relationshipValues'"
@@ -665,6 +672,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import Toast from '@/components/common/Toast.vue'
 import {useToast} from '@/hooks/common/use-toast'
 import {useAccountProfileDetail} from '@/hooks/account'
+import {useProfileOptionsStore} from '@/stores/modules/profile-options'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {
   ALLOWED_PHOTO_EXTENSIONS,
@@ -685,6 +693,7 @@ import type {
 useRequireAuth()
 const toast = useToast()
 const {t, locale, locales} = usePageI18n('accountCenter')
+const profileOptionsStore = useProfileOptionsStore()
 const profileId = ref('')
 const createMode = ref(false)
 const editLocale = computed(() => locale.value)
@@ -768,6 +777,11 @@ const profileSubmitReviewLabel = computed(() => {
       ? t('profiles.actions.republish')
       : t('profiles.actions.publishNow')
 })
+const profileCityLabel = computed(() => {
+  const value = pageData.value?.city || ''
+  if (!value) return '-'
+  return enumOptions('city').find((option) => option.value === value)?.label || value
+})
 const maskedIdentityName = computed(() => maskName(payload.value?.verification.legalName))
 const maskedIdentityDate = computed(() => maskDate(payload.value?.verification.dateOfBirth))
 const selectedVerificationTitle = computed(() => {
@@ -810,38 +824,42 @@ watch(payload, (value) => {
   hydrateDraft(value)
 }, {immediate: true})
 
+watch(editLocale, (value) => {
+  void profileOptionsStore.ensureOptions(value)
+}, {immediate: true})
+
 function hydrateDraft(value: NonNullable<typeof payload.value>) {
   draft.value = {
     profileName: value.profileName,
     gender: value.gender,
     birthYear: String(value.birthYear),
     height: String(value.height),
-    city: value.city,
-    country: value.country,
-    nationality: value.nationality,
+    city: value.cityCode || '',
+    country: value.countryCode || '',
+    nationality: value.nationalityCode || '',
     languages: value.languages.map((v) => v.toUpperCase()).join(' / '),
     degreeLevel: value.degreeLevel,
-    education: value.education,
-    industry: value.industry,
+    education: value.educationCode || '',
+    industry: value.industryCode || '',
     careerDirection: value.careerDirection ?? '',
     maritalStatus: value.maritalStatus,
     hasChildren: String(value.hasChildren),
     childrenPlan: value.childrenPlan,
     acceptsLongDistance: String(value.acceptsLongDistance),
     datingIntentionCode: value.datingIntentionCode,
-    relationshipGoal: value.relationshipGoal,
-    residencePlan: value.residencePlan,
+    relationshipGoal: value.relationshipGoalCode || '',
+    residencePlan: value.residencePlanCode || '',
     relocation: value.relocation,
     relationshipValues: value.relationshipValues.join(' / '),
     preferredAgeMin: String(value.preferredAgeMin),
     preferredAgeMax: String(value.preferredAgeMax),
     preferredLocation: value.preferredLocation,
-    preferredEducation: value.preferredEducation,
-    familyLife: value.familyLife,
+    preferredEducation: value.preferredEducationCode || '',
+    familyLife: value.familyLifeCode || '',
     dealBreakers: value.dealBreakers.join(' / '),
     smoking: value.smoking,
     drinking: value.drinking,
-    exercise: value.exercise,
+    exercise: value.exerciseCode || '',
     activityLevel: value.activityLevel,
     weekendStyle: value.weekendStyle,
     pets: value.pets,
@@ -858,6 +876,13 @@ function hydrateDraft(value: NonNullable<typeof payload.value>) {
     wechat: value.contact.wechat ?? '',
     preferredChannel: value.contact.preferredChannel ?? 'email',
     contactVisibility: value.contact.visibility,
+    educationExtraText: value.optionExtraTexts?.education ?? '',
+    industryExtraText: value.optionExtraTexts?.industry ?? '',
+    relationshipGoalExtraText: value.optionExtraTexts?.relationshipGoal ?? '',
+    residencePlanExtraText: value.optionExtraTexts?.residencePlan ?? '',
+    preferredEducationExtraText: value.optionExtraTexts?.preferredEducation ?? '',
+    familyLifeExtraText: value.optionExtraTexts?.familyLife ?? '',
+    exerciseExtraText: value.optionExtraTexts?.exercise ?? '',
   }
   photoDrafts.value = value.photos.map((photo, index) => ({
     id: photo.id,
@@ -885,7 +910,13 @@ function resolveProfileTitleText() {
 function formatDisplayValue(entry: AccountProfileDetailPageData['profileSections'][number]['items'][number]) {
   const v = entry.rawValue
   if (v === null || v === undefined) return '-'
-  if (entry.editor === 'enum') return t(entry.valueKey!)
+  if (entry.editor === 'enum') {
+    if (entry.valueKey) return t(entry.valueKey)
+    const value = String(v || '')
+    if (value === 'other' && entry.extraText) return entry.extraText
+    const label = enumOptions(entry.fieldKey).find((option) => option.value === value)?.label
+    return label || value || '-'
+  }
   if (entry.editor === 'boolean') return v ? t('common.yes') : t('common.no')
   if (entry.editor === 'list') return displayListItems(entry).join(' / ') || '-'
   if (entry.editor === 'number') return Number(v) > 0 ? String(v) : '-'
@@ -1053,32 +1084,32 @@ function buildProfilePayload() {
     gender: draft.value.gender as NonNullable<typeof payload.value>['gender'],
     birthYear: toNumber(draft.value.birthYear),
     height: toNumber(draft.value.height),
-    city: draft.value.city,
-    country: draft.value.country,
-    nationality: draft.value.nationality,
+    cityCode: draft.value.city,
+    countryCode: draft.value.country,
+    nationalityCode: draft.value.nationality,
     languages: toList(draft.value.languages),
     degreeLevel: draft.value.degreeLevel as NonNullable<typeof payload.value>['degreeLevel'],
-    education: draft.value.education,
-    industry: draft.value.industry,
+    educationCode: draft.value.education,
+    industryCode: draft.value.industry,
     careerDirection: draft.value.careerDirection,
     maritalStatus: draft.value.maritalStatus as NonNullable<typeof payload.value>['maritalStatus'],
     hasChildren: toBoolean(draft.value.hasChildren),
     childrenPlan: draft.value.childrenPlan as NonNullable<typeof payload.value>['childrenPlan'],
     acceptsLongDistance: toBoolean(draft.value.acceptsLongDistance),
     datingIntentionCode: draft.value.datingIntentionCode as NonNullable<typeof payload.value>['datingIntentionCode'],
-    relationshipGoal: draft.value.relationshipGoal,
-    residencePlan: draft.value.residencePlan,
+    relationshipGoalCode: draft.value.relationshipGoal,
+    residencePlanCode: draft.value.residencePlan,
     relocation: draft.value.relocation as NonNullable<typeof payload.value>['relocation'],
     relationshipValues: toList(draft.value.relationshipValues) as NonNullable<typeof payload.value>['relationshipValues'],
     preferredAgeMin: toNumber(draft.value.preferredAgeMin),
     preferredAgeMax: toNumber(draft.value.preferredAgeMax),
     preferredLocation: draft.value.preferredLocation as NonNullable<typeof payload.value>['preferredLocation'],
-    preferredEducation: draft.value.preferredEducation,
-    familyLife: draft.value.familyLife,
+    preferredEducationCode: draft.value.preferredEducation,
+    familyLifeCode: draft.value.familyLife,
     dealBreakers: toList(draft.value.dealBreakers),
     smoking: draft.value.smoking as NonNullable<typeof payload.value>['smoking'],
     drinking: draft.value.drinking as NonNullable<typeof payload.value>['drinking'],
-    exercise: draft.value.exercise,
+    exerciseCode: draft.value.exercise,
     activityLevel: draft.value.activityLevel as NonNullable<typeof payload.value>['activityLevel'],
     weekendStyle: draft.value.weekendStyle as NonNullable<typeof payload.value>['weekendStyle'],
     pets: draft.value.pets as NonNullable<typeof payload.value>['pets'],
@@ -1088,6 +1119,7 @@ function buildProfilePayload() {
     summary: draft.value.summary,
     tags: toList(draft.value.tags),
     familyVisible: toBoolean(draft.value.familyVisible),
+    optionExtraTexts: buildOptionExtraTexts(),
   }
 }
 
@@ -1254,7 +1286,10 @@ const booleanOptions = computed(() => [
   {label: t('common.no'), value: false},
 ])
 
-function enumOptions(fieldKey: string) {
+function enumOptions(fieldKey: string): Array<{ label: string; value: string; requiresExtraText?: boolean }> {
+  const backendOptions = profileOptionsStore.optionsFor(editLocale.value, fieldKey)
+  if (backendOptions.length > 0) return backendOptions
+
   const options = {
     gender: ['male', 'female'],
     degreeLevel: ['bachelor', 'master', 'phd'],
@@ -1285,6 +1320,26 @@ function enumOptions(fieldKey: string) {
     label: t(`${keyPrefix}.${value}`),
     value,
   }))
+}
+
+function enumRequiresExtraText(fieldKey: string) {
+  return enumOptions(fieldKey).some((option) => option.value === readDraft(fieldKey) && option.requiresExtraText)
+}
+
+function extraTextDraftKey(fieldKey: string) {
+  return `${fieldKey}ExtraText`
+}
+
+function buildOptionExtraTexts() {
+  return {
+    education: draft.value.educationExtraText ?? '',
+    industry: draft.value.industryExtraText ?? '',
+    relationshipGoal: draft.value.relationshipGoalExtraText ?? '',
+    residencePlan: draft.value.residencePlanExtraText ?? '',
+    preferredEducation: draft.value.preferredEducationExtraText ?? '',
+    familyLife: draft.value.familyLifeExtraText ?? '',
+    exercise: draft.value.exerciseExtraText ?? '',
+  }
 }
 
 function selectedEnumLabel(fieldKey: string) {
@@ -1715,3 +1770,4 @@ function verificationToneClass(tone: string) {
   return 'border-semantic-border-soft text-semantic-text-muted'
 }
 </script>
+

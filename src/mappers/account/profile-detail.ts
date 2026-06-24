@@ -1,4 +1,4 @@
-import type { AccountProfileDetailDTO } from '@/api/account'
+﻿import type { AccountProfileDetailDTO } from '@/api/account'
 import type {
   AccountProfileDetailPageData,
   AccountProfileDetailPrivacyPreferenceItem,
@@ -29,7 +29,7 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
     profileTitleKey,
     profileTitleRelation,
     avatarUrl: payload.avatarUrl,
-    city: payload.city,
+    city: payload.cityCode,
     ownershipBadgeKeys: [
       `profiles.profileType.${payload.profileType}`,
     ],
@@ -57,13 +57,13 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
         { fieldKey: 'gender', labelKey: 'profiles.detail.fields.gender', rawValue: blank ? null : payload.gender, editor: 'enum', valueKey: `profiles.detail.values.gender.${payload.gender}`, required: true },
         { fieldKey: 'birthYear', labelKey: 'profiles.detail.fields.birthYear', rawValue: payload.birthYear, editor: 'number', required: true },
         { fieldKey: 'height', labelKey: 'profiles.detail.fields.height', rawValue: payload.height, editor: 'number', required: true },
-        { fieldKey: 'city', labelKey: 'profiles.detail.fields.city', rawValue: payload.city, editor: 'text', required: true },
-        { fieldKey: 'country', labelKey: 'profiles.detail.fields.country', rawValue: payload.country, editor: 'text', required: true },
-        { fieldKey: 'nationality', labelKey: 'profiles.detail.fields.nationality', rawValue: payload.nationality, editor: 'text' },
+        { fieldKey: 'city', labelKey: 'profiles.detail.fields.city', rawValue: payload.cityCode, editor: 'enum', required: true },
+        { fieldKey: 'country', labelKey: 'profiles.detail.fields.country', rawValue: payload.countryCode, editor: 'enum', required: true },
+        { fieldKey: 'nationality', labelKey: 'profiles.detail.fields.nationality', rawValue: payload.nationalityCode, editor: 'enum' },
         { fieldKey: 'languages', labelKey: 'profiles.detail.fields.languages', rawValue: payload.languages, editor: 'list' },
         { fieldKey: 'degreeLevel', labelKey: 'profiles.detail.fields.degreeLevel', rawValue: blank ? null : payload.degreeLevel, editor: 'enum', valueKey: `profiles.detail.values.degreeLevel.${payload.degreeLevel}`, required: true },
-        { fieldKey: 'education', labelKey: 'profiles.detail.fields.education', rawValue: payload.education, editor: 'text', required: true },
-        { fieldKey: 'industry', labelKey: 'profiles.detail.fields.industry', rawValue: payload.industry, editor: 'text', required: true },
+        { fieldKey: 'education', labelKey: 'profiles.detail.fields.education', rawValue: payload.educationCode, editor: 'enum', extraText: payload.optionExtraTexts?.education, required: true },
+        { fieldKey: 'industry', labelKey: 'profiles.detail.fields.industry', rawValue: payload.industryCode, editor: 'enum', extraText: payload.optionExtraTexts?.industry, required: true },
         { fieldKey: 'careerDirection', labelKey: 'profiles.detail.fields.careerDirection', rawValue: payload.careerDirection, editor: 'text' },
       ],
     },
@@ -76,8 +76,8 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
         { fieldKey: 'childrenPlan', labelKey: 'profiles.detail.fields.childrenPlan', rawValue: blank ? null : payload.childrenPlan, editor: 'enum', valueKey: `profiles.detail.values.childrenPlan.${payload.childrenPlan}` },
         { fieldKey: 'acceptsLongDistance', labelKey: 'profiles.detail.fields.acceptsLongDistance', rawValue: blank ? null : payload.acceptsLongDistance, editor: 'boolean' },
         { fieldKey: 'datingIntentionCode', labelKey: 'profiles.detail.fields.datingIntentionCode', rawValue: blank ? null : payload.datingIntentionCode, editor: 'enum', valueKey: `profiles.detail.values.datingIntentionCode.${payload.datingIntentionCode}`, required: true },
-        { fieldKey: 'relationshipGoal', labelKey: 'profiles.detail.fields.relationshipGoal', rawValue: payload.relationshipGoal, editor: 'text', required: true },
-        { fieldKey: 'residencePlan', labelKey: 'profiles.detail.fields.residencePlan', rawValue: payload.residencePlan, editor: 'text' },
+        { fieldKey: 'relationshipGoal', labelKey: 'profiles.detail.fields.relationshipGoal', rawValue: payload.relationshipGoalCode, editor: 'enum', extraText: payload.optionExtraTexts?.relationshipGoal, required: true },
+        { fieldKey: 'residencePlan', labelKey: 'profiles.detail.fields.residencePlan', rawValue: payload.residencePlanCode, editor: 'enum', extraText: payload.optionExtraTexts?.residencePlan },
         { fieldKey: 'relocation', labelKey: 'profiles.detail.fields.relocation', rawValue: payload.relocation, editor: 'enum', valueKey: `profiles.detail.values.relocation.${payload.relocation}` },
         { fieldKey: 'relationshipValues', labelKey: 'profiles.detail.fields.relationshipValues', rawValue: payload.relationshipValues, editor: 'list' },
       ],
@@ -88,8 +88,8 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
       items: [
         { fieldKey: 'preferredAgeMin', labelKey: 'profiles.detail.fields.preferredAgeRange', rawValue: payload.preferredAgeMin || payload.preferredAgeMax ? `${payload.preferredAgeMin} - ${payload.preferredAgeMax}` : null, editor: 'ageRange' },
         { fieldKey: 'preferredLocation', labelKey: 'profiles.detail.fields.preferredLocation', rawValue: payload.preferredLocation, editor: 'enum', valueKey: `profiles.detail.values.preferredLocation.${payload.preferredLocation}` },
-        { fieldKey: 'preferredEducation', labelKey: 'profiles.detail.fields.preferredEducation', rawValue: payload.preferredEducation, editor: 'text' },
-        { fieldKey: 'familyLife', labelKey: 'profiles.detail.fields.familyLife', rawValue: payload.familyLife, editor: 'text' },
+        { fieldKey: 'preferredEducation', labelKey: 'profiles.detail.fields.preferredEducation', rawValue: payload.preferredEducationCode, editor: 'enum', extraText: payload.optionExtraTexts?.preferredEducation },
+        { fieldKey: 'familyLife', labelKey: 'profiles.detail.fields.familyLife', rawValue: payload.familyLifeCode, editor: 'enum', extraText: payload.optionExtraTexts?.familyLife },
         { fieldKey: 'dealBreakers', labelKey: 'profiles.detail.fields.dealBreakers', rawValue: payload.dealBreakers, editor: 'list' },
       ],
     },
@@ -99,7 +99,7 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
       items: [
         { fieldKey: 'smoking', labelKey: 'profiles.detail.fields.smoking', rawValue: blank ? null : payload.smoking, editor: 'enum', valueKey: `profiles.detail.values.habit.${payload.smoking}` },
         { fieldKey: 'drinking', labelKey: 'profiles.detail.fields.drinking', rawValue: blank ? null : payload.drinking, editor: 'enum', valueKey: `profiles.detail.values.habit.${payload.drinking}` },
-        { fieldKey: 'exercise', labelKey: 'profiles.detail.fields.exercise', rawValue: payload.exercise, editor: 'text' },
+        { fieldKey: 'exercise', labelKey: 'profiles.detail.fields.exercise', rawValue: payload.exerciseCode, editor: 'enum', extraText: payload.optionExtraTexts?.exercise },
         { fieldKey: 'activityLevel', labelKey: 'profiles.detail.fields.activityLevel', rawValue: payload.activityLevel, editor: 'enum', valueKey: `profiles.detail.values.activityLevel.${payload.activityLevel}` },
         { fieldKey: 'weekendStyle', labelKey: 'profiles.detail.fields.weekendStyle', rawValue: payload.weekendStyle, editor: 'enum', valueKey: `profiles.detail.values.weekendStyle.${payload.weekendStyle}` },
         { fieldKey: 'pets', labelKey: 'profiles.detail.fields.pets', rawValue: payload.pets, editor: 'enum', valueKey: `profiles.detail.values.pets.${payload.pets}` },
@@ -174,3 +174,4 @@ function buildPrivacyPreferenceItems(preferences: AccountProfileDetailDTO['priva
     hidden: preferences[key],
   }))
 }
+

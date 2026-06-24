@@ -414,12 +414,19 @@
               >
                 <text class="text-semantic-text-secondary">{{ item.label }}</text>
 
-                <input
-                    v-if="editing && item.code === 'preferred_city'"
-                    :value="String(readPreference(item.code) ?? '')"
-                    class="box-border min-h-[44px] w-full border border-semantic-border-soft bg-semantic-surface-panel px-4 py-2.5 text-[14px] leading-6 text-semantic-text-primary"
-                    @input="(e: any) => writePreference(item.code, e.detail.value)"
-                />
+                <view v-if="editing && item.code === 'preferred_city'" class="flex flex-wrap gap-2">
+                  <view
+                      v-for="option in cityOptions"
+                      :key="option.value"
+                      :class="readPreference(item.code) === option.value
+                      ? 'border-semantic-border-emphasis bg-semantic-surface-emphasis'
+                      : 'border-semantic-border-soft bg-semantic-surface-panel'"
+                      class="cursor-pointer border px-3 py-1.5 text-[13px]"
+                      @click="writePreference(item.code, option.value)"
+                  >
+                    {{ option.label }}
+                  </view>
+                </view>
                 <view v-else-if="editing && item.code === 'preferred_contact_channel'" class="flex flex-wrap gap-2">
                   <view
                       v-for="ch in contactChannelOptions"
@@ -737,6 +744,7 @@ import Toast from '@/components/common/Toast.vue'
 import {useToast} from '@/hooks/common/use-toast'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountSettings} from '@/hooks/account'
+import {useProfileOptionsStore} from '@/stores/modules/profile-options'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {formatLocalizedDateTime} from '@/utils/locale-format'
 import {maskIdentifier} from '@/mappers/account/settings'
@@ -755,6 +763,7 @@ import {useAgreementDialog} from '@/hooks/legal'
 useRequireAuth()
 const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
+const profileOptionsStore = useProfileOptionsStore()
 const {t: globalT} = useI18n({useScope: 'global'})
 const {
   loading,
@@ -778,10 +787,15 @@ const {
   exportData
 } = useAccountSettings()
 watch(locale, () => {
+  void profileOptionsStore.ensureOptions(locale.value)
   if (!editing.value) {
     void refresh()
   }
 })
+
+watch(locale, (value) => {
+  void profileOptionsStore.ensureOptions(value)
+}, {immediate: true})
 const editing = ref(false)
 const saving = ref(false)
 const avatarLocalPath = ref('')
@@ -846,6 +860,7 @@ function buildPreferenceItems(codes: AccountPreferenceCode[]) {
 
 function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
   if (code === 'preferred_city' && (!value || value === '')) return t('settings.placeholders.preferredCity')
+  if (code === 'preferred_city' && typeof value === 'string') return cityOptionLabel(value)
   if (code === 'preferred_contact_channel' && typeof value === 'string') return t(`settings.contactChannel.${value}`)
   if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
   if (Array.isArray(value)) return value.join(' / ')
@@ -918,6 +933,12 @@ const booleanOptions = computed(() => [
   {label: t('common.yes'), value: true},
   {label: t('common.no'), value: false},
 ])
+
+const cityOptions = computed(() => profileOptionsStore.optionsFor(locale.value, 'city'))
+
+function cityOptionLabel(value: string) {
+  return cityOptions.value.find((option) => option.value === value)?.label ?? value
+}
 
 watch(settings, (value) => {
   if (!value || saving.value) return

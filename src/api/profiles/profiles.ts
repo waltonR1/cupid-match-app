@@ -1,4 +1,4 @@
-import {isApiStatusError, apiRequest} from '@/api/shared/http'
+﻿import {isApiStatusError, apiRequest} from '@/api/shared/http'
 import type {
     FamilyProfileDetail,
     FamilyProfileDirectoryQuery,
@@ -8,6 +8,7 @@ import type {
     SelfProfileDirectoryQuery,
     SelfProfileDirectoryResponse,
     PrivateIntroduction,
+    ProfileOptionsResponse,
 } from './profiles.types'
 
 export function getSelfProfileDirectory(query: SelfProfileDirectoryQuery): Promise<SelfProfileDirectoryResponse> {
@@ -66,4 +67,8 @@ export async function getFamilyProfileDetail(id: string): Promise<FamilyProfileD
         if (isApiStatusError(error, 404)) return null
         throw error
     }
+}
+
+export function getProfileOptions(locale: 'zh' | 'fr' | 'en', version?: string): Promise<ProfileOptionsResponse> {
+    return apiRequest<ProfileOptionsResponse>('/profiles/options', {query: {locale, version}})
 }
