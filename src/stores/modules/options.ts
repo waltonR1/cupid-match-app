@@ -21,7 +21,7 @@ export const useOptionsStore = defineStore('options', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await getCommonOptions('profile', current?.version)
+      const response = await getCommonOptions(current?.version)
       if (!response.unchanged && response.groups) {
         cache.value = {
           ...cache.value,

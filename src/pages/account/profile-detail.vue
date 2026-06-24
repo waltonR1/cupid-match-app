@@ -1286,8 +1286,12 @@ const booleanOptions = computed(() => [
   {label: t('common.no'), value: false},
 ])
 
+function profileOptionGroup(fieldKey: string) {
+  return 'profile.' + fieldKey
+}
+
 function enumOptions(fieldKey: string): Array<{ label: string; value: string; requiresExtraText?: boolean }> {
-  const backendOptions = optionsStore.optionsFor(editLocale.value, fieldKey)
+  const backendOptions = optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
   if (backendOptions.length > 0) return backendOptions
 
   const options = {

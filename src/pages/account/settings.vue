@@ -934,7 +934,7 @@ const booleanOptions = computed(() => [
   {label: t('common.no'), value: false},
 ])
 
-const cityOptions = computed(() => optionsStore.optionsFor(locale.value, 'city'))
+const cityOptions = computed(() => optionsStore.optionsFor(locale.value, 'profile.city'))
 
 function cityOptionLabel(value: string) {
   return cityOptions.value.find((option) => option.value === value)?.label ?? value
