@@ -398,6 +398,45 @@
                       @input="writeDraft('preferredAgeMax', getInputValue($event))"
                   />
                 </view>
+                <view v-else-if="entry.fieldKey === 'birthYear'" class="max-w-[280px]">
+                  <view class="relative">
+                    <view
+                        class="flex min-h-[40px] cursor-pointer items-center justify-between border border-semantic-border-default bg-semantic-surface-soft px-3 text-[14px] transition-colors hover:border-semantic-border-interactive-hover hover:bg-semantic-surface-panel"
+                        @click="toggleSelect('birthYear')"
+                    >
+                      <text>{{ numericPickerLabel('birthYear') }}</text>
+                      <text class="text-semantic-text-muted">{{ openSelectKey === 'birthYear' ? '^' : 'v' }}</text>
+                    </view>
+                    <view
+                        v-if="openSelectKey === 'birthYear'"
+                        class="absolute left-0 top-[calc(100%+6px)] z-30 max-h-[280px] w-full overflow-auto border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
+                    >
+                      <view
+                          v-for="option in birthYearOptions"
+                          :key="option.value"
+                          :class="option.value === readDraft('birthYear')
+                          ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
+                          : 'text-semantic-text-secondary hover:bg-semantic-surface-soft hover:text-semantic-text-primary'"
+                          class="cursor-pointer border-b border-semantic-border-divider px-3 py-2 text-[14px] last:border-b-0"
+                          @click="selectNumeric('birthYear', option.value)"
+                      >
+                        {{ option.label }}
+                      </view>
+                    </view>
+                  </view>
+                </view>
+                <view v-else-if="entry.fieldKey === 'height'" class="flex max-w-[280px] items-center border border-semantic-border-default bg-semantic-surface-soft transition-colors hover:border-semantic-border-interactive-hover">
+                  <input
+                      type="number"
+                      :value="readDraft('height')"
+                      class="box-border min-h-[44px] w-full bg-transparent px-4 py-2.5 text-[15px] leading-6 text-semantic-text-primary"
+                      min="120"
+                      max="230"
+                      placeholder="170"
+                      @input="writeDraft('height', getInputValue($event))"
+                  />
+                  <text class="shrink-0 pr-3 text-[14px] text-semantic-text-muted">cm</text>
+                </view>
                 <input
                     v-else
                     :type="entry.editor === 'number' ? 'number' : 'text'"
@@ -918,7 +957,7 @@ function formatDisplayValue(entry: AccountProfileDetailPageData['profileSections
   }
   if (entry.editor === 'boolean') return v ? t('common.yes') : t('common.no')
   if (entry.editor === 'list') return displayListItems(entry).join(' / ') || '-'
-  if (entry.editor === 'number') return Number(v) > 0 ? String(v) : '-'
+  if (entry.editor === 'number') return Number(v) > 0 ? entry.fieldKey === 'height' ? `${v} cm` : String(v) : '-'
   return String(v) || '-'
 }
 
@@ -1154,6 +1193,27 @@ function selectRelationship(value: typeof draftOwnership.value.relationshipToPro
 const languageOptions = computed(() => enumOptions('languages'))
 
 const relationshipValueOptions = computed(() => optionsStore.optionsFor(editLocale.value, profileOptionGroup('relationshipValues')))
+
+const currentYear = new Date().getFullYear()
+
+const birthYearOptions = computed(() => {
+  const options: Array<{ label: string; value: string }> = []
+  for (let y = currentYear - 18; y >= currentYear - 70; y--) {
+    options.push({ label: String(y), value: String(y) })
+  }
+  return options
+})
+
+function numericPickerLabel(fieldKey: string) {
+  const value = readDraft(fieldKey)
+  if (value === '' || value === undefined || Number(value) === 0) return '-'
+  return String(value)
+}
+
+function selectNumeric(fieldKey: string, value: string) {
+  writeDraft(fieldKey, value)
+  openSelectKey.value = null
+}
 
 function listFieldOptions(fieldKey: string) {
   if (fieldKey === 'languages') return languageOptions.value
