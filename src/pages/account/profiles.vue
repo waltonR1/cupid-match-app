@@ -42,7 +42,7 @@
                     :key="badge.key"
                     class="border border-semantic-border-soft bg-semantic-surface-panel px-2 py-1 text-[11px] text-semantic-text-secondary"
                 >
-                  {{ t(badge.i18nKey) }}
+                  {{ optionLabel(badge.group, badge.value) }}
                 </view>
               </view>
 
@@ -50,7 +50,7 @@
                 <view>{{ profile.city }}</view>
                 <view
                     class="border border-semantic-border-soft bg-semantic-surface-panel px-2.5 py-1 text-[12px] text-semantic-text-primary">
-                  {{ t(`profiles.status.${profile.profileStatus}`) }}
+                  {{ optionLabel('profile.profileStatus', profile.profileStatus) }}
                 </view>
               </view>
 
@@ -117,13 +117,16 @@ import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openAccountProfileCreate, openAccountProfileDetail} from '@/utils/navigation'
 import {formatLocalizedAge} from '@/utils/profile-format'
 import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account/profiles'
+import {useOptionsStore} from '@/stores/modules/options'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
 const {loading, error, payload, refresh} = useAccountProfiles()
-watch(locale, () => {
+watch(locale, value => {
+  void optionsStore.ensureOptions(value)
   void refresh()
-})
+}, {immediate: true})
 onShow(() => {
   void refresh()
 })
@@ -136,9 +139,14 @@ type ManagedProfileSummary = NonNullable<typeof payload.value>['profiles'][numbe
 type AccountProfileVerification = ManagedProfileSummary['verification']
 
 function getProfileBadges(profile: ManagedProfileSummary) {
-  const badges: Array<{ key: string; i18nKey: string }> = []
-  badges.push({key: 'relation', i18nKey: `profiles.relationship.${profile.relationshipToProfile}`})
+  const badges: Array<{ key: string; group: string; value: string }> = []
+  badges.push({key: 'relation', group: 'profile.relationshipToProfile', value: profile.relationshipToProfile})
   return badges
+}
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+    .find(option => option.value === value)?.label ?? value
 }
 
 function verificationDescription(v: AccountProfileVerification) {

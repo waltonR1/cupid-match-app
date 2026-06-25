@@ -2,15 +2,17 @@ import type { EventDetail, EventRegistrationResponse, FormatLocale } from '@/api
 import type { Translate } from '@/i18n/types'
 import type { EventAgendaItem, EventDetailHeroViewModel, EventNoteItem, EventRegistrationViewModel } from '@/types/events/detail'
 import { formatEventDetailDate } from '@/utils/locale-format'
-import { toEventOverviewItem } from './directory'
+import { toEventOverviewItem, type OptionLabel } from './directory'
 
 export function toEventDetailPageData(params: {
   event: EventDetail | null
   locale: FormatLocale
   t: Translate
   actionLoading: boolean
+  optionLabel?: OptionLabel
 }) {
   const event = params.event
+  const optionLabel = params.optionLabel ?? fallbackOptionLabel
 
   if (!event) {
     return {
@@ -25,8 +27,8 @@ export function toEventDetailPageData(params: {
 
   return {
     fieldLabels: buildEventDetailFieldLabels(params.t),
-    hero: toEventDetailHero(event, params.locale, params.t),
-    facts: buildEventFacts(event, params.t),
+    hero: toEventDetailHero(event, params.locale, params.t, optionLabel),
+    facts: buildEventFacts(event, params.t, optionLabel),
     noteItems: buildEventNoteItems(event, params.t),
     agendaItems: event.agendaItems.map(toAgendaItem),
     registration: buildRegistrationViewModel(
@@ -50,23 +52,28 @@ export function mergeEventRegistration(event: EventDetail, response: EventRegist
   }
 }
 
-function toEventDetailHero(event: EventDetail, locale: FormatLocale, t: Translate): EventDetailHeroViewModel {
+function toEventDetailHero(
+  event: EventDetail,
+  locale: FormatLocale,
+  t: Translate,
+  optionLabel: OptionLabel,
+): EventDetailHeroViewModel {
   return {
-    ...toEventOverviewItem(event, locale, t),
+    ...toEventOverviewItem(event, locale, t, optionLabel),
     date: formatEventDetailDate(locale, event.date),
     addressText: event.addressVisible ? event.address : undefined,
     addressLocked: !event.addressVisible,
-    addressLockHint: event.addressVisible ? undefined : buildAddressLockHint(event.addressLockReason, t),
-    languageText: event.languageCodes.map((item) => item.toUpperCase()).join(' / '),
+    addressLockHint: event.addressVisible ? undefined : buildAddressLockHint(event.addressLockReason, t, optionLabel),
+    languageText: formatLanguageLabels(event.languageCodes, optionLabel),
   }
 }
 
-function buildEventFacts(event: EventDetail, t: Translate) {
+function buildEventFacts(event: EventDetail, t: Translate, optionLabel: OptionLabel) {
   return [
     { key: 'format', label: t('fields.format'), value: event.format },
     { key: 'audience', label: t('fields.audience'), value: event.audience },
     { key: 'focus', label: t('fields.focus'), value: event.relationshipFocus.join(' / ') },
-    { key: 'languages', label: t('fields.languages'), value: event.languageCodes.map((item) => item.toUpperCase()).join(' / ') },
+    { key: 'languages', label: t('fields.languages'), value: formatLanguageLabels(event.languageCodes, optionLabel) },
   ]
 }
 
@@ -90,10 +97,10 @@ function buildRegistrationViewModel(
 
   return {
     status,
-    title: t(`registration.${status}.title`),
+    title: t('registration.' + status + '.title'),
     description: consumesMembershipQuota && status !== 'guest'
-      ? `${t(`registration.${status}.description`)} ${t('quota.remaining', {count: quotaRemaining})}`
-      : t(`registration.${status}.description`),
+      ? t('registration.' + status + '.description') + ' ' + t('quota.remaining', {count: quotaRemaining})
+      : t('registration.' + status + '.description'),
     action,
   }
 }
@@ -131,9 +138,18 @@ function toAgendaItem(item: EventDetail['agendaItems'][number]): EventAgendaItem
   }
 }
 
-function buildAddressLockHint(reason: EventDetail['addressLockReason'], t: Translate) {
+function buildAddressLockHint(reason: EventDetail['addressLockReason'], t: Translate, optionLabel: OptionLabel) {
   if (!reason) return t('address.locked')
-  return t(`address.${reason}`)
+  return optionLabel('event.addressLockReason', reason)
+}
+
+function formatLanguageLabels(values: string[], optionLabel: OptionLabel): string {
+  if (values.length === 0) return '-'
+  return values.map(value => optionLabel('profile.languages', value.toUpperCase())).join(' / ')
+}
+
+function fallbackOptionLabel(_group: string, value: string): string {
+  return value
 }
 
 function buildEventDetailFieldLabels(t: Translate) {

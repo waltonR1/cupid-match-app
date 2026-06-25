@@ -40,7 +40,7 @@
 
             <view :class="currentPlanBadgeClass(membership.tier)"
                   class="rounded-full border px-3 py-1.5 text-[11px] uppercase tracking-[2px]">
-              {{ t(`membership.status.${membership.status}`) }}
+              {{ optionLabel('membership.status', membership.status) }}
             </view>
           </view>
 
@@ -87,7 +87,7 @@
             {{ t('membership.coreQuota') }}
           </view>
           <view class="mt-4 text-[20px] font-semibold">{{
-              t(`membership.entitlement.${entitlement.code}`)
+              optionLabel('membership.entitlement', entitlement.code)
             }}
           </view>
           <view class="mt-5 text-[42px] font-semibold leading-none">
@@ -153,19 +153,27 @@ import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openPage} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
 import {findNextPlan} from '@/mappers/account/membership'
+import {useOptionsStore} from '@/stores/modules/options'
 
 useRequireAuth()
 const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
 const {loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade} = useAccountMembership()
-watch(locale, () => {
+watch(locale, value => {
+  void optionsStore.ensureOptions(value)
   void refresh()
-})
+}, {immediate: true})
 
 const quotaEntitlements = computed(() => entitlements.value.filter(
     (item) => item.code === 'private_introduction' || item.code === 'event_registration',
 ))
 const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+    .find(option => option.value === value)?.label ?? value
+}
 
 function openMembershipSystemPage() {
   openPage('/pages/public/membership')

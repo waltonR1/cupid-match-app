@@ -40,7 +40,7 @@
                   <view
                       class="border border-component-account-badge-status-border bg-component-account-badge-status-background px-3 py-1 text-[12px] leading-5 text-component-account-badge-status-text"
                   >
-                    {{ t(`settings.accountStatus.${settings.account.status}`) }}
+                    {{ commonOptionLabel('account.status', settings.account.status) }}
                   </view>
                 </view>
 
@@ -99,7 +99,7 @@
                   {{ t('settings.accountFields.status') }}
                 </view>
                 <view class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
-                  {{ t(`settings.accountStatus.${settings.account.status}`) }}
+                  {{ commonOptionLabel('account.status', settings.account.status) }}
                 </view>
               </view>
 
@@ -118,7 +118,7 @@
                   </view>
                 </view>
                 <view v-else class="mt-1 break-words text-[14px] font-medium leading-6 text-semantic-text-primary">
-                  {{ t(`settings.locale.${settings.account.preferredLocale}`) }}
+                  {{ commonOptionLabel('account.locale', settings.account.preferredLocale) }}
                 </view>
               </view>
 
@@ -318,7 +318,7 @@
                     </view>
                     <view v-if="mfaStatus?.enabled && mfaStatus.identityLabel"
                           class="mt-2 text-[13px] text-semantic-text-secondary">
-                      {{ t('settings.mfa.usingIdentity', {method: t(`settings.provider.${mfaStatus.method}`)}) }}
+                      {{ t('settings.mfa.usingIdentity', {method: commonOptionLabel('account.identityProvider', mfaStatus.method)}) }}
                       {{ mfaStatus.identityLabel }}
                     </view>
                   </view>
@@ -602,7 +602,7 @@
           >
             <view>
               <text class="text-[13px] font-medium text-semantic-text-primary">{{
-                  t(`settings.provider.${item.method}`)
+                  commonOptionLabel('account.identityProvider', item.method)
                 }}
               </text>
               <text class="ml-2 text-[13px] text-semantic-text-secondary">{{ item.maskedIdentifier }}</text>
@@ -852,7 +852,7 @@ function buildPreferenceItems(codes: AccountPreferenceCode[]) {
     const key = PREFERENCE_CODE_TO_KEY[code]
     return {
       code,
-      label: t(`settings.preference.${code}`),
+      label: commonOptionLabel('account.preference', code),
       displayValue: formatPreferenceDisplay(code, settings.value?.preferences?.[key])
     }
   })
@@ -861,10 +861,16 @@ function buildPreferenceItems(codes: AccountPreferenceCode[]) {
 function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
   if (code === 'preferred_city' && (!value || value === '')) return t('settings.placeholders.preferredCity')
   if (code === 'preferred_city' && typeof value === 'string') return cityOptionLabel(value)
-  if (code === 'preferred_contact_channel' && typeof value === 'string') return t(`settings.contactChannel.${value}`)
+  if (code === 'preferred_contact_channel' && typeof value === 'string') return contactChannelOptionLabel(value)
   if (typeof value === 'boolean') return value ? t('common.yes') : t('common.no')
   if (Array.isArray(value)) return value.join(' / ')
   return String(value ?? '')
+}
+
+function commonOptionLabel(group: string, value?: string | null): string {
+  if (!value) return ''
+  return optionsStore.optionsFor(locale.value, group)
+      .find(option => option.value === value)?.label ?? value
 }
 
 const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => {
@@ -873,7 +879,7 @@ const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => 
       .map((item, _index, list) => ({
         id: item.id,
         provider: item.provider as 'email' | 'phone',
-        providerLabel: t(`settings.provider.${item.provider}`),
+        providerLabel: commonOptionLabel('account.identityProvider', item.provider),
         identifier: maskIdentifier(item.identifier, item.provider),
         verifiedText: item.verifiedAt ? t('settings.security.verified') : t('settings.security.unverified'),
         canBind: false,
@@ -883,7 +889,7 @@ const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => 
     {
       id: 'email-preview',
       provider: 'email' as const,
-      providerLabel: t('settings.provider.email'),
+      providerLabel: commonOptionLabel('account.identityProvider', 'email'),
       identifier: t('settings.security.unbound'),
       verifiedText: t('settings.security.unverified'),
       canBind: true,
@@ -892,7 +898,7 @@ const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => 
     {
       id: 'phone-preview',
       provider: 'phone' as const,
-      providerLabel: t('settings.provider.phone'),
+      providerLabel: commonOptionLabel('account.identityProvider', 'phone'),
       identifier: t('settings.security.unbound'),
       verifiedText: t('settings.security.unverified'),
       canBind: true,
@@ -999,17 +1005,13 @@ function writePreference(code: string, value: string | boolean | number | string
   preferenceDraft.value[code] = value
 }
 
-const localeOptions = computed(() => [
-  {label: t('settings.locale.zh'), value: 'zh' as const},
-  {label: t('settings.locale.en'), value: 'en' as const},
-  {label: t('settings.locale.fr'), value: 'fr' as const},
-])
+const localeOptions = computed(() => optionsStore.optionsFor(locale.value, 'account.locale') as Array<{ label: string; value: 'zh' | 'en' | 'fr' }>)
 
-const contactChannelOptions = computed(() => [
-  {label: t('settings.contactChannel.email'), value: 'email'},
-  {label: t('settings.contactChannel.phone'), value: 'phone'},
-  {label: t('settings.contactChannel.wechat'), value: 'wechat'},
-])
+const contactChannelOptions = computed(() => optionsStore.optionsFor(locale.value, 'profile.preferredChannel'))
+
+function contactChannelOptionLabel(value: string) {
+  return contactChannelOptions.value.find((option) => option.value === value)?.label ?? value
+}
 
 // password change
 const showPasswordForm = ref(false)

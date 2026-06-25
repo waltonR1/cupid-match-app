@@ -48,7 +48,7 @@
             </view>
             <view class="flex items-start md:justify-end">
               <EventStatusBadge
-                  :label="t(`events.registrationStatus.${item.status}`)"
+                  :label="optionLabel('event.registrationStatus', item.status)"
                   :status="toBadgeStatus(item.status)"
               />
             </view>
@@ -89,7 +89,7 @@
             </view>
             <view class="flex items-start md:justify-end">
               <EventStatusBadge
-                  :label="t(`events.registrationStatus.${item.status}`)"
+                  :label="optionLabel('event.registrationStatus', item.status)"
                   :status="toBadgeStatus(item.status)"
               />
             </view>
@@ -122,13 +122,21 @@ import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {openEventDetail} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
 import {toBadgeStatus, groupRegistrations} from '@/mappers/account/events'
+import {useOptionsStore} from '@/stores/modules/options'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
 const {loading, error, registrations, refresh} = useAccountEvents()
-watch(locale, () => {
+watch(locale, value => {
+  void optionsStore.ensureOptions(value)
   void refresh()
-})
+}, {immediate: true})
 
 const grouped = computed(() => groupRegistrations(registrations.value))
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+    .find(option => option.value === value)?.label ?? value
+}
 </script>

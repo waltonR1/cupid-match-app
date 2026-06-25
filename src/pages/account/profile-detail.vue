@@ -1,4 +1,4 @@
-ï»¿<template>
+<template>
   <AccountShell active-page="profiles">
     <view v-if="pageData" class="grid gap-6">
       <view
@@ -26,7 +26,7 @@
             class="cursor-pointer border px-3 py-1.5 transition-colors"
             @click="requestEditLocaleChange(item)"
         >
-          {{ t(`profiles.detail.values.language.${item.toUpperCase()}`) }}
+          {{ optionLabel('languages', item.toUpperCase()) }}
         </view>
       </view>
       <view
@@ -477,7 +477,7 @@
                     class="cursor-pointer border px-2.5 py-1 text-[12px] transition-colors hover:bg-semantic-surface-soft"
                     @click="openVerificationPanel(item.key)"
                 >
-                  {{ t(item.valueKey) }}
+                  {{ verificationStatusLabel(item) }}
                 </view>
               </view>
             </view>
@@ -531,7 +531,7 @@
           class="fixed right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center text-[28px] leading-none text-white/30 transition-opacity duration-200 hover:text-white/60"
           @click.stop="closePhotoPreview"
       >
-        Ã—
+        ¡Á
       </view>
     </view>
 
@@ -555,7 +555,7 @@
                 aria-label="Close"
                 class="flex h-8 w-8 cursor-pointer items-center justify-center border border-semantic-border-soft text-[18px] leading-none text-semantic-text-secondary transition-colors hover:bg-semantic-surface-soft hover:text-semantic-text-primary"
                 @click="closeVerificationPanel">
-            Ã—
+            ¡Á
           </view>
         </view>
 
@@ -902,7 +902,7 @@ function hydrateDraft(value: NonNullable<typeof payload.value>) {
 function resolveProfileTitleText() {
   if (!pageData.value) return ''
   if (pageData.value.profileTitleRelation) {
-    return `${t(pageData.value.profileTitleRelation)} ${t(pageData.value.profileTitleKey!)}`
+    return `${optionLabel('relationshipToProfile', pageData.value.profileTitleRelation)} ${t(pageData.value.profileTitleKey!)}`
   }
   return t(pageData.value.profileTitleKey!)
 }
@@ -911,7 +911,6 @@ function formatDisplayValue(entry: AccountProfileDetailPageData['profileSections
   const v = entry.rawValue
   if (v === null || v === undefined) return '-'
   if (entry.editor === 'enum') {
-    if (entry.valueKey) return t(entry.valueKey)
     const value = String(v || '')
     if (value === 'other' && entry.extraText) return entry.extraText
     const label = enumOptions(entry.fieldKey).find((option) => option.value === value)?.label
@@ -927,10 +926,10 @@ function displayListItems(entry: AccountProfileDetailPageData['profileSections']
   const values = Array.isArray(entry.rawValue) ? entry.rawValue : []
   if (values.length === 0) return ['-']
   if (entry.fieldKey === 'languages') {
-    return values.map((value) => t(`profiles.detail.values.language.${value.toUpperCase()}`))
+    return values.map((value) => optionLabel('languages', value.toUpperCase()))
   }
   if (entry.fieldKey === 'relationshipValues') {
-    return values.map((value) => t(`profiles.detail.values.relationshipValues.${value}`))
+    return values.map((value) => optionLabel('relationshipValues', value))
   }
   return values.map(String)
 }
@@ -938,9 +937,14 @@ function displayListItems(entry: AccountProfileDetailPageData['profileSections']
 function formatStatusValue(entry: AccountProfileDetailPageData['statusItems'][number]) {
   const v = entry.rawValue
   if (typeof v !== 'string') return String(v)
-  if (v.startsWith('profiles.')) return t(v)
+  if (entry.labelKey === 'profiles.detail.fields.profileStatus') return optionLabel('profileStatus', v)
   // ISO date from lastActiveAt
   return formatLocalizedDateTime(locale.value, v)
+}
+
+function verificationStatusLabel(item: AccountProfileDetailPageData['verificationItems'][number]) {
+  const group = item.key === 'review' ? 'reviewStatus' : 'verificationStatus'
+  return optionLabel(group, item.valueRaw)
 }
 
 function goBack() {
@@ -1124,15 +1128,8 @@ function buildProfilePayload() {
 }
 
 const relationshipOptions = computed(() => {
-  const all: Array<{ label: string; value: typeof draftOwnership.value.relationshipToProfile }> = [
-    {label: t('profiles.relationship.father'), value: 'father'},
-    {label: t('profiles.relationship.mother'), value: 'mother'},
-    {label: t('profiles.relationship.relative'), value: 'relative'},
-  ]
-  if (!hasSelfProfile.value) {
-    all.unshift({label: t('profiles.relationship.self'), value: 'self'})
-  }
-  return all
+  const options = enumOptions('relationshipToProfile') as Array<{ label: string; value: typeof draftOwnership.value.relationshipToProfile }>
+  return hasSelfProfile.value ? options.filter((item) => item.value !== 'self') : options
 })
 
 const selectedRelationshipLabel = computed(() => {
@@ -1154,39 +1151,9 @@ function selectRelationship(value: typeof draftOwnership.value.relationshipToPro
   openSelectKey.value = null
 }
 
-const languageOptions = computed(() => [
-  'ZH', 'EN', 'FR', 'ES', 'AR', 'PT', 'RU', 'DE', 'JA', 'KO',
-  'HI', 'IT', 'NL', 'TR', 'VI', 'TH', 'PL', 'SV', 'EL', 'HE',
-  'ID', 'MS', 'BN', 'FA', 'UR', 'YUE', 'TA', 'TE', 'MR', 'GU',
-  'PA', 'TL', 'KM', 'MY', 'LO', 'MN', 'NE', 'SI', 'AM', 'SW',
-  'RO', 'HU', 'CS', 'SK', 'BG', 'SR', 'HR', 'UK', 'NO', 'DA',
-  'FI', 'LT', 'LV', 'ET', 'SL', 'IS', 'CA', 'HY', 'KA', 'AZ',
-  'KK', 'UZ', 'KY', 'PS', 'KU', 'HT', 'MT', 'GA', 'CY', 'ML',
-  'KN', 'OR', 'FIL', 'AF', 'MI', 'MG', 'SO', 'SM', 'SD', 'TK',
-].map((value) => ({
-  label: t(`profiles.detail.values.language.${value}`),
-  value,
-})))
+const languageOptions = computed(() => enumOptions('languages'))
 
-const relationshipValueOptions = computed(() => [
-  'honesty',
-  'trust',
-  'communication',
-  'respect',
-  'loyalty',
-  'family',
-  'growth',
-  'support',
-  'humor',
-  'ambition',
-  'kindness',
-  'independence',
-  'romance',
-  'stability',
-].map((value) => ({
-  label: t(`profiles.detail.values.relationshipValues.${value}`),
-  value,
-})))
+const relationshipValueOptions = computed(() => enumOptions('relationshipValues'))
 
 function listFieldOptions(fieldKey: string) {
   if (fieldKey === 'languages') return languageOptions.value
@@ -1264,13 +1231,13 @@ function removeListDraft(fieldKey: string, value: string) {
 }
 
 function displayTagDraft(fieldKey: string, value: string) {
-  if (fieldKey === 'relationshipValues') return t(`profiles.detail.values.relationshipValues.${value}`)
-  if (fieldKey === 'languages') return t(`profiles.detail.values.language.${value.toUpperCase()}`)
+  if (fieldKey === 'relationshipValues') return optionLabel('relationshipValues', value)
+  if (fieldKey === 'languages') return optionLabel('languages', value.toUpperCase())
   return value
 }
 
 function toList(value: string | undefined) {
-  return (value ?? '').split(/[\/,ï¼Œã€]/).map((item) => item.trim()).filter(Boolean)
+  return (value ?? '').split(/[\/,£¬¡¢]/).map((item) => item.trim()).filter(Boolean)
 }
 
 function toNumber(value: string | undefined) {
@@ -1291,39 +1258,11 @@ function profileOptionGroup(fieldKey: string) {
 }
 
 function enumOptions(fieldKey: string): Array<{ label: string; value: string; requiresExtraText?: boolean }> {
-  const backendOptions = optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
-  if (backendOptions.length > 0) return backendOptions
+  return optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
+}
 
-  const options = {
-    gender: ['male', 'female'],
-    degreeLevel: ['bachelor', 'master', 'phd'],
-    maritalStatus: ['never_married', 'divorced', 'widowed'],
-    childrenPlan: ['wants', 'open_to_discuss', 'does_not_want'],
-    datingIntentionCode: ['serious', 'marriage', 'exclusive', 'cross_border'],
-    relocation: ['willing', 'unwilling', 'open_to_discuss'],
-    preferredLocation: ['local', 'regional', 'national', 'international'],
-    activityLevel: ['low', 'moderate', 'high'],
-    weekendStyle: ['outdoors', 'indoors', 'social', 'flexible'],
-    pets: ['has', 'none', 'likes'],
-    communicationStyle: ['direct', 'indirect', 'balanced'],
-    smoking: ['never', 'social', 'often'],
-    drinking: ['never', 'social', 'often'],
-    preferredChannel: ['phone', 'email', 'wechat'],
-    contactVisibility: ['after_introduction', 'owner_only', 'disabled'],
-  }[fieldKey] ?? []
-
-  const keyPrefix = fieldKey === 'smoking' || fieldKey === 'drinking'
-      ? 'profiles.detail.values.habit'
-      : fieldKey === 'preferredChannel'
-          ? 'profiles.detail.values.contactChannel'
-          : fieldKey === 'contactVisibility'
-              ? 'profiles.detail.values.contactVisibility'
-              : `profiles.detail.values.${fieldKey}`
-
-  return options.map((value) => ({
-    label: t(`${keyPrefix}.${value}`),
-    value,
-  }))
+function optionLabel(fieldKey: string, value: string) {
+  return enumOptions(fieldKey).find((option) => option.value === value)?.label ?? value
 }
 
 function enumRequiresExtraText(fieldKey: string) {
@@ -1762,9 +1701,7 @@ async function buildPhotoPayload() {
 }
 
 function photoStatusLabel(status: NonNullable<typeof payload.value>['photos'][number]['status']) {
-  if (status === 'approved') return t('profiles.detail.photoStatus.approved')
-  if (status === 'hidden') return t('profiles.detail.photoStatus.hidden')
-  return t('profiles.detail.photoStatus.review')
+  return optionLabel('photoStatus', status)
 }
 
 function verificationToneClass(tone: string) {
@@ -1774,4 +1711,3 @@ function verificationToneClass(tone: string) {
   return 'border-semantic-border-soft text-semantic-text-muted'
 }
 </script>
-

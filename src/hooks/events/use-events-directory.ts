@@ -8,13 +8,19 @@ import {
   toEventDirectoryPageData,
 } from '@/mappers/events/directory'
 import type { Translate } from '@/i18n/types'
+import {useOptionsStore} from '@/stores/modules/options'
 import type { EventDirectoryFilters } from '@/types/events/directory'
 
 export function useEventsDirectory(t: Translate, locale: { value: FormatLocale }) {
   const latest = useLatestRequest()
+  const optionsStore = useOptionsStore()
   const filters = ref<EventDirectoryFilters>({ ...DEFAULT_EVENT_DIRECTORY_FILTERS })
   const page = ref(1)
   const response = ref<EventsListResponse | null>(null)
+
+  watch(() => locale.value, value => {
+    void optionsStore.ensureOptions(value)
+  }, { immediate: true })
 
   watch([filters, page, () => locale.value], () => {
     void load()
@@ -37,11 +43,17 @@ export function useEventsDirectory(t: Translate, locale: { value: FormatLocale }
     response.value = nextResponse
   }
 
+  function optionLabel(group: string, value: string): string {
+    return optionsStore.optionsFor(locale.value, group)
+      .find(option => option.value === value)?.label ?? value
+  }
+
   const pageData = computed(() => toEventDirectoryPageData({
     response: response.value,
     filters: filters.value,
     locale: locale.value,
     t,
+    optionLabel,
   }))
 
   return {

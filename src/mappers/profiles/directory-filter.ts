@@ -14,6 +14,8 @@ import type {ProfileFilterToolbarItem} from '@/types/profiles/directory'
 
 type FilterGroup = ProfileFilterToolbarItem['group']
 
+export type OptionLabel = (fieldKey: string, value: string) => string
+
 interface FacetOption {
     label: string
     value: string
@@ -24,22 +26,18 @@ interface IntentOption {
     label: string
 }
 
-/** 构建全部选项 */
 export function allOption(t: Translate): DirectoryOption {
     return {label: t('filters.all'), value: ''}
 }
 
-/** 转换通用 facet 选项 */
 export function toDirectoryOptions(items: FacetOption[]): DirectoryOption[] {
     return items.map(item => ({label: item.label, value: item.value}))
 }
 
-/** 转换交友意向 facet 选项 */
 export function toIntentOptions(items: IntentOption[]): DirectoryOption[] {
     return items.map(item => ({label: item.label, value: item.code}))
 }
 
-/** 转换静态筛选选项 */
 export function toStaticOptions(items: readonly ProfileFilterOptionDefinition[], t: Translate): DirectoryOption[] {
     return items.map(item => ({
         label: 'label' in item ? item.label : t(item.labelKey),
@@ -47,16 +45,27 @@ export function toStaticOptions(items: readonly ProfileFilterOptionDefinition[],
     }))
 }
 
-/** 构建性别筛选项 */
+function toCommonOptions(
+    items: readonly ProfileFilterOptionDefinition[],
+    fieldKey: string,
+    optionLabel: OptionLabel,
+): DirectoryOption[] {
+    return items.map(item => ({
+        label: optionLabel(fieldKey, item.value),
+        value: item.value,
+    }))
+}
+
 export function buildGenderFilter<TKey extends string>(
     key: TKey,
     value: string,
     t: Translate,
+    optionLabel: OptionLabel,
 ): ProfileFilterToolbarItem<TKey> {
     return buildStaticFilter({
         key,
         label: t('filters.gender'),
-        options: toStaticOptions(PROFILE_GENDER_FILTER_OPTIONS, t),
+        options: toCommonOptions(PROFILE_GENDER_FILTER_OPTIONS, 'gender', optionLabel),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.compact,
         group: 'primary',
@@ -64,7 +73,6 @@ export function buildGenderFilter<TKey extends string>(
     })
 }
 
-/** 构建年龄筛选项 */
 export function buildAgeRangeFilter<TKey extends string>(
     key: TKey,
     value: string,
@@ -81,16 +89,16 @@ export function buildAgeRangeFilter<TKey extends string>(
     })
 }
 
-/** 构建学历筛选项 */
 export function buildEducationFilter<TKey extends string>(
     key: TKey,
     value: string,
     t: Translate,
+    optionLabel: OptionLabel,
 ): ProfileFilterToolbarItem<TKey> {
     return buildStaticFilter({
         key,
         label: t('filters.education'),
-        options: toStaticOptions(PROFILE_EDUCATION_FILTER_OPTIONS, t),
+        options: toCommonOptions(PROFILE_EDUCATION_FILTER_OPTIONS, 'degreeLevel', optionLabel),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'primary',
@@ -98,16 +106,16 @@ export function buildEducationFilter<TKey extends string>(
     })
 }
 
-/** 构建婚姻状态筛选项 */
 export function buildMaritalStatusFilter<TKey extends string>(
     key: TKey,
     value: string,
     t: Translate,
+    optionLabel: OptionLabel,
 ): ProfileFilterToolbarItem<TKey> {
     return buildStaticFilter({
         key,
         label: t('filters.maritalStatus'),
-        options: toStaticOptions(PROFILE_MARITAL_STATUS_FILTER_OPTIONS, t),
+        options: toCommonOptions(PROFILE_MARITAL_STATUS_FILTER_OPTIONS, 'maritalStatus', optionLabel),
         value,
         widthClass: PROFILE_FILTER_WIDTH_CLASS.regular,
         group: 'secondary',
@@ -115,7 +123,6 @@ export function buildMaritalStatusFilter<TKey extends string>(
     })
 }
 
-/** 构建子女状态筛选项 */
 export function buildChildrenFilter<TKey extends string>(
     key: TKey,
     value: string,
@@ -132,7 +139,6 @@ export function buildChildrenFilter<TKey extends string>(
     })
 }
 
-/** 构建异地接受度筛选项 */
 export function buildLongDistanceFilter<TKey extends string>(
     key: TKey,
     value: string,
@@ -149,7 +155,6 @@ export function buildLongDistanceFilter<TKey extends string>(
     })
 }
 
-/** 构建带动态选项的筛选项 */
 export function buildDynamicFilter<TKey extends string>(params: {
     key: TKey
     label: string
@@ -169,7 +174,6 @@ export function buildDynamicFilter<TKey extends string>(params: {
     }
 }
 
-/** 构建带固定选项的筛选项 */
 function buildStaticFilter<TKey extends string>(params: {
     key: TKey
     label: string

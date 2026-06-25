@@ -17,16 +17,16 @@ import {
     toDirectoryOptions,
     toIntentOptions,
     toStaticOptions,
+    type OptionLabel,
 } from '@/mappers/profiles/directory-filter'
 import type {SelfDirectoryFilterItem, SelfDirectoryFilters} from '@/types/profiles/directory'
-import {formatProfileLanguages} from '@/utils/profile-format'
 
-/** 构建个人资料目录筛选项 */
 export function buildSelfDirectoryFilterItems(
     facets: SelfProfileDirectoryFacets | null,
     filters: SelfDirectoryFilters,
-    locale: FormatLocale,
+    _locale: FormatLocale,
     t: Translate,
+    optionLabel: OptionLabel,
 ): SelfDirectoryFilterItem[] {
     const cities = facets?.cities ?? []
     const intents = facets?.intents ?? []
@@ -34,22 +34,21 @@ export function buildSelfDirectoryFilterItems(
     const languages = facets?.languages ?? []
 
     return [
-        buildGenderFilter('gender', filters.gender, t),
+        buildGenderFilter('gender', filters.gender, t, optionLabel),
         buildAgeRangeFilter('ageRange', filters.ageRange, t),
         buildCityFilter(filters, t, cities),
         buildHeightRangeFilter(filters, t),
-        buildEducationFilter('education', filters.education, t),
+        buildEducationFilter('education', filters.education, t, optionLabel),
         buildIntentFilter(filters, t, intents),
         buildIndustryFilter(filters, t, industries),
-        buildLanguageFilter(filters, locale, t, languages),
+        buildLanguageFilter(filters, t, languages, optionLabel),
         buildVerifiedFilter(filters, t),
-        buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t),
+        buildMaritalStatusFilter('maritalStatus', filters.maritalStatus, t, optionLabel),
         buildChildrenFilter('hasChildren', filters.hasChildren, t),
         buildLongDistanceFilter('acceptsLongDistance', filters.acceptsLongDistance, t),
     ]
 }
 
-/** 构建城市筛选项 */
 function buildCityFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -66,7 +65,6 @@ function buildCityFilter(
     })
 }
 
-/** 构建身高筛选项 */
 function buildHeightRangeFilter(filters: SelfDirectoryFilters, t: Translate): SelfDirectoryFilterItem {
     return buildDynamicFilter({
         key: 'heightRange',
@@ -79,7 +77,6 @@ function buildHeightRangeFilter(filters: SelfDirectoryFilters, t: Translate): Se
     })
 }
 
-/** 构建交友意向筛选项 */
 function buildIntentFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -96,7 +93,6 @@ function buildIntentFilter(
     })
 }
 
-/** 构建行业筛选项 */
 function buildIndustryFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -113,18 +109,17 @@ function buildIndustryFilter(
     })
 }
 
-/** 构建语言筛选项 */
 function buildLanguageFilter(
     filters: SelfDirectoryFilters,
-    locale: FormatLocale,
     t: Translate,
     languages: SelfProfileDirectoryFacets['languages'],
+    optionLabel: OptionLabel,
 ): SelfDirectoryFilterItem {
     return buildDynamicFilter({
         key: 'language',
         label: t('filters.languages'),
         options: languages.map(value => ({
-            label: formatProfileLanguages(locale, [value]),
+            label: optionLabel('languages', value.toUpperCase()),
             value,
         })),
         value: filters.language,
@@ -134,7 +129,6 @@ function buildLanguageFilter(
     })
 }
 
-/** 构建认证状态筛选项 */
 function buildVerifiedFilter(filters: SelfDirectoryFilters, t: Translate): SelfDirectoryFilterItem {
     return {
         key: 'verified',

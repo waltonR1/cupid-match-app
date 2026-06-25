@@ -8,16 +8,19 @@ import {
 import { addFavorite, removeFavorite } from '@/api/account'
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import type { Translate } from '@/i18n/types'
+import { useOptionsStore } from '@/stores/modules/options'
 import { toFamilyProfileDetailPageData } from '@/mappers/profiles/family-detail-page'
 
 export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, locale: Ref<FormatLocale>, showToast?: (msg: string, type?: 'success' | 'error' | 'info') => void) {
     const latest = useLatestRequest()
+    const optionsStore = useOptionsStore()
     const profile = ref<FamilyProfileDetail | null>(null)
 
     watch([profileId, locale], () => { void load() }, {immediate: true})
+    watch(locale, (value) => { void optionsStore.ensureOptions(value) }, {immediate: true})
 
     const pageData = computed(() => toFamilyProfileDetailPageData({
-        profile: profile.value, locale: locale.value, t,
+        profile: profile.value, locale: locale.value, t, optionLabel,
     }))
     const accessLevel = computed(() => pageData.value.accessLevel)
     const favorite = computed(() => profile.value?.favorite ?? { isFavorite: false, canFavorite: false })
@@ -43,6 +46,11 @@ export function useFamilyProfileDetail(profileId: Ref<string>, t: Translate, loc
         } finally {
             favoriteLoading.value = false
         }
+    }
+
+    function optionLabel(fieldKey: string, value: string) {
+        return optionsStore.optionsFor(locale.value, 'profile.' + fieldKey)
+            .find((option) => option.value === value)?.label ?? value
     }
 
     async function load() {

@@ -1,35 +1,44 @@
 import type {
     FamilyProfileListItem,
-    DatingIntentionCode,
     ProfileStatusCode,
     SelfProfileListItem,
 } from '@/api/profiles'
 import type {Translate} from '@/i18n/types'
 import type {ProfileCardViewModel} from '@/types/profiles/card'
-import {formatLocalizedAge, formatProfileLanguages} from '@/utils/profile-format'
+import {formatLocalizedAge} from '@/utils/profile-format'
 import type {FormatLocale} from '@/utils/locale-format'
 
-/** 转换个人资料卡片 */
-export function toSelfProfileCardViewModel(profile: SelfProfileListItem, locale: FormatLocale, t: Translate): ProfileCardViewModel {
+type OptionLabel = (fieldKey: string, value: string) => string
+
+export function toSelfProfileCardViewModel(
+    profile: SelfProfileListItem,
+    locale: FormatLocale,
+    t: Translate,
+    optionLabel: OptionLabel = fallbackOptionLabel,
+): ProfileCardViewModel {
     return {
         avatarUrl: profile.avatarUrl,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
-        badge: t(resolveIntentBadgeKey(profile.datingIntentionCode)),
+        meta: formatLocalizedAge(locale, profile.age) + ' / ' + profile.industry,
+        badge: optionLabel('datingIntentionCode', profile.datingIntentionCode),
         summary: profile.summary,
         facts: [
             {label: t('fields.city'), value: profile.city},
             {label: t('fields.education'), value: profile.education},
-            {label: t('fields.languages'), value: formatProfileLanguages(locale, profile.languages)},
+            {label: t('fields.languages'), value: formatLanguageLabels(profile.languages, optionLabel)},
         ],
         tags: profile.tags.slice(0, 3),
         footer: t(resolveSelfFooterKey(profile.profileStatus)),
     }
 }
 
-/** 转换家庭资料卡片 */
-export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, locale: FormatLocale, t: Translate): ProfileCardViewModel {
+export function toFamilyProfileCardViewModel(
+    profile: FamilyProfileListItem,
+    locale: FormatLocale,
+    t: Translate,
+    optionLabel: OptionLabel = fallbackOptionLabel,
+): ProfileCardViewModel {
     const tagTexts = [
         profile.acceptsLongDistance ? t('tags.longDistanceYes') : '',
         profile.hasChildren ? t('tags.childrenYes') : t('tags.childrenNo'),
@@ -39,8 +48,8 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
         avatarUrl: profile.avatarUrl,
         displayName: profile.displayName,
         gender: profile.gender,
-        meta: `${formatLocalizedAge(locale, profile.age)} / ${profile.industry}`,
-        badge: t(resolveMaritalStatusTagKey(profile.maritalStatus)),
+        meta: formatLocalizedAge(locale, profile.age) + ' / ' + profile.industry,
+        badge: optionLabel('maritalStatus', profile.maritalStatus),
         summary: profile.relationshipGoal,
         facts: [
             {label: t('fields.city'), value: profile.city},
@@ -52,22 +61,15 @@ export function toFamilyProfileCardViewModel(profile: FamilyProfileListItem, loc
     }
 }
 
-/** 解析意向徽章文案 */
-function resolveIntentBadgeKey(code: DatingIntentionCode): string {
-    switch (code) {
-        case 'marriage':
-            return 'card.goalMarriage'
-        case 'exclusive':
-            return 'card.goalExclusive'
-        case 'cross_border':
-            return 'card.goalCrossBorder'
-        case 'serious':
-        default:
-            return 'card.goalSerious'
-    }
+function formatLanguageLabels(values: string[], optionLabel: OptionLabel): string {
+    if (values.length === 0) return '-'
+    return values.map(value => optionLabel('languages', value.toUpperCase())).join(' / ')
 }
 
-/** 解析个人卡片底部文案 */
+function fallbackOptionLabel(_fieldKey: string, value: string): string {
+    return value
+}
+
 function resolveSelfFooterKey(profileStatus: ProfileStatusCode): string {
     switch (profileStatus) {
         case 'review':
@@ -78,21 +80,7 @@ function resolveSelfFooterKey(profileStatus: ProfileStatusCode): string {
     }
 }
 
-/** 解析家庭卡片底部文案 */
 function resolveFamilyFooterKey(profileStatus: ProfileStatusCode): string {
     if (profileStatus === 'review') return 'card.labelReview'
     return 'card.labelObserve'
-}
-
-/** 解析婚姻状态标签文案 */
-function resolveMaritalStatusTagKey(status: FamilyProfileListItem['maritalStatus']): string {
-    switch (status) {
-        case 'divorced':
-            return 'tags.maritalDivorced'
-        case 'widowed':
-            return 'tags.maritalWidowed'
-        case 'never_married':
-        default:
-            return 'tags.maritalSingle'
-    }
 }

@@ -13,6 +13,8 @@ export const DEFAULT_EVENT_DIRECTORY_FILTERS: EventDirectoryFilters = {
   month: '',
 }
 
+export type OptionLabel = (group: string, value: string) => string
+
 export function buildEventDirectoryQuery(params: {
   page: number
   pageSize: number
@@ -33,8 +35,10 @@ export function toEventDirectoryPageData(params: {
   filters: EventDirectoryFilters
   locale: FormatLocale
   t: Translate
+  optionLabel?: OptionLabel
 }) {
   const items = params.response?.items ?? []
+  const optionLabel = params.optionLabel ?? fallbackOptionLabel
   const pagination = params.response?.pagination ?? {
     page: 1,
     pageSize: EVENT_DIRECTORY_PAGE_SIZE,
@@ -44,25 +48,32 @@ export function toEventDirectoryPageData(params: {
 
   return {
     fieldLabels: buildEventFieldLabels(params.t),
-    nextEventCard: items[0] ? toEventOverviewItem(items[0], params.locale, params.t) : undefined,
+    nextEventCard: items[0] ? toEventOverviewItem(items[0], params.locale, params.t, optionLabel) : undefined,
     featuredEventCards: items
       .filter((item) => item.status === 'open' || item.status === 'waitlist')
       .slice(0, 3)
-      .map((item) => toEventOverviewItem(item, params.locale, params.t)),
-    scheduleEventCards: items.map((item) => toEventOverviewItem(item, params.locale, params.t)),
+      .map((item) => toEventOverviewItem(item, params.locale, params.t, optionLabel)),
+    scheduleEventCards: items.map((item) => toEventOverviewItem(item, params.locale, params.t, optionLabel)),
     pagination,
     statCards: buildStatCards(items, params.t),
   }
 }
 
-export function toEventOverviewItem(event: EventDirectoryItem, locale: FormatLocale, t: Translate): EventOverviewItem {
+export function toEventOverviewItem(
+  event: EventDirectoryItem,
+  locale: FormatLocale,
+  t: Translate,
+  optionLabel: OptionLabel = fallbackOptionLabel,
+): EventOverviewItem {
+  const status = resolveEventCardStatus(event)
+
   return {
     id: event.id,
     title: event.title,
     summary: event.summary,
     coverImageUrl: event.coverImageUrl,
     date: formatEventDate(locale, event.date),
-    time: `${event.startTime} - ${event.endTime}`,
+    time: event.startTime + ' - ' + event.endTime,
     city: event.city,
     venue: event.venue,
     format: event.format,
@@ -71,8 +82,8 @@ export function toEventOverviewItem(event: EventDirectoryItem, locale: FormatLoc
     remainingSeatsText: t('seats.remaining', { count: event.remainingSeats }),
     waitlistText: event.waitlistCount > 0 ? t('seats.waitlist', { count: event.waitlistCount }) : undefined,
     memberOnly: event.memberOnly,
-    status: resolveEventCardStatus(event),
-    statusLabel: t(`status.${resolveEventCardStatus(event)}`),
+    status,
+    statusLabel: optionLabel('event.status', status),
   }
 }
 
@@ -105,4 +116,8 @@ function resolveEventCardStatus(event: EventDirectoryItem) {
   if (event.status === 'open' && event.memberOnly) return 'member'
 
   return event.status
+}
+
+function fallbackOptionLabel(_group: string, value: string): string {
+  return value
 }

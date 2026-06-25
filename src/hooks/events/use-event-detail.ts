@@ -9,11 +9,17 @@ import {
 import { useLatestRequest } from '@/hooks/common/useLatestRequest'
 import { mergeEventRegistration, toEventDetailPageData } from '@/mappers/events/detail'
 import type { Translate } from '@/i18n/types'
+import {useOptionsStore} from '@/stores/modules/options'
 
 export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { value: FormatLocale }) {
   const latest = useLatestRequest()
   const actionRequest = useLatestRequest()
+  const optionsStore = useOptionsStore()
   const event = ref<EventDetail | null>(null)
+
+  watch(() => locale.value, value => {
+    void optionsStore.ensureOptions(value)
+  }, { immediate: true })
 
   watch([eventId, () => locale.value], () => {
     void load()
@@ -55,11 +61,17 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
     }
   }
 
+  function optionLabel(group: string, value: string): string {
+    return optionsStore.optionsFor(locale.value, group)
+      .find(option => option.value === value)?.label ?? value
+  }
+
   const pageData = computed(() => toEventDetailPageData({
     event: event.value,
     locale: locale.value,
     t,
     actionLoading: actionRequest.loading.value,
+    optionLabel,
   }))
 
   return {

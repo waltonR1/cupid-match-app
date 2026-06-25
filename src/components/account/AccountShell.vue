@@ -39,10 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { useAuthStore } from '@/stores/modules/auth'
+import {useOptionsStore} from '@/stores/modules/options'
 import {
   openAccountEventsPage,
   openAccountPage,
@@ -59,11 +60,20 @@ defineProps<{
 }>()
 
 const auth = useAuthStore()
-const { t } = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
+const { t, locale } = usePageI18n('accountCenter')
+watch(locale, value => {
+  void optionsStore.ensureOptions(value)
+}, {immediate: true})
 const membershipName = computed(() => {
   const tier = auth.membershipTier
-  return tier ? t(`home.membership.tier.${tier}`) : t('home.functional.noMembership')
+  return tier ? optionLabel('membership.tier', tier) : t('home.functional.noMembership')
 })
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+    .find(option => option.value === value)?.label ?? value
+}
+
 const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [
   { key: 'home', label: t('nav.home') },
   { key: 'profiles', label: t('nav.profiles') },

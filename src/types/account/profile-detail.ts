@@ -27,8 +27,7 @@ export interface AccountProfileDetailStatusItem {
 export interface AccountProfileDetailVerificationItem {
   key: AccountProfileVerificationPanelKey
   labelKey: string
-  valueKey: string
-  valueRaw?: string
+  valueRaw: string
   tone: string
 }
 

@@ -108,19 +108,21 @@
 
 <script lang="ts" setup>
 import {useRequireAuth} from '@/hooks/common/use-require-auth'
-import {computed} from 'vue'
+import {computed, watch} from 'vue'
 import AppPageLayout from '@/components/layout/AppPageLayout.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {useMessagesInbox} from '@/hooks/messages/use-messages-inbox'
 import type {InboxSubjectType} from '@/types/messages/inbox'
+import {useOptionsStore} from '@/stores/modules/options'
 
 type MessageThread = {
   subjectType?: InboxSubjectType
 }
 
 useRequireAuth()
-const {t} = usePageI18n('messages')
+const {t, locale} = usePageI18n('messages')
+const optionsStore = useOptionsStore()
 const {
   threads,
   messages,
@@ -137,12 +139,19 @@ const {
 const activeThread = computed(() =>
     threads.value.find((t) => t.id === activeThreadId.value) ?? null,
 )
+watch(locale, (value) => {
+  void optionsStore.ensureOptions(value)
+}, {immediate: true})
 
 const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="65" text-anchor="middle" fill="%239ca3af" font-size="50">?</text></svg>'
 
 function resolveLabel(item: MessageThread) {
-  if (item.subjectType) return t(`subject.${item.subjectType}`)
-  return t('subject.system')
+  return optionLabel('message.subjectType', item.subjectType || 'system')
+}
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+      .find(option => option.value === value)?.label ?? value
 }
 
 function resolveAvatar(_item: MessageThread) {

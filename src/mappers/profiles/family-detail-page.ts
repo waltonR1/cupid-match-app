@@ -14,16 +14,17 @@ import {
     formatBooleanText,
     formatLocalizedAge,
     formatProfileHeight,
-    formatProfileLanguages,
 } from '@/utils/profile-format'
 
 type FactBuilder = (label: string, value: RestrictedProfileField<string>) => ProfileDetailFactItem
+type OptionLabel = (fieldKey: string, value: string) => string
 
 /** 转换家庭详情页展示数据 */
 export function toFamilyProfileDetailPageData(params: {
     profile: FamilyProfileDetail | null
     locale: FormatLocale
     t: Translate
+    optionLabel?: OptionLabel
 }): FamilyProfileDetailPageData {
     if (!params.profile) {
         return emptyFamilyProfileDetailPageData()
@@ -38,9 +39,11 @@ function buildFamilyProfileDetailPageData(
     context: {
         locale: FormatLocale
         t: Translate
+        optionLabel?: OptionLabel
     },
 ): FamilyProfileDetailPageData {
     const {locale, t} = context
+    const optionLabel = context.optionLabel ?? ((_fieldKey: string, value: string) => value)
     const pub = (label: string, value: string) => createProfileFact(label, value)
     const access = (label: string, value: RestrictedProfileField<string>) => accessFact(label, value)
     const accessLevel = resolveAccessLevel(profile)
@@ -65,19 +68,19 @@ function buildFamilyProfileDetailPageData(
             tags: profile.tags.slice(0, 5),
             quickFacts: [
                 pub(t('fields.intent'), profile.datingIntentionLabel),
-                access(t('fields.maritalStatus'), formatRestrictedMaritalStatus(profile.maritalStatus, t)),
-                access(t('fields.languages'), formatRestrictedLanguages(locale, profile.languages)),
+                access(t('fields.maritalStatus'), formatRestrictedEnum('maritalStatus', profile.maritalStatus, optionLabel)),
+                access(t('fields.languages'), formatRestrictedLanguages(profile.languages, optionLabel)),
             ],
             hasMemberAccess: accessLevel === 'premium',
             accessLabel: buildAccessLabel(accessLevel, t),
             galleryLockedText: buildGalleryLockedText(profile, accessLevel, t),
         },
-        snapshotFacts: buildSnapshotFacts(profile, locale, pub, access, t, accessLevel),
-        familyReviewFacts: buildFamilyReviewFacts(profile, access, t),
-        relationshipFacts: buildRelationshipFacts(profile, pub, access, t),
-        lifestyleFacts: buildLifestyleFacts(profile, access, t),
-        preferenceFacts: buildPreferenceFacts(profile, access, t),
-        valueFacts: buildValueFacts(profile, access, t),
+        snapshotFacts: buildSnapshotFacts(profile, locale, pub, access, t, optionLabel, accessLevel),
+        familyReviewFacts: buildFamilyReviewFacts(profile, access, t, optionLabel),
+        relationshipFacts: buildRelationshipFacts(profile, pub, access, t, optionLabel),
+        lifestyleFacts: buildLifestyleFacts(profile, access, t, optionLabel),
+        preferenceFacts: buildPreferenceFacts(profile, access, t, optionLabel),
+        valueFacts: buildValueFacts(profile, access, t, optionLabel),
         familyIntroductionData: buildFamilyIntroductionData(profile, familyModeText, t),
         privateIntroductionData: buildPrivateIntroductionData(profile),
     }
@@ -126,6 +129,7 @@ function buildSnapshotFacts(
     pub: (label: string, value: string) => ProfileDetailFactItem,
     access: FactBuilder,
     t: Translate,
+    optionLabel: OptionLabel,
     accessLevel: FamilyProfileDetailAccessLevel,
 ): ProfileDetailFactItem[] {
     const visitorFacts = [
@@ -142,17 +146,17 @@ function buildSnapshotFacts(
         ...visitorFacts,
         access(t('fields.country'), profile.country),
         access(t('fields.nationality'), profile.nationality),
-        access(t('fields.languages'), formatRestrictedLanguages(locale, profile.languages)),
+        access(t('fields.languages'), formatRestrictedLanguages(profile.languages, optionLabel)),
     ]
 }
 
 /** 构建家庭协作判断 */
-function buildFamilyReviewFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
+function buildFamilyReviewFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate, optionLabel: OptionLabel): ProfileDetailFactItem[] {
     return [
         createProfileFact(t('fields.familySupport'), resolveFamilyModeText(profile, t)),
         createProfileFact(t('fields.visibility'), profile.familyVisible ? t('visibility.familyVisible') : t('visibility.userVisible')),
-        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, t)),
-        access(t('fields.communicationStyle'), formatEnumValue('communicationStyle', profile.communicationStyle, t)),
+        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, optionLabel)),
+        access(t('fields.communicationStyle'), formatRestrictedEnum('communicationStyle', profile.communicationStyle, optionLabel)),
     ]
 }
 
@@ -162,35 +166,36 @@ function buildRelationshipFacts(
     pub: (label: string, value: string) => ProfileDetailFactItem,
     access: FactBuilder,
     t: Translate,
+    optionLabel: OptionLabel,
 ): ProfileDetailFactItem[] {
     return [
         pub(t('fields.intent'), profile.datingIntentionLabel),
-        access(t('fields.maritalStatus'), formatRestrictedMaritalStatus(profile.maritalStatus, t)),
+        access(t('fields.maritalStatus'), formatRestrictedEnum('maritalStatus', profile.maritalStatus, optionLabel)),
         access(t('fields.relationshipGoal'), profile.relationshipGoal),
         access(t('fields.residencePlan'), profile.residencePlan),
-        access(t('fields.relocation'), formatEnumValue('relocation', profile.relocation, t)),
+        access(t('fields.relocation'), formatRestrictedEnum('relocation', profile.relocation, optionLabel)),
         access(t('fields.longDistance'), formatRestrictedBoolean(profile.acceptsLongDistance, t)),
         access(t('fields.familyLife'), profile.familyLife),
     ]
 }
 
 /** 构建生活背景 */
-function buildLifestyleFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
+function buildLifestyleFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate, optionLabel: OptionLabel): ProfileDetailFactItem[] {
     return [
         access(t('fields.exercise'), profile.exercise),
-        access(t('fields.activityLevel'), formatEnumValue('activityLevel', profile.activityLevel, t)),
-        access(t('fields.weekendStyle'), formatEnumValue('weekendStyle', profile.weekendStyle, t)),
-        access(t('fields.smoke'), formatRestrictedHabit(profile.smoking, t)),
-        access(t('fields.drink'), formatRestrictedHabit(profile.drinking, t)),
-        access(t('fields.pets'), formatEnumValue('pets', profile.pets, t)),
+        access(t('fields.activityLevel'), formatRestrictedEnum('activityLevel', profile.activityLevel, optionLabel)),
+        access(t('fields.weekendStyle'), formatRestrictedEnum('weekendStyle', profile.weekendStyle, optionLabel)),
+        access(t('fields.smoke'), formatRestrictedEnum('smoking', profile.smoking, optionLabel)),
+        access(t('fields.drink'), formatRestrictedEnum('drinking', profile.drinking, optionLabel)),
+        access(t('fields.pets'), formatRestrictedEnum('pets', profile.pets, optionLabel)),
     ]
 }
 
 /** 构建择偶偏好 */
-function buildPreferenceFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
+function buildPreferenceFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate, optionLabel: OptionLabel): ProfileDetailFactItem[] {
     return [
         access(t('fields.preferredAgeRange'), formatPreferredAgeRange(profile.preferredAgeMin, profile.preferredAgeMax)),
-        access(t('fields.preferredLocation'), formatEnumValue('preferredLocation', profile.preferredLocation, t)),
+        access(t('fields.preferredLocation'), formatRestrictedEnum('preferredLocation', profile.preferredLocation, optionLabel)),
         access(t('fields.preferredEducation'), profile.preferredEducation),
         access(t('fields.preferredFamilyPlan'), profile.familyLife),
         access(t('fields.dealBreakers'), joinRestrictedList(profile.dealBreakers)),
@@ -198,13 +203,13 @@ function buildPreferenceFacts(profile: FamilyProfileDetail, access: FactBuilder,
 }
 
 /** 构建家庭价值观 */
-function buildValueFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate): ProfileDetailFactItem[] {
+function buildValueFacts(profile: FamilyProfileDetail, access: FactBuilder, t: Translate, optionLabel: OptionLabel): ProfileDetailFactItem[] {
     return [
-        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, t)),
+        access(t('fields.relationshipValues'), joinEnumValues('relationshipValues', profile.relationshipValues, optionLabel)),
         access(t('fields.personalityTraits'), joinRestrictedList(profile.personalityTraits)),
-        access(t('fields.communicationStyle'), formatEnumValue('communicationStyle', profile.communicationStyle, t)),
+        access(t('fields.communicationStyle'), formatRestrictedEnum('communicationStyle', profile.communicationStyle, optionLabel)),
         access(t('fields.children'), formatRestrictedBoolean(profile.hasChildren, t)),
-        access(t('fields.childrenPlan'), formatRestrictedChildrenPlan(profile.childrenPlan, t)),
+        access(t('fields.childrenPlan'), formatRestrictedEnum('childrenPlan', profile.childrenPlan, optionLabel)),
     ]
 }
 
@@ -271,32 +276,33 @@ function formatRestrictedBoolean(value: RestrictedProfileField<boolean>, t: Tran
     return isRestrictedValue(value) ? value : formatBooleanText(value, t)
 }
 
-/** 格式化受限习惯值 */
-function formatRestrictedHabit(value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
-    return isRestrictedValue(value) ? value : t(`habits.${value}`)
-}
-
-/** 格式化受限婚姻状态 */
-function formatRestrictedMaritalStatus(value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
-    return isRestrictedValue(value) ? value : t(`maritalStatus.${value}`)
-}
-
-/** 格式化受限家庭计划 */
-function formatRestrictedChildrenPlan(value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
-    return isRestrictedValue(value) ? value : t(`childrenPlan.${value}`)
-}
-
-/** 格式化受限语言 */
-function formatRestrictedLanguages(locale: FormatLocale, value: RestrictedProfileField<string[]>): RestrictedProfileField<string> {
-    return isRestrictedValue(value) ? value : formatProfileLanguages(locale, value)
-}
-
 /** 格式化受限文本 */
 function formatRestrictedText(value: RestrictedProfileField<string>): string {
     return isRestrictedValue(value) ? '' : value
 }
 
 /** 格式化偏好年龄范围 */
+/** Format restricted languages through common options. */
+function formatRestrictedLanguages(value: RestrictedProfileField<string[]>, optionLabel: OptionLabel): RestrictedProfileField<string> {
+    return isRestrictedValue(value) ? value : value.map(item => optionLabel('languages', item.toUpperCase())).join(' / ')
+}
+
+/** Format an enum code through common options. */
+function formatRestrictedEnum(fieldKey: string, value: RestrictedProfileField<string>, optionLabel: OptionLabel): RestrictedProfileField<string> {
+    return isRestrictedValue(value) ? value : optionLabel(fieldKey, value)
+}
+
+/** Join enum code arrays through common options. */
+function joinEnumValues(
+    fieldKey: string,
+    values: RestrictedProfileField<string[]>,
+    optionLabel: OptionLabel,
+): RestrictedProfileField<string> {
+    return isRestrictedValue(values)
+        ? values
+        : values.map(value => optionLabel(fieldKey, value)).join(' / ')
+}
+
 function formatPreferredAgeRange(
     min: RestrictedProfileField<number>,
     max: RestrictedProfileField<number>,
@@ -310,22 +316,6 @@ function formatPreferredAgeRange(
 /** 拼接受限列表 */
 function joinRestrictedList(value: RestrictedProfileField<string[]>): RestrictedProfileField<string> {
     return isRestrictedValue(value) ? value : value.join(' / ')
-}
-
-/** Format an enum code through the detail i18n value group. */
-function formatEnumValue(group: string, value: RestrictedProfileField<string>, t: Translate): RestrictedProfileField<string> {
-    return isRestrictedValue(value) ? value : t(`${group}.${value}`)
-}
-
-/** Join enum code arrays through the detail i18n value group. */
-function joinEnumValues(
-    group: string,
-    values: RestrictedProfileField<string[]>,
-    t: Translate,
-): RestrictedProfileField<string> {
-    return isRestrictedValue(values)
-        ? values
-        : values.map(value => formatEnumValue(group, value, t)).join(' / ')
 }
 
 /** 判断是否为受限值 */

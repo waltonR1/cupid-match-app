@@ -79,7 +79,7 @@
                   <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.city }} · {{ item.date }}</view>
                 </view>
                 <view class="border border-semantic-border-soft px-3 py-1 text-[12px] text-semantic-text-secondary">
-                  {{ t(`events.registrationStatus.${item.status}`) }}
+                  {{ optionLabel('event.registrationStatus', item.status) }}
                 </view>
               </view>
             </view>
@@ -108,14 +108,14 @@
                 <view class="text-[15px]">
                   <template v-if="item.profileName">{{ item.profileName }}</template>
                   <template v-else-if="item.profileType === 'self'">{{ t('profiles.profileType.self') }}</template>
-                  <template v-else>{{ t(`profiles.relationship.${item.relationshipToProfile}`) }}
+                  <template v-else>{{ optionLabel('profile.relationshipToProfile', item.relationshipToProfile) }}
                     {{ t('profiles.profileType.family') }}
                   </template>
                 </view>
                 <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ item.city }}</view>
               </view>
               <view class="text-[13px] text-semantic-text-secondary">{{
-                  t(`profiles.status.${item.profileStatus}`)
+                  optionLabel('profile.profileStatus', item.profileStatus)
                 }}
               </view>
             </view>
@@ -136,14 +136,14 @@
             </view>
             <view class="grid gap-1 py-4">
               <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.status') }}</view>
-              <view class="text-[15px]">{{ t(`home.accountStatus.${payload.user.status}`) }}</view>
+              <view class="text-[15px]">{{ optionLabel('account.status', payload.user.status) }}</view>
             </view>
             <view class="grid gap-1 py-4">
               <view class="text-[13px] text-semantic-text-secondary">{{
                   t('home.accountFields.preferredLocale')
                 }}
               </view>
-              <view class="text-[15px]">{{ t(`home.locale.${payload.user.preferredLocale}`) }}</view>
+              <view class="text-[15px]">{{ optionLabel('account.locale', payload.user.preferredLocale) }}</view>
             </view>
             <view class="grid gap-1 py-4">
               <view class="text-[13px] text-semantic-text-secondary">{{ t('home.accountFields.membership') }}</view>
@@ -207,17 +207,25 @@ import {
   openSelfDirectoryPage
 } from '@/utils/navigation'
 import {resolvePrimaryAction} from '@/mappers/account/home'
+import {useOptionsStore} from '@/stores/modules/options'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
 const {loading, payload, refresh} = useAccountDashboard()
-watch(locale, () => {
+watch(locale, value => {
+  void optionsStore.ensureOptions(value)
   void refresh()
-})
+}, {immediate: true})
 
 const primaryAction = computed(() => payload.value ? resolvePrimaryAction(payload.value) : undefined)
 const privateIntroQuota = computed(() => payload.value?.entitlements.find((item) => item.code === 'private_introduction'))
 const requestedIntroductions = computed(() => payload.value?.recentIntroductions.filter((item) => item.status === 'requested') ?? [])
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(locale.value, group)
+    .find(option => option.value === value)?.label ?? value
+}
 
 function handleAction(key: string) {
   if (key === 'create-profile') {

@@ -6,7 +6,7 @@
       <view class="flex flex-wrap items-start justify-between gap-3">
         <view>
           <view class="font-medium">{{ item.targetDisplayName }}</view>
-          <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ t(`introduction.status.${item.status}`) }}</view>
+          <view class="mt-1 text-[13px] text-semantic-text-secondary">{{ optionLabel('introduction.status', item.status) }}</view>
         </view>
 
         <view class="text-[12px] text-semantic-text-card-label">
@@ -35,24 +35,24 @@
 
         <view v-else>
           <view v-if="!contact.available" class="text-[13px] text-semantic-text-muted">
-            {{ t(`relationship.contactReason.${contact.reason}`) }}
+            {{ optionLabel('relationship.contactReason', contact.reason) }}
           </view>
 
           <view v-else class="grid gap-1 text-[13px]">
             <view v-if="contact.phone" class="flex gap-2">
-              <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.phone') }}</text>
+              <text class="text-semantic-text-card-label">{{ optionLabel('profile.preferredChannel', 'phone') }}</text>
               <text class="text-semantic-text-primary">{{ contact.phone }}</text>
               <text v-if="contact.preferredChannel === 'phone'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
             </view>
 
             <view v-if="contact.email" class="flex gap-2">
-              <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.email') }}</text>
+              <text class="text-semantic-text-card-label">{{ optionLabel('profile.preferredChannel', 'email') }}</text>
               <text class="text-semantic-text-primary">{{ contact.email }}</text>
               <text v-if="contact.preferredChannel === 'email'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
             </view>
 
             <view v-if="contact.wechat" class="flex gap-2">
-              <text class="text-semantic-text-card-label">{{ t('settings.contactChannel.wechat') }}</text>
+              <text class="text-semantic-text-card-label">{{ optionLabel('profile.preferredChannel', 'wechat') }}</text>
               <text class="text-semantic-text-primary">{{ contact.wechat }}</text>
               <text v-if="contact.preferredChannel === 'wechat'" class="text-semantic-text-muted">({{ t('relationship.preferredTag') }})</text>
             </view>
@@ -64,8 +64,10 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { formatLocalizedDate, type FormatLocale } from '@/utils/locale-format'
+import {useOptionsStore} from '@/stores/modules/options'
 
 type IntroductionItem = {
   requestId: string
@@ -91,7 +93,7 @@ type IntroductionContact =
       reason: string
     }
 
-defineProps<{
+const props = defineProps<{
   item: IntroductionItem
   contact?: IntroductionContact
   contactLoading?: boolean
@@ -103,6 +105,16 @@ const emit = defineEmits<{
 }>()
 
 const { t } = usePageI18n('accountCenter')
+const optionsStore = useOptionsStore()
+
+watch(() => props.locale, value => {
+  void optionsStore.ensureOptions(value)
+}, {immediate: true})
+
+function optionLabel(group: string, value: string): string {
+  return optionsStore.optionsFor(props.locale, group)
+    .find(option => option.value === value)?.label ?? value
+}
 
 const introDateFields = [
   { key: 'requestedAt' as const, labelKey: 'relationship.labels.requestedAt' },
