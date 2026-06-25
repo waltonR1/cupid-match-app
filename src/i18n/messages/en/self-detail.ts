@@ -116,76 +116,29 @@ export const selfDetailMessages: AppMessageSchema = {
     visibility: {
       familyVisible: 'Visible for family review',
       userVisible: 'User-led visibility only',
-    },
-    status: {
-      open: 'Open profile',
-      review: 'In review',
-      priority: 'Priority profile',
-    },
-    maritalStatus: {
+    },    maritalStatus: {
       never_married: 'Never married',
       divorced: 'Divorced',
       widowed: 'Widowed',
-    },
-    relocation: {
-      willing: 'Willing',
-      unwilling: 'Unwilling',
-      open_to_discuss: 'Open to discuss',
-    },
-    preferredLocation: {
+    },    preferredLocation: {
       local: 'Local',
       regional: 'Regional',
       national: 'National',
       international: 'International',
-    },
-    relationshipValues: {
-      honesty: 'Honesty',
-      trust: 'Trust',
-      communication: 'Communication',
-      respect: 'Respect',
-      loyalty: 'Loyalty',
-      family: 'Family',
-      growth: 'Shared growth',
-      support: 'Mutual support',
-      humor: 'Humor',
-      ambition: 'Ambition',
-      kindness: 'Kindness',
-      independence: 'Independence',
-      romance: 'Romance',
-      stability: 'Stability',
-    },
-    activityLevel: {
+    },    activityLevel: {
       low: 'Low',
       moderate: 'Moderate',
       high: 'High',
-    },
-    pets: {
-      has: 'Has pets',
-      none: 'No pets',
-      likes: 'Likes pets',
-    },
-    weekendStyle: {
+    },    weekendStyle: {
       outdoors: 'Outdoors',
       indoors: 'Indoors',
       social: 'Social',
       flexible: 'Flexible',
-    },
-    communicationStyle: {
-      direct: 'Direct',
-      indirect: 'Indirect',
-      balanced: 'Balanced',
-    },
-    childrenPlan: {
+    },    childrenPlan: {
       wants: 'Would like children',
       open_to_discuss: 'Open to discuss',
       does_not_want: 'Does not plan to have children',
-    },
-    habits: {
-      never: 'Never',
-      social: 'Social only',
-      often: 'Often',
-    },
-    familySupport: {
+    },    familySupport: {
       priority: 'Priority family-side review',
       contactReady: 'Ready for family-assisted contact',
       contextOnly: 'Background context only',

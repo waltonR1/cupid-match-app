@@ -76,13 +76,7 @@ export const familyMessages: AppMessageSchema = {
       education: '学历',
       residencePlan: '定居计划',
     },
-
-    modes: {
-      contextOnly: '仅背景可见',
-      contactReady: '可家长辅助沟通',
-      priority: '优先家长评估',
-    },
-
+
     tags: {
       maritalSingle: '未婚',
       maritalDivorced: '离异',
@@ -91,14 +85,7 @@ export const familyMessages: AppMessageSchema = {
       childrenNo: '无孩子',
       longDistanceYes: '接受异地',
     },
-
-    card: {
-      labelObserve: '建议先家庭了解',
-      labelContactReady: '可安排家长沟通',
-      labelReview: '资料仍在补充',
-      labelPriority: '可优先推进',
-    },
-
+
     pagination: {
       prev: '上一页',
       next: '下一页',

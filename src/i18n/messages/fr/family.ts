@@ -76,13 +76,7 @@ export const familyMessages: AppMessageSchema = {
       education: 'Formation',
       residencePlan: 'Projet de vie',
     },
-
-    modes: {
-      contextOnly: 'Contexte seulement',
-      contactReady: 'Pret pour echange famille',
-      priority: 'Priorite famille',
-    },
-
+
     tags: {
       maritalSingle: 'Celibataire',
       maritalDivorced: 'Divorce',
@@ -91,14 +85,7 @@ export const familyMessages: AppMessageSchema = {
       childrenNo: 'Sans enfant',
       longDistanceYes: 'Ouvert a distance',
     },
-
-    card: {
-      labelObserve: 'A evaluer en famille',
-      labelContactReady: 'Echange famille possible',
-      labelReview: 'Dossier encore en verification',
-      labelPriority: 'A pousser en priorite',
-    },
-
+
     pagination: {
       prev: 'Precedent',
       next: 'Suivant',

@@ -20,13 +20,7 @@ export const membershipMessages: AppMessageSchema = {
       secondaryCta: 'Comparer les offres',
       overviewTitle: 'Apercu VIP',
       overviewText: 'Trois niveaux d adhesion correspondant a differents rythmes relationnels, capacites d acces aux evenements et profondeurs de service.',
-    },
-    heroCards: {
-      silverLabel: 'Silver',
-      goldLabel: 'Gold',
-      diamondLabel: 'Diamond',
-    },
-    free: {
+    },    free: {
       badge: 'Free',
       f3: 'Acces aux informations sur les evenements et la plateforme',
       f4: 'Possibilite d evoluer plus tard vers le VIP',

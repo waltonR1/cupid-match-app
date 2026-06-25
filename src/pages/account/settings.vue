@@ -265,7 +265,7 @@
                       settings.password.isSet ? t('settings.security.passwordSet') : t('settings.security.passwordUnset')
                     }}
                     <text v-if="settings.password.lastChangedAt">
-                      路 {{ t('settings.security.lastChangedAt') }}
+                      · {{ t('settings.security.lastChangedAt') }}
                       {{ formatLocalizedDateTime(locale, settings.password.lastChangedAt) }}
                     </text>
                   </view>

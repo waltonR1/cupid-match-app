@@ -116,76 +116,29 @@ export const selfDetailMessages: AppMessageSchema = {
     visibility: {
       familyVisible: 'Visible cote famille',
       userVisible: 'Visible uniquement cote membre',
-    },
-    status: {
-      open: 'Dossier ouvert',
-      review: 'En verification',
-      priority: 'Dossier prioritaire',
-    },
-    maritalStatus: {
+    },    maritalStatus: {
       never_married: 'Celibataire',
       divorced: 'Divorce',
       widowed: 'Veuf / veuve',
-    },
-    relocation: {
-      willing: 'Volontaire',
-      unwilling: 'Non volontaire',
-      open_to_discuss: 'Ouvert à la discussion',
-    },
-    preferredLocation: {
+    },    preferredLocation: {
       local: 'Local',
       regional: 'Régional',
       national: 'National',
       international: 'International',
-    },
-    relationshipValues: {
-      honesty: 'Honnêteté',
-      trust: 'Confiance',
-      communication: 'Communication',
-      respect: 'Respect',
-      loyalty: 'Loyauté',
-      family: 'Famille',
-      growth: 'Croissance commune',
-      support: 'Soutien mutuel',
-      humor: 'Humour',
-      ambition: 'Ambition',
-      kindness: 'Bienveillance',
-      independence: 'Indépendance',
-      romance: 'Romantisme',
-      stability: 'Stabilité',
-    },
-    activityLevel: {
+    },    activityLevel: {
       low: 'Faible',
       moderate: 'Modéré',
       high: 'Élevé',
-    },
-    pets: {
-      has: 'A des animaux',
-      none: "Pas d'animaux",
-      likes: 'Aime les animaux',
-    },
-    weekendStyle: {
+    },    weekendStyle: {
       outdoors: 'En extérieur',
       indoors: 'En intérieur',
       social: 'Social',
       flexible: 'Flexible',
-    },
-    communicationStyle: {
-      direct: 'Direct',
-      indirect: 'Indirect',
-      balanced: 'Équilibré',
-    },
-    childrenPlan: {
+    },    childrenPlan: {
       wants: 'Souhaite des enfants',
       open_to_discuss: 'Ouvert a la discussion',
       does_not_want: 'Ne prevoit pas d enfants',
-    },
-    habits: {
-      never: 'Jamais',
-      social: 'Occasionnel',
-      often: 'Souvent',
-    },
-    familySupport: {
+    },    familySupport: {
       priority: 'Priorite pour une evaluation familiale',
       contactReady: 'Ouvert a un echange avec appui familial',
       contextOnly: 'Contexte familial seulement',

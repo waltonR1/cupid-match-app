@@ -77,17 +77,7 @@ export const selfMessages: AppMessageSchema = {
       education: 'Education',
       languages: 'Languages',
     },
-
-    card: {
-      goalSerious: 'Serious relationship',
-      goalMarriage: 'Marriage-oriented',
-      goalExclusive: 'Long-term path',
-      goalCrossBorder: 'Cross-city potential',
-      labelSelected: 'Selected Profile',
-      labelReview: 'Profile In Review',
-      labelPriority: 'Priority Profile',
-    },
-
+
     pagination: {
       prev: 'Previous',
       next: 'Next',

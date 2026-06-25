@@ -77,17 +77,7 @@ export const selfMessages: AppMessageSchema = {
       education: '学历',
       languages: '语言',
     },
-
-    card: {
-      goalSerious: '认真关系',
-      goalMarriage: '婚姻导向',
-      goalExclusive: '长期发展',
-      goalCrossBorder: '跨城可能',
-      labelSelected: '精选资料',
-      labelReview: '资料审核中',
-      labelPriority: '优先资料',
-    },
-
+
     pagination: {
       prev: '上一页',
       next: '下一页',

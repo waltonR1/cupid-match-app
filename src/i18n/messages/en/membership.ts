@@ -20,13 +20,7 @@ export const membershipMessages: AppMessageSchema = {
       secondaryCta: 'Compare Plans',
       overviewTitle: 'VIP Overview',
       overviewText: 'Three membership tiers designed for different relationship pace, event access, and level of support.',
-    },
-    heroCards: {
-      silverLabel: 'Silver',
-      goldLabel: 'Gold',
-      diamondLabel: 'Diamond',
-    },
-    free: {
+    },    free: {
       badge: 'Free',
       f3: 'Access event and platform information',
       f4: 'Can upgrade to VIP later',

@@ -76,13 +76,7 @@ export const familyMessages: AppMessageSchema = {
       education: 'Education',
       residencePlan: 'Residence plan',
     },
-
-    modes: {
-      contextOnly: 'Context only',
-      contactReady: 'Family contact ready',
-      priority: 'Priority family review',
-    },
-
+
     tags: {
       maritalSingle: 'Single',
       maritalDivorced: 'Divorced',
@@ -91,14 +85,7 @@ export const familyMessages: AppMessageSchema = {
       childrenNo: 'No children',
       longDistanceYes: 'Open to long-distance',
     },
-
-    card: {
-      labelObserve: 'Worth family review first',
-      labelContactReady: 'Ready for family discussion',
-      labelReview: 'Profile still under review',
-      labelPriority: 'Ready to move forward',
-    },
-
+
     pagination: {
       prev: 'Previous',
       next: 'Next',

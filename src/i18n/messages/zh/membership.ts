@@ -20,13 +20,7 @@ export const membershipMessages: AppMessageSchema = {
       secondaryCta: '查看方案对比',
       overviewTitle: 'VIP 概览',
       overviewText: '三档会员方案，对应不同的关系推进节奏、活动参与能力与服务深度。',
-    },
-    heroCards: {
-      silverLabel: 'Silver',
-      goldLabel: 'Gold',
-      diamondLabel: 'Diamond',
-    },
-    free: {
+    },    free: {
       badge: 'Free',
       f3: '查看活动信息与平台介绍',
       f4: '后续可升级为 VIP 服务',
