@@ -1,6 +1,5 @@
 import type {
     FamilyProfileListItem,
-    ProfileStatusCode,
     SelfProfileListItem,
 } from '@/api/profiles'
 import type {Translate} from '@/i18n/types'
@@ -29,7 +28,7 @@ export function toSelfProfileCardViewModel(
             {label: t('fields.languages'), value: formatLanguageLabels(profile.languages, optionLabel)},
         ],
         tags: profile.tags.slice(0, 3),
-        footer: t(resolveSelfFooterKey(profile.profileStatus)),
+        footer: optionLabel('profileStatus', profile.profileStatus),
     }
 }
 
@@ -57,7 +56,7 @@ export function toFamilyProfileCardViewModel(
             {label: t('fields.residencePlan'), value: profile.residencePlan},
         ],
         tags: [...profile.tags, ...tagTexts].slice(0, 3),
-        footer: t(resolveFamilyFooterKey(profile.profileStatus)),
+        footer: optionLabel('profileStatus', profile.profileStatus),
     }
 }
 
@@ -68,19 +67,4 @@ function formatLanguageLabels(values: string[], optionLabel: OptionLabel): strin
 
 function fallbackOptionLabel(_fieldKey: string, value: string): string {
     return value
-}
-
-function resolveSelfFooterKey(profileStatus: ProfileStatusCode): string {
-    switch (profileStatus) {
-        case 'review':
-            return 'card.labelReview'
-        case 'open':
-        default:
-            return 'card.labelSelected'
-    }
-}
-
-function resolveFamilyFooterKey(profileStatus: ProfileStatusCode): string {
-    if (profileStatus === 'review') return 'card.labelReview'
-    return 'card.labelObserve'
 }
