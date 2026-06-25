@@ -308,6 +308,6 @@ export const accountCenterMessages: AppMessageSchema = {
       },
       actions: { upgrade: '升级会员', viewSystem: '查看会员体系' },
   },
-  common: { open: '查看', manage: '管理', edit: '编辑', cancel: '取消', retry: '重试', yes: '是', no: '否' },
+  common: { open: '查看', manage: '管理', edit: '编辑', cancel: '取消', retry: '重试', yes: '是', no: '否', selectPlaceholder: '请选择' },
   subPageHeader: { back: '返回账户首页' },
 }

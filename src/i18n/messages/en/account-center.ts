@@ -302,6 +302,6 @@ export const accountCenterMessages: AppMessageSchema = {
   },
 
 
-  common: { open: 'Open', manage: 'Manage', edit: 'Edit', cancel: 'Cancel', retry: 'Retry', yes: 'Yes', no: 'No' },
+  common: { open: 'Open', manage: 'Manage', edit: 'Edit', cancel: 'Cancel', retry: 'Retry', yes: 'Yes', no: 'No', selectPlaceholder: 'Select...' },
   subPageHeader: { back: 'Back to account home' },
 }

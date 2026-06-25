@@ -46,13 +46,20 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
   }
 }
 
+function sortRequiredFirst(items: AccountProfileDetailSection['items']) {
+  return [...items].sort((a, b) => {
+    if (a.required === b.required) return 0
+    return a.required ? -1 : 1
+  })
+}
+
 function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileDetailSection[] {
   const blank = payload.isBlankDraft
   return [
     {
       key: 'basics',
       titleKey: 'profiles.detail.sections.basics',
-      items: [
+      items: sortRequiredFirst([
         { fieldKey: 'profileName', labelKey: 'profiles.detail.fields.profileName', rawValue: payload.profileName, editor: 'text', required: true },
         { fieldKey: 'gender', labelKey: 'profiles.detail.fields.gender', rawValue: blank ? null : payload.gender, editor: 'enum', required: true },
         { fieldKey: 'birthYear', labelKey: 'profiles.detail.fields.birthYear', rawValue: payload.birthYear, editor: 'number', required: true },
@@ -65,12 +72,12 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
         { fieldKey: 'education', labelKey: 'profiles.detail.fields.education', rawValue: payload.educationCode, editor: 'enum', extraText: payload.optionExtraTexts?.education, required: true },
         { fieldKey: 'industry', labelKey: 'profiles.detail.fields.industry', rawValue: payload.industryCode, editor: 'enum', extraText: payload.optionExtraTexts?.industry, required: true },
         { fieldKey: 'careerDirection', labelKey: 'profiles.detail.fields.careerDirection', rawValue: payload.careerDirection, editor: 'text' },
-      ],
+      ]),
     },
     {
       key: 'relationship',
       titleKey: 'profiles.detail.sections.relationship',
-      items: [
+      items: sortRequiredFirst([
         { fieldKey: 'maritalStatus', labelKey: 'profiles.detail.fields.maritalStatus', rawValue: blank ? null : payload.maritalStatus, editor: 'enum', required: true },
         { fieldKey: 'hasChildren', labelKey: 'profiles.detail.fields.hasChildren', rawValue: blank ? null : payload.hasChildren, editor: 'boolean' },
         { fieldKey: 'childrenPlan', labelKey: 'profiles.detail.fields.childrenPlan', rawValue: blank ? null : payload.childrenPlan, editor: 'enum' },
@@ -80,48 +87,48 @@ function buildProfileSections(payload: AccountProfileDetailDTO): AccountProfileD
         { fieldKey: 'residencePlan', labelKey: 'profiles.detail.fields.residencePlan', rawValue: payload.residencePlanCode, editor: 'enum', extraText: payload.optionExtraTexts?.residencePlan },
         { fieldKey: 'relocation', labelKey: 'profiles.detail.fields.relocation', rawValue: payload.relocation, editor: 'enum' },
         { fieldKey: 'relationshipValues', labelKey: 'profiles.detail.fields.relationshipValues', rawValue: payload.relationshipValues, editor: 'list' },
-      ],
+      ]),
+    },
+    {
+      key: 'expression',
+      titleKey: 'profiles.detail.sections.expression',
+      items: sortRequiredFirst([
+        { fieldKey: 'personalityTraits', labelKey: 'profiles.detail.fields.personalityTraits', rawValue: payload.personalityTraits, editor: 'list' },
+        { fieldKey: 'interests', labelKey: 'profiles.detail.fields.interests', rawValue: payload.interests, editor: 'list' },
+        { fieldKey: 'communicationStyle', labelKey: 'profiles.detail.fields.communicationStyle', rawValue: payload.communicationStyle, editor: 'enum' },
+        { fieldKey: 'summary', labelKey: 'profiles.detail.fields.summary', rawValue: payload.summary, editor: 'text', required: true },
+        { fieldKey: 'tags', labelKey: 'profiles.detail.fields.tags', rawValue: payload.tags, editor: 'list' },
+      ]),
     },
     {
       key: 'preferences',
       titleKey: 'profiles.detail.sections.preferences',
-      items: [
+      items: sortRequiredFirst([
         { fieldKey: 'preferredAgeMin', labelKey: 'profiles.detail.fields.preferredAgeRange', rawValue: payload.preferredAgeMin || payload.preferredAgeMax ? `${payload.preferredAgeMin} - ${payload.preferredAgeMax}` : null, editor: 'ageRange' },
         { fieldKey: 'preferredLocation', labelKey: 'profiles.detail.fields.preferredLocation', rawValue: payload.preferredLocation, editor: 'enum' },
         { fieldKey: 'preferredEducation', labelKey: 'profiles.detail.fields.preferredEducation', rawValue: payload.preferredEducationCode, editor: 'enum', extraText: payload.optionExtraTexts?.preferredEducation },
         { fieldKey: 'familyLife', labelKey: 'profiles.detail.fields.familyLife', rawValue: payload.familyLifeCode, editor: 'enum', extraText: payload.optionExtraTexts?.familyLife },
         { fieldKey: 'dealBreakers', labelKey: 'profiles.detail.fields.dealBreakers', rawValue: payload.dealBreakers, editor: 'list' },
-      ],
+      ]),
     },
     {
       key: 'lifestyle',
       titleKey: 'profiles.detail.sections.lifestyle',
-      items: [
+      items: sortRequiredFirst([
         { fieldKey: 'smoking', labelKey: 'profiles.detail.fields.smoking', rawValue: blank ? null : payload.smoking, editor: 'enum' },
         { fieldKey: 'drinking', labelKey: 'profiles.detail.fields.drinking', rawValue: blank ? null : payload.drinking, editor: 'enum' },
         { fieldKey: 'exercise', labelKey: 'profiles.detail.fields.exercise', rawValue: payload.exerciseCode, editor: 'enum', extraText: payload.optionExtraTexts?.exercise },
         { fieldKey: 'activityLevel', labelKey: 'profiles.detail.fields.activityLevel', rawValue: payload.activityLevel, editor: 'enum' },
         { fieldKey: 'weekendStyle', labelKey: 'profiles.detail.fields.weekendStyle', rawValue: payload.weekendStyle, editor: 'enum' },
         { fieldKey: 'pets', labelKey: 'profiles.detail.fields.pets', rawValue: payload.pets, editor: 'enum' },
-      ],
-    },
-    {
-      key: 'expression',
-      titleKey: 'profiles.detail.sections.expression',
-      items: [
-        { fieldKey: 'personalityTraits', labelKey: 'profiles.detail.fields.personalityTraits', rawValue: payload.personalityTraits, editor: 'list' },
-        { fieldKey: 'interests', labelKey: 'profiles.detail.fields.interests', rawValue: payload.interests, editor: 'list' },
-        { fieldKey: 'communicationStyle', labelKey: 'profiles.detail.fields.communicationStyle', rawValue: payload.communicationStyle, editor: 'enum' },
-        { fieldKey: 'summary', labelKey: 'profiles.detail.fields.summary', rawValue: payload.summary, editor: 'text', required: true },
-        { fieldKey: 'tags', labelKey: 'profiles.detail.fields.tags', rawValue: payload.tags, editor: 'list' },
-      ],
+      ]),
     },
     {
       key: 'family',
       titleKey: 'profiles.detail.sections.family',
-      items: [
+      items: sortRequiredFirst([
         { fieldKey: 'familyVisible', labelKey: 'profiles.detail.fields.familyVisible', rawValue: blank ? null : payload.familyVisible, editor: 'boolean' },
-      ],
+      ]),
     },
   ]
 }

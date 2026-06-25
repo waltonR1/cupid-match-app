@@ -531,7 +531,7 @@
           class="fixed right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center text-[28px] leading-none text-white/30 transition-opacity duration-200 hover:text-white/60"
           @click.stop="closePhotoPreview"
       >
-        ¡Á
+        Ã—
       </view>
     </view>
 
@@ -555,7 +555,7 @@
                 aria-label="Close"
                 class="flex h-8 w-8 cursor-pointer items-center justify-center border border-semantic-border-soft text-[18px] leading-none text-semantic-text-secondary transition-colors hover:bg-semantic-surface-soft hover:text-semantic-text-primary"
                 @click="closeVerificationPanel">
-            ¡Á
+            Ã—
           </view>
         </view>
 
@@ -715,7 +715,7 @@ const photoDrafts = ref<AccountProfilePhotoDraft[]>([])
 const photoPreviewUrl = ref('')
 const photoPreviewSize = ref({width: 0, height: 0})
 const draftOwnership = ref({
-  relationshipToProfile: 'relative' as 'self' | 'father' | 'mother' | 'relative',
+  relationshipToProfile: '' as 'self' | 'father' | 'mother' | 'relative' | '',
 })
 const openSelectKey = ref<string | null>(null)
 const listOpenSelectKey = ref<string | null>(null)
@@ -1153,7 +1153,7 @@ function selectRelationship(value: typeof draftOwnership.value.relationshipToPro
 
 const languageOptions = computed(() => enumOptions('languages'))
 
-const relationshipValueOptions = computed(() => enumOptions('relationshipValues'))
+const relationshipValueOptions = computed(() => optionsStore.optionsFor(editLocale.value, profileOptionGroup('relationshipValues')))
 
 function listFieldOptions(fieldKey: string) {
   if (fieldKey === 'languages') return languageOptions.value
@@ -1237,7 +1237,7 @@ function displayTagDraft(fieldKey: string, value: string) {
 }
 
 function toList(value: string | undefined) {
-  return (value ?? '').split(/[\/,£¬¡¢]/).map((item) => item.trim()).filter(Boolean)
+  return (value ?? '').split(/[\/,ï¼Œã€]/).map((item) => item.trim()).filter(Boolean)
 }
 
 function toNumber(value: string | undefined) {
@@ -1258,7 +1258,8 @@ function profileOptionGroup(fieldKey: string) {
 }
 
 function enumOptions(fieldKey: string): Array<{ label: string; value: string; requiresExtraText?: boolean }> {
-  return optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
+  const options = optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
+  return [{ label: t('common.selectPlaceholder'), value: '' }, ...options]
 }
 
 function optionLabel(fieldKey: string, value: string) {

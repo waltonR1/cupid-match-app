@@ -6,10 +6,10 @@ export type PreferredContactChannel = 'email' | 'phone' | 'wechat'
 export type AccountEventRegistrationStatus = 'requested' | 'confirmed' | 'declined' | 'waitlist' | 'cancelled' | 'attended'
 export type AccountIntroductionStatus = 'requested' | 'accepted' | 'declined' | 'cancelled' | 'expired' | 'cooldown'
 export type AccountProfileType = 'self' | 'family'
-export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative'
+export type AccountProfileRelationship = 'self' | 'father' | 'mother' | 'relative' | ''
 export type AccountProfileOwnershipStatus = 'pending' | 'active' | 'revoked'
-export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled'
-export type ProfileContactChannel = 'phone' | 'email' | 'wechat'
+export type ProfileContactVisibility = 'after_introduction' | 'owner_only' | 'disabled' | ''
+export type ProfileContactChannel = 'phone' | 'email' | 'wechat' | ''
 export type EditableLocalizedSource = 'manual' | 'machine'
 export type EditableLocalizedProvider = 'human' | 'translation_api' | null
 export type EditableLocalizedStatus = 'ready' | 'pending' | 'failed' | 'stale' | 'missing'
@@ -62,44 +62,44 @@ export interface AccountProfileDetailDTO {
   optionExtraTexts?: AccountProfileOptionExtraTextsDTO
   contact: AccountProfileContactDTO
   photos: Array<{ id: string; url: string; isPrimary: boolean; sortOrder: number; status: 'review' | 'approved' | 'hidden' }>
-  gender: 'male' | 'female'
+  gender: 'male' | 'female' | ''
   birthYear: number
   height: number
-  cityCode: string
-  countryCode: string
-  nationalityCode: string
+  cityCode: string
+  countryCode: string
+  nationalityCode: string
   languages: string[]
   profileStatus: 'draft' | 'review' | 'open' | 'paused' | 'hidden'
   lastActiveAt: string
   familyVisible: boolean
-  degreeLevel: 'bachelor' | 'master' | 'phd'
-  educationCode: string
-  industryCode: string
+  degreeLevel: 'bachelor' | 'master' | 'phd' | ''
+  educationCode: string
+  industryCode: string
   careerDirection?: string
-  maritalStatus: 'never_married' | 'divorced' | 'widowed'
+  maritalStatus: 'never_married' | 'divorced' | 'widowed' | ''
   hasChildren: boolean
-  childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want'
+  childrenPlan: 'wants' | 'open_to_discuss' | 'does_not_want' | ''
   acceptsLongDistance: boolean
-  datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border'
-  relationshipGoalCode: string
-  residencePlanCode: string
-  relocation: 'willing' | 'unwilling' | 'open_to_discuss'
+  datingIntentionCode: 'serious' | 'marriage' | 'exclusive' | 'cross_border' | ''
+  relationshipGoalCode: string
+  residencePlanCode: string
+  relocation: 'willing' | 'unwilling' | 'open_to_discuss' | ''
   relationshipValues: ('honesty' | 'trust' | 'communication' | 'respect' | 'loyalty' | 'family' | 'growth' | 'support' | 'humor' | 'ambition' | 'kindness' | 'independence' | 'romance' | 'stability')[]
   preferredAgeMin: number
   preferredAgeMax: number
-  preferredLocation: 'local' | 'regional' | 'national' | 'international'
-  preferredEducationCode: string
-  familyLifeCode: string
+  preferredLocation: 'local' | 'regional' | 'national' | 'international' | ''
+  preferredEducationCode: string
+  familyLifeCode: string
   dealBreakers: string[]
-  smoking: 'never' | 'social' | 'often'
-  drinking: 'never' | 'social' | 'often'
-  exerciseCode: string
-  activityLevel: 'low' | 'moderate' | 'high'
-  weekendStyle: 'outdoors' | 'indoors' | 'social' | 'flexible'
-  pets: 'has' | 'none' | 'likes'
+  smoking: 'never' | 'social' | 'often' | ''
+  drinking: 'never' | 'social' | 'often' | ''
+  exerciseCode: string
+  activityLevel: 'low' | 'moderate' | 'high' | ''
+  weekendStyle: 'outdoors' | 'indoors' | 'social' | 'flexible' | ''
+  pets: 'has' | 'none' | 'likes' | ''
   personalityTraits: string[]
   interests: string[]
-  communicationStyle: 'direct' | 'indirect' | 'balanced'
+  communicationStyle: 'direct' | 'indirect' | 'balanced' | ''
   summary: string
   tags: string[]
   createdAt: string
@@ -531,9 +531,9 @@ export interface FavoriteProfileSummaryDTO {
   age: number
   city: string
   education: string
-  educationCode: string
+  educationCode: string
   industry: string
-  industryCode: string
+  industryCode: string
   summary: string
   tags: string[]
   createdAt: string
