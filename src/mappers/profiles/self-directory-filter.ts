@@ -21,6 +21,7 @@ import {
 } from '@/mappers/profiles/directory-filter'
 import type {SelfDirectoryFilterItem, SelfDirectoryFilters} from '@/types/profiles/directory'
 
+/** 构建个人资料目录筛选项 */
 export function buildSelfDirectoryFilterItems(
     facets: SelfProfileDirectoryFacets | null,
     filters: SelfDirectoryFilters,
@@ -49,6 +50,7 @@ export function buildSelfDirectoryFilterItems(
     ]
 }
 
+/** 构建城市筛选项 */
 function buildCityFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -65,6 +67,7 @@ function buildCityFilter(
     })
 }
 
+/** 构建身高筛选项 */
 function buildHeightRangeFilter(filters: SelfDirectoryFilters, t: Translate): SelfDirectoryFilterItem {
     return buildDynamicFilter({
         key: 'heightRange',
@@ -77,6 +80,7 @@ function buildHeightRangeFilter(filters: SelfDirectoryFilters, t: Translate): Se
     })
 }
 
+/** 构建交友意向筛选项 */
 function buildIntentFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -93,6 +97,7 @@ function buildIntentFilter(
     })
 }
 
+/** 构建行业筛选项 */
 function buildIndustryFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -109,6 +114,7 @@ function buildIndustryFilter(
     })
 }
 
+/** 构建语言筛选项 */
 function buildLanguageFilter(
     filters: SelfDirectoryFilters,
     t: Translate,
@@ -129,6 +135,7 @@ function buildLanguageFilter(
     })
 }
 
+/** 构建认证状态筛选项 */
 function buildVerifiedFilter(filters: SelfDirectoryFilters, t: Translate): SelfDirectoryFilterItem {
     return {
         key: 'verified',

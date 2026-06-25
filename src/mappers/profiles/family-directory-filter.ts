@@ -16,6 +16,7 @@ import {
 } from '@/mappers/profiles/directory-filter'
 import type {FamilyDirectoryFilterItem, FamilyDirectoryFilters} from '@/types/profiles/directory'
 
+/** 构建家庭资料目录筛选项 */
 export function buildFamilyDirectoryFilterItems(
     facets: FamilyProfileDirectoryFacets | null,
     filters: FamilyDirectoryFilters,
@@ -40,6 +41,7 @@ export function buildFamilyDirectoryFilterItems(
     ]
 }
 
+/** 构建家庭参与模式筛选项 */
 function buildFamilyModeFilter(filters: FamilyDirectoryFilters, t: Translate): FamilyDirectoryFilterItem {
     return buildDynamicFilter({
         key: 'familyMode',
@@ -52,6 +54,7 @@ function buildFamilyModeFilter(filters: FamilyDirectoryFilters, t: Translate): F
     })
 }
 
+/** 构建城市筛选项 */
 function buildCityFilter(
     filters: FamilyDirectoryFilters,
     t: Translate,
@@ -68,6 +71,7 @@ function buildCityFilter(
     })
 }
 
+/** 构建交友意向筛选项 */
 function buildIntentFilter(
     filters: FamilyDirectoryFilters,
     t: Translate,
@@ -84,6 +88,7 @@ function buildIntentFilter(
     })
 }
 
+/** 构建行业筛选项 */
 function buildIndustryFilter(
     filters: FamilyDirectoryFilters,
     t: Translate,

@@ -7,6 +7,7 @@ import type {FamilyDirectoryFilters, FamilyProfileDirectoryPageData} from '@/typ
 import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
 import type {OptionLabel} from '@/mappers/profiles/directory-filter'
 
+/** 转换家庭资料目录页面数据 */
 export function toFamilyProfileDirectoryPageData(params: {
     response: FamilyProfileDirectoryResponse | null
     filters: FamilyDirectoryFilters

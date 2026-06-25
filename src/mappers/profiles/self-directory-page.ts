@@ -7,6 +7,7 @@ import type {SelfDirectoryFilters, SelfProfileDirectoryPageData} from '@/types/p
 import {buildActiveDirectoryFilterChips} from '@/utils/profile-format'
 import type {OptionLabel} from '@/mappers/profiles/directory-filter'
 
+/** 转换个人资料目录页面数据 */
 export function toSelfProfileDirectoryPageData(params: {
     response: SelfProfileDirectoryResponse | null
     filters: SelfDirectoryFilters
