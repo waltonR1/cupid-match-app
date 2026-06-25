@@ -23,12 +23,7 @@
         </view>
       </view>
 
-      <view v-if="showBadge" class="flex items-center gap-2">
-        <view
-            class="rounded-full border border-component-directory-card-badge-border bg-component-directory-card-badge-background px-3 py-1 text-[12px] text-component-directory-card-badge-text">
-          {{ data.badge }}
-        </view>
-      </view>
+      <view v-if="showBadge" class="mt-1 h-3 w-3 shrink-0 rotate-45 rounded-[1px] border border-semantic-accent-primary" />
     </view>
 
     <!-- 简介 -->
