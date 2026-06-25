@@ -269,7 +269,7 @@
                         class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
                     >
                       <view
-                          v-for="option in enumOptions(entry.fieldKey)"
+                          v-for="option in (entry.fieldKey === 'city' ? cityOptions : enumOptions(entry.fieldKey))"
                           :key="option.value"
                           :class="option.value === readDraft(entry.fieldKey)
                           ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
@@ -474,7 +474,7 @@
                         class="absolute left-0 top-[calc(100%+6px)] z-30 w-full overflow-hidden border border-semantic-border-soft bg-semantic-surface-card shadow-dropdown"
                     >
                       <view
-                          v-for="option in enumOptions(entry.fieldKey)"
+                          v-for="option in (entry.fieldKey === 'city' ? cityOptions : enumOptions(entry.fieldKey))"
                           :key="option.value"
                           :class="option.value === readDraft(entry.fieldKey)
                           ? 'bg-component-directory-control-selected-background text-component-directory-control-selected-text'
@@ -866,6 +866,15 @@ watch(payload, (value) => {
 watch(editLocale, (value) => {
   void optionsStore.ensureOptions(value)
 }, {immediate: true})
+
+watch(() => draft.value.country, (newCountry, oldCountry) => {
+  if (newCountry === oldCountry) return
+  if (!newCountry) return
+  const city = draft.value.city as string
+  if (city && !city.startsWith(newCountry + ':')) {
+    draft.value.city = ''
+  }
+})
 
 function hydrateDraft(value: NonNullable<typeof payload.value>) {
   draft.value = {
@@ -1321,6 +1330,15 @@ function enumOptions(fieldKey: string): Array<{ label: string; value: string; re
   const options = optionsStore.optionsFor(editLocale.value, profileOptionGroup(fieldKey))
   return [{ label: t('common.selectPlaceholder'), value: '' }, ...options]
 }
+
+const cityOptions = computed(() => {
+  const options = optionsStore.optionsFor(editLocale.value, profileOptionGroup('city'))
+  const countryCode = readDraft('country')
+  const filtered = countryCode
+    ? options.filter((option) => option.value.startsWith(countryCode + ':'))
+    : options
+  return [{ label: t('common.selectPlaceholder'), value: '' }, ...filtered]
+})
 
 function optionLabel(fieldKey: string, value: string) {
   return enumOptions(fieldKey).find((option) => option.value === value)?.label ?? value

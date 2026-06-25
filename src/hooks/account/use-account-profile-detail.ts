@@ -226,7 +226,7 @@ function createDraftProfileDetail(
         pets: '',
         personalityTraits: [],
         interests: [],
-        communicationStyle: 'balanced',
+        communicationStyle: '',
         summary: '',
         tags: [],
         createdAt: now,
