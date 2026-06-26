@@ -70,8 +70,7 @@ const membershipName = computed(() => {
   return tier ? optionLabel('membership.tier', tier) : t('home.functional.noMembership')
 })
 function optionLabel(group: string, value: string): string {
-  return optionsStore.optionsFor(locale.value, group)
-    .find(option => option.value === value)?.label ?? value
+  return optionsStore.labelFor(locale.value, group, value) ?? value
 }
 
 const items = computed<Array<{ key: AccountPageKey; label: string }>>(() => [

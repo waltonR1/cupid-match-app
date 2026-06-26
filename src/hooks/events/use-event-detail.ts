@@ -62,8 +62,7 @@ export function useEventDetail(eventId: Ref<string>, t: Translate, locale: { val
   }
 
   function optionLabel(group: string, value: string): string {
-    return optionsStore.optionsFor(locale.value, group)
-      .find(option => option.value === value)?.label ?? value
+    return optionsStore.labelFor(locale.value, group, value) ?? value
   }
 
   const pageData = computed(() => toEventDetailPageData({

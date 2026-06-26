@@ -45,8 +45,7 @@ export function useFamilyProfileDirectory(t: Translate, locale: Ref<FormatLocale
     }))
 
     function optionLabel(fieldKey: string, value: string): string {
-        return optionsStore.optionsFor(locale.value, 'profile.' + fieldKey)
-            .find(option => option.value === value)?.label ?? value
+        return optionsStore.labelFor(locale.value, 'profile.' + fieldKey, value) ?? value
     }
 
     /** 加载家庭资料目录 */

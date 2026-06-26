@@ -869,8 +869,7 @@ function formatPreferenceDisplay(code: AccountPreferenceCode, value: unknown) {
 
 function commonOptionLabel(group: string, value?: string | null): string {
   if (!value) return ''
-  return optionsStore.optionsFor(locale.value, group)
-      .find(option => option.value === value)?.label ?? value
+  return optionsStore.labelFor(locale.value, group, value) ?? value
 }
 
 const securityAccountItems = computed<AccountSecurityIdentityViewModel[]>(() => {

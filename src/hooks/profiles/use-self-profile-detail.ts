@@ -49,8 +49,7 @@ export function useSelfProfileDetail(profileId: Ref<string>, t: Translate, local
     }
 
     function optionLabel(fieldKey: string, value: string) {
-        return optionsStore.optionsFor(locale.value, 'profile.' + fieldKey)
-            .find((option) => option.value === value)?.label ?? value
+        return optionsStore.labelFor(locale.value, 'profile.' + fieldKey, value) ?? value
     }
 
     async function load() {

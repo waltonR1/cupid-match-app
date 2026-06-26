@@ -150,8 +150,7 @@ function resolveLabel(item: MessageThread) {
 }
 
 function optionLabel(group: string, value: string): string {
-  return optionsStore.optionsFor(locale.value, group)
-      .find(option => option.value === value)?.label ?? value
+  return optionsStore.labelFor(locale.value, group, value) ?? value
 }
 
 function resolveAvatar(_item: MessageThread) {

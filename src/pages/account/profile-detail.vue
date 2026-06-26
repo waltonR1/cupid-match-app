@@ -819,7 +819,7 @@ const profileSubmitReviewLabel = computed(() => {
 const profileCityLabel = computed(() => {
   const value = pageData.value?.city || ''
   if (!value) return '-'
-  return enumOptions('city').find((option) => option.value === value)?.label || value
+  return optionsStore.labelFor(editLocale.value, profileOptionGroup('city'), value) || value
 })
 const maskedIdentityName = computed(() => maskName(payload.value?.verification.legalName))
 const maskedIdentityDate = computed(() => maskDate(payload.value?.verification.dateOfBirth))
@@ -961,7 +961,7 @@ function formatDisplayValue(entry: AccountProfileDetailPageData['profileSections
   if (entry.editor === 'enum') {
     const value = String(v || '')
     if (value === 'other' && entry.extraText) return entry.extraText
-    const label = enumOptions(entry.fieldKey).find((option) => option.value === value)?.label
+    const label = optionsStore.labelFor(editLocale.value, profileOptionGroup(entry.fieldKey), value)
     return label || value || '-'
   }
   if (entry.editor === 'boolean') return v ? t('common.yes') : t('common.no')
@@ -1341,7 +1341,7 @@ const cityOptions = computed(() => {
 })
 
 function optionLabel(fieldKey: string, value: string) {
-  return enumOptions(fieldKey).find((option) => option.value === value)?.label ?? value
+  return optionsStore.labelFor(editLocale.value, profileOptionGroup(fieldKey), value) ?? value
 }
 
 function enumRequiresExtraText(fieldKey: string) {

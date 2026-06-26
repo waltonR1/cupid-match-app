@@ -112,8 +112,7 @@ watch(() => props.locale, value => {
 }, {immediate: true})
 
 function optionLabel(group: string, value: string): string {
-  return optionsStore.optionsFor(props.locale, group)
-    .find(option => option.value === value)?.label ?? value
+  return optionsStore.labelFor(props.locale, group, value) ?? value
 }
 
 const introDateFields = [

@@ -171,8 +171,7 @@ const quotaEntitlements = computed(() => entitlements.value.filter(
 const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
 
 function optionLabel(group: string, value: string): string {
-  return optionsStore.optionsFor(locale.value, group)
-    .find(option => option.value === value)?.label ?? value
+  return optionsStore.labelFor(locale.value, group, value) ?? value
 }
 
 function openMembershipSystemPage() {

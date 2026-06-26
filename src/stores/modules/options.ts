@@ -16,6 +16,7 @@ import type { FormatLocale } from '@/utils/locale-format'
 interface CachedProfileOptions {
   version: string
   groups: CommonOptionsGroup
+  labelGroups: CommonOptionsGroup
 }
 
 /**
@@ -73,7 +74,7 @@ export const useOptionsStore = defineStore('options', () => {
     try {
       // 这里只传当前语言缓存的 version。
       // locale 已经由 API 通用封装统一带入请求。
-      const response = await getCommonOptions(current?.version)
+      const response = await getCommonOptions(current?.labelGroups ? current.version : undefined)
 
       // 如果后端数据发生变化，则更新当前 locale 的缓存。
       if (!response.unchanged && response.groups) {
@@ -82,6 +83,7 @@ export const useOptionsStore = defineStore('options', () => {
           [locale]: {
             version: response.version,
             groups: response.groups,
+            labelGroups: response.labelGroups ?? response.groups,
           },
         }
       }
@@ -111,12 +113,23 @@ export const useOptionsStore = defineStore('options', () => {
     return cache.value[locale]?.groups[group] ?? []
   }
 
+  function labelFor(locale: FormatLocale, group: string, value: string | undefined | null): string | undefined {
+    if (value === undefined || value === null || value === '') return undefined
+    const rawValue = String(value)
+    const normalizedValue = rawValue.toLowerCase()
+    const option = cache.value[locale]?.labelGroups?.[group]?.find((item) =>
+      item.value === rawValue || item.value.toLowerCase() === normalizedValue
+    )
+    return option?.label
+  }
+
   return {
     cache,
     loading,
     error,
     ensureOptions,
     optionsFor,
+    labelFor,
   }
 }, {
   persist: {

@@ -10,4 +10,5 @@ export interface CommonOptionsResponse {
     version: string
     unchanged: boolean
     groups?: CommonOptionsGroup
+    labelGroups?: CommonOptionsGroup
 }
