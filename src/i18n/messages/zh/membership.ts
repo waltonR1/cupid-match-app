@@ -54,7 +54,7 @@ export const membershipMessages: AppMessageSchema = {
       eyebrow: 'Rules & Upgrade',
       title: '规则说明',
       titleAccent: '与升级方式',
-      description: '所有 VIP 会员均需完成实名验证。私人介绍名额在发起申请时预留；若对方拒绝，平台不再占用本月名额。',
+      description: '所有 VIP 会员均需完成实名验证。私人介绍名额在发起申请时预留；若平台暂不受理，将按规则恢复名额或进入冷静期。',
       secondaryDescription: '升级前会先与顾问确认服务承接方式，再完成支付。平台始终坚持尊重、同意与边界优先。',
       tag1: {
         title: '实名验证',

@@ -242,7 +242,7 @@ function buildPrivateIntroductionData(profile: FamilyProfileDetail): PrivateIntr
         quotaRemaining: profile.privateIntroduction.quotaRemaining,
         canRequest: profile.privateIntroduction.canRequest,
         alreadyRequested: profile.privateIntroduction.alreadyRequested,
-        showPrivateRoom: status === 'accepted',
+        showPrivateRoom: false,
     }
 }
 

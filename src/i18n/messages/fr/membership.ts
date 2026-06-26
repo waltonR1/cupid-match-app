@@ -54,7 +54,7 @@ export const membershipMessages: AppMessageSchema = {
       eyebrow: 'Rules & Upgrade',
       title: 'Regles',
       titleAccent: 'et evolution',
-      description: 'Tous les membres VIP sont verifies. Un quota d introduction privee est reserve au moment de la demande ; en cas de refus, il ne consomme plus le quota du mois.',
+      description: 'Tous les membres VIP sont verifies. Un quota d introduction privee est reserve lors de la demande; si la plateforme ne peut pas l accepter, le quota et la pause suivent les regles du service.',
       secondaryDescription: 'Avant paiement, l evolution doit etre confirmee avec un conseiller. Le respect, le consentement et les limites restent prioritaires.',
       tag1: {
         title: 'Verification',
@@ -62,7 +62,7 @@ export const membershipMessages: AppMessageSchema = {
       },
       tag2: {
         title: 'Consentement mutuel',
-        desc: 'Un refus ne consomme pas le quota du mois',
+        desc: 'Un refus par la plateforme ne consomme pas le quota du mois',
       },
       tag3: {
         title: 'Validation conseiller',

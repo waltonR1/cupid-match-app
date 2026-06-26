@@ -227,7 +227,7 @@ function buildPrivateIntroductionData(profile: SelfProfileDetail): PrivateIntrod
         quotaRemaining: profile.privateIntroduction.quotaRemaining,
         canRequest: profile.privateIntroduction.canRequest,
         alreadyRequested: profile.privateIntroduction.alreadyRequested,
-        showPrivateRoom: status === 'accepted',
+        showPrivateRoom: false,
     }
 }
 

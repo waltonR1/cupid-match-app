@@ -54,7 +54,7 @@ export const membershipMessages: AppMessageSchema = {
       eyebrow: 'Rules & Upgrade',
       title: 'Rules',
       titleAccent: 'and Upgrade',
-      description: 'All VIP members are identity-verified. A private introduction quota is reserved when the request is submitted; if the other side declines, it no longer consumes this month’s quota.',
+      description: 'All VIP members are identity-verified. A private introduction quota is reserved when the request is submitted; if the platform cannot accept it, quota and cooldown follow the service rules.',
       secondaryDescription: 'Upgrades should be confirmed with an advisor before payment. Respect, consent, and boundaries always come first.',
       tag1: {
         title: 'Verification',
@@ -62,7 +62,7 @@ export const membershipMessages: AppMessageSchema = {
       },
       tag2: {
         title: 'Mutual consent',
-        desc: 'Declines do not consume this month’s quota',
+        desc: 'Platform-declined requests do not consume this month’s quota',
       },
       tag3: {
         title: 'Advisor confirmation',
