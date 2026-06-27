@@ -1,4 +1,4 @@
-export type EventCardStatus = 'open' | 'waitlist' | 'closed' | 'completed' | 'member'
+export type EventCardStatus = 'open' | 'waitlist' | 'closed' | 'completed' | 'hidden' | 'member'
 
 export interface EventFieldLabels {
   date: string

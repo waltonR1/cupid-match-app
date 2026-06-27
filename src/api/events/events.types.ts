@@ -2,7 +2,7 @@ import type { FormatLocale } from '@/utils/locale-format'
 
 export type { FormatLocale }
 
-export type EventStatus = 'open' | 'waitlist' | 'closed' | 'completed'
+export type EventStatus = 'open' | 'waitlist' | 'closed' | 'completed' | 'hidden'
 export type EventVisibility = 'public' | 'registered' | 'member'
 export type EventRegistrationStatus =
   | 'guest'

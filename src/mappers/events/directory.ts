@@ -45,10 +45,11 @@ export function toEventDirectoryPageData(params: {
     total: 0,
     totalPages: 1,
   }
+  const nextEvent = items.find((item) => item.status === 'open' || item.status === 'waitlist')
 
   return {
     fieldLabels: buildEventFieldLabels(params.t),
-    nextEventCard: items[0] ? toEventOverviewItem(items[0], params.locale, params.t, optionLabel) : undefined,
+    nextEventCard: nextEvent ? toEventOverviewItem(nextEvent, params.locale, params.t, optionLabel) : undefined,
     featuredEventCards: items
       .filter((item) => item.status === 'open' || item.status === 'waitlist')
       .slice(0, 3)
