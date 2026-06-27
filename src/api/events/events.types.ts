@@ -35,7 +35,6 @@ export interface EventDirectoryQuery {
 
 export interface EventDirectoryItem {
   id: string
-  slug: string
   status: EventStatus
   title: string
   summary: string
@@ -83,6 +82,13 @@ export interface EventAgendaItem {
   sortOrder: number
 }
 
+export interface EventNoteItem {
+  id: string
+  title: string
+  description: string
+  sortOrder: number
+}
+
 export interface EventRegistrationState {
   status: EventRegistrationStatus
   registrationId?: string
@@ -93,7 +99,7 @@ export interface EventDetail extends EventDirectoryItem {
   addressVisible: boolean
   addressLockReason?: 'login_required' | 'registration_required' | 'confirmation_required'
   languageCodes: string[]
-  curatorNote: string
+  noteItems: EventNoteItem[]
   agendaItems: EventAgendaItem[]
   registration: EventRegistrationState
   eventEntitlement: EventEntitlementSummary

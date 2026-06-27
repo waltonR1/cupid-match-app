@@ -15,7 +15,6 @@ export const eventDetailMessages: AppMessageSchema = {
     seats: 'Seats',
     focus: 'Relationship focus',
     languages: 'Languages',
-    curatorNote: 'Curator note',
   },
   actions: {
     register: 'Request a seat',

@@ -15,7 +15,6 @@ export const eventDetailMessages: AppMessageSchema = {
     seats: '席位',
     focus: '关系主题',
     languages: '语言',
-    curatorNote: '策展说明',
   },
   actions: {
     register: '申请参加',

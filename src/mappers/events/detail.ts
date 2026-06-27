@@ -29,7 +29,7 @@ export function toEventDetailPageData(params: {
     fieldLabels: buildEventDetailFieldLabels(params.t),
     hero: toEventDetailHero(event, params.locale, params.t, optionLabel),
     facts: buildEventFacts(event, params.t, optionLabel),
-    noteItems: buildEventNoteItems(event, params.t),
+    noteItems: buildEventNoteItems(event),
     agendaItems: event.agendaItems.map(toAgendaItem),
     registration: buildRegistrationViewModel(
       event.registration.status,
@@ -77,13 +77,11 @@ function buildEventFacts(event: EventDetail, t: Translate, optionLabel: OptionLa
   ]
 }
 
-function buildEventNoteItems(event: EventDetail, t: Translate): EventNoteItem[] {
-  return [
-    {
-      title: t('fields.curatorNote'),
-      description: event.curatorNote,
-    },
-  ]
+function buildEventNoteItems(event: EventDetail): EventNoteItem[] {
+  return event.noteItems.map((item) => ({
+    title: item.title,
+    description: item.description,
+  }))
 }
 
 function buildRegistrationViewModel(
@@ -163,7 +161,6 @@ function buildEventDetailFieldLabels(t: Translate) {
     seats: t('fields.seats'),
     focus: t('fields.focus'),
     languages: t('fields.languages'),
-    curatorNote: t('fields.curatorNote'),
     status: t('fields.status'),
   }
 }

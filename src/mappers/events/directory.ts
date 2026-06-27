@@ -98,7 +98,6 @@ function buildEventFieldLabels(t: Translate) {
     seats: t('fields.seats'),
     focus: t('fields.focus'),
     languages: t('fields.languages'),
-    curatorNote: t('fields.curatorNote'),
     status: t('fields.status'),
   }
 }

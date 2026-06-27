@@ -15,7 +15,6 @@ export const eventDetailMessages: AppMessageSchema = {
     seats: 'Places',
     focus: 'Theme relationnel',
     languages: 'Langues',
-    curatorNote: 'Note du curateur',
   },
   actions: {
     register: 'Demander une place',
