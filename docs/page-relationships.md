@@ -106,6 +106,7 @@
 - `openAccountProfileCreate()` -> `/pages/account/profile-detail?mode=create`
 - `openAccountEventsPage()` -> `/pages/account/events`
 - `openMessagesPage()` -> `/pages/messages/index`
+- `openInboxAction()` -> 根据受控 action code 进入账户资料、活动详情、私人介绍或会员页
 - `openVerificationPage()` -> `/pages/account/profiles`
 - `openConnectionsPage()` -> `/pages/account/relationship`
 - `openAccountSettingsPage()` -> `/pages/account/settings`

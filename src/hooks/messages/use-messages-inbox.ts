@@ -27,9 +27,9 @@ export function useMessagesInbox() {
         const data = await latest.run(() => getInboxThreads())
         if (!data) return
 
-        threads.value = data
+        threads.value = sortThreadsAscending(data)
         if (!activeThreadId.value && data.length > 0) {
-            await selectThread(data[0].id)
+            await selectThread(threads.value[threads.value.length - 1].id)
         }
     }
 
@@ -43,7 +43,7 @@ export function useMessagesInbox() {
 
         const data = await detailLatest.run(() => getInboxMessages(threadId))
         if (data) {
-            messages.value = data.items
+            messages.value = sortMessagesAscending(data.items)
             hasMore.value = data.page.hasMore
             nextBefore.value = data.page.nextBefore
         }
@@ -63,7 +63,7 @@ export function useMessagesInbox() {
         if (!activeThreadId.value || !nextBefore.value) return
         const data = await detailLatest.run(() => getInboxMessages(activeThreadId.value!, nextBefore.value))
         if (data) {
-            messages.value = [...messages.value, ...data.items]
+            messages.value = sortMessagesAscending([...messages.value, ...data.items])
             hasMore.value = data.page.hasMore
             nextBefore.value = data.page.nextBefore
         }
@@ -82,4 +82,22 @@ export function useMessagesInbox() {
         selectThread,
         loadMore,
     }
+}
+
+function sortThreadsAscending(items: InboxThreadDTO[]) {
+    return [...items].sort((a, b) => compareTimeAsc(a.lastMessageAt ?? a.updatedAt, b.lastMessageAt ?? b.updatedAt))
+}
+
+function sortMessagesAscending(items: InboxMessageDTO[]) {
+    return [...items].sort((a, b) => compareTimeAsc(a.createdAt, b.createdAt))
+}
+
+function compareTimeAsc(left?: string, right?: string) {
+    return toTimestamp(left) - toTimestamp(right)
+}
+
+function toTimestamp(value?: string) {
+    if (!value) return 0
+    const time = new Date(value).getTime()
+    return Number.isNaN(time) ? 0 : time
 }

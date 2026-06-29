@@ -122,6 +122,25 @@ export function openMessagesPage() {
   openPage('/pages/messages/index')
 }
 
+/** 执行 Inbox 消息允许的受控业务跳转。 */
+export function openInboxAction(actionType: string, subjectId?: string) {
+  if (actionType === 'view_profile' && subjectId) {
+    openAccountProfileDetail(subjectId)
+    return
+  }
+  if (actionType === 'view_event' && subjectId) {
+    openEventDetail(subjectId)
+    return
+  }
+  if (actionType === 'view_introduction') {
+    openRelationshipPage('introductions')
+    return
+  }
+  if (actionType === 'view_membership') {
+    openMembershipPage()
+  }
+}
+
 /** 打开资料页中的认证区域 */
 export function openVerificationPage() {
   openMyProfilePage()
