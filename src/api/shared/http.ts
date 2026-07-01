@@ -22,6 +22,8 @@ interface RequestOptions {
     data?: string | ArrayBuffer | object
 }
 
+const DEVICE_ID_STORAGE_KEY = 'cupid:device-id'
+
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
     const url = buildUrl(path, options.query)
     const method = options.method ?? 'GET'
@@ -362,13 +364,29 @@ function logApiFail(
 }
 
 function buildRequestContextHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {
+        'X-Device-Id': resolveDeviceId(),
+    }
     const token = resolveRequestToken()
-    if (token) return { Authorization: `Bearer ${token}` }
+    if (token) {
+        headers.Authorization = `Bearer ${token}`
+        return headers
+    }
 
-    if (resolveAppEnvironment() === 'production') return {}
+    if (resolveAppEnvironment() === 'production') return headers
 
     const userId = resolveRequestUserId()
-    return userId ? { 'X-User-Id': userId } : {}
+    if (userId) headers['X-User-Id'] = userId
+    return headers
+}
+
+function resolveDeviceId(): string {
+    const stored = uni.getStorageSync(DEVICE_ID_STORAGE_KEY)
+    if (typeof stored === 'string' && stored.trim()) return stored.trim()
+
+    const generated = `cm-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
+    uni.setStorageSync(DEVICE_ID_STORAGE_KEY, generated)
+    return generated
 }
 
 function resolveRequestUserId(): string {
