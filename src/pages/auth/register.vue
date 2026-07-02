@@ -356,7 +356,7 @@ async function handleSendCode() {
       identifier: identifier.value.trim(),
     })
     if (result) {
-      startResendCountdown()
+      startResendCountdown(result.resendAvailableAt)
       return
     }
 
@@ -368,15 +368,20 @@ async function handleSendCode() {
   }
 }
 
-function startResendCountdown() {
+function startResendCountdown(resendAvailableAt: string) {
   resetResendCountdown()
-  resendSeconds.value = 60
+  resendSeconds.value = secondsUntil(resendAvailableAt)
   resendTimer = setInterval(() => {
     resendSeconds.value -= 1
     if (resendSeconds.value <= 0) {
       resetResendCountdown()
     }
   }, 1000)
+}
+
+function secondsUntil(timestamp: string) {
+  const remaining = Math.ceil((Date.parse(timestamp) - Date.now()) / 1000)
+  return Number.isFinite(remaining) ? Math.max(1, remaining) : 60
 }
 
 function resetResendCountdown() {

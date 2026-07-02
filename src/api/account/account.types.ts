@@ -435,6 +435,7 @@ export interface AccountMfaDisablePayload {
 export interface AccountSecurityChallengeCodeResultDTO {
   id: string
   expiresAt: string
+  resendAvailableAt: string
   maskedIdentifier: string
 }
 
@@ -468,6 +469,7 @@ export interface VerificationCodeRequestPayload {
 export interface VerificationCodeRequestResultDTO {
   id: string
   expiresAt: string
+  resendAvailableAt: string
 }
 
 export interface AccountIdentityActionResultDTO {

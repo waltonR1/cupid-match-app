@@ -27,6 +27,7 @@ export interface AuthVerificationCodeRequestPayload {
 export interface AuthVerificationCodeRequestResult {
   id: string
   expiresAt: string
+  resendAvailableAt: string
 }
 
 export interface AuthUser {

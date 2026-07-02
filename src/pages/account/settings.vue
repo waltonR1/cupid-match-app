@@ -1045,7 +1045,7 @@ async function resolveSensitiveAction(action: AccountSecurityChallengeAction) {
   challengeError.value = ''
   challengeMaskedIdentifier.value = request.maskedIdentifier
   showChallengeModal.value = true
-  startChallengeResendCountdown()
+  startChallengeResendCountdown(request.resendAvailableAt)
 
   return new Promise<string | null>((resolve) => {
     challengeResolve = resolve
@@ -1069,7 +1069,7 @@ async function resendSecurityChallengeCode() {
       return
     }
     challengeMaskedIdentifier.value = request.maskedIdentifier
-    startChallengeResendCountdown()
+    startChallengeResendCountdown(request.resendAvailableAt)
   } catch {
     challengeError.value = t('settings.toasts.saveFailed')
   } finally {
@@ -1077,9 +1077,9 @@ async function resendSecurityChallengeCode() {
   }
 }
 
-function startChallengeResendCountdown() {
+function startChallengeResendCountdown(resendAvailableAt: string) {
   resetChallengeResendCountdown()
-  challengeResendSeconds.value = 60
+  challengeResendSeconds.value = secondsUntil(resendAvailableAt)
   challengeResendTimer = setInterval(() => {
     challengeResendSeconds.value -= 1
     if (challengeResendSeconds.value <= 0) resetChallengeResendCountdown()
@@ -1217,7 +1217,7 @@ async function handleSendCode() {
     if (result) {
       codeRequested.value = true
       codeExpiresAt.value = result.expiresAt
-      startBindResendCountdown()
+      startBindResendCountdown(result.resendAvailableAt)
     }
   } catch {
     bindError.value = t('settings.toasts.saveFailed')
@@ -1253,9 +1253,9 @@ async function handleBindIdentity() {
   }
 }
 
-function startBindResendCountdown() {
+function startBindResendCountdown(resendAvailableAt: string) {
   resetBindResendCountdown()
-  resendSeconds.value = 60
+  resendSeconds.value = secondsUntil(resendAvailableAt)
   resendTimer = setInterval(() => {
     resendSeconds.value -= 1
     if (resendSeconds.value <= 0) {
@@ -1270,6 +1270,11 @@ function resetBindResendCountdown() {
     clearInterval(resendTimer)
     resendTimer = null
   }
+}
+
+function secondsUntil(timestamp: string) {
+  const remaining = Math.ceil((Date.parse(timestamp) - Date.now()) / 1000)
+  return Number.isFinite(remaining) ? Math.max(1, remaining) : 60
 }
 
 function isValidBindIdentifier(provider: BindableIdentityProvider, value: string) {
