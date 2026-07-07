@@ -203,7 +203,7 @@ VITE_ENABLE_DEBUG=true
 - development / staging 可继续使用 `X-User-Id` 作为 mock request context；production 前端发送 `Authorization: Bearer <token>`。
 - mock `AuthSession.token` 不是生产 JWT；RuoYi 后端应返回可校验 JWT 或同等 Bearer token。
 - password hash 是 mock hash，不是生产密码哈希方案。
-- 验证码只用于本地链路验证，不接真实邮件、短信或微信。
+- mock-server 验证码只用于本地链路验证，不接真实邮件、短信或微信；Java 后端已提供真实 Email/SMS 投递通道。
 - 上传文件由 mock-server 本地目录托管，不是对象存储。
 - 会员升级是流程占位，不接真实支付。
 - LowDB 不提供生产级事务、并发控制、审计、备份和权限隔离。
