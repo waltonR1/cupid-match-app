@@ -385,8 +385,22 @@ export interface AccountMembershipUpgradePayload {
 }
 
 export interface AccountMembershipUpgradeResultDTO {
-  status: 'pending_external_flow'
+  status: 'checkout_required' | 'pending_external_flow'
   requestedTier: 'free' | 'silver' | 'gold' | 'diamond'
+  orderId?: string
+  checkoutUrl?: string
+}
+
+export interface AccountMembershipOrderDTO {
+  orderId: string
+  status: string
+  membershipStatus?: string
+  checkoutSessionId?: string
+  subscriptionId?: string
+  amountCents?: number
+  currency?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface AccountExportResultDTO {

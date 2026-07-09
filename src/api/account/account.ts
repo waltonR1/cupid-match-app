@@ -8,6 +8,7 @@ import type {
   IntroductionContactUnavailableDTO,
   AccountIntroductionSummaryDTO,
   AccountMembershipDTO,
+  AccountMembershipOrderDTO,
   MembershipPlanDTO,
   AccountPasswordChangePayload,
   AccountPasswordChangeResultDTO,
@@ -193,6 +194,10 @@ export function updateAccountPreferences(payload: AccountPreferenceUpdatePayload
 
 export function requestAccountMembershipUpgrade(payload: AccountMembershipUpgradePayload): Promise<AccountMembershipUpgradeResultDTO> {
   return apiRequest<AccountMembershipUpgradeResultDTO>('/account/membership/upgrade', { method: 'POST', data: payload })
+}
+
+export function getAccountMembershipOrder(orderId: string): Promise<AccountMembershipOrderDTO> {
+  return apiRequest<AccountMembershipOrderDTO>(`/account/membership/orders/${encodeURIComponent(orderId)}`)
 }
 
 export function changeAccountPassword(payload: AccountPasswordChangePayload): Promise<AccountPasswordChangeResultDTO> {

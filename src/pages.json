@@ -113,6 +113,13 @@
       }
     },
     {
+      "path": "pages/account/membership-payment-result",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员支付"
+      }
+    },
+    {
       "path": "pages/account/settings",
       "style": {
         "navigationStyle": "custom",

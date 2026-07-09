@@ -24,6 +24,10 @@ export const useAuthStore = defineStore('auth', () => {
     membership.value = session.membership
   }
 
+  function updateMembership(nextMembership: MembershipInfo | null) {
+    membership.value = nextMembership
+  }
+
   function logout() {
     isLoggedIn.value = false
     token.value = ''
@@ -41,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
     preferredLocale,
     membershipTier,
     login,
+    updateMembership,
     logout,
   }
 }, {

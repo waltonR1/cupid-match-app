@@ -150,7 +150,7 @@ import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountMembership} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {openPage} from '@/utils/navigation'
+import {openMembershipPaymentResultPage, openPage} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
 import {findNextPlan} from '@/mappers/account/membership'
 import {useOptionsStore} from '@/stores/modules/options'
@@ -181,6 +181,16 @@ function openMembershipSystemPage() {
 async function requestNextUpgrade() {
   if (!nextPlan.value) return
   const result = await requestUpgrade(nextPlan.value.tier)
+  if (result?.status === 'checkout_required' && result.checkoutUrl) {
+    toast.show('正在打开安全支付页...', 'success')
+    // #ifdef H5
+    window.location.href = result.checkoutUrl
+    // #endif
+    // #ifndef H5
+    openMembershipPaymentResultPage(result.orderId)
+    // #endif
+    return
+  }
   if (result?.status === 'pending_external_flow') {
     toast.show(t('membership.upgrade.pending'), 'info')
   }

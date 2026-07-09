@@ -117,6 +117,11 @@ export function openMembershipPage() {
   openPage('/pages/account/membership')
 }
 
+export function openMembershipPaymentResultPage(orderId?: string) {
+  const query = orderId ? `?orderId=${encodeURIComponent(orderId)}` : ''
+  openPage(`/pages/account/membership-payment-result${query}`)
+}
+
 /** 打开消息中心 */
 export function openMessagesPage() {
   openPage('/pages/messages/index')

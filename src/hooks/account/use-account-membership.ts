@@ -27,6 +27,9 @@ export function useAccountMembership() {
             membership.value = data.membership
             entitlements.value = data.entitlements
             availablePlans.value = data.availablePlans
+            if (data.membership) {
+                authStore.updateMembership({tier: data.membership.tier, status: data.membership.status})
+            }
         }
     }
 
