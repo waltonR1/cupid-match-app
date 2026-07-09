@@ -152,6 +152,9 @@ export const homeMessages: AppMessageSchema = {
         },
         vip: {
             cta: 'Speak with a Private Advisor',
+            currentPlanCta: 'Current plan',
+            includedCta: 'Included',
+            upgradeCta: 'Upgrade to this plan',
             silver: {
                 badge: 'SILVER ACCESS',
                   description: 'For a more structured first layer of browsing and interaction.',

@@ -11,7 +11,11 @@
 
     <HomeFeatures/>
     <HomeAudience/>
-    <HomeMembership :plans="membershipPlans"/>
+    <HomeMembership
+        :plans="membershipPlans"
+        :current-tier="membership?.tier"
+        @open-plan="handleMembershipPlanAction"
+    />
   </AppPageLayout>
 </template>
 
@@ -28,7 +32,11 @@ import HomeVision from '@/components/home/HomeVision.vue'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
 import {useHomeEvents} from '@/hooks/events'
 import {useHomeSelfProfiles} from '@/hooks/profiles'
-import {useMembershipCatalog} from '@/hooks/membership'
+import {useMembershipCatalog, useMembershipUpgrade} from '@/hooks/membership'
+import {useAccountMembership} from '@/hooks/account'
+import {useAuthStore} from '@/stores/modules/auth'
+import {openMembershipPaymentResultPage, openRegisterPage} from '@/utils/navigation'
+import type {MembershipTier} from '@/api/membership'
 
 const {t: profileT, locale} = usePageI18n('self')
 const {t: eventsT} = usePageI18n('events')
@@ -36,5 +44,42 @@ const {t: membershipT} = usePageI18n('membership')
 const {featuredProfiles: profiles} = useHomeSelfProfiles(profileT, locale)
 const {viewModel: eventsPreview} = useHomeEvents(eventsT, locale)
 const {plans: membershipPlans} = useMembershipCatalog(membershipT, locale)
+const {requestUpgrade} = useMembershipUpgrade()
+const {membership} = useAccountMembership()
+const authStore = useAuthStore()
+
+async function handleMembershipPlanAction(plan: MembershipTier) {
+  if (plan === 'free') {
+    openRegisterPage()
+    return
+  }
+  if (!authStore.isLoggedIn) {
+    openRegisterPage()
+    return
+  }
+  if (membership.value && tierRank(plan) <= tierRank(membership.value.tier)) {
+    return
+  }
+
+  const result = await requestUpgrade(plan)
+  if (result?.status === 'login_required') {
+    openRegisterPage()
+    return
+  }
+  if (result?.status === 'checkout_required' && result.checkoutUrl) {
+    // #ifdef H5
+    window.location.href = result.checkoutUrl
+    // #endif
+    // #ifndef H5
+    openMembershipPaymentResultPage(result.orderId)
+    // #endif
+  }
+}
+
+const tierOrder: MembershipTier[] = ['free', 'silver', 'gold', 'diamond']
+
+function tierRank(tier: MembershipTier) {
+  return tierOrder.indexOf(tier)
+}
 
 </script>

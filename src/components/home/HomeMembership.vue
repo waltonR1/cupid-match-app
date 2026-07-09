@@ -85,9 +85,10 @@
           <MembershipPlanButton
               tier="silver"
               class="relative mt-auto"
-              @click="openRegisterPage"
+              :disabled="isPlanDisabled('silver')"
+              @click="emit('openPlan', 'silver')"
           >
-            {{ t('membership.vip.cta') }}
+            {{ planCta('silver') }}
           </MembershipPlanButton>
         </view>
 
@@ -145,9 +146,11 @@
           <MembershipPlanButton
               tier="gold"
               class="relative mt-auto"
-              @click="openRegisterPage"
+              :disabled="isPlanDisabled('gold')"
+              disabled-tone="dark"
+              @click="emit('openPlan', 'gold')"
           >
-            {{ t('membership.vip.cta') }}
+            {{ planCta('gold') }}
           </MembershipPlanButton>
         </view>
 
@@ -159,7 +162,7 @@
           <view class="absolute inset-y-0 right-0 w-[46%] bg-gradient-membership-tier-diamond-glow"/>
 
           <view
-              class="relative inline-flex w-fit items-center border border-component-membership-tier-diamond-badge-border bg-component-membership-tier-diamond-badge-background px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-semantic-text-inverse"
+              class="relative inline-flex w-fit items-center border border-component-membership-tier-diamond-badge-border bg-transparent px-2.5 py-1 text-[10px] uppercase tracking-[3px] text-component-membership-tier-diamond-access-label"
           >
             {{ t('membership.vip.diamond.badge') }}
           </view>
@@ -210,9 +213,11 @@
 
             <MembershipPlanButton
                 tier="diamond"
-                @click="openRegisterPage"
+                :disabled="isPlanDisabled('diamond')"
+                disabled-tone="dark"
+                @click="emit('openPlan', 'diamond')"
             >
-              {{ t('membership.vip.cta') }}
+              {{ planCta('diamond') }}
             </MembershipPlanButton>
           </view>
         </view>
@@ -264,7 +269,7 @@
 
           <MembershipPlanButton
               tier="free"
-              @click="openRegisterPage"
+              @click="emit('openPlan', 'free')"
           >
             {{ t('membership.free.button') }}
           </MembershipPlanButton>
@@ -276,12 +281,16 @@
 
 <script setup lang="ts">
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {openRegisterPage} from '@/utils/navigation'
 import MembershipPlanButton from '@/components/membership/MembershipPlanButton.vue'
 import type {MembershipPlanViewModel} from '@/types/membership/catalog'
 
 const props = defineProps<{
   plans: MembershipPlanViewModel[]
+  currentTier?: MembershipPlanViewModel['tier']
+}>()
+
+const emit = defineEmits<{
+  openPlan: [plan: MembershipPlanViewModel['tier']]
 }>()
 
 /** 首页文案 */
@@ -289,6 +298,26 @@ const {t} = usePageI18n('home')
 
 function plan(tier: MembershipPlanViewModel['tier']) {
   return props.plans.find((item) => item.tier === tier)
+}
+
+const tierOrder: MembershipPlanViewModel['tier'][] = ['free', 'silver', 'gold', 'diamond']
+
+function tierRank(tier?: MembershipPlanViewModel['tier']) {
+  return tier ? tierOrder.indexOf(tier) : -1
+}
+
+function isPlanDisabled(tier: MembershipPlanViewModel['tier']) {
+  const currentRank = tierRank(props.currentTier)
+  return currentRank >= 0 && tierRank(tier) <= currentRank
+}
+
+function planCta(tier: MembershipPlanViewModel['tier']) {
+  const currentRank = tierRank(props.currentTier)
+  const targetRank = tierRank(tier)
+  if (currentRank < 0) return t('membership.vip.cta')
+  if (targetRank === currentRank) return t('membership.vip.currentPlanCta')
+  if (targetRank < currentRank) return t('membership.vip.includedCta')
+  return t('membership.vip.upgradeCta')
 }
 </script>
 

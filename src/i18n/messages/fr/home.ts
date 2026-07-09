@@ -152,6 +152,9 @@ export const homeMessages: AppMessageSchema = {
         },
         vip: {
             cta: 'Parler a un conseiller prive',
+            currentPlanCta: 'Formule actuelle',
+            includedCta: 'Inclus',
+            upgradeCta: 'Passer a cette formule',
             silver: {
                 badge: 'SILVER ACCESS',
                   description: 'Pour un parcours plus structure et une premiere dynamique de rencontre.',

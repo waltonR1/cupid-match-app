@@ -19,6 +19,7 @@ type MembershipPlanTier = 'free' | 'silver' | 'gold' | 'diamond'
 const props = defineProps<{
   tier: MembershipPlanTier
   disabled?: boolean
+  disabledTone?: 'light' | 'dark'
 }>()
 
 /** 点击事件 */
@@ -29,6 +30,10 @@ const emit = defineEmits<{
 /** 会员等级样式 */
 const tierClass = computed(() => {
   if (props.disabled) {
+    if (props.disabledTone === 'dark') {
+      return 'border-semantic-border-hero bg-transparent text-semantic-text-inverse-muted'
+    }
+
     return 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-muted'
   }
 

@@ -152,6 +152,9 @@ export const homeMessages: AppMessageSchema = {
         },
         vip: {
             cta: '咨询专属顾问',
+            currentPlanCta: '当前会员',
+            includedCta: '已包含',
+            upgradeCta: '升级到此方案',
             silver: {
                 badge: 'SILVER ACCESS',
                   description: '适合希望进入更完整浏览与基础互动节奏的会员。',
