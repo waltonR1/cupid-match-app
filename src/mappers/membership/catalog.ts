@@ -9,9 +9,7 @@ export function toMembershipPlanViewModel(plan: MembershipPlanDTO, t: Translate)
     name: plan.name,
     euroPrice: formatWholePrice(plan.priceCents, '€'),
     cnyPrice: formatWholePrice(plan.cnyPriceCents, '¥'),
-    validity: plan.validityMonths
-      ? t('catalog.validityMonths', {count: plan.validityMonths})
-      : t('catalog.noFixedValidity'),
+    validity: formatValidity(plan, t),
     privateIntroduction: plan.privateIntroductionQuota > 0
       ? t('catalog.privateIntroductions', {count: plan.privateIntroductionQuota})
       : t('catalog.noPrivateIntroductions'),
@@ -20,6 +18,21 @@ export function toMembershipPlanViewModel(plan: MembershipPlanDTO, t: Translate)
       : t('catalog.noEvents'),
     featured: plan.featured,
   }
+}
+
+function formatValidity(plan: MembershipPlanDTO, t: Translate) {
+  if (plan.billingType === 'recurring') {
+    if (plan.billingPeriod === 'monthly') return t('catalog.monthlySubscription')
+    if (plan.billingPeriod === 'quarterly') return t('catalog.quarterlySubscription')
+    if (plan.billingPeriod === 'yearly') return t('catalog.yearlySubscription')
+    return t('catalog.recurringSubscription')
+  }
+
+  if (plan.validityMonths) {
+    return t('catalog.validityMonths', {count: plan.validityMonths})
+  }
+
+  return t('catalog.noFixedValidity')
 }
 
 function formatWholePrice(cents: number, symbol: string) {

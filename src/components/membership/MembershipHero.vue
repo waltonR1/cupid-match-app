@@ -83,18 +83,16 @@
               </view>
 
               <view
-                  class="border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-4 py-4 text-semantic-text-inverse shadow-panel">
-                <view class="flex items-center justify-between gap-2">
-                  <view class="text-[12px] uppercase tracking-[3px] text-semantic-text-inverse-subtle">
+                  class="relative -translate-y-2 overflow-hidden border-2 border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-4 py-5 text-semantic-text-inverse shadow-emphasis">
+                <view class="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-component-membership-tier-gold-accent-line"/>
+                <view class="pointer-events-none absolute inset-0 bg-gradient-membership-tier-gold-glow"/>
+                <view>
+                  <view class="relative text-[12px] uppercase tracking-[3px] text-semantic-text-inverse-subtle">
                     {{ plan('gold')?.name }}
                   </view>
-                  <view
-                      class="rounded-full border border-component-membership-tier-gold-border px-2 py-1 text-[10px] uppercase tracking-[2px] text-component-membership-tier-gold-badge-label">
-                    {{ t('tiers.popular') }}
-                  </view>
                 </view>
-                <view class="mt-3 text-[26px] font-semibold">{{ plan('gold')?.euroPrice }}</view>
-                <view class="mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ plan('gold')?.validity }}</view>
+                <view class="relative mt-4 text-[30px] font-semibold">{{ plan('gold')?.euroPrice }}</view>
+                <view class="relative mt-2 text-[13px] leading-6 text-semantic-text-inverse-muted">{{ plan('gold')?.validity }}</view>
               </view>
 
               <view

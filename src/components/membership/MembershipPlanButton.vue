@@ -1,7 +1,7 @@
 <template>
   <view
       v-bind="$attrs"
-      class="inline-flex w-full items-center justify-center border px-5 py-2 text-[14px] font-medium tracking-[0.3px] transition-all duration-300"
+      class="inline-flex min-h-[48px] w-full items-center justify-center border px-5 py-3 text-[13px] font-semibold uppercase tracking-[2px] transition-all duration-300"
       :class="[tierClass, disabled ? 'cursor-not-allowed' : 'cursor-pointer hover:-translate-y-[2px] hover:scale-[1.02]']"
       :aria-disabled="disabled ? 'true' : 'false'"
       @click="handleClick"
@@ -29,7 +29,7 @@ const emit = defineEmits<{
 /** 会员等级样式 */
 const tierClass = computed(() => {
   if (props.disabled) {
-    return 'border-semantic-action-disabled-border bg-semantic-action-disabled text-semantic-action-disabled-contrast'
+    return 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-muted'
   }
 
   if (props.tier === 'silver') {

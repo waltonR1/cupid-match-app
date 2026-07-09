@@ -77,9 +77,10 @@
             <MembershipPlanButton
                 tier="free"
                 class="mt-8"
+                :disabled="isPlanDisabled('free')"
                 @click="emit('openPlan', 'free')"
             >
-              {{ t('free.cta') }}
+              {{ planCta('free', t('free.cta')) }}
             </MembershipPlanButton>
           </view>
 
@@ -118,9 +119,10 @@
             <MembershipPlanButton
                 tier="silver"
                 class="mt-8"
+                :disabled="isPlanDisabled('silver')"
                 @click="emit('openPlan', 'silver')"
             >
-              {{ t('tiers.cardCta') }}
+              {{ planCta('silver', t('tiers.cardCta')) }}
             </MembershipPlanButton>
           </view>
 
@@ -169,9 +171,10 @@
             <MembershipPlanButton
                 tier="gold"
                 class="mt-8"
+                :disabled="isPlanDisabled('gold')"
                 @click="emit('openPlan', 'gold')"
             >
-              {{ t('tiers.cardCta') }}
+              {{ planCta('gold', t('tiers.cardCta')) }}
             </MembershipPlanButton>
           </view>
 
@@ -213,9 +216,10 @@
             <MembershipPlanButton
                 tier="diamond"
                 class="mt-8"
+                :disabled="isPlanDisabled('diamond')"
                 @click="emit('openPlan', 'diamond')"
             >
-              {{ t('tiers.cardCta') }}
+              {{ planCta('diamond', t('tiers.cardCta')) }}
             </MembershipPlanButton>
           </view>
         </view>
@@ -232,6 +236,7 @@ import type {MembershipPlanViewModel} from '@/types/membership/catalog'
 
 const props = defineProps<{
   plans: MembershipPlanViewModel[]
+  currentTier?: MembershipPlanViewModel['tier']
 }>()
 
 /** Membership Tiers 操作事件 */
@@ -244,5 +249,25 @@ const {t} = usePageI18n('membership')
 
 function plan(tier: MembershipPlanViewModel['tier']) {
   return props.plans.find((item) => item.tier === tier)
+}
+
+const tierOrder: MembershipPlanViewModel['tier'][] = ['free', 'silver', 'gold', 'diamond']
+
+function tierRank(tier?: MembershipPlanViewModel['tier']) {
+  return tier ? tierOrder.indexOf(tier) : -1
+}
+
+function isPlanDisabled(tier: MembershipPlanViewModel['tier']) {
+  const currentRank = tierRank(props.currentTier)
+  return currentRank >= 0 && tierRank(tier) <= currentRank
+}
+
+function planCta(tier: MembershipPlanViewModel['tier'], fallback: string) {
+  const currentRank = tierRank(props.currentTier)
+  const targetRank = tierRank(tier)
+  if (currentRank < 0) return fallback
+  if (targetRank === currentRank) return t('tiers.currentPlanCta')
+  if (targetRank < currentRank) return t('tiers.includedCta')
+  return t('tiers.upgradeCta')
 }
 </script>

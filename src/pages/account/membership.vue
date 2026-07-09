@@ -128,26 +128,17 @@
       <view class="mt-6 border border-semantic-border-default bg-semantic-surface-card px-6 py-6 shadow-panel">
         <view class="flex flex-wrap items-start justify-between gap-5">
           <view>
-            <view class="text-[16px] font-semibold">{{ t('membership.upgrade.title') }}</view>
+            <view class="text-[16px] font-semibold">{{ t('membership.actions.viewSystem') }}</view>
             <view class="mt-2 text-[14px] leading-7 text-semantic-text-secondary">
               {{ t('membership.upgrade.description') }}
             </view>
           </view>
 
-          <view class="flex flex-wrap gap-3">
-            <view
-                v-if="nextPlan"
-                class="cursor-pointer border border-semantic-border-emphasis bg-semantic-surface-emphasis px-4 py-3 text-[14px] font-medium text-semantic-text-primary"
-                @click="requestNextUpgrade"
-            >
-              {{ t('membership.actions.upgrade') }} · {{ t('membership.upgrade.nextPlan', {plan: nextPlan.name}) }}
-            </view>
-            <view
-                class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px] text-semantic-text-link"
-                @click="openMembershipSystemPage"
-            >
-              {{ t('membership.actions.viewSystem') }}
-            </view>
+          <view
+              class="cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px] text-semantic-text-link"
+              @click="openMembershipSystemPage"
+          >
+            {{ t('membership.actions.viewSystem') }}
           </view>
         </view>
       </view>
@@ -171,16 +162,15 @@ import AccountSubPageHeader from '@/components/account/AccountSubPageHeader.vue'
 import EmptyStatePanel from '@/components/common/feedback/EmptyStatePanel.vue'
 import {useAccountMembership} from '@/hooks/account'
 import {usePageI18n} from '@/i18n/composables/use-page-i18n'
-import {openMembershipPaymentResultPage, openPage} from '@/utils/navigation'
+import {openPage} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
-import {findNextPlan} from '@/mappers/account/membership'
 import {useOptionsStore} from '@/stores/modules/options'
 
 useRequireAuth()
 const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
 const optionsStore = useOptionsStore()
-const {loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade, cancelRenewal} = useAccountMembership()
+const {loading, error, membership, entitlements, refresh, cancelRenewal} = useAccountMembership()
 watch(locale, value => {
   void optionsStore.ensureOptions(value)
   void refresh()
@@ -189,7 +179,6 @@ watch(locale, value => {
 const quotaEntitlements = computed(() => entitlements.value.filter(
     (item) => item.code === 'private_introduction' || item.code === 'event_registration',
 ))
-const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
 const canCancelRenewal = computed(() => Boolean(
     membership.value
     && membership.value.tier !== 'free'
@@ -203,24 +192,6 @@ function optionLabel(group: string, value: string): string {
 
 function openMembershipSystemPage() {
   openPage('/pages/public/membership')
-}
-
-async function requestNextUpgrade() {
-  if (!nextPlan.value) return
-  const result = await requestUpgrade(nextPlan.value.tier)
-  if (result?.status === 'checkout_required' && result.checkoutUrl) {
-    toast.show('正在打开安全支付页...', 'success')
-    // #ifdef H5
-    window.location.href = result.checkoutUrl
-    // #endif
-    // #ifndef H5
-    openMembershipPaymentResultPage(result.orderId)
-    // #endif
-    return
-  }
-  if (result?.status === 'pending_external_flow') {
-    toast.show(t('membership.upgrade.pending'), 'info')
-  }
 }
 
 async function requestCancelRenewal() {
