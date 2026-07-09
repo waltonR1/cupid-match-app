@@ -22,6 +22,7 @@ import type {
   AccountPreferenceUpdatePayload,
   AccountMembershipUpgradePayload,
   AccountMembershipUpgradeResultDTO,
+  AccountMembershipCancelRenewalResultDTO,
   AccountDeactivateResultDTO,
   AccountIdentityActionResultDTO,
   AccountMfaStatusDTO,
@@ -194,6 +195,10 @@ export function updateAccountPreferences(payload: AccountPreferenceUpdatePayload
 
 export function requestAccountMembershipUpgrade(payload: AccountMembershipUpgradePayload): Promise<AccountMembershipUpgradeResultDTO> {
   return apiRequest<AccountMembershipUpgradeResultDTO>('/account/membership/upgrade', { method: 'POST', data: payload })
+}
+
+export function cancelAccountMembershipRenewal(): Promise<AccountMembershipCancelRenewalResultDTO> {
+  return apiRequest<AccountMembershipCancelRenewalResultDTO>('/account/membership/cancel-renewal', { method: 'POST', data: {} })
 }
 
 export function getAccountMembershipOrder(orderId: string): Promise<AccountMembershipOrderDTO> {

@@ -290,6 +290,8 @@ export const accountCenterMessages: AppMessageSchema = {
       featuredDescription: 'Les introductions privees constituent le quota central du service de conciergerie.',
     startedAt: 'Debut',
     expiresAt: 'Expiration',
+    renewalStatus: 'Renouvellement',
+    renewal: { renewing: 'Renouvellement automatique actif', cancel_at_period_end: 'S arrete a la fin de la periode', none: 'Aucun abonnement actif' },
     conciergePriority: 'Priorite concierge',      entitlementDescription: { private_introduction: 'Utilise pour lancer une demande formelle de mise en relation.', event_registration: 'Utilise pour les evenements hors ligne limites par l offre.' },
       tierPositioning: {
         free: 'Pour decouvrir la plateforme et les services essentiels.',
@@ -314,7 +316,8 @@ export const accountCenterMessages: AppMessageSchema = {
         fields: { orderId: 'Commande', orderStatus: 'Statut commande', membershipStatus: 'Statut abonnement' },
         actions: { refresh: 'Rafraichir' },
       },
-      actions: { upgrade: 'Passer a cette formule', viewSystem: 'Voir le systeme d abonnement', backToMembership: 'Retour a l abonnement' },
+      cancelRenewal: { title: 'Annuler le renouvellement ?', description: 'Vos avantages restent actifs jusqu a la fin de la periode actuelle. Stripe ne renouvellera pas cet abonnement ensuite.', success: 'Le renouvellement automatique est annule. Votre abonnement reste actif jusqu a la fin de la periode actuelle.' },
+      actions: { upgrade: 'Passer a cette formule', viewSystem: 'Voir le systeme d abonnement', backToMembership: 'Retour a l abonnement', cancelRenewal: 'Annuler le renouvellement' },
   },
 
 

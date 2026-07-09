@@ -290,6 +290,8 @@ export const accountCenterMessages: AppMessageSchema = {
       featuredDescription: 'Private introductions are the core concierge quota used to begin a formal next step.',
     startedAt: 'Started at',
     expiresAt: 'Expires at',
+    renewalStatus: 'Renewal',
+    renewal: { renewing: 'Auto-renewal enabled', cancel_at_period_end: 'Stops at the end of this period', none: 'No active subscription' },
     conciergePriority: 'Concierge priority',      entitlementDescription: { private_introduction: 'Used to start a formal next-step introduction request.', event_registration: 'Used for offline events controlled by the membership plan quota.' },
       tierPositioning: {
         free: 'Best for exploring the platform and core services.',
@@ -314,7 +316,8 @@ export const accountCenterMessages: AppMessageSchema = {
         fields: { orderId: 'Order ID', orderStatus: 'Order status', membershipStatus: 'Membership status' },
         actions: { refresh: 'Refresh status' },
       },
-      actions: { upgrade: 'Upgrade membership', viewSystem: 'View membership system', backToMembership: 'Back to membership' },
+      cancelRenewal: { title: 'Cancel auto-renewal?', description: 'Your current membership benefits remain active until the current period ends. Stripe will not renew this subscription afterward.', success: 'Auto-renewal has been cancelled. Your membership remains active until the current period ends.' },
+      actions: { upgrade: 'Upgrade membership', viewSystem: 'View membership system', backToMembership: 'Back to membership', cancelRenewal: 'Cancel auto-renewal' },
   },
 
 

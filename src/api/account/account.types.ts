@@ -128,6 +128,10 @@ export interface AccountMembershipDTO {
   expiresAt?: string
   staffSupportLevel: 'none' | 'standard' | 'priority' | 'concierge'
   conciergePriority: boolean
+  subscriptionProvider?: 'stripe' | string
+  subscriptionStatus?: string
+  cancelAtPeriodEnd?: boolean
+  renewalStatus?: 'none' | 'renewing' | 'cancel_at_period_end'
 }
 
 export interface MembershipPlanDTO {
@@ -389,6 +393,13 @@ export interface AccountMembershipUpgradeResultDTO {
   requestedTier: 'free' | 'silver' | 'gold' | 'diamond'
   orderId?: string
   checkoutUrl?: string
+}
+
+export interface AccountMembershipCancelRenewalResultDTO {
+  status: 'renewal_cancelled'
+  subscriptionId: string
+  cancelAtPeriodEnd: boolean
+  currentPeriodEndsAt?: string
 }
 
 export interface AccountMembershipOrderDTO {

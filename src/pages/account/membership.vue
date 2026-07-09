@@ -66,7 +66,7 @@
             <view
                 v-if="membership.expiresAt"
                 :class="currentPlanFeatureClass(membership.tier)"
-                class="border px-4 py-4 sm:col-span-2"
+                class="border px-4 py-4"
             >
               <view :class="currentPlanLabelClass(membership.tier)" class="text-[12px] uppercase tracking-[2px]">
                 {{ t('membership.expiresAt') }}
@@ -75,6 +75,27 @@
                 {{ formatLocalizedDate(locale, membership.expiresAt) }}
               </view>
             </view>
+
+            <view
+                v-if="membership.renewalStatus && membership.renewalStatus !== 'none'"
+                :class="currentPlanFeatureClass(membership.tier)"
+                class="border px-4 py-4"
+            >
+              <view :class="currentPlanLabelClass(membership.tier)" class="text-[12px] uppercase tracking-[2px]">
+                {{ t('membership.renewalStatus') }}
+              </view>
+              <view class="mt-2 text-[16px] font-medium">
+                {{ t(`membership.renewal.${membership.renewalStatus}`) }}
+              </view>
+            </view>
+          </view>
+
+          <view
+              v-if="canCancelRenewal"
+              class="mt-6 inline-flex cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px] text-semantic-text-secondary"
+              @click="requestCancelRenewal"
+          >
+            {{ t('membership.actions.cancelRenewal') }}
           </view>
         </view>
 
@@ -159,7 +180,7 @@ useRequireAuth()
 const toast = useToast()
 const {t, locale} = usePageI18n('accountCenter')
 const optionsStore = useOptionsStore()
-const {loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade} = useAccountMembership()
+const {loading, error, membership, entitlements, availablePlans, refresh, requestUpgrade, cancelRenewal} = useAccountMembership()
 watch(locale, value => {
   void optionsStore.ensureOptions(value)
   void refresh()
@@ -169,6 +190,12 @@ const quotaEntitlements = computed(() => entitlements.value.filter(
     (item) => item.code === 'private_introduction' || item.code === 'event_registration',
 ))
 const nextPlan = computed(() => findNextPlan(availablePlans.value, membership.value?.tier))
+const canCancelRenewal = computed(() => Boolean(
+    membership.value
+    && membership.value.tier !== 'free'
+    && membership.value.subscriptionProvider
+    && membership.value.renewalStatus === 'renewing',
+))
 
 function optionLabel(group: string, value: string): string {
   return optionsStore.labelFor(locale.value, group, value) ?? value
@@ -194,6 +221,29 @@ async function requestNextUpgrade() {
   if (result?.status === 'pending_external_flow') {
     toast.show(t('membership.upgrade.pending'), 'info')
   }
+}
+
+async function requestCancelRenewal() {
+  const confirmed = await confirmCancelRenewal()
+  if (!confirmed) return
+
+  const result = await cancelRenewal()
+  if (result?.status === 'renewal_cancelled') {
+    toast.show(t('membership.cancelRenewal.success'), 'success')
+  }
+}
+
+function confirmCancelRenewal(): Promise<boolean> {
+  return new Promise(resolve => {
+    uni.showModal({
+      title: t('membership.cancelRenewal.title'),
+      content: t('membership.cancelRenewal.description'),
+      confirmText: t('membership.actions.cancelRenewal'),
+      cancelText: t('common.cancel'),
+      success: result => resolve(result.confirm),
+      fail: () => resolve(false),
+    })
+  })
 }
 
 function currentPlanCardClass(tier: string) {

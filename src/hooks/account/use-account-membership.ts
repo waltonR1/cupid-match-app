@@ -1,5 +1,6 @@
 import {ref} from 'vue'
 import {
+    cancelAccountMembershipRenewal,
     getAccountMembership,
     requestAccountMembershipUpgrade,
     type AccountEntitlementBalanceDTO,
@@ -39,6 +40,14 @@ export function useAccountMembership() {
         return latest.run(() => requestAccountMembershipUpgrade({tier}))
     }
 
+    async function cancelRenewal() {
+        if (!authStore.isLoggedIn) return undefined
+
+        const result = await latest.run(() => cancelAccountMembershipRenewal())
+        await load()
+        return result
+    }
+
     return {
         loading: latest.loading,
         error: latest.error,
@@ -46,6 +55,7 @@ export function useAccountMembership() {
         entitlements,
         availablePlans,
         refresh: load,
-        requestUpgrade
+        requestUpgrade,
+        cancelRenewal
     }
 }
