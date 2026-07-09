@@ -1,6 +1,9 @@
 <template>
-  <view id="membership-compare" class="bg-semantic-page-subtle text-semantic-text-primary">
-    <view class="mx-auto max-w-[1280px] px-8 py-24">
+  <view id="membership-compare" class="relative overflow-hidden bg-semantic-page-default text-semantic-text-primary">
+    <view class="pointer-events-none absolute inset-0">
+      <view class="absolute inset-0 bg-gradient-membership-showcase-ambient"/>
+    </view>
+    <view class="relative mx-auto max-w-[1280px] px-8 py-24">
       <!-- Membership Tiers 内容区域 -->
       <view class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <!-- 左侧标题与操作区 -->
@@ -86,22 +89,24 @@
 
           <!-- Silver 方案 -->
           <view
-              class="border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-8 py-10 text-semantic-text-primary shadow-panel">
-            <view class="text-[13px] uppercase tracking-[5px] text-component-membership-tier-silver-badge-label">
+              class="relative overflow-hidden border border-component-membership-tier-silver-border bg-gradient-membership-tier-silver-card px-8 py-10 text-semantic-text-primary shadow-panel">
+            <view class="pointer-events-none absolute inset-x-0 top-0 h-px bg-component-membership-tier-silver-accent-line"/>
+            <view class="pointer-events-none absolute inset-0 bg-gradient-membership-tier-silver-glow"/>
+            <view class="relative text-[13px] uppercase tracking-[5px] text-component-membership-tier-silver-badge-label">
               {{ t('silver.badge') }}
             </view>
-            <view class="mt-5 text-[40px] font-semibold">{{ plan('silver')?.name }}</view>
-            <view class="mt-3 max-w-[460px] text-[15px] italic leading-7 text-semantic-text-secondary">
+            <view class="relative mt-5 text-[40px] font-semibold">{{ plan('silver')?.name }}</view>
+            <view class="relative mt-3 max-w-[460px] text-[15px] italic leading-7 text-semantic-text-secondary">
               {{ t('tiers.silverFit') }}
             </view>
 
-            <view class="mt-8 text-[34px] font-semibold">
+            <view class="relative mt-8 text-[34px] font-semibold">
               {{ plan('silver')?.euroPrice }}
               <text class="text-[18px] font-normal text-semantic-text-muted"> / {{ plan('silver')?.cnyPrice }}</text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-muted">{{ plan('silver')?.validity }}</view>
+            <view class="relative mt-2 text-[15px] italic text-semantic-text-muted">{{ plan('silver')?.validity }}</view>
 
-            <view class="mt-8 grid gap-3 md:grid-cols-3">
+            <view class="relative mt-8 grid gap-3 md:grid-cols-3">
               <view
                   class="border border-component-membership-tier-silver-feature-border bg-component-membership-tier-silver-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-secondary">
                 {{ plan('silver')?.privateIntroduction }}
@@ -118,7 +123,7 @@
 
             <MembershipPlanButton
                 tier="silver"
-                class="mt-8"
+                class="relative mt-8"
                 :disabled="isPlanDisabled('silver')"
                 @click="emit('openPlan', 'silver')"
             >
@@ -128,8 +133,10 @@
 
           <!-- Gold 方案 -->
           <view
-              class="border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-8 py-10 text-semantic-text-inverse shadow-emphasis">
-            <view class="flex items-start justify-between gap-4">
+              class="relative overflow-hidden border border-component-membership-tier-gold-border bg-gradient-membership-tier-gold-card px-8 py-10 text-semantic-text-inverse shadow-emphasis">
+            <view class="pointer-events-none absolute inset-x-0 top-0 h-px bg-component-membership-tier-gold-accent-line"/>
+            <view class="pointer-events-none absolute inset-0 bg-gradient-membership-tier-gold-glow"/>
+            <view class="relative flex items-start justify-between gap-4">
               <view>
                 <view class="text-[13px] uppercase tracking-[5px] text-semantic-text-inverse-subtle">{{
                     t('gold.badge')
@@ -147,31 +154,32 @@
               </view>
             </view>
 
-            <view class="mt-8 text-[34px] font-semibold">
+            <view class="relative mt-8 text-[34px] font-semibold">
               {{ plan('gold')?.euroPrice }}
               <text class="text-[18px] font-normal text-semantic-text-inverse-subtle"> / {{ plan('gold')?.cnyPrice }}</text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-subtle">{{ plan('gold')?.validity }}</view>
+            <view class="relative mt-2 text-[15px] italic text-semantic-text-inverse-subtle">{{ plan('gold')?.validity }}</view>
 
-            <view class="mt-8 grid gap-3 md:grid-cols-3">
+            <view class="relative mt-8 grid gap-3 md:grid-cols-3">
               <view
-                  class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-gold-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ plan('gold')?.privateIntroduction }}
               </view>
               <view
-                  class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-gold-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ plan('gold')?.eventAllowance }}
               </view>
               <view
-                  class="border border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-gold-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ t('gold.f3') }}
               </view>
             </view>
 
             <MembershipPlanButton
                 tier="gold"
-                class="mt-8"
+                class="relative mt-8"
                 :disabled="isPlanDisabled('gold')"
+                disabled-tone="dark"
                 @click="emit('openPlan', 'gold')"
             >
               {{ planCta('gold', t('tiers.cardCta')) }}
@@ -180,43 +188,46 @@
 
           <!-- Diamond 方案 -->
           <view
-              class="border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-8 py-10 text-semantic-text-inverse shadow-luxe">
-            <view class="text-[13px] uppercase tracking-[5px] text-component-membership-tier-diamond-badge-label">
+              class="relative overflow-hidden border border-component-membership-tier-diamond-border bg-gradient-membership-tier-diamond-card px-8 py-10 text-semantic-text-inverse shadow-luxe ring-1 ring-component-membership-tier-diamond-ring">
+            <view class="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-component-membership-tier-diamond-accent-line"/>
+            <view class="pointer-events-none absolute inset-y-0 right-0 w-[46%] bg-gradient-membership-tier-diamond-glow"/>
+            <view class="relative text-[13px] uppercase tracking-[5px] text-component-membership-tier-diamond-badge-label">
               {{ t('diamond.badge') }}
             </view>
-            <view class="mt-5 text-[40px] font-semibold text-semantic-text-inverse">{{ plan('diamond')?.name }}</view>
-            <view class="mt-3 max-w-[520px] text-[15px] italic leading-7 text-semantic-text-inverse-muted">
+            <view class="relative mt-5 text-[40px] font-semibold text-semantic-text-inverse">{{ plan('diamond')?.name }}</view>
+            <view class="relative mt-3 max-w-[520px] text-[15px] italic leading-7 text-semantic-text-inverse-muted">
               {{ t('tiers.diamondFit') }}
             </view>
 
-            <view class="mt-8 text-[34px] font-semibold text-semantic-text-inverse">
+            <view class="relative mt-8 text-[34px] font-semibold text-semantic-text-inverse">
               {{ plan('diamond')?.euroPrice }}
               <text class="text-[18px] font-normal text-semantic-text-inverse-muted"> {{
                   plan('diamond')?.cnyPrice
                 }}
               </text>
             </view>
-            <view class="mt-2 text-[15px] italic text-semantic-text-inverse-muted">{{ plan('diamond')?.validity }}</view>
+            <view class="relative mt-2 text-[15px] italic text-semantic-text-inverse-muted">{{ plan('diamond')?.validity }}</view>
 
-            <view class="mt-8 grid gap-3 md:grid-cols-3">
+            <view class="relative mt-8 grid gap-3 md:grid-cols-3">
               <view
-                  class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-diamond-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ plan('diamond')?.privateIntroduction }}
               </view>
               <view
-                  class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-diamond-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ plan('diamond')?.eventAllowance }}
               </view>
               <view
-                  class="border border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
+                  class="border border-component-membership-tier-diamond-feature-border bg-transparent px-4 py-4 text-[14px] leading-6 text-semantic-text-inverse-muted">
                 {{ t('diamond.f3') }}
               </view>
             </view>
 
             <MembershipPlanButton
                 tier="diamond"
-                class="mt-8"
+                class="relative mt-8"
                 :disabled="isPlanDisabled('diamond')"
+                disabled-tone="dark"
                 @click="emit('openPlan', 'diamond')"
             >
               {{ planCta('diamond', t('tiers.cardCta')) }}
