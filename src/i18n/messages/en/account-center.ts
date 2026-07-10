@@ -292,6 +292,12 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: 'Expires at',
     renewalStatus: 'Renewal',
     renewal: { renewing: 'Auto-renewal enabled', cancel_at_period_end: 'Stops at the end of this period', none: 'No active subscription' },
+    subscriptionNotice: {
+      renewing: { title: 'Subscription renews automatically', description: 'Stripe will renew this subscription at the end of the current period and your membership benefits will continue.' },
+      cancelAtPeriodEnd: { title: 'Auto-renewal cancelled', description: 'Your current benefits remain active until the period ends. The subscription will not renew afterward.' },
+      paymentIssue: { title: 'Subscription payment needs confirmation', description: 'Stripe has not completed the current period payment yet. Benefits stay available for now; contact the platform if the issue continues.' },
+      paused: { title: 'Membership service paused', description: 'This subscription needs platform confirmation. Some membership benefits may be temporarily unavailable.' },
+    },
     conciergePriority: 'Concierge priority',      entitlementDescription: { private_introduction: 'Used to start a formal next-step introduction request.', event_registration: 'Used for offline events controlled by the membership plan quota.' },
       tierPositioning: {
         free: 'Best for exploring the platform and core services.',

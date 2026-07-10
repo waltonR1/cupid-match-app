@@ -292,6 +292,12 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: '到期时间',
     renewalStatus: '续费状态',
     renewal: { renewing: '自动续费中', cancel_at_period_end: '当前周期结束后停止续费', none: '无有效订阅' },
+    subscriptionNotice: {
+      renewing: { title: '订阅正常续费中', description: 'Stripe 会在当前周期结束时自动续订，会员权益会按周期延续。' },
+      cancelAtPeriodEnd: { title: '已取消自动续费', description: '当前会员权益会保留到本周期结束，到期后将不再自动续订。' },
+      paymentIssue: { title: '订阅支付需要确认', description: 'Stripe 暂未完成本周期扣款。当前周期内权益会暂时保留，如持续失败请联系平台确认。' },
+      paused: { title: '会员服务已暂停', description: '当前订阅状态需要平台确认，部分会员权益可能暂时不可用。' },
+    },
     conciergePriority: '顾问优先级',      entitlementDescription: {
         private_introduction: '用于发起正式的进一步认识申请。',
         event_registration: '用于参加受会员套餐额度控制的线下活动。',

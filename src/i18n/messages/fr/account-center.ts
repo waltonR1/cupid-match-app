@@ -292,6 +292,12 @@ export const accountCenterMessages: AppMessageSchema = {
     expiresAt: 'Expiration',
     renewalStatus: 'Renouvellement',
     renewal: { renewing: 'Renouvellement automatique actif', cancel_at_period_end: 'S arrete a la fin de la periode', none: 'Aucun abonnement actif' },
+    subscriptionNotice: {
+      renewing: { title: 'Renouvellement automatique actif', description: 'Stripe renouvellera l abonnement a la fin de la periode actuelle et les avantages continueront.' },
+      cancelAtPeriodEnd: { title: 'Renouvellement automatique annule', description: 'Vos avantages restent actifs jusqu a la fin de la periode. L abonnement ne sera pas renouvele ensuite.' },
+      paymentIssue: { title: 'Paiement a confirmer', description: 'Stripe n a pas encore finalise le paiement de la periode actuelle. Les avantages restent disponibles pour le moment ; contactez la plateforme si le probleme continue.' },
+      paused: { title: 'Service temporairement suspendu', description: 'Cet abonnement doit etre confirme par la plateforme. Certains avantages peuvent etre temporairement indisponibles.' },
+    },
     conciergePriority: 'Priorite concierge',      entitlementDescription: { private_introduction: 'Utilise pour lancer une demande formelle de mise en relation.', event_registration: 'Utilise pour les evenements hors ligne limites par l offre.' },
       tierPositioning: {
         free: 'Pour decouvrir la plateforme et les services essentiels.',

@@ -91,6 +91,15 @@
           </view>
 
           <view
+              v-if="subscriptionNotice"
+              :class="subscriptionNoticeClass"
+              class="mt-6 border px-4 py-4 text-[14px] leading-7"
+          >
+            <view class="font-semibold">{{ subscriptionNotice.title }}</view>
+            <view class="mt-1">{{ subscriptionNotice.description }}</view>
+          </view>
+
+          <view
               v-if="canCancelRenewal"
               class="mt-6 inline-flex cursor-pointer border border-semantic-border-soft bg-semantic-surface-panel px-4 py-3 text-[14px] text-semantic-text-secondary"
               @click="requestCancelRenewal"
@@ -179,6 +188,53 @@ watch(locale, value => {
 const quotaEntitlements = computed(() => entitlements.value.filter(
     (item) => item.code === 'private_introduction' || item.code === 'event_registration',
 ))
+const subscriptionNotice = computed(() => {
+  if (!membership.value?.subscriptionProvider) return null
+
+  if (membership.value.renewalStatus === 'cancel_at_period_end') {
+    return {
+      tone: 'warning',
+      title: t('membership.subscriptionNotice.cancelAtPeriodEnd.title'),
+      description: t('membership.subscriptionNotice.cancelAtPeriodEnd.description'),
+    }
+  }
+
+  if (membership.value.subscriptionStatus === 'past_due' || membership.value.subscriptionStatus === 'unpaid') {
+    return {
+      tone: 'danger',
+      title: t('membership.subscriptionNotice.paymentIssue.title'),
+      description: t('membership.subscriptionNotice.paymentIssue.description'),
+    }
+  }
+
+  if (membership.value.status === 'paused') {
+    return {
+      tone: 'warning',
+      title: t('membership.subscriptionNotice.paused.title'),
+      description: t('membership.subscriptionNotice.paused.description'),
+    }
+  }
+
+  if (membership.value.renewalStatus === 'renewing') {
+    return {
+      tone: 'normal',
+      title: t('membership.subscriptionNotice.renewing.title'),
+      description: t('membership.subscriptionNotice.renewing.description'),
+    }
+  }
+
+  return null
+})
+const subscriptionNoticeClass = computed(() => {
+  if (subscriptionNotice.value?.tone === 'danger') {
+    return 'border-semantic-state-danger bg-semantic-surface-card text-semantic-state-danger'
+  }
+  if (subscriptionNotice.value?.tone === 'warning') {
+    return 'border-semantic-border-emphasis bg-semantic-state-warning text-semantic-text-primary'
+  }
+  if (!membership.value) return 'border-semantic-border-soft bg-semantic-surface-panel text-semantic-text-secondary'
+  return `${currentPlanFeatureClass(membership.value.tier)} ${currentPlanDescriptionClass(membership.value.tier)}`
+})
 const canCancelRenewal = computed(() => Boolean(
     membership.value
     && membership.value.tier !== 'free'
