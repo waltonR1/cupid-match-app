@@ -1,5 +1,6 @@
 import type {FamilyProfileDetail, FormatLocale, RestrictedProfileField} from '@/api/profiles'
 import {PROFILE_FIELD_HIDDEN, PROFILE_FIELD_LOGIN_REQUIRED, PROFILE_FIELD_MEMBER_ONLY} from '@/api/profiles'
+import {resolveAssetUrl} from '@/config/app'
 import type {Translate} from '@/i18n/types'
 import type {
     FamilyIntroductionSectionData,
@@ -52,7 +53,7 @@ function buildFamilyProfileDetailPageData(
     return {
         accessLevel,
         heroData: {
-            avatarUrl: profile.avatarUrl,
+            avatarUrl: profile.avatarUrl ? resolveAssetUrl(profile.avatarUrl) : '',
             photos: buildHeroPhotos(profile, accessLevel),
             displayName: profile.displayName,
             gender: profile.gender,
@@ -96,7 +97,7 @@ function buildAccessLabel(accessLevel: FamilyProfileDetailAccessLevel, t: Transl
 /** 构建头图相册 */
 function buildHeroPhotos(profile: FamilyProfileDetail, accessLevel: FamilyProfileDetailAccessLevel): string[] {
     if (isRestrictedValue(profile.photos)) return []
-    const photos = profile.photos.map(photo => photo.url)
+    const photos = profile.photos.map(photo => resolveAssetUrl(photo.url))
     if (accessLevel === 'visitor') return photos.slice(0, 2)
     if (accessLevel === 'registered') return photos.slice(0, 3)
     return photos

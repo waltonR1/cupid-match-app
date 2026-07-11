@@ -28,7 +28,7 @@
               class="grid cursor-pointer gap-5 border-b border-semantic-border-soft px-5 py-5 transition-colors last:border-b-0 hover:bg-semantic-surface-soft md:grid-cols-[auto_minmax(0,1fr)_220px]"
               @click="openAccountProfileDetail(profile.profileId)"
           >
-            <image :src="profile.avatarUrl" class="h-14 w-14 rounded-full object-cover"/>
+            <image :src="resolveAssetUrl(profile.avatarUrl)" class="h-14 w-14 rounded-full object-cover"/>
 
             <view class="min-w-0">
               <view class="flex flex-wrap items-center gap-2">
@@ -118,6 +118,7 @@ import {openAccountProfileCreate, openAccountProfileDetail} from '@/utils/naviga
 import {formatLocalizedAge} from '@/utils/profile-format'
 import {computeVerificationRatio, resolveVerificationDescriptionKey} from '@/mappers/account/profiles'
 import {useOptionsStore} from '@/stores/modules/options'
+import {resolveAssetUrl} from '@/config/app'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

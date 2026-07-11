@@ -1,6 +1,6 @@
 <template>
   <view class="grid gap-4 border-b border-semantic-border-soft px-5 py-4 last:border-b-0 sm:grid-cols-[auto_minmax(0,1fr)]">
-    <image :src="item.targetAvatarUrl" class="h-12 w-12 rounded-full object-cover" />
+    <image :src="resolveAssetUrl(item.targetAvatarUrl)" class="h-12 w-12 rounded-full object-cover" />
 
     <view class="min-w-0">
       <view class="flex flex-wrap items-start justify-between gap-3">
@@ -68,6 +68,7 @@ import { watch } from 'vue'
 import { usePageI18n } from '@/i18n/composables/use-page-i18n'
 import { formatLocalizedDate, type FormatLocale } from '@/utils/locale-format'
 import {useOptionsStore} from '@/stores/modules/options'
+import {resolveAssetUrl} from '@/config/app'
 
 type IntroductionItem = {
   requestId: string

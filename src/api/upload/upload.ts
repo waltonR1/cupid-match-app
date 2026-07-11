@@ -1,5 +1,4 @@
 import {apiUploadFile} from '@/api/shared/http'
-import {resolveAssetUrl} from '@/config/app'
 
 interface UploadResponse {
   url: string
@@ -16,7 +15,7 @@ interface VerificationMaterialUploadResponse {
 
 export function uploadImage(filePath: string): Promise<string> {
   return apiUploadFile<UploadResponse>('/upload', filePath)
-    .then((result) => resolveAssetUrl(result.url))
+    .then((result) => result.url)
 }
 
 export function uploadVerificationMaterial(profileId: string, filePath: string): Promise<VerificationMaterialUploadResponse> {

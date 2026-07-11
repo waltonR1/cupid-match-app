@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue'
+import {resolveAssetUrl} from '@/config/app'
 
 /** 组件属性 */
 const props = withDefaults(defineProps<{
@@ -37,9 +38,7 @@ const imageSrc = computed(() => {
 
   if (!value) return ''
 
-  return /^(https?:)?\/\//.test(value) || value.startsWith('/')
-      ? value
-      : ''
+  return resolveAssetUrl(value)
 })
 
 /** 占位文本 */

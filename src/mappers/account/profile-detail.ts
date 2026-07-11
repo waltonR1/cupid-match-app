@@ -1,4 +1,5 @@
 import type { AccountProfileDetailDTO } from '@/api/account'
+import {resolveAssetUrl} from '@/config/app'
 import type {
   AccountProfileDetailPageData,
   AccountProfileDetailPrivacyPreferenceItem,
@@ -28,7 +29,7 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
     profileTitle,
     profileTitleKey,
     profileTitleRelation,
-    avatarUrl: payload.avatarUrl,
+    avatarUrl: payload.avatarUrl ? resolveAssetUrl(payload.avatarUrl) : '',
     city: payload.cityCode,
     ownershipBadgeKeys: [
       `profiles.profileType.${payload.profileType}`,
@@ -39,7 +40,10 @@ export function toAccountProfileDetailPageData(params: { payload: AccountProfile
     ],
     profileSections: buildProfileSections(payload),
     contactSection: buildContactSection(payload),
-    photos: payload.photos,
+    photos: payload.photos.map(photo => ({
+      ...photo,
+      url: resolveAssetUrl(photo.url),
+    })),
     verification: payload.verification,
     verificationItems: buildVerificationItems(payload),
     privacyPreferenceItems: buildPrivacyPreferenceItems(payload.privacyPreferences),

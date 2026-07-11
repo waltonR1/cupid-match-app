@@ -19,7 +19,7 @@
               >
                 <view class="relative h-[72px] w-[72px]">
                   <image
-                      :src="editing ? (accountDraft.avatarUrl || settings.account.avatarUrl || defaultAvatar) : (settings.account.avatarUrl || defaultAvatar)"
+                      :src="accountAvatarSrc"
                       class="h-[72px] w-[72px] rounded-full border border-semantic-border-soft object-cover"
                   />
                   <view
@@ -759,6 +759,7 @@ import type {
 } from '@/types/account/settings'
 import {openLoginPage} from '@/utils/navigation'
 import {useAgreementDialog} from '@/hooks/legal'
+import {resolveAssetUrl} from '@/config/app'
 
 useRequireAuth()
 const toast = useToast()
@@ -834,6 +835,13 @@ const accountDraft = ref<{
 }>({accountName: '', avatarUrl: '', preferredLocale: 'zh'})
 const defaultAvatar = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23e5e7eb" width="100" height="100"/><text x="50" y="58" text-anchor="middle" fill="%239ca3af" font-size="40">?</text></svg>'
 const preferenceDraft = ref<Record<string, string | boolean | number | string[]>>({})
+
+const accountAvatarSrc = computed(() => {
+  const value = editing.value
+      ? (accountDraft.value.avatarUrl || settings.value?.account.avatarUrl || defaultAvatar)
+      : (settings.value?.account.avatarUrl || defaultAvatar)
+  return resolveAssetUrl(value)
+})
 
 const PREFERENCE_CODE_TO_KEY = {
   preferred_city: 'preferredCity',

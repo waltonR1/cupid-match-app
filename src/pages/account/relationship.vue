@@ -79,7 +79,7 @@
                 class="group grid cursor-pointer gap-4 border border-semantic-border-default bg-semantic-surface-card px-5 py-5 shadow-panel transition-all duration-200 hover:border-semantic-border-card-hover hover:bg-semantic-surface-soft hover:shadow-card-hover md:grid-cols-[88px_minmax(0,1fr)_auto]"
                 @click="openFavoriteProfile(favorite.profileId, favorite.profileType)"
             >
-              <image :src="favorite.avatarUrl" class="h-20 w-20 object-cover"/>
+              <image :src="resolveAssetUrl(favorite.avatarUrl)" class="h-20 w-20 object-cover"/>
 
               <view class="min-w-0">
                 <view class="flex flex-wrap items-center gap-2">
@@ -205,6 +205,7 @@ import {splitIntroductions} from '@/mappers/account/relationship'
 import {openFamilyProfileDetail, openSelfDetail} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
 import {formatLocalizedAge} from '@/utils/profile-format'
+import {resolveAssetUrl} from '@/config/app'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

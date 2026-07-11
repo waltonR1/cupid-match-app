@@ -38,7 +38,7 @@
               class="grid cursor-pointer gap-4 border-b border-semantic-border-soft px-5 py-5 transition-colors hover:bg-semantic-surface-soft last:border-b-0 md:grid-cols-[120px_minmax(0,1fr)_160px]"
               @click="openEventDetail(item.eventId)"
           >
-            <image :src="item.coverImageUrl" class="h-24 w-full object-cover"/>
+            <image :src="resolveAssetUrl(item.coverImageUrl)" class="h-24 w-full object-cover"/>
             <view>
               <view class="text-[18px] font-semibold">{{ item.title }}</view>
               <view class="mt-3 text-[14px] text-semantic-text-secondary">{{ item.city }} / {{ item.venue }}</view>
@@ -79,7 +79,7 @@
               class="grid cursor-pointer gap-4 border-b border-semantic-border-soft px-5 py-5 transition-colors hover:bg-semantic-surface-soft last:border-b-0 md:grid-cols-[120px_minmax(0,1fr)_160px]"
               @click="openEventDetail(item.eventId)"
           >
-            <image :src="item.coverImageUrl" class="h-24 w-full object-cover"/>
+            <image :src="resolveAssetUrl(item.coverImageUrl)" class="h-24 w-full object-cover"/>
             <view>
               <view class="text-[18px] font-semibold">{{ item.title }}</view>
               <view class="mt-3 text-[14px] text-semantic-text-secondary">{{ item.city }} / {{ item.venue }}</view>
@@ -123,6 +123,7 @@ import {openEventDetail} from '@/utils/navigation'
 import {formatLocalizedDate} from '@/utils/locale-format'
 import {toBadgeStatus, groupRegistrations} from '@/mappers/account/events'
 import {useOptionsStore} from '@/stores/modules/options'
+import {resolveAssetUrl} from '@/config/app'
 
 useRequireAuth()
 const {t, locale} = usePageI18n('accountCenter')

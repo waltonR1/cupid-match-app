@@ -147,7 +147,7 @@ Endpoint status rules:
 | Account | `POST` | `/api/account/identities` | 绑定已验证 email / phone 身份。 |
 | Account | `DELETE` | `/api/account/identities/:id` | 解绑账户身份。 |
 | Account | `POST` | `/api/account/membership/upgrade` | 发起会员升级。 |
-| Upload | `POST` | `/api/upload` | 上传图片并返回公开 asset URL。 |
+| Upload | `POST` | `/api/upload` | 上传图片并返回 `/profile/...` 公开资源相对路径；C 端展示时再拼接 `VITE_ASSET_BASE_URL`。 |
 | Debug | `GET` | `/api/debug/private-introductions` | 调试私人介绍申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/accept` | 调试接受申请。 |
 | Debug | `POST` | `/api/debug/private-introductions/:id/decline` | 调试拒绝申请。 |

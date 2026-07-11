@@ -48,7 +48,7 @@ export function resolveAssetBaseUrl() {
 }
 
 export function resolveAssetUrl(pathOrUrl: string) {
-  if (/^https?:\/\//.test(pathOrUrl) || pathOrUrl.startsWith('data:') || pathOrUrl.startsWith('blob:')) {
+  if (isExternalOrRuntimeUrl(pathOrUrl) || pathOrUrl.startsWith('/static/')) {
     return pathOrUrl
   }
 
@@ -74,4 +74,8 @@ export function resolveDebugEnabled() {
 
 function trimTrailingSlash(value: string) {
   return value.endsWith('/') ? value.slice(0, -1) : value
+}
+
+function isExternalOrRuntimeUrl(value: string) {
+  return /^[a-z][a-z\d+.-]*:/i.test(value) || value.startsWith('//')
 }

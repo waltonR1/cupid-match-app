@@ -3,6 +3,7 @@ import type {
     SelfProfileListItem,
 } from '@/api/profiles'
 import type {Translate} from '@/i18n/types'
+import {resolveAssetUrl} from '@/config/app'
 import type {ProfileCardViewModel} from '@/types/profiles/card'
 import {formatLocalizedAge} from '@/utils/profile-format'
 import type {FormatLocale} from '@/utils/locale-format'
@@ -16,7 +17,7 @@ export function toSelfProfileCardViewModel(
     optionLabel: OptionLabel = fallbackOptionLabel,
 ): ProfileCardViewModel {
     return {
-        avatarUrl: profile.avatarUrl,
+        avatarUrl: profile.avatarUrl ? resolveAssetUrl(profile.avatarUrl) : '',
         displayName: profile.displayName,
         gender: profile.gender,
         meta: formatLocalizedAge(locale, profile.age) + ' / ' + profile.industry,
@@ -44,7 +45,7 @@ export function toFamilyProfileCardViewModel(
     ].filter(Boolean)
 
     return {
-        avatarUrl: profile.avatarUrl,
+        avatarUrl: profile.avatarUrl ? resolveAssetUrl(profile.avatarUrl) : '',
         displayName: profile.displayName,
         gender: profile.gender,
         meta: formatLocalizedAge(locale, profile.age) + ' / ' + profile.industry,

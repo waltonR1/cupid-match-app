@@ -3,6 +3,7 @@ import type { Translate } from '@/i18n/types'
 import type { EventOverviewItem, EventStatItem } from '@/types/events/card'
 import type { EventDirectoryFilters } from '@/types/events/directory'
 import { formatEventDate } from '@/utils/locale-format'
+import {resolveAssetUrl} from '@/config/app'
 
 export const EVENT_DIRECTORY_PAGE_SIZE = 12
 
@@ -72,7 +73,7 @@ export function toEventOverviewItem(
     id: event.id,
     title: event.title,
     summary: event.summary,
-    coverImageUrl: event.coverImageUrl,
+    coverImageUrl: event.coverImageUrl ? resolveAssetUrl(event.coverImageUrl) : '',
     date: formatEventDate(locale, event.date),
     time: event.startTime + ' - ' + event.endTime,
     city: event.city,

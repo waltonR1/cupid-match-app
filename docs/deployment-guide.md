@@ -31,7 +31,7 @@
 | --- | --- | --- |
 | `VITE_APP_ENV` | dev 为 `development`，build 为 `production` | 应用运行环境：`development` / `staging` / `production`。 |
 | `VITE_API_BASE_URL` | 必填，开发示例 `http://127.0.0.1:8080/api` | 前端 API 基地址。 |
-| `VITE_ASSET_BASE_URL` | 必填，开发示例 `http://127.0.0.1:8080` | 图片、上传文件等公开资源基地址。 |
+| `VITE_ASSET_BASE_URL` | 必填，开发示例 `http://127.0.0.1:8080` | 公开图片资源基地址；可填后端域名或 CDN 域名，只用于 `/profile/**` 等公开资源。 |
 | `VITE_API_ENABLE_LOGGING` | 必填：`true` / `false` | 是否在前端 console 输出 API 日志。 |
 | `VITE_ENABLE_DEBUG` | 非 production 默认开启 | 是否允许访问 `/pages/debug/*`。商用环境必须为 `false`。 |
 
@@ -40,6 +40,7 @@
 ```env
 VITE_APP_ENV=production
 VITE_API_BASE_URL=https://api.example.com/api
+VITE_ASSET_BASE_URL=https://cdn.example.com
 VITE_API_ENABLE_LOGGING=false
 VITE_ENABLE_DEBUG=false
 ```
@@ -49,9 +50,34 @@ VITE_ENABLE_DEBUG=false
 ```env
 VITE_APP_ENV=staging
 VITE_API_BASE_URL=http://127.0.0.1:8080/api
+VITE_ASSET_BASE_URL=http://127.0.0.1:8080
 VITE_API_ENABLE_LOGGING=false
 VITE_ENABLE_DEBUG=true
 ```
+
+### 公开图片与 CDN
+
+当前上传已经按公开图片和私有认证材料分流：
+
+- 头像、资料照片等公开图片走 `POST /api/upload`，后端返回 `/profile/upload/...`。
+- C 端保存 `/profile/...` 相对路径，展示时用 `VITE_ASSET_BASE_URL` 拼接公开图片地址。
+- 实名、学历、收入、婚姻等认证材料返回 `private://verification/...`，不会走公开 CDN。
+
+生产如果接 CDN，通常只需要把 `VITE_ASSET_BASE_URL` 改成 CDN 域名，并在 CDN 平台配置 `/profile/**` 回源到后端或 Nginx：
+
+```env
+VITE_ASSET_BASE_URL=https://cdn.example.com
+```
+
+如果暂时不接 CDN，可以填后端域名：
+
+```env
+VITE_ASSET_BASE_URL=https://api.example.com
+```
+
+后端的 `ruoyi.profile` 仍然是服务器本地上传目录，不是 URL。对象存储直传或服务端上传 S3/OSS/COS/R2 属于下一阶段存储实现，不是当前 CDN 回源配置。
+
+因为公开图片保存层尽量保留相对路径，后续从后端域名切换到 CDN 域名时，通常只需要改 `VITE_ASSET_BASE_URL` 并重新部署前端。
 
 ## mock-server 配置
 
@@ -170,7 +196,7 @@ npm run generate:token-docs
 发布前逐项确认：
 
 - `.env.production` 中的 `VITE_API_BASE_URL` 已替换为真实生产 API 域名，不是 `https://api.example.com/api`。
-- `.env.production` 中的 `VITE_ASSET_BASE_URL` 已替换为真实生产资源域名，不是 `https://static.example.com`。
+- `.env.production` 中的 `VITE_ASSET_BASE_URL` 已替换为真实生产公开资源域名或 CDN 域名，不是 `https://static.example.com`。
 - `.env.production` 中 `VITE_ENABLE_DEBUG=false`。
 - `.env.production` 中 `VITE_API_ENABLE_LOGGING=false`。
 - `npm run build:h5:production` 构建成功。
@@ -204,7 +230,7 @@ VITE_ENABLE_DEBUG=true
 - mock `AuthSession.token` 不是生产 JWT；RuoYi 后端应返回可校验 JWT 或同等 Bearer token。
 - password hash 是 mock hash，不是生产密码哈希方案。
 - mock-server 验证码只用于本地链路验证，不接真实邮件、短信或微信；Java 后端已提供真实 Email/SMS 投递通道。
-- 上传文件由 mock-server 本地目录托管，不是对象存储。
+- mock-server 上传文件由本地目录托管，不是对象存储；Java 后端当前公开图片也可先用本地目录 + `/profile/**` + CDN 回源。
 - 会员升级是流程占位，不接真实支付。
 - LowDB 不提供生产级事务、并发控制、审计、备份和权限隔离。
 
