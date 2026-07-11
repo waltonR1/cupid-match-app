@@ -18,13 +18,22 @@ const DATING_INTENTION_LABELS: Record<DatingIntentionCode, LocalizedText> = {
 
 /** 生成稳定的前台匿名展示名 */
 export function deriveProfileDisplayName(profileId: string): string {
-    let hash = 0
+    const words = [
+        '温柔星光', '静谧微风', '暖色晨曦', '清澈月光',
+        '蓝色远方', '轻柔细雨', '森林回声', '海洋之梦',
+        '银色云朵', '春日小径', '琥珀微光', '安静河流',
+    ]
+    let hash = 1125899906842597
     for (const char of profileId) {
-        hash = ((hash << 5) - hash + char.charCodeAt(0)) | 0
+        hash = Math.imul(31, hash) + char.charCodeAt(0)
     }
 
-    const suffix = Math.abs(hash).toString(36).toUpperCase().padStart(6, '0').slice(0, 6)
-    return `CM-${suffix}`
+    const normalized = Math.abs(hash)
+    const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+    const first = letters[normalized % letters.length]
+    const number = String(Math.floor(normalized / letters.length) % 100).padStart(2, '0')
+    const last = letters[Math.floor(normalized / letters.length / 100) % letters.length]
+    return `${words[normalized % words.length]}·${first}${number}${last}`
 }
 
 /** 从出生年份派生当前年龄 */
