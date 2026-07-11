@@ -229,6 +229,9 @@ const subscriptionNoticeClass = computed(() => {
   if (subscriptionNotice.value?.tone === 'danger') {
     return 'border-semantic-state-danger bg-semantic-surface-card text-semantic-state-danger'
   }
+  if (membership.value && (membership.value.tier === 'gold' || membership.value.tier === 'diamond')) {
+    return `${currentPlanFeatureClass(membership.value.tier)} ${currentPlanDescriptionClass(membership.value.tier)}`
+  }
   if (subscriptionNotice.value?.tone === 'warning') {
     return 'border-semantic-border-emphasis bg-semantic-state-warning text-semantic-text-primary'
   }
@@ -313,11 +316,11 @@ function currentPlanBadgeClass(tier: string) {
 
 function currentPlanFeatureClass(tier: string) {
   if (tier === 'gold') {
-    return 'border-component-membership-tier-gold-feature-border bg-component-membership-tier-gold-feature-background'
+    return 'border-component-membership-tier-gold-feature-border bg-transparent'
   }
 
   if (tier === 'diamond') {
-    return 'border-component-membership-tier-diamond-feature-border bg-component-membership-tier-diamond-feature-background'
+    return 'border-component-membership-tier-diamond-feature-border bg-transparent'
   }
 
   if (tier === 'silver') {
