@@ -312,6 +312,22 @@ export interface StaffTaskRecord {
 }
 
 /** Inbox 线程 */
+export interface ContactLeadRecord {
+    id: string
+    source: 'contact_page'
+    inquiryType: 'platform' | 'membership' | 'event' | 'advisor' | 'partnership' | 'complaint' | 'privacy' | 'other'
+    name?: string
+    contactChannel: 'email' | 'phone' | 'wechat'
+    contactValue: string
+    message: string
+    status: 'new' | 'processing' | 'resolved' | 'ignored'
+    handlerSysUserId?: string
+    handlerNote?: string
+    handledAt?: string
+    createdAt: string
+    updatedAt: string
+}
+
 export type InboxSubjectType = 'profile' | 'event' | 'private_introduction_request' | 'membership' | 'legal_document'
 
 export interface InboxThreadRecord {
@@ -398,6 +414,7 @@ export interface Database {
     user_entitlement_balances: UserEntitlementBalanceRecord[]
     user_preferences: UserPreferenceRecord[]
     staff_tasks: StaffTaskRecord[]
+    contact_leads: ContactLeadRecord[]
     legal_documents: LegalDocumentRecord[]
     legal_document_contents: LegalDocumentContentRecord[]
     user_agreement_acceptances: UserAgreementAcceptanceRecord[]

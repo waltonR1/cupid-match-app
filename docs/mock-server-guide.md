@@ -151,6 +151,7 @@ development / staging mock 请求上下文仍可使用 `X-User-Id`。production 
 - `GET /api/events`
 - `GET /api/events/:id`
 - `GET /api/membership/catalog`
+- `POST /api/contact/leads`
 - `GET /api/account/membership`
 - `GET /api/account/dashboard`
 - `GET /api/account/settings`

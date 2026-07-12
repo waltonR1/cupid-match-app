@@ -1,4 +1,4 @@
-{
+﻿{
   "profiles": [
     {
       "id": "p-001",
@@ -4713,6 +4713,7 @@
     }
   ],
   "staff_tasks": [],
+  "contact_leads": [],
   "legal_document_contents": [
     {
       "id": "ldc-001-01",
@@ -5597,7 +5598,7 @@
           "clauses": [
             {
               "number": "10.1",
-              "body": "如您对本隐私政策有任何疑问、意见或投诉，请通过以下方式联系我们：\n\n邮箱：privacy@cupidmatch.com\n地址：[平台运营方注册地址]\n客服电话：[客服电话号码]"
+              "body": "如您对本隐私政策有任何疑问、意见或投诉，请通过以下方式联系我们：\n\n邮箱：privacy@rencontreaparis.com\n微信：RencontreParis\n城市：Paris / France"
             },
             {
               "number": "10.2",
@@ -5815,7 +5816,7 @@
           "clauses": [
             {
               "number": "10.1",
-              "body": "If you have any questions, comments, or complaints about this Privacy Policy, please contact us through the following methods:\n\nEmail: privacy@cupidmatch.com\nAddress: [Registered address of the Platform operator]\nCustomer service phone: [Customer service phone number]"
+              "body": "If you have any questions, comments, or complaints about this Privacy Policy, please contact us through the following methods:\n\nEmail: privacy@rencontreaparis.com\nWeChat: RencontreParis\nCity: Paris / France"
             },
             {
               "number": "10.2",
@@ -6033,7 +6034,7 @@
           "clauses": [
             {
               "number": "10.1",
-              "body": "Pour toute question, suggestion ou plainte concernant la presente Politique de confidentialite, vous pouvez nous contacter par les moyens suivants :\n\nEmail : privacy@cupidmatch.com\nAdresse : [Adresse d enregistrement de l operateur de la Plateforme]\nTelephone du service client : [Numero du service client]"
+              "body": "Pour toute question, suggestion ou plainte concernant la presente Politique de confidentialite, vous pouvez nous contacter par les moyens suivants :\n\nEmail : privacy@rencontreaparis.com\nWeChat : RencontreParis\nVille : Paris / France"
             },
             {
               "number": "10.2",

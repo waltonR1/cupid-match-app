@@ -62,7 +62,7 @@
               {{ t(item.desc) }}
             </view>
             <view class="mt-6 text-[18px] font-medium text-semantic-text-inverse">
-              {{ t(item.value, {email}) }}
+              {{ t(item.value, { email, wechat, location }) }}
             </view>
           </view>
         </view>
@@ -84,6 +84,8 @@ defineProps<{
     value: string
   }[]
   email: string
+  wechat: string
+  location: string
 }>()
 
 /** Contact Hero 操作事件 */

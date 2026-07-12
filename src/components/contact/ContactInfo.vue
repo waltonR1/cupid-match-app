@@ -46,7 +46,7 @@
           </view>
           <view
               class="mt-6 border-t border-semantic-border-soft pt-5 text-[16px] font-medium text-semantic-text-primary">
-            {{ t(item.value, {email}) }}
+            {{ t(item.value, { email, wechat, location }) }}
           </view>
         </view>
       </view>
@@ -66,6 +66,8 @@ defineProps<{
     value: string
   }[]
   email: string
+  wechat: string
+  location: string
 }>()
 
 /** Contact 页面命名空间文案 */

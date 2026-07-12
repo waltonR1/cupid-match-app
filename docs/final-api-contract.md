@@ -101,6 +101,7 @@ Endpoint status rules:
 | Auth | `POST` | `/api/auth/login` | 登录并返回 session。 |
 | Auth | `POST` | `/api/auth/logout` | 删除当前 Redis session，使当前 JWT 立即失效。 |
 | Legal | `GET` | `/api/legal/documents/:type` | 获取当前生效服务条款或隐私说明。 |
+| Contact | `POST` | `/api/contact/leads` | 提交公共联系咨询线索。 |
 | Profiles | `GET` | `/api/profiles/featured` | 首页精选 self profiles。 |
 | Profiles | `GET` | `/api/profiles/self` | self 资料目录。 |
 | Profiles | `GET` | `/api/profiles/family` | family 资料目录。 |
@@ -216,6 +217,41 @@ interface LoginPayload {
 
 返回 `AuthSessionDTO`。
 ## Legal API
+
+## Contact API
+
+### Create Contact Lead
+
+```ts
+type ContactInquiryType =
+  | 'platform'
+  | 'membership'
+  | 'event'
+  | 'advisor'
+  | 'partnership'
+  | 'complaint'
+  | 'privacy'
+  | 'other'
+
+type ContactChannel = 'email' | 'phone' | 'wechat'
+
+interface ContactLeadPayload {
+  inquiryType: ContactInquiryType
+  name?: string
+  contactChannel: ContactChannel
+  contactValue: string
+  message: string
+}
+
+interface ContactLeadResultDTO {
+  id: string
+  status: 'new'
+}
+```
+
+- `POST /api/contact/leads` is public and does not require login.
+- Contact leads are handled in the admin platform under 用户服务 / 联系咨询.
+- Clients must not submit passwords, identity documents, bank card data, or other sensitive information in `message`.
 
 ### Get Legal Document
 

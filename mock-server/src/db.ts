@@ -17,6 +17,7 @@ const defaultData: Database = {
     user_entitlement_balances: [],
     user_preferences: [],
     staff_tasks: [],
+    contact_leads: [],
     legal_documents: [],
     legal_document_contents: [],
     user_agreement_acceptances: [],
@@ -59,6 +60,7 @@ export async function initDb(): Promise<void> {
     db.data.user_entitlement_balances ??= []
     db.data.user_preferences ??= []
     db.data.staff_tasks ??= []
+    db.data.contact_leads ??= []
     db.data.legal_documents ??= []
     db.data.legal_document_contents ??= []
     db.data.user_agreement_acceptances ??= []

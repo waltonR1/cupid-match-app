@@ -1,9 +1,7 @@
 <template>
   <view class="border-t border-semantic-border-default bg-component-footer-background text-semantic-text-secondary">
     <view class="mx-auto max-w-[1280px] px-8 py-10">
-      <!-- 上半部分 -->
       <view class="grid gap-12 md:grid-cols-4">
-        <!-- 品牌 -->
         <view>
           <view class="text-[22px] font-semibold tracking-[2px] text-component-footer-brand-wordmark">
             {{ t('common.brand.name') }}
@@ -16,7 +14,6 @@
           </view>
         </view>
 
-        <!-- 导航 -->
         <view>
           <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.nav') }}
@@ -38,19 +35,17 @@
           </view>
         </view>
 
-        <!-- 联系 -->
         <view>
           <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.contact') }}
           </view>
           <view class="mt-3 space-y-2 text-[14px] text-semantic-text-secondary">
             <view>{{ t('common.contact.email', { email }) }}</view>
-            <view>{{ t('common.contact.wechat') }}</view>
-            <view>{{ t('common.contact.location') }}</view>
+            <view>{{ t('common.contact.wechat', { wechat: contact.wechat }) }}</view>
+            <view>{{ t('common.contact.location', { location: contact.location }) }}</view>
           </view>
         </view>
 
-        <!-- 语言 -->
         <view>
           <view class="text-[16px] font-medium text-component-footer-heading">
             {{ t('common.footer.lang') }}
@@ -62,7 +57,6 @@
       </view>
     </view>
 
-    <!-- 底部收口区 -->
     <view class="border-t border-component-footer-divider py-4">
       <view class="text-center text-[12px] tracking-wide text-semantic-text-subtle">
         {{ t('common.footer.rights', { year }) }}
@@ -72,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import { resolvePublicContactConfig } from '@/config/contact'
 import { useAppI18n } from '@/i18n/composables/use-app-i18n'
 
 interface NavItem {
@@ -85,7 +80,8 @@ defineProps<{
 const { t } = useAppI18n()
 
 const year = new Date().getFullYear()
-const email = 'contact@rencontreaparis.com'
+const contact = resolvePublicContactConfig()
+const email = contact.email
 
 const emit = defineEmits<{
   (e: 'nav-click', key: string): void

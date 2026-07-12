@@ -65,6 +65,10 @@ src/api/
     events.ts
     events.types.ts
     index.ts
+  contact/
+    contact.ts
+    contact.types.ts
+    index.ts
   legal/
   messages/
   profiles/
@@ -100,6 +104,7 @@ mock 层通过独立的 HTTP 服务提供接口：
 - profiles / favorites / private introductions
 - events / event registrations
 - account / membership / settings
+- contact
 - messages / inbox
 - upload
 - debug

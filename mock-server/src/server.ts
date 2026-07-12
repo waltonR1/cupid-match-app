@@ -4,6 +4,7 @@ import {config} from './config.js'
 import {getDb, initDb} from './db.js'
 import {registerAccountRoutes} from './routes/account.routes.js'
 import {registerAuthRoutes} from './routes/auth.routes.js'
+import {registerContactRoutes} from './routes/contact.routes.js'
 import {registerDebugRoutes} from './routes/debug.routes.js'
 import {registerEventRoutes} from './routes/events.routes.js'
 import {registerInboxRoutes} from './routes/inbox.routes.js'
@@ -73,6 +74,7 @@ export async function createServer() {
     await app.register(registerProfileRoutes, {prefix: config.apiPrefix})
     await app.register(registerEventRoutes, {prefix: config.apiPrefix})
     await app.register(registerAuthRoutes, {prefix: config.apiPrefix})
+    await app.register(registerContactRoutes, {prefix: config.apiPrefix})
     await app.register(registerAccountRoutes, {prefix: config.apiPrefix})
     await app.register(registerMembershipRoutes, {prefix: config.apiPrefix})
     await app.register(registerLegalRoutes, {prefix: config.apiPrefix})
