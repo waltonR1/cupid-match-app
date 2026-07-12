@@ -70,6 +70,8 @@
     },
     "vueVersion" : "3",
     "h5" : {
+        "title": "Cupid Match",
+        "favicon": "/static/favicon.ico",
         "router" : {
             "mode" : "hash",
             "base" : "/"
