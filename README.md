@@ -75,11 +75,13 @@ npm run dev:h5
 npm run mock:dev
 ```
 
-默认 API 地址：
+默认真实后端 API 地址：
 
 ```text
 http://127.0.0.1:8080/api
 ```
+
+如果只做前端页面或 mock 联调，可以把 `VITE_API_BASE_URL` 改为 mock server 地址；真实后端联调时保持指向 `http://127.0.0.1:8080/api`。
 
 健康检查入口：
 
@@ -120,6 +122,8 @@ npm run build:h5
 7. [docs/mock-server-guide.md](./docs/mock-server-guide.md)
 8. [docs/token-usage-guide.md](./docs/token-usage-guide.md)
 9. [docs/git-commit-convention.md](./docs/git-commit-convention.md)
+
+后端数据库、账号、支付、验证码和上传配置见 `../cupid-match-server/doc/`。
 
 ## 协作入口
 

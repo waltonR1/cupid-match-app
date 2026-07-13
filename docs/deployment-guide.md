@@ -238,7 +238,7 @@ VITE_ENABLE_DEBUG=true
 
 部署演示环境至少检查：
 
-1. 登录：`lin@example.com / password123`
+1. 登录：真实后端演示库使用 `lin.yuanhang@rencontreaparis.test / password123`；mock server 联调使用 `lin@example.com / password123`。
 2. 导航、主题、语言切换。
 3. self profile 列表和详情。
 4. family profile 列表和详情。
