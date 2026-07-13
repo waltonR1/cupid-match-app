@@ -18,7 +18,7 @@
 项目采用以下调用链：
 
 ```text
-page -> hook -> api -> mock-server
+page -> hook -> api -> Java backend
 ```
 
 ## 目录概览
@@ -52,7 +52,7 @@ src/utils       无状态纯函数
 - `mappers` 负责接口响应到页面或组件展示模型的转换
 - `api` 负责请求边界、DTO 和错误透传
 - `utils` 只放无状态纯函数
-- `mock-server` 提供本地 `/api/...` HTTP 接口
+- `mock-server` 仅提供本地 `/api/...` HTTP 模拟接口；部署环境连接 `cupid-match-server`
 - `i18n` 只负责界面文案和当前语言状态
 
 ## 快速开始
