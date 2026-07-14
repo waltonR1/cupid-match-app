@@ -2,6 +2,16 @@
 
 一个面向长期关系与真实相亲流程的婚恋平台前台原型。
 
+## 关联仓库
+
+| 仓库 | 职责 | 生产平台 |
+| --- | --- | --- |
+| [cupid-match-server](https://github.com/waltonR1/cupid-match-server) | Java API、认证、支付、存储与后台任务 | Render |
+| [cupid-match](https://github.com/waltonR1/cupid-match) | 当前仓库，C 端 uni-app / Vue H5 | Cloudflare Pages |
+| [cupid-match-admin](https://github.com/waltonR1/cupid-match-admin) | Vue 3 运营后台 | Cloudflare Pages |
+
+三仓统一部署说明见 [cupid-match-server/doc/cm-production-deployment.md](https://github.com/waltonR1/cupid-match-server/blob/master/doc/cm-production-deployment.md)。
+
 ## 技术栈
 
 - `uni-app`
@@ -98,7 +108,7 @@ npm run check:i18n
 npm run build:h5
 ```
 
-部署说明见 [docs/deployment-guide.md](./docs/deployment-guide.md)。
+前端构建细节见 [docs/deployment-guide.md](./docs/deployment-guide.md)；完整生产发布流程以 [三仓生产部署](https://github.com/waltonR1/cupid-match-server/blob/master/doc/cm-production-deployment.md) 为准。
 
 ## 常用脚本
 
@@ -123,7 +133,7 @@ npm run build:h5
 8. [docs/token-usage-guide.md](./docs/token-usage-guide.md)
 9. [docs/git-commit-convention.md](./docs/git-commit-convention.md)
 
-后端数据库、账号、支付、验证码和上传配置见 `../cupid-match-server/doc/`。
+后端数据库、账号、支付、验证码和上传配置见 [cupid-match-server/doc](https://github.com/waltonR1/cupid-match-server/tree/master/doc)。
 
 ## 协作入口
 

@@ -2,6 +2,8 @@
 
 本文用于部署前检查和本地部署演练。当前仓库包含 H5 前端和本地 mock-server 两个运行单元；mock-server 只用于验证业务链路和 API contract，不是生产后端。
 
+本文只记录 C 端特有的构建与环境配置。三仓发布顺序、Render、运营后台、R2 和 Stripe 配置统一见 [server 仓库生产部署手册](https://github.com/waltonR1/cupid-match-server/blob/master/doc/cm-production-deployment.md)。
+
 ## 运行单元
 
 | 单元 | 用途 | 部署方式 |
@@ -117,7 +119,7 @@ Render 配置：
 
 Render 演示后端仍然属于 mock 边界：LowDB、mock token、本地上传、验证码、支付占位都不能视为生产后端能力。
 
-当前正式 Render 服务应从 `waltonR1/cupid-match-server` 构建，详见后端仓库 `doc/cm-render-deployment.md`。
+当前正式 Render 服务从 [waltonR1/cupid-match-server](https://github.com/waltonR1/cupid-match-server) 构建；完整生产配置见 [三仓生产部署](https://github.com/waltonR1/cupid-match-server/blob/master/doc/cm-production-deployment.md)。
 
 ## 本地开发
 
